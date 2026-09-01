@@ -1,5 +1,9 @@
 # Aperçu du site sur GitHub Pages.
 # Publie https://<utilisateur>.github.io/<dépôt>/ à chaque push sur la branche de travail.
+#
+# À faire une seule fois avant le premier déploiement :
+#   Settings > Pages > Build and deployment > Source : « GitHub Actions »
+# (le jeton du workflow n'a pas le droit d'activer Pages tout seul)
 name: Aperçu GitHub Pages
 
 on:
@@ -35,10 +39,8 @@ jobs:
 
       - name: Configurer GitHub Pages
         id: pages
+        # Prérequis, une seule fois : Settings > Pages > Source : GitHub Actions
         uses: actions/configure-pages@v5
-        with:
-          # Active GitHub Pages automatiquement au premier passage
-          enablement: true
 
       - name: Construire le site
         env:

@@ -193,12 +193,16 @@ Le workflow `.github/workflows/preview.yml` construit le site et le déploie sur
 GitHub Pages. Il se déclenche sur `main`, sur les branches `claude/**`, et
 manuellement (onglet **Actions → Aperçu GitHub Pages → Run workflow**).
 
-Au tout premier passage, GitHub Pages doit être activé sur le dépôt. Le workflow
-essaie de le faire seul ; si le job échoue, activez-le à la main :
-**Settings → Pages → Build and deployment → Source : GitHub Actions**.
-Si le déploiement est refusé parce qu'il ne vient pas de la branche par défaut :
-**Settings → Environments → github-pages → Deployment branches** et autorisez
-`claude/*` (ou « All branches »).
+**À faire une seule fois**, avant le premier déploiement :
+**Settings → Pages → Build and deployment → Source : « GitHub Actions »**.
+Le jeton du workflow n'a pas le droit d'activer Pages lui-même ; tant que ce n'est
+pas fait, le job s'arrête sur `Create Pages site failed`. Une fois activé, relancez
+le workflow (**Actions → Aperçu GitHub Pages → Run workflow**, ou *Re-run all jobs*
+sur l'exécution échouée).
+
+Si le déploiement est ensuite refusé parce qu'il ne vient pas de la branche par
+défaut : **Settings → Environments → github-pages → Deployment branches** et
+autorisez `claude/*` (ou « All branches »).
 
 L'aperçu est servi dans un sous-dossier (`/y/`). Le site en tient compte via la
 variable `BASE_PATH`, renseignée automatiquement par le workflow : tous les liens,
