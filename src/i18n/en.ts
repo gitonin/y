@@ -72,14 +72,12 @@ const en: Dict = {
       'Yunma sources and roasts specialty coffee from Yunnan, China: traceable lots, partner growers, light roasting. Shipping across France and Europe.',
     heroTitle: 'Specialty coffee\nfrom Yunnan.',
     heroSub: 'Slow coffee.\nSlow life.',
-    heroAlt: 'Misty mountains of Yunnan, home of Yunma coffees',
     heroCta: 'Discover our coffees',
     originLabel: 'Our origin',
     originTitle: 'Yunnan.\nOur land.\nOur inspiration.',
     originText:
       'In south-west China, between 1,200 and 1,900 metres of altitude, Yunnan grows a coffee still largely unknown. There we select micro-lots from producing families, plot by plot, harvest after harvest.',
     originCta: 'Discover the origin',
-    originAlt: 'Coffee terraces in the mountains of Yunnan',
     coffeesLabel: 'Our coffees',
     coffeesTitle: 'Exceptional coffees,\ngrown with care.',
     coffeesText:
@@ -90,10 +88,8 @@ const en: Dict = {
     approachText:
       'Controlled fermentation, drying on raised beds, hand sorting: every step is documented with our partners to reveal the cup without ever forcing it.',
     approachCta: 'Learn more',
-    approachAlt: 'Coffee cherries drying on raised beds',
     closingTitle: 'Every cup\nbegins in\nthe mountains.',
     closingCta: 'Discover Yunma',
-    closingAlt: 'Misty ridges of Yunnan at sunrise',
     journalLabel: 'Journal',
     journalTitle: 'Harvest notebooks',
     proLabel: 'Trade',

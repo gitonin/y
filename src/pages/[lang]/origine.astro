@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import Scene from '../../components/Scene.astro';
+import Photo from '../../components/Photo.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, type Lang } from '../../i18n/utils';
 import { products } from '../../data/products';
@@ -12,7 +12,7 @@ export const getStaticPaths: GetStaticPaths = () => langPaths();
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
-const scenes = ['ridges', 'portrait', 'terraces'] as const;
+const sectionPhotos = ['cretes-brumeuses', 'recolte-cueilleurs', 'sechage-lits'] as const;
 
 const jsonld = [
   {
@@ -39,7 +39,7 @@ const jsonld = [
 
   <div class="wrap">
     <figure class="media media--wide" data-reveal>
-      <Scene variant="ridges" tone="cool" />
+      <Photo name="cretes-brumeuses" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
     </figure>
   </div>
 
@@ -54,7 +54,12 @@ const jsonld = [
               <p class="muted" data-reveal>{section.text}</p>
             </div>
             <figure class="media media--tall osection__media">
-              <Scene variant={scenes[i % scenes.length]} tone={i % 2 === 0 ? 'warm' : 'deep'} />
+              <Photo
+                name={sectionPhotos[i % sectionPhotos.length]}
+                lang={lang}
+                position="50% 55%"
+                sizes="(min-width: 860px) 56vw, 100vw"
+              />
             </figure>
           </article>
         ))

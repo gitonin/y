@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
-import Scene from '../../../components/Scene.astro';
+import Photo from '../../../components/Photo.astro';
 import { languages, useTranslations, url, route, postUrl, formatDate, type Lang } from '../../../i18n/utils';
 import { SITE } from '../../../consts';
 
@@ -94,7 +94,7 @@ const jsonld = [
 
     <figure class="wrap post__cover">
       <div class="media media--wide">
-        <Scene variant={post.data.scene} tone={post.data.tone} />
+        <Photo name={post.data.photo} lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
       </div>
     </figure>
 

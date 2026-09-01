@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
-import Scene from '../../components/Scene.astro';
+import Photo from '../../components/Photo.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, url, route, type Lang } from '../../i18n/utils';
 import { SITE } from '../../consts';
@@ -64,7 +64,7 @@ const jsonld = [
         </a>
       </div>
       <figure class="media phead__media">
-        <Scene variant="counter" tone="warm" />
+        <Photo name="tabouret-terrasse" lang={lang} priority sizes="(min-width: 900px) 54vw, 100vw" />
       </figure>
     </div>
   </section>

@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import PageHero from '../../../components/PageHero.astro';
-import Scene from '../../../components/Scene.astro';
+import Photo from '../../../components/Photo.astro';
 import { langPaths } from '../../../i18n/paths';
 import { useTranslations, postUrl, formatDate, type Lang } from '../../../i18n/utils';
 
@@ -63,7 +63,7 @@ const jsonld = [
       featured && (
         <a class="feat media-link" href={postUrl(lang, slugOf(featured.id))} data-reveal>
           <div class="media feat__media">
-            <Scene variant={featured.data.scene} tone={featured.data.tone} />
+            <Photo name={featured.data.photo} lang={lang} priority decorative sizes="(min-width: 900px) 58vw, 100vw" />
           </div>
           <div class="feat__body">
             <span class="label">{t.journal.latest}</span>
@@ -85,7 +85,7 @@ const jsonld = [
             <li data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
               <a class="jitem media-link" href={postUrl(lang, slugOf(post.id))}>
                 <div class="media media--wide">
-                  <Scene variant={post.data.scene} tone={post.data.tone} />
+                  <Photo name={post.data.photo} lang={lang} decorative sizes="(min-width: 760px) 32vw, 100vw" />
                 </div>
                 <time class="label jitem__date" datetime={post.data.date.toISOString()}>
                   {formatDate(post.data.date, lang)}

@@ -2,7 +2,7 @@
 import type { Lang } from '../i18n/utils';
 import { useTranslations, route, url, defaultAlternates, languages, dictionaries } from '../i18n/utils';
 import { SHOPIFY } from '../consts';
-import Scene from './Scene.astro';
+import Photo from './Photo.astro';
 
 interface Props {
   lang: Lang;
@@ -120,7 +120,7 @@ const current = Astro.url.pathname;
       </div>
 
       <div class="nav__visual" aria-hidden="true">
-        <Scene variant="ridges" tone="cool" />
+        <Photo name="cretes-brumeuses" lang={lang} decorative position="50% 60%" sizes="(min-width: 900px) 50vw, 100vw" />
       </div>
     </div>
   </div>
@@ -460,13 +460,15 @@ const current = Astro.url.pathname;
       height: 100%;
     }
 
-    .nav__visual :global(svg) {
+    .nav__visual :global(img) {
+      width: 100%;
       height: 100%;
+      object-fit: cover;
       transform: scale(1.12);
-      transition: transform 1.6s var(--ease-out-expo);
+      transition: transform 1.8s var(--ease-out-expo);
     }
 
-    .nav.is-open .nav__visual :global(svg) {
+    .nav.is-open .nav__visual :global(img) {
       transform: scale(1);
     }
   }

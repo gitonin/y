@@ -4,8 +4,7 @@ description: 'The complete drip bag method: temperature, ratio, three pours, com
 date: 2025-06-12
 author: Yunma
 tags: ['Method', 'Brewing', 'Drip bag']
-scene: counter
-tone: warm
+photo: tabouret-terrasse
 ---
 
 A drip bag is not an emergency coffee. It is a real filter brew, simply pre-dosed and pre-ground. Done properly, it has nothing to envy a V60 — and it fits in a pocket.

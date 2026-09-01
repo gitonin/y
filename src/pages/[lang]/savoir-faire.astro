@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import Scene from '../../components/Scene.astro';
+import Photo from '../../components/Photo.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, type Lang } from '../../i18n/utils';
 
@@ -46,7 +46,7 @@ const jsonld = [
 
   <div class="wrap">
     <figure class="media media--wide" data-reveal>
-      <Scene variant="cherries" tone="deep" />
+      <Photo name="sechage-lits" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
     </figure>
   </div>
 

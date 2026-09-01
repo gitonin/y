@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Scene from '../../components/Scene.astro';
+import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { langPaths } from '../../i18n/paths';
@@ -64,7 +64,7 @@ const jsonld = [
   <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="hero__media media is-visible">
-      <Scene variant="ridges" tone="warm" />
+      <Photo name="cretes-brumeuses" lang={lang} priority sizes="100vw" decorative />
     </div>
     <div class="hero__inner wrap">
       <SplitTitle text={t.home.heroTitle} as="h1" size="hero" class="hero__title" />
@@ -93,9 +93,8 @@ const jsonld = [
 
     <figure class="bleed">
       <div class="media media--wide">
-        <Scene variant="terraces" tone="warm" />
+        <Photo name="recolte-cueilleurs" lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
       </div>
-      <figcaption class="visually-hidden">{t.home.originAlt}</figcaption>
     </figure>
   </section>
 
@@ -134,9 +133,8 @@ const jsonld = [
       </div>
       <figure class="approach__media">
         <div class="media media--tall">
-          <Scene variant="cherries" tone="deep" />
+          <Photo name="cerises-branche" lang={lang} position="60% 55%" sizes="(min-width: 860px) 52vw, 100vw" />
         </div>
-        <figcaption class="visually-hidden">{t.home.approachAlt}</figcaption>
       </figure>
     </div>
   </section>
@@ -166,7 +164,7 @@ const jsonld = [
               <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
                 <a class="jcard media-link" href={postUrl(lang, post.id.split('/')[1])}>
                   <div class="media media--wide">
-                    <Scene variant={post.data.scene} tone={post.data.tone} />
+                    <Photo name={post.data.photo} lang={lang} decorative sizes="(min-width: 760px) 32vw, 100vw" />
                   </div>
                   <time class="label jcard__date" datetime={post.data.date.toISOString()}>
                     {formatDate(post.data.date, lang)}
@@ -198,7 +196,7 @@ const jsonld = [
   <!-- ============ CLOSING ============ -->
   <section class="closing" aria-labelledby="h-closing">
     <div class="closing__media media">
-      <Scene variant="ridges" tone="deep" />
+      <Photo name="tabouret-terrasse" lang={lang} decorative sizes="100vw" />
     </div>
     <div class="closing__inner wrap">
       <SplitTitle text={t.home.closingTitle} as="p" size="closing" class="on-dark" />
@@ -231,7 +229,14 @@ const jsonld = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(244, 242, 236, 0.5) 0%, rgba(244, 242, 236, 0) 42%, rgba(28, 28, 26, 0.28) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(244, 242, 236, 0.34) 0%,
+      rgba(244, 242, 236, 0) 26%,
+      rgba(28, 28, 26, 0.12) 52%,
+      rgba(28, 28, 26, 0.34) 78%,
+      rgba(28, 28, 26, 0.56) 100%
+    );
   }
 
   .hero__inner {
@@ -242,13 +247,15 @@ const jsonld = [
 
   .hero__sub {
     margin-top: 1.25rem;
-    color: rgba(251, 250, 247, 0.85);
+    color: rgba(251, 250, 247, 0.96);
     line-height: 1.7;
+    text-shadow: 0 1px 12px rgba(28, 28, 26, 0.4);
   }
 
   .hero__cta {
     margin-top: 1.5rem;
     color: var(--white);
+    text-shadow: 0 1px 12px rgba(28, 28, 26, 0.4);
   }
 
   .hero__scroll {
@@ -447,7 +454,7 @@ const jsonld = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 30%, rgba(28, 28, 26, 0.42) 100%);
+    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 24%, rgba(28, 28, 26, 0.28) 62%, rgba(28, 28, 26, 0.6) 100%);
   }
 
   .closing__inner {

@@ -4,8 +4,7 @@ description: "Le mode d'emploi complet du drip bag : température, ratio, trois 
 date: 2025-06-12
 author: Yunma
 tags: ['Méthode', 'Extraction', 'Drip bag']
-scene: counter
-tone: warm
+photo: tabouret-terrasse
 ---
 
 Le drip bag n'est pas un café de dépannage. C'est un vrai filtre, simplement pré-dosé et pré-moulu. Bien préparé, il n'a rien à envier à une V60 — et il tient dans une poche.

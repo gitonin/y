@@ -70,14 +70,12 @@ const fr = {
       'Yunma sélectionne et torréfie des cafés de spécialité du Yunnan (Chine) : lots tracés, producteurs partenaires, torréfaction claire. Livraison en France et en Europe.',
     heroTitle: 'Cafés de spécialité\ndu Yunnan.',
     heroSub: 'Slow coffee.\nSlow life.',
-    heroAlt: 'Montagnes brumeuses du Yunnan, berceau des cafés Yunma',
     heroCta: 'Découvrir nos cafés',
     originLabel: 'Notre origine',
     originTitle: 'Le Yunnan.\nNotre terre.\nNotre inspiration.',
     originText:
       'Au sud-ouest de la Chine, entre 1 200 et 1 900 mètres d’altitude, le Yunnan cultive un café encore méconnu. Nous y sélectionnons des micro-lots auprès de familles productrices, parcelle par parcelle, récolte après récolte.',
     originCta: 'Découvrir l’origine',
-    originAlt: 'Terrasses de caféiers dans les montagnes du Yunnan',
     coffeesLabel: 'Nos cafés',
     coffeesTitle: 'Des cafés d’exception,\ncultivés avec soin.',
     coffeesText:
@@ -88,10 +86,8 @@ const fr = {
     approachText:
       'Fermentations maîtrisées, séchage sur lits africains, tri manuel : chaque étape est documentée avec nos partenaires pour révéler la tasse sans jamais la forcer.',
     approachCta: 'En savoir plus',
-    approachAlt: 'Cerises de café en cours de séchage sur lits surélevés',
     closingTitle: 'Chaque tasse\ncommence dans\nla montagne.',
     closingCta: 'Découvrir Yunma',
-    closingAlt: 'Crêtes brumeuses du Yunnan au lever du jour',
     journalLabel: 'Journal',
     journalTitle: 'Carnets de récolte',
     proLabel: 'Professionnels',

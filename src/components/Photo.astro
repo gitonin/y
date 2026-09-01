@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import { photos, type PhotoName } from '../data/photos';
+import type { Lang } from '../i18n/utils';
+
+interface Props {
+  name: PhotoName;
+  lang: Lang;
+  /** Image décorative (le contexte porte déjà l'information) */
+  decorative?: boolean;
+  /** Chargement prioritaire — à réserver à l'image d'en-tête */
+  priority?: boolean;
+  sizes?: string;
+  /** Surcharge du cadrage, ex. '50% 50%' pour un format portrait */
+  position?: string;
+  class?: string;
+}
+
+const {
+  name,
+  lang,
+  decorative = false,
+  priority = false,
+  sizes = '100vw',
+  position,
+  class: className = '',
+} = Astro.props;
+
+const photo = photos[name];
+---
+
+<Image
+  src={photo.src}
+  alt={decorative ? '' : photo.alt[lang]}
+  widths={[480, 720, 1080, 1440, 1920]}
+  sizes={sizes}
+  loading={priority ? 'eager' : 'lazy'}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  class={className}
+  style={`object-position:${position ?? photo.position}`}
+/>

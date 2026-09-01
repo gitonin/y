@@ -4,8 +4,7 @@ description: 挂耳咖啡完整冲煮指南：水温、粉水比、三段注水�
 date: 2025-06-12
 author: Yunma
 tags: ['方法', '萃取', '挂耳']
-scene: counter
-tone: warm
+photo: tabouret-terrasse
 ---
 
 挂耳咖啡不是应急之选。它是真正的滤泡式咖啡，只是预先称量并研磨好了。冲得好，它不逊于 V60——而且能装进口袋。

@@ -15,8 +15,10 @@ const journal = defineCollection({
     updated: z.coerce.date().optional(),
     author: z.string().default('Yunma'),
     tags: z.array(z.string()).default([]),
-    scene: z.enum(['ridges', 'terraces', 'cherries', 'canopy', 'counter', 'portrait']).default('ridges'),
-    tone: z.enum(['warm', 'cool', 'deep']).default('warm'),
+    /** Photographie d'en-tête : une clé de src/data/photos.ts */
+    photo: z
+      .enum(['recolte-cueilleurs', 'cretes-brumeuses', 'cerises-branche', 'sechage-lits', 'tabouret-terrasse'])
+      .default('cretes-brumeuses'),
     draft: z.boolean().default(false),
   }),
 });

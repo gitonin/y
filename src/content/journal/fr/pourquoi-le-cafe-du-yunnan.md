@@ -4,8 +4,7 @@ description: "Altitude, amplitude thermique, variétés et nouvelle génération
 date: 2025-04-06
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Comprendre']
-scene: ridges
-tone: cool
+photo: cretes-brumeuses
 ---
 
 Le Yunnan produit aujourd'hui plus de 95 % du café chinois, et la Chine est entrée dans le top 15 mondial. Pourtant, la province reste presque absente des cartes de cafés de spécialité européennes. Voici pourquoi cela change — et pourquoi cela mérite votre attention.

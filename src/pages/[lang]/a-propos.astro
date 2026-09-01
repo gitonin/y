@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import Scene from '../../components/Scene.astro';
+import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, type Lang } from '../../i18n/utils';
@@ -37,7 +37,7 @@ const jsonld = [
 
   <div class="wrap">
     <figure class="media media--wide" data-reveal>
-      <Scene variant="portrait" tone="warm" />
+      <Photo name="recolte-cueilleurs" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
     </figure>
   </div>
 
@@ -92,7 +92,7 @@ const jsonld = [
 
   <section class="closing">
     <div class="closing__media media">
-      <Scene variant="ridges" tone="deep" />
+      <Photo name="cretes-brumeuses" lang={lang} decorative sizes="100vw" />
     </div>
     <div class="closing__inner wrap">
       <SplitTitle text={t.apropos.closing} as="p" size="closing" class="on-dark" />
@@ -199,7 +199,7 @@ const jsonld = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 35%, rgba(28, 28, 26, 0.42) 100%);
+    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 24%, rgba(28, 28, 26, 0.28) 62%, rgba(28, 28, 26, 0.6) 100%);
   }
 
   .closing__inner {

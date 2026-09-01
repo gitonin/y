@@ -4,8 +4,7 @@ description: 'Altitude, day-night temperature swing, varieties and a new generat
 date: 2025-04-06
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Understanding']
-scene: ridges
-tone: cool
+photo: cretes-brumeuses
 ---
 
 Yunnan now grows more than 95% of Chinese coffee, and China has entered the world top 15. Yet the province is still almost absent from European specialty menus. Here is why that is changing — and why it deserves your attention.

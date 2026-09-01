@@ -131,16 +131,38 @@ informations définitives : SIREN, RCS, TVA, hébergeur).
 
 ## 4. Visuels
 
-Les images du site sont pour l'instant des **illustrations vectorielles générées**
-(`src/components/Scene.astro`) et des **packshots CSS** (`src/components/Packshot.astro`),
-dans les couleurs de la marque. Ils tiennent lieu de photographies en attendant les
-visuels définitifs : remplacez un `<Scene … />` par une balise `<img>` (ou
-`<Image>` d'Astro) sans rien changer d'autre à la mise en page.
+### Photographies
+
+Les photographies vivent dans `src/assets/photos/` et sont déclarées une seule fois
+dans `src/data/photos.ts` — avec leur texte alternatif dans les trois langues et leur
+cadrage par défaut (`object-position`, utile quand une image verticale est affichée
+dans un cadre large).
+
+| Clé | Utilisée pour |
+| --- | --- |
+| `cretes-brumeuses` | Accueil (bandeau), menu ouvert, Origine, clôture « Notre histoire » |
+| `recolte-cueilleurs` | Accueil (Notre origine), Origine, Notre histoire |
+| `cerises-branche` | Accueil (Notre approche) |
+| `sechage-lits` | Savoir-faire, Origine |
+| `tabouret-terrasse` | Espace pro, clôture de l'accueil |
+
+Pour remplacer une image : déposez le nouveau fichier dans `src/assets/photos/` et
+changez l'import correspondant dans `src/data/photos.ts`. Rien d'autre à modifier.
+Pour en ajouter une : ajoutez une entrée dans ce même fichier, puis
+`<Photo name="ma-photo" lang={lang} />` là où vous la voulez.
+
+Astro génère automatiquement les versions WebP responsives (5 largeurs, `srcset`
+et `sizes`), avec chargement différé partout sauf sur l'image d'en-tête de chaque page.
+
+### Packagings
+
+Les visuels produits sont pour l'instant des **packshots CSS**
+(`src/components/Packshot.astro`) portant le logo, dans les tons de la marque. Quand
+vous aurez les photos de packaging, elles remplacent le composant dans
+`ProductCard.astro` et sur la fiche produit — la mise en page ne change pas.
 
 Le logo est décliné dans `public/brand/` (lockup, mark, wordmark, favicon, icône 512,
 image Open Graph dans `public/og/`).
-
----
 
 ## 5. Référencement (Google + IA)
 
