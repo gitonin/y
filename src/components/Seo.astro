@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/utils';
-import { dictionaries, languages, defaultAlternates } from '../i18n/utils';
+import { dictionaries, languages, defaultAlternates, asset, absolute } from '../i18n/utils';
 import { SITE } from '../consts';
 
 interface Props {
@@ -29,7 +29,7 @@ const {
 
 const base = Astro.site ?? new URL('https://yunma.fr');
 const canonical = new URL(Astro.url.pathname, base).href;
-const ogImage = new URL(image, base).href;
+const ogImage = image.startsWith('http') ? image : new URL(asset(image), base).href;
 const alts = { ...defaultAlternates(Astro.url.pathname), ...(alternates ?? {}) };
 const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
 
@@ -38,7 +38,7 @@ const organization = {
   '@id': `${base.origin}/#organization`,
   name: SITE.name,
   url: base.origin,
-  logo: new URL('/brand/icon-512.png', base).href,
+  logo: absolute(Astro.site, 'brand/icon-512.png'),
   email: SITE.email,
   telephone: SITE.phone,
   foundingDate: SITE.founded,

@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/utils';
-import { useTranslations } from '../i18n/utils';
+import { useTranslations, asset } from '../i18n/utils';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Cart from '../components/Cart.astro';
@@ -49,9 +49,9 @@ const t = useTranslations(lang);
       document.documentElement.classList.add('js');
     </script>
 
-    <link rel="icon" href="/brand/favicon-96.png" type="image/png" sizes="96x96" />
-    <link rel="apple-touch-icon" href="/brand/icon-512.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={asset("brand/favicon-96.png")} type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href={asset("brand/icon-512.png")} />
+    <link rel="manifest" href={asset("site.webmanifest")} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,7 +59,7 @@ const t = useTranslations(lang);
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap"
     />
-    <link rel="preload" as="image" href="/brand/yunma-logo.png" />
+    <link rel="preload" as="image" href={asset("brand/yunma-logo.png")} />
 
     <Seo
       lang={lang}

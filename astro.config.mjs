@@ -3,9 +3,12 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 const site = process.env.SITE_URL || 'https://yunma.fr';
+// Sous-dossier de déploiement — utilisé pour l'aperçu GitHub Pages (ex. BASE_PATH=/y)
+const base = process.env.BASE_PATH || '/';
 
 export default defineConfig({
   site,
+  base,
   trailingSlash: 'always',
   build: { format: 'directory' },
   i18n: {

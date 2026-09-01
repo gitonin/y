@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/utils';
-import { useTranslations, route } from '../i18n/utils';
+import { useTranslations, route, asset } from '../i18n/utils';
 import { SHOPIFY, SITE } from '../consts';
 
 interface Props {
@@ -15,6 +15,7 @@ const config = {
   apiVersion: '2024-10',
   lang,
   currency: SITE.currency,
+  markUrl: asset('brand/yunma-mark.png'),
   strings: {
     empty: t.cart.empty,
     total: t.cart.total,
@@ -294,6 +295,7 @@ const config = {
     apiVersion: string;
     lang: 'fr' | 'en' | 'zh';
     currency: string;
+    markUrl: string;
     strings: Record<string, string>;
   };
 
@@ -471,7 +473,7 @@ const config = {
       .map(
         (l) => `
         <li class="cline" data-line="${l.id}">
-          <span class="cline__thumb"><img src="/brand/yunma-mark.png" alt="" loading="lazy" /></span>
+          <span class="cline__thumb"><img src="${cfg?.markUrl ?? ''}" alt="" loading="lazy" /></span>
           <div>
             <p class="cline__title">${l.title}</p>
             ${l.variantTitle ? `<p class="cline__meta">${l.variantTitle}</p>` : ''}

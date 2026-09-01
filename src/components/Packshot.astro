@@ -1,6 +1,6 @@
 ---
 import type { Lang, Product } from '../data/products';
-import { useTranslations } from '../i18n/utils';
+import { useTranslations, asset } from '../i18n/utils';
 
 interface Props {
   product: Product;
@@ -18,6 +18,7 @@ const rows: [string, string][] = [
   [t.product.notes, spec.notes[lang]],
 ];
 const kind = product.visual;
+const markUrl = asset('brand/yunma-logo.png');
 ---
 
 <div class={`shot shot--${size} shot--${kind} ${className}`} data-packshot>
@@ -60,7 +61,7 @@ const kind = product.visual;
   </div>
 </div>
 
-<style>
+<style define:vars={{ markUrl: `url(${markUrl})` }}>
   .shot {
     position: relative;
     width: 100%;
@@ -126,7 +127,7 @@ const kind = product.visual;
     width: 34%;
     aspect-ratio: 228 / 342;
     margin-top: 8%;
-    background: url('/brand/yunma-logo.png') center / contain no-repeat;
+    background: var(--markUrl) center / contain no-repeat;
     opacity: 0.92;
   }
 
@@ -198,7 +199,7 @@ const kind = product.visual;
     display: block;
     width: 20%;
     aspect-ratio: 228 / 342;
-    background: url('/brand/yunma-logo.png') center / contain no-repeat;
+    background: var(--markUrl) center / contain no-repeat;
     opacity: 0.92;
   }
 

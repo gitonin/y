@@ -5,7 +5,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ProductCard from '../../../components/ProductCard.astro';
 import SplitTitle from '../../../components/SplitTitle.astro';
 import { langPaths } from '../../../i18n/paths';
-import { useTranslations, url, route, type Lang } from '../../../i18n/utils';
+import { useTranslations, url, route, absolute, type Lang } from '../../../i18n/utils';
 import { products } from '../../../data/products';
 import { SITE } from '../../../consts';
 
@@ -38,15 +38,15 @@ const jsonld = [
     itemListElement: products.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: new URL(`${lang}/cafes/${p.slug}/`, base).href,
+      url: absolute(Astro.site, `${lang}/cafes/${p.slug}/`),
       name: p.name[lang],
     })),
   },
   {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
-      { '@type': 'ListItem', position: 2, name: t.nav.cafes, item: new URL(`${lang}/cafes/`, base).href },
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: absolute(Astro.site, `${lang}/`) },
+      { '@type': 'ListItem', position: 2, name: t.nav.cafes, item: absolute(Astro.site, `${lang}/cafes/`) },
     ],
   },
 ];

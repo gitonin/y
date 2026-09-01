@@ -3,7 +3,12 @@
  * Racine : redirection vers la langue de l'utilisateur (français par défaut).
  * Une redirection serveur (_redirects / vercel.json) prend le relais si elle est configurée.
  */
+import { asset, absolute, languages, dictionaries } from '../i18n/utils';
+
 export const prerender = true;
+
+const base = asset('');
+const canonical = absolute(Astro.site, 'fr/');
 ---
 
 <!doctype html>
@@ -13,13 +18,20 @@ export const prerender = true;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Yunma — Cafés de spécialité du Yunnan</title>
     <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href="https://yunma.fr/fr/" />
-    <link rel="alternate" hreflang="fr-FR" href="https://yunma.fr/fr/" />
-    <link rel="alternate" hreflang="en" href="https://yunma.fr/en/" />
-    <link rel="alternate" hreflang="zh-Hans" href="https://yunma.fr/zh/" />
-    <link rel="alternate" hreflang="x-default" href="https://yunma.fr/fr/" />
-    <meta http-equiv="refresh" content="0; url=/fr/" />
-    <script is:inline>
+    <link rel="canonical" href={canonical} />
+    {
+      languages.map((code) => (
+        <link
+          rel="alternate"
+          hreflang={dictionaries[code].meta.hreflang}
+          href={absolute(Astro.site, `${code}/`)}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="icon" href={asset('brand/favicon-96.png')} type="image/png" sizes="96x96" />
+    <meta http-equiv="refresh" content={`0; url=${base}fr/`} />
+    <script is:inline define:vars={{ base }}>
       (function () {
         var supported = ['fr', 'en', 'zh'];
         var stored = null;
@@ -27,9 +39,10 @@ export const prerender = true;
           stored = localStorage.getItem('yunma:lang');
         } catch (e) {}
         var nav = (navigator.language || 'fr').toLowerCase();
-        var guess = nav.indexOf('zh') === 0 ? 'zh' : nav.indexOf('fr') === 0 ? 'fr' : nav.indexOf('en') === 0 ? 'en' : 'fr';
+        var guess =
+          nav.indexOf('zh') === 0 ? 'zh' : nav.indexOf('fr') === 0 ? 'fr' : nav.indexOf('en') === 0 ? 'en' : 'fr';
         var lang = supported.indexOf(stored) > -1 ? stored : guess;
-        location.replace('/' + lang + '/');
+        location.replace(base + lang + '/');
       })();
     </script>
     <style>
@@ -58,11 +71,15 @@ export const prerender = true;
   </head>
   <body>
     <main>
-      <img src="/brand/yunma-logo.png" alt="Yunma" width="114" height="171" style="margin-inline:auto" />
+      <img src={asset('brand/yunma-logo.png')} alt="Yunma" width="114" height="171" style="margin-inline:auto" />
       <ul>
-        <li><a href="/fr/">Français</a></li>
-        <li><a href="/en/">English</a></li>
-        <li><a href="/zh/">简体中文</a></li>
+        {
+          languages.map((code) => (
+            <li>
+              <a href={`${base}${code}/`}>{dictionaries[code].meta.label}</a>
+            </li>
+          ))
+        }
       </ul>
     </main>
   </body>

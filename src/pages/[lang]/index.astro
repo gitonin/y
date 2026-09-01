@@ -6,7 +6,7 @@ import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, route, url, postUrl, formatDate, type Lang } from '../../i18n/utils';
+import { useTranslations, route, url, postUrl, formatDate, absolute, type Lang } from '../../i18n/utils';
 import { products } from '../../data/products';
 import { SITE } from '../../consts';
 
@@ -38,7 +38,7 @@ const jsonld = [
     itemListElement: products.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: new URL(`${lang}/cafes/${p.slug}/`, base).href,
+      url: absolute(Astro.site, `${lang}/cafes/${p.slug}/`),
       name: p.name[lang],
     })),
   },

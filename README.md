@@ -183,19 +183,53 @@ Search Console et vérifiez les rich results produits.
 
 ---
 
-## 6. Mise en ligne
+## 6. Aperçu en ligne (GitHub Pages)
+
+Un aperçu public est publié automatiquement à chaque push :
+
+**https://gitonin.github.io/y/**
+
+Le workflow `.github/workflows/preview.yml` construit le site et le déploie sur
+GitHub Pages. Il se déclenche sur `main`, sur les branches `claude/**`, et
+manuellement (onglet **Actions → Aperçu GitHub Pages → Run workflow**).
+
+Au tout premier passage, GitHub Pages doit être activé sur le dépôt. Le workflow
+essaie de le faire seul ; si le job échoue, activez-le à la main :
+**Settings → Pages → Build and deployment → Source : GitHub Actions**.
+Si le déploiement est refusé parce qu'il ne vient pas de la branche par défaut :
+**Settings → Environments → github-pages → Deployment branches** et autorisez
+`claude/*` (ou « All branches »).
+
+L'aperçu est servi dans un sous-dossier (`/y/`). Le site en tient compte via la
+variable `BASE_PATH`, renseignée automatiquement par le workflow : tous les liens,
+images et données structurées sont préfixés. En production à la racine d'un
+domaine, il n'y a rien à faire — `BASE_PATH` reste vide.
+
+Sur l'aperçu, le panier tourne en mode démonstration. Pour tester le vrai tunnel
+Shopify, ajoutez les secrets `PUBLIC_SHOPIFY_DOMAIN`,
+`PUBLIC_SHOPIFY_STOREFRONT_TOKEN` et `PUBLIC_SHOPIFY_ACCOUNT_URL` dans
+**Settings → Secrets and variables → Actions** : le workflow les utilise au build.
+
+> Autre option, sans publication : ouvrez le dépôt dans **GitHub Codespaces**
+> (bouton *Code → Codespaces → Create codespace*), puis `npm install && npm run dev`.
+> GitHub vous donne une URL de prévisualisation privée, avec rechargement à chaud.
+
+---
+
+## 7. Mise en ligne
 
 Site 100 % statique : `npm run build` produit `dist/`, déployable sur Netlify,
 Vercel, Cloudflare Pages, o2switch, etc.
 
-- Variable d'environnement de build : `SITE_URL=https://votre-domaine`
-  (utilisée pour les URLs canoniques, le sitemap et les données structurées).
+- Variables d'environnement de build : `SITE_URL=https://votre-domaine`
+  (URLs canoniques, sitemap, données structurées) et, uniquement si le site n'est
+  pas servi à la racine du domaine, `BASE_PATH=/sous-dossier`.
 - `public/_redirects` redirige `/` vers `/fr/` sur Netlify et Cloudflare Pages.
   Sur un autre hébergeur, la redirection est assurée côté client par `/index.html`.
 
 ---
 
-## 7. Accessibilité et performances
+## 8. Accessibilité et performances
 
 - Navigation clavier complète, focus visible, piège de focus dans le menu et le panier.
 - `prefers-reduced-motion` respecté (toutes les animations sont neutralisées).

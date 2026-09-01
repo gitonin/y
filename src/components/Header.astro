@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/utils';
-import { useTranslations, route, url, defaultAlternates, languages, dictionaries } from '../i18n/utils';
+import { useTranslations, route, url, defaultAlternates, languages, dictionaries, asset } from '../i18n/utils';
 import { SHOPIFY } from '../consts';
 import Photo from './Photo.astro';
 
@@ -39,7 +39,7 @@ const current = Astro.url.pathname;
     </button>
 
     <a class="hd__logo" href={url(lang)} aria-label={t.a11y.logo}>
-      <img src="/brand/yunma-logo.png" alt="Yunma" width="228" height="342" />
+      <img src={asset("brand/yunma-logo.png")} alt="Yunma" width="228" height="342" />
     </a>
 
     <button class="hd__cart" type="button" data-cart-toggle>
@@ -63,7 +63,7 @@ const current = Astro.url.pathname;
         <span class="visually-hidden">{t.nav.close}</span>
       </button>
       <a class="nav__logo" href={url(lang)} aria-label={t.a11y.logo}>
-        <img src="/brand/yunma-logo.png" alt="" width="228" height="342" />
+        <img src={asset("brand/yunma-logo.png")} alt="" width="228" height="342" />
       </a>
       <span class="nav__spacer"></span>
     </div>

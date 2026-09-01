@@ -5,7 +5,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Packshot from '../../../components/Packshot.astro';
 import BuyBox from '../../../components/BuyBox.astro';
 import ProductCard from '../../../components/ProductCard.astro';
-import { languages, useTranslations, url, route, formatPrice, type Lang } from '../../../i18n/utils';
+import { languages, useTranslations, url, route, formatPrice, absolute, type Lang } from '../../../i18n/utils';
 import { products, getProduct, fromPrice } from '../../../data/products';
 import { SITE } from '../../../consts';
 
@@ -46,7 +46,7 @@ const jsonld = [
     category: product.category === 'grain' ? 'Coffee beans' : product.category === 'drip' ? 'Drip coffee bags' : 'Coffee gift set',
     brand: { '@type': 'Brand', name: SITE.name },
     url: canonical,
-    image: new URL('/og/yunma-og.png', base).href,
+    image: absolute(Astro.site, 'og/yunma-og.png'),
     countryOfOrigin: 'CN',
     additionalProperty: [...specRows, ...detailRows].map((row) => ({
       '@type': 'PropertyValue',
@@ -70,8 +70,8 @@ const jsonld = [
   {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
-      { '@type': 'ListItem', position: 2, name: t.nav.cafes, item: new URL(`${lang}/cafes/`, base).href },
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: absolute(Astro.site, `${lang}/`) },
+      { '@type': 'ListItem', position: 2, name: t.nav.cafes, item: absolute(Astro.site, `${lang}/cafes/`) },
       { '@type': 'ListItem', position: 3, name: product.name[lang], item: canonical },
     ],
   },
