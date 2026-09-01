@@ -1,0 +1,184 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Scene from '../../components/Scene.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, route, type Lang } from '../../i18n/utils';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+
+const jsonld = [
+  {
+    '@type': 'HowTo',
+    name: t.savoirFaire.seoTitle,
+    description: t.savoirFaire.seoDescription,
+    inLanguage: t.meta.hreflang,
+    step: t.savoirFaire.steps.map((step, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: step.title,
+      text: step.text,
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.savoirFaire, item: new URL(`${lang}/savoir-faire/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.savoirFaire.seoTitle} description={t.savoirFaire.seoDescription} jsonld={jsonld}>
+  <PageHero
+    lang={lang}
+    label={t.savoirFaire.label}
+    title={t.savoirFaire.title}
+    intro={t.savoirFaire.intro}
+    crumb={t.nav.savoirFaire}
+  />
+
+  <div class="wrap">
+    <figure class="media media--wide" data-reveal>
+      <Scene variant="cherries" tone="deep" />
+    </figure>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <ol class="steps">
+        {
+          t.savoirFaire.steps.map((step, i) => (
+            <li class="step" data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
+              <span class="step__n label">{step.n}</span>
+              <h2 class="step__title">{step.title}</h2>
+              <p class="small muted">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tight panel">
+    <div class="wrap">
+      <header class="brews__head">
+        <div>
+          <h2 class="brews__title">{t.savoirFaire.brewTitle}</h2>
+          <p class="muted" data-reveal>{t.savoirFaire.brewText}</p>
+        </div>
+        <a class="link" href={route(lang, 'cafes')} data-reveal>
+          {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </header>
+
+      <table class="brews">
+        <thead>
+          <tr>
+            <th scope="col">{t.savoirFaire.brewMethod}</th>
+            <th scope="col">Ratio</th>
+            <th scope="col">T°</th>
+            <th scope="col">⏱</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            t.savoirFaire.brews.map((brew) => (
+              <tr>
+                <th scope="row">{brew.name}</th>
+                <td>{brew.ratio}</td>
+                <td>{brew.temp}</td>
+                <td>{brew.time}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .steps {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    counter-reset: step;
+  }
+
+  @media (min-width: 700px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .step {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .step__n {
+    color: var(--accent);
+  }
+
+  .step__title {
+    margin-top: 0.65rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--fs-h3);
+    font-weight: 400;
+  }
+
+  .brews__head {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  @media (min-width: 860px) {
+    .brews__head {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+  }
+
+  .brews__title {
+    font-size: var(--fs-h2);
+    margin-bottom: 0.5rem;
+  }
+
+  .brews {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-small);
+  }
+
+  .brews th,
+  .brews td {
+    text-align: left;
+    padding: 0.9rem 0.75rem 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+    font-weight: 400;
+  }
+
+  .brews thead th {
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+
+  .brews tbody th {
+    color: var(--ink);
+  }
+</style>

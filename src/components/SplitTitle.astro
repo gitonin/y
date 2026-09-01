@@ -1,0 +1,67 @@
+---
+/**
+ * Titre révélé ligne par ligne (une ligne par saut de ligne dans `text`).
+ * Les tailles sont gérées ici : les styles scopés d'une page parente
+ * n'atteignent pas les éléments rendus par ce composant.
+ */
+interface Props {
+  text: string;
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  size?: 'hero' | 'xl' | 'lg' | 'md' | 'closing';
+  class?: string;
+}
+const { text, as: Tag = 'h2', size = 'lg', class: className = '' } = Astro.props;
+const lines = text.split('\n');
+---
+
+<Tag class={`reveal-lines ttl ttl--${size} ${className}`}>
+  {
+    lines.map((line, i) => (
+      <span class="line">
+        <span style={`--i:${i}`}>{line}</span>
+      </span>
+    ))
+  }
+</Tag>
+
+<style>
+  .ttl {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+
+  .ttl--hero {
+    font-size: clamp(2.5rem, 1.6rem + 4vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    text-shadow: 0 1px 40px rgba(28, 28, 26, 0.22);
+  }
+
+  .ttl--xl {
+    font-size: var(--fs-h1);
+  }
+
+  .ttl--lg {
+    font-size: var(--fs-h2);
+  }
+
+  .ttl--md {
+    font-size: var(--fs-h3);
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+  }
+
+  .ttl--closing {
+    font-size: clamp(1.85rem, 1.2rem + 3vw, 3.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.024em;
+    max-width: 20ch;
+  }
+
+  :global(:lang(zh)) .ttl {
+    letter-spacing: 0.01em;
+    line-height: 1.18;
+  }
+</style>

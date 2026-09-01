@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { dictionaries, languages, url } from '../i18n/utils';
+const t = dictionaries.fr;
+---
+
+<Base lang="fr" title="404 — Page introuvable" description="Cette page n’existe pas ou a été déplacée." noindex>
+  <section class="nf wrap">
+    <span class="label">404</span>
+    <h1 class="nf__title">Cette page s’est perdue dans la brume.</h1>
+    <p class="lead muted nf__text">
+      This page could not be found. 页面未找到.
+    </p>
+    <ul class="nf__links">
+      {
+        languages.map((code) => (
+          <li>
+            <a class="link" href={url(code)}>
+              {dictionaries[code].common.home} ({dictionaries[code].meta.short})
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="link link--ink nf__shop" href={url('fr', 'cafes')}>
+      {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 72svh;
+    display: grid;
+    align-content: center;
+    gap: 1.25rem;
+    padding-block: var(--section);
+    justify-items: start;
+  }
+
+  .nf__title {
+    font-size: var(--fs-h2);
+    max-width: 16ch;
+  }
+
+  .nf__text {
+    max-width: 40ch;
+  }
+
+  .nf__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin-top: 0.5rem;
+  }
+</style>

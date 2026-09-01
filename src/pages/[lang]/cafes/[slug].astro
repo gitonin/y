@@ -1,0 +1,345 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Packshot from '../../../components/Packshot.astro';
+import BuyBox from '../../../components/BuyBox.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import { languages, useTranslations, url, route, formatPrice, type Lang } from '../../../i18n/utils';
+import { products, getProduct, fromPrice } from '../../../data/products';
+import { SITE } from '../../../consts';
+
+export const getStaticPaths: GetStaticPaths = () =>
+  languages.flatMap((lang) => products.map((product) => ({ params: { lang, slug: product.slug }, props: { product } })));
+
+const lang = Astro.params.lang as Lang;
+const { product } = Astro.props;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+const price = fromPrice(product);
+const related = product.related.map((slug) => getProduct(slug)).filter(Boolean);
+
+const specRows = [
+  { label: t.product.origin, value: product.specs.origin[lang] },
+  { label: t.product.altitude, value: product.specs.altitude[lang] },
+  { label: t.product.variety, value: product.specs.variety[lang] },
+  { label: t.product.process, value: product.specs.process[lang] },
+  { label: t.product.notes, value: product.specs.notes[lang] },
+];
+
+const detailRows = [
+  { label: t.product.drying, value: product.specs.drying[lang] },
+  { label: t.product.harvest, value: product.specs.harvest[lang] },
+  { label: t.product.roast, value: product.specs.roast[lang] },
+  { label: t.product.score, value: product.specs.score },
+];
+
+const canonical = new URL(Astro.url.pathname, base).href;
+
+const jsonld = [
+  {
+    '@type': 'Product',
+    '@id': `${canonical}#product`,
+    name: product.name[lang],
+    description: product.description[lang],
+    sku: product.sku,
+    category: product.category === 'grain' ? 'Coffee beans' : product.category === 'drip' ? 'Drip coffee bags' : 'Coffee gift set',
+    brand: { '@type': 'Brand', name: SITE.name },
+    url: canonical,
+    image: new URL('/og/yunma-og.png', base).href,
+    countryOfOrigin: 'CN',
+    additionalProperty: [...specRows, ...detailRows].map((row) => ({
+      '@type': 'PropertyValue',
+      name: row.label,
+      value: row.value,
+    })),
+    offers: product.variants.map((variant) => ({
+      '@type': 'Offer',
+      url: canonical,
+      priceCurrency: SITE.currency,
+      price: variant.price.toFixed(2),
+      availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@id': `${base.origin}/#organization` },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: ['FR', 'BE', 'DE', 'ES', 'IT', 'NL'] },
+      },
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.cafes, item: new URL(`${lang}/cafes/`, base).href },
+      { '@type': 'ListItem', position: 3, name: product.name[lang], item: canonical },
+    ],
+  },
+];
+
+const seoTitle = `${product.name[lang]} — ${product.subtitle[lang]}`;
+const seoDescription = `${product.short[lang]} ${product.description[lang]}`.slice(0, 300);
+---
+
+<Base
+  lang={lang}
+  title={seoTitle}
+  description={seoDescription}
+  type="product"
+  jsonld={jsonld}
+  keywords={[product.name[lang], product.subtitle[lang], t.common.tagline]}
+>
+  <div class="wrap page-top">
+    <Breadcrumbs
+      lang={lang}
+      items={[
+        { href: url(lang), label: t.common.home },
+        { href: route(lang, 'cafes'), label: t.nav.cafes },
+        { label: product.name[lang] },
+      ]}
+    />
+
+    <div class="pdp">
+      <div class="pdp__visual">
+        <div class="media pdp__media">
+          <Packshot product={product} lang={lang} size="lg" />
+        </div>
+      </div>
+
+      <div class="pdp__info">
+        <h1 class="pdp__title">{product.name[lang]}</h1>
+        <p class="pdp__sub muted">{product.subtitle[lang]}</p>
+        <p class="pdp__price mono-num">{formatPrice(price, lang)}</p>
+        <p class="pdp__short">{product.short[lang]}</p>
+
+        <dl class="specs">
+          {
+            specRows.map((row) => (
+              <div class="specs__row">
+                <dt class="label">{row.label}</dt>
+                <dd>{row.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <BuyBox product={product} lang={lang} hidePrice />
+
+        <a class="link pdp__more" href="#about">
+          {t.common.learnMore}<span class="arrow" aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+
+    <section class="about" id="about" data-reveal>
+      <h2 class="about__title">{t.product.aboutTitle}</h2>
+      <div class="about__grid">
+        <div class="about__text stack">
+          <p>{product.description[lang]}</p>
+          <p class="muted">{product.story[lang]}</p>
+          {
+            product.includes && (
+              <ul class="includes">
+                {product.includes.map((item) => (
+                  <li>{item[lang]}</li>
+                ))}
+              </ul>
+            )
+          }
+        </div>
+
+        <div class="about__side">
+          <dl class="details">
+            {
+              detailRows.map((row) => (
+                <div class="details__row">
+                  <dt class="label">{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          <a class="link" href={route(lang, 'origine')}>
+            {t.product.farmCta}<span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="brew" data-reveal>
+        <h3 class="brew__title">{t.product.brewTitle}</h3>
+        <p class="muted">{product.brew[lang]}</p>
+      </div>
+    </section>
+
+    {
+      related.length > 0 && (
+        <section class="related" aria-labelledby="h-related">
+          <h2 class="label" id="h-related">
+            {t.product.relatedTitle}
+          </h2>
+          <div class="related__grid">
+            {related.map((item, i) => item && <ProductCard product={item} lang={lang} index={i} compact />)}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .page-top {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: var(--section);
+  }
+
+  .pdp {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 4rem);
+    margin-top: clamp(1.25rem, 3vw, 2.25rem);
+  }
+
+  @media (min-width: 900px) {
+    .pdp {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      align-items: start;
+    }
+
+    .pdp__visual {
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+    }
+  }
+
+  .pdp__media {
+    background: none;
+  }
+
+  .pdp__title {
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+    color: var(--accent);
+    letter-spacing: -0.015em;
+  }
+
+  .pdp__sub {
+    margin-top: 0.35rem;
+    font-size: var(--fs-small);
+  }
+
+  .pdp__price {
+    margin-top: 0.9rem;
+    font-size: 1.125rem;
+  }
+
+  .pdp__short {
+    margin-top: 0.9rem;
+    font-size: var(--fs-lead);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    max-width: 30ch;
+  }
+
+  .specs {
+    margin-block: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .specs__row dd {
+    margin: 0.2rem 0 0;
+    font-size: var(--fs-small);
+  }
+
+  .about {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+    scroll-margin-top: calc(var(--header-h) + 2rem);
+  }
+
+  .about__title {
+    font-size: var(--fs-h3);
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .about__grid {
+    display: grid;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  @media (min-width: 860px) {
+    .about__grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    }
+  }
+
+  .about__text {
+    --stack: 1.1rem;
+    max-width: 62ch;
+  }
+
+  .includes {
+    display: grid;
+    gap: 0.45rem;
+    padding-top: 0.5rem;
+    font-size: var(--fs-small);
+  }
+
+  .includes li {
+    padding-left: 1.1rem;
+    position: relative;
+    color: var(--ink-70);
+  }
+
+  .includes li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .details {
+    display: grid;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .details__row {
+    display: grid;
+    gap: 0.2rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .details__row dd {
+    margin: 0;
+    font-size: var(--fs-small);
+  }
+
+  .brew {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--paper-2);
+    max-width: 62ch;
+  }
+
+  .brew__title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .related {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .related__grid {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+</style>

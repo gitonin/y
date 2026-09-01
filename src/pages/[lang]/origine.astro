@@ -1,0 +1,176 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Scene from '../../components/Scene.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, route, type Lang } from '../../i18n/utils';
+import { products } from '../../data/products';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+const scenes = ['ridges', 'portrait', 'terraces'] as const;
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, base).href,
+    name: t.origine.seoTitle,
+    description: t.origine.seoDescription,
+    inLanguage: t.meta.hreflang,
+    isPartOf: { '@id': `${base.origin}/#website` },
+    about: { '@type': 'Place', name: 'Yunnan', address: { '@type': 'PostalAddress', addressCountry: 'CN' } },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.origine, item: new URL(`${lang}/origine/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.origine.seoTitle} description={t.origine.seoDescription} jsonld={jsonld}>
+  <PageHero lang={lang} label={t.origine.label} title={t.origine.title} intro={t.origine.intro} crumb={t.nav.origine} />
+
+  <div class="wrap">
+    <figure class="media media--wide" data-reveal>
+      <Scene variant="ridges" tone="cool" />
+    </figure>
+  </div>
+
+  <section class="section">
+    <div class="wrap osections">
+      {
+        t.origine.sections.map((section, i) => (
+          <article class="osection">
+            <div class="osection__text">
+              <span class="label" data-reveal>{section.label}</span>
+              <h2 class="osection__title" data-reveal>{section.title}</h2>
+              <p class="muted" data-reveal>{section.text}</p>
+            </div>
+            <figure class="media media--tall osection__media">
+              <Scene variant={scenes[i % scenes.length]} tone={i % 2 === 0 ? 'warm' : 'deep'} />
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="quote panel">
+    <div class="wrap wrap--narrow">
+      <blockquote data-reveal>“{t.origine.quote}”</blockquote>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap terroirs">
+      <div>
+        <span class="label" data-reveal>{t.origine.mapTitle}</span>
+        <p class="lead terroirs__lead" data-reveal>{t.origine.mapText}</p>
+      </div>
+      <ul class="terroirs__list">
+        {
+          products.slice(0, 3).map((product) => (
+            <li data-reveal>
+              <span class="label">{product.subtitle[lang].split(',')[0]}</span>
+              <p class="small muted">
+                {product.specs.altitude[lang]} · {product.specs.process[lang]}
+              </p>
+              <p class="small muted">{product.specs.notes[lang]}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="link" href={route(lang, 'cafes')} data-reveal>
+        {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .osections {
+    display: grid;
+    gap: clamp(3rem, 7vw, 6rem);
+  }
+
+  .osection {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  @media (min-width: 860px) {
+    .osection {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+
+    .osection:nth-child(even) .osection__text {
+      order: 2;
+    }
+  }
+
+  .osection__text {
+    display: grid;
+    gap: 0.85rem;
+    align-content: start;
+  }
+
+  .osection__title {
+    font-size: var(--fs-h3);
+  }
+
+  .osection__text p {
+    max-width: 46ch;
+  }
+
+  .quote {
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+    text-align: center;
+  }
+
+  .quote blockquote {
+    font-size: var(--fs-h3);
+    line-height: 1.32;
+    letter-spacing: -0.015em;
+    max-width: 24ch;
+    margin-inline: auto;
+  }
+
+  .terroirs {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    justify-items: start;
+  }
+
+  .terroirs__lead {
+    margin-top: 0.75rem;
+  }
+
+  .terroirs__list {
+    display: grid;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  @media (min-width: 760px) {
+    .terroirs__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .terroirs__list li {
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .terroirs__list p {
+    margin-top: 0.35rem;
+  }
+</style>

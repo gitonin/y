@@ -1,0 +1,463 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Scene from '../../components/Scene.astro';
+import SplitTitle from '../../components/SplitTitle.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, route, url, postUrl, formatDate, type Lang } from '../../i18n/utils';
+import { products } from '../../data/products';
+import { SITE } from '../../consts';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+
+const posts = (await getCollection('journal'))
+  .filter((p) => p.id.startsWith(`${lang}/`) && !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const base = Astro.site ?? new URL('https://yunma.fr');
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, base).href,
+    url: new URL(Astro.url.pathname, base).href,
+    name: t.home.seoTitle,
+    description: t.home.seoDescription,
+    inLanguage: t.meta.hreflang,
+    isPartOf: { '@id': `${base.origin}/#website` },
+    about: { '@id': `${base.origin}/#organization` },
+  },
+  {
+    '@type': 'ItemList',
+    name: t.cafes.title,
+    itemListElement: products.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: new URL(`${lang}/cafes/${p.slug}/`, base).href,
+      name: p.name[lang],
+    })),
+  },
+];
+---
+
+<Base
+  lang={lang}
+  title={t.home.seoTitle}
+  description={t.home.seoDescription}
+  transparentHeader
+  jsonld={jsonld}
+  keywords={[
+    'café de spécialité',
+    'Yunnan',
+    'specialty coffee',
+    'torréfacteur',
+    'drip bag',
+    'Baoshan',
+    "Pu'er",
+  ]}
+>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero__media media is-visible">
+      <Scene variant="ridges" tone="warm" />
+    </div>
+    <div class="hero__inner wrap">
+      <SplitTitle text={t.home.heroTitle} as="h1" size="hero" class="hero__title" />
+      <p class="hero__sub label prewrap">{t.home.heroSub}</p>
+      <a class="hero__cta link" href={route(lang, 'cafes')}>
+        {t.home.heroCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+    <span class="hero__scroll label" aria-hidden="true">{t.common.scroll}</span>
+  </section>
+
+  <!-- ============ ORIGINE ============ -->
+  <section class="section" aria-labelledby="h-origine">
+    <div class="wrap grid grid--sidebar">
+      <div data-reveal>
+        <span class="label">{t.home.originLabel}</span>
+      </div>
+      <div>
+        <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title" />
+        <p class="lead muted origin__text" data-reveal id="h-origine">{t.home.originText}</p>
+        <a class="link" href={route(lang, 'origine')} data-reveal>
+          {t.home.originCta}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <figure class="bleed">
+      <div class="media media--wide">
+        <Scene variant="terraces" tone="warm" />
+      </div>
+      <figcaption class="visually-hidden">{t.home.originAlt}</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ CAFÉS ============ -->
+  <section class="section section--tight panel" aria-labelledby="h-cafes">
+    <div class="wrap">
+      <header class="shead">
+        <div>
+          <span class="label" data-reveal>{t.home.coffeesLabel}</span>
+          <SplitTitle text={t.home.coffeesTitle} as="h2" size="lg" class="sec-title" />
+        </div>
+        <div class="shead__aside">
+          <p class="muted" data-reveal id="h-cafes">{t.home.coffeesText}</p>
+          <a class="link" href={route(lang, 'cafes')} data-reveal>
+            {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="pgrid">
+        {products.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APPROCHE ============ -->
+  <section class="section" aria-labelledby="h-approche">
+    <div class="wrap approach">
+      <div class="approach__text">
+        <span class="label" data-reveal>{t.home.approachLabel}</span>
+        <SplitTitle text={t.home.approachTitle} as="h2" size="lg" class="sec-title" />
+        <p class="lead muted" data-reveal id="h-approche">{t.home.approachText}</p>
+        <a class="link" href={route(lang, 'savoirFaire')} data-reveal>
+          {t.home.approachCta}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+      <figure class="approach__media">
+        <div class="media media--tall">
+          <Scene variant="cherries" tone="deep" />
+        </div>
+        <figcaption class="visually-hidden">{t.home.approachAlt}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ JOURNAL ============ -->
+  {
+    posts.length > 0 && (
+      <section class="section section--tight" aria-labelledby="h-journal">
+        <div class="wrap">
+          <header class="shead">
+            <div>
+              <span class="label" data-reveal>{t.home.journalLabel}</span>
+              <SplitTitle text={t.home.journalTitle} as="h2" size="md" />
+            </div>
+            <div class="shead__aside">
+              <a class="link" href={route(lang, 'journal')} data-reveal id="h-journal">
+                {t.journal.all}
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            </div>
+          </header>
+
+          <ul class="jgrid">
+            {posts.map((post, i) => (
+              <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
+                <a class="jcard media-link" href={postUrl(lang, post.id.split('/')[1])}>
+                  <div class="media media--wide">
+                    <Scene variant={post.data.scene} tone={post.data.tone} />
+                  </div>
+                  <time class="label jcard__date" datetime={post.data.date.toISOString()}>
+                    {formatDate(post.data.date, lang)}
+                  </time>
+                  <h3 class="jcard__title">{post.data.title}</h3>
+                  <p class="small muted jcard__desc">{post.data.description}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============ PRO ============ -->
+  <section class="pro-band panel--olive" aria-labelledby="h-pro">
+    <div class="wrap pro-band__inner">
+      <div>
+        <span class="label" data-reveal>{t.home.proLabel}</span>
+        <p class="pro-band__title" data-reveal id="h-pro">{t.home.proTitle}</p>
+      </div>
+      <a class="link pro-band__cta" href={route(lang, 'pro')} data-reveal>
+        {t.home.proCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="closing" aria-labelledby="h-closing">
+    <div class="closing__media media">
+      <Scene variant="ridges" tone="deep" />
+    </div>
+    <div class="closing__inner wrap">
+      <SplitTitle text={t.home.closingTitle} as="p" size="closing" class="on-dark" />
+      <a class="link closing__cta" href={url(lang, 'a-propos')} id="h-closing">
+        {t.home.closingCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+    overflow: hidden;
+    color: var(--ink);
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    background: var(--paper-2);
+  }
+
+  .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(244, 242, 236, 0.5) 0%, rgba(244, 242, 236, 0) 42%, rgba(28, 28, 26, 0.28) 100%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+  }
+
+  .hero__sub {
+    margin-top: 1.25rem;
+    color: rgba(251, 250, 247, 0.85);
+    line-height: 1.7;
+  }
+
+  .hero__cta {
+    margin-top: 1.5rem;
+    color: var(--white);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    right: var(--gutter);
+    bottom: clamp(3rem, 8vh, 6rem);
+    z-index: 2;
+    color: rgba(251, 250, 247, 0.7);
+    writing-mode: vertical-rl;
+    animation: drift 2.6s var(--ease) infinite;
+  }
+
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.55;
+    }
+    50% {
+      transform: translateY(10px);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero__scroll {
+      display: none;
+    }
+  }
+
+  /* ---------- Sections ---------- */
+  :global(.sec-title) {
+    margin-bottom: 1.25rem;
+  }
+
+  .origin__text {
+    max-width: 46ch;
+    margin-bottom: 1.5rem;
+  }
+
+  .bleed {
+    margin-top: clamp(2.5rem, 6vw, 5rem);
+    padding-inline: var(--gutter);
+    max-width: var(--max);
+    margin-inline: auto;
+  }
+
+  .shead {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  @media (min-width: 860px) {
+    .shead {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      align-items: end;
+      gap: clamp(2rem, 6vw, 5rem);
+    }
+  }
+
+  .shead__aside {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    max-width: 44ch;
+  }
+
+  .pgrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
+  }
+
+  @media (min-width: 700px) {
+    .pgrid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .pgrid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  .approach {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  @media (min-width: 860px) {
+    .approach {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+  }
+
+  .approach__text {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .approach__text .lead {
+    max-width: 42ch;
+  }
+
+  /* ---------- Journal ---------- */
+  .jgrid {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  @media (min-width: 760px) {
+    .jgrid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .jcard__date {
+    margin-top: 1rem;
+  }
+
+  .jcard__title {
+    margin-top: 0.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.32;
+    transition: color 0.4s var(--ease);
+  }
+
+  .jcard:hover .jcard__title {
+    color: var(--accent);
+  }
+
+  .jcard__desc {
+    margin-top: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ---------- Bande pro ---------- */
+  .pro-band {
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .pro-band__inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 860px) {
+    .pro-band__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      align-items: end;
+    }
+  }
+
+  .pro-band__title {
+    margin-top: 0.75rem;
+    font-size: var(--fs-h3);
+    line-height: 1.25;
+    max-width: 24ch;
+  }
+
+  .pro-band__cta {
+    color: var(--white);
+    justify-self: start;
+  }
+
+  @media (min-width: 860px) {
+    .pro-band__cta {
+      justify-self: end;
+    }
+  }
+
+  /* ---------- Closing ---------- */
+  .closing {
+    position: relative;
+    min-height: 78svh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    overflow: hidden;
+  }
+
+  .closing__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .closing__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 30%, rgba(28, 28, 26, 0.42) 100%);
+  }
+
+  .closing__inner {
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+  }
+
+  .closing__cta {
+    margin-top: 1.25rem;
+    color: var(--white);
+  }
+</style>

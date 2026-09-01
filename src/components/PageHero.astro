@@ -1,0 +1,52 @@
+---
+import type { Lang } from '../i18n/utils';
+import Breadcrumbs from './Breadcrumbs.astro';
+import SplitTitle from './SplitTitle.astro';
+import { url, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  label: string;
+  title: string;
+  intro?: string;
+  crumb: string;
+  size?: 'lg' | 'md';
+}
+const { lang, label, title, intro, crumb, size = 'lg' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<header class="phero wrap">
+  <Breadcrumbs lang={lang} items={[{ href: url(lang), label: t.common.home }, { label: crumb }]} />
+  <span class="label phero__label" data-reveal>{label}</span>
+  <SplitTitle text={title} as="h1" size={size === 'lg' ? 'xl' : 'lg'} class={`phero__title phero__title--${size}`} />
+  {intro && <p class="lead muted phero__intro" data-reveal>{intro}</p>}
+</header>
+
+<style>
+  .phero {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .phero__label {
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  :global(.phero__title) {
+    margin-top: 0.75rem;
+  }
+
+  :global(.phero__title--lg) {
+    max-width: 16ch;
+  }
+
+  :global(.phero__title--md) {
+    max-width: 20ch;
+  }
+
+  .phero__intro {
+    margin-top: 1.5rem;
+    max-width: 52ch;
+  }
+</style>

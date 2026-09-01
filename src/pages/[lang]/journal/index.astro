@@ -1,0 +1,178 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Scene from '../../../components/Scene.astro';
+import { langPaths } from '../../../i18n/paths';
+import { useTranslations, postUrl, formatDate, type Lang } from '../../../i18n/utils';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+
+const posts = (await getCollection('journal'))
+  .filter((p) => p.id.startsWith(`${lang}/`) && !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const [featured, ...rest] = posts;
+const slugOf = (id: string) => id.split('/').slice(1).join('/');
+
+const jsonld = [
+  {
+    '@type': 'Blog',
+    '@id': `${new URL(Astro.url.pathname, base).href}#blog`,
+    name: t.journal.seoTitle,
+    description: t.journal.seoDescription,
+    inLanguage: t.meta.hreflang,
+    publisher: { '@id': `${base.origin}/#organization` },
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.date.toISOString(),
+      url: new URL(postUrl(lang, slugOf(post.id)), base).href,
+      author: { '@type': 'Organization', name: post.data.author },
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.journal, item: new URL(`${lang}/journal/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.journal.seoTitle} description={t.journal.seoDescription} jsonld={jsonld}>
+  <PageHero
+    lang={lang}
+    label={t.journal.label}
+    title={t.journal.title}
+    intro={t.journal.intro}
+    crumb={t.nav.journal}
+  />
+
+  <div class="wrap jwrap">
+    {posts.length === 0 && <p class="muted">{t.journal.empty}</p>}
+
+    {
+      featured && (
+        <a class="feat media-link" href={postUrl(lang, slugOf(featured.id))} data-reveal>
+          <div class="media feat__media">
+            <Scene variant={featured.data.scene} tone={featured.data.tone} />
+          </div>
+          <div class="feat__body">
+            <span class="label">{t.journal.latest}</span>
+            <h2 class="feat__title">{featured.data.title}</h2>
+            <p class="muted feat__desc">{featured.data.description}</p>
+            <p class="small feat__meta">
+              <time datetime={featured.data.date.toISOString()}>{formatDate(featured.data.date, lang)}</time>
+              {featured.data.tags.length > 0 && <span> · {featured.data.tags.join(' · ')}</span>}
+            </p>
+          </div>
+        </a>
+      )
+    }
+
+    {
+      rest.length > 0 && (
+        <ul class="jlist">
+          {rest.map((post, i) => (
+            <li data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
+              <a class="jitem media-link" href={postUrl(lang, slugOf(post.id))}>
+                <div class="media media--wide">
+                  <Scene variant={post.data.scene} tone={post.data.tone} />
+                </div>
+                <time class="label jitem__date" datetime={post.data.date.toISOString()}>
+                  {formatDate(post.data.date, lang)}
+                </time>
+                <h3 class="jitem__title">{post.data.title}</h3>
+                <p class="small muted">{post.data.description}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .jwrap {
+    padding-bottom: var(--section);
+  }
+
+  .feat {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 900px) {
+    .feat {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: center;
+    }
+  }
+
+  .feat__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .feat__body {
+    display: grid;
+    gap: 0.75rem;
+    align-content: center;
+  }
+
+  .feat__title {
+    font-size: var(--fs-h2);
+    line-height: 1.12;
+    transition: color 0.4s var(--ease);
+  }
+
+  .feat:hover .feat__title {
+    color: var(--accent);
+  }
+
+  .feat__desc {
+    max-width: 46ch;
+  }
+
+  .feat__meta {
+    color: var(--ink-50);
+    letter-spacing: 0.02em;
+  }
+
+  .jlist {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 760px) {
+    .jlist {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .jitem__date {
+    margin-top: 1rem;
+  }
+
+  .jitem__title {
+    margin-block: 0.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.32;
+    transition: color 0.4s var(--ease);
+  }
+
+  .jitem:hover .jitem__title {
+    color: var(--accent);
+  }
+</style>

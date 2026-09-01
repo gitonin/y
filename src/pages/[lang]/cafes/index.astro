@@ -1,0 +1,232 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import SplitTitle from '../../../components/SplitTitle.astro';
+import { langPaths } from '../../../i18n/paths';
+import { useTranslations, url, route, type Lang } from '../../../i18n/utils';
+import { products } from '../../../data/products';
+import { SITE } from '../../../consts';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+
+const filters = [
+  { key: 'all', label: t.cafes.filterAll },
+  { key: 'grain', label: t.cafes.filterGrains },
+  { key: 'drip', label: t.cafes.filterDrip },
+  { key: 'set', label: t.cafes.filterSets },
+];
+
+const jsonld = [
+  {
+    '@type': 'CollectionPage',
+    '@id': new URL(Astro.url.pathname, base).href,
+    name: t.cafes.seoTitle,
+    description: t.cafes.seoDescription,
+    inLanguage: t.meta.hreflang,
+    isPartOf: { '@id': `${base.origin}/#website` },
+  },
+  {
+    '@type': 'ItemList',
+    name: t.cafes.title,
+    numberOfItems: products.length,
+    itemListElement: products.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: new URL(`${lang}/cafes/${p.slug}/`, base).href,
+      name: p.name[lang],
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.cafes, item: new URL(`${lang}/cafes/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.cafes.seoTitle} description={t.cafes.seoDescription} jsonld={jsonld}>
+  <div class="wrap page-top">
+    <Breadcrumbs lang={lang} items={[{ href: url(lang), label: t.common.home }, { label: t.nav.cafes }]} />
+
+    <header class="chead">
+      <span class="label" data-reveal>{t.cafes.label}</span>
+      <SplitTitle text={t.cafes.title} as="h1" size="xl" class="chead__title" />
+      <p class="lead muted chead__intro" data-reveal>{t.cafes.intro}</p>
+    </header>
+
+    <div class="filters" role="group" aria-label={t.cafes.filterAll} data-reveal>
+      {
+        filters.map((f) => (
+          <button type="button" class="filters__btn" data-filter={f.key} aria-pressed={f.key === 'all' ? 'true' : 'false'}>
+            {f.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="clist" data-product-list>
+      {
+        products.map((product, i) => (
+          <div data-category={product.category}>
+            <ProductCard product={product} lang={lang} index={i} />
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="clist__empty muted" data-list-empty hidden>{t.cafes.empty}</p>
+
+    <aside class="help panel" data-reveal>
+      <div>
+        <h2 class="help__title">{t.cafes.helpTitle}</h2>
+        <p class="muted help__text">{t.cafes.helpText}</p>
+      </div>
+      <a class="link" href={route(lang, 'contact')}>
+        {t.common.contactUs}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .page-top {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: var(--section);
+  }
+
+  .chead {
+    margin-block: clamp(1.5rem, 4vw, 2.5rem) clamp(2rem, 5vw, 3rem);
+  }
+
+  :global(.chead__title) {
+    margin-top: 0.75rem;
+    max-width: 14ch;
+  }
+
+  .chead__intro {
+    margin-top: 1.25rem;
+    max-width: 46ch;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .filters__btn {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--line);
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
+    transition:
+      color 0.35s var(--ease),
+      border-color 0.35s var(--ease),
+      background-color 0.35s var(--ease);
+  }
+
+  .filters__btn:hover {
+    color: var(--ink);
+    border-color: var(--ink-30);
+  }
+
+  .filters__btn[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .clist {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 2.5vw, 2rem);
+  }
+
+  @media (min-width: 900px) {
+    .clist {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .clist > [hidden] {
+    display: none;
+  }
+
+  .clist__empty {
+    padding-block: 3rem;
+    text-align: center;
+  }
+
+  .help {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  @media (min-width: 860px) {
+    .help {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 2rem;
+    }
+  }
+
+  .help__title {
+    font-size: var(--fs-h3);
+  }
+
+  .help__text {
+    margin-top: 0.5rem;
+    max-width: 52ch;
+  }
+</style>
+
+<script>
+  const initFilters = () => {
+    const list = document.querySelector<HTMLElement>('[data-product-list]');
+    if (!list || list.dataset.bound) return;
+    list.dataset.bound = '1';
+
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const items = list.querySelectorAll<HTMLElement>('[data-category]');
+    const empty = document.querySelector<HTMLElement>('[data-list-empty]');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.filter!;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        let visible = 0;
+        items.forEach((item, i) => {
+          const match = key === 'all' || item.dataset.category === key;
+          item.hidden = !match;
+          if (match) {
+            visible += 1;
+            const card = item.firstElementChild as HTMLElement | null;
+            if (card) {
+              card.style.setProperty('--reveal-delay', `${(i % 3) * 60}ms`);
+              card.classList.remove('is-visible');
+              requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('is-visible')));
+            }
+          }
+        });
+        if (empty) empty.hidden = visible > 0;
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', initFilters);
+</script>

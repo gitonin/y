@@ -1,0 +1,104 @@
+---
+import type { Lang } from '../i18n/utils';
+import { dictionaries, languages, defaultAlternates } from '../i18n/utils';
+import { SITE } from '../consts';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article' | 'product';
+  alternates?: Partial<Record<Lang, string>>;
+  noindex?: boolean;
+  jsonld?: Record<string, unknown>[];
+  keywords?: string[];
+}
+
+const {
+  lang,
+  title,
+  description,
+  image = '/og/yunma-og.png',
+  type = 'website',
+  alternates,
+  noindex = false,
+  jsonld = [],
+  keywords = [],
+} = Astro.props;
+
+const base = Astro.site ?? new URL('https://yunma.fr');
+const canonical = new URL(Astro.url.pathname, base).href;
+const ogImage = new URL(image, base).href;
+const alts = { ...defaultAlternates(Astro.url.pathname), ...(alternates ?? {}) };
+const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
+
+const organization = {
+  '@type': 'Organization',
+  '@id': `${base.origin}/#organization`,
+  name: SITE.name,
+  url: base.origin,
+  logo: new URL('/brand/icon-512.png', base).href,
+  email: SITE.email,
+  telephone: SITE.phone,
+  foundingDate: SITE.founded,
+  description: dictionaries[lang].home.seoDescription,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.street,
+    postalCode: SITE.address.postalCode,
+    addressLocality: SITE.address.city,
+    addressCountry: SITE.address.country,
+  },
+  sameAs: [SITE.social.instagram, SITE.social.linkedin],
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${base.origin}/#website`,
+  url: base.origin,
+  name: SITE.name,
+  inLanguage: dictionaries[lang].meta.hreflang,
+  publisher: { '@id': `${base.origin}/#organization` },
+};
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [organization, website, ...jsonld],
+};
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+{keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+<link rel="canonical" href={canonical} />
+
+{
+  languages.map((code) => (
+    <link rel="alternate" hreflang={dictionaries[code].meta.hreflang} href={new URL(alts[code]!, base).href} />
+  ))
+}
+<link rel="alternate" hreflang="x-default" href={new URL(alts.fr!, base).href} />
+
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+
+<meta property="og:type" content={type === 'product' ? 'website' : type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={`${SITE.name} — ${dictionaries[lang].common.tagline}`} />
+<meta property="og:locale" content={dictionaries[lang].meta.ogLocale} />
+{
+  languages
+    .filter((c) => c !== lang)
+    .map((code) => <meta property="og:locale:alternate" content={dictionaries[code].meta.ogLocale} />)
+}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />

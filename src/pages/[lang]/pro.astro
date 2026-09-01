@@ -1,0 +1,311 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SplitTitle from '../../components/SplitTitle.astro';
+import Scene from '../../components/Scene.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, url, route, type Lang } from '../../i18n/utils';
+import { SITE } from '../../consts';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+
+const jsonld = [
+  {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, base).href,
+    name: t.pro.seoTitle,
+    description: t.pro.seoDescription,
+    inLanguage: t.meta.hreflang,
+    isPartOf: { '@id': `${base.origin}/#website` },
+  },
+  {
+    '@type': 'Service',
+    name: t.pro.offerTitle,
+    provider: { '@id': `${base.origin}/#organization` },
+    areaServed: ['FR', 'BE', 'LU', 'CH'],
+    audience: { '@type': 'BusinessAudience', name: t.pro.forWhoText },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: t.pro.offerTitle,
+      itemListElement: t.pro.offers.map((offer) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: offer.title, description: offer.text },
+      })),
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.pro, item: new URL(`${lang}/pro/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.pro.seoTitle} description={t.pro.seoDescription} jsonld={jsonld}>
+  <div class="wrap page-top">
+    <Breadcrumbs lang={lang} items={[{ href: url(lang), label: t.common.home }, { label: t.nav.pro }]} />
+  </div>
+
+  <section class="phead">
+    <div class="wrap phead__inner">
+      <div class="phead__text">
+        <span class="label" data-reveal>{t.pro.label}</span>
+        <SplitTitle text={t.pro.title} as="h1" size="xl" />
+        <p class="lead muted phead__intro" data-reveal>{t.pro.intro}</p>
+        <a class="link" href="#contact-pro" data-reveal>
+          {t.pro.cta}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+      <figure class="media phead__media">
+        <Scene variant="counter" tone="warm" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <h2 class="label" data-reveal>{t.pro.commitmentsTitle}</h2>
+      <ul class="commits">
+        {
+          t.pro.commitments.map((item, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
+              <span class="commits__mark" aria-hidden="true" />
+              <h3 class="commits__title">{item.title}</h3>
+              <p class="small muted">{item.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight panel">
+    <div class="wrap offers__wrap">
+      <header class="offers__head">
+        <h2 class="offers__title">{t.pro.offerTitle}</h2>
+        <p class="muted" data-reveal>{t.pro.forWhoText}</p>
+      </header>
+      <ul class="offers">
+        {
+          t.pro.offers.map((offer, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
+              <h3 class="offers__name">{offer.title}</h3>
+              <p class="small muted">{offer.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <ul class="tags">
+        {t.pro.forWho.map((item) => <li data-reveal>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <h2 class="label" data-reveal>{t.pro.stepsTitle}</h2>
+      <ol class="psteps">
+        {
+          t.pro.steps.map((step, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
+              <span class="label psteps__n">{step.n}</span>
+              <h3 class="psteps__title">{step.title}</h3>
+              <p class="small muted">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="pcontact panel--olive" id="contact-pro">
+    <div class="wrap pcontact__inner">
+      <div>
+        <span class="label" data-reveal>{t.pro.contactTitle}</span>
+        <p class="pcontact__title" data-reveal>{t.pro.contactText}</p>
+        <p class="small pcontact__meta" data-reveal>{t.pro.formIntro}</p>
+      </div>
+      <ul class="pcontact__links" data-reveal>
+        <li><a href={`mailto:${SITE.proEmail}`}>{SITE.proEmail}</a></li>
+        <li><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></li>
+        <li><a href={route(lang, 'contact')}>{t.nav.contact}</a></li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-top {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .phead {
+    padding-block: clamp(1.5rem, 4vw, 3rem) clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .phead__inner {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .phead__inner {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+  }
+
+  .phead__text {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .phead__intro {
+    max-width: 34ch;
+  }
+
+  .phead__media {
+    aspect-ratio: 3 / 4;
+  }
+
+  @media (min-width: 900px) {
+    .phead__media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .commits,
+  .offers,
+  .psteps {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 800px) {
+    .commits,
+    .offers,
+    .psteps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .commits__mark {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--ink-30);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .commits__mark::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: var(--accent);
+  }
+
+  .commits__title,
+  .offers__name,
+  .psteps__title {
+    font-size: 1.0625rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .offers__head {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 46ch;
+  }
+
+  .offers__title {
+    font-size: var(--fs-h2);
+  }
+
+  .offers > li,
+  .psteps > li {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .psteps__n {
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+
+  .tags {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tags li {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: var(--fs-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-70);
+  }
+
+  .pcontact {
+    padding-block: clamp(3rem, 7vw, 5rem);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .pcontact__inner {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 860px) {
+    .pcontact__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      align-items: start;
+    }
+  }
+
+  .pcontact__title {
+    margin-top: 0.75rem;
+    font-size: var(--fs-h3);
+    max-width: 22ch;
+  }
+
+  .pcontact__meta {
+    margin-top: 0.75rem;
+    color: rgba(251, 250, 247, 0.66);
+  }
+
+  .pcontact__links {
+    display: grid;
+    gap: 0.5rem;
+    font-size: var(--fs-small);
+  }
+
+  .pcontact__links a {
+    position: relative;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(251, 250, 247, 0.3);
+    transition: border-color 0.4s var(--ease);
+  }
+
+  .pcontact__links a:hover {
+    border-color: var(--white);
+  }
+</style>

@@ -1,0 +1,155 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, route, type Lang } from '../../i18n/utils';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+
+const jsonld = [
+  {
+    '@type': 'FAQPage',
+    '@id': `${new URL(Astro.url.pathname, base).href}#faq`,
+    inLanguage: t.meta.hreflang,
+    mainEntity: t.faq.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.faq, item: new URL(`${lang}/faq/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.faq.seoTitle} description={t.faq.seoDescription} jsonld={jsonld}>
+  <PageHero lang={lang} label={t.faq.label} title={t.faq.title} intro={t.faq.intro} crumb={t.nav.faq} size="md" />
+
+  <div class="wrap faq">
+    <ul class="faq__list">
+      {
+        t.faq.items.map((item, i) => (
+          <li data-reveal style={`--reveal-delay:${(i % 4) * 60}ms`}>
+            <details name="faq" open={i === 0}>
+              <summary>
+                <span>{item.q}</span>
+                <span class="faq__icon" aria-hidden="true" />
+              </summary>
+              <div class="faq__answer">
+                <p class="muted">{item.a}</p>
+              </div>
+            </details>
+          </li>
+        ))
+      }
+    </ul>
+
+    <aside class="faq__aside panel" data-reveal>
+      <p class="muted">{t.contact.intro}</p>
+      <a class="link" href={route(lang, 'contact')}>
+        {t.common.contactUs}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .faq {
+    padding-bottom: var(--section);
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 960px) {
+    .faq {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      align-items: start;
+    }
+  }
+
+  .faq__list {
+    border-top: 1px solid var(--line);
+  }
+
+  .faq__list li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.35rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    transition: color 0.35s var(--ease);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover {
+    color: var(--accent);
+  }
+
+  .faq__icon {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  details[open] .faq__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .faq__answer {
+    padding-bottom: 1.5rem;
+    max-width: 62ch;
+    animation: faq-in 0.5s var(--ease-out-expo) both;
+  }
+
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  .faq__aside {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+  }
+</style>

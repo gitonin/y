@@ -1,0 +1,13 @@
+{
+  "name": "Yunma — Cafés de spécialité du Yunnan",
+  "short_name": "Yunma",
+  "description": "Cafés de spécialité du Yunnan, sélectionnés et torréfiés en petites séries.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f2ec",
+  "theme_color": "#f4f2ec",
+  "icons": [
+    { "src": "/brand/favicon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

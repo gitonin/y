@@ -1,0 +1,61 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, type Lang } from '../../i18n/utils';
+import { mentions } from '../../data/legal';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const sections = mentions[lang];
+---
+
+<Base lang={lang} title={t.legal.mentionsTitle} description={t.legal.mentionsSeo}>
+  <PageHero lang={lang} label={t.footer.legal} title={t.legal.mentionsTitle} crumb={t.legal.mentionsTitle} size="md" />
+
+  <div class="wrap wrap--narrow legal">
+    <p class="small muted legal__note">{t.legal.placeholder}</p>
+    {
+      sections.map((section) => (
+        <section class="legal__section" data-reveal>
+          <h2>{section.title}</h2>
+          {section.body.map((paragraph) => (
+            <p class="muted">{paragraph}</p>
+          ))}
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .legal {
+    padding-bottom: var(--section);
+  }
+
+  .legal__note {
+    padding: 1rem 1.25rem;
+    background: var(--paper-2);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .legal__section {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .legal__section h2 {
+    font-size: var(--fs-h3);
+    margin-bottom: 0.75rem;
+  }
+
+  .legal__section p + p {
+    margin-top: 0.85rem;
+  }
+
+  .legal__section p {
+    max-width: 68ch;
+  }
+</style>

@@ -1,0 +1,3 @@
+# Netlify / Cloudflare Pages — redirection de la racine vers la langue par défaut
+/            /fr/    302
+/index.html  /fr/    301

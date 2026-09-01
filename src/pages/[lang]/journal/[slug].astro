@@ -1,0 +1,240 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Scene from '../../../components/Scene.astro';
+import { languages, useTranslations, url, route, postUrl, formatDate, type Lang } from '../../../i18n/utils';
+import { SITE } from '../../../consts';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getCollection('journal');
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => {
+      const [lang, ...rest] = post.id.split('/');
+      return { params: { lang, slug: rest.join('/') }, props: { post } };
+    });
+};
+
+const lang = Astro.params.lang as Lang;
+const slug = Astro.params.slug as string;
+const { post } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(post);
+const base = Astro.site ?? new URL('https://yunma.fr');
+const canonical = new URL(Astro.url.pathname, base).href;
+
+/* Alternates : uniquement les langues où l'article existe */
+const all = await getCollection('journal');
+const available = new Set(all.filter((p) => p.id.endsWith(`/${slug}`)).map((p) => p.id.split('/')[0]));
+const alternates = Object.fromEntries(
+  languages.map((code) => [code, available.has(code) ? postUrl(code, slug) : route(code, 'journal')])
+) as Record<Lang, string>;
+
+const words = post.body?.split(/\s+/).length ?? 0;
+const readingTime = Math.max(2, Math.round(words / (lang === 'zh' ? 300 : 200)));
+
+const jsonld = [
+  {
+    '@type': 'BlogPosting',
+    '@id': `${canonical}#article`,
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.date.toISOString(),
+    dateModified: (post.data.updated ?? post.data.date).toISOString(),
+    inLanguage: t.meta.hreflang,
+    keywords: post.data.tags.join(', '),
+    wordCount: words,
+    author: { '@type': 'Organization', name: post.data.author, url: base.origin },
+    publisher: { '@id': `${base.origin}/#organization` },
+    mainEntityOfPage: canonical,
+    image: new URL('/og/yunma-og.png', base).href,
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.journal, item: new URL(`${lang}/journal/`, base).href },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: canonical },
+    ],
+  },
+];
+---
+
+<Base
+  lang={lang}
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  alternates={alternates}
+  jsonld={jsonld}
+  keywords={post.data.tags}
+>
+  <div class="wrap page-top">
+    <Breadcrumbs
+      lang={lang}
+      items={[
+        { href: url(lang), label: t.common.home },
+        { href: route(lang, 'journal'), label: t.nav.journal },
+        { label: post.data.title },
+      ]}
+    />
+  </div>
+
+  <article class="post">
+    <header class="post__head wrap wrap--narrow">
+      <p class="label post__meta">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time>
+        <span> · {readingTime} {t.common.minRead}</span>
+      </p>
+      <h1 class="post__title">{post.data.title}</h1>
+      <p class="lead muted post__lead">{post.data.description}</p>
+    </header>
+
+    <figure class="wrap post__cover">
+      <div class="media media--wide">
+        <Scene variant={post.data.scene} tone={post.data.tone} />
+      </div>
+    </figure>
+
+    <div class="wrap wrap--narrow post__body">
+      <Content />
+    </div>
+
+    {
+      post.data.tags.length > 0 && (
+        <footer class="wrap wrap--narrow post__foot">
+          <span class="label">{t.journal.tags}</span>
+          <ul class="post__tags">
+            {post.data.tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+          <a class="link" href={route(lang, 'journal')}>
+            <span class="arrow" aria-hidden="true">←</span>
+            {t.common.backToJournal}
+          </a>
+        </footer>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .page-top {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .post {
+    padding-bottom: var(--section);
+  }
+
+  .post__head {
+    padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .post__meta {
+    color: var(--ink-50);
+  }
+
+  .post__title {
+    margin-top: 0.85rem;
+    font-size: clamp(1.85rem, 1.4rem + 2vw, 3rem);
+    letter-spacing: -0.022em;
+    line-height: 1.1;
+  }
+
+  .post__lead {
+    margin-top: 1.25rem;
+  }
+
+  .post__cover {
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .post__body {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .post__body :global(p) {
+    margin-bottom: 1.4rem;
+    max-width: 68ch;
+  }
+
+  .post__body :global(h2) {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 0.9rem;
+    font-size: var(--fs-h3);
+    letter-spacing: -0.015em;
+  }
+
+  .post__body :global(h3) {
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+    font-size: 1.0625rem;
+  }
+
+  .post__body :global(strong) {
+    font-weight: 500;
+  }
+
+  .post__body :global(ol),
+  .post__body :global(ul) {
+    margin-bottom: 1.4rem;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    max-width: 66ch;
+  }
+
+  .post__body :global(ol) {
+    list-style: decimal;
+  }
+
+  .post__body :global(ul) {
+    list-style: disc;
+  }
+
+  .post__body :global(li)::marker {
+    color: var(--accent);
+  }
+
+  .post__body :global(blockquote) {
+    margin: 2rem 0;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--accent);
+    font-size: var(--fs-lead);
+    line-height: 1.45;
+  }
+
+  .post__body :global(a) {
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .post__foot {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .post__tags li {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: var(--fs-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-70);
+  }
+</style>

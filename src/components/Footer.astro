@@ -1,0 +1,289 @@
+---
+import type { Lang } from '../i18n/utils';
+import { useTranslations, route, url, defaultAlternates, languages, dictionaries } from '../i18n/utils';
+import { SITE, SHOPIFY } from '../consts';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const alt = defaultAlternates(Astro.url.pathname);
+const year = new Date().getFullYear();
+
+const rowA = [
+  { href: route(lang, 'origine'), label: t.nav.origine },
+  { href: route(lang, 'cafes'), label: t.nav.cafes },
+  { href: route(lang, 'savoirFaire'), label: t.nav.savoirFaire },
+  { href: route(lang, 'journal'), label: t.nav.journal },
+  { href: route(lang, 'apropos'), label: t.nav.apropos },
+  { href: route(lang, 'pro'), label: t.nav.pro },
+];
+---
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft__news" data-reveal>
+      <div>
+        <span class="label">{t.common.newsletterTitle}</span>
+        <p class="ft__newsText">{t.common.newsletterText}</p>
+      </div>
+      <form class="ft__form" data-newsletter novalidate>
+        <label class="visually-hidden" for="ft-email">{t.common.email}</label>
+        <input id="ft-email" type="email" name="email" required placeholder="hello@exemple.com" autocomplete="email" />
+        <button class="ft__submit" type="submit">
+          {t.common.newsletterCta}
+          <span aria-hidden="true">→</span>
+        </button>
+        <p class="ft__ok small" data-newsletter-ok hidden>{t.common.newsletterOk}</p>
+      </form>
+    </div>
+
+    <hr class="rule" />
+
+    <div class="ft__main">
+      <a class="ft__logo" href={url(lang)} aria-label={t.a11y.logo}>
+        <img src="/brand/yunma-logo.png" alt="Yunma" width="228" height="342" loading="lazy" />
+      </a>
+
+      <nav class="ft__nav" aria-label={t.footer.nav}>
+        <ul class="ft__row">
+          {rowA.map((i) => (
+            <li><a href={i.href}>{i.label}</a></li>
+          ))}
+        </ul>
+        <ul class="ft__row ft__row--soft">
+          <li><a href={route(lang, 'faq')}>{t.nav.faq}</a></li>
+          <li><a href={route(lang, 'contact')}>{t.nav.contact}</a></li>
+          <li>
+            <a href={SHOPIFY.accountUrl || route(lang, 'contact')} rel={SHOPIFY.accountUrl ? 'nofollow' : undefined}>
+              {t.nav.account}
+            </a>
+          </li>
+          <li>
+            <button type="button" data-cart-toggle>{t.nav.cart} (<span data-cart-count-inline>0</span>)</button>
+          </li>
+        </ul>
+      </nav>
+
+      <ul class="ft__lang" aria-label={t.nav.language}>
+        {languages.map((code) => (
+          <li>
+            <a
+              href={alt[code]}
+              hreflang={dictionaries[code].meta.hreflang}
+              lang={dictionaries[code].meta.htmlLang}
+              class={code === lang ? 'is-active' : ''}>{dictionaries[code].meta.short}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="ft__base small">
+      <p>© {year} {SITE.name} — {t.footer.rights}</p>
+      <ul class="ft__legal">
+        <li><a href={route(lang, 'mentions')}>{t.footer.mentions}</a></li>
+        <li><a href={route(lang, 'cgv')}>{t.footer.cgv}</a></li>
+        <li><span class="muted">{t.footer.payment}</span></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .ft__news {
+    display: grid;
+    gap: 1.75rem;
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  @media (min-width: 860px) {
+    .ft__news {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: end;
+      gap: clamp(2rem, 6vw, 5rem);
+    }
+  }
+
+  .ft__newsText {
+    margin-top: 0.65rem;
+    max-width: 40ch;
+    color: var(--ink-70);
+    font-size: var(--fs-small);
+  }
+
+  .ft__form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.4s var(--ease);
+  }
+
+  .ft__form:focus-within {
+    border-color: var(--ink);
+  }
+
+  .ft__form input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.85rem 0;
+    background: none;
+    border: 0;
+  }
+
+  .ft__form input:focus {
+    outline: none;
+  }
+
+  .ft__submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .ft__submit span {
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+
+  .ft__submit:hover span {
+    transform: translateX(4px);
+  }
+
+  .ft__ok {
+    position: absolute;
+    left: 0;
+    bottom: -1.75rem;
+    color: var(--accent);
+  }
+
+  .ft__main {
+    display: grid;
+    justify-items: center;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+    padding-block: clamp(2.25rem, 5vw, 3.5rem);
+    text-align: center;
+  }
+
+  .ft__logo img {
+    height: 54px;
+    width: auto;
+  }
+
+  .ft__nav {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: center;
+  }
+
+  .ft__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem clamp(1rem, 3vw, 2.25rem);
+    font-size: var(--fs-small);
+  }
+
+  .ft__row a,
+  .ft__row button {
+    position: relative;
+    padding-block: 2px;
+    font-size: inherit;
+  }
+
+  .ft__row a::after,
+  .ft__row button::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+
+  .ft__row a:hover::after,
+  .ft__row button:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .ft__row--soft {
+    color: var(--ink-50);
+  }
+
+  .ft__lang {
+    display: flex;
+    gap: 1.1rem;
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-30);
+  }
+
+  .ft__lang a.is-active {
+    color: var(--ink);
+  }
+
+  .ft__base {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    border-top: 1px solid var(--line-soft);
+    color: var(--ink-50);
+    text-align: center;
+  }
+
+  .ft__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+  }
+
+  @media (min-width: 860px) {
+    .ft__base {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>
+
+<script>
+  const initNewsletter = () => {
+    document.querySelectorAll<HTMLFormElement>('[data-newsletter]').forEach((form) => {
+      if (form.dataset.bound) return;
+      form.dataset.bound = '1';
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = form.querySelector<HTMLInputElement>('input[type="email"]');
+        if (!input || !input.value.includes('@')) {
+          input?.focus();
+          return;
+        }
+        form.querySelector<HTMLElement>('[data-newsletter-ok]')?.removeAttribute('hidden');
+        input.value = '';
+        input.blur();
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', initNewsletter);
+</script>

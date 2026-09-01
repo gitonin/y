@@ -1,0 +1,303 @@
+---
+import type { Lang, Product } from '../data/products';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  product: Product;
+  lang: Lang;
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+const { product, lang, size = 'md', class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+const spec = product.specs;
+const rows: [string, string][] = [
+  [t.product.origin, spec.origin[lang]],
+  [t.product.altitude, spec.altitude[lang]],
+  [t.product.process, spec.process[lang]],
+  [t.product.notes, spec.notes[lang]],
+];
+const kind = product.visual;
+---
+
+<div class={`shot shot--${size} shot--${kind} ${className}`} data-packshot>
+  <div class="shot__stage">
+    {(kind === 'bundle') && (
+      <div class="shot__group">
+        <div class="pouch pouch--back pouch--t1"><span class="pouch__mark" /></div>
+        <div class="pouch pouch--mid pouch--t2"><span class="pouch__mark" /></div>
+        <div class="pouch pouch--front pouch--t3">
+          <span class="pouch__mark" />
+          <span class="pouch__lot">{product.lot}</span>
+        </div>
+        <div class="dbox dbox--tucked"><span class="dbox__mark" /><span class="dbox__label">DRIP ×8</span></div>
+      </div>
+    )}
+
+    {kind === 'box' && (
+      <div class="dbox dbox--hero">
+        <span class="dbox__mark" />
+        <span class="dbox__title">DRIP BAGS</span>
+        <span class="dbox__label">8 × 10 g</span>
+      </div>
+    )}
+
+    {(kind === 'bag-01' || kind === 'bag-03' || kind === 'bag-05') && (
+      <div class={`pouch pouch--hero pouch--${kind}`}>
+        <span class="pouch__seam" />
+        <span class="pouch__mark" />
+        <dl class="pouch__specs">
+          {rows.map(([k, v]) => (
+            <div>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+        <span class="pouch__lot">{product.lot} · {product.variants[0].label[lang]}</span>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .shot {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(168deg, #efece4 0%, #e3ded2 58%, #d9d3c5 100%);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .shot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 80% at 30% 12%, rgba(255, 255, 255, 0.6), transparent 62%);
+    pointer-events: none;
+  }
+
+  .shot__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* --- Sachet --- */
+  .pouch {
+    position: relative;
+    width: 46%;
+    aspect-ratio: 3 / 4.2;
+    background: linear-gradient(103deg, #fbfaf6 0%, #f2efe7 40%, #e7e2d6 100%);
+    border-radius: 3px 3px 6px 6px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.9) inset,
+      -14px 0 22px -18px rgba(28, 28, 26, 0.5) inset,
+      0 24px 44px -22px rgba(28, 28, 26, 0.42);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 9% 8% 7%;
+    color: #1c1c1a;
+  }
+
+  .pouch--hero {
+    width: 52%;
+  }
+
+  .pouch__seam {
+    position: absolute;
+    top: 3.5%;
+    left: 10%;
+    right: 10%;
+    height: 3.5%;
+    background: linear-gradient(180deg, rgba(28, 28, 26, 0.055), rgba(28, 28, 26, 0));
+    border-radius: 2px;
+  }
+
+  .pouch__mark {
+    display: block;
+    width: 34%;
+    aspect-ratio: 228 / 342;
+    margin-top: 8%;
+    background: url('/brand/yunma-logo.png') center / contain no-repeat;
+    opacity: 0.92;
+  }
+
+  .pouch__specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4% 6%;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: 6%;
+  }
+
+  .pouch__specs dt {
+    font-size: clamp(4px, 0.9cqw, 7px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(28, 28, 26, 0.42);
+    line-height: 1.3;
+  }
+
+  .pouch__specs dd {
+    margin: 0;
+    font-size: clamp(4.5px, 1cqw, 7.5px);
+    line-height: 1.35;
+    color: rgba(28, 28, 26, 0.72);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pouch__lot {
+    font-size: clamp(5px, 1.1cqw, 8px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(28, 28, 26, 0.5);
+  }
+
+  .pouch--bag-03 {
+    background: linear-gradient(103deg, #fbf9f4 0%, #f0ece1 40%, #e2dccc 100%);
+  }
+
+  .pouch--bag-05 {
+    background: linear-gradient(103deg, #f9f6ef 0%, #eee8db 40%, #ded6c3 100%);
+  }
+
+  /* --- Boîte drip --- */
+  .dbox {
+    position: relative;
+    width: 58%;
+    aspect-ratio: 5 / 3.4;
+    background: linear-gradient(100deg, #fbfaf6 0%, #f1eee6 46%, #e4dfd3 100%);
+    border-radius: 3px;
+    box-shadow:
+      -12px 0 20px -18px rgba(28, 28, 26, 0.5) inset,
+      0 22px 40px -24px rgba(28, 28, 26, 0.45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4%;
+    padding: 6%;
+  }
+
+  .dbox--hero {
+    width: 66%;
+  }
+
+  .dbox__mark {
+    display: block;
+    width: 20%;
+    aspect-ratio: 228 / 342;
+    background: url('/brand/yunma-logo.png') center / contain no-repeat;
+    opacity: 0.92;
+  }
+
+  .dbox__title,
+  .dbox__label {
+    font-size: clamp(5px, 1.2cqw, 9px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(28, 28, 26, 0.62);
+  }
+
+  .dbox__title {
+    color: rgba(28, 28, 26, 0.82);
+  }
+
+  /* --- Coffret --- */
+  .shot__group {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .shot__group .pouch {
+    position: absolute;
+    width: 30%;
+    aspect-ratio: 3 / 4.2;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .shot__group .pouch__mark {
+    width: 44%;
+    margin: 0;
+  }
+
+  .pouch--back {
+    left: 12%;
+    bottom: 30%;
+    transform: rotate(-5deg);
+    z-index: 1;
+    filter: brightness(0.98);
+  }
+
+  .pouch--mid {
+    left: 35%;
+    bottom: 34%;
+    width: 32%;
+    z-index: 3;
+  }
+
+  .pouch--front {
+    right: 12%;
+    bottom: 30%;
+    transform: rotate(5deg);
+    z-index: 2;
+  }
+
+  .shot__group .pouch__lot {
+    position: absolute;
+    bottom: 9%;
+    font-size: clamp(4px, 0.75cqw, 6px);
+  }
+
+  .dbox--tucked {
+    position: absolute;
+    z-index: 4;
+    width: 42%;
+    left: 50%;
+    bottom: 12%;
+    transform: translateX(-50%) rotate(-1.5deg);
+  }
+
+  .dbox--tucked .dbox__mark {
+    width: 22%;
+  }
+
+  .dbox--tucked .dbox__label {
+    font-size: clamp(4px, 0.85cqw, 7px);
+  }
+
+  /* --- Tailles --- */
+  .shot--sm .pouch--hero {
+    width: 58%;
+  }
+
+  .shot--lg {
+    aspect-ratio: 1 / 1;
+  }
+
+  @media (hover: hover) {
+    :global(a:hover) .shot__stage,
+    .shot:hover .shot__stage {
+      transform: translateY(-6px) scale(1.015);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shot__stage {
+      transition: none;
+    }
+  }
+</style>

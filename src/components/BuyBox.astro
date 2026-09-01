@@ -1,0 +1,283 @@
+---
+import type { Lang } from '../i18n/utils';
+import { useTranslations, formatPrice } from '../i18n/utils';
+import type { Product } from '../data/products';
+
+interface Props {
+  product: Product;
+  lang: Lang;
+  /** Le prix est affiché ailleurs sur la page produit. */
+  hidePrice?: boolean;
+}
+const { product, lang, hidePrice = false } = Astro.props;
+const t = useTranslations(lang);
+const first = product.variants[0];
+const qtyId = `qty-${product.slug}`;
+const multi = product.variants.length > 1;
+---
+
+<div class="buy" data-buybox>
+  <p class="buy__price mono-num" data-price-display hidden={hidePrice}>{formatPrice(first.price, lang)}</p>
+
+  {
+    multi && (
+      <fieldset class="buy__variants">
+        <legend class="label">{t.common.format}</legend>
+        <div class="buy__chips">
+          {product.variants.map((v, i) => (
+            <label class="chip">
+              <input
+                type="radio"
+                name={`variant-${product.slug}`}
+                value={v.shopifyVariantId}
+                checked={i === 0}
+                data-variant-option
+                data-price={v.price}
+                data-label={v.label[lang]}
+                disabled={!v.available}
+              />
+              <span>{v.label[lang]}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    )
+  }
+
+  {
+    !multi && (
+      <p class="buy__single">
+        <span class="label">{t.common.format}</span>
+        <span>{first.label[lang]}</span>
+      </p>
+    )
+  }
+
+  <div class="buy__qty">
+    <span class="label" id={`${qtyId}-label`}>{t.common.quantity}</span>
+    <div class="stepper">
+      <button type="button" data-qty-dec aria-label={t.common.decrease}>−</button>
+      <input
+        id={qtyId}
+        type="number"
+        min="1"
+        max="20"
+        value="1"
+        inputmode="numeric"
+        aria-labelledby={`${qtyId}-label`}
+        data-qty-input
+      />
+      <button type="button" data-qty-inc aria-label={t.common.increase}>+</button>
+    </div>
+  </div>
+
+  <button
+    class="btn buy__add"
+    type="button"
+    data-add-to-cart
+    data-variant={first.shopifyVariantId}
+    data-sku={product.sku}
+    data-title={product.name[lang]}
+    data-variant-title={first.label[lang]}
+    data-price={first.price}
+    data-qty-target={`#${qtyId}`}
+    disabled={!first.available}
+  >
+    {first.available ? t.common.addToCart : t.common.soldOut}
+  </button>
+
+  <ul class="buy__reassure small muted">
+    <li>{t.product.freshness}</li>
+    <li>{t.product.shipping}</li>
+  </ul>
+</div>
+
+<style>
+  .buy {
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .buy__price {
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .buy__variants {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .buy__variants legend {
+    margin-bottom: 0.6rem;
+  }
+
+  .buy__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .chip span {
+    display: inline-block;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--line);
+    font-size: var(--fs-small);
+    cursor: pointer;
+    transition:
+      border-color 0.35s var(--ease),
+      background-color 0.35s var(--ease),
+      color 0.35s var(--ease);
+  }
+
+  .chip input:checked + span {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .chip input:disabled + span {
+    opacity: 0.4;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+
+  .buy__single {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: var(--fs-small);
+  }
+
+  .buy__single .label {
+    display: inline;
+  }
+
+  .buy__qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+  }
+
+  .stepper button {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: var(--ink-50);
+    transition: color 0.3s var(--ease), background-color 0.3s var(--ease);
+  }
+
+  .stepper button:hover {
+    color: var(--ink);
+    background: var(--paper-2);
+  }
+
+  .stepper input {
+    width: 48px;
+    height: 42px;
+    text-align: center;
+    border: 0;
+    background: none;
+    font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .stepper input::-webkit-outer-spin-button,
+  .stepper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .stepper input:focus {
+    outline: none;
+  }
+
+  .buy__reassure {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+  }
+
+  .buy__reassure li {
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .buy__reassure li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+</style>
+
+<script>
+  const currency = (value: number) => {
+    const lang = document.documentElement.lang.startsWith('zh')
+      ? 'zh-CN'
+      : document.documentElement.lang.startsWith('en')
+        ? 'en-GB'
+        : 'fr-FR';
+    return new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(value);
+  };
+
+  const initBuyBox = () => {
+    document.querySelectorAll<HTMLElement>('[data-buybox]').forEach((box) => {
+      if (box.dataset.bound) return;
+      box.dataset.bound = '1';
+
+      const input = box.querySelector<HTMLInputElement>('[data-qty-input]');
+      const addBtn = box.querySelector<HTMLElement>('[data-add-to-cart]');
+      const priceEl = box.querySelector<HTMLElement>('[data-price-display]');
+
+      const clamp = (n: number) => Math.min(20, Math.max(1, Number.isNaN(n) ? 1 : n));
+
+      box.querySelector('[data-qty-dec]')?.addEventListener('click', () => {
+        if (input) input.value = String(clamp(Number(input.value) - 1));
+      });
+      box.querySelector('[data-qty-inc]')?.addEventListener('click', () => {
+        if (input) input.value = String(clamp(Number(input.value) + 1));
+      });
+      input?.addEventListener('change', () => {
+        input.value = String(clamp(Number(input.value)));
+      });
+
+      box.querySelectorAll<HTMLInputElement>('[data-variant-option]').forEach((radio) => {
+        radio.addEventListener('change', () => {
+          if (!radio.checked || !addBtn) return;
+          addBtn.dataset.variant = radio.value;
+          addBtn.dataset.price = radio.dataset.price ?? '';
+          addBtn.dataset.variantTitle = radio.dataset.label ?? '';
+          if (priceEl && radio.dataset.price) priceEl.textContent = currency(Number(radio.dataset.price));
+        });
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', initBuyBox);
+</script>

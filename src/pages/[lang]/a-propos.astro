@@ -1,0 +1,215 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Scene from '../../components/Scene.astro';
+import SplitTitle from '../../components/SplitTitle.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, route, type Lang } from '../../i18n/utils';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const base = Astro.site ?? new URL('https://yunma.fr');
+
+const jsonld = [
+  {
+    '@type': 'AboutPage',
+    '@id': new URL(Astro.url.pathname, base).href,
+    name: t.apropos.seoTitle,
+    description: t.apropos.seoDescription,
+    inLanguage: t.meta.hreflang,
+    mainEntity: { '@id': `${base.origin}/#organization` },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.common.home, item: new URL(`${lang}/`, base).href },
+      { '@type': 'ListItem', position: 2, name: t.nav.apropos, item: new URL(`${lang}/a-propos/`, base).href },
+    ],
+  },
+];
+---
+
+<Base lang={lang} title={t.apropos.seoTitle} description={t.apropos.seoDescription} jsonld={jsonld}>
+  <PageHero lang={lang} label={t.apropos.label} title={t.apropos.title} intro={t.apropos.intro} crumb={t.nav.apropos} />
+
+  <div class="wrap">
+    <figure class="media media--wide" data-reveal>
+      <Scene variant="portrait" tone="warm" />
+    </figure>
+  </div>
+
+  <section class="section">
+    <div class="wrap grid grid--sidebar">
+      <p class="lead" data-reveal>{t.apropos.storyText}</p>
+      <div class="mission stack">
+        <div data-reveal>
+          <h2 class="mission__title">{t.apropos.missionTitle}</h2>
+          <p class="muted">{t.apropos.missionText}</p>
+        </div>
+        <div data-reveal>
+          <h2 class="mission__title">{t.apropos.approachTitle}</h2>
+          <p class="muted">{t.apropos.approachText}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight panel">
+    <div class="wrap">
+      <h2 class="label" data-reveal>{t.apropos.valuesTitle}</h2>
+      <ul class="values">
+        {
+          t.apropos.values.map((value, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
+              <span class="values__mark" aria-hidden="true" />
+              <h3 class="values__title">{value.title}</h3>
+              <p class="small muted">{value.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <h2 class="label" data-reveal>{t.apropos.figuresTitle}</h2>
+      <dl class="figures">
+        {
+          t.apropos.figures.map((figure, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <dt class="figures__value">{figure.value}</dt>
+              <dd class="small muted">{figure.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="closing__media media">
+      <Scene variant="ridges" tone="deep" />
+    </div>
+    <div class="closing__inner wrap">
+      <SplitTitle text={t.apropos.closing} as="p" size="closing" class="on-dark" />
+      <a class="link closing__cta" href={route(lang, 'journal')}>
+        {t.apropos.closingCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .mission {
+    --stack: 2rem;
+  }
+
+  .mission__title {
+    font-size: var(--fs-h3);
+    margin-bottom: 0.65rem;
+  }
+
+  .mission p {
+    max-width: 48ch;
+  }
+
+  .values {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  @media (min-width: 800px) {
+    .values {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .values__mark {
+    display: block;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .values__mark::after {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.25;
+  }
+
+  .values__title {
+    font-size: 1.0625rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .figures {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 700px) {
+    .figures {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .figures > div {
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .figures__value {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+  }
+
+  .figures dd {
+    margin: 0;
+    max-width: 22ch;
+  }
+
+  .closing {
+    position: relative;
+    min-height: 70svh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    overflow: hidden;
+  }
+
+  .closing__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .closing__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 35%, rgba(28, 28, 26, 0.42) 100%);
+  }
+
+  .closing__inner {
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+  }
+
+  .closing__cta {
+    margin-top: 1.25rem;
+    color: var(--white);
+  }
+</style>
