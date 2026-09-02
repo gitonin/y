@@ -74,7 +74,7 @@ const fr = {
     originLabel: 'Notre origine',
     originTitle: 'Le Yunnan.\nNotre terre.\nNotre inspiration.',
     originText:
-      'Au sud-ouest de la Chine, entre 1 200 et 1 900 mètres d’altitude, le Yunnan cultive un café encore méconnu. Nous y sélectionnons des micro-lots auprès de familles productrices, parcelle par parcelle, récolte après récolte.',
+      'Au sud-ouest de la Chine, entre 1 300 et 1 800 mètres d’altitude, le Yunnan cultive un café encore méconnu. Nous y sélectionnons des micro-lots auprès de trois fermes partenaires, parcelle par parcelle, récolte après récolte.',
     originCta: 'Découvrir l’origine',
     coffeesLabel: 'Nos cafés',
     coffeesTitle: 'Des cafés d’exception,\ncultivés avec soin.',
@@ -120,7 +120,7 @@ const fr = {
     notes: 'Notes',
     drying: 'Séchage',
     harvest: 'Récolte',
-    roast: 'Torréfaction',
+    roast: 'Profil',
     farmTitle: 'La ferme',
     relatedTitle: 'Vous aimerez aussi',
     shipping: 'Expédié sous 48 h — livraison offerte dès 45 €',
@@ -139,12 +139,12 @@ const fr = {
       {
         label: 'Le terroir',
         title: 'Une montagne, trois vallées',
-        text: 'Nos parcelles se situent entre 1 200 et 1 900 mètres, sur des sols volcaniques et argileux. Les nuits fraîches ralentissent la maturation des cerises et concentrent les sucres : c’est ce qui donne au Yunnan cette tasse ronde, à la fois florale et cacaotée.',
+        text: 'Nos parcelles se situent entre 1 300 et 1 800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches ralentissent la maturation des cerises et concentrent les sucres : c’est ce qui donne au Yunnan cette tasse ronde, à la fois florale et cacaotée.',
       },
       {
-        label: 'Les familles',
+        label: 'Les fermes',
         title: 'Des relations directes, année après année',
-        text: 'Nous travaillons avec cinq familles productrices à Baoshan, Pu’er et Menglian. Nous achetons en direct, à un prix supérieur au marché, et nous nous engageons sur plusieurs récoltes afin que chacun puisse investir dans ses parcelles et ses infrastructures de séchage.',
+        text: 'Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons en direct, à un prix supérieur au marché, et nous nous engageons sur plusieurs récoltes afin que chacune puisse investir dans ses parcelles et ses infrastructures de séchage.',
       },
       {
         label: 'La saison',
@@ -155,6 +155,23 @@ const fr = {
     quote: 'Un café ne se fabrique pas. Il se cultive, puis se respecte.',
     mapTitle: 'Nos terroirs',
     mapText: 'Trois zones, trois profils de tasse.',
+    terroirs: [
+      {
+        name: 'Baoshan',
+        detail: '1 550 – 1 750 m · Catimor et Bourbon jaune',
+        text: 'Les hauteurs de Gaoshen, où une même exploitation conduit deux variétés côte à côte. C’est de là que viennent nos drip bags.',
+      },
+      {
+        name: 'Pu’er',
+        detail: '1 300 – 1 500 m · Catimor',
+        text: 'Les collines de Torch Estate, d’où sortent nos deux lots honey : l’un en fermentation anaérobie double, l’autre en traitement traditionnel.',
+      },
+      {
+        name: 'Xishuangbanna',
+        detail: '1 600 – 1 800 m · Pacamara',
+        text: 'L’extrême sud du Yunnan et nos parcelles les plus hautes, à Yun Lan Estate, où mûrit un Pacamara lavé, rare et peu productif.',
+      },
+    ],
     anchors: {
       terroir: 'Le Yunnan',
       histoire: 'Notre histoire',
@@ -218,9 +235,9 @@ const fr = {
     ],
     figuresTitle: 'Yunma en quelques repères',
     figures: [
-      { value: '5', label: 'familles productrices partenaires' },
+      { value: '3', label: 'fermes partenaires' },
       { value: '3', label: 'terroirs du Yunnan' },
-      { value: '1 200 – 1 900 m', label: 'altitude de nos parcelles' },
+      { value: '1 300 – 1 800 m', label: 'altitude de nos parcelles' },
       { value: '2019', label: 'première récolte importée' },
     ],
     closing: 'Le temps révèle les arômes.',

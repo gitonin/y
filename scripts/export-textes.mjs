@@ -152,7 +152,7 @@ section('Encadré « Besoin d’un conseil ? »');
 fields('cafes', t.cafes, ['helpTitle', 'helpText']);
 
 /* ------- produits ------- */
-chapter('Les cinq produits');
+chapter('Les six produits');
 note('Les prix figurent ici pour mémoire : ils doivent rester identiques à ceux saisis dans Shopify, qui fait foi au paiement.');
 for (const p of products) {
   section(`${p.name.fr} — ${p.subtitle.fr}`);
@@ -169,7 +169,7 @@ for (const p of products) {
   field(`${c}.notes`, p.specs.notes.fr, 'Fiche : notes de dégustation');
   field(`${c}.sechage`, p.specs.drying.fr, 'Fiche : séchage');
   field(`${c}.recolte`, p.specs.harvest.fr, 'Fiche : récolte');
-  field(`${c}.torrefaction`, p.specs.roast.fr, 'Fiche : torréfaction');
+  field(`${c}.profil`, p.specs.roast.fr, 'Fiche : profil (filtre ou espresso)');
   field(`${c}.preparation`, p.brew.fr, 'Conseils de préparation');
   (p.includes ?? []).forEach((item, i) => field(`${c}.contenu.${i + 1}`, item.fr, `Contenu, ligne ${i + 1}`));
   field(`${c}.ferme.nom`, p.farm.name, 'Ferme : nom');
@@ -194,6 +194,11 @@ t.origine.sections.forEach((s, i) => {
 section('Citation et terroirs');
 field('origine.citation', t.origine.quote, 'Citation');
 fields('origine', t.origine, ['mapTitle', 'mapText']);
+t.origine.terroirs.forEach((terroir, i) => {
+  field(`origine.terroir.${i + 1}.nom`, terroir.name, `Terroir ${i + 1} : nom`);
+  field(`origine.terroir.${i + 1}.detail`, terroir.detail, `Terroir ${i + 1} : altitude et variétés`);
+  field(`origine.terroir.${i + 1}.texte`, terroir.text, `Terroir ${i + 1} : texte`);
+});
 
 section('Sommaire de la page');
 Object.entries(t.origine.anchors).forEach(([cle, valeur]) => field(`origine.sommaire.${cle}`, valeur, 'Entrée du sommaire'));

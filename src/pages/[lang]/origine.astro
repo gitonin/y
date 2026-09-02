@@ -9,7 +9,6 @@ import SplitTitle from '../../components/SplitTitle.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
-import { products } from '../../data/products';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
 
@@ -113,13 +112,11 @@ const jsonld = [
         </div>
         <ul class="terroirs__list">
           {
-            products.slice(0, 3).map((product) => (
+            t.origine.terroirs.map((terroir) => (
               <li data-reveal>
-                <span class="label">{product.subtitle[lang].split(',')[0]}</span>
-                <p class="small muted">
-                  {product.specs.altitude[lang]} · {product.specs.process[lang]}
-                </p>
-                <p class="small muted">{product.specs.notes[lang]}</p>
+                <span class="label">{terroir.name}</span>
+                <p class="small muted">{terroir.detail}</p>
+                <p class="small muted">{terroir.text}</p>
               </li>
             ))
           }

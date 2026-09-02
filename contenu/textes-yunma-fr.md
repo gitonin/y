@@ -90,7 +90,7 @@ Notre terre.
 Notre inspiration.
 
 **Texte** `[accueil.originText]`
-Au sud-ouest de la Chine, entre 1 200 et 1 900 mètres d’altitude, le Yunnan cultive un café encore méconnu. Nous y sélectionnons des micro-lots auprès de familles productrices, parcelle par parcelle, récolte après récolte.
+Au sud-ouest de la Chine, entre 1 300 et 1 800 mètres d’altitude, le Yunnan cultive un café encore méconnu. Nous y sélectionnons des micro-lots auprès de trois fermes partenaires, parcelle par parcelle, récolte après récolte.
 
 **Libellé du lien** `[accueil.originCta]`
 Découvrir l’origine
@@ -209,180 +209,180 @@ Besoin d’un conseil ?
 Dites-nous comment vous préparez votre café, nous vous orientons vers le lot qui vous ira le mieux.
 
 
-## Les cinq produits
+## Les six produits
 
 > Les prix figurent ici pour mémoire : ils doivent rester identiques à ceux saisis dans Shopify, qui fait foi au paiement.
 
 
-### Sélection Lot N°23-01 — Baoshan, Yunnan
+### Torch Estate, Lot.01 — Pu’er
 
-**Nom** `[produit.lot-23-01-baoshan.nom]`
-Sélection Lot N°23-01
+**Nom** `[produit.torch-estate-lot-01.nom]`
+Torch Estate, Lot.01
 
-**Sous-titre** `[produit.lot-23-01-baoshan.sousTitre]`
-Baoshan, Yunnan
+**Sous-titre** `[produit.torch-estate-lot-01.sousTitre]`
+Pu’er
 
-**Accroche (une phrase, sous le prix)** `[produit.lot-23-01-baoshan.accroche]`
-Thé noir, abricot, chocolat noir.
+**Accroche (une phrase, sous le prix)** `[produit.torch-estate-lot-01.accroche]`
+Fruits tropicaux, baies, vin rouge.
 
-**Description** `[produit.lot-23-01-baoshan.description]`
-Cultivé dans les montagnes de Baoshan, ce lot lavé révèle une tasse propre et équilibrée, aux notes de thé noir et d'abricot. Une entrée en matière idéale dans les cafés du Yunnan : douce, ronde, sans aspérité.
+**Description** `[produit.torch-estate-lot-01.description]`
+Une double fermentation anaérobie, menée en cuve fermée avant le séchage en honey. Le résultat est franchement aromatique : fruits tropicaux mûrs, baies, une finale qui tire vers le vin rouge. C’est notre lot le plus démonstratif, celui que l’on sert quand quelqu’un doute encore de ce que le Yunnan sait faire.
 
-**Histoire du lot** `[produit.lot-23-01-baoshan.histoire]`
-La famille Yang cultive 3,5 hectares à 1 500 mètres, sur un versant orienté à l'est. Les cerises sont dépulpées le soir même de la récolte, fermentées 18 heures en cuve puis lavées à l'eau de source.
+**Histoire du lot** `[produit.torch-estate-lot-01.histoire]`
+La fermentation anaérobie double demande une discipline que peu de fermes acceptent : deux cycles en cuve fermée, chacun suivi en température et en pH, sans marge d’erreur. Un degré de trop et le lot part en vinaigre. Torch Estate s’y est mise il y a trois récoltes, en commençant par des micro-lots de quelques sacs.
 
-**Fiche : origine** `[produit.lot-23-01-baoshan.origine]`
-Yunnan, Chine — Baoshan
+**Fiche : origine** `[produit.torch-estate-lot-01.origine]`
+Yunnan, Chine — Pu’er
 
-**Fiche : altitude** `[produit.lot-23-01-baoshan.altitude]`
-1 500 – 1 800 m
+**Fiche : altitude** `[produit.torch-estate-lot-01.altitude]`
+1 450 m
 
-**Fiche : variété** `[produit.lot-23-01-baoshan.variete]`
+**Fiche : variété** `[produit.torch-estate-lot-01.variete]`
 Catimor
 
-**Fiche : process** `[produit.lot-23-01-baoshan.process]`
-Lavé
+**Fiche : process** `[produit.torch-estate-lot-01.process]`
+Honey anaérobie double
 
-**Fiche : notes de dégustation** `[produit.lot-23-01-baoshan.notes]`
-Thé noir, abricot, chocolat noir
+**Fiche : notes de dégustation** `[produit.torch-estate-lot-01.notes]`
+Fruits tropicaux, baies, vin rouge
 
-**Fiche : séchage** `[produit.lot-23-01-baoshan.sechage]`
+**Fiche : séchage** `[produit.torch-estate-lot-01.sechage]`
 Lits africains surélevés
 
-**Fiche : récolte** `[produit.lot-23-01-baoshan.recolte]`
+**Fiche : récolte** `[produit.torch-estate-lot-01.recolte]`
 À la main, cerises mûres
 
-**Fiche : torréfaction** `[produit.lot-23-01-baoshan.torrefaction]`
-Claire — filtre & espresso
+**Fiche : profil (filtre ou espresso)** `[produit.torch-estate-lot-01.profil]`
+Filtre
 
-**Conseils de préparation** `[produit.lot-23-01-baoshan.preparation]`
-Filtre : 15 g pour 250 ml, eau à 93 °C, 2 min 45. Espresso : 18 g pour 40 g en 26 secondes.
+**Conseils de préparation** `[produit.torch-estate-lot-01.preparation]`
+Filtre : 15 g pour 250 ml, eau à 93 °C, 2 min 45. Versements courts pour ne pas écraser le fruit.
 
-**Ferme : nom** `[produit.lot-23-01-baoshan.ferme.nom]`
-Ferme des Yang
+**Ferme : nom** `[produit.torch-estate-lot-01.ferme.nom]`
+Torch Estate
 
-**Ferme : lieu** `[produit.lot-23-01-baoshan.ferme.lieu]`
-Baoshan, Yunnan
+**Ferme : lieu** `[produit.torch-estate-lot-01.ferme.lieu]`
+Pu’er, Yunnan
 
-**Ferme : présentation** `[produit.lot-23-01-baoshan.ferme.texte]`
-La famille Yang cultive 3,5 hectares à 1 500 mètres, sur un versant orienté à l'est, planté d'arbres d'ombrage. Trois générations y travaillent : les parents à la parcelle, le fils à la station de lavage qu'ils ont construite en 2021. Nous achetons chez eux depuis notre première récolte, à un prix fixé avant la saison.
+**Ferme : présentation** `[produit.torch-estate-lot-01.ferme.texte]`
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1 450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot.01 en fermentation anaérobie double, le Lot.02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
 
-**Format et prix** `[produit.lot-23-01-baoshan.prix.1]`
-200 g — 18.00 €
-
-
-### Sélection Lot N°23-03 — Pu'er, Yunnan
-
-**Nom** `[produit.lot-23-03-puer.nom]`
-Sélection Lot N°23-03
-
-**Sous-titre** `[produit.lot-23-03-puer.sousTitre]`
-Pu'er, Yunnan
-
-**Accroche (une phrase, sous le prix)** `[produit.lot-23-03-puer.accroche]`
-Pêche blanche, miel, jasmin.
-
-**Description** `[produit.lot-23-03-puer.description]`
-Un honey délicat, séché lentement à l'ombre. La mucilage laissée sur le grain apporte une texture soyeuse et une douceur miellée, portée par un parfum de fleurs blanches.
-
-**Histoire du lot** `[produit.lot-23-03-puer.histoire]`
-À Pu'er, le café pousse en lisière des jardins de thé. Ce lot provient d'une parcelle de 1,8 hectare travaillée sans intrant de synthèse depuis 2017, où les caféiers sont ombragés par des arbres fruitiers.
-
-**Fiche : origine** `[produit.lot-23-03-puer.origine]`
-Yunnan, Chine — Pu'er
-
-**Fiche : altitude** `[produit.lot-23-03-puer.altitude]`
-1 400 – 1 650 m
-
-**Fiche : variété** `[produit.lot-23-03-puer.variete]`
-Typica, Bourbon
-
-**Fiche : process** `[produit.lot-23-03-puer.process]`
-Honey
-
-**Fiche : notes de dégustation** `[produit.lot-23-03-puer.notes]`
-Pêche blanche, miel, jasmin
-
-**Fiche : séchage** `[produit.lot-23-03-puer.sechage]`
-Lits africains, 18 jours à l'ombre
-
-**Fiche : récolte** `[produit.lot-23-03-puer.recolte]`
-À la main, tri le jour même
-
-**Fiche : torréfaction** `[produit.lot-23-03-puer.torrefaction]`
-Claire — filtre
-
-**Conseils de préparation** `[produit.lot-23-03-puer.preparation]`
-Filtre : 15 g pour 250 ml, eau à 92 °C, versements courts. Idéal en V60 ou en cafetière à immersion.
-
-**Ferme : nom** `[produit.lot-23-03-puer.ferme.nom]`
-Jardin de Manlao
-
-**Ferme : lieu** `[produit.lot-23-03-puer.ferme.lieu]`
-Pu'er, Yunnan
-
-**Ferme : présentation** `[produit.lot-23-03-puer.ferme.texte]`
-Une parcelle de 1,8 hectare en lisière des jardins de thé, conduite sans intrant de synthèse depuis 2017. Les caféiers y poussent sous des arbres fruitiers, ce qui allonge la maturation de deux à trois semaines. La récolte est traitée en honey, séchée à l'ombre, sur des lits que la famille couvre chaque soir.
-
-**Format et prix** `[produit.lot-23-03-puer.prix.1]`
+**Format et prix** `[produit.torch-estate-lot-01.prix.1]`
 200 g — 19.00 €
 
 
-### Sélection Lot N°23-05 — Menglian, Yunnan
+### Torch Estate, Lot.02 — Pu’er
 
-**Nom** `[produit.lot-23-05-menglian.nom]`
-Sélection Lot N°23-05
+**Nom** `[produit.torch-estate-lot-02.nom]`
+Torch Estate, Lot.02
 
-**Sous-titre** `[produit.lot-23-05-menglian.sousTitre]`
-Menglian, Yunnan
+**Sous-titre** `[produit.torch-estate-lot-02.sousTitre]`
+Pu’er
 
-**Accroche (une phrase, sous le prix)** `[produit.lot-23-05-menglian.accroche]`
-Fraise, cacao, épices douces.
+**Accroche (une phrase, sous le prix)** `[produit.torch-estate-lot-02.accroche]`
+Citron vert, olive, liqueur de cacao.
 
-**Description** `[produit.lot-23-05-menglian.description]`
-Notre lot le plus expressif. Séché en cerise entière pendant 21 jours, il développe des arômes de fruits rouges confits et une finale cacaotée, longue et enveloppante.
+**Description** `[produit.torch-estate-lot-02.description]`
+Un honey traditionnel, pensé pour l’espresso. La mucilage laissée sur le grain donne du corps et une douceur de liqueur de cacao, que vient trancher une acidité de citron vert. Cette note d’olive, presque saline, est la signature de la parcelle : on la retrouve d’une récolte à l’autre.
 
-**Histoire du lot** `[produit.lot-23-05-menglian.histoire]`
-Menglian borde la frontière birmane. Les nuits y sont fraîches et les journées sèches en fin d'année : des conditions rares qui permettent un séchage naturel long, sans risque de fermentation excessive.
+**Histoire du lot** `[produit.torch-estate-lot-02.histoire]`
+C’est le lot que nous buvons le plus souvent à l’atelier, en espresso serré le matin. Il tient aussi remarquablement bien au lait : la liqueur de cacao ressort, l’acidité se range. Si vous n’avez qu’une machine et pas envie de réfléchir, prenez celui-là.
 
-**Fiche : origine** `[produit.lot-23-05-menglian.origine]`
-Yunnan, Chine — Menglian
+**Fiche : origine** `[produit.torch-estate-lot-02.origine]`
+Yunnan, Chine — Pu’er
 
-**Fiche : altitude** `[produit.lot-23-05-menglian.altitude]`
-1 300 – 1 550 m
+**Fiche : altitude** `[produit.torch-estate-lot-02.altitude]`
+1 300 – 1 500 m
 
-**Fiche : variété** `[produit.lot-23-05-menglian.variete]`
-Catimor, Typica
+**Fiche : variété** `[produit.torch-estate-lot-02.variete]`
+Catimor
 
-**Fiche : process** `[produit.lot-23-05-menglian.process]`
-Naturel
+**Fiche : process** `[produit.torch-estate-lot-02.process]`
+Honey traditionnel
 
-**Fiche : notes de dégustation** `[produit.lot-23-05-menglian.notes]`
-Fraise, cacao, épices douces
+**Fiche : notes de dégustation** `[produit.torch-estate-lot-02.notes]`
+Citron vert, olive, liqueur de cacao
 
-**Fiche : séchage** `[produit.lot-23-05-menglian.sechage]`
-Cerise entière, 21 jours
+**Fiche : séchage** `[produit.torch-estate-lot-02.sechage]`
+Lits africains surélevés
 
-**Fiche : récolte** `[produit.lot-23-05-menglian.recolte]`
+**Fiche : récolte** `[produit.torch-estate-lot-02.recolte]`
+À la main, cerises mûres
+
+**Fiche : profil (filtre ou espresso)** `[produit.torch-estate-lot-02.profil]`
+Espresso
+
+**Conseils de préparation** `[produit.torch-estate-lot-02.preparation]`
+Espresso : 18 g pour 40 g en 26 secondes, eau à 92 °C. En filtre, allonger à 15 g pour 260 ml.
+
+**Ferme : nom** `[produit.torch-estate-lot-02.ferme.nom]`
+Torch Estate
+
+**Ferme : lieu** `[produit.torch-estate-lot-02.ferme.lieu]`
+Pu’er, Yunnan
+
+**Ferme : présentation** `[produit.torch-estate-lot-02.ferme.texte]`
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1 450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot.01 en fermentation anaérobie double, le Lot.02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+
+**Format et prix** `[produit.torch-estate-lot-02.prix.1]`
+200 g — 18.00 €
+
+
+### Yun Lan Estate — Xishuangbanna
+
+**Nom** `[produit.yun-lan-estate.nom]`
+Yun Lan Estate
+
+**Sous-titre** `[produit.yun-lan-estate.sousTitre]`
+Xishuangbanna
+
+**Accroche (une phrase, sous le prix)** `[produit.yun-lan-estate.accroche]`
+Pamplemousse, prune rouge, thé noir.
+
+**Description** `[produit.yun-lan-estate.description]`
+Du Pacamara cultivé entre 1 600 et 1 800 mètres, traité en lavé traditionnel : rien pour masquer, rien pour ajouter. Ce qui reste, c’est la variété et l’altitude — une acidité de pamplemousse, une chair de prune rouge, et une longueur de thé noir qui tient bien après la tasse.
+
+**Histoire du lot** `[produit.yun-lan-estate.histoire]`
+Le Pacamara est une variété encombrante : de grands arbres, de très gros grains, peu de rendement, et une sensibilité qui décourage la plupart des exploitations. Il en existe encore peu au Yunnan. Ce lot est le plus cher que nous proposons, et c’est aussi le seul dont nous savons, chaque année, qu’il partira avant les autres.
+
+**Fiche : origine** `[produit.yun-lan-estate.origine]`
+Yunnan, Chine — Xishuangbanna
+
+**Fiche : altitude** `[produit.yun-lan-estate.altitude]`
+1 600 – 1 800 m
+
+**Fiche : variété** `[produit.yun-lan-estate.variete]`
+Pacamara
+
+**Fiche : process** `[produit.yun-lan-estate.process]`
+Lavé traditionnel
+
+**Fiche : notes de dégustation** `[produit.yun-lan-estate.notes]`
+Pamplemousse, prune rouge, thé noir
+
+**Fiche : séchage** `[produit.yun-lan-estate.sechage]`
+Lits africains surélevés
+
+**Fiche : récolte** `[produit.yun-lan-estate.recolte]`
 À la main, sélection 100 % mûre
 
-**Fiche : torréfaction** `[produit.lot-23-05-menglian.torrefaction]`
-Claire à moyenne — filtre & espresso
+**Fiche : profil (filtre ou espresso)** `[produit.yun-lan-estate.profil]`
+Filtre
 
-**Conseils de préparation** `[produit.lot-23-05-menglian.preparation]`
-Filtre : 15 g pour 250 ml, eau à 94 °C. En espresso, allonger légèrement le ratio pour adoucir l'acidité.
+**Conseils de préparation** `[produit.yun-lan-estate.preparation]`
+Filtre : 15 g pour 250 ml, eau à 94 °C. Mouture un cran plus grossière que d’habitude — le Pacamara donne beaucoup, vite.
 
-**Ferme : nom** `[produit.lot-23-05-menglian.ferme.nom]`
-Coopérative de Menglian
+**Ferme : nom** `[produit.yun-lan-estate.ferme.nom]`
+Yun Lan Estate
 
-**Ferme : lieu** `[produit.lot-23-05-menglian.ferme.lieu]`
-Menglian, Yunnan
+**Ferme : lieu** `[produit.yun-lan-estate.ferme.lieu]`
+Xishuangbanna, Yunnan
 
-**Ferme : présentation** `[produit.lot-23-05-menglian.ferme.texte]`
-Sept familles réunies en coopérative, le long de la frontière birmane. Elles mettent en commun l'aire de séchage et le trieur optique, ce qu'aucune ne pourrait financer seule. Ce lot naturel est le fruit de cette mise en commun : vingt et un jours de séchage demandent une surveillance que l'on ne tient pas à une seule paire de bras.
+**Ferme : présentation** `[produit.yun-lan-estate.ferme.texte]`
+Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1 600 et 1 800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
 
-**Format et prix** `[produit.lot-23-05-menglian.prix.1]`
-200 g — 20.00 €
+**Format et prix** `[produit.yun-lan-estate.prix.1]`
+200 g — 22.00 €
 
 
 ### Drip Bags — Boîte de 8 — Assemblage de saison
@@ -397,25 +397,25 @@ Assemblage de saison
 Un filtre propre, partout, en trois minutes.
 
 **Description** `[produit.drip-bags-x8.description]`
-Huit sachets filtres individuels de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. L'assemblage de saison réunit nos lots de Baoshan et de Pu'er : douceur, fruit, longueur.
+Huit sachets filtres individuels de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. L’assemblage de saison réunit le honey de Torch Estate et le lavé de Gaoshen : du corps, du fruit, et assez de douceur pour se passer de sucre.
 
 **Histoire du lot** `[produit.drip-bags-x8.histoire]`
 Pensés pour le bureau, le train et les matins pressés — sans jamais renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, aucun matériel.
 
 **Fiche : origine** `[produit.drip-bags-x8.origine]`
-Yunnan, Chine — Baoshan & Pu'er
+Yunnan, Chine — Pu’er & Baoshan
 
 **Fiche : altitude** `[produit.drip-bags-x8.altitude]`
-1 400 – 1 800 m
+1 300 – 1 750 m
 
 **Fiche : variété** `[produit.drip-bags-x8.variete]`
-Catimor, Typica
+Catimor
 
 **Fiche : process** `[produit.drip-bags-x8.process]`
-Lavé & honey
+Honey & lavé
 
 **Fiche : notes de dégustation** `[produit.drip-bags-x8.notes]`
-Amande, abricot, cacao au lait
+Amande, cacao au lait, fruits jaunes
 
 **Fiche : séchage** `[produit.drip-bags-x8.sechage]`
 Lits africains surélevés
@@ -423,8 +423,8 @@ Lits africains surélevés
 **Fiche : récolte** `[produit.drip-bags-x8.recolte]`
 À la main, cerises mûres
 
-**Fiche : torréfaction** `[produit.drip-bags-x8.torrefaction]`
-Moyenne — mouture filtre
+**Fiche : profil (filtre ou espresso)** `[produit.drip-bags-x8.profil]`
+Filtre
 
 **Conseils de préparation** `[produit.drip-bags-x8.preparation]`
 Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.
@@ -439,13 +439,13 @@ Assemblage de saison, moulu du jour
 Boîte recyclable
 
 **Ferme : nom** `[produit.drip-bags-x8.ferme.nom]`
-Baoshan & Pu’er
+Torch Estate
 
 **Ferme : lieu** `[produit.drip-bags-x8.ferme.lieu]`
-Deux fermes partenaires
+Pu’er, Yunnan
 
 **Ferme : présentation** `[produit.drip-bags-x8.ferme.texte]`
-Cet assemblage réunit le lavé de la famille Yang, à Baoshan, et le honey du jardin de Manlao, à Pu'er. Le premier apporte la structure et la propreté, le second la douceur et le parfum. Les proportions sont réajustées à chaque récolte pour que la tasse reste la même d'une boîte à l'autre.
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1 450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot.01 en fermentation anaérobie double, le Lot.02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
 
 **Format et prix** `[produit.drip-bags-x8.prix.1]`
 Boîte de 8 — 14.00 €
@@ -463,10 +463,10 @@ Ferme de Gaoshen, Baoshan
 Huit sachets, deux variétés, votre choix.
 
 **Description** `[produit.drip-bags-a-composer.description]`
-Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaoshen : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d'une seule, ou quatre de chaque pour les comparer tasse après tasse.
+Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaoshen : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d’une seule, ou quatre de chaque pour les comparer tasse après tasse.
 
 **Histoire du lot** `[produit.drip-bags-a-composer.histoire]`
-Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C'est la comparaison la plus honnête que l'on puisse proposer, et la plus instructive. La plupart des gens ne s'entendent pas dire « je préfère le Bourbon jaune » avant d'avoir bu les deux à la suite.
+Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C’est la comparaison la plus honnête que l’on puisse proposer, et la plus instructive. La plupart des gens ne s’entendent pas dire « je préfère le Bourbon jaune » avant d’avoir bu les deux à la suite.
 
 **Fiche : origine** `[produit.drip-bags-a-composer.origine]`
 Yunnan, Chine — Gaoshen, Baoshan
@@ -478,7 +478,7 @@ Yunnan, Chine — Gaoshen, Baoshan
 Catimor ou Bourbon jaune
 
 **Fiche : process** `[produit.drip-bags-a-composer.process]`
-Lavé
+Lavé traditionnel
 
 **Fiche : notes de dégustation** `[produit.drip-bags-a-composer.notes]`
 Catimor : cacao, noisette · Bourbon jaune : jasmin, sucre roux
@@ -489,8 +489,8 @@ Lits africains surélevés, 14 jours
 **Fiche : récolte** `[produit.drip-bags-a-composer.recolte]`
 À la main, cerises mûres
 
-**Fiche : torréfaction** `[produit.drip-bags-a-composer.torrefaction]`
-Moyenne — mouture filtre
+**Fiche : profil (filtre ou espresso)** `[produit.drip-bags-a-composer.profil]`
+Filtre
 
 **Conseils de préparation** `[produit.drip-bags-a-composer.preparation]`
 Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.
@@ -511,7 +511,7 @@ Ferme de Gaoshen
 Baoshan, Yunnan
 
 **Ferme : présentation** `[produit.drip-bags-a-composer.ferme.texte]`
-À Gaoshen, sur les hauteurs de Baoshan, une même exploitation conduit côte à côte deux variétés que tout oppose en tasse. Le Catimor occupe les parcelles basses, plus exposées ; le Bourbon jaune, plus fragile et deux fois moins productif, est réservé aux terrasses hautes. Les deux sont récoltés, lavés et séchés exactement de la même manière — c'est ce qui rend la comparaison possible.
+À Gaoshen, sur les hauteurs de Baoshan, une même exploitation conduit côte à côte deux variétés que tout oppose en tasse. Le Catimor occupe les parcelles basses, plus exposées ; le Bourbon jaune, plus fragile et deux fois moins productif, est réservé aux terrasses hautes. Les deux sont récoltés, lavés et séchés exactement de la même manière — c’est ce qui rend la comparaison possible.
 
 **Format et prix** `[produit.drip-bags-a-composer.prix.1]`
 8 × Catimor — 15.00 €
@@ -532,49 +532,49 @@ Coffret Découverte
 3 × 200 g + 1 boîte de drip bags
 
 **Accroche (une phrase, sous le prix)** `[produit.coffret-decouverte.accroche]`
-Les trois terroirs, plus les drip bags.
+Les trois lots, plus les drip bags.
 
 **Description** `[produit.coffret-decouverte.description]`
-Le meilleur moyen de comprendre le Yunnan : trois lots de 200 g — Baoshan lavé, Pu'er honey, Menglian naturel — et une boîte de huit drip bags pour emporter la dégustation avec vous.
+Le meilleur moyen de comprendre notre gamme : les deux honey de Torch Estate — anaérobie double et traditionnel — le lavé de Yun Lan Estate en Pacamara, et une boîte de huit drip bags pour emporter la dégustation avec vous.
 
 **Histoire du lot** `[produit.coffret-decouverte.histoire]`
-Trois traitements, trois vallées, une même saison. Dégustez-les côte à côte : c'est là que le terroir se lit le plus clairement. Le coffret est accompagné d'une fiche de dégustation.
+Deux fermes, deux terroirs, trois traitements, une même saison. Dégustez-les côte à côte : c’est là que le travail se lit le plus clairement — ce que change une fermentation, ce que change une variété. Le coffret est accompagné d’une fiche de dégustation.
 
 **Fiche : origine** `[produit.coffret-decouverte.origine]`
-Yunnan, Chine — 3 terroirs
+Yunnan, Chine — Pu’er & Xishuangbanna
 
 **Fiche : altitude** `[produit.coffret-decouverte.altitude]`
 1 300 – 1 800 m
 
 **Fiche : variété** `[produit.coffret-decouverte.variete]`
-Catimor, Typica, Bourbon
+Catimor, Pacamara
 
 **Fiche : process** `[produit.coffret-decouverte.process]`
-Lavé, honey, naturel
+Honey anaérobie, honey, lavé
 
 **Fiche : notes de dégustation** `[produit.coffret-decouverte.notes]`
-Thé noir, pêche, fraise, cacao
+Fruits tropicaux, citron vert, pamplemousse, cacao
 
 **Fiche : séchage** `[produit.coffret-decouverte.sechage]`
 Lits africains surélevés
 
 **Fiche : récolte** `[produit.coffret-decouverte.recolte]`
-Récolte 2023 – 2024
+Récolte en cours
 
-**Fiche : torréfaction** `[produit.coffret-decouverte.torrefaction]`
-Claire à moyenne
+**Fiche : profil (filtre ou espresso)** `[produit.coffret-decouverte.profil]`
+Filtre & espresso
 
 **Conseils de préparation** `[produit.coffret-decouverte.preparation]`
-Commencez par le Baoshan, puis le Pu’er, terminez par le Menglian : du plus délicat au plus expressif.
+Commencez par le Lot.02, puis le Lot.01, terminez par le Yun Lan : du plus rond au plus vif.
 
 **Contenu, ligne 1** `[produit.coffret-decouverte.contenu.1]`
-Sélection Lot N°23-01 — 200 g
+Torch Estate, Lot.01 — 200 g
 
 **Contenu, ligne 2** `[produit.coffret-decouverte.contenu.2]`
-Sélection Lot N°23-03 — 200 g
+Torch Estate, Lot.02 — 200 g
 
 **Contenu, ligne 3** `[produit.coffret-decouverte.contenu.3]`
-Sélection Lot N°23-05 — 200 g
+Yun Lan Estate — 200 g
 
 **Contenu, ligne 4** `[produit.coffret-decouverte.contenu.4]`
 Drip Bags — boîte de 8
@@ -583,16 +583,16 @@ Drip Bags — boîte de 8
 Fiche de dégustation
 
 **Ferme : nom** `[produit.coffret-decouverte.ferme.nom]`
-Nos trois fermes
+Yun Lan Estate
 
 **Ferme : lieu** `[produit.coffret-decouverte.ferme.lieu]`
-Baoshan, Pu’er, Menglian
+Xishuangbanna, Yunnan
 
 **Ferme : présentation** `[produit.coffret-decouverte.ferme.texte]`
-Le coffret rassemble le travail des trois fermes avec lesquelles nous travaillons depuis le début : la famille Yang à Baoshan, le jardin de Manlao à Pu'er, la coopérative de Menglian. Trois altitudes, trois traitements, trois façons de faire — c'est en les goûtant côte à côte qu'on entend ce que chacune apporte.
+Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1 600 et 1 800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
 
 **Format et prix** `[produit.coffret-decouverte.prix.1]`
-Coffret complet — 62.00 €
+Coffret complet — 66.00 €
 
 
 ## Page « Origine » (terroir, histoire et savoir-faire)
@@ -632,19 +632,19 @@ Le terroir
 Une montagne, trois vallées
 
 **Texte** `[origine.bloc.1.texte]`
-Nos parcelles se situent entre 1 200 et 1 900 mètres, sur des sols volcaniques et argileux. Les nuits fraîches ralentissent la maturation des cerises et concentrent les sucres : c’est ce qui donne au Yunnan cette tasse ronde, à la fois florale et cacaotée.
+Nos parcelles se situent entre 1 300 et 1 800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches ralentissent la maturation des cerises et concentrent les sucres : c’est ce qui donne au Yunnan cette tasse ronde, à la fois florale et cacaotée.
 
 
 ### Bloc 2 — Des relations directes, année après année
 
 **Sur-titre** `[origine.bloc.2.surTitre]`
-Les familles
+Les fermes
 
 **Titre** `[origine.bloc.2.titre]`
 Des relations directes, année après année
 
 **Texte** `[origine.bloc.2.texte]`
-Nous travaillons avec cinq familles productrices à Baoshan, Pu’er et Menglian. Nous achetons en direct, à un prix supérieur au marché, et nous nous engageons sur plusieurs récoltes afin que chacun puisse investir dans ses parcelles et ses infrastructures de séchage.
+Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons en direct, à un prix supérieur au marché, et nous nous engageons sur plusieurs récoltes afin que chacune puisse investir dans ses parcelles et ses infrastructures de séchage.
 
 
 ### Bloc 3 — De novembre à mars
@@ -669,6 +669,33 @@ Nos terroirs
 
 **Phrase** `[origine.mapText]`
 Trois zones, trois profils de tasse.
+
+**Terroir 1 : nom** `[origine.terroir.1.nom]`
+Baoshan
+
+**Terroir 1 : altitude et variétés** `[origine.terroir.1.detail]`
+1 550 – 1 750 m · Catimor et Bourbon jaune
+
+**Terroir 1 : texte** `[origine.terroir.1.texte]`
+Les hauteurs de Gaoshen, où une même exploitation conduit deux variétés côte à côte. C’est de là que viennent nos drip bags.
+
+**Terroir 2 : nom** `[origine.terroir.2.nom]`
+Pu’er
+
+**Terroir 2 : altitude et variétés** `[origine.terroir.2.detail]`
+1 300 – 1 500 m · Catimor
+
+**Terroir 2 : texte** `[origine.terroir.2.texte]`
+Les collines de Torch Estate, d’où sortent nos deux lots honey : l’un en fermentation anaérobie double, l’autre en traitement traditionnel.
+
+**Terroir 3 : nom** `[origine.terroir.3.nom]`
+Xishuangbanna
+
+**Terroir 3 : altitude et variétés** `[origine.terroir.3.detail]`
+1 600 – 1 800 m · Pacamara
+
+**Terroir 3 : texte** `[origine.terroir.3.texte]`
+L’extrême sud du Yunnan et nos parcelles les plus hautes, à Yun Lan Estate, où mûrit un Pacamara lavé, rare et peu productif.
 
 
 ### Sommaire de la page
@@ -877,10 +904,10 @@ Petites séries, emballages recyclables, transport maritime privilégié.
 Yunma en quelques repères
 
 **Repère 1 — chiffre** `[apropos.repere.1.valeur]`
-5
+3
 
 **Repère 1 — légende** `[apropos.repere.1.libelle]`
-familles productrices partenaires
+fermes partenaires
 
 **Repère 2 — chiffre** `[apropos.repere.2.valeur]`
 3
@@ -889,7 +916,7 @@ familles productrices partenaires
 terroirs du Yunnan
 
 **Repère 3 — chiffre** `[apropos.repere.3.valeur]`
-1 200 – 1 900 m
+1 300 – 1 800 m
 
 **Repère 3 — légende** `[apropos.repere.3.libelle]`
 altitude de nos parcelles

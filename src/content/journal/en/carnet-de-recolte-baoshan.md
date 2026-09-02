@@ -1,17 +1,17 @@
 ---
 title: 'Harvest notebook: three weeks in Baoshan'
-description: 'Three weeks in the mountains of Baoshan at the heart of the harvest: picking, fermentation, drying and cupping with the producing families who partner with Yunma.'
+description: 'Three weeks in the mountains of Baoshan at the heart of the harvest: picking, fermentation, drying and cupping at Gaoshen, our partner farm in Baoshan.'
 date: 2025-02-18
 author: Yunma
 tags: ['Yunnan', 'Harvest', 'Travel']
 photo: recolte-cueilleurs
 ---
 
-We arrived in Baoshan on the first day of February, in the middle of the harvest. The road climbs slowly, between terraced rice paddies and the first coffee trees planted in the shade of mango trees. At 1,500 metres the air is dry and nights fall to 8 °C — exactly what cherries need to ripen slowly.
+We arrived in Baoshan on the first day of February, in the middle of the harvest. The road climbs slowly, between terraced rice paddies and the first coffee trees planted in the shade of mango trees. At 1,600 metres the air is dry and nights fall to 8 °C — exactly what cherries need to ripen slowly.
 
 ## Picking, pass after pass
 
-On the Yang family plot, a tree is never harvested in one go. They come back every ten days to take only the deep-red cherries. It is slower, more expensive, and it is the only way to get a consistent cup: one green cherry, and bitterness settles into the whole lot.
+On the high terraces of Gaoshen, planted with Yellow Bourbon, a tree is never harvested in one go. They come back every ten days to take only the deep-red cherries. It is slower, more expensive, and it is the only way to get a consistent cup: one green cherry, and bitterness settles into the whole lot.
 
 An experienced picker gathers between 60 and 80 kilos of cherries a day. It takes five to six kilos of cherries to make one kilo of green coffee, and six kilos of green coffee to make five kilos of roasted coffee.
 
@@ -27,6 +27,6 @@ The raised beds sit on a gentle slope, oriented east to west. For the first days
 
 ## The final cupping
 
-We ended with a table of eighteen cups, with the four families together. It is our favourite moment: producers taste their own coffee blind, next to their neighbours'. The conversations that follow are worth more than any analysis report.
+We ended with a table of eighteen cups, with the farm team and neighbouring growers. It is our favourite moment: producers taste their own coffee blind, next to their neighbours'. The conversations that follow are worth more than any analysis report.
 
-Three lots were exported this year. You will find them in the collection under numbers 23-01, 23-03 and 23-05.
+Two varieties were exported this year: the Catimor from the lower plots and the Yellow Bourbon from the high terraces. You will find them in our drip bags — on their own, or side by side in the build-your-own box.

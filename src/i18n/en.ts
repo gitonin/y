@@ -76,7 +76,7 @@ const en: Dict = {
     originLabel: 'Our origin',
     originTitle: 'Yunnan.\nOur land.\nOur inspiration.',
     originText:
-      'In south-west China, between 1,200 and 1,900 metres of altitude, Yunnan grows a coffee still largely unknown. There we select micro-lots from producing families, plot by plot, harvest after harvest.',
+      'In south-west China, between 1,300 and 1,800 metres of altitude, Yunnan grows a coffee still largely unknown. There we select micro-lots from three partner farms, plot by plot, harvest after harvest.',
     originCta: 'Discover the origin',
     coffeesLabel: 'Our coffees',
     coffeesTitle: 'Exceptional coffees,\ngrown with care.',
@@ -122,7 +122,7 @@ const en: Dict = {
     notes: 'Notes',
     drying: 'Drying',
     harvest: 'Harvest',
-    roast: 'Roast',
+    roast: 'Profile',
     farmTitle: 'The farm',
     relatedTitle: 'You may also like',
     shipping: 'Ships within 48 h — free delivery from €45',
@@ -141,12 +141,12 @@ const en: Dict = {
       {
         label: 'The terroir',
         title: 'One mountain, three valleys',
-        text: 'Our plots sit between 1,200 and 1,900 metres, on volcanic and clay soils. Cool nights slow the ripening of the cherries and concentrate the sugars: this is what gives Yunnan its round cup, at once floral and cocoa-like.',
+        text: 'Our plots sit between 1,300 and 1,800 metres, on volcanic and clay soils. Cool nights slow the ripening of the cherries and concentrate the sugars: this is what gives Yunnan its round cup, at once floral and cocoa-like.',
       },
       {
-        label: 'The families',
+        label: 'The farms',
         title: 'Direct relationships, year after year',
-        text: 'We work with five producing families in Baoshan, Pu’er and Menglian. We buy directly, above market price, and commit over several harvests so that everyone can invest in their plots and drying infrastructure.',
+        text: 'We work with three farms, in Baoshan, Pu’er and Xishuangbanna. We buy directly, above market price, and commit over several harvests so that each of them can invest in their plots and drying infrastructure.',
       },
       {
         label: 'The season',
@@ -157,6 +157,23 @@ const en: Dict = {
     quote: 'Coffee is not manufactured. It is grown, then respected.',
     mapTitle: 'Our terroirs',
     mapText: 'Three areas, three cup profiles.',
+    terroirs: [
+      {
+        name: 'Baoshan',
+        detail: '1,550 – 1,750 m · Catimor and Yellow Bourbon',
+        text: 'The heights of Gaoshen, where a single estate grows two varieties side by side. This is where our drip bags come from.',
+      },
+      {
+        name: 'Pu’er',
+        detail: '1,300 – 1,500 m · Catimor',
+        text: 'The hills of Torch Estate, home to both our honey lots: one in double anaerobic fermentation, the other traditional.',
+      },
+      {
+        name: 'Xishuangbanna',
+        detail: '1,600 – 1,800 m · Pacamara',
+        text: 'The far south of Yunnan and our highest plots, at Yun Lan Estate, where a rare, low-yielding washed Pacamara ripens.',
+      },
+    ],
     anchors: {
       terroir: 'Yunnan',
       histoire: 'Our story',
@@ -219,9 +236,9 @@ const en: Dict = {
     ],
     figuresTitle: 'Yunma in a few figures',
     figures: [
-      { value: '5', label: 'partner producing families' },
+      { value: '3', label: 'partner farms' },
       { value: '3', label: 'Yunnan terroirs' },
-      { value: '1,200 – 1,900 m', label: 'altitude of our plots' },
+      { value: '1,300 – 1,800 m', label: 'altitude of our plots' },
       { value: '2019', label: 'first harvest imported' },
     ],
     closing: 'Time reveals the aromas.',
