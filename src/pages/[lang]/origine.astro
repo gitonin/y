@@ -8,7 +8,7 @@ import Icon from '../../components/Icon.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
+import { useTranslations, route, absolute, asset, type Lang } from '../../i18n/utils';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
 
@@ -129,8 +129,14 @@ const jsonld = [
   <section class="oro panel panel--soft">
     <div class="wrap oro__inner">
       <div class="oro__mark" data-reveal>
-        <span class="oro__initials" aria-hidden="true">ORO</span>
-        <span class="oro__oval" aria-hidden="true"></span>
+        <img
+          src={asset('brand/oro-yunnan.png')}
+          alt={`${t.origine.oroName} — ${t.origine.oroFull}`}
+          width="1827"
+          height="218"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div class="oro__text">
         <span class="label" data-reveal>{t.origine.oroLabel}</span>
@@ -369,32 +375,22 @@ const jsonld = [
     align-items: center;
   }
 
-  @media (min-width: 760px) {
+  @media (min-width: 900px) {
     .oro__inner {
-      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
       gap: clamp(2rem, 5vw, 4rem);
+      align-items: center;
     }
   }
 
   .oro__mark {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 132px;
-    height: 84px;
+    max-width: 420px;
   }
 
-  .oro__oval {
-    position: absolute;
-    inset: 0;
-    border: 2px solid var(--ink-30);
-    border-radius: 50%;
-  }
-
-  .oro__initials {
-    font-size: 1.5rem;
-    letter-spacing: 0.06em;
-    color: var(--ink-70);
+  .oro__mark img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .oro__name {
