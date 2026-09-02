@@ -85,6 +85,21 @@ reste inactif.
 
 ## 3. Modifier le contenu
 
+### Par document (recommandé pour les textes rédactionnels)
+
+`contenu/textes-yunma-fr.docx` (et sa version texte `.md`) rassemble les 338 textes
+du site en français, chacun précédé d'un code stable entre crochets, par exemple
+`[accueil.heroTitle]`. On modifie le texte sous le code, on renvoie le document,
+et les modifications sont réinjectées au bon endroit puis traduites.
+
+Le document se régénère depuis les fichiers du site — il ne se périme donc jamais :
+
+```bash
+node scripts/export-textes.mjs
+```
+
+### Directement dans le code
+
 **Un texte de page** → `src/i18n/fr.ts` (puis `en.ts` et `zh.ts` : même structure,
 mêmes clés). Les retours à la ligne `\n` dans les titres créent les lignes animées.
 

@@ -13,5 +13,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
     "astro": "^7.2.10"
+  },
+  "devDependencies": {
+    "docx": "^9.7.1"
   }
 }
