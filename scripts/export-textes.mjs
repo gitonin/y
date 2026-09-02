@@ -171,12 +171,16 @@ for (const p of products) {
   field(`${c}.recolte`, p.specs.harvest.fr, 'Fiche : récolte');
   field(`${c}.torrefaction`, p.specs.roast.fr, 'Fiche : torréfaction');
   field(`${c}.preparation`, p.brew.fr, 'Conseils de préparation');
-  (p.includes ?? []).forEach((item, i) => field(`${c}.contenu.${i + 1}`, item.fr, `Contenu du coffret, ligne ${i + 1}`));
+  (p.includes ?? []).forEach((item, i) => field(`${c}.contenu.${i + 1}`, item.fr, `Contenu, ligne ${i + 1}`));
+  field(`${c}.ferme.nom`, p.farm.name, 'Ferme : nom');
+  field(`${c}.ferme.lieu`, p.farm.place.fr, 'Ferme : lieu');
+  field(`${c}.ferme.texte`, p.farm.text.fr, 'Ferme : présentation');
   p.variants.forEach((v, i) => field(`${c}.prix.${i + 1}`, `${v.label.fr} — ${v.price.toFixed(2)} €`, 'Format et prix'));
 }
 
-/* ------- origine ------- */
-chapter('Page « Origine »');
+/* ------- origine (page fusionnée) ------- */
+chapter('Page « Origine » (terroir, histoire et savoir-faire)');
+note('Cette page réunit trois anciennes pages. Le sommaire en haut de page permet de sauter d’une partie à l’autre.');
 section('Référencement de la page');
 fields('origine', t.origine, ['seoTitle', 'seoDescription']);
 section('En-tête');
@@ -191,8 +195,17 @@ section('Citation et terroirs');
 field('origine.citation', t.origine.quote, 'Citation');
 fields('origine', t.origine, ['mapTitle', 'mapText']);
 
+section('Sommaire de la page');
+Object.entries(t.origine.anchors).forEach(([cle, valeur]) => field(`origine.sommaire.${cle}`, valeur, 'Entrée du sommaire'));
+
+section('Soutien d’ORO Yunnan');
+field('origine.oro.surTitre', t.origine.oroLabel, 'Sur-titre');
+field('origine.oro.nom', t.origine.oroName, 'Nom');
+field('origine.oro.nomComplet', t.origine.oroFull, 'Nom complet');
+field('origine.oro.texte', t.origine.oroText, 'Texte');
+
 /* ------- savoir-faire ------- */
-chapter('Page « Savoir-faire »');
+chapter('Origine — partie « Savoir-faire »');
 section('Référencement de la page');
 fields('savoirFaire', t.savoirFaire, ['seoTitle', 'seoDescription']);
 section('En-tête');
@@ -209,7 +222,7 @@ t.savoirFaire.brews.forEach((b, i) => {
 });
 
 /* ------- notre histoire ------- */
-chapter('Page « Notre histoire »');
+chapter('Origine — partie « Notre histoire »');
 section('Référencement de la page');
 fields('apropos', t.apropos, ['seoTitle', 'seoDescription']);
 section('En-tête et récit');
@@ -285,11 +298,10 @@ section('Référencement de la page');
 fields('contact', t.contact, ['seoTitle', 'seoDescription']);
 section('En-tête');
 fields('contact', t.contact, ['label', 'title', 'intro']);
-section('Encadrés');
-fields('contact', t.contact, ['generalTitle', 'proTitle', 'pressTitle', 'hoursTitle', 'hoursText']);
-section('Formulaire');
-fields('contact', t.contact, ['formTitle', 'subject', 'formNote']);
-t.contact.subjects.forEach((s, i) => field(`contact.sujet.${i + 1}`, s, `Sujet ${i + 1}`));
+section('Les trois interlocuteurs');
+fields('contact', t.contact, ['generalTitle', 'generalText', 'proTitle', 'proText', 'pressTitle', 'pressText']);
+section('Atelier');
+fields('contact', t.contact, ['hoursTitle', 'hoursText']);
 
 /* ------- pied de page ------- */
 chapter('Pied de page et newsletter');

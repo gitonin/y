@@ -121,16 +121,16 @@ const fr = {
     drying: 'Séchage',
     harvest: 'Récolte',
     roast: 'Torréfaction',
-    farmCta: 'Découvrir la ferme',
+    farmTitle: 'La ferme',
     relatedTitle: 'Vous aimerez aussi',
     shipping: 'Expédié sous 48 h — livraison offerte dès 45 €',
     freshness: 'Torréfié à la commande, chaque semaine',
     brewTitle: 'Conseils de préparation',
   },
   origine: {
-    seoTitle: 'Le Yunnan, origine des cafés Yunma',
+    seoTitle: 'Origine, histoire et savoir-faire — Yunma, cafés du Yunnan',
     seoDescription:
-      'Le Yunnan, province du sud-ouest de la Chine : altitude, terroirs de Baoshan, Pu’er et Menglian, familles productrices partenaires de Yunma.',
+      'Le Yunnan et ses terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.',
     label: 'Notre origine',
     title: 'Le Yunnan.\nNotre terre.\nNotre inspiration.',
     intro:
@@ -155,6 +155,18 @@ const fr = {
     quote: 'Un café ne se fabrique pas. Il se cultive, puis se respecte.',
     mapTitle: 'Nos terroirs',
     mapText: 'Trois zones, trois profils de tasse.',
+    anchors: {
+      terroir: 'Le Yunnan',
+      histoire: 'Notre histoire',
+      savoirFaire: 'Savoir-faire',
+      engagements: 'Engagements',
+    },
+    oroLabel: 'Avec le soutien de',
+    oroName: 'ORO Yunnan',
+    oroFull: 'Bureau de représentation commerciale du Yunnan en France (Paris)',
+    oroText:
+      "ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques qui s'y développent. Un appui précieux pour acheter en direct à dix mille kilomètres, et pour faire connaître ici un terroir que l'on découvre à peine.",
+
   },
   savoirFaire: {
     seoTitle: 'Savoir-faire Yunma — traitement, séchage et torréfaction',
@@ -287,15 +299,18 @@ const fr = {
     label: 'Contact',
     title: 'Écrivez-nous',
     intro: 'Une question ? Un projet ? Nous répondons sous un jour ouvré.',
-    generalTitle: 'Questions générales',
-    proTitle: 'Professionnels',
+    generalTitle: 'Une question sur nos cafés',
+    generalText:
+      'Un conseil sur le lot qui vous conviendrait, une commande à suivre, un doute sur une mouture ou une méthode : écrivez-nous, c’est nous qui répondons.',
+    proTitle: 'Cafés, hôtels, restaurants',
+    proText:
+      'Tarifs dégressifs, grains en 1 kg, drip bags à votre marque, réglages sur site et formation. Dites-nous ce que vous servez, nous vous envoyons des échantillons.',
     pressTitle: 'Presse & partenariats',
+    pressText:
+      'Visuels, informations sur les fermes partenaires, visites de l’atelier : nous répondons volontiers, et nous préférons les sujets qui vont regarder d’un peu plus près.',
     hoursTitle: 'Atelier',
     hoursText: 'Visites sur rendez-vous, du mardi au vendredi.',
-    formTitle: 'Formulaire',
-    formNote: 'En envoyant ce message, vous acceptez que vos données soient utilisées pour vous répondre.',
-    subject: 'Sujet',
-    subjects: ['Une commande', 'Un conseil café', 'Une demande pro', 'Autre'],
+    writeUs: 'Écrire',
   },
   legal: {
     mentionsTitle: 'Mentions légales',

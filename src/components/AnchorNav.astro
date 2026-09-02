@@ -1,0 +1,142 @@
+---
+/**
+ * Sommaire d'une page longue. Colle sous l'en-tête, remonte quand celui-ci
+ * s'efface, et souligne la section en cours de lecture.
+ */
+interface Props {
+  items: { id: string; label: string }[];
+  ariaLabel: string;
+}
+const { items, ariaLabel } = Astro.props;
+---
+
+<nav class="anchors" aria-label={ariaLabel} data-anchor-nav>
+  <div class="wrap anchors__inner">
+    <ul>
+      {
+        items.map((item) => (
+          <li>
+            <a href={`#${item.id}`} data-anchor-link={item.id}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .anchors {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 40;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(12px) saturate(1.1);
+    border-block: 1px solid var(--line-soft);
+    transition: top 0.55s var(--ease-out-expo);
+  }
+
+  :global(html.header-hidden) .anchors {
+    top: 0;
+  }
+
+  .anchors__inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .anchors__inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  ul {
+    display: flex;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-block: 0.9rem;
+    white-space: nowrap;
+  }
+
+  a {
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
+    position: relative;
+    padding-block: 0.25rem;
+    transition: color 0.35s var(--ease);
+  }
+
+  a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+
+  a:hover {
+    color: var(--ink);
+  }
+
+  a[aria-current='true'] {
+    color: var(--accent);
+  }
+
+  a[aria-current='true']::after {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anchors {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const initAnchorNav = () => {
+    const nav = document.querySelector<HTMLElement>('[data-anchor-nav]');
+    if (!nav || nav.dataset.bound) return;
+    nav.dataset.bound = '1';
+
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-anchor-link]')];
+    const sections = links
+      .map((link) => document.getElementById(link.dataset.anchorLink!))
+      .filter((el): el is HTMLElement => !!el);
+    if (!sections.length || !('IntersectionObserver' in window)) return;
+
+    const seen = new Map<string, number>();
+    const marquer = () => {
+      let courante = '';
+      let meilleur = 0;
+      for (const [id, ratio] of seen) {
+        if (ratio > meilleur) {
+          meilleur = ratio;
+          courante = id;
+        }
+      }
+      links.forEach((link) => {
+        const actif = link.dataset.anchorLink === courante;
+        if (actif) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => seen.set(entry.target.id, entry.intersectionRatio));
+        marquer();
+      },
+      { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.15, 0.4, 0.75, 1] }
+    );
+    sections.forEach((section) => observer.observe(section));
+  };
+
+  document.addEventListener('astro:page-load', initAnchorNav);
+</script>

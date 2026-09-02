@@ -42,149 +42,121 @@ const jsonld = [
   />
 
   <div class="wrap contact">
-    <div class="contact__cards">
-      <div class="ccard" data-reveal>
+    <ul class="ccards">
+      <li class="ccard" data-reveal>
         <span class="label">{t.contact.generalTitle}</span>
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-      </div>
-      <div class="ccard" data-reveal>
+        <p class="muted ccard__text">{t.contact.generalText}</p>
+        <a class="link ccard__link" href={`mailto:${SITE.email}`}>
+          {SITE.email}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+
+      <li class="ccard" data-reveal style="--reveal-delay:90ms">
         <span class="label">{t.contact.proTitle}</span>
-        <a href={`mailto:${SITE.proEmail}`}>{SITE.proEmail}</a>
-        <a class="small muted" href={route(lang, 'pro')}>{t.pro.forWhoCta}</a>
-      </div>
-      <div class="ccard" data-reveal>
+        <p class="muted ccard__text">{t.contact.proText}</p>
+        <a class="link ccard__link" href={`mailto:${SITE.proEmail}`}>
+          {SITE.proEmail}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="small muted ccard__more" href={route(lang, 'pro')}>{t.pro.forWhoCta}</a>
+      </li>
+
+      <li class="ccard" data-reveal style="--reveal-delay:180ms">
         <span class="label">{t.contact.pressTitle}</span>
-        <a href={`mailto:${SITE.pressEmail}`}>{SITE.pressEmail}</a>
-      </div>
-      <div class="ccard" data-reveal>
+        <p class="muted ccard__text">{t.contact.pressText}</p>
+        <a class="link ccard__link" href={`mailto:${SITE.pressEmail}`}>
+          {SITE.pressEmail}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+
+    <aside class="cplace panel panel--soft" data-reveal>
+      <div>
         <span class="label">{t.contact.hoursTitle}</span>
-        <address>
+        <address class="cplace__address">
           {SITE.address.street}<br />
           {SITE.address.postalCode} {SITE.address.city}
         </address>
         <p class="small muted">{t.contact.hoursText}</p>
       </div>
-    </div>
-
-    <form
-      class="cform"
-      data-reveal
-      action={`mailto:${SITE.email}`}
-      method="post"
-      enctype="text/plain"
-      data-contact-form
-    >
-      <h2 class="label cform__title">{t.contact.formTitle}</h2>
-
-      <label class="field">
-        <span>{t.common.name}</span>
-        <input type="text" name="name" autocomplete="name" required />
-      </label>
-
-      <label class="field">
-        <span>{t.common.email}</span>
-        <input type="email" name="email" autocomplete="email" required />
-      </label>
-
-      <label class="field">
-        <span>{t.contact.subject}</span>
-        <select name="subject">
-          {t.contact.subjects.map((subject) => <option value={subject}>{subject}</option>)}
-        </select>
-      </label>
-
-      <label class="field">
-        <span>{t.common.message}</span>
-        <textarea name="message" rows="5" required></textarea>
-      </label>
-
-      <button class="btn" type="submit">{t.common.send}</button>
-      <p class="small muted cform__note">{t.contact.formNote}</p>
-    </form>
+      <div class="cplace__phone">
+        <span class="label">{t.nav.contact}</span>
+        <a class="link link--ink" href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+      </div>
+    </aside>
   </div>
 </Base>
 
-<script>
-  /* Sans back-office, le formulaire compose un e-mail dans le client de l'utilisateur.
-     Branchez ici votre service (Formspree, Basin, Shopify Forms…) le moment venu. */
-  const initContactForm = () => {
-    document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
-      if (form.dataset.bound) return;
-      form.dataset.bound = '1';
-      form.addEventListener('submit', (event) => {
-        if (!form.reportValidity()) return;
-        event.preventDefault();
-        const data = new FormData(form);
-        const to = (form.getAttribute('action') || '').replace('mailto:', '');
-        const subject = `${data.get('subject') ?? 'Contact'} — ${data.get('name') ?? ''}`;
-        const body = `${data.get('message') ?? ''}\n\n— ${data.get('name') ?? ''} (${data.get('email') ?? ''})`;
-        window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      });
-    });
-  };
 
-  document.addEventListener('astro:page-load', initContactForm);
-</script>
 
 <style>
   .contact {
     padding-bottom: var(--section);
     display: grid;
-    gap: clamp(2.5rem, 5vw, 4.5rem);
+    gap: clamp(2.5rem, 6vw, 4.5rem);
   }
 
-  @media (min-width: 960px) {
-    .contact {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      align-items: start;
-    }
-  }
-
-  .contact__cards {
+  .ccards {
     display: grid;
-    gap: 1.5rem;
+    gap: clamp(1.75rem, 4vw, 3rem);
   }
 
-  @media (min-width: 620px) {
-    .contact__cards {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  @media (min-width: 860px) {
+    .ccards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
   .ccard {
     display: grid;
-    gap: 0.4rem;
     justify-items: start;
-    padding-top: 1rem;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
     border-top: 1px solid var(--line);
+  }
+
+  .ccard__text {
+    max-width: 40ch;
     font-size: var(--fs-small);
-  }
-
-  .ccard a {
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 1px;
-    transition: border-color 0.35s var(--ease);
-  }
-
-  .ccard a:hover {
-    border-color: var(--accent);
-  }
-
-  .ccard address {
-    font-style: normal;
     line-height: 1.6;
   }
 
-  .cform {
+  .ccard__link {
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: var(--fs-body);
+  }
+
+  .ccard__more {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+  }
+
+  .ccard__more:hover {
+    border-color: var(--accent);
+  }
+
+  .cplace {
     padding: clamp(1.5rem, 3vw, 2.5rem);
-    background: var(--paper-soft);
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
   }
 
-  .cform__title {
-    margin-bottom: 1.5rem;
+  @media (min-width: 700px) {
+    .cplace {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
   }
 
-  .cform__note {
-    margin-top: 1rem;
+  .cplace__address {
+    font-style: normal;
+    line-height: 1.6;
+    margin-block: 0.5rem 0.4rem;
+  }
+
+  .cplace__phone {
+    display: grid;
+    gap: 0.4rem;
+    justify-items: start;
   }
 </style>

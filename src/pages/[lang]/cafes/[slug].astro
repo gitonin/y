@@ -5,6 +5,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Packshot from '../../../components/Packshot.astro';
 import BuyBox from '../../../components/BuyBox.astro';
 import ProductCard from '../../../components/ProductCard.astro';
+import Photo from '../../../components/Photo.astro';
 import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
 import { languages, useTranslations, url, route, formatPrice, absolute, type Lang } from '../../../i18n/utils';
@@ -113,6 +114,8 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
         <p class="pdp__price mono-num">{formatPrice(price, lang)}</p>
         <p class="pdp__short">{product.short[lang]}</p>
 
+        <BuyBox product={product} lang={lang} hidePrice />
+
         <dl class="specs">
           {
             specRows.map((row) => (
@@ -123,8 +126,6 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
             ))
           }
         </dl>
-
-        <BuyBox product={product} lang={lang} hidePrice />
 
         <a class="link pdp__more" href="#about">
           {t.common.learnMore}<span class="arrow" aria-hidden="true">↓</span>
@@ -163,15 +164,24 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
               ))
             }
           </dl>
-          <a class="link" href={route(lang, 'origine')}>
-            {t.product.farmCta}<span class="arrow" aria-hidden="true">→</span>
-          </a>
         </div>
       </div>
 
       <div class="brew" data-reveal>
         <h3 class="brew__title">{t.product.brewTitle}</h3>
         <p class="muted">{product.brew[lang]}</p>
+      </div>
+    </section>
+
+    <section class="farm" data-reveal>
+      <div class="farm__media media">
+        <Photo name={product.farm.photo} lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
+      </div>
+      <div class="farm__text">
+        <span class="label">{t.product.farmTitle}</span>
+        <h2 class="farm__name">{product.farm.name}</h2>
+        <p class="small muted farm__place">{product.farm.place[lang]}</p>
+        <p class="muted farm__body">{product.farm.text[lang]}</p>
       </div>
     </section>
 
@@ -236,6 +246,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 
   .pdp__short {
     margin-top: 0.9rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
     font-size: var(--fs-lead);
     line-height: 1.4;
     letter-spacing: -0.01em;
@@ -243,7 +254,9 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
   }
 
   .specs {
-    margin-block: clamp(1.5rem, 3vw, 2.25rem);
+    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    border-top: 1px solid var(--line-soft);
     display: grid;
     gap: 0.9rem;
   }
@@ -339,6 +352,39 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
   .brew__title {
     font-size: 1rem;
     margin-bottom: 0.5rem;
+  }
+
+  .farm {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .farm {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    }
+  }
+
+  .farm__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .farm__name {
+    margin-top: 0.65rem;
+    font-size: var(--fs-h3);
+  }
+
+  .farm__place {
+    margin-top: 0.2rem;
+  }
+
+  .farm__body {
+    margin-top: 1rem;
+    max-width: 52ch;
   }
 
   .related {

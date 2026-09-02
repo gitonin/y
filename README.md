@@ -38,9 +38,7 @@ src/
 | Accueil | `/fr/` |
 | Tous les cafés | `/fr/cafes/` |
 | Fiche produit | `/fr/cafes/<slug>/` |
-| Origine | `/fr/origine/` |
-| Savoir-faire | `/fr/savoir-faire/` |
-| Notre histoire | `/fr/a-propos/` |
+| Origine, histoire et savoir-faire | `/fr/origine/` |
 | Espace pro (B2B) | `/fr/pro/` |
 | Journal (blog) | `/fr/journal/` et `/fr/journal/<slug>/` |
 | FAQ | `/fr/faq/` |

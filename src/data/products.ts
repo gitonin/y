@@ -37,6 +37,13 @@ export type Product = {
   };
   brew: L;
   includes?: L[];
+  /** Ferme ou famille productrice, présentée directement sur la fiche produit. */
+  farm: {
+    name: string;
+    place: L;
+    text: L;
+    photo: 'recolte-cueilleurs' | 'cretes-brumeuses' | 'cerises-branche' | 'sechage-lits' | 'tabouret-terrasse';
+  };
   related: string[];
 };
 
@@ -98,6 +105,16 @@ export const products: Product[] = [
       en: 'Filter: 15 g per 250 ml, water at 93 °C, 2 min 45. Espresso: 18 g for 40 g in 26 seconds.',
       zh: '手冲：15 克 / 250 毫升，93 °C，2 分 45 秒。意式：18 克粉萃取 40 克液，26 秒。',
     },
+    farm: {
+      name: 'Ferme des Yang',
+      place: { fr: 'Baoshan, Yunnan', en: 'Baoshan, Yunnan', zh: '云南 保山' },
+      text: {
+        fr: "La famille Yang cultive 3,5 hectares à 1 500 mètres, sur un versant orienté à l'est, planté d'arbres d'ombrage. Trois générations y travaillent : les parents à la parcelle, le fils à la station de lavage qu'ils ont construite en 2021. Nous achetons chez eux depuis notre première récolte, à un prix fixé avant la saison.",
+        en: 'The Yang family farms 3.5 hectares at 1,500 metres, on an east-facing slope planted with shade trees. Three generations work there: the parents on the plot, the son at the washing station they built in 2021. We have bought from them since our first harvest, at a price agreed before the season.',
+        zh: '杨家在海拔 1500 米的东向坡地耕作 3.5 公顷，地块间种有遮荫树。三代人一同劳作：父母在地里，儿子负责他们 2021 年自建的水洗处理站。自第一个产季起我们便向他们采购，价格在开季前就已谈定。',
+      },
+      photo: 'recolte-cueilleurs',
+    },
     related: ['lot-23-03-puer', 'lot-23-05-menglian', 'coffret-decouverte'],
   },
   {
@@ -149,6 +166,16 @@ export const products: Product[] = [
       en: 'Filter: 15 g per 250 ml, water at 92 °C, short pours. Ideal in a V60 or an immersion brewer.',
       zh: '手冲：15 克 / 250 毫升，92 °C，小水流分段注水。适合 V60 或浸泡式冲煮。',
     },
+    farm: {
+      name: 'Jardin de Manlao',
+      place: { fr: "Pu'er, Yunnan", en: "Pu'er, Yunnan", zh: '云南 普洱' },
+      text: {
+        fr: "Une parcelle de 1,8 hectare en lisière des jardins de thé, conduite sans intrant de synthèse depuis 2017. Les caféiers y poussent sous des arbres fruitiers, ce qui allonge la maturation de deux à trois semaines. La récolte est traitée en honey, séchée à l'ombre, sur des lits que la famille couvre chaque soir.",
+        en: 'A 1.8-hectare plot on the edge of the tea gardens, farmed without synthetic inputs since 2017. Coffee trees grow under fruit trees, which stretches ripening by two to three weeks. The harvest is honey processed and shade dried, on beds the family covers every evening.',
+        zh: '一块 1.8 公顷的地块，位于茶园边缘，自 2017 年起不使用合成投入品。咖啡树生长在果树之下，使成熟期延长两到三周。采收后采用蜜处理，于阴凉处晾晒，家人每晚为晾床覆盖。',
+      },
+      photo: 'cretes-brumeuses',
+    },
     related: ['lot-23-01-baoshan', 'lot-23-05-menglian', 'drip-bags-x8'],
   },
   {
@@ -199,6 +226,16 @@ export const products: Product[] = [
       fr: "Filtre : 15 g pour 250 ml, eau à 94 °C. En espresso, allonger légèrement le ratio pour adoucir l'acidité.",
       en: 'Filter: 15 g per 250 ml, water at 94 °C. For espresso, stretch the ratio slightly to soften the acidity.',
       zh: '手冲：15 克 / 250 毫升，94 °C。做意式时可略微拉长粉液比以柔化酸度。',
+    },
+    farm: {
+      name: 'Coopérative de Menglian',
+      place: { fr: 'Menglian, Yunnan', en: 'Menglian, Yunnan', zh: '云南 孟连' },
+      text: {
+        fr: "Sept familles réunies en coopérative, le long de la frontière birmane. Elles mettent en commun l'aire de séchage et le trieur optique, ce qu'aucune ne pourrait financer seule. Ce lot naturel est le fruit de cette mise en commun : vingt et un jours de séchage demandent une surveillance que l'on ne tient pas à une seule paire de bras.",
+        en: 'Seven families gathered in a cooperative, along the Burmese border. They share the drying yard and the optical sorter, which none of them could afford alone. This natural lot is the fruit of that pooling: twenty-one days of drying demand a watchfulness one pair of hands cannot keep.',
+        zh: '缅甸边境沿线的七个家庭组成合作社，共用晾晒场与光学分选机——这是任何一户都无力独自购置的设备。这支日晒批次正源于这种共享：二十一天的晾晒需要的看护，一双手撑不下来。',
+      },
+      photo: 'cerises-branche',
     },
     related: ['lot-23-01-baoshan', 'lot-23-03-puer', 'coffret-decouverte'],
   },
@@ -256,7 +293,105 @@ export const products: Product[] = [
       { fr: 'Assemblage de saison, moulu du jour', en: 'Seasonal blend, ground that day', zh: '当季拼配，当日研磨' },
       { fr: 'Boîte recyclable', en: 'Recyclable box', zh: '可回收包装盒' },
     ],
-    related: ['coffret-decouverte', 'lot-23-01-baoshan', 'lot-23-03-puer'],
+    farm: {
+      name: 'Baoshan & Pu’er',
+      place: { fr: 'Deux fermes partenaires', en: 'Two partner farms', zh: '两家合作农场' },
+      text: {
+        fr: "Cet assemblage réunit le lavé de la famille Yang, à Baoshan, et le honey du jardin de Manlao, à Pu'er. Le premier apporte la structure et la propreté, le second la douceur et le parfum. Les proportions sont réajustées à chaque récolte pour que la tasse reste la même d'une boîte à l'autre.",
+        en: 'This blend brings together the Yang family washed lot from Baoshan and the Manlao garden honey from Pu’er. The first brings structure and cleanliness, the second sweetness and perfume. Proportions are adjusted at every harvest so the cup stays the same from one box to the next.',
+        zh: '这款拼配融合了保山杨家的水洗批次与普洱曼老园的蜜处理批次。前者带来结构与干净度，后者带来甜感与香气。每一季都会重新调整比例，让每一盒的风味保持一致。',
+      },
+      photo: 'sechage-lits',
+    },
+    related: ['drip-bags-a-composer', 'coffret-decouverte', 'lot-23-01-baoshan'],
+  },
+  {
+    slug: 'drip-bags-a-composer',
+    sku: 'YUN-DRIP-COMPO',
+    category: 'drip',
+    visual: 'box',
+    shopifyHandle: 'drip-bags-a-composer',
+    shopifyProductId: '',
+    variants: [
+      {
+        shopifyVariantId: '',
+        label: { fr: '8 × Catimor', en: '8 × Catimor', zh: '8 片 卡蒂姆' },
+        price: 15,
+        weightGrams: 80,
+        available: true,
+      },
+      {
+        shopifyVariantId: '',
+        label: { fr: '8 × Bourbon jaune', en: '8 × Yellow Bourbon', zh: '8 片 黄波旁' },
+        price: 15,
+        weightGrams: 80,
+        available: true,
+      },
+      {
+        shopifyVariantId: '',
+        label: { fr: '4 × Catimor + 4 × Bourbon jaune', en: '4 × Catimor + 4 × Yellow Bourbon', zh: '4 片卡蒂姆 + 4 片黄波旁' },
+        price: 15,
+        weightGrams: 80,
+        available: true,
+      },
+    ],
+    lot: 'Drip',
+    name: {
+      fr: 'Drip Bags — Composez votre boîte',
+      en: 'Drip Bags — Build your own box',
+      zh: '挂耳咖啡 — 自选组合',
+    },
+    subtitle: { fr: 'Ferme de Gaoshen, Baoshan', en: 'Gaoshen farm, Baoshan', zh: '保山 高神农场' },
+    short: {
+      fr: 'Huit sachets, deux variétés, votre choix.',
+      en: 'Eight sachets, two varieties, your choice.',
+      zh: '八片滤袋，两种品种，由您决定。',
+    },
+    description: {
+      fr: "Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaoshen : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d'une seule, ou quatre de chaque pour les comparer tasse après tasse.",
+      en: 'A box of eight drip bags composed by you, from two varieties grown on the same farm in Gaoshen: Catimor, round and cocoa-like, and Yellow Bourbon, finer and floral. Take eight of one, or four of each to compare them cup after cup.',
+      zh: '由您自行组合的八片挂耳，两种品种来自高神的同一座农场：卡蒂姆，圆润带可可感；黄波旁，更细腻、更具花香。可以八片同款，也可以各四片，一杯一杯地比较。',
+    },
+    story: {
+      fr: "Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C'est la comparaison la plus honnête que l'on puisse proposer, et la plus instructive. La plupart des gens ne s'entendent pas dire « je préfère le Bourbon jaune » avant d'avoir bu les deux à la suite.",
+      en: 'Same soil, same altitude, same processing, same roast: only the variety changes. It is the most honest comparison we can offer, and the most instructive. Most people never hear themselves say “I prefer the Yellow Bourbon” until they have drunk both in a row.',
+      zh: '同一片土地、同样的海拔、同样的处理与烘焙：只有品种不同。这是我们能提供的最诚实、也最有启发的比较。多数人要连着喝过两杯，才会听见自己说出"我更喜欢黄波旁"。',
+    },
+    specs: {
+      origin: { fr: 'Yunnan, Chine — Gaoshen, Baoshan', en: 'Yunnan, China — Gaoshen, Baoshan', zh: '中国云南 — 保山 高神' },
+      altitude: { fr: '1 550 – 1 750 m', en: '1,550 – 1,750 m', zh: '1550 – 1750 米' },
+      variety: { fr: 'Catimor ou Bourbon jaune', en: 'Catimor or Yellow Bourbon', zh: '卡蒂姆 或 黄波旁' },
+      process: { fr: 'Lavé', en: 'Washed', zh: '水洗' },
+      notes: {
+        fr: 'Catimor : cacao, noisette · Bourbon jaune : jasmin, sucre roux',
+        en: 'Catimor: cocoa, hazelnut · Yellow Bourbon: jasmine, brown sugar',
+        zh: '卡蒂姆：可可、榛果 · 黄波旁：茉莉、红糖',
+      },
+      drying: { fr: 'Lits africains surélevés, 14 jours', en: 'Raised African beds, 14 days', zh: '非洲高架床，14 天' },
+      harvest: { fr: 'À la main, cerises mûres', en: 'Hand-picked, ripe cherries', zh: '手工采摘，成熟果实' },
+      roast: { fr: 'Moyenne — mouture filtre', en: 'Medium — filter grind', zh: '中烘 — 手冲研磨度' },
+    },
+    brew: {
+      fr: 'Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.',
+      en: 'Rest the sachet on the cup, pour 30 ml to bloom, wait 30 seconds, then top up to 180 ml in two pours.',
+      zh: '将滤袋挂在杯口，先注入 30 毫升闷蒸 30 秒，再分两次注水至 180 毫升。',
+    },
+    includes: [
+      { fr: '8 sachets filtres de 10 g, moulus du jour', en: '8 filter sachets of 10 g, ground that day', zh: '8 片 10 克滤袋，当日研磨' },
+      { fr: 'Une seule ferme, une seule récolte', en: 'One farm, one harvest', zh: '单一农场，单一产季' },
+      { fr: 'Boîte recyclable', en: 'Recyclable box', zh: '可回收包装盒' },
+    ],
+    farm: {
+      name: 'Ferme de Gaoshen',
+      place: { fr: 'Baoshan, Yunnan', en: 'Baoshan, Yunnan', zh: '云南 保山' },
+      text: {
+        fr: "À Gaoshen, sur les hauteurs de Baoshan, une même exploitation conduit côte à côte deux variétés que tout oppose en tasse. Le Catimor occupe les parcelles basses, plus exposées ; le Bourbon jaune, plus fragile et deux fois moins productif, est réservé aux terrasses hautes. Les deux sont récoltés, lavés et séchés exactement de la même manière — c'est ce qui rend la comparaison possible.",
+        en: 'At Gaoshen, above Baoshan, a single estate grows side by side two varieties that oppose each other in the cup. Catimor takes the lower, more exposed plots; Yellow Bourbon, more fragile and half as productive, is kept for the high terraces. Both are picked, washed and dried in exactly the same way — which is what makes the comparison possible.',
+        zh: '在保山高处的高神，同一座农场并排种植着两个在杯中截然不同的品种。卡蒂姆种在较低、日照更强的地块；更娇弱、产量只有一半的黄波旁则留给高处的梯田。两者的采摘、水洗与晾晒完全一致——正因如此，比较才有意义。',
+      },
+      photo: 'sechage-lits',
+    },
+    related: ['drip-bags-x8', 'lot-23-01-baoshan', 'coffret-decouverte'],
   },
   {
     slug: 'coffret-decouverte',
@@ -314,6 +449,16 @@ export const products: Product[] = [
       { fr: 'Drip Bags — boîte de 8', en: 'Drip Bags — box of 8', zh: '挂耳咖啡 — 8 片装' },
       { fr: 'Fiche de dégustation', en: 'Tasting sheet', zh: '杯测记录卡' },
     ],
+    farm: {
+      name: 'Nos trois fermes',
+      place: { fr: 'Baoshan, Pu’er, Menglian', en: 'Baoshan, Pu’er, Menglian', zh: '保山、普洱、孟连' },
+      text: {
+        fr: "Le coffret rassemble le travail des trois fermes avec lesquelles nous travaillons depuis le début : la famille Yang à Baoshan, le jardin de Manlao à Pu'er, la coopérative de Menglian. Trois altitudes, trois traitements, trois façons de faire — c'est en les goûtant côte à côte qu'on entend ce que chacune apporte.",
+        en: 'The set gathers the work of the three farms we have worked with from the start: the Yang family in Baoshan, the Manlao garden in Pu’er, the Menglian cooperative. Three altitudes, three processes, three ways of working — tasting them side by side is how you hear what each one brings.',
+        zh: '这只礼盒汇集了我们自始合作的三家农场：保山的杨家、普洱的曼老园、孟连的合作社。三种海拔、三种处理法、三种做法——并排品尝，才听得见各自的声音。',
+      },
+      photo: 'recolte-cueilleurs',
+    },
     related: ['lot-23-01-baoshan', 'lot-23-03-puer', 'drip-bags-x8'],
   },
 ];

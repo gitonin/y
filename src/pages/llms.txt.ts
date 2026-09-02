@@ -51,12 +51,11 @@ export const GET: APIRoute = async ({ site }) => {
   }
 
   push('', '## Pages principales (français)', '');
+  // La page Origine réunit le terroir, l'histoire de la marque et le savoir-faire.
   const pages: [string, string, string][] = [
     ['Accueil', '/fr/', t.home.seoDescription],
     ['Nos cafés', '/fr/cafes/', t.cafes.seoDescription],
-    ['Origine — le Yunnan', '/fr/origine/', t.origine.seoDescription],
-    ['Savoir-faire', '/fr/savoir-faire/', t.savoirFaire.seoDescription],
-    ['Notre histoire', '/fr/a-propos/', t.apropos.seoDescription],
+    ['Origine, histoire et savoir-faire', '/fr/origine/', t.origine.seoDescription],
     ['Espace professionnels', '/fr/pro/', t.pro.seoDescription],
     ['Journal', '/fr/journal/', t.journal.seoDescription],
     ['FAQ', '/fr/faq/', t.faq.seoDescription],

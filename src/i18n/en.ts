@@ -123,16 +123,16 @@ const en: Dict = {
     drying: 'Drying',
     harvest: 'Harvest',
     roast: 'Roast',
-    farmCta: 'Discover the farm',
+    farmTitle: 'The farm',
     relatedTitle: 'You may also like',
     shipping: 'Ships within 48 h — free delivery from €45',
     freshness: 'Roasted to order, every week',
     brewTitle: 'Brewing guide',
   },
   origine: {
-    seoTitle: 'Yunnan, the origin of Yunma coffees',
+    seoTitle: 'Origin, story and craft — Yunma, coffee from Yunnan',
     seoDescription:
-      'Yunnan, a province of south-west China: altitude, the terroirs of Baoshan, Pu’er and Menglian, and the producing families partnering with Yunma.',
+      'Yunnan and its terroirs, the story of Yunma, and our craft from cherry to cup: harvest, processing, drying, roasting.',
     label: 'Our origin',
     title: 'Yunnan.\nOur land.\nOur inspiration.',
     intro:
@@ -157,6 +157,18 @@ const en: Dict = {
     quote: 'Coffee is not manufactured. It is grown, then respected.',
     mapTitle: 'Our terroirs',
     mapText: 'Three areas, three cup profiles.',
+    anchors: {
+      terroir: 'Yunnan',
+      histoire: 'Our story',
+      savoirFaire: 'Craft',
+      engagements: 'Commitments',
+    },
+    oroLabel: 'With the support of',
+    oroName: 'ORO Yunnan',
+    oroFull: 'Yunnan Commercial Representative Office in Paris, France',
+    oroText:
+      'ORO Yunnan supports our work with growers and the promotion of the province in France: its mountain farming, its landscapes, and the ecological practices taking root there. Valuable help for buying directly from ten thousand kilometres away, and for making known here a terroir that is only beginning to be discovered.',
+
   },
   savoirFaire: {
     seoTitle: 'Yunma craft — processing, drying and roasting',
@@ -287,15 +299,18 @@ const en: Dict = {
     label: 'Contact',
     title: 'Write to us',
     intro: 'A question? A project? We reply within one business day.',
-    generalTitle: 'General enquiries',
-    proTitle: 'Trade',
+    generalTitle: 'A question about our coffees',
+    generalText:
+      'Advice on the lot that would suit you, an order to follow, a doubt about a grind or a method: write to us — we answer ourselves.',
+    proTitle: 'Cafés, hotels, restaurants',
+    proText:
+      'Volume pricing, 1 kg whole bean, drip bags under your own brand, on-site dialling in and training. Tell us what you serve and we will send samples.',
     pressTitle: 'Press & partnerships',
+    pressText:
+      'Images, information about our partner farms, visits to the roastery: we answer gladly, and we prefer the stories that look a little closer.',
     hoursTitle: 'Roastery',
     hoursText: 'Visits by appointment, Tuesday to Friday.',
-    formTitle: 'Form',
-    formNote: 'By sending this message, you agree that your data will be used to reply to you.',
-    subject: 'Subject',
-    subjects: ['An order', 'Coffee advice', 'A trade enquiry', 'Other'],
+    writeUs: 'Write',
   },
   legal: {
     mentionsTitle: 'Legal notice',

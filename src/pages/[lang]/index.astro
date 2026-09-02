@@ -127,7 +127,7 @@ const jsonld = [
         <span class="label" data-reveal>{t.home.approachLabel}</span>
         <SplitTitle text={t.home.approachTitle} as="h2" size="lg" class="sec-title" />
         <p class="lead muted" data-reveal id="h-approche">{t.home.approachText}</p>
-        <a class="link" href={route(lang, 'savoirFaire')} data-reveal>
+        <a class="link" href={`${route(lang, 'origine')}#savoir-faire`} data-reveal>
           {t.home.approachCta}<span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>
@@ -200,7 +200,7 @@ const jsonld = [
     </div>
     <div class="closing__inner wrap">
       <SplitTitle text={t.home.closingTitle} as="p" size="closing" class="on-dark" />
-      <a class="link closing__cta" href={url(lang, 'a-propos')} id="h-closing">
+      <a class="link closing__cta" href={`${route(lang, 'origine')}#histoire`} id="h-closing">
         {t.home.closingCta}<span class="arrow" aria-hidden="true">→</span>
       </a>
     </div>

@@ -15,10 +15,8 @@ const alt = defaultAlternates(Astro.url.pathname);
 const primary = [
   { href: route(lang, 'origine'), label: t.nav.origine },
   { href: route(lang, 'cafes'), label: t.nav.cafes },
-  { href: route(lang, 'savoirFaire'), label: t.nav.savoirFaire },
-  { href: route(lang, 'journal'), label: t.nav.journal },
-  { href: route(lang, 'apropos'), label: t.nav.apropos },
   { href: route(lang, 'pro'), label: t.nav.pro },
+  { href: route(lang, 'journal'), label: t.nav.journal },
 ];
 
 const secondary = [
@@ -320,12 +318,14 @@ const current = Astro.url.pathname;
   @media (min-width: 900px) {
     .nav__body {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      overflow: hidden;
+      /* jamais 'hidden' : sur une fenêtre très basse, le bas du menu
+         (liens secondaires et choix de langue) doit rester atteignable */
+      overflow-y: auto;
     }
   }
 
   .nav__col {
-    padding: clamp(1.5rem, 4vw, 3rem) var(--gutter) clamp(3rem, 6vw, 4rem);
+    padding: clamp(1.25rem, 3vh, 3rem) var(--gutter) clamp(1.75rem, 4vh, 4rem);
     max-width: 640px;
     width: 100%;
     margin-left: auto;
@@ -362,10 +362,10 @@ const current = Astro.url.pathname;
 
   .nav__list a {
     display: inline-block;
-    font-size: clamp(1.75rem, 1.1rem + 3vw, 3rem);
-    line-height: 1.28;
+    font-size: clamp(1.6rem, min(1.1rem + 3vw, 6.4vh), 3rem);
+    line-height: 1.24;
     letter-spacing: -0.02em;
-    padding-block: 0.08em;
+    padding-block: 0.06em;
     position: relative;
   }
 
@@ -401,19 +401,19 @@ const current = Astro.url.pathname;
   }
 
   .nav__rule {
-    margin-block: clamp(1.25rem, 3vw, 2.25rem);
+    margin-block: clamp(0.9rem, 2.4vh, 2.25rem);
     max-width: 420px;
   }
 
   .nav__sub {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: clamp(0.15rem, 0.5vh, 0.4rem);
   }
 
   .nav__sub a,
   .nav__sub button {
-    font-size: 1rem;
+    font-size: clamp(0.875rem, 1.9vh, 1rem);
     color: var(--ink-70);
     transition: color 0.35s var(--ease);
     padding-block: 0.18rem;
@@ -547,7 +547,10 @@ const current = Astro.url.pathname;
       const nav = getNav();
       if (!header) return;
       // Menu ouvert : l'en-tête ne bouge pas.
-      header.classList.toggle('is-hidden', hidden && !!nav?.hidden);
+      const masque = hidden && !!nav?.hidden;
+      header.classList.toggle('is-hidden', masque);
+      // Permet aux sommaires collants de remonter quand l'en-tête s'efface.
+      document.documentElement.classList.toggle('header-hidden', masque);
     };
 
     const onScroll = () => {
@@ -606,6 +609,7 @@ const current = Astro.url.pathname;
     const header = document.querySelector<HTMLElement>('[data-header]');
     if (header) {
       header.classList.remove('is-hidden');
+      document.documentElement.classList.remove('header-hidden');
       header.classList.toggle('is-solid', window.scrollY > 24);
     }
     bindGlobals();

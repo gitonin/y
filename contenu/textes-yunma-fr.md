@@ -258,6 +258,15 @@ Claire — filtre & espresso
 **Conseils de préparation** `[produit.lot-23-01-baoshan.preparation]`
 Filtre : 15 g pour 250 ml, eau à 93 °C, 2 min 45. Espresso : 18 g pour 40 g en 26 secondes.
 
+**Ferme : nom** `[produit.lot-23-01-baoshan.ferme.nom]`
+Ferme des Yang
+
+**Ferme : lieu** `[produit.lot-23-01-baoshan.ferme.lieu]`
+Baoshan, Yunnan
+
+**Ferme : présentation** `[produit.lot-23-01-baoshan.ferme.texte]`
+La famille Yang cultive 3,5 hectares à 1 500 mètres, sur un versant orienté à l'est, planté d'arbres d'ombrage. Trois générations y travaillent : les parents à la parcelle, le fils à la station de lavage qu'ils ont construite en 2021. Nous achetons chez eux depuis notre première récolte, à un prix fixé avant la saison.
+
 **Format et prix** `[produit.lot-23-01-baoshan.prix.1]`
 200 g — 18.00 €
 
@@ -305,6 +314,15 @@ Claire — filtre
 
 **Conseils de préparation** `[produit.lot-23-03-puer.preparation]`
 Filtre : 15 g pour 250 ml, eau à 92 °C, versements courts. Idéal en V60 ou en cafetière à immersion.
+
+**Ferme : nom** `[produit.lot-23-03-puer.ferme.nom]`
+Jardin de Manlao
+
+**Ferme : lieu** `[produit.lot-23-03-puer.ferme.lieu]`
+Pu'er, Yunnan
+
+**Ferme : présentation** `[produit.lot-23-03-puer.ferme.texte]`
+Une parcelle de 1,8 hectare en lisière des jardins de thé, conduite sans intrant de synthèse depuis 2017. Les caféiers y poussent sous des arbres fruitiers, ce qui allonge la maturation de deux à trois semaines. La récolte est traitée en honey, séchée à l'ombre, sur des lits que la famille couvre chaque soir.
 
 **Format et prix** `[produit.lot-23-03-puer.prix.1]`
 200 g — 19.00 €
@@ -354,6 +372,15 @@ Claire à moyenne — filtre & espresso
 **Conseils de préparation** `[produit.lot-23-05-menglian.preparation]`
 Filtre : 15 g pour 250 ml, eau à 94 °C. En espresso, allonger légèrement le ratio pour adoucir l'acidité.
 
+**Ferme : nom** `[produit.lot-23-05-menglian.ferme.nom]`
+Coopérative de Menglian
+
+**Ferme : lieu** `[produit.lot-23-05-menglian.ferme.lieu]`
+Menglian, Yunnan
+
+**Ferme : présentation** `[produit.lot-23-05-menglian.ferme.texte]`
+Sept familles réunies en coopérative, le long de la frontière birmane. Elles mettent en commun l'aire de séchage et le trieur optique, ce qu'aucune ne pourrait financer seule. Ce lot naturel est le fruit de cette mise en commun : vingt et un jours de séchage demandent une surveillance que l'on ne tient pas à une seule paire de bras.
+
 **Format et prix** `[produit.lot-23-05-menglian.prix.1]`
 200 g — 20.00 €
 
@@ -402,17 +429,98 @@ Moyenne — mouture filtre
 **Conseils de préparation** `[produit.drip-bags-x8.preparation]`
 Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.
 
-**Contenu du coffret, ligne 1** `[produit.drip-bags-x8.contenu.1]`
+**Contenu, ligne 1** `[produit.drip-bags-x8.contenu.1]`
 8 sachets filtres de 10 g
 
-**Contenu du coffret, ligne 2** `[produit.drip-bags-x8.contenu.2]`
+**Contenu, ligne 2** `[produit.drip-bags-x8.contenu.2]`
 Assemblage de saison, moulu du jour
 
-**Contenu du coffret, ligne 3** `[produit.drip-bags-x8.contenu.3]`
+**Contenu, ligne 3** `[produit.drip-bags-x8.contenu.3]`
 Boîte recyclable
+
+**Ferme : nom** `[produit.drip-bags-x8.ferme.nom]`
+Baoshan & Pu’er
+
+**Ferme : lieu** `[produit.drip-bags-x8.ferme.lieu]`
+Deux fermes partenaires
+
+**Ferme : présentation** `[produit.drip-bags-x8.ferme.texte]`
+Cet assemblage réunit le lavé de la famille Yang, à Baoshan, et le honey du jardin de Manlao, à Pu'er. Le premier apporte la structure et la propreté, le second la douceur et le parfum. Les proportions sont réajustées à chaque récolte pour que la tasse reste la même d'une boîte à l'autre.
 
 **Format et prix** `[produit.drip-bags-x8.prix.1]`
 Boîte de 8 — 14.00 €
+
+
+### Drip Bags — Composez votre boîte — Ferme de Gaoshen, Baoshan
+
+**Nom** `[produit.drip-bags-a-composer.nom]`
+Drip Bags — Composez votre boîte
+
+**Sous-titre** `[produit.drip-bags-a-composer.sousTitre]`
+Ferme de Gaoshen, Baoshan
+
+**Accroche (une phrase, sous le prix)** `[produit.drip-bags-a-composer.accroche]`
+Huit sachets, deux variétés, votre choix.
+
+**Description** `[produit.drip-bags-a-composer.description]`
+Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaoshen : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d'une seule, ou quatre de chaque pour les comparer tasse après tasse.
+
+**Histoire du lot** `[produit.drip-bags-a-composer.histoire]`
+Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C'est la comparaison la plus honnête que l'on puisse proposer, et la plus instructive. La plupart des gens ne s'entendent pas dire « je préfère le Bourbon jaune » avant d'avoir bu les deux à la suite.
+
+**Fiche : origine** `[produit.drip-bags-a-composer.origine]`
+Yunnan, Chine — Gaoshen, Baoshan
+
+**Fiche : altitude** `[produit.drip-bags-a-composer.altitude]`
+1 550 – 1 750 m
+
+**Fiche : variété** `[produit.drip-bags-a-composer.variete]`
+Catimor ou Bourbon jaune
+
+**Fiche : process** `[produit.drip-bags-a-composer.process]`
+Lavé
+
+**Fiche : notes de dégustation** `[produit.drip-bags-a-composer.notes]`
+Catimor : cacao, noisette · Bourbon jaune : jasmin, sucre roux
+
+**Fiche : séchage** `[produit.drip-bags-a-composer.sechage]`
+Lits africains surélevés, 14 jours
+
+**Fiche : récolte** `[produit.drip-bags-a-composer.recolte]`
+À la main, cerises mûres
+
+**Fiche : torréfaction** `[produit.drip-bags-a-composer.torrefaction]`
+Moyenne — mouture filtre
+
+**Conseils de préparation** `[produit.drip-bags-a-composer.preparation]`
+Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.
+
+**Contenu, ligne 1** `[produit.drip-bags-a-composer.contenu.1]`
+8 sachets filtres de 10 g, moulus du jour
+
+**Contenu, ligne 2** `[produit.drip-bags-a-composer.contenu.2]`
+Une seule ferme, une seule récolte
+
+**Contenu, ligne 3** `[produit.drip-bags-a-composer.contenu.3]`
+Boîte recyclable
+
+**Ferme : nom** `[produit.drip-bags-a-composer.ferme.nom]`
+Ferme de Gaoshen
+
+**Ferme : lieu** `[produit.drip-bags-a-composer.ferme.lieu]`
+Baoshan, Yunnan
+
+**Ferme : présentation** `[produit.drip-bags-a-composer.ferme.texte]`
+À Gaoshen, sur les hauteurs de Baoshan, une même exploitation conduit côte à côte deux variétés que tout oppose en tasse. Le Catimor occupe les parcelles basses, plus exposées ; le Bourbon jaune, plus fragile et deux fois moins productif, est réservé aux terrasses hautes. Les deux sont récoltés, lavés et séchés exactement de la même manière — c'est ce qui rend la comparaison possible.
+
+**Format et prix** `[produit.drip-bags-a-composer.prix.1]`
+8 × Catimor — 15.00 €
+
+**Format et prix** `[produit.drip-bags-a-composer.prix.2]`
+8 × Bourbon jaune — 15.00 €
+
+**Format et prix** `[produit.drip-bags-a-composer.prix.3]`
+4 × Catimor + 4 × Bourbon jaune — 15.00 €
 
 
 ### Coffret Découverte — 3 × 200 g + 1 boîte de drip bags
@@ -459,35 +567,46 @@ Claire à moyenne
 **Conseils de préparation** `[produit.coffret-decouverte.preparation]`
 Commencez par le Baoshan, puis le Pu’er, terminez par le Menglian : du plus délicat au plus expressif.
 
-**Contenu du coffret, ligne 1** `[produit.coffret-decouverte.contenu.1]`
+**Contenu, ligne 1** `[produit.coffret-decouverte.contenu.1]`
 Sélection Lot N°23-01 — 200 g
 
-**Contenu du coffret, ligne 2** `[produit.coffret-decouverte.contenu.2]`
+**Contenu, ligne 2** `[produit.coffret-decouverte.contenu.2]`
 Sélection Lot N°23-03 — 200 g
 
-**Contenu du coffret, ligne 3** `[produit.coffret-decouverte.contenu.3]`
+**Contenu, ligne 3** `[produit.coffret-decouverte.contenu.3]`
 Sélection Lot N°23-05 — 200 g
 
-**Contenu du coffret, ligne 4** `[produit.coffret-decouverte.contenu.4]`
+**Contenu, ligne 4** `[produit.coffret-decouverte.contenu.4]`
 Drip Bags — boîte de 8
 
-**Contenu du coffret, ligne 5** `[produit.coffret-decouverte.contenu.5]`
+**Contenu, ligne 5** `[produit.coffret-decouverte.contenu.5]`
 Fiche de dégustation
+
+**Ferme : nom** `[produit.coffret-decouverte.ferme.nom]`
+Nos trois fermes
+
+**Ferme : lieu** `[produit.coffret-decouverte.ferme.lieu]`
+Baoshan, Pu’er, Menglian
+
+**Ferme : présentation** `[produit.coffret-decouverte.ferme.texte]`
+Le coffret rassemble le travail des trois fermes avec lesquelles nous travaillons depuis le début : la famille Yang à Baoshan, le jardin de Manlao à Pu'er, la coopérative de Menglian. Trois altitudes, trois traitements, trois façons de faire — c'est en les goûtant côte à côte qu'on entend ce que chacune apporte.
 
 **Format et prix** `[produit.coffret-decouverte.prix.1]`
 Coffret complet — 62.00 €
 
 
-## Page « Origine »
+## Page « Origine » (terroir, histoire et savoir-faire)
+
+> Cette page réunit trois anciennes pages. Le sommaire en haut de page permet de sauter d’une partie à l’autre.
 
 
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[origine.seoTitle]`
-Le Yunnan, origine des cafés Yunma
+Origine, histoire et savoir-faire — Yunma, cafés du Yunnan
 
 **Description affichée dans Google (≈ 155 signes)** `[origine.seoDescription]`
-Le Yunnan, province du sud-ouest de la Chine : altitude, terroirs de Baoshan, Pu’er et Menglian, familles productrices partenaires de Yunma.
+Le Yunnan et ses terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.
 
 
 ### En-tête
@@ -552,7 +671,37 @@ Nos terroirs
 Trois zones, trois profils de tasse.
 
 
-## Page « Savoir-faire »
+### Sommaire de la page
+
+**Entrée du sommaire** `[origine.sommaire.terroir]`
+Le Yunnan
+
+**Entrée du sommaire** `[origine.sommaire.histoire]`
+Notre histoire
+
+**Entrée du sommaire** `[origine.sommaire.savoirFaire]`
+Savoir-faire
+
+**Entrée du sommaire** `[origine.sommaire.engagements]`
+Engagements
+
+
+### Soutien d’ORO Yunnan
+
+**Sur-titre** `[origine.oro.surTitre]`
+Avec le soutien de
+
+**Nom** `[origine.oro.nom]`
+ORO Yunnan
+
+**Nom complet** `[origine.oro.nomComplet]`
+Bureau de représentation commerciale du Yunnan en France (Paris)
+
+**Texte** `[origine.oro.texte]`
+ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques qui s'y développent. Un appui précieux pour acheter en direct à dix mille kilomètres, et pour faire connaître ici un terroir que l'on découvre à peine.
+
+
+## Origine — partie « Savoir-faire »
 
 
 ### Référencement de la page
@@ -656,7 +805,7 @@ French press — 30 g / 500 ml — 94 °C — 4 min
 Drip bag — 10 g / 180 ml — 92 °C — 3 versements
 
 
-## Page « Notre histoire »
+## Origine — partie « Notre histoire »
 
 
 ### Référencement de la page
@@ -1034,46 +1183,34 @@ Contact
 Une question ? Un projet ? Nous répondons sous un jour ouvré.
 
 
-### Encadrés
+### Les trois interlocuteurs
 
 **Titre** `[contact.generalTitle]`
-Questions générales
+Une question sur nos cafés
+
+**Texte** `[contact.generalText]`
+Un conseil sur le lot qui vous conviendrait, une commande à suivre, un doute sur une mouture ou une méthode : écrivez-nous, c’est nous qui répondons.
 
 **Titre** `[contact.proTitle]`
-Professionnels
+Cafés, hôtels, restaurants
+
+**Texte** `[contact.proText]`
+Tarifs dégressifs, grains en 1 kg, drip bags à votre marque, réglages sur site et formation. Dites-nous ce que vous servez, nous vous envoyons des échantillons.
 
 **Titre** `[contact.pressTitle]`
 Presse & partenariats
+
+**Texte** `[contact.pressText]`
+Visuels, informations sur les fermes partenaires, visites de l’atelier : nous répondons volontiers, et nous préférons les sujets qui vont regarder d’un peu plus près.
+
+
+### Atelier
 
 **Titre** `[contact.hoursTitle]`
 Atelier
 
 **Précision** `[contact.hoursText]`
 Visites sur rendez-vous, du mardi au vendredi.
-
-
-### Formulaire
-
-**Titre** `[contact.formTitle]`
-Formulaire
-
-**Mention sous le formulaire** `[contact.formNote]`
-En envoyant ce message, vous acceptez que vos données soient utilisées pour vous répondre.
-
-**subject** `[contact.subject]`
-Sujet
-
-**Sujet 1** `[contact.sujet.1]`
-Une commande
-
-**Sujet 2** `[contact.sujet.2]`
-Un conseil café
-
-**Sujet 3** `[contact.sujet.3]`
-Une demande pro
-
-**Sujet 4** `[contact.sujet.4]`
-Autre
 
 
 ## Pied de page et newsletter
@@ -1305,9 +1442,6 @@ Expédié sous 48 h — livraison offerte dès 45 €
 
 **Titre « Vous aimerez aussi »** `[produit.similairesTitre]`
 Vous aimerez aussi
-
-**Lien « Découvrir la ferme »** `[produit.fermeCta]`
-Découvrir la ferme
 
 **Titre « Conseils de préparation »** `[produit.preparationTitre]`
 Conseils de préparation

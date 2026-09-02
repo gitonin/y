@@ -23,7 +23,11 @@ export default defineConfig({
         locales: { fr: 'fr-FR', en: 'en', zh: 'zh-Hans' },
       },
       // Exclut la racine (page de redirection) et la 404 du sitemap
-      filter: (page) => !page.includes('/404') && new URL(page).pathname !== '/',
+      filter: (page) =>
+        !page.includes('/404') &&
+        !page.includes('/savoir-faire/') &&
+        !page.includes('/a-propos/') &&
+        new URL(page).pathname !== '/',
     }),
   ],
   devToolbar: { enabled: false },

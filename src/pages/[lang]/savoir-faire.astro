@@ -1,10 +1,9 @@
 ---
+/**
+ * Ancienne page, désormais fondue dans « Origine ».
+ * On garde l'adresse pour ne pas casser les liens déjà partagés.
+ */
 import type { GetStaticPaths } from 'astro';
-import Base from '../../layouts/Base.astro';
-import PageHero from '../../components/PageHero.astro';
-import Photo from '../../components/Photo.astro';
-import Icon from '../../components/Icon.astro';
-import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
 
@@ -12,192 +11,36 @@ export const getStaticPaths: GetStaticPaths = () => langPaths();
 
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
-const base = Astro.site ?? new URL('https://yunma.fr');
-
-/* Une icône par étape, dans l'ordre du tableau `steps` des dictionnaires. */
-const stepIcons: IconName[] = ['cherries', 'droplet', 'dry', 'funnel', 'bean', 'cup'];
-
-const jsonld = [
-  {
-    '@type': 'HowTo',
-    name: t.savoirFaire.seoTitle,
-    description: t.savoirFaire.seoDescription,
-    inLanguage: t.meta.hreflang,
-    step: t.savoirFaire.steps.map((step, i) => ({
-      '@type': 'HowToStep',
-      position: i + 1,
-      name: step.title,
-      text: step.text,
-    })),
-  },
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: t.common.home, item: absolute(Astro.site, `${lang}/`) },
-      { '@type': 'ListItem', position: 2, name: t.nav.savoirFaire, item: absolute(Astro.site, `${lang}/savoir-faire/`) },
-    ],
-  },
-];
+const cible = `${route(lang, 'origine')}#savoir-faire`;
+const canonique = absolute(Astro.site, `${lang}/origine/`);
 ---
 
-<Base lang={lang} title={t.savoirFaire.seoTitle} description={t.savoirFaire.seoDescription} jsonld={jsonld}>
-  <PageHero
-    lang={lang}
-    label={t.savoirFaire.label}
-    title={t.savoirFaire.title}
-    intro={t.savoirFaire.intro}
-    crumb={t.nav.savoirFaire}
-  />
-
-  <div class="wrap">
-    <figure class="media media--wide" data-reveal>
-      <Photo name="sechage-lits" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
-    </figure>
-  </div>
-
-  <section class="section">
-    <div class="wrap">
-      <ol class="steps">
-        {
-          t.savoirFaire.steps.map((step, i) => (
-            <li class="step" data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
-              <div class="step__head">
-                <Icon name={stepIcons[i]} size={26} class="step__icon" />
-                <span class="step__n label">{step.n}</span>
-              </div>
-              <h2 class="step__title">{step.title}</h2>
-              <p class="small muted">{step.text}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
-  <section class="section section--tight panel">
-    <div class="wrap">
-      <header class="brews__head">
-        <div>
-          <h2 class="brews__title">{t.savoirFaire.brewTitle}</h2>
-          <p class="muted" data-reveal>{t.savoirFaire.brewText}</p>
-        </div>
-        <a class="link" href={route(lang, 'cafes')} data-reveal>
-          {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </header>
-
-      <table class="brews">
-        <thead>
-          <tr>
-            <th scope="col">{t.savoirFaire.brewMethod}</th>
-            <th scope="col">Ratio</th>
-            <th scope="col">T°</th>
-            <th scope="col">⏱</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            t.savoirFaire.brews.map((brew) => (
-              <tr>
-                <th scope="row">{brew.name}</th>
-                <td>{brew.ratio}</td>
-                <td>{brew.temp}</td>
-                <td>{brew.time}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-  </section>
-</Base>
-
-<style>
-  .steps {
-    display: grid;
-    gap: clamp(1.75rem, 4vw, 3rem);
-    counter-reset: step;
-  }
-
-  @media (min-width: 700px) {
-    .steps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1040px) {
-    .steps {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .step {
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--line);
-  }
-
-  .step__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .step__icon {
-    color: var(--ink-70);
-  }
-
-  .step__n {
-    color: var(--accent);
-  }
-
-  .step__title {
-    margin-top: 0.65rem;
-    margin-bottom: 0.5rem;
-    font-size: var(--fs-h3);
-    font-weight: 400;
-  }
-
-  .brews__head {
-    display: grid;
-    gap: 1rem;
-    margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
-  }
-
-  @media (min-width: 860px) {
-    .brews__head {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: end;
-    }
-  }
-
-  .brews__title {
-    font-size: var(--fs-h2);
-    margin-bottom: 0.5rem;
-  }
-
-  .brews {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--fs-small);
-  }
-
-  .brews th,
-  .brews td {
-    text-align: left;
-    padding: 0.9rem 0.75rem 0.9rem 0;
-    border-bottom: 1px solid var(--line);
-    font-weight: 400;
-  }
-
-  .brews thead th {
-    font-size: var(--fs-label);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--ink-50);
-  }
-
-  .brews tbody th {
-    color: var(--ink);
-  }
-</style>
+<!doctype html>
+<html lang={t.meta.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.origine.seoTitle}</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={canonique} />
+    <meta http-equiv="refresh" content={`0; url=${cible}`} />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #ebe7de;
+        color: #212121;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 14px;
+      }
+      a {
+        color: #b95f2c;
+      }
+    </style>
+  </head>
+  <body>
+    <p><a href={cible}>{t.origine.title.replace('\n', ' ')}</a></p>
+  </body>
+</html>
