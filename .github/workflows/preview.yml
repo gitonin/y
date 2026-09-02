@@ -1,16 +1,23 @@
-# Aperçu du site sur GitHub Pages.
-# Publie https://<utilisateur>.github.io/<dépôt>/ à chaque push sur la branche de travail.
+# Publication de l'aperçu sur GitHub Pages.
 #
-# À faire une seule fois avant le premier déploiement :
+# Une seule publication contient les deux versions du site :
+#   https://<utilisateur>.github.io/<dépôt>/       -> version 1
+#   https://<utilisateur>.github.io/<dépôt>/v2/    -> version 2
+#
+# Le déploiement part toujours de cette branche : c'est elle qui publie.
+# Une poussée sur la branche v2 déclenche, de son côté, une simple
+# vérification de build (voir le workflow de cette branche-là).
+#
+# À faire une seule fois si rien ne se publie :
 #   Settings > Pages > Build and deployment > Source : « GitHub Actions »
-# (le jeton du workflow n'a pas le droit d'activer Pages tout seul)
+#   Settings > Environments > github-pages > Deployment branches : autoriser claude/*
 name: Aperçu GitHub Pages
 
 on:
   push:
     branches:
       - main
-      - 'claude/**'
+      - claude/yunma-coffee-ecommerce-l4qy1c
   workflow_dispatch:
 
 permissions:
@@ -18,44 +25,72 @@ permissions:
   pages: write
   id-token: write
 
-# Une seule publication à la fois ; les pushes suivants annulent la précédente.
 concurrency:
   group: pages
   cancel-in-progress: true
+
+env:
+  V2_BRANCH: claude/yunma-site-v2
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Récupérer la version 1
+        uses: actions/checkout@v4
+        with:
+          path: v1
+
+      - name: Récupérer la version 2
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.V2_BRANCH }}
+          path: v2
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-
-      - name: Installer les dépendances
-        run: npm ci
 
       - name: Configurer GitHub Pages
         id: pages
-        # Prérequis, une seule fois : Settings > Pages > Source : GitHub Actions
         uses: actions/configure-pages@v5
 
-      - name: Construire le site
+      - name: Construire la version 1
+        working-directory: v1
         env:
-          # Le site est servi dans un sous-dossier : https://<user>.github.io/<repo>/
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          # Renseignez ces secrets pour tester le vrai panier Shopify sur l'aperçu.
           PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
           PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
           PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
-        run: npm run build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Construire la version 2
+        working-directory: v2
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}v2
+          PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
+          PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+          PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Assembler les deux versions
+        run: |
+          mkdir -p site
+          cp -r v1/dist/. site/
+          mkdir -p site/v2
+          cp -r v2/dist/. site/v2/
+          echo "Publié : / (v1) et /v2/ (v2)"
+          ls site site/v2 | head -30
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site
 
   deploy:
     needs: build

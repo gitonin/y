@@ -185,9 +185,16 @@ Search Console et vérifiez les rich results produits.
 
 ## 6. Aperçu en ligne (GitHub Pages)
 
-Un aperçu public est publié automatiquement à chaque push :
+Un aperçu public est publié automatiquement. Une même mise en ligne contient
+les deux versions du site :
 
-**https://gitonin.github.io/y/**
+- **https://gitonin.github.io/y/** — version 1
+- **https://gitonin.github.io/y/v2/** — version 2 (branche `claude/yunma-site-v2`)
+
+La publication part toujours de cette branche-ci : le workflow y récupère aussi
+la branche v2, construit les deux, et les met en ligne ensemble. Une poussée sur
+la branche v2 ne fait que vérifier sa construction ; pour republier, relancez
+« Aperçu GitHub Pages » depuis cette branche (**Actions → Run workflow**).
 
 Le workflow `.github/workflows/preview.yml` construit le site et le déploie sur
 GitHub Pages. Il se déclenche sur `main`, sur les branches `claude/**`, et
