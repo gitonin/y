@@ -55,11 +55,23 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      # GitHub renvoie le chemin de base tantôt avec, tantôt sans barre oblique
+      # finale : on le normalise avant d'en dériver celui de la version 2.
+      - name: Calculer les chemins de publication
+        id: paths
+        run: |
+          base='${{ steps.pages.outputs.base_path }}'
+          base="${base%/}"
+          echo "v1=${base}/" >> "$GITHUB_OUTPUT"
+          echo "v2=${base}/v2/" >> "$GITHUB_OUTPUT"
+          echo "version 1 -> ${base}/"
+          echo "version 2 -> ${base}/v2/"
+
       - name: Construire la version 1
         working-directory: v1
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          BASE_PATH: ${{ steps.paths.outputs.v1 }}
           PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
           PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
           PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
@@ -71,7 +83,7 @@ jobs:
         working-directory: v2
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}v2
+          BASE_PATH: ${{ steps.paths.outputs.v2 }}
           PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
           PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
           PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
@@ -87,6 +99,22 @@ jobs:
           cp -r v2/dist/. site/v2/
           echo "Publié : / (v1) et /v2/ (v2)"
           ls site site/v2 | head -30
+
+      # Filet de sécurité : si une version pointait vers un mauvais dossier,
+      # la publication s'arrête ici plutôt que de mettre en ligne un site cassé.
+      - name: Vérifier les chemins des deux versions
+        run: |
+          check() {
+            local page="$1" expected="$2" nom="$3"
+            if ! grep -q "\"${expected}brand/yunma-logo.png\"" "$page"; then
+              echo "::error::$nom : les liens ne pointent pas vers $expected"
+              grep -o 'src="/[^"]*"' "$page" | sort -u | head -5
+              exit 1
+            fi
+            echo "$nom : liens vers $expected — conforme"
+          }
+          check site/fr/index.html    '${{ steps.paths.outputs.v1 }}' 'version 1'
+          check site/v2/fr/index.html '${{ steps.paths.outputs.v2 }}' 'version 2'
 
       - uses: actions/upload-pages-artifact@v3
         with:
