@@ -39,4 +39,4 @@ C'est un café qui plaît immédiatement, y compris à ceux qui trouvent les caf
 
 ## Ce que nous cherchons
 
-Nous ne cherchons pas le lot spectaculaire noté 90. Nous cherchons la régularité : un café que l'on peut boire tous les matins, dont la qualité ne dépend pas d'un coup de chance, et dont on connaît le producteur par son nom.
+Nous ne cherchons pas le lot spectaculaire d’une saison. Nous cherchons la régularité : un café que l'on peut boire tous les matins, dont la qualité ne dépend pas d'un coup de chance, et dont on connaît le producteur par son nom.

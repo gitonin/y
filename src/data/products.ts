@@ -34,7 +34,6 @@ export type Product = {
     drying: L;
     harvest: L;
     roast: L;
-    score: string;
   };
   brew: L;
   includes?: L[];
@@ -93,7 +92,6 @@ export const products: Product[] = [
       drying: { fr: 'Lits africains surélevés', en: 'Raised African beds', zh: '非洲高架床' },
       harvest: { fr: 'À la main, cerises mûres', en: 'Hand-picked, ripe cherries', zh: '手工采摘，成熟果实' },
       roast: { fr: 'Claire — filtre & espresso', en: 'Light — filter & espresso', zh: '浅烘 — 手冲与意式' },
-      score: '86 / 100',
     },
     brew: {
       fr: 'Filtre : 15 g pour 250 ml, eau à 93 °C, 2 min 45. Espresso : 18 g pour 40 g en 26 secondes.',
@@ -145,7 +143,6 @@ export const products: Product[] = [
       drying: { fr: "Lits africains, 18 jours à l'ombre", en: 'Raised beds, 18 days in the shade', zh: '高架床，阴干 18 天' },
       harvest: { fr: 'À la main, tri le jour même', en: 'Hand-picked, same-day sorting', zh: '手工采摘，当日筛选' },
       roast: { fr: 'Claire — filtre', en: 'Light — filter', zh: '浅烘 — 手冲' },
-      score: '87 / 100',
     },
     brew: {
       fr: 'Filtre : 15 g pour 250 ml, eau à 92 °C, versements courts. Idéal en V60 ou en cafetière à immersion.',
@@ -197,7 +194,6 @@ export const products: Product[] = [
       drying: { fr: 'Cerise entière, 21 jours', en: 'Whole cherry, 21 days', zh: '整果日晒 21 天' },
       harvest: { fr: 'À la main, sélection 100 % mûre', en: 'Hand-picked, 100% ripe selection', zh: '手工采摘，全熟果选' },
       roast: { fr: 'Claire à moyenne — filtre & espresso', en: 'Light to medium — filter & espresso', zh: '浅中烘 — 手冲与意式' },
-      score: '88 / 100',
     },
     brew: {
       fr: "Filtre : 15 g pour 250 ml, eau à 94 °C. En espresso, allonger légèrement le ratio pour adoucir l'acidité.",
@@ -249,7 +245,6 @@ export const products: Product[] = [
       drying: { fr: 'Lits africains surélevés', en: 'Raised African beds', zh: '非洲高架床' },
       harvest: { fr: 'À la main, cerises mûres', en: 'Hand-picked, ripe cherries', zh: '手工采摘，成熟果实' },
       roast: { fr: 'Moyenne — mouture filtre', en: 'Medium — filter grind', zh: '中烘 — 手冲研磨度' },
-      score: '85 / 100',
     },
     brew: {
       fr: 'Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.',
@@ -306,7 +301,6 @@ export const products: Product[] = [
       drying: { fr: 'Lits africains surélevés', en: 'Raised African beds', zh: '非洲高架床' },
       harvest: { fr: 'Récolte 2023 – 2024', en: '2023 – 2024 harvest', zh: '2023 – 2024 产季' },
       roast: { fr: 'Claire à moyenne', en: 'Light to medium', zh: '浅至中烘' },
-      score: '86 – 88 / 100',
     },
     brew: {
       fr: 'Commencez par le Baoshan, puis le Pu’er, terminez par le Menglian : du plus délicat au plus expressif.',

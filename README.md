@@ -129,7 +129,21 @@ informations définitives : SIREN, RCS, TVA, hébergeur).
 
 ---
 
-## 4. Visuels
+## 4. Charte et visuels
+
+### Typographie et couleurs
+
+Aucune police n'est chargée depuis le réseau : le site utilise **Helvetica Neue,
+Helvetica, puis Arial** en repli, avec les graisses disponibles (`--w-regular`,
+`--w-medium`, `--w-bold`, plus `--w-light` là où Helvetica Neue la propose).
+Tailles, graisses et interlettrages sont centralisés dans les variables du haut de
+`src/styles/global.css`.
+
+Le fond principal est le beige crème **#ebe7de**, décliné en variante claire
+(`--paper-soft`, classe `.panel--soft`) et sourde (`--paper-2`, classe `.panel`)
+pour donner du rythme d'une section à l'autre. Les textes et tous les noirs sont en
+**#212121** (`--ink`), avec l'orangé **#b95f2c** en accent et l'olive **#565a41**
+pour les bandeaux professionnels.
 
 ### Photographies
 
@@ -153,6 +167,23 @@ Pour en ajouter une : ajoutez une entrée dans ce même fichier, puis
 
 Astro génère automatiquement les versions WebP responsives (5 largeurs, `srcset`
 et `sizes`), avec chargement différé partout sauf sur l'image d'en-tête de chaque page.
+
+### Icônes
+
+`src/components/Icon.astro` contient un jeu d'icônes vectorielles dessinées d'après
+la planche de la charte : tracés fins, épaisseur constante, angles arrondis.
+Usage : `<Icon name="cherries" size={24} />`.
+
+Elles sont employées **avec parcimonie**, à quatre endroits seulement, là où elles
+aident à lire ou soulignent un engagement :
+
+- la fiche technique d'un café (séchage, récolte, torréfaction) ;
+- les six étapes de la page Savoir-faire ;
+- les engagements des pages À propos et Espace pro ;
+- la mention de paiement sécurisé, en pied de page.
+
+Ajouter une icône = ajouter un tracé dans l'objet `paths` du composant. Merci de
+garder cette discipline : l'icône doit apporter une information, jamais décorer.
 
 ### Packagings
 
@@ -237,6 +268,5 @@ Vercel, Cloudflare Pages, o2switch, etc.
 
 - Navigation clavier complète, focus visible, piège de focus dans le menu et le panier.
 - `prefers-reduced-motion` respecté (toutes les animations sont neutralisées).
-- Aucune police ni script bloquant hors Google Fonts (Inter) ; les visuels sont
-  vectoriels et inline.
+- Aucune police distante, aucun script bloquant : le texte s'affiche immédiatement.
 - Contenu visible sans JavaScript (les animations d'apparition se désactivent).

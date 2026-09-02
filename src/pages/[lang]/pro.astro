@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, url, route, absolute, type Lang } from '../../i18n/utils';
 import { SITE } from '../../consts';
@@ -13,6 +15,9 @@ export const getStaticPaths: GetStaticPaths = () => langPaths();
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
+
+/* Dans l'ordre des engagements du dictionnaire. */
+const commitIcons: IconName[] = ['leaf', 'community', 'book'];
 
 const jsonld = [
   {
@@ -76,7 +81,7 @@ const jsonld = [
         {
           t.pro.commitments.map((item, i) => (
             <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
-              <span class="commits__mark" aria-hidden="true" />
+              <Icon name={commitIcons[i]} size={28} class="commits__icon" />
               <h3 class="commits__title">{item.title}</h3>
               <p class="small muted">{item.text}</p>
             </li>
@@ -198,25 +203,9 @@ const jsonld = [
     }
   }
 
-  .commits__mark {
-    display: block;
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--ink-30);
-    border-radius: 50%;
-    margin-bottom: 1rem;
-    position: relative;
-  }
-
-  .commits__mark::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 9px;
-    height: 9px;
-    transform: translate(-50%, -50%) rotate(45deg);
-    background: var(--accent);
+  .commits__icon {
+    margin-bottom: 1.1rem;
+    color: var(--accent);
   }
 
   .commits__title,

@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
+import Icon from '../../components/Icon.astro';
+import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
 
@@ -12,6 +14,9 @@ export const getStaticPaths: GetStaticPaths = () => langPaths();
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
+
+/* Dans l'ordre des engagements du dictionnaire. */
+const valueIcons: IconName[] = ['leaf', 'community', 'sprout'];
 
 const jsonld = [
   {
@@ -64,7 +69,7 @@ const jsonld = [
         {
           t.apropos.values.map((value, i) => (
             <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
-              <span class="values__mark" aria-hidden="true" />
+              <Icon name={valueIcons[i]} size={28} class="values__icon" />
               <h3 class="values__title">{value.title}</h3>
               <p class="small muted">{value.text}</p>
             </li>
@@ -129,23 +134,9 @@ const jsonld = [
     }
   }
 
-  .values__mark {
-    display: block;
-    width: 26px;
-    height: 26px;
-    border: 1px solid var(--accent);
-    border-radius: 50%;
-    position: relative;
-    margin-bottom: 1rem;
-  }
-
-  .values__mark::after {
-    content: '';
-    position: absolute;
-    inset: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.25;
+  .values__icon {
+    margin-bottom: 1.1rem;
+    color: var(--accent);
   }
 
   .values__title {
@@ -199,7 +190,7 @@ const jsonld = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(28, 28, 26, 0) 24%, rgba(28, 28, 26, 0.28) 62%, rgba(28, 28, 26, 0.6) 100%);
+    background: linear-gradient(180deg, rgba(33, 33, 33, 0) 24%, rgba(33, 33, 33, 0.28) 62%, rgba(33, 33, 33, 0.6) 100%);
   }
 
   .closing__inner {

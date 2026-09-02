@@ -526,18 +526,66 @@ const current = Astro.url.pathname;
       }
     });
 
-    let last = window.scrollY;
+    /* --- Masquage / réapparition de l'en-tête ---------------------------
+       On accumule le déplacement dans une direction avant de basculer :
+       les micro-variations d'un scroll lent ne font plus trembler la barre.
+       Elle réapparaît sur un vrai scroll vers le haut, ou dès que le
+       défilement est complètement arrêté. ------------------------------ */
+    const HIDE_AFTER = 72; // px cumulés vers le bas avant de masquer
+    const SHOW_AFTER = 56; // px cumulés vers le haut avant de réafficher
+    const IDLE_MS = 320; // durée sans le moindre événement = scroll arrêté
+    const TOP_ZONE = 120; // en haut de page, l'en-tête reste toujours visible
+
+    let lastY = window.scrollY;
+    let downAmount = 0;
+    let upAmount = 0;
+    let idleTimer = 0;
     let ticking = false;
-    const onScroll = () => {
+
+    const setHidden = (hidden: boolean) => {
       const header = document.querySelector<HTMLElement>('[data-header]');
       const nav = getNav();
-      ticking = false;
       if (!header) return;
-      const y = window.scrollY;
-      header.classList.toggle('is-solid', y > 24);
-      header.classList.toggle('is-hidden', y > 260 && y > last + 4 && !!nav?.hidden);
-      last = y;
+      // Menu ouvert : l'en-tête ne bouge pas.
+      header.classList.toggle('is-hidden', hidden && !!nav?.hidden);
     };
+
+    const onScroll = () => {
+      ticking = false;
+      const header = document.querySelector<HTMLElement>('[data-header]');
+      if (!header) return;
+
+      const y = Math.max(0, window.scrollY);
+      const delta = y - lastY;
+      lastY = y;
+
+      header.classList.toggle('is-solid', y > 24);
+
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        // Défilement totalement arrêté : on rend la barre.
+        downAmount = 0;
+        setHidden(false);
+      }, IDLE_MS);
+
+      if (y <= TOP_ZONE) {
+        downAmount = 0;
+        upAmount = 0;
+        setHidden(false);
+        return;
+      }
+
+      if (delta > 0) {
+        downAmount += delta;
+        upAmount = 0;
+        if (downAmount > HIDE_AFTER) setHidden(true);
+      } else if (delta < 0) {
+        upAmount -= delta;
+        downAmount = 0;
+        if (upAmount > SHOW_AFTER) setHidden(false);
+      }
+    };
+
     window.addEventListener(
       'scroll',
       () => {
@@ -556,7 +604,10 @@ const current = Astro.url.pathname;
     document.querySelectorAll('[data-nav-close]').forEach((b) => b.addEventListener('click', closeNav));
     getNav()?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav));
     const header = document.querySelector<HTMLElement>('[data-header]');
-    if (header && window.scrollY > 24) header.classList.add('is-solid');
+    if (header) {
+      header.classList.remove('is-hidden');
+      header.classList.toggle('is-solid', window.scrollY > 24);
+    }
     bindGlobals();
   };
 

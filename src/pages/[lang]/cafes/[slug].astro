@@ -5,6 +5,8 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Packshot from '../../../components/Packshot.astro';
 import BuyBox from '../../../components/BuyBox.astro';
 import ProductCard from '../../../components/ProductCard.astro';
+import Icon from '../../../components/Icon.astro';
+import type { IconName } from '../../../components/Icon.astro';
 import { languages, useTranslations, url, route, formatPrice, absolute, type Lang } from '../../../i18n/utils';
 import { products, getProduct, fromPrice } from '../../../data/products';
 import { SITE } from '../../../consts';
@@ -27,11 +29,10 @@ const specRows = [
   { label: t.product.notes, value: product.specs.notes[lang] },
 ];
 
-const detailRows = [
-  { label: t.product.drying, value: product.specs.drying[lang] },
-  { label: t.product.harvest, value: product.specs.harvest[lang] },
-  { label: t.product.roast, value: product.specs.roast[lang] },
-  { label: t.product.score, value: product.specs.score },
+const detailRows: { label: string; value: string; icon: IconName }[] = [
+  { label: t.product.drying, value: product.specs.drying[lang], icon: 'dry' },
+  { label: t.product.harvest, value: product.specs.harvest[lang], icon: 'cherries' },
+  { label: t.product.roast, value: product.specs.roast[lang], icon: 'bean' },
 ];
 
 const canonical = new URL(Astro.url.pathname, base).href;
@@ -153,8 +154,11 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
             {
               detailRows.map((row) => (
                 <div class="details__row">
-                  <dt class="label">{row.label}</dt>
-                  <dd>{row.value}</dd>
+                  <Icon name={row.icon} size={22} class="details__icon" />
+                  <div>
+                    <dt class="label">{row.label}</dt>
+                    <dd>{row.value}</dd>
+                  </div>
                 </div>
               ))
             }
@@ -308,9 +312,16 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 
   .details__row {
     display: grid;
-    gap: 0.2rem;
+    grid-template-columns: 22px minmax(0, 1fr);
+    align-items: start;
+    gap: 0.2rem 0.9rem;
     padding-bottom: 0.9rem;
     border-bottom: 1px solid var(--line-soft);
+  }
+
+  .details__icon {
+    margin-top: 0.1rem;
+    color: var(--ink-50);
   }
 
   .details__row dd {
@@ -321,7 +332,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
   .brew {
     margin-top: clamp(2rem, 4vw, 3rem);
     padding: clamp(1.5rem, 3vw, 2.25rem);
-    background: var(--paper-2);
+    background: var(--paper-soft);
     max-width: 62ch;
   }
 

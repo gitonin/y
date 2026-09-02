@@ -120,7 +120,6 @@ const fr = {
     notes: 'Notes',
     drying: 'Séchage',
     harvest: 'Récolte',
-    score: 'Score',
     roast: 'Torréfaction',
     farmCta: 'Découvrir la ferme',
     relatedTitle: 'Vous aimerez aussi',
@@ -201,7 +200,7 @@ const fr = {
       'Nous travaillons main dans la main avec des producteurs passionnés pour offrir des cafés traçables, durables et uniques. Peu de références, choisies, suivies, renouvelées au rythme des saisons.',
     valuesTitle: 'Nos engagements',
     values: [
-      { title: 'Qualité d’exception', text: 'Cafés traçables et sélectionnés avec soin, notés 85+ sur l’échelle SCA.' },
+      { title: 'Qualité d’exception', text: 'Des lots choisis à la tasse, un par un, et suivis d’une récolte à l’autre.' },
       { title: 'Relations directes', text: 'Partenariats durables avec nos producteurs, prix d’achat au-dessus du marché.' },
       { title: 'Juste mesure', text: 'Petites séries, emballages recyclables, transport maritime privilégié.' },
     ],

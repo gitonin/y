@@ -3,6 +3,8 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
 
@@ -11,6 +13,9 @@ export const getStaticPaths: GetStaticPaths = () => langPaths();
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
+
+/* Une icône par étape, dans l'ordre du tableau `steps` des dictionnaires. */
+const stepIcons: IconName[] = ['cherries', 'droplet', 'dry', 'funnel', 'bean', 'cup'];
 
 const jsonld = [
   {
@@ -56,7 +61,10 @@ const jsonld = [
         {
           t.savoirFaire.steps.map((step, i) => (
             <li class="step" data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
-              <span class="step__n label">{step.n}</span>
+              <div class="step__head">
+                <Icon name={stepIcons[i]} size={26} class="step__icon" />
+                <span class="step__n label">{step.n}</span>
+              </div>
               <h2 class="step__title">{step.title}</h2>
               <p class="small muted">{step.text}</p>
             </li>
@@ -126,6 +134,17 @@ const jsonld = [
   .step {
     padding-top: 1.25rem;
     border-top: 1px solid var(--line);
+  }
+
+  .step__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .step__icon {
+    color: var(--ink-70);
   }
 
   .step__n {

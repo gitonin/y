@@ -2,6 +2,7 @@
 import type { Lang } from '../i18n/utils';
 import { useTranslations, route, url, defaultAlternates, languages, dictionaries, asset } from '../i18n/utils';
 import { SITE, SHOPIFY } from '../consts';
+import Icon from './Icon.astro';
 
 interface Props {
   lang: Lang;
@@ -84,7 +85,10 @@ const rowA = [
       <ul class="ft__legal">
         <li><a href={route(lang, 'mentions')}>{t.footer.mentions}</a></li>
         <li><a href={route(lang, 'cgv')}>{t.footer.cgv}</a></li>
-        <li><span class="muted">{t.footer.payment}</span></li>
+        <li class="ft__secure">
+          <Icon name="lock" size={13} />
+          <span class="muted">{t.footer.payment}</span>
+        </li>
       </ul>
     </div>
   </div>
@@ -192,15 +196,27 @@ const rowA = [
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: baseline;
     gap: 0.6rem clamp(1rem, 3vw, 2.25rem);
     font-size: var(--fs-small);
+    line-height: 1.4;
+  }
+
+  .ft__row li {
+    display: block;
   }
 
   .ft__row a,
   .ft__row button {
+    display: inline-block;
     position: relative;
-    padding-block: 2px;
+    padding: 2px 0;
+    margin: 0;
     font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    vertical-align: baseline;
+    text-align: left;
   }
 
   .ft__row a::after,
@@ -251,9 +267,17 @@ const rowA = [
     text-align: center;
   }
 
+  .ft__secure {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--ink-50);
+  }
+
   .ft__legal {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
     gap: 0.5rem 1.5rem;
   }

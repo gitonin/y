@@ -122,7 +122,6 @@ const en: Dict = {
     notes: 'Notes',
     drying: 'Drying',
     harvest: 'Harvest',
-    score: 'Score',
     roast: 'Roast',
     farmCta: 'Discover the farm',
     relatedTitle: 'You may also like',
@@ -202,7 +201,7 @@ const en: Dict = {
       'We work hand in hand with passionate producers to offer traceable, sustainable and unique coffees. Few references, carefully chosen, followed and renewed with the seasons.',
     valuesTitle: 'Our commitments',
     values: [
-      { title: 'Exceptional quality', text: 'Traceable coffees selected with care, scoring 85+ on the SCA scale.' },
+      { title: 'Exceptional quality', text: 'Lots chosen in the cup, one by one, and followed from one harvest to the next.' },
       { title: 'Direct relationships', text: 'Lasting partnerships with our growers, purchase prices above market.' },
       { title: 'Right measure', text: 'Small batches, recyclable packaging, sea freight wherever possible.' },
     ],

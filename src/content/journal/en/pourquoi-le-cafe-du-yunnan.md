@@ -39,4 +39,4 @@ It is a coffee that pleases immediately, including people who find specialty cof
 
 ## What we look for
 
-We are not chasing the spectacular 90-point lot. We are chasing consistency: a coffee you can drink every morning, whose quality does not depend on luck, and whose producer we know by name.
+We are not chasing one spectacular lot for a season. We are chasing consistency: a coffee you can drink every morning, whose quality does not depend on luck, and whose producer we know by name.
