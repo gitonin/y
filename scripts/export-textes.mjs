@@ -7,9 +7,10 @@
  *   node scripts/export-textes.mjs
  */
 import { build } from 'esbuild';
-import { mkdtemp, readFile, writeFile, mkdir } from 'node:fs/promises';
+import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { ecrire } from './lib/document.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'contenu');
@@ -347,93 +348,11 @@ field('produit.preparationTitre', t.product.brewTitle, 'Titre « Conseils de pr�
 section('Panier');
 fields('panier', t.cart, ['title', 'empty', 'total', 'checkout', 'continue', 'notice']);
 
-/* ---------------------------------------------------------------- sorties */
-await mkdir(OUT, { recursive: true });
-
-/* --- version texte --- */
-const md = [];
-md.push('# Yunma — textes du site (français)', '');
-md.push(`_Document généré le ${new Date().toLocaleDateString('fr-FR')} à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._`, '');
-for (const item of doc) {
-  if (item.type === 'chapter') md.push('', `## ${item.title}`, '');
-  else if (item.type === 'section') md.push('', `### ${item.title}`, '');
-  else if (item.type === 'note') md.push(`> ${item.text}`, '');
-  else {
-    md.push(`**${item.label}** \`[${item.code}]\``);
-    md.push(...item.lines);
-    md.push('');
-  }
-}
-await writeFile(path.join(OUT, 'textes-yunma-fr.md'), md.join('\n'), 'utf8');
-
-/* --- version Word --- */
-let docxWritten = false;
-try {
-  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } = await import('docx');
-  const children = [];
-  children.push(
-    new Paragraph({ text: 'Yunma — textes du site', heading: HeadingLevel.TITLE }),
-    new Paragraph({
-      spacing: { after: 320 },
-      children: [
-        new TextRun({
-          text: `Français. Document généré le ${new Date().toLocaleDateString('fr-FR')}. Modifiez les textes sous les codes entre crochets, sans toucher aux codes.`,
-          italics: true,
-          color: '666660',
-        }),
-      ],
-    })
-  );
-  for (const item of doc) {
-    if (item.type === 'chapter') {
-      children.push(
-        new Paragraph({
-          text: item.title,
-          heading: HeadingLevel.HEADING_1,
-          spacing: { before: 520, after: 200 },
-          border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: 'C9C3B4', space: 6 } },
-        })
-      );
-    } else if (item.type === 'section') {
-      children.push(new Paragraph({ text: item.title, heading: HeadingLevel.HEADING_2, spacing: { before: 340, after: 140 } }));
-    } else if (item.type === 'note') {
-      children.push(
-        new Paragraph({ spacing: { after: 140 }, children: [new TextRun({ text: item.text, italics: true, color: '55524A' })] })
-      );
-    } else {
-      children.push(
-        new Paragraph({
-          spacing: { before: 200, after: 40 },
-          children: [
-            new TextRun({ text: item.label, bold: true, size: 19, color: '55524A' }),
-            new TextRun({ text: `   [${item.code}]`, size: 19, color: 'B95F2C' }),
-          ],
-        })
-      );
-      for (const line of item.lines) {
-        children.push(new Paragraph({ spacing: { after: 0 }, children: [new TextRun({ text: line, size: 22 })] }));
-      }
-      if (item.lines.length > 1) {
-        children.push(
-          new Paragraph({
-            spacing: { after: 60 },
-            children: [new TextRun({ text: '↑ les retours à la ligne ci-dessus sont volontaires', size: 15, italics: true, color: '9A958A' })],
-          })
-        );
-      }
-    }
-  }
-  const document = new Document({
-    creator: 'Yunma',
-    title: 'Yunma — textes du site',
-    styles: { default: { document: { run: { font: 'Helvetica', size: 22, color: '212121' } } } },
-    sections: [{ properties: { page: { margin: { top: 1000, bottom: 1000, left: 1100, right: 1100 } } }, children }],
-  });
-  await writeFile(path.join(OUT, 'textes-yunma-fr.docx'), await Packer.toBuffer(document));
-  docxWritten = true;
-} catch (error) {
-  console.warn('Document Word non généré (npm i -D docx pour l’activer) :', error.message);
-}
-
-const count = doc.filter((d) => d.type === 'field').length;
-console.log(`${count} textes exportés · contenu/textes-yunma-fr.md${docxWritten ? ' + .docx' : ''}`);
+/* ---------------------------------------------------------------- sortie */
+const { champs, word } = await ecrire(doc, {
+  dossier: OUT,
+  nom: 'textes-yunma-fr',
+  titre: 'Yunma — textes du site (français)',
+  consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
+});
+console.log(`${champs} textes exportés · contenu/textes-yunma-fr.md${word ? ' + .docx' : ''}`);
