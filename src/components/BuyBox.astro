@@ -251,50 +251,76 @@ const multi = product.variants.length > 1;
     return new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(value);
   };
 
-  const initBuyBox = () => {
-    document.querySelectorAll<HTMLElement>('[data-buybox]').forEach((box) => {
-      if (box.dataset.bound) return;
-      box.dataset.bound = '1';
+  const borner = (n: number) => Math.min(20, Math.max(1, Number.isNaN(n) ? 1 : n));
 
-      const input = box.querySelector<HTMLInputElement>('[data-qty-input]');
-      const addBtn = box.querySelector<HTMLElement>('[data-add-to-cart]');
-      /* Le prix apparaît dans l'encart d'achat et, sur la fiche produit, en haut
-         de page : les deux suivent la variante choisie. */
-      const slug = box.dataset.product ?? '';
-      const prixAffiches = [
-        ...box.querySelectorAll<HTMLElement>('[data-price-display]'),
-        ...document.querySelectorAll<HTMLElement>(`[data-price-display][data-product="${slug}"]`),
-      ];
+  /** Répercute la variante cochée : prix affichés et données du bouton d'achat. */
+  const appliquerVariante = (radio: HTMLInputElement) => {
+    const box = radio.closest<HTMLElement>('[data-buybox]');
+    const bouton = box?.querySelector<HTMLElement>('[data-add-to-cart]');
+    if (!box || !bouton) return;
 
-      const clamp = (n: number) => Math.min(20, Math.max(1, Number.isNaN(n) ? 1 : n));
+    bouton.dataset.variant = radio.value;
+    bouton.dataset.variantIndex = radio.dataset.variantIndex ?? '';
+    bouton.dataset.price = radio.dataset.price ?? '';
+    bouton.dataset.variantTitle = radio.dataset.label ?? '';
 
-      box.querySelector('[data-qty-dec]')?.addEventListener('click', () => {
-        if (input) input.value = String(clamp(Number(input.value) - 1));
-      });
-      box.querySelector('[data-qty-inc]')?.addEventListener('click', () => {
-        if (input) input.value = String(clamp(Number(input.value) + 1));
-      });
-      input?.addEventListener('change', () => {
-        input.value = String(clamp(Number(input.value)));
-      });
-
-      box.querySelectorAll<HTMLInputElement>('[data-variant-option]').forEach((radio) => {
-        radio.addEventListener('change', () => {
-          if (!radio.checked || !addBtn) return;
-          addBtn.dataset.variant = radio.value;
-          addBtn.dataset.variantIndex = radio.dataset.variantIndex ?? '';
-          addBtn.dataset.price = radio.dataset.price ?? '';
-          addBtn.dataset.variantTitle = radio.dataset.label ?? '';
-          if (radio.dataset.price) {
-            const affiche = currency(Number(radio.dataset.price));
-            prixAffiches.forEach((el) => {
-              el.textContent = affiche;
-            });
-          }
-        });
-      });
+    if (!radio.dataset.price) return;
+    /* Le prix paraît deux fois : dans l'encart d'achat et, sur la fiche produit,
+       en haut de page. Les deux suivent le format choisi. */
+    const affiche = currency(Number(radio.dataset.price));
+    const slug = box.dataset.product ?? '';
+    const cibles = [
+      ...box.querySelectorAll<HTMLElement>('[data-price-display]'),
+      ...document.querySelectorAll<HTMLElement>(`[data-price-display][data-product="${slug}"]`),
+    ];
+    cibles.forEach((el) => {
+      el.textContent = affiche;
     });
   };
 
-  document.addEventListener('astro:page-load', initBuyBox);
+  /**
+   * Se cale sur la case déjà cochée. Un visiteur peut choisir son format avant
+   * que ce script ne soit exécuté : le clic coche bien la case, mais l'événement
+   * est perdu — et recliquer la même case n'en émet aucun autre. Sans cette
+   * remise à niveau, le prix resterait figé jusqu'au rechargement de la page.
+   */
+  const synchroniser = () => {
+    document
+      .querySelectorAll<HTMLInputElement>('[data-buybox] [data-variant-option]:checked')
+      .forEach(appliquerVariante);
+  };
+
+  /* Un seul jeu d'écouteurs, posé sur le document dès l'exécution du script :
+     il vaut pour toutes les fiches produit, y compris celles affichées ensuite
+     par une navigation sans rechargement. */
+  if (!(window as any).__yunmaBuyBox) {
+    (window as any).__yunmaBuyBox = true;
+
+    document.addEventListener('change', (e) => {
+      const cible = e.target as HTMLElement | null;
+
+      const radio = cible?.closest?.<HTMLInputElement>('[data-variant-option]');
+      if (radio?.checked) {
+        appliquerVariante(radio);
+        return;
+      }
+
+      const quantite = cible?.closest?.<HTMLInputElement>('[data-qty-input]');
+      if (quantite) quantite.value = String(borner(Number(quantite.value)));
+    });
+
+    document.addEventListener('click', (e) => {
+      const cible = e.target as HTMLElement | null;
+      const bouton = cible?.closest?.<HTMLElement>('[data-qty-dec], [data-qty-inc]');
+      if (!bouton) return;
+      const champ = bouton.closest('[data-buybox]')?.querySelector<HTMLInputElement>('[data-qty-input]');
+      if (!champ) return;
+      const pas = bouton.hasAttribute('data-qty-inc') ? 1 : -1;
+      champ.value = String(borner(Number(champ.value) + pas));
+    });
+  }
+
+  document.addEventListener('astro:page-load', synchroniser);
+  /* La page peut déjà être affichée quand ce script s'exécute. */
+  synchroniser();
 </script>

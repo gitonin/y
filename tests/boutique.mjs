@@ -221,6 +221,54 @@ await pg.fill('[data-qty-input]', '0');
 await pg.dispatchEvent('[data-qty-input]', 'change');
 check('quantité minimale de 1', await pg.locator('[data-qty-input]').inputValue(), '1');
 
+/* ------------------------------- 6. choix fait avant que le script soit prêt */
+titre('Format choisi avant que le script de la fiche ne soit exécuté');
+{
+  /* Un visiteur peut cliquer dès que la page s'affiche, avant que le script de
+     l'encart d'achat n'ait tourné. Le clic coche bien la case, mais l'événement
+     est perdu — et recliquer la même case n'en émettra pas d'autre. Le prix doit
+     malgré tout se remettre à niveau dès que le script s'exécute. */
+  const ctxLent = await navigateur.newContext({ viewport: { width: 1280, height: 900 } });
+  const lente = await ctxLent.newPage();
+  let script = '';
+  await ctxLent.route('**/cafes/drip-bags-a-composer/**', async (route) => {
+    const rep = await route.fetch();
+    let html = await rep.text();
+    for (const m of html.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)) {
+      if (m[1].includes('data-variant-option')) {
+        script = m[1];
+        html = html.replace(m[0], '');
+        break;
+      }
+    }
+    await route.fulfill({ response: rep, body: html, headers: { ...rep.headers(), 'content-type': 'text/html' } });
+  });
+
+  await lente.goto(`${B}/fr/cafes/drip-bags-a-composer/`, { waitUntil: 'networkidle' });
+  check('script de l’encart bien retiré pour le test', script !== '', true);
+  await lente.locator('.buy__chips .chip').nth(1).click();
+  await lente.waitForTimeout(150);
+  check('la case est cochée malgré tout', await lente.locator('.buy__chips input').nth(1).isChecked(), true);
+
+  await lente.evaluate((code) => {
+    const el = document.createElement('script');
+    el.type = 'module';
+    el.textContent = code;
+    document.body.appendChild(el);
+  }, script);
+  await lente.waitForTimeout(400);
+  check('prix remis à niveau à l’arrivée du script', await lente.locator('.pdp__price').innerText(), euros(18));
+  check('prix transmis au panier', Number(await lente.locator('[data-add-to-cart]').getAttribute('data-price')), 18);
+
+  await lente.locator('.buy__chips .chip').nth(2).click();
+  await lente.waitForTimeout(200);
+  check('le choix suivant fonctionne', await lente.locator('.pdp__price').innerText(), euros(16.5));
+  await lente.locator('[data-qty-inc]').click();
+  await lente.waitForTimeout(150);
+  check('le compteur de quantité fonctionne', await lente.locator('[data-qty-input]').inputValue(), '2');
+  await ctxLent.close();
+}
+
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);
 if (echecs.length) echecs.forEach((e) => console.log('  ·', e));
 await navigateur.close();
