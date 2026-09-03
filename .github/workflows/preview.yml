@@ -31,6 +31,9 @@ jobs:
       - name: Installer les dépendances
         run: npm ci
 
+      - name: Vérifier les types
+        run: npm run check
+
       - name: Construire le site
         env:
           SITE_URL: https://yunma.fr

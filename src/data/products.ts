@@ -463,3 +463,10 @@ export const products: Product[] = [
 
 export const getProduct = (slug: string) => products.find((p) => p.slug === slug);
 export const fromPrice = (p: Product) => Math.min(...p.variants.map((v) => v.price));
+export const toPrice = (p: Product) => Math.max(...p.variants.map((v) => v.price));
+/** Vrai quand les variantes n'ont pas toutes le même prix : le catalogue affiche « à partir de ». */
+export const hasPriceRange = (p: Product) => fromPrice(p) !== toPrice(p);
+/** Variante proposée par défaut : la première encore disponible. */
+export const defaultVariant = (p: Product) => p.variants.find((v) => v.available) ?? p.variants[0];
+/** Position de cette variante dans la liste — sert de clé stable, indépendante de la langue. */
+export const variantIndex = (p: Product, variant: Variant) => p.variants.indexOf(variant);

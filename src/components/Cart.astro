@@ -535,7 +535,11 @@ const config = {
         await addLive(variantId, quantity);
       } else {
         loadDemo();
-        const key = `demo:${btn.dataset.sku || variantId || btn.dataset.title}`;
+        /* Une ligne par variante : deux formats du même produit ne doivent pas
+           se confondre. L'indice de variante sert de clé — il ne change pas
+           d'une langue à l'autre, contrairement au libellé. */
+        const variante = btn.dataset.variantIndex ?? btn.dataset.variantTitle ?? '';
+        const key = `demo:${btn.dataset.sku || btn.dataset.title}#${variantId || variante}`;
         const existing = lines.find((l) => l.id === key);
         if (existing) existing.quantity += quantity;
         else

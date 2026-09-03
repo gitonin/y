@@ -8,13 +8,16 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "test:boutique": "node tests/boutique.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
     "astro": "^7.2.10"
   },
   "devDependencies": {
-    "docx": "^9.7.1"
+    "@astrojs/check": "^0.9.10",
+    "docx": "^9.7.1",
+    "typescript": "^6.0.3"
   }
 }

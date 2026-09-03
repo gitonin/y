@@ -2,6 +2,7 @@
 import type { Lang } from '../i18n/utils';
 import { useTranslations, formatPrice } from '../i18n/utils';
 import type { Product } from '../data/products';
+import { defaultVariant } from '../data/products';
 
 interface Props {
   product: Product;
@@ -11,12 +12,14 @@ interface Props {
 }
 const { product, lang, hidePrice = false } = Astro.props;
 const t = useTranslations(lang);
-const first = product.variants[0];
+/* La variante affichée à l'ouverture : la première encore disponible. */
+const first = defaultVariant(product);
+const firstIndex = product.variants.indexOf(first);
 const qtyId = `qty-${product.slug}`;
 const multi = product.variants.length > 1;
 ---
 
-<div class="buy" data-buybox>
+<div class="buy" data-buybox data-product={product.slug}>
   <p class="buy__price mono-num" data-price-display hidden={hidePrice}>{formatPrice(first.price, lang)}</p>
 
   {
@@ -30,8 +33,9 @@ const multi = product.variants.length > 1;
                 type="radio"
                 name={`variant-${product.slug}`}
                 value={v.shopifyVariantId}
-                checked={i === 0}
+                checked={i === firstIndex}
                 data-variant-option
+                data-variant-index={i}
                 data-price={v.price}
                 data-label={v.label[lang]}
                 disabled={!v.available}
@@ -76,6 +80,7 @@ const multi = product.variants.length > 1;
     type="button"
     data-add-to-cart
     data-variant={first.shopifyVariantId}
+    data-variant-index={firstIndex}
     data-sku={product.sku}
     data-title={product.name[lang]}
     data-variant-title={first.label[lang]}
@@ -253,7 +258,13 @@ const multi = product.variants.length > 1;
 
       const input = box.querySelector<HTMLInputElement>('[data-qty-input]');
       const addBtn = box.querySelector<HTMLElement>('[data-add-to-cart]');
-      const priceEl = box.querySelector<HTMLElement>('[data-price-display]');
+      /* Le prix apparaît dans l'encart d'achat et, sur la fiche produit, en haut
+         de page : les deux suivent la variante choisie. */
+      const slug = box.dataset.product ?? '';
+      const prixAffiches = [
+        ...box.querySelectorAll<HTMLElement>('[data-price-display]'),
+        ...document.querySelectorAll<HTMLElement>(`[data-price-display][data-product="${slug}"]`),
+      ];
 
       const clamp = (n: number) => Math.min(20, Math.max(1, Number.isNaN(n) ? 1 : n));
 
@@ -271,9 +282,15 @@ const multi = product.variants.length > 1;
         radio.addEventListener('change', () => {
           if (!radio.checked || !addBtn) return;
           addBtn.dataset.variant = radio.value;
+          addBtn.dataset.variantIndex = radio.dataset.variantIndex ?? '';
           addBtn.dataset.price = radio.dataset.price ?? '';
           addBtn.dataset.variantTitle = radio.dataset.label ?? '';
-          if (priceEl && radio.dataset.price) priceEl.textContent = currency(Number(radio.dataset.price));
+          if (radio.dataset.price) {
+            const affiche = currency(Number(radio.dataset.price));
+            prixAffiches.forEach((el) => {
+              el.textContent = affiche;
+            });
+          }
         });
       });
     });

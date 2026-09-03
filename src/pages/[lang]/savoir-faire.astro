@@ -5,7 +5,7 @@
  */
 import type { GetStaticPaths } from 'astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
+import { useTranslations, route, absolute, asset, type Lang } from '../../i18n/utils';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
 
@@ -24,6 +24,7 @@ const canonique = absolute(Astro.site, `${lang}/origine/`);
     <meta name="robots" content="noindex, follow" />
     <link rel="canonical" href={canonique} />
     <meta http-equiv="refresh" content={`0; url=${cible}`} />
+    <link rel="icon" href={asset('brand/favicon-96.png')} type="image/png" sizes="96x96" />
     <style>
       body {
         margin: 0;
@@ -41,6 +42,6 @@ const canonique = absolute(Astro.site, `${lang}/origine/`);
     </style>
   </head>
   <body>
-    <p><a href={cible}>{t.origine.title.replace('\n', ' ')}</a></p>
+    <p><a href={cible}>{t.origine.title.split('\n').join(' ')}</a></p>
   </body>
 </html>

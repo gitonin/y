@@ -1,8 +1,8 @@
 ---
 import type { Lang } from '../i18n/utils';
-import { formatPrice, productUrl } from '../i18n/utils';
+import { formatPrice, productUrl, useTranslations } from '../i18n/utils';
 import type { Product } from '../data/products';
-import { fromPrice } from '../data/products';
+import { fromPrice, hasPriceRange } from '../data/products';
 import Packshot from './Packshot.astro';
 
 interface Props {
@@ -12,7 +12,11 @@ interface Props {
   compact?: boolean;
 }
 const { product, lang, index = 0, compact = false } = Astro.props;
+const t = useTranslations(lang);
+/* Plusieurs formats à des prix différents : on annonce le plus bas, sans le laisser
+   passer pour le prix unique. */
 const price = fromPrice(product);
+const aPartirDe = hasPriceRange(product);
 ---
 
 <article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
@@ -24,7 +28,10 @@ const price = fromPrice(product);
       <h3 class="pcard__name">{product.name[lang]}</h3>
       <p class="pcard__sub muted small">{product.subtitle[lang]}</p>
       {!compact && <p class="pcard__notes small">{product.short[lang]}</p>}
-      <p class="pcard__price mono-num">{formatPrice(price, lang)}</p>
+      <p class="pcard__price mono-num">
+        {aPartirDe && <span class="pcard__from">{t.common.from} </span>}
+        {formatPrice(price, lang)}
+      </p>
     </div>
   </a>
 </article>
@@ -40,6 +47,13 @@ const price = fromPrice(product);
 
   .pcard__media :global(.shot) {
     transform: none;
+  }
+
+  .pcard__from {
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
   }
 
   .pcard__body {

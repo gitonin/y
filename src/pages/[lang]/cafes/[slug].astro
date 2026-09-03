@@ -9,17 +9,21 @@ import Photo from '../../../components/Photo.astro';
 import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
 import { languages, useTranslations, url, route, formatPrice, absolute, type Lang } from '../../../i18n/utils';
-import { products, getProduct, fromPrice } from '../../../data/products';
+import type { Product } from '../../../data/products';
+import { products, getProduct, fromPrice, toPrice, defaultVariant } from '../../../data/products';
 import { SITE } from '../../../consts';
 
 export const getStaticPaths: GetStaticPaths = () =>
   languages.flatMap((lang) => products.map((product) => ({ params: { lang, slug: product.slug }, props: { product } })));
 
 const lang = Astro.params.lang as Lang;
-const { product } = Astro.props;
+/* Le produit vient de getStaticPaths ; on le type ici pour que la page soit vérifiable. */
+const product = Astro.props.product as Product;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
-const price = fromPrice(product);
+/* Le prix affiché en haut de page est celui de la variante sélectionnée :
+   il est réactualisé par l'encart d'achat à chaque changement de format. */
+const variantePardefaut = defaultVariant(product);
 const related = product.related.map((slug) => getProduct(slug)).filter(Boolean);
 
 const specRows = [
@@ -38,6 +42,34 @@ const detailRows: { label: string; value: string; icon: IconName }[] = [
 
 const canonical = new URL(Astro.url.pathname, base).href;
 
+/* Une offre par format ; regroupées quand les prix diffèrent, pour que Google
+   annonce une fourchette plutôt qu'un prix unique. */
+const offres = product.variants.map((variant) => ({
+  '@type': 'Offer',
+  name: variant.label[lang],
+  url: canonical,
+  priceCurrency: SITE.currency,
+  price: variant.price.toFixed(2),
+  availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+  itemCondition: 'https://schema.org/NewCondition',
+  seller: { '@id': `${base.origin}/#organization` },
+  shippingDetails: {
+    '@type': 'OfferShippingDetails',
+    shippingDestination: { '@type': 'DefinedRegion', addressCountry: ['FR', 'BE', 'DE', 'ES', 'IT', 'NL'] },
+  },
+}));
+const offreProduit =
+  product.variants.length > 1
+    ? {
+        '@type': 'AggregateOffer',
+        priceCurrency: SITE.currency,
+        lowPrice: fromPrice(product).toFixed(2),
+        highPrice: toPrice(product).toFixed(2),
+        offerCount: product.variants.length,
+        offers: offres,
+      }
+    : offres[0];
+
 const jsonld = [
   {
     '@type': 'Product',
@@ -55,19 +87,7 @@ const jsonld = [
       name: row.label,
       value: row.value,
     })),
-    offers: product.variants.map((variant) => ({
-      '@type': 'Offer',
-      url: canonical,
-      priceCurrency: SITE.currency,
-      price: variant.price.toFixed(2),
-      availability: variant.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      itemCondition: 'https://schema.org/NewCondition',
-      seller: { '@id': `${base.origin}/#organization` },
-      shippingDetails: {
-        '@type': 'OfferShippingDetails',
-        shippingDestination: { '@type': 'DefinedRegion', addressCountry: ['FR', 'BE', 'DE', 'ES', 'IT', 'NL'] },
-      },
-    })),
+    offers: offreProduit,
   },
   {
     '@type': 'BreadcrumbList',
@@ -111,7 +131,9 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
       <div class="pdp__info">
         <h1 class="pdp__title">{product.name[lang]}</h1>
         <p class="pdp__sub muted">{product.subtitle[lang]}</p>
-        <p class="pdp__price mono-num">{formatPrice(price, lang)}</p>
+        <p class="pdp__price mono-num" data-price-display data-product={product.slug}>
+          {formatPrice(variantePardefaut.price, lang)}
+        </p>
         <p class="pdp__short">{product.short[lang]}</p>
 
         <BuyBox product={product} lang={lang} hidePrice />

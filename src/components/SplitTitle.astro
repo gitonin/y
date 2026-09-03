@@ -11,7 +11,7 @@ interface Props {
   class?: string;
 }
 const { text, as: Tag = 'h2', size = 'lg', class: className = '' } = Astro.props;
-const lines = text.split('\n');
+const lines: string[] = text.split('\n');
 ---
 
 <Tag class={`reveal-lines ttl ttl--${size} ${className}`}>

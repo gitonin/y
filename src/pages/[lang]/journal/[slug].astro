@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Photo from '../../../components/Photo.astro';
@@ -19,7 +19,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const lang = Astro.params.lang as Lang;
 const slug = Astro.params.slug as string;
-const { post } = Astro.props;
+/* L'article vient de getStaticPaths ; on le type ici pour que la page soit vérifiable. */
+const post = Astro.props.post as CollectionEntry<'journal'>;
 const t = useTranslations(lang);
 const { Content } = await render(post);
 const base = Astro.site ?? new URL('https://yunma.fr');
