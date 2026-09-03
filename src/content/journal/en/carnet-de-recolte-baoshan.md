@@ -1,6 +1,6 @@
 ---
 title: 'Harvest notebook: three weeks in Baoshan'
-description: 'Three weeks in the mountains of Baoshan at the heart of the harvest: picking, fermentation, drying and cupping at Gaoshen, our partner farm in Baoshan.'
+description: 'Three weeks in the mountains of Baoshan at the heart of the harvest: picking, fermentation, drying and cupping at Gaosheng, our partner farm in Baoshan.'
 date: 2025-02-18
 author: Yunma
 tags: ['Yunnan', 'Harvest', 'Travel']
@@ -11,7 +11,7 @@ We arrived in Baoshan on the first day of February, in the middle of the harvest
 
 ## Picking, pass after pass
 
-On the high terraces of Gaoshen, planted with Yellow Bourbon, a tree is never harvested in one go. They come back every ten days to take only the deep-red cherries. It is slower, more expensive, and it is the only way to get a consistent cup: one green cherry, and bitterness settles into the whole lot.
+On the high terraces of Gaosheng, planted with Yellow Bourbon, a tree is never harvested in one go. They come back every ten days to take only the deep-red cherries. It is slower, more expensive, and it is the only way to get a consistent cup: one green cherry, and bitterness settles into the whole lot.
 
 An experienced picker gathers between 60 and 80 kilos of cherries a day. It takes five to six kilos of cherries to make one kilo of green coffee, and six kilos of green coffee to make five kilos of roasted coffee.
 

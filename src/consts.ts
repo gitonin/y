@@ -6,11 +6,11 @@ export const SITE = {
   email: 'hello@yunma.fr',
   proEmail: 'pro@yunma.fr',
   pressEmail: 'presse@yunma.fr',
-  phone: '+33 6 00 00 00 00',
-  phoneHref: '+33600000000',
+  phone: '+33 6 42 05 04 58',
+  phoneHref: '+33642050458',
   address: {
-    street: '12 rue des Torréfacteurs',
-    postalCode: '75011',
+    street: '1 rue Ordener',
+    postalCode: '75018',
     city: 'Paris',
     country: 'FR',
   },
@@ -19,7 +19,7 @@ export const SITE = {
     linkedin: 'https://www.linkedin.com/company/yunma/',
   },
   currency: 'EUR',
-  freeShippingFrom: 45,
+  freeShippingFrom: 50,
   founded: '2019',
 };
 

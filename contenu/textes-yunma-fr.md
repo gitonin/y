@@ -1,6 +1,6 @@
 # Yunma — textes du site (français)
 
-_Document généré le 02/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 03/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -34,11 +34,11 @@ pro@yunma.fr
 presse@yunma.fr
 
 **Téléphone** `[site.telephone]`
-+33 6 00 00 00 00
++33 6 42 05 04 58
 
 **Adresse** `[site.adresse]`
-12 rue des Torréfacteurs
-75011 Paris
+1 rue Ordener
+75018 Paris
 
 **Lien Instagram** `[site.instagram]`
 https://www.instagram.com/yunma.coffee/
@@ -47,7 +47,7 @@ https://www.instagram.com/yunma.coffee/
 https://www.linkedin.com/company/yunma/
 
 **Livraison offerte à partir de** `[site.livraisonOfferteDes]`
-45 €
+50 €
 
 **Année de la première récolte importée** `[site.premiereRecolte]`
 2019
@@ -59,10 +59,10 @@ https://www.linkedin.com/company/yunma/
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[accueil.seoTitle]`
-Yunma — Cafés de spécialité du Yunnan, torréfiés en France
+Yunma — Cafés de spécialité du Yunnan, torréfiés à Paris
 
 **Description affichée dans Google (≈ 155 signes)** `[accueil.seoDescription]`
-Yunma sélectionne et torréfie des cafés de spécialité du Yunnan (Chine) : lots tracés, producteurs partenaires, torréfaction claire. Livraison en France et en Europe.
+Yunma sélectionne des cafés de spécialité du Yunnan (Chine) : lots tracés, producteurs indépendants, torréfaction à Paris. Livraison en France et en Europe.
 
 
 ### Bandeau d’ouverture
@@ -82,15 +82,15 @@ Découvrir nos cafés
 ### Bloc « Notre origine »
 
 **Sur-titre** `[accueil.originLabel]`
-Notre origine
+À L’origine,
 
 **Titre** `[accueil.originTitle]`
-Le Yunnan.
-Notre terre.
-Notre inspiration.
+le Yunnan.
+Un terroir.
+Une philosophie.
 
 **Texte** `[accueil.originText]`
-Au sud-ouest de la Chine, entre 1 300 et 1 800 mètres d’altitude, le Yunnan cultive un café encore méconnu. Nous y sélectionnons des micro-lots auprès de trois fermes partenaires, parcelle par parcelle, récolte après récolte.
+Au sud-ouest de la Chine, entre 1300 et 2000 mètres d’altitude, le Yunnan cultive un café encore peu connu. Chaque café que nous sélectionnons au Yunnan raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons une certaine philosophie de vie.
 
 **Libellé du lien** `[accueil.originCta]`
 Découvrir l’origine
@@ -102,28 +102,28 @@ Découvrir l’origine
 Nos cafés
 
 **Titre** `[accueil.coffeesTitle]`
-Des cafés d’exception,
-cultivés avec soin.
+Des cafés du Yunnan,
+cultivés avec passion.
 
 **Texte** `[accueil.coffeesText]`
-Trois lots de saison en 200 g, des drip bags à emporter et un coffret pour tout goûter. Torréfaction claire à moyenne, en petites séries.
+Trois lots de saison en sachet de 200 g, des drip bags à emporter, ou le coffret pour tout goûter. Torréfiés en petites séries, de manière régulière.
 
 **Libellé du lien** `[accueil.coffeesCta]`
-Découvrir nos cafés
+Découvrir nos cafés du Yunnan
 
 
 ### Bloc « Notre approche »
 
 **Sur-titre** `[accueil.approachLabel]`
-Notre approche
+Notre philosophie
 
 **Titre** `[accueil.approachTitle]`
-Le temps,
-la nature
-et la précision.
+Du temps,
+des saveurs
+et la nature.
 
 **Texte** `[accueil.approachText]`
-Fermentations maîtrisées, séchage sur lits africains, tri manuel : chaque étape est documentée avec nos partenaires pour révéler la tasse sans jamais la forcer.
+Notre approche est de révéler les terroirs distinctifs du Yunnan. Pas de mélanges standardisés, mais des cafés tracés, à déguster comme on le ferait pour des grands vins.
 
 **Libellé du lien** `[accueil.approachCta]`
 En savoir plus
@@ -135,7 +135,7 @@ En savoir plus
 Journal
 
 **Titre** `[accueil.journalTitle]`
-Carnets de récolte
+Carnets de Yunma
 
 
 ### Bande « Professionnels »
@@ -144,10 +144,10 @@ Carnets de récolte
 Professionnels
 
 **Titre** `[accueil.proTitle]`
-Cafés de spécialité pour les professionnels exigeants.
+Cafés de spécialité du Yunnan pour votre Coffee shop, pour les torréfacteurs, hôtels, restaurants et épiceries fine.
 
 **Libellé du lien** `[accueil.proCta]`
-Découvrir l’offre pro
+Découvrir notre offre pro
 
 
 ### Image de fin
@@ -155,7 +155,7 @@ Découvrir l’offre pro
 **Titre** `[accueil.closingTitle]`
 Chaque tasse
 commence dans
-la montagne.
+le Yunnan.
 
 **Libellé du lien** `[accueil.closingCta]`
 Découvrir Yunma
@@ -170,19 +170,19 @@ Découvrir Yunma
 Nos cafés de spécialité du Yunnan — Yunma
 
 **Description affichée dans Google (≈ 155 signes)** `[cafes.seoDescription]`
-Découvrez les cafés Yunma : lots de spécialité du Yunnan en 200 g, drip bags en boîte de 8 et coffret découverte. Origine tracée, torréfaction en petites séries.
+Découvrez les cafés Yunma : cafés de spécialité du Yunnan (Chine) en 200 g, drip bags en boîte de 8 ou coffret découverte. Des origine tracées, la torréfaction à Paris.
 
 
 ### En-tête
 
 **Sur-titre** `[cafes.label]`
-Nos cafés
+Notre spécialité
 
 **Titre** `[cafes.title]`
-La collection
+Cafés du Yunnan
 
 **Introduction** `[cafes.intro]`
-Des lots de spécialité issus de trois terroirs du Yunnan, torréfiés en petites séries pour révéler ce que la montagne a mis un an à construire.
+Nos cafés de spécialité sont issus de trois terroirs du Yunnan, torréfiés régulièrement pour révéler ce que les montagnes du Yunnan ont à nous offrir.
 
 
 ### Filtres
@@ -203,10 +203,10 @@ Coffrets
 ### Encadré « Besoin d’un conseil ? »
 
 **Titre** `[cafes.helpTitle]`
-Besoin d’un conseil ?
+Besoin de conseils ?
 
 **Texte** `[cafes.helpText]`
-Dites-nous comment vous préparez votre café, nous vous orientons vers le lot qui vous ira le mieux.
+Dites-nous comment vous préparez votre café, nous vous orienterons vers le lot qui vous conviendra le mieux.
 
 
 ## Les six produits
@@ -214,31 +214,31 @@ Dites-nous comment vous préparez votre café, nous vous orientons vers le lot q
 > Les prix figurent ici pour mémoire : ils doivent rester identiques à ceux saisis dans Shopify, qui fait foi au paiement.
 
 
-### Torch Estate, Lot.01 — Pu’er
+### Torch Estate, Lot 01 — Café de Pu’er, Yunnan
 
 **Nom** `[produit.torch-estate-lot-01.nom]`
-Torch Estate, Lot.01
+Torch Estate, Lot 01
 
 **Sous-titre** `[produit.torch-estate-lot-01.sousTitre]`
-Pu’er
+Café de Pu’er, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.torch-estate-lot-01.accroche]`
-Fruits tropicaux, baies, vin rouge.
+Café du Yunnan aux notes de fruits tropicaux, baies, vin rouge.
 
 **Description** `[produit.torch-estate-lot-01.description]`
-Une double fermentation anaérobie, menée en cuve fermée avant le séchage en honey. Le résultat est franchement aromatique : fruits tropicaux mûrs, baies, une finale qui tire vers le vin rouge. C’est notre lot le plus démonstratif, celui que l’on sert quand quelqu’un doute encore de ce que le Yunnan sait faire.
+Une double fermentation anaérobie, menée en cuve fermée avant le séchage honey. Le résultat est clairement aromatique : fruits tropicaux mûrs, baies, une finale qui pointe vers les notes de vin rouge. C’est notre lot le plus démonstratif, celui que l’on sert quand quelqu’un doute encore de ce que le Yunnan sait faire.
 
 **Histoire du lot** `[produit.torch-estate-lot-01.histoire]`
-La fermentation anaérobie double demande une discipline que peu de fermes acceptent : deux cycles en cuve fermée, chacun suivi en température et en pH, sans marge d’erreur. Un degré de trop et le lot part en vinaigre. Torch Estate s’y est mise il y a trois récoltes, en commençant par des micro-lots de quelques sacs.
+La fermentation anaérobie double demande une discipline que peu de fermes acceptent : deux cycles en cuve fermée, chacun suivi en température et en pH, sans marge d’erreur. Torch Estate s’y est mise il y a trois récoltes, en commençant par des micro-lots.
 
 **Fiche : origine** `[produit.torch-estate-lot-01.origine]`
 Yunnan, Chine — Pu’er
 
 **Fiche : altitude** `[produit.torch-estate-lot-01.altitude]`
-1 450 m
+1450 m
 
 **Fiche : variété** `[produit.torch-estate-lot-01.variete]`
-Catimor
+Catimor (Arabica)
 
 **Fiche : process** `[produit.torch-estate-lot-01.process]`
 Honey anaérobie double
@@ -247,16 +247,16 @@ Honey anaérobie double
 Fruits tropicaux, baies, vin rouge
 
 **Fiche : séchage** `[produit.torch-estate-lot-01.sechage]`
-Lits africains surélevés
+Lits surélevés
 
 **Fiche : récolte** `[produit.torch-estate-lot-01.recolte]`
 À la main, cerises mûres
 
 **Fiche : profil (filtre ou espresso)** `[produit.torch-estate-lot-01.profil]`
-Filtre
+Filtre et espresso
 
 **Conseils de préparation** `[produit.torch-estate-lot-01.preparation]`
-Filtre : 15 g pour 250 ml, eau à 93 °C, 2 min 45. Versements courts pour ne pas écraser le fruit.
+Filtre : 15 g pour 250 ml, eau à 93 °C, 2 min 30. Versements courts pour ne pas écraser le fruit.
 
 **Ferme : nom** `[produit.torch-estate-lot-01.ferme.nom]`
 Torch Estate
@@ -265,37 +265,39 @@ Torch Estate
 Pu’er, Yunnan
 
 **Ferme : présentation** `[produit.torch-estate-lot-01.ferme.texte]`
-Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1 450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot.01 en fermentation anaérobie double, le Lot.02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot 01 en fermentation anaérobie double, le Lot 02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+Fondée en 2014, Torch Coffee s’est installée directement sur les terres de production, en partenariat étroit avec les producteurs locaux. Leur modèle repose sur une logique de co-création plutôt que d’assistance : ils travaillent avec les fermiers pour développer des variétés (notamment le Catimor) et expérimenter des méthodes de traitement à faible consommation d’eau.
+Torch Estate fait partie de ce qu’ils appellent le « Mountain Man Project », un programme visant à convertir des fermes autrefois tournées vers le commerce de masse vers la production de cafés de spécialité, avec un accompagnement technique et une valorisation économique.
 
 **Format et prix** `[produit.torch-estate-lot-01.prix.1]`
-200 g — 19.00 €
+200 g — 15.00 €
 
 
-### Torch Estate, Lot.02 — Pu’er
+### Torch Estate, Lot 02 — Café de Pu’er, Yunnan
 
 **Nom** `[produit.torch-estate-lot-02.nom]`
-Torch Estate, Lot.02
+Torch Estate, Lot 02
 
 **Sous-titre** `[produit.torch-estate-lot-02.sousTitre]`
-Pu’er
+Café de Pu’er, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.torch-estate-lot-02.accroche]`
-Citron vert, olive, liqueur de cacao.
+Café du Yunnan aux notes de Citron vert, olive, liqueur de cacao.
 
 **Description** `[produit.torch-estate-lot-02.description]`
-Un honey traditionnel, pensé pour l’espresso. La mucilage laissée sur le grain donne du corps et une douceur de liqueur de cacao, que vient trancher une acidité de citron vert. Cette note d’olive, presque saline, est la signature de la parcelle : on la retrouve d’une récolte à l’autre.
+Un honey traditionnel, pensé pour l’espresso. La mucilage laissée sur le grain donne du corps et une douceur de liqueur de cacao, que vient trancher une acidité de citron vert. Cette note d’olive, presque saline, est la signature du lot: on la retrouve souvent d’une récolte à l’autre.
 
 **Histoire du lot** `[produit.torch-estate-lot-02.histoire]`
-C’est le lot que nous buvons le plus souvent à l’atelier, en espresso serré le matin. Il tient aussi remarquablement bien au lait : la liqueur de cacao ressort, l’acidité se range. Si vous n’avez qu’une machine et pas envie de réfléchir, prenez celui-là.
+C’est le lot que nous buvons le plus souvent chez nous, en espresso serré le matin. Il tient aussi remarquablement bien au lait : la liqueur de cacao ressort, l’acidité se range. Si vous n’avez qu’une machine, ne cherchez plus, prenez celui-là.
 
 **Fiche : origine** `[produit.torch-estate-lot-02.origine]`
 Yunnan, Chine — Pu’er
 
 **Fiche : altitude** `[produit.torch-estate-lot-02.altitude]`
-1 300 – 1 500 m
+1300 – 1500 m
 
 **Fiche : variété** `[produit.torch-estate-lot-02.variete]`
-Catimor
+Catimor (Arabica)
 
 **Fiche : process** `[produit.torch-estate-lot-02.process]`
 Honey traditionnel
@@ -304,7 +306,7 @@ Honey traditionnel
 Citron vert, olive, liqueur de cacao
 
 **Fiche : séchage** `[produit.torch-estate-lot-02.sechage]`
-Lits africains surélevés
+Lits surélevés
 
 **Fiche : récolte** `[produit.torch-estate-lot-02.recolte]`
 À la main, cerises mûres
@@ -313,7 +315,7 @@ Lits africains surélevés
 Espresso
 
 **Conseils de préparation** `[produit.torch-estate-lot-02.preparation]`
-Espresso : 18 g pour 40 g en 26 secondes, eau à 92 °C. En filtre, allonger à 15 g pour 260 ml.
+Espresso : 18 g pour 40 ml en 26 secondes, eau à 91 °C. En filtre, allonger à 15 g pour 260 ml.
 
 **Ferme : nom** `[produit.torch-estate-lot-02.ferme.nom]`
 Torch Estate
@@ -322,34 +324,36 @@ Torch Estate
 Pu’er, Yunnan
 
 **Ferme : présentation** `[produit.torch-estate-lot-02.ferme.texte]`
-Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1 450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot.01 en fermentation anaérobie double, le Lot.02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot 01 en fermentation anaérobie double, le Lot 02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+Fondée en 2014, Torch Coffee s’est installée directement sur les terres de production, en partenariat étroit avec les producteurs locaux. Leur modèle repose sur une logique de co-création plutôt que d’assistance : ils travaillent avec les fermiers pour développer des variétés (notamment le Catimor) et expérimenter des méthodes de traitement à faible consommation d’eau.
+Torch Estate fait partie de ce qu’ils appellent le « Mountain Man Project », un programme visant à convertir des fermes autrefois tournées vers le commerce de masse vers la production de cafés de spécialité, avec un accompagnement technique et une valorisation économique.
 
 **Format et prix** `[produit.torch-estate-lot-02.prix.1]`
-200 g — 18.00 €
+200 g — 15.00 €
 
 
-### Yun Lan Estate — Xishuangbanna
+### Yun Lan Estate — Café de Xishuangbanna, Yunnan
 
 **Nom** `[produit.yun-lan-estate.nom]`
 Yun Lan Estate
 
 **Sous-titre** `[produit.yun-lan-estate.sousTitre]`
-Xishuangbanna
+Café de Xishuangbanna, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.yun-lan-estate.accroche]`
 Pamplemousse, prune rouge, thé noir.
 
 **Description** `[produit.yun-lan-estate.description]`
-Du Pacamara cultivé entre 1 600 et 1 800 mètres, traité en lavé traditionnel : rien pour masquer, rien pour ajouter. Ce qui reste, c’est la variété et l’altitude — une acidité de pamplemousse, une chair de prune rouge, et une longueur de thé noir qui tient bien après la tasse.
+Du Pacamara cultivé entre 1600 et 1800 mètres, traité en lavé traditionnel : naturel, rien pour masquer, rien pour ajouter. Ce qui reste, c’est la variété et l’altitude — une acidité de pamplemousse, une chair de prune rouge, et une longueur de thé noir qui tient après la tasse.
 
 **Histoire du lot** `[produit.yun-lan-estate.histoire]`
-Le Pacamara est une variété encombrante : de grands arbres, de très gros grains, peu de rendement, et une sensibilité qui décourage la plupart des exploitations. Il en existe encore peu au Yunnan. Ce lot est le plus cher que nous proposons, et c’est aussi le seul dont nous savons, chaque année, qu’il partira avant les autres.
+Le Pacamara est une variété encombrante : de grands arbres, de très gros grains, peu de rendement, et une sensibilité qui décourage la plupart des exploitations. Il en existe peu au Yunnan. Ce lot est le plus cher que nous proposons, et c’est aussi le seul dont nous savons qu’il partira avant les autres.
 
 **Fiche : origine** `[produit.yun-lan-estate.origine]`
 Yunnan, Chine — Xishuangbanna
 
 **Fiche : altitude** `[produit.yun-lan-estate.altitude]`
-1 600 – 1 800 m
+1600 – 1800 m
 
 **Fiche : variété** `[produit.yun-lan-estate.variete]`
 Pacamara
@@ -370,7 +374,7 @@ Lits africains surélevés
 Filtre
 
 **Conseils de préparation** `[produit.yun-lan-estate.preparation]`
-Filtre : 15 g pour 250 ml, eau à 94 °C. Mouture un cran plus grossière que d’habitude — le Pacamara donne beaucoup, vite.
+Filtre : 15 g pour 250 ml, eau à 93 °C. Mouture un cran plus grossière que d’habitude — le Pacamara donne beaucoup, rapidement.
 
 **Ferme : nom** `[produit.yun-lan-estate.ferme.nom]`
 Yun Lan Estate
@@ -379,37 +383,38 @@ Yun Lan Estate
 Xishuangbanna, Yunnan
 
 **Ferme : présentation** `[produit.yun-lan-estate.ferme.texte]`
-Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1 600 et 1 800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
+Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1600 et 1800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
+Créée en 1999 par Zhang Hongjun, cette ferme est l’une des plus anciennes fermes de spécialité du Yunnan. Elle cultive plus de 20 variétés (Geisha, Pacamara, Typica pourpre, sélections locales) avec une approche patiente, artisanale et plutôt traditionnelle (lavé, naturel, honey). Ses cafés sont connus pour leur acidité lumineuse et douce, leurs arômes d’agrumes, de baies, de prune et de thé noir, et leur grande finesse.
 
 **Format et prix** `[produit.yun-lan-estate.prix.1]`
-200 g — 22.00 €
+200 g — 17.00 €
 
 
-### Drip Bags — Boîte de 8 — Assemblage de saison
+### Drip Bags — Boîte de 8 — Catimor et Bourbon
 
 **Nom** `[produit.drip-bags-x8.nom]`
 Drip Bags — Boîte de 8
 
 **Sous-titre** `[produit.drip-bags-x8.sousTitre]`
-Assemblage de saison
+Catimor et Bourbon
 
 **Accroche (une phrase, sous le prix)** `[produit.drip-bags-x8.accroche]`
-Un filtre propre, partout, en trois minutes.
+Un filtre individuel de café du Yunnan à emporter partout.
 
 **Description** `[produit.drip-bags-x8.description]`
-Huit sachets filtres individuels de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. L’assemblage de saison réunit le honey de Torch Estate et le lavé de Gaoshen : du corps, du fruit, et assez de douceur pour se passer de sucre.
+Huit sachets filtres individuels de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. L’assemblage de saison réunit quatre Catimor et quatre Bourbon jaune de la ferme Gaosheng : de la légèreté et assez de douceur pour se passer de sucre.
 
 **Histoire du lot** `[produit.drip-bags-x8.histoire]`
-Pensés pour le bureau, le train et les matins pressés — sans jamais renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, aucun matériel.
+Pensés pour le bureau, les voyages ou les matins pressés — sans jamais renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, savourez.
 
 **Fiche : origine** `[produit.drip-bags-x8.origine]`
-Yunnan, Chine — Pu’er & Baoshan
+Yunnan, Chine — Baoshan
 
 **Fiche : altitude** `[produit.drip-bags-x8.altitude]`
-1 300 – 1 750 m
+1300 – 1850 m
 
 **Fiche : variété** `[produit.drip-bags-x8.variete]`
-Catimor
+Catimor et Bourbon Jaune
 
 **Fiche : process** `[produit.drip-bags-x8.process]`
 Honey & lavé
@@ -427,55 +432,55 @@ Lits africains surélevés
 Filtre
 
 **Conseils de préparation** `[produit.drip-bags-x8.preparation]`
-Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.
+Posez le sachet sur le mug, versez 30 ml à 90 °C pour humidifier, attendez 30 secondes, puis complétez à 120 - 150 ml en deux versements.
 
 **Contenu, ligne 1** `[produit.drip-bags-x8.contenu.1]`
-8 sachets filtres de 10 g
+4x2 sachets filtres de 10 g
 
 **Contenu, ligne 2** `[produit.drip-bags-x8.contenu.2]`
-Assemblage de saison, moulu du jour
+Variétés Catimor et Bourbon Jaune
 
 **Contenu, ligne 3** `[produit.drip-bags-x8.contenu.3]`
-Boîte recyclable
+Boîte et sachets recyclables
 
 **Ferme : nom** `[produit.drip-bags-x8.ferme.nom]`
-Torch Estate
+Gaosheng Manor
 
 **Ferme : lieu** `[produit.drip-bags-x8.ferme.lieu]`
-Pu’er, Yunnan
+Baoshan, Yunnan
 
 **Ferme : présentation** `[produit.drip-bags-x8.ferme.texte]`
-Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1 450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot.01 en fermentation anaérobie double, le Lot.02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
 
 **Format et prix** `[produit.drip-bags-x8.prix.1]`
-Boîte de 8 — 14.00 €
+Boîte de 8 — 16.50 €
 
 
-### Drip Bags — Composez votre boîte — Ferme de Gaoshen, Baoshan
+### Drip Bags — Composez votre boîte — Ferme de Gaosheng, Baoshan
 
 **Nom** `[produit.drip-bags-a-composer.nom]`
 Drip Bags — Composez votre boîte
 
 **Sous-titre** `[produit.drip-bags-a-composer.sousTitre]`
-Ferme de Gaoshen, Baoshan
+Ferme de Gaosheng, Baoshan
 
 **Accroche (une phrase, sous le prix)** `[produit.drip-bags-a-composer.accroche]`
-Huit sachets, deux variétés, votre choix.
+Huit sachets, deux variétés au choix.
 
 **Description** `[produit.drip-bags-a-composer.description]`
-Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaoshen : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d’une seule, ou quatre de chaque pour les comparer tasse après tasse.
+Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaosheng : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d’une seule, ou quatre de chaque pour les comparer tasse après tasse.
 
 **Histoire du lot** `[produit.drip-bags-a-composer.histoire]`
 Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C’est la comparaison la plus honnête que l’on puisse proposer, et la plus instructive. La plupart des gens ne s’entendent pas dire « je préfère le Bourbon jaune » avant d’avoir bu les deux à la suite.
 
 **Fiche : origine** `[produit.drip-bags-a-composer.origine]`
-Yunnan, Chine — Gaoshen, Baoshan
+Yunnan, Chine — Gaosheng, Baoshan
 
 **Fiche : altitude** `[produit.drip-bags-a-composer.altitude]`
-1 550 – 1 750 m
+1300 – 1850 m
 
 **Fiche : variété** `[produit.drip-bags-a-composer.variete]`
-Catimor ou Bourbon jaune
+Catimor et / ou Bourbon jaune
 
 **Fiche : process** `[produit.drip-bags-a-composer.process]`
 Lavé traditionnel
@@ -493,34 +498,34 @@ Lits africains surélevés, 14 jours
 Filtre
 
 **Conseils de préparation** `[produit.drip-bags-a-composer.preparation]`
-Posez le sachet sur la tasse, versez 30 ml pour humidifier, attendez 30 secondes, puis complétez à 180 ml en deux versements.
+Posez le sachet sur le mug, versez 30 ml à 90 °C pour humidifier, attendez 30 secondes, puis complétez à 120 - 150 ml en deux versements.
 
 **Contenu, ligne 1** `[produit.drip-bags-a-composer.contenu.1]`
-8 sachets filtres de 10 g, moulus du jour
+8 sachets filtres de 10 g
 
 **Contenu, ligne 2** `[produit.drip-bags-a-composer.contenu.2]`
-Une seule ferme, une seule récolte
+Variétés Catimor et / ou Bourbon Jaune
 
 **Contenu, ligne 3** `[produit.drip-bags-a-composer.contenu.3]`
-Boîte recyclable
+Boîte et sachets recyclables
 
 **Ferme : nom** `[produit.drip-bags-a-composer.ferme.nom]`
-Ferme de Gaoshen
+Ferme de Gaosheng
 
 **Ferme : lieu** `[produit.drip-bags-a-composer.ferme.lieu]`
 Baoshan, Yunnan
 
 **Ferme : présentation** `[produit.drip-bags-a-composer.ferme.texte]`
-À Gaoshen, sur les hauteurs de Baoshan, une même exploitation conduit côte à côte deux variétés que tout oppose en tasse. Le Catimor occupe les parcelles basses, plus exposées ; le Bourbon jaune, plus fragile et deux fois moins productif, est réservé aux terrasses hautes. Les deux sont récoltés, lavés et séchés exactement de la même manière — c’est ce qui rend la comparaison possible.
+La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
 
 **Format et prix** `[produit.drip-bags-a-composer.prix.1]`
 8 × Catimor — 15.00 €
 
 **Format et prix** `[produit.drip-bags-a-composer.prix.2]`
-8 × Bourbon jaune — 15.00 €
+8 × Bourbon jaune — 18.00 €
 
 **Format et prix** `[produit.drip-bags-a-composer.prix.3]`
-4 × Catimor + 4 × Bourbon jaune — 15.00 €
+4 × Catimor + 4 × Bourbon jaune — 16.50 €
 
 
 ### Coffret Découverte — 3 × 200 g + 1 boîte de drip bags
@@ -532,22 +537,22 @@ Coffret Découverte
 3 × 200 g + 1 boîte de drip bags
 
 **Accroche (une phrase, sous le prix)** `[produit.coffret-decouverte.accroche]`
-Les trois lots, plus les drip bags.
+Nos trois cafés du Yunnan, avec les drip bags.
 
 **Description** `[produit.coffret-decouverte.description]`
-Le meilleur moyen de comprendre notre gamme : les deux honey de Torch Estate — anaérobie double et traditionnel — le lavé de Yun Lan Estate en Pacamara, et une boîte de huit drip bags pour emporter la dégustation avec vous.
+Le meilleur moyen de comprendre nos cafés du Yunnan : deux honey de Torch Estate — anaérobie double et traditionnel — le lavé de Yun Lan Estate en Pacamara, et une boîte de huit drip bags de Gaosheng pour emporter un peu de Yunnan partout avec vous.
 
 **Histoire du lot** `[produit.coffret-decouverte.histoire]`
-Deux fermes, deux terroirs, trois traitements, une même saison. Dégustez-les côte à côte : c’est là que le travail se lit le plus clairement — ce que change une fermentation, ce que change une variété. Le coffret est accompagné d’une fiche de dégustation.
+Une ferme, un terroir, deux variétés. Dégustez-les côte à côte : c’est là que le travail se lit le plus clairement — ce que change une fermentation, ce que change une variété. Le coffret est accompagné d’une fiche de dégustation.
 
 **Fiche : origine** `[produit.coffret-decouverte.origine]`
-Yunnan, Chine — Pu’er & Xishuangbanna
+Yunnan, Chine — Pu’er, Baoshan & Xishuangbanna
 
 **Fiche : altitude** `[produit.coffret-decouverte.altitude]`
-1 300 – 1 800 m
+1300 –1800 m
 
 **Fiche : variété** `[produit.coffret-decouverte.variete]`
-Catimor, Pacamara
+Catimor, Pacamara et Bourbon jaune
 
 **Fiche : process** `[produit.coffret-decouverte.process]`
 Honey anaérobie, honey, lavé
@@ -568,10 +573,10 @@ Filtre & espresso
 Commencez par le Lot.02, puis le Lot.01, terminez par le Yun Lan : du plus rond au plus vif.
 
 **Contenu, ligne 1** `[produit.coffret-decouverte.contenu.1]`
-Torch Estate, Lot.01 — 200 g
+Torch Estate, Lot 01 — 200 g
 
 **Contenu, ligne 2** `[produit.coffret-decouverte.contenu.2]`
-Torch Estate, Lot.02 — 200 g
+Torch Estate, Lot 02 — 200 g
 
 **Contenu, ligne 3** `[produit.coffret-decouverte.contenu.3]`
 Yun Lan Estate — 200 g
@@ -580,7 +585,7 @@ Yun Lan Estate — 200 g
 Drip Bags — boîte de 8
 
 **Contenu, ligne 5** `[produit.coffret-decouverte.contenu.5]`
-Fiche de dégustation
+Fiches de dégustation
 
 **Ferme : nom** `[produit.coffret-decouverte.ferme.nom]`
 Yun Lan Estate
@@ -589,10 +594,11 @@ Yun Lan Estate
 Xishuangbanna, Yunnan
 
 **Ferme : présentation** `[produit.coffret-decouverte.ferme.texte]`
-Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1 600 et 1 800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
+Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1600 et 1800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
+Créée en 1999 par Zhang Hongjun, cette ferme est l’une des plus anciennes fermes de spécialité du Yunnan. Elle cultive plus de 20 variétés (Geisha, Pacamara, Typica pourpre, sélections locales) avec une approche patiente, artisanale et plutôt traditionnelle (lavé, naturel, honey). Ses cafés sont connus pour leur acidité lumineuse et douce, leurs arômes d’agrumes, de baies, de prune et de thé noir, et leur grande finesse.
 
 **Format et prix** `[produit.coffret-decouverte.prix.1]`
-Coffret complet — 66.00 €
+Coffret complet — 60.00 €
 
 
 ## Page « Origine » (terroir, histoire et savoir-faire)
@@ -603,60 +609,60 @@ Coffret complet — 66.00 €
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[origine.seoTitle]`
-Origine, histoire et savoir-faire — Yunma, cafés du Yunnan
+Origine, histoire et savoir-faire — Yunma, cafés de spécialité du Yunnan
 
 **Description affichée dans Google (≈ 155 signes)** `[origine.seoDescription]`
-Le Yunnan et ses terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.
+Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.
 
 
 ### En-tête
 
 **Sur-titre** `[origine.label]`
-Notre origine
+À l’origine,
 
 **Titre** `[origine.title]`
-Le Yunnan.
-Notre terre.
-Notre inspiration.
+le Yunnan.
+Un terroir.
+Une philosophie.
 
 **Introduction** `[origine.intro]`
-Le Yunnan produit plus de 95 % du café chinois. Longtemps vendu en commodité, il révèle depuis quelques années des tasses d’une finesse rare, portées par une nouvelle génération de producteurs.
+Le Yunnan produit plus de 95 % du café chinois. La Chine n’exporte que 5 % de sa production aux marchés extérieurs. Des cafés rares et d’une grande finesse portés par une nouvelle génération de producteurs.
 
 
-### Bloc 1 — Une montagne, trois vallées
+### Bloc 1 — Ses montagnes, ses terroirs
 
 **Sur-titre** `[origine.bloc.1.surTitre]`
-Le terroir
+La région
 
 **Titre** `[origine.bloc.1.titre]`
-Une montagne, trois vallées
+Ses montagnes, ses terroirs
 
 **Texte** `[origine.bloc.1.texte]`
-Nos parcelles se situent entre 1 300 et 1 800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches ralentissent la maturation des cerises et concentrent les sucres : c’est ce qui donne au Yunnan cette tasse ronde, à la fois florale et cacaotée.
+Les terroirs de café se situent entre 1300 et 1800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches en altitude ralentissent la maturation des cerises de café et concentrent leurs sucres : c’est ce qui donne au Yunnan ces cafés distinctifs.
 
 
-### Bloc 2 — Des relations directes, année après année
+### Bloc 2 — Des relations humaines, une philosophie de vie
 
 **Sur-titre** `[origine.bloc.2.surTitre]`
 Les fermes
 
 **Titre** `[origine.bloc.2.titre]`
-Des relations directes, année après année
+Des relations humaines, une philosophie de vie
 
 **Texte** `[origine.bloc.2.texte]`
-Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons en direct, à un prix supérieur au marché, et nous nous engageons sur plusieurs récoltes afin que chacune puisse investir dans ses parcelles et ses infrastructures de séchage.
+Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons à un prix supérieur au marché, et nous nous engageons afin que chacune puisse perpétuer dans ses parcelles et ses infrastructures de cafés de spécialité.
 
 
-### Bloc 3 — De novembre à mars
+### Bloc 3 — De décembre à mars
 
 **Sur-titre** `[origine.bloc.3.surTitre]`
 La saison
 
 **Titre** `[origine.bloc.3.titre]`
-De novembre à mars
+De décembre à mars
 
 **Texte** `[origine.bloc.3.texte]`
-La récolte s’étale sur quatre mois. Les cerises sont cueillies à la main, à pleine maturité, puis triées le jour même. Les lots arrivent en France au printemps et sont torréfiés au fil de l’année, jamais stockés au-delà de la saison suivante.
+La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées le jour même. Les lots arrivent en France au printemps pour être torréfiés tout au long de l’année.
 
 
 ### Citation et terroirs
@@ -677,7 +683,7 @@ Baoshan
 1 550 – 1 750 m · Catimor et Bourbon jaune
 
 **Terroir 1 : texte** `[origine.terroir.1.texte]`
-Les hauteurs de Gaoshen, où une même exploitation conduit deux variétés côte à côte. C’est de là que viennent nos drip bags.
+Les hauteurs de Gaosheng, où une même exploitation conduit deux variétés côte à côte. C’est de là que viennent nos drip bags.
 
 **Terroir 2 : nom** `[origine.terroir.2.nom]`
 Pu’er
@@ -1129,7 +1135,7 @@ Nous torréfions chaque semaine, en petites séries. Votre commande part sous 48
 Quels sont les délais de livraison ?
 
 **Réponse** `[faq.2.reponse]`
-France : 2 à 3 jours ouvrés via Colissimo ou Mondial Relay. Union européenne : 3 à 6 jours ouvrés. Livraison offerte à partir de 45 € d’achat en France métropolitaine.
+France : 2 à 3 jours ouvrés via Colissimo ou Mondial Relay. Union européenne : 3 à 6 jours ouvrés. Livraison offerte à partir de 50 € d’achat en France métropolitaine.
 
 
 ### Question 3
@@ -1382,7 +1388,7 @@ Livraison
 Les commandes sont préparées sous 48 heures ouvrées après la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.
 
 **Paragraphe 2** `[cgv.4.paragraphe.2]`
-La livraison est offerte à partir de 45 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis.
+La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis.
 
 
 ### 5. Droit de rétractation
@@ -1462,7 +1468,7 @@ Ajouter au panier
 Torréfié à la commande, chaque semaine
 
 **Mention d’expédition** `[produit.expedition]`
-Expédié sous 48 h — livraison offerte dès 45 €
+Expédié sous 48 h — livraison offerte dès 50 €
 
 **Titre « À propos de ce café »** `[produit.aProposTitre]`
 À propos de ce café

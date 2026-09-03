@@ -142,7 +142,7 @@ export const cgv: LegalDoc = {
       title: 'Livraison',
       body: [
         'Les commandes sont préparées sous 48 heures ouvrées après la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.',
-        'La livraison est offerte à partir de 45 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis.',
+        'La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis.',
       ],
     },
     {
@@ -190,7 +190,7 @@ export const cgv: LegalDoc = {
       title: 'Delivery',
       body: [
         'Orders are prepared within 48 business hours of the closest roast. Indicative times: 2 to 3 business days in France, 3 to 6 business days within the European Union.',
-        'Delivery is free from €45 within mainland France. Risk transfers on handover of the parcel.',
+        'Delivery is free from €50 within mainland France. Risk transfers on handover of the parcel.',
       ],
     },
     {
@@ -236,7 +236,7 @@ export const cgv: LegalDoc = {
       title: '配送',
       body: [
         '订单在最近一次烘焙后的 48 个工作小时内备货。参考时效：法国境内 2 至 3 个工作日，欧盟 3 至 6 个工作日。',
-        '法国本土满 45 欧元免运费。风险自包裹交付时转移。',
+        '法国本土满 50 欧元免运费。风险自包裹交付时转移。',
       ],
     },
     {

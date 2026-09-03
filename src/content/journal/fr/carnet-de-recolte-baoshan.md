@@ -1,6 +1,6 @@
 ---
 title: 'Carnet de récolte : trois semaines à Baoshan'
-description: "Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaoshen, notre partenaire à Baoshan."
+description: "Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaosheng, notre partenaire à Baoshan."
 date: 2025-02-18
 author: Yunma
 tags: ['Yunnan', 'Récolte', 'Voyage']
@@ -11,7 +11,7 @@ Nous sommes arrivés à Baoshan le premier jour de février, au milieu de la ré
 
 ## La cueillette, passage après passage
 
-Sur les terrasses hautes de Gaoshen, plantées en Bourbon jaune, on ne récolte pas un arbre en une fois. On y revient tous les dix jours, pour ne prendre que les cerises rouge profond. C'est plus long, plus coûteux, et c'est la seule manière d'obtenir une tasse homogène : une cerise verte, et l'amertume s'installe dans tout le lot.
+Sur les terrasses hautes de Gaosheng, plantées en Bourbon jaune, on ne récolte pas un arbre en une fois. On y revient tous les dix jours, pour ne prendre que les cerises rouge profond. C'est plus long, plus coûteux, et c'est la seule manière d'obtenir une tasse homogène : une cerise verte, et l'amertume s'installe dans tout le lot.
 
 Une cueilleuse expérimentée ramasse entre 60 et 80 kilos de cerises par jour. Il en faut cinq à six kilos pour obtenir un kilo de café vert, et six kilos de café vert pour cinq kilos de café torréfié.
 

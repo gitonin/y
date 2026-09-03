@@ -221,9 +221,11 @@ const jsonld = [
         <thead>
           <tr>
             <th scope="col">{t.savoirFaire.brewMethod}</th>
-            <th scope="col">Ratio</th>
-            <th scope="col">T°</th>
-            <th scope="col">⏱</th>
+            <th scope="col">{t.savoirFaire.brewRatio}</th>
+            <th scope="col">{t.savoirFaire.brewTemp}</th>
+            <th scope="col" class="brews__time">
+              <Icon name="timer" size={15} label={t.savoirFaire.brewTime} />
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -542,6 +544,12 @@ const jsonld = [
     padding: 0.9rem 0.75rem 0.9rem 0;
     border-bottom: 1px solid var(--line);
     font-weight: var(--w-regular);
+  }
+
+  .brews__time :global(svg) {
+    display: inline-block;
+    vertical-align: -0.24em;
+    color: var(--ink-50);
   }
 
   .brews thead th {

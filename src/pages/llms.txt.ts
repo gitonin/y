@@ -24,7 +24,7 @@ export const GET: APIRoute = async ({ site }) => {
     '',
     `> ${t.home.seoDescription}`,
     '',
-    "Yunma est un torréfacteur français spécialisé dans les cafés de spécialité du Yunnan (Chine). La marque achète en direct auprès de trois fermes partenaires — Torch Estate à Pu'er, Yun Lan Estate à Xishuangbanna et la ferme de Gaoshen à Baoshan — entre 1 300 et 1 800 mètres d'altitude, et torréfie en petites séries. Le site est disponible en français, anglais et chinois simplifié. Le paiement et l'expédition sont opérés par Shopify.",
+    "Yunma est un torréfacteur français spécialisé dans les cafés de spécialité du Yunnan (Chine). La marque achète en direct auprès de trois fermes partenaires — Torch Estate à Pu'er, Yun Lan Estate à Xishuangbanna et la ferme de Gaosheng à Baoshan — entre 1 300 et 1 800 mètres d'altitude, et torréfie en petites séries. Le site est disponible en français, anglais et chinois simplifié. Le paiement et l'expédition sont opérés par Shopify.",
     '',
     '## Informations clés',
     '',

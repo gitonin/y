@@ -181,7 +181,12 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
         <span class="label">{t.product.farmTitle}</span>
         <h2 class="farm__name">{product.farm.name}</h2>
         <p class="small muted farm__place">{product.farm.place[lang]}</p>
-        <p class="muted farm__body">{product.farm.text[lang]}</p>
+        {
+          /* Le texte de la ferme peut tenir en plusieurs paragraphes. */
+          product.farm.text[lang].split('\n').map((paragraphe) => (
+            <p class="muted farm__body">{paragraphe}</p>
+          ))
+        }
       </div>
     </section>
 
