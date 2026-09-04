@@ -1,3 +1,5 @@
+import type { PhotoName } from './photos';
+
 export type Lang = 'fr' | 'en' | 'zh';
 export type L = Record<Lang, string>;
 
@@ -44,7 +46,7 @@ export type Product = {
     name: string;
     place: L;
     text: L;
-    photo: 'recolte-cueilleurs' | 'cretes-brumeuses' | 'cerises-branche' | 'sechage-lits' | 'tabouret-terrasse';
+    photo: PhotoName;
   };
   related: string[];
 };
@@ -58,7 +60,7 @@ const torchEstate = {
     en: 'Torch Estate farms its plots in the hills of Pu’er, at around 1,450 metres. Both our honey lots come from this same farm: Lot 01 in double anaerobic fermentation, Lot 02 in traditional honey. Same soil, same variety, two processes — and two cups with almost nothing in common.\nFounded in 2014, Torch Coffee settled directly on the growing land, in close partnership with local producers. Their model rests on co-creation rather than aid: they work with farmers to develop varieties (Catimor in particular) and to trial low-water processing methods.\nTorch Estate is part of what they call the “Mountain Man Project”, a programme to convert farms once geared to the commodity trade towards specialty coffee, with technical support and a better return.',
     zh: '火炬庄园（Torch Estate）的地块位于普洱丘陵地带，海拔约 1450 米。我们两支蜜处理批次都来自这座农场：Lot 01 采用双重厌氧发酵，Lot 02 为传统蜜处理。同一片土地、同一个品种、两种处理法——两杯几乎毫无共同之处的咖啡。\n火炬咖啡（Torch Coffee）成立于 2014 年，直接扎根产区，与当地咖农紧密合作。他们的模式不是援助，而是共创：与农户一起选育品种（尤其是卡蒂姆），并试验低耗水的处理方式。\n火炬庄园属于他们所称的「Mountain Man Project」——一个把过去面向大宗贸易的农场转向精品咖啡生产的计划，提供技术支持，也带来更好的收益。',
   },
-  photo: 'recolte-cueilleurs',
+  photo: 'ferme-torch-estate',
 } as const;
 
 const yunLanEstate = {
@@ -69,7 +71,7 @@ const yunLanEstate = {
     en: 'Yun Lan Estate sits in Xishuangbanna, at the far south of Yunnan, between 1,600 and 1,800 metres — the highest plots we work with. The farm grows Pacamara there, a rare variety, low-yielding and demanding, processed with a traditional washed method.\nFounded in 1999 by Zhang Hongjun, it is one of the oldest specialty farms in Yunnan. It grows more than 20 varieties (Geisha, Pacamara, purple Typica, local selections) with a patient, hands-on and rather traditional approach (washed, natural, honey). Its coffees are known for their bright, gentle acidity, their citrus, berry, plum and black-tea aromas, and their great finesse.',
     zh: '云澜庄园（Yun Lan Estate）位于云南最南端的西双版纳，海拔 1600 至 1800 米，是我们合作地块中最高的一处。农场在此种植帕卡马拉：产量低、管理难，采用传统水洗处理。\n庄园由张宏军于 1999 年创立，是云南最早的精品咖啡农场之一。园内种有 20 多个品种（瑰夏、帕卡马拉、紫叶铁皮卡、本地选育等），处理方式耐心而传统（水洗、日晒、蜜处理）。其咖啡以明亮柔和的酸质，柑橘、莓果、李子与红茶的香气，以及细腻的口感著称。',
   },
-  photo: 'cretes-brumeuses',
+  photo: 'ferme-yun-lan-estate',
 } as const;
 
 const gaosheng = {
@@ -80,7 +82,7 @@ const gaosheng = {
     en: 'Gaosheng Manor, founded in 1956, is often described as the first coffee plantation in China dedicated to quality Arabica. The farm grows mainly Catimor (and a little Typica, the local “Blue Mountain”) between 1,500 and 1,850 metres, in the hot, dry valley of the Nu river, near the Myanmar border.',
     zh: '高神庄园（Gaosheng Manor）创立于 1956 年，常被视为中国第一座专注优质阿拉比卡的咖啡种植园。农场主要种植卡蒂姆（也有少量铁皮卡，即当地的「蓝山」），海拔 1500 至 1850 米，位于靠近缅甸边境、干热的怒江河谷。',
   },
-  photo: 'sechage-lits',
+  photo: 'ferme-gaosheng',
 } as const;
 
 export const products: Product[] = [

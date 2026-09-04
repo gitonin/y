@@ -1,0 +1,38 @@
+---
+/**
+ * Poinçon de la marque, posé seul entre deux blocs de texte pour marquer un
+ * changement de propos. Il remplace le filet horizontal : à réserver aux
+ * passages d'un contenu écrit à un autre, jamais juste avant ou juste après
+ * une image, qui rythme déjà la page à elle seule.
+ */
+import { asset } from '../i18n/utils';
+
+interface Props {
+  /** Resserre les marges quand la respiration de la section suffit déjà. */
+  tight?: boolean;
+  class?: string;
+}
+const { tight = false, class: className = '' } = Astro.props;
+---
+
+<div class:list={['poincon', tight && 'poincon--tight', className]} aria-hidden="true">
+  <img src={asset('brand/yunma-poincon.svg')} alt="" width="285" height="285" loading="lazy" />
+</div>
+
+<style>
+  .poincon {
+    display: grid;
+    place-items: center;
+    margin-block: clamp(2.75rem, 7vw, 5rem);
+  }
+
+  .poincon--tight {
+    margin-block: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .poincon img {
+    width: clamp(22px, 3.4vw, 30px);
+    height: auto;
+    opacity: 0.72;
+  }
+</style>

@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
+import Poincon from '../../components/Poincon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, type Lang } from '../../i18n/utils';
 import { cgv } from '../../data/legal';
@@ -18,6 +19,8 @@ const sections = cgv[lang];
 
   <div class="wrap wrap--narrow legal">
     <p class="small muted legal__note">{t.legal.placeholder}</p>
+
+    <Poincon tight />
     {
       sections.map((section) => (
         <section class="legal__section" data-reveal>

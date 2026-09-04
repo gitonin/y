@@ -7,7 +7,7 @@
  * au moment où l'animation reboucle.
  */
 import type { Lang } from '../i18n/utils';
-import { useTranslations } from '../i18n/utils';
+import { useTranslations, asset } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
@@ -17,10 +17,14 @@ const t = useTranslations(lang);
 
 /* Assez de répétitions pour couvrir les très larges écrans sans laisser de vide. */
 const motifs = Array.from({ length: 10 });
+/* Le lettrage de la signature est fourni tracé : l'étoile et la typographie
+   sont celles de la marque, identiques d'une langue à l'autre. */
+const signe = asset('brand/yunma-signature.svg');
+const lecture = `${t.common.signatureStart} — ${t.common.signatureEnd}`;
 ---
 
 <div class="sig">
-  <p class="visually-hidden">{t.common.signatureStart} — {t.common.signatureEnd}</p>
+  <p class="visually-hidden">{lecture}</p>
 
   <div class="sig__piste" aria-hidden="true">
     {
@@ -28,14 +32,7 @@ const motifs = Array.from({ length: 10 });
         <div class="sig__groupe">
           {motifs.map(() => (
             <span class="sig__motif">
-              {t.common.signatureStart}
-              <svg class="sig__etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path
-                  d="M12 1.5c.35 7.4 3.1 10.15 10.5 10.5-7.4.35-10.15 3.1-10.5 10.5-.35-7.4-3.1-10.15-10.5-10.5 7.4-.35 10.15-3.1 10.5-10.5Z"
-                  fill="currentColor"
-                />
-              </svg>
-              {t.common.signatureEnd}
+              <img class="sig__signe" src={signe} alt="" width="1118" height="157" loading="lazy" />
             </span>
           ))}
         </div>
@@ -72,21 +69,20 @@ const motifs = Array.from({ length: 10 });
   .sig__motif {
     display: inline-flex;
     align-items: center;
-    /* L'étoile sépare les deux moitiés de la phrase ; un large blanc sépare
-       les répétitions entre elles. */
-    gap: clamp(0.9rem, 2vw, 1.5rem);
+    /* Un large blanc sépare les répétitions entre elles. */
     padding-right: clamp(4rem, 9vw, 9rem);
     font-size: clamp(1.05rem, 0.85rem + 0.7vw, 1.5rem);
     line-height: 1.2;
     white-space: nowrap;
-    color: var(--ink);
   }
 
-  .sig__etoile {
+  /* Le lettrage est un tracé, pas du texte : sa hauteur totale dépasse celle
+     des capitales, d'où le rapport appliqué au corps de référence. */
+  .sig__signe {
     flex: none;
-    width: 0.82em;
-    height: 0.82em;
     display: block;
+    height: 1.34em;
+    width: auto;
   }
 
   @keyframes defiler {

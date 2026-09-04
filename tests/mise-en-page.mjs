@@ -212,7 +212,7 @@ titre('La signature défile en bas de chaque page');
         const base = document.querySelector('.ft__base');
         return sig && piste && base ? {
           groupes: groupes.length,
-          identiques: groupes[0]?.innerText === groupes[1]?.innerText,
+          identiques: groupes[0]?.innerHTML === groupes[1]?.innerHTML,
           groupePlusLargeQueLEcran: groupes[0].getBoundingClientRect().width > window.innerWidth,
           avantLeCopyright: !!(sig.compareDocumentPosition(base) & Node.DOCUMENT_POSITION_FOLLOWING),
           debordement: document.documentElement.scrollWidth > window.innerWidth,
@@ -234,17 +234,20 @@ titre('La signature défile en bas de chaque page');
     const vitesse = (avant - apres) / 2;
     check(`${appareil} — défile vers la gauche à ${vitesse.toFixed(0)} px/s (entre 18 et 35)`, vitesse > 18 && vitesse < 35, true);
 
-    /* Une seule étoile, entre les deux moitiés de la phrase ; les répétitions
+    /* Le lettrage fourni par la marque, une fois par motif ; les répétitions
        sont séparées par un large blanc. */
     const motif = await pg.evaluate(() => {
       const m = document.querySelector('.sig__motif');
+      const signe = m.querySelector('.sig__signe');
       return {
-        etoiles: m.querySelectorAll('svg').length,
+        signes: m.querySelectorAll('.sig__signe').length,
+        vectoriel: !!signe && signe.getAttribute('src').endsWith('.svg') && signe.naturalWidth > 0,
         blanc: parseFloat(getComputedStyle(m).paddingRight),
         texte: parseFloat(getComputedStyle(m).fontSize),
       };
     });
-    check(`${appareil} — une seule étoile par motif`, motif.etoiles, 1);
+    check(`${appareil} — un seul lettrage par motif`, motif.signes, 1);
+    check(`${appareil} — le lettrage est le SVG de la marque, bien chargé`, motif.vectoriel, true);
     check(`${appareil} — le blanc entre motifs dépasse deux cadratins (${motif.blanc.toFixed(0)} px)`, motif.blanc > motif.texte * 2, true);
     await pg.close();
   }
@@ -265,6 +268,16 @@ titre('La signature défile en bas de chaque page');
   }));
   check('le texte est annoncé une seule fois', lecture.annonce, 'Slow Coffee — Slow Life');
   check('les répétitions sont masquées aux lecteurs d’écran', lecture.masquee, 'true');
+
+  /* Le logo est désormais vectoriel, à l'identique en taille. */
+  const logos = await calme.evaluate(() =>
+    [...document.querySelectorAll('.hd__logo img, .ft__logo img')].map((i) => ({
+      svg: i.getAttribute('src').endsWith('.svg'),
+      charge: i.naturalWidth > 0,
+    })),
+  );
+  check('les logos sont vectoriels', logos.length > 0 && logos.every((l) => l.svg), true);
+  check('les logos sont bien chargés', logos.every((l) => l.charge), true);
 
   /* Le logo du pied de page a été agrandi de moitié : 54 px à l'origine. */
   const hauteurLogo = await calme.evaluate(() => Math.round(document.querySelector('.ft__logo img').getBoundingClientRect().height));

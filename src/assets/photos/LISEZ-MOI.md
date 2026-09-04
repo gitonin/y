@@ -22,24 +22,20 @@ d'autre n'est à modifier.
 | `sechage-lits.jpg`         | Séchage sur lits surélevés en bambou               | Origine                                 |
 | `tabouret-terrasse.jpg`    | Nature morte, terrasse face aux montagnes          | Pro, bloc de fin de page                |
 
-## Fermes et producteurs — à ajouter
+## Fermes et producteurs
 
-Une photo par ferme, et si vous en avez, un portrait du producteur. Ces
-images viendront illustrer la ferme sur chaque fiche produit, à la place des
-photos d'ambiance qui y servent aujourd'hui de solution d'attente.
+| Fichier                          | Sujet                                                          | Où elle paraît                    |
+| -------------------------------- | -------------------------------------------------------------- | --------------------------------- |
+| `ferme-torch-estate.jpg`         | Torch Estate, Pu'er                                            | Fiches Lot 01 et Lot 02           |
+| `ferme-yun-lan-estate.jpg`       | Yun Lan Estate, Xishuangbanna                                  | Fiche Yun Lan Estate              |
+| `ferme-gaosheng.jpg`             | Gaosheng Manor, Baoshan                                        | Fiches drip bags et coffret       |
+| `producteur-torch-estate.jpg`    | Les producteurs de Torch Estate                                | En réserve                        |
+| `producteur-yun-lan-estate.jpg`  | Cueilleur de Yun Lan Estate                                    | En réserve                        |
+| `producteur-gaosheng.jpg`        | Tri des cerises au dépulpeur, Gaosheng                         | En réserve                        |
 
-| Fichier                          | Sujet attendu                                                  |
-| -------------------------------- | -------------------------------------------------------------- |
-| `ferme-torch-estate.jpg`         | Torch Estate, Pu'er — parcelles, séchage ou bâtiment de ferme  |
-| `ferme-yun-lan-estate.jpg`       | Yun Lan Estate, Xishuangbanna — vue de la ferme                |
-| `ferme-gaosheng.jpg`             | Gaosheng Manor, Baoshan — vue de la ferme                      |
-| `producteur-torch-estate.jpg`    | Portrait du producteur de Torch Estate, au travail             |
-| `producteur-yun-lan-estate.jpg`  | Portrait du producteur de Yun Lan Estate                       |
-| `producteur-gaosheng.jpg`        | Portrait du producteur de Gaosheng Manor                       |
-
-Un nom différent ne pose pas de problème : il suffit de préciser à quel sujet
-correspond chaque fichier. Les portraits sont facultatifs — une ferme sans
-portrait garde simplement sa photo de paysage.
+Les trois photos « ferme » illustrent le bloc *La ferme* de chaque fiche
+produit. Les trois « producteur » sont enregistrées et prêtes à servir : elles
+peuvent illustrer une section de la page Origine ou un article du journal.
 
 ## Format
 
@@ -58,3 +54,9 @@ portrait garde simplement sa photo de paysage.
 
 N'envoyez que des images dont vous détenez les droits, ou dont la licence
 autorise un usage commercial. Précisez le crédit à porter, s'il y en a un.
+
+## Éléments de marque
+
+Le fichier source du logo, de la signature et du poinçon vit dans
+`src/assets/marque/elements-yunma.svg`. Les trois éléments en sont extraits,
+un par fichier, dans `public/brand/`.

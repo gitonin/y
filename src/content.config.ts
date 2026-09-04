@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { photoNames } from './data/photos';
 
 /**
  * Journal — un dossier par langue : src/content/journal/{fr,en,zh}/mon-article.md
@@ -17,7 +18,7 @@ const journal = defineCollection({
     tags: z.array(z.string()).default([]),
     /** Photographie d'en-tête : une clé de src/data/photos.ts */
     photo: z
-      .enum(['recolte-cueilleurs', 'cretes-brumeuses', 'cerises-branche', 'sechage-lits', 'tabouret-terrasse'])
+      .enum(photoNames)
       .default('cretes-brumeuses'),
     draft: z.boolean().default(false),
   }),
