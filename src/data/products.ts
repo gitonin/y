@@ -41,6 +41,8 @@ export type Product = {
   };
   brew: L;
   includes?: L[];
+  /** Photographie d'ambiance, en pleine largeur au-dessus du récit de la fiche. */
+  ambiance: PhotoName;
   /** Ferme productrice, présentée directement sur la fiche produit. */
   farm: {
     name: string;
@@ -88,6 +90,7 @@ const gaosheng = {
 export const products: Product[] = [
   {
     slug: 'torch-estate-lot-01',
+    ambiance: 'producteur-torch-estate',
     sku: 'YUN-TORCH-01-200',
     category: 'grain',
     visual: 'bag-01',
@@ -144,6 +147,7 @@ export const products: Product[] = [
   },
   {
     slug: 'torch-estate-lot-02',
+    ambiance: 'sechage-lits',
     sku: 'YUN-TORCH-02-200',
     category: 'grain',
     visual: 'bag-03',
@@ -200,6 +204,7 @@ export const products: Product[] = [
   },
   {
     slug: 'yun-lan-estate',
+    ambiance: 'producteur-yun-lan-estate',
     sku: 'YUN-YUNLAN-200',
     category: 'grain',
     visual: 'bag-05',
@@ -256,6 +261,7 @@ export const products: Product[] = [
   },
   {
     slug: 'drip-bags-x8',
+    ambiance: 'producteur-gaosheng',
     sku: 'YUN-DRIP-8',
     category: 'drip',
     visual: 'box',
@@ -313,6 +319,7 @@ export const products: Product[] = [
   },
   {
     slug: 'drip-bags-a-composer',
+    ambiance: 'cerises-branche',
     sku: 'YUN-DRIP-COMPO',
     category: 'drip',
     visual: 'box',
@@ -396,6 +403,7 @@ export const products: Product[] = [
   },
   {
     slug: 'coffret-decouverte',
+    ambiance: 'recolte-cueilleurs',
     sku: 'YUN-SET-DEC',
     category: 'set',
     visual: 'bundle',

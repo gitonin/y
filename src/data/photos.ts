@@ -108,7 +108,8 @@ export const photos = {
       en: 'Portrait of the two Torch Estate producers in front of their coffee trees in Pu’er',
       zh: '火炬庄园两位咖农在自家咖啡树前的合影',
     },
-    position: '50% 40%',
+    /* Les visages sont hauts dans le cadre : le bandeau doit garder leur tête. */
+    position: '50% 32%',
   },
   'producteur-yun-lan-estate': {
     src: producteurYunLanEstate,

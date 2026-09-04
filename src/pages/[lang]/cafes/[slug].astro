@@ -155,6 +155,10 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
       </div>
     </div>
 
+    <figure class="media pdp__ambiance" data-reveal>
+      <Photo name={product.ambiance} lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
+    </figure>
+
     <section class="about" id="about" data-reveal>
       <h2 class="about__title">{t.product.aboutTitle}</h2>
       <div class="about__grid">
@@ -293,10 +297,28 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
     font-size: var(--fs-small);
   }
 
-  .about {
+  /* Une image du terroir ouvre le récit de la fiche. Elle occupe toute la
+     largeur, mais en bandeau : elle réchauffe la page sans lui voler la
+     vedette, que garde le sachet. */
+  .pdp__ambiance {
     margin-top: clamp(3.5rem, 8vw, 6rem);
-    padding-top: clamp(2rem, 4vw, 3rem);
-    border-top: 1px solid var(--line);
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 700px) {
+    .pdp__ambiance {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .pdp__ambiance {
+      aspect-ratio: 21 / 9;
+    }
+  }
+
+  .about {
+    margin-top: clamp(2.25rem, 5vw, 3.5rem);
     scroll-margin-top: calc(var(--header-h) + 2rem);
   }
 
