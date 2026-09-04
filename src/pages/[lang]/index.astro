@@ -67,7 +67,7 @@ const jsonld = [
       <Photo name="cretes-brumeuses" lang={lang} priority sizes="100vw" decorative />
     </div>
     <div class="hero__inner wrap">
-      <SplitTitle text={t.home.heroTitle} as="h1" size="hero" class="hero__title" />
+      <SplitTitle text={t.home.heroTitle} as="h1" size="xl" class="hero__title" />
       <p class="hero__sub label prewrap">{t.home.heroSub}</p>
       <a class="hero__cta link" href={route(lang, 'cafes')}>
         {t.home.heroCta}<span class="arrow" aria-hidden="true">→</span>
@@ -213,7 +213,12 @@ const jsonld = [
     position: relative;
     min-height: 100svh;
     display: flex;
-    align-items: flex-end;
+    /* Le titre se cale en haut, à la même hauteur que sur les autres pages.
+       L'en-tête est fixe : on ajoute sa hauteur — plus le filet d'un pixel
+       qui la souligne — au retrait commun aux grands titres. */
+    align-items: flex-start;
+    --haut-titre: calc(var(--header-h) + 1px + var(--titre-page-haut));
+    padding-top: var(--haut-titre);
     padding-bottom: clamp(3rem, 8vh, 6rem);
     overflow: hidden;
     color: var(--ink);
@@ -229,33 +234,44 @@ const jsonld = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(235, 231, 222, 0.34) 0%,
-      rgba(235, 231, 222, 0) 26%,
-      rgba(33, 33, 33, 0.12) 52%,
-      rgba(33, 33, 33, 0.34) 78%,
-      rgba(33, 33, 33, 0.56) 100%
-    );
+    /* Deux voiles superposés. Celui du haut protège la lecture du titre : il
+       est exprimé en longueurs fixes, calées sur la hauteur du bloc de titre,
+       pour qu'une fenêtre basse soit couverte comme une fenêtre haute — le
+       cadrage de la photo change, la lisibilité non. Celui du bas donne de la
+       profondeur et porte l'invitation à défiler. */
+    background:
+      linear-gradient(
+        180deg,
+        rgba(235, 231, 222, 0.68) 0,
+        rgba(235, 231, 222, 0.64) var(--haut-titre),
+        rgba(235, 231, 222, 0.54) calc(var(--haut-titre) + 11rem),
+        rgba(235, 231, 222, 0.28) calc(var(--haut-titre) + 18rem),
+        rgba(235, 231, 222, 0) calc(var(--haut-titre) + 25rem)
+      ),
+      linear-gradient(
+        180deg,
+        rgba(33, 33, 33, 0) 58%,
+        rgba(33, 33, 33, 0.22) 82%,
+        rgba(33, 33, 33, 0.46) 100%
+      );
   }
 
   .hero__inner {
     position: relative;
     z-index: 2;
-    color: var(--white);
+  }
+
+  :global(.hero__title) {
+    max-width: 16ch;
   }
 
   .hero__sub {
-    margin-top: 1.25rem;
-    color: rgba(251, 250, 247, 0.96);
+    margin-top: 1.5rem;
     line-height: 1.7;
-    text-shadow: 0 1px 12px rgba(33, 33, 33, 0.4);
   }
 
   .hero__cta {
     margin-top: 1.5rem;
-    color: var(--white);
-    text-shadow: 0 1px 12px rgba(33, 33, 33, 0.4);
   }
 
   .hero__scroll {
@@ -277,12 +293,6 @@ const jsonld = [
     50% {
       transform: translateY(10px);
       opacity: 1;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .hero__scroll {
-      display: none;
     }
   }
 

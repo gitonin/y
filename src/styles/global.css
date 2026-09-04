@@ -53,6 +53,12 @@
   --dur: 0.6s;
 
   --header-h: 60px;
+
+  /* Hauteur à laquelle commencent les grands titres, sous l'en-tête. Elle
+     reprend l'empilement du composant PageHero (marge haute, fil d'Ariane,
+     sur-titre) pour que le titre de l'accueil se cale exactement sur celui
+     des autres pages. tests/boutique.mjs vérifie que les deux restent alignés. */
+  --titre-page-haut: clamp(5.9375rem, 3.25rem + 7.42vw, 8.4375rem);
 }
 
 @media (min-width: 900px) {
