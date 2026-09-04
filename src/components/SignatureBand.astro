@@ -36,12 +36,6 @@ const motifs = Array.from({ length: 10 });
                 />
               </svg>
               {t.common.signatureEnd}
-              <svg class="sig__etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path
-                  d="M12 1.5c.35 7.4 3.1 10.15 10.5 10.5-7.4.35-10.15 3.1-10.5 10.5-.35-7.4-3.1-10.15-10.5-10.5 7.4-.35 10.15-3.1 10.5-10.5Z"
-                  fill="currentColor"
-                />
-              </svg>
             </span>
           ))}
         </div>
@@ -60,14 +54,14 @@ const motifs = Array.from({ length: 10 });
     display: flex;
     width: max-content;
     /* La piste s'élargit avec le corps du texte : on allonge la durée à
-       l'avenant pour garder la même vitesse apparente, environ 50 px par
+       l'avenant pour garder la même vitesse apparente, environ 25 px par
        seconde, du téléphone au grand écran. */
-    animation: defiler 48s linear infinite;
+    animation: defiler 100s linear infinite;
   }
 
   @media (min-width: 900px) {
     .sig__piste {
-      animation-duration: 70s;
+      animation-duration: 160s;
     }
   }
 
@@ -78,8 +72,10 @@ const motifs = Array.from({ length: 10 });
   .sig__motif {
     display: inline-flex;
     align-items: center;
+    /* L'étoile sépare les deux moitiés de la phrase ; un large blanc sépare
+       les répétitions entre elles. */
     gap: clamp(0.9rem, 2vw, 1.5rem);
-    padding-right: clamp(0.9rem, 2vw, 1.5rem);
+    padding-right: clamp(4rem, 9vw, 9rem);
     font-size: clamp(1.05rem, 0.85rem + 0.7vw, 1.5rem);
     line-height: 1.2;
     white-space: nowrap;

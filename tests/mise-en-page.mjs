@@ -232,7 +232,20 @@ titre('La signature défile en bas de chaque page');
     await pg.waitForTimeout(2000);
     const apres = await decalage(pg);
     const vitesse = (avant - apres) / 2;
-    check(`${appareil} — défile vers la gauche à ${vitesse.toFixed(0)} px/s (entre 35 et 70)`, vitesse > 35 && vitesse < 70, true);
+    check(`${appareil} — défile vers la gauche à ${vitesse.toFixed(0)} px/s (entre 18 et 35)`, vitesse > 18 && vitesse < 35, true);
+
+    /* Une seule étoile, entre les deux moitiés de la phrase ; les répétitions
+       sont séparées par un large blanc. */
+    const motif = await pg.evaluate(() => {
+      const m = document.querySelector('.sig__motif');
+      return {
+        etoiles: m.querySelectorAll('svg').length,
+        blanc: parseFloat(getComputedStyle(m).paddingRight),
+        texte: parseFloat(getComputedStyle(m).fontSize),
+      };
+    });
+    check(`${appareil} — une seule étoile par motif`, motif.etoiles, 1);
+    check(`${appareil} — le blanc entre motifs dépasse deux cadratins (${motif.blanc.toFixed(0)} px)`, motif.blanc > motif.texte * 2, true);
     await pg.close();
   }
 
@@ -252,6 +265,10 @@ titre('La signature défile en bas de chaque page');
   }));
   check('le texte est annoncé une seule fois', lecture.annonce, 'Slow Coffee — Slow Life');
   check('les répétitions sont masquées aux lecteurs d’écran', lecture.masquee, 'true');
+
+  /* Le logo du pied de page a été agrandi de moitié : 54 px à l'origine. */
+  const hauteurLogo = await calme.evaluate(() => Math.round(document.querySelector('.ft__logo img').getBoundingClientRect().height));
+  check('logo du pied de page agrandi de 50 %', hauteurLogo, 81);
   await calme.close();
 }
 
