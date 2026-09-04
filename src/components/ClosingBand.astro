@@ -1,0 +1,64 @@
+---
+/**
+ * Image de fin, avec sa phrase et son lien vers l'histoire de la marque.
+ * Partagée par l'accueil et la page des cafés : un seul endroit à modifier.
+ */
+import type { Lang } from '../i18n/utils';
+import { route, useTranslations } from '../i18n/utils';
+import Photo from './Photo.astro';
+import SplitTitle from './SplitTitle.astro';
+
+interface Props {
+  lang: Lang;
+  /** Identifiant du lien, pour le rattachement aux lecteurs d'écran. */
+  id?: string;
+}
+const { lang, id = 'h-closing' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="closing" aria-labelledby={id}>
+  <div class="closing__media media">
+    <Photo name="tabouret-terrasse" lang={lang} decorative sizes="100vw" />
+  </div>
+  <div class="closing__inner wrap">
+    <SplitTitle text={t.home.closingTitle} as="p" size="closing" class="on-dark" />
+    <a class="link closing__cta" href={`${route(lang, 'origine')}#histoire`} id={id}>
+      {t.home.closingCta}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .closing {
+    position: relative;
+    min-height: 78svh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    overflow: hidden;
+  }
+
+  .closing__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .closing__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(33, 33, 33, 0) 24%, rgba(33, 33, 33, 0.28) 62%, rgba(33, 33, 33, 0.6) 100%);
+  }
+
+  .closing__inner {
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+  }
+
+  .closing__cta {
+    margin-top: 1.25rem;
+    color: var(--white);
+  }
+</style>

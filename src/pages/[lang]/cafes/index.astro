@@ -4,6 +4,8 @@ import Base from '../../../layouts/Base.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ProductCard from '../../../components/ProductCard.astro';
 import SplitTitle from '../../../components/SplitTitle.astro';
+import ProBand from '../../../components/ProBand.astro';
+import ClosingBand from '../../../components/ClosingBand.astro';
 import { langPaths } from '../../../i18n/paths';
 import { useTranslations, url, route, absolute, type Lang } from '../../../i18n/utils';
 import { products } from '../../../data/products';
@@ -94,6 +96,12 @@ const jsonld = [
       </a>
     </aside>
   </div>
+
+  <!-- ============ PRO ============ -->
+  <ProBand lang={lang} />
+
+  <!-- ============ IMAGE DE FIN ============ -->
+  <ClosingBand lang={lang} />
 </Base>
 
 <style>

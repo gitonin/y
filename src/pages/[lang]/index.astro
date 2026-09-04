@@ -4,6 +4,8 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
+import ProBand from '../../components/ProBand.astro';
+import ClosingBand from '../../components/ClosingBand.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, url, postUrl, formatDate, absolute, type Lang } from '../../i18n/utils';
@@ -181,30 +183,10 @@ const jsonld = [
   }
 
   <!-- ============ PRO ============ -->
-  <section class="pro-band panel--olive" aria-labelledby="h-pro">
-    <div class="wrap pro-band__inner">
-      <div>
-        <span class="label" data-reveal>{t.home.proLabel}</span>
-        <p class="pro-band__title" data-reveal id="h-pro">{t.home.proTitle}</p>
-      </div>
-      <a class="link pro-band__cta" href={route(lang, 'pro')} data-reveal>
-        {t.home.proCta}<span class="arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </section>
+  <ProBand lang={lang} />
 
-  <!-- ============ CLOSING ============ -->
-  <section class="closing" aria-labelledby="h-closing">
-    <div class="closing__media media">
-      <Photo name="tabouret-terrasse" lang={lang} decorative sizes="100vw" />
-    </div>
-    <div class="closing__inner wrap">
-      <SplitTitle text={t.home.closingTitle} as="p" size="closing" class="on-dark" />
-      <a class="link closing__cta" href={`${route(lang, 'origine')}#histoire`} id="h-closing">
-        {t.home.closingCta}<span class="arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </section>
+  <!-- ============ IMAGE DE FIN ============ -->
+  <ClosingBand lang={lang} />
 </Base>
 
 <style>
@@ -410,71 +392,4 @@ const jsonld = [
     overflow: hidden;
   }
 
-  /* ---------- Bande pro ---------- */
-  .pro-band {
-    padding-block: clamp(3rem, 7vw, 5rem);
-  }
-
-  .pro-band__inner {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  @media (min-width: 860px) {
-    .pro-band__inner {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-      align-items: end;
-    }
-  }
-
-  .pro-band__title {
-    margin-top: 0.75rem;
-    font-size: var(--fs-h3);
-    line-height: 1.25;
-    max-width: 24ch;
-  }
-
-  .pro-band__cta {
-    color: var(--white);
-    justify-self: start;
-  }
-
-  @media (min-width: 860px) {
-    .pro-band__cta {
-      justify-self: end;
-    }
-  }
-
-  /* ---------- Closing ---------- */
-  .closing {
-    position: relative;
-    min-height: 78svh;
-    display: flex;
-    align-items: flex-end;
-    padding-block: clamp(3rem, 8vw, 6rem);
-    overflow: hidden;
-  }
-
-  .closing__media {
-    position: absolute;
-    inset: 0;
-  }
-
-  .closing__media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(33, 33, 33, 0) 24%, rgba(33, 33, 33, 0.28) 62%, rgba(33, 33, 33, 0.6) 100%);
-  }
-
-  .closing__inner {
-    position: relative;
-    z-index: 2;
-    color: var(--white);
-  }
-
-  .closing__cta {
-    margin-top: 1.25rem;
-    color: var(--white);
-  }
 </style>

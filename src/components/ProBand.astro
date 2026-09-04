@@ -1,0 +1,64 @@
+---
+/**
+ * Bande « professionnels », en olive pleine largeur.
+ * Partagée par l'accueil et la page des cafés : un seul endroit à modifier.
+ */
+import type { Lang } from '../i18n/utils';
+import { route, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Identifiant du titre, pour le rattachement aux lecteurs d'écran. */
+  id?: string;
+}
+const { lang, id = 'h-pro' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="pro-band panel--olive" aria-labelledby={id}>
+  <div class="wrap pro-band__inner">
+    <div>
+      <span class="label" data-reveal>{t.home.proLabel}</span>
+      <p class="pro-band__title" data-reveal id={id}>{t.home.proTitle}</p>
+    </div>
+    <a class="link pro-band__cta" href={route(lang, 'pro')} data-reveal>
+      {t.home.proCta}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .pro-band {
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .pro-band__inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 860px) {
+    .pro-band__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      align-items: end;
+    }
+  }
+
+  .pro-band__title {
+    margin-top: 0.75rem;
+    font-size: var(--fs-h3);
+    line-height: 1.25;
+    max-width: 24ch;
+  }
+
+  .pro-band__cta {
+    color: var(--white);
+    justify-self: start;
+  }
+
+  @media (min-width: 860px) {
+    .pro-band__cta {
+      justify-self: end;
+    }
+  }
+</style>

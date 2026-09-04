@@ -140,6 +140,57 @@ for (const [w, h, appareil] of [[390, 844, 'mobile'], [768, 1024, 'tablette'], [
   await pg.close();
 }
 
+/* --------------------------------- 4. blocs de fin partagés */
+titre('La bande pro et l’image de fin closent aussi la page des cafés');
+{
+  const releve = async (pg, chemin) => {
+    await pg.goto(B + chemin, { waitUntil: 'networkidle' });
+    await pg.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight * 0.5) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    await pg.waitForTimeout(900);
+    return pg.evaluate(() => {
+      const decrire = (el) => el && {
+        hauteur: Math.round(el.getBoundingClientRect().height),
+        fond: getComputedStyle(el).backgroundColor,
+        texte: el.innerText.replace(/\s+/g, ' ').trim(),
+        lien: el.querySelector('a')?.getAttribute('href'),
+      };
+      const pro = document.querySelector('.pro-band');
+      const fin = document.querySelector('.closing');
+      const pied = document.querySelector('footer');
+      return {
+        pro: decrire(pro),
+        fin: decrire(fin),
+        /* l'infolettre vit dans le pied de page : les deux blocs la précèdent */
+        avantLePied: !!pro && !!fin && !!pied
+          && !!(pro.compareDocumentPosition(pied) & Node.DOCUMENT_POSITION_FOLLOWING)
+          && !!(fin.compareDocumentPosition(pied) & Node.DOCUMENT_POSITION_FOLLOWING)
+          && !!(pro.compareDocumentPosition(fin) & Node.DOCUMENT_POSITION_FOLLOWING),
+      };
+    });
+  };
+
+  for (const [w, h, appareil] of [[1440, 900, 'ordinateur'], [390, 844, 'mobile']]) {
+    const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
+    const accueil = await releve(pg, '/fr/');
+    const cafes = await releve(pg, '/fr/cafes/');
+    for (const [nom, cle] of [['bande pro', 'pro'], ['image de fin', 'fin']]) {
+      check(`${appareil} — ${nom} présente sur la page des cafés`, !!cafes[cle], true);
+      check(`${appareil} — ${nom}, même hauteur qu’à l’accueil`, cafes[cle]?.hauteur, accueil[cle]?.hauteur);
+      check(`${appareil} — ${nom}, même fond`, cafes[cle]?.fond, accueil[cle]?.fond);
+      check(`${appareil} — ${nom}, même texte`, cafes[cle]?.texte, accueil[cle]?.texte);
+      check(`${appareil} — ${nom}, même lien`, cafes[cle]?.lien, accueil[cle]?.lien);
+    }
+    check(`${appareil} — les deux blocs précèdent l’infolettre`, cafes.avantLePied, true);
+    await pg.close();
+  }
+}
+
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);
 if (echecs.length) echecs.forEach((e) => console.log('  ·', e));
 await navigateur.close();
