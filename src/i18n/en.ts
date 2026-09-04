@@ -32,6 +32,8 @@ const en: Dict = {
     brand: 'Yunma',
     tagline: 'Specialty coffee from Yunnan',
     signature: 'Slow coffee. Slow life.',
+    signatureStart: 'Slow Coffee',
+    signatureEnd: 'Slow Life',
     discover: 'Discover',
     learnMore: 'Learn more',
     readMore: 'Read the article',

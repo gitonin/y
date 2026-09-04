@@ -1,0 +1,101 @@
+---
+/**
+ * Signature défilante, en bas de chaque page.
+ * Le motif « Slow Coffee ✦ Slow Life » glisse en continu, sans couture : la
+ * piste contient deux groupes identiques et se décale de la moitié de sa
+ * largeur, si bien que le second groupe prend exactement la place du premier
+ * au moment où l'animation reboucle.
+ */
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+/* Assez de répétitions pour couvrir les très larges écrans sans laisser de vide. */
+const motifs = Array.from({ length: 10 });
+---
+
+<div class="sig">
+  <p class="visually-hidden">{t.common.signatureStart} — {t.common.signatureEnd}</p>
+
+  <div class="sig__piste" aria-hidden="true">
+    {
+      [0, 1].map(() => (
+        <div class="sig__groupe">
+          {motifs.map(() => (
+            <span class="sig__motif">
+              {t.common.signatureStart}
+              <svg class="sig__etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                  d="M12 1.5c.35 7.4 3.1 10.15 10.5 10.5-7.4.35-10.15 3.1-10.5 10.5-.35-7.4-3.1-10.15-10.5-10.5 7.4-.35 10.15-3.1 10.5-10.5Z"
+                  fill="currentColor"
+                />
+              </svg>
+              {t.common.signatureEnd}
+              <svg class="sig__etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                  d="M12 1.5c.35 7.4 3.1 10.15 10.5 10.5-7.4.35-10.15 3.1-10.5 10.5-.35-7.4-3.1-10.15-10.5-10.5 7.4-.35 10.15-3.1 10.5-10.5Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .sig {
+    overflow: hidden;
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .sig__piste {
+    display: flex;
+    width: max-content;
+    /* La piste s'élargit avec le corps du texte : on allonge la durée à
+       l'avenant pour garder la même vitesse apparente, environ 50 px par
+       seconde, du téléphone au grand écran. */
+    animation: defiler 48s linear infinite;
+  }
+
+  @media (min-width: 900px) {
+    .sig__piste {
+      animation-duration: 70s;
+    }
+  }
+
+  .sig__groupe {
+    display: flex;
+  }
+
+  .sig__motif {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(0.9rem, 2vw, 1.5rem);
+    padding-right: clamp(0.9rem, 2vw, 1.5rem);
+    font-size: clamp(1.05rem, 0.85rem + 0.7vw, 1.5rem);
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+
+  .sig__etoile {
+    flex: none;
+    width: 0.82em;
+    height: 0.82em;
+    display: block;
+  }
+
+  @keyframes defiler {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

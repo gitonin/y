@@ -316,6 +316,12 @@ field('newsletter.titre', t.common.newsletterTitle, 'Titre');
 field('newsletter.texte', t.common.newsletterText, 'Texte');
 field('newsletter.bouton', t.common.newsletterCta, 'Bouton');
 field('newsletter.confirmation', t.common.newsletterOk, 'Message de confirmation');
+section('Signature défilante');
+note(
+  'La bande qui défile en bas de chaque page. Elle reste en anglais dans les trois versions du site : c’est une signature de marque. L’étoile entre les deux moitiés est un dessin, elle ne se modifie pas ici.'
+);
+field('signature.debut', t.common.signatureStart, 'Première moitié');
+field('signature.fin', t.common.signatureEnd, 'Seconde moitié');
 section('Mentions du pied de page');
 fields('piedDePage', t.footer, ['tagline', 'rights', 'payment']);
 

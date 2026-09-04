@@ -3,6 +3,7 @@ import type { Lang } from '../i18n/utils';
 import { useTranslations, route, url, defaultAlternates, languages, dictionaries, asset } from '../i18n/utils';
 import { SITE, SHOPIFY } from '../consts';
 import Icon from './Icon.astro';
+import SignatureBand from './SignatureBand.astro';
 
 interface Props {
   lang: Lang;
@@ -78,6 +79,11 @@ const rowA = [
       </ul>
     </div>
 
+  </div>
+
+  <SignatureBand lang={lang} />
+
+  <div class="wrap">
     <div class="ft__base small">
       <p>© {year} {SITE.name} — {t.footer.rights}</p>
       <ul class="ft__legal">

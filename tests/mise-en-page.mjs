@@ -191,6 +191,70 @@ titre('La bande pro et l’image de fin closent aussi la page des cafés');
   }
 }
 
+/* --------------------------------- 5. signature défilante */
+titre('La signature défile en bas de chaque page');
+{
+  const decalage = (pg) => pg.evaluate(() => {
+    const m = new DOMMatrixReadOnly(getComputedStyle(document.querySelector('.sig__piste')).transform);
+    return m.m41;
+  });
+
+  for (const [w, h, appareil] of [[1440, 900, 'ordinateur'], [390, 844, 'mobile']]) {
+    const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
+    /* la bande vit dans le pied de page : elle doit être là sur toutes les pages */
+    for (const chemin of ['/fr/', '/fr/cafes/', '/fr/origine/', '/fr/journal/', '/en/cafes/', '/zh/']) {
+      await pg.goto(B + chemin, { waitUntil: 'domcontentloaded' });
+      await pg.waitForTimeout(200);
+      const etat = await pg.evaluate(() => {
+        const sig = document.querySelector('.sig');
+        const piste = document.querySelector('.sig__piste');
+        const groupes = document.querySelectorAll('.sig__groupe');
+        const base = document.querySelector('.ft__base');
+        return sig && piste && base ? {
+          groupes: groupes.length,
+          identiques: groupes[0]?.innerText === groupes[1]?.innerText,
+          groupePlusLargeQueLEcran: groupes[0].getBoundingClientRect().width > window.innerWidth,
+          avantLeCopyright: !!(sig.compareDocumentPosition(base) & Node.DOCUMENT_POSITION_FOLLOWING),
+          debordement: document.documentElement.scrollWidth > window.innerWidth,
+        } : null;
+      });
+      check(`${appareil} — ${chemin} : bande présente, avant le copyright`, !!etat?.avantLeCopyright, true);
+      check(`${appareil} — ${chemin} : deux groupes identiques (boucle sans couture)`, etat?.groupes === 2 && etat?.identiques, true);
+      check(`${appareil} — ${chemin} : un groupe couvre l’écran`, etat?.groupePlusLargeQueLEcran, true);
+      check(`${appareil} — ${chemin} : pas de débordement horizontal`, etat?.debordement, false);
+    }
+
+    /* vitesse réelle, mesurée sur deux secondes */
+    await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+    await pg.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await pg.waitForTimeout(500);
+    const avant = await decalage(pg);
+    await pg.waitForTimeout(2000);
+    const apres = await decalage(pg);
+    const vitesse = (avant - apres) / 2;
+    check(`${appareil} — défile vers la gauche à ${vitesse.toFixed(0)} px/s (entre 35 et 70)`, vitesse > 35 && vitesse < 70, true);
+    await pg.close();
+  }
+
+  /* immobile pour qui a demandé à réduire les animations */
+  const calme = await (await navigateur.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })).newPage();
+  await calme.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+  await calme.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await calme.waitForTimeout(400);
+  const a = await decalage(calme);
+  await calme.waitForTimeout(1200);
+  const b2 = await decalage(calme);
+  check('animations réduites — la bande reste immobile', Math.abs(b2 - a) < 1, true);
+  /* et le texte n'est annoncé qu'une fois */
+  const lecture = await calme.evaluate(() => ({
+    annonce: document.querySelector('.sig .visually-hidden')?.textContent.trim(),
+    masquee: document.querySelector('.sig__piste')?.getAttribute('aria-hidden'),
+  }));
+  check('le texte est annoncé une seule fois', lecture.annonce, 'Slow Coffee — Slow Life');
+  check('les répétitions sont masquées aux lecteurs d’écran', lecture.masquee, 'true');
+  await calme.close();
+}
+
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);
 if (echecs.length) echecs.forEach((e) => console.log('  ·', e));
 await navigateur.close();

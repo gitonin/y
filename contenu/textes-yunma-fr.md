@@ -1,6 +1,6 @@
 # Yunma — textes du site (français)
 
-_Document généré le 03/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 04/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -1262,6 +1262,17 @@ S’inscrire
 
 **Message de confirmation** `[newsletter.confirmation]`
 Merci, votre inscription est enregistrée.
+
+
+### Signature défilante
+
+> La bande qui défile en bas de chaque page. Elle reste en anglais dans les trois versions du site : c’est une signature de marque. L’étoile entre les deux moitiés est un dessin, elle ne se modifie pas ici.
+
+**Première moitié** `[signature.debut]`
+Slow Coffee
+
+**Seconde moitié** `[signature.fin]`
+Slow Life
 
 
 ### Mentions du pied de page

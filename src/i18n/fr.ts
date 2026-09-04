@@ -30,6 +30,8 @@ const fr = {
     brand: 'Yunma',
     tagline: 'Cafés de spécialité du Yunnan',
     signature: 'Slow coffee. Slow life.',
+    signatureStart: 'Slow Coffee',
+    signatureEnd: 'Slow Life',
     discover: 'Découvrir',
     learnMore: 'En savoir plus',
     readMore: 'Lire l’article',

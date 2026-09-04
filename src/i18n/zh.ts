@@ -32,6 +32,8 @@ const zh: Dict = {
     brand: 'Yunma 云马',
     tagline: '云南精品咖啡',
     signature: '慢咖啡，慢生活。',
+    signatureStart: 'Slow Coffee',
+    signatureEnd: 'Slow Life',
     discover: '探索',
     learnMore: '了解更多',
     readMore: '阅读全文',
