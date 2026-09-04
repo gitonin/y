@@ -106,7 +106,9 @@ jobs:
         run: |
           check() {
             local page="$1" expected="$2" nom="$3"
-            if ! grep -q "\"${expected}brand/yunma-logo.png\"" "$page"; then
+            # Les fichiers construits par Astro sont le repère le plus sûr :
+            # ils existent sur toutes les pages, quels que soient les visuels.
+            if ! grep -q "\"${expected}_astro/" "$page"; then
               echo "::error::$nom : les liens ne pointent pas vers $expected"
               grep -o 'src="/[^"]*"' "$page" | sort -u | head -5
               exit 1
