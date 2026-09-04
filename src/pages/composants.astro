@@ -1,0 +1,651 @@
+---
+/**
+ * Planche des composants — page de travail, hors du site public.
+ *
+ * Elle affiche chaque composant pour de vrai, avec son nom, son fichier et
+ * ses réglages. Rien n'y est recopié à la main : les composants sont ceux du
+ * site et les chiffres d'emploi sont relevés dans les sources au moment de la
+ * construction. La planche ne peut donc pas se démoder.
+ *
+ * Elle n'est pas référencée : `noindex` et absente du plan du site.
+ */
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+import Base from '../layouts/Base.astro';
+import AnchorNav from '../components/AnchorNav.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BuyBox from '../components/BuyBox.astro';
+import ClosingBand from '../components/ClosingBand.astro';
+import Icon from '../components/Icon.astro';
+import type { IconName } from '../components/Icon.astro';
+import Packshot from '../components/Packshot.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import Poincon from '../components/Poincon.astro';
+import ProBand from '../components/ProBand.astro';
+import ProductCard from '../components/ProductCard.astro';
+import SignatureBand from '../components/SignatureBand.astro';
+import SplitTitle from '../components/SplitTitle.astro';
+
+import { products } from '../data/products';
+import { url, useTranslations } from '../i18n/utils';
+
+const lang = 'fr' as const;
+const t = useTranslations(lang);
+const exemple = products[0];
+const dripBags = products.find((p) => p.slug === 'drip-bags-a-composer') ?? products[3];
+
+/* --- Relevé des sources -------------------------------------------------- */
+
+/** Tous les fichiers .astro du site, contenu compris. */
+const sources = (() => {
+  const fichiers: { chemin: string; texte: string }[] = [];
+  const parcourir = (dossier: string) => {
+    for (const entree of readdirSync(dossier, { withFileTypes: true })) {
+      const chemin = join(dossier, entree.name);
+      if (entree.isDirectory()) parcourir(chemin);
+      else if (entree.name.endsWith('.astro')) {
+        fichiers.push({ chemin: chemin.replace(/^src\//, ''), texte: readFileSync(chemin, 'utf8') });
+      }
+    }
+  };
+  parcourir('src');
+  /* La planche elle-même ne compte pas : les chiffres décrivent le site. */
+  return fichiers.filter((f) => f.chemin !== 'pages/composants.astro');
+})();
+
+/** Nombre de lignes du composant, et pages qui l'emploient. */
+const releve = (nom: string) => {
+  const propre = sources.find((f) => f.chemin.endsWith(`/${nom}.astro`));
+  const motif = new RegExp(`<${nom}[\\s/>]`, 'g');
+  const employeurs = sources
+    .filter((f) => !f.chemin.endsWith(`/${nom}.astro`) && motif.test(f.texte))
+    .map((f) => f.chemin);
+  const occurrences = sources
+    .filter((f) => !f.chemin.endsWith(`/${nom}.astro`))
+    .reduce((total, f) => total + (f.texte.match(new RegExp(`<${nom}[\\s/>]`, 'g'))?.length ?? 0), 0);
+  return {
+    lignes: propre ? propre.texte.split('\n').length : 0,
+    employeurs,
+    occurrences,
+  };
+};
+
+type Fiche = {
+  nom: string;
+  dossier: 'components' | 'layouts';
+  role: string;
+  reglages: string[];
+};
+
+const familles: { titre: string; id: string; propos: string; fiches: Fiche[] }[] = [
+  {
+    titre: 'Ossature de page',
+    id: 'ossature',
+    propos:
+      'Ce que toutes les pages partagent. On les voit à l’œuvre autour de cette planche même : l’en-tête en haut, le pied de page en bas, le panier au clic sur le sac.',
+    fiches: [
+      {
+        nom: 'Base',
+        dossier: 'layouts',
+        role: 'Le gabarit. Il pose la langue, les styles, les transitions de page, et enveloppe chaque page de l’en-tête, du pied de page et du panier.',
+        reglages: ['lang', 'title', 'description', 'transparentHeader', 'alternates', 'jsonld', 'type', 'image', 'keywords', 'noindex'],
+      },
+      {
+        nom: 'Header',
+        dossier: 'components',
+        role: 'En-tête : logo, menu plein écran, accès au panier. Il s’efface au défilement vers le bas et revient dès qu’on remonte.',
+        reglages: ['lang', 'transparent', 'current'],
+      },
+      {
+        nom: 'Footer',
+        dossier: 'components',
+        role: 'Pied de page : lettre d’information, logo, liens, choix de langue, signature défilante et copyright.',
+        reglages: ['lang'],
+      },
+      {
+        nom: 'Cart',
+        dossier: 'components',
+        role: 'Panier en tiroir. Parle à Shopify quand les clés sont renseignées, et retombe sur un panier de démonstration sinon.',
+        reglages: ['lang'],
+      },
+      {
+        nom: 'Seo',
+        dossier: 'components',
+        role: 'Toutes les balises de tête : titre, description, Open Graph, liens entre langues, données structurées. Invisible, mais présent sur chaque page.',
+        reglages: ['lang', 'title', 'description', 'image', 'type', 'alternates', 'noindex', 'jsonld', 'keywords'],
+      },
+    ],
+  },
+  {
+    titre: 'Titres et repères',
+    id: 'titres',
+    propos: 'De quoi ouvrir une page et s’y retrouver.',
+    fiches: [
+      {
+        nom: 'SplitTitle',
+        dossier: 'components',
+        role: 'Grand titre. Chaque ligne du texte devient une ligne du titre, et se lève à l’apparition, l’une après l’autre.',
+        reglages: ['text', 'as', 'size', 'class'],
+      },
+      {
+        nom: 'PageHero',
+        dossier: 'components',
+        role: 'Entrée de page : fil d’Ariane, sur-titre, grand titre et chapeau. Il assemble Breadcrumbs et SplitTitle.',
+        reglages: ['lang', 'label', 'title', 'intro', 'crumb', 'size'],
+      },
+      {
+        nom: 'Breadcrumbs',
+        dossier: 'components',
+        role: 'Fil d’Ariane, avec ses données structurées pour les moteurs de recherche.',
+        reglages: ['lang', 'items'],
+      },
+      {
+        nom: 'AnchorNav',
+        dossier: 'components',
+        role: 'Sommaire d’une page longue. Colle sous l’en-tête, remonte quand celui-ci s’efface, et souligne la section en cours de lecture.',
+        reglages: ['items', 'ariaLabel'],
+      },
+      {
+        nom: 'Icon',
+        dossier: 'components',
+        role: 'Le jeu d’icônes, treize tracés d’un même trait. Muette par défaut, elle prend un nom accessible quand elle porte du sens.',
+        reglages: ['name', 'size', 'label', 'class'],
+      },
+      {
+        nom: 'Poincon',
+        dossier: 'components',
+        role: 'Le sceau de la marque, posé entre deux blocs de texte à la place d’un filet. Jamais au contact d’une image.',
+        reglages: ['tight', 'class'],
+      },
+    ],
+  },
+  {
+    titre: 'Images',
+    id: 'images',
+    propos: 'Deux façons de montrer : la photographie, et le produit.',
+    fiches: [
+      {
+        nom: 'Photo',
+        dossier: 'components',
+        role: 'Photographie du fonds. Le site fabrique lui-même toutes les tailles en WebP ; le texte alternatif et le cadrage viennent de la table des photos.',
+        reglages: ['name', 'lang', 'decorative', 'priority', 'sizes', 'position', 'class'],
+      },
+      {
+        nom: 'Packshot',
+        dossier: 'components',
+        role: 'Le produit sur son fond crème. Affiche la photographie du packaging quand elle existe, et retombe sinon sur un sachet dessiné en CSS.',
+        reglages: ['product', 'lang', 'size', 'decorative', 'class'],
+      },
+    ],
+  },
+  {
+    titre: 'Boutique',
+    id: 'boutique',
+    propos: 'Du catalogue au panier.',
+    fiches: [
+      {
+        nom: 'ProductCard',
+        dossier: 'components',
+        role: 'Carte du catalogue : visuel, nom, notes, prix — précédé d’un « à partir de » quand les formats n’ont pas le même prix.',
+        reglages: ['product', 'lang', 'index', 'compact'],
+      },
+      {
+        nom: 'BuyBox',
+        dossier: 'components',
+        role: 'Encart d’achat : choix du format, quantité, ajout au panier. Le prix suit le format choisi, sur la page comme dans le panier.',
+        reglages: ['product', 'lang', 'hidePrice'],
+      },
+    ],
+  },
+  {
+    titre: 'Bandeaux de fin',
+    id: 'bandeaux',
+    propos: 'Les blocs qui closent les pages, partagés pour rester identiques partout.',
+    fiches: [
+      {
+        nom: 'ProBand',
+        dossier: 'components',
+        role: 'Le bandeau vert qui renvoie vers l’offre professionnelle.',
+        reglages: ['lang', 'id'],
+      },
+      {
+        nom: 'ClosingBand',
+        dossier: 'components',
+        role: 'Le bloc de clôture sur photographie, qui renvoie vers l’histoire de la maison.',
+        reglages: ['lang', 'id'],
+      },
+      {
+        nom: 'SignatureBand',
+        dossier: 'components',
+        role: 'La signature défilante, en bas de chaque page avant le copyright. Le lettrage est celui de la marque, en tracé.',
+        reglages: ['lang'],
+      },
+    ],
+  },
+];
+
+const toutes = familles.flatMap((f) => f.fiches);
+const total = toutes.length;
+const totalLignes = toutes.reduce((n, f) => n + releve(f.nom).lignes, 0);
+
+const iconesDemo: IconName[] = ['leaf', 'mountains', 'cherries', 'droplet', 'dry', 'funnel', 'bean', 'cup', 'community', 'sprout', 'book', 'timer', 'lock'];
+---
+
+<Base
+  lang={lang}
+  title="Planche des composants — Yunma"
+  description="Inventaire visuel des composants du site Yunma."
+  noindex
+>
+  <div class="wrap pl-top">
+    <span class="label" data-reveal>Document de travail</span>
+    <SplitTitle text={'Planche des\ncomposants'} as="h1" size="xl" class="pl-titre" />
+    <p class="lead muted pl-intro" data-reveal>
+      Le site est bâti en {total} briques réutilisables — {totalLignes} lignes en tout. Chacune est
+      montrée ici pour de vrai, telle qu’elle paraît sur le site : ce n’est pas une capture, mais le
+      composant lui-même. Les chiffres d’emploi sont relevés dans les sources à chaque construction.
+    </p>
+  </div>
+
+  <AnchorNav
+    items={familles.map((f) => ({ id: f.id, label: f.titre }))}
+    ariaLabel="Sommaire de la planche"
+  />
+
+  <div class="wrap pl-sommaire">
+    <table class="pl-table">
+      <thead>
+        <tr>
+          <th scope="col">Composant</th>
+          <th scope="col">Fichier</th>
+          <th scope="col">Lignes</th>
+          <th scope="col">Emplois</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          toutes.map((fiche) => {
+            const r = releve(fiche.nom);
+            return (
+              <tr>
+                <td><code>{`<${fiche.nom} />`}</code></td>
+                <td class="muted small">{`src/${fiche.dossier}/${fiche.nom}.astro`}</td>
+                <td class="mono-num">{r.lignes}</td>
+                <td class="mono-num">{r.occurrences}</td>
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {
+    familles.map((famille) => (
+      <section class="pl-famille anchor-target" id={famille.id}>
+        <div class="wrap">
+          <h2 class="pl-famille__titre">{famille.titre}</h2>
+          <p class="muted pl-famille__propos">{famille.propos}</p>
+        </div>
+
+        {famille.fiches.map((fiche) => {
+          const r = releve(fiche.nom);
+          return (
+            <article class="pl-fiche">
+              <div class="wrap pl-fiche__tete">
+                <div>
+                  <h3 class="pl-fiche__nom"><code>{`<${fiche.nom} />`}</code></h3>
+                  <p class="small muted pl-fiche__chemin">{`src/${fiche.dossier}/${fiche.nom}.astro`}</p>
+                  <p class="pl-fiche__role">{fiche.role}</p>
+                </div>
+                <dl class="pl-fiche__meta small">
+                  <div>
+                    <dt class="label">Réglages</dt>
+                    <dd>{fiche.reglages.map((p) => <code>{p}</code>)}</dd>
+                  </div>
+                  <div>
+                    <dt class="label">Employé</dt>
+                    <dd class="muted">
+                      {r.occurrences === 0
+                        ? 'par le gabarit, sur toutes les pages'
+                        : `${r.occurrences} fois, dans ${r.employeurs.length} fichier${r.employeurs.length > 1 ? 's' : ''}`}
+                    </dd>
+                  </div>
+                  {r.employeurs.length > 0 && (
+                    <div>
+                      <dt class="label">Où</dt>
+                      <dd class="muted pl-fiche__ou">
+                        {r.employeurs.map((c) => <span>{c}</span>)}
+                      </dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt class="label">Longueur</dt>
+                    <dd class="muted">{r.lignes} lignes</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div class="wrap">
+                <div class="pl-demo" data-demo={fiche.nom}>
+                  {fiche.nom === 'Base' && (
+                    <p class="pl-note">
+                      Cette page en est un exemple : tout ce que vous voyez au-dessus et au-dessous
+                      est posé par le gabarit.
+                    </p>
+                  )}
+                  {fiche.nom === 'Header' && (
+                    <p class="pl-note">En haut de cet écran. Défilez pour le voir s’effacer, remontez pour le voir revenir.</p>
+                  )}
+                  {fiche.nom === 'Footer' && <p class="pl-note">Tout en bas de cette page.</p>}
+                  {fiche.nom === 'Cart' && (
+                    <p class="pl-note">Cliquez le sac, en haut à droite : le tiroir s’ouvre par la droite.</p>
+                  )}
+                  {fiche.nom === 'Seo' && (
+                    <p class="pl-note">
+                      Sans rendu visible — son travail est dans la source de la page, entre les
+                      balises de tête.
+                    </p>
+                  )}
+
+                  {fiche.nom === 'SplitTitle' && (
+                    <div class="pl-pile">
+                      <SplitTitle text={'Cafés de spécialité\ndu Yunnan'} as="p" size="lg" />
+                      <p class="small muted">size="lg" — deux lignes, deux temps d’apparition</p>
+                    </div>
+                  )}
+                  {fiche.nom === 'PageHero' && (
+                    <div class="pl-encadre">
+                      <PageHero
+                        lang={lang}
+                        label="Origine"
+                        title={'Le Yunnan,\nde la cerise à la tasse'}
+                        intro="Trois fermes, trois terroirs, une même exigence."
+                        crumb="Origine"
+                        size="md"
+                      />
+                    </div>
+                  )}
+                  {fiche.nom === 'Breadcrumbs' && (
+                    <Breadcrumbs
+                      lang={lang}
+                      items={[{ href: url(lang), label: t.common.home }, { label: 'Origine' }]}
+                    />
+                  )}
+                  {fiche.nom === 'AnchorNav' && (
+                    <p class="pl-note">
+                      Juste sous le titre de cette page — le sommaire qui suit votre lecture.
+                    </p>
+                  )}
+                  {fiche.nom === 'Icon' && (
+                    <ul class="pl-icones">
+                      {iconesDemo.map((nom) => (
+                        <li>
+                          <Icon name={nom} size={26} />
+                          <span class="small muted">{nom}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {fiche.nom === 'Poincon' && (
+                    <div class="pl-pile">
+                      <p class="muted">Un premier propos s’achève ici.</p>
+                      <Poincon tight />
+                      <p class="muted">Un autre commence là.</p>
+                    </div>
+                  )}
+
+                  {fiche.nom === 'Photo' && (
+                    <div class="pl-duo">
+                      <figure class="media media--wide">
+                        <Photo name="cretes-brumeuses" lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
+                      </figure>
+                      <figure class="media media--tall">
+                        <Photo name="cerises-branche" lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
+                      </figure>
+                    </div>
+                  )}
+                  {fiche.nom === 'Packshot' && (
+                    <div class="pl-trio">
+                      {(['sm', 'md', 'lg'] as const).map((taille) => (
+                        <div>
+                          <Packshot product={exemple} lang={lang} size={taille} decorative />
+                          <p class="small muted">size="{taille}"</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {fiche.nom === 'ProductCard' && (
+                    <div class="pl-trio">
+                      <ProductCard product={exemple} lang={lang} />
+                      <ProductCard product={dripBags} lang={lang} />
+                      <ProductCard product={products[2]} lang={lang} compact />
+                    </div>
+                  )}
+                  {fiche.nom === 'BuyBox' && (
+                    <div class="pl-encadre pl-encadre--etroit">
+                      <BuyBox product={dripBags} lang={lang} />
+                    </div>
+                  )}
+
+                  {fiche.nom === 'ProBand' && <ProBand lang={lang} id="demo-pro" />}
+                  {fiche.nom === 'ClosingBand' && <ClosingBand lang={lang} id="demo-closing" />}
+                  {fiche.nom === 'SignatureBand' && <SignatureBand lang={lang} />}
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+    ))
+  }
+
+  <div class="wrap pl-fin">
+    <Poincon />
+    <p class="small muted">
+      Page de travail, hors du site public : elle n’est pas référencée et n’apparaît pas dans le
+      plan du site. Pour l’ouvrir : <code>/composants/</code>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .pl-top {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  :global(.pl-titre) {
+    margin-top: 0.75rem;
+  }
+
+  .pl-intro {
+    margin-top: 1.25rem;
+    max-width: 60ch;
+  }
+
+  .pl-sommaire {
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .pl-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .pl-table th {
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
+    font-weight: 400;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pl-table td {
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: baseline;
+  }
+
+  .pl-table th:nth-child(3),
+  .pl-table th:nth-child(4),
+  .pl-table td:nth-child(3),
+  .pl-table td:nth-child(4) {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .pl-famille {
+    padding-top: clamp(3rem, 7vw, 5rem);
+    scroll-margin-top: calc(var(--header-h) + 4rem);
+  }
+
+  .pl-famille__titre {
+    font-size: var(--fs-h3);
+  }
+
+  .pl-famille__propos {
+    margin-top: 0.6rem;
+    max-width: 58ch;
+  }
+
+  .pl-fiche {
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .pl-fiche__tete {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  @media (min-width: 900px) {
+    .pl-fiche__tete {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: start;
+    }
+  }
+
+  .pl-fiche__nom {
+    font-size: 1.25rem;
+  }
+
+  .pl-fiche__nom code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .pl-fiche__chemin {
+    margin-top: 0.3rem;
+  }
+
+  .pl-fiche__role {
+    margin-top: 0.85rem;
+    max-width: 54ch;
+  }
+
+  .pl-fiche__meta {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+  }
+
+  .pl-fiche__meta dt {
+    margin-bottom: 0.35rem;
+  }
+
+  .pl-fiche__meta dd {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .pl-fiche__ou {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .pl-demo {
+    border: 1px solid var(--line);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--paper);
+    /* Contient les éléments collants des démonstrations. */
+    overflow: hidden;
+  }
+
+  .pl-note {
+    color: var(--ink-50);
+    font-size: var(--fs-small);
+  }
+
+  .pl-pile {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .pl-encadre {
+    background: var(--paper-2);
+  }
+
+  .pl-encadre--etroit {
+    max-width: 30rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .pl-duo {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 700px) {
+    .pl-duo {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  .pl-trio {
+    display: grid;
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+
+  @media (min-width: 700px) {
+    .pl-trio {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  .pl-icones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .pl-icones li {
+    display: grid;
+    justify-items: center;
+    gap: 0.45rem;
+    text-align: center;
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85em;
+    background: var(--paper-2);
+    padding: 0.12em 0.4em;
+  }
+
+  .pl-fin {
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+</style>
