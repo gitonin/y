@@ -1,14 +1,18 @@
 ---
+import { Image } from 'astro:assets';
 import type { Lang, Product } from '../data/products';
+import { getPackshot } from '../data/packshots';
 import { useTranslations, asset } from '../i18n/utils';
 
 interface Props {
   product: Product;
   lang: Lang;
   size?: 'sm' | 'md' | 'lg';
+  /** Le nom du produit suit dans le même lien : l'image n'a rien à répéter. */
+  decorative?: boolean;
   class?: string;
 }
-const { product, lang, size = 'md', class: className = '' } = Astro.props;
+const { product, lang, size = 'md', decorative = false, class: className = '' } = Astro.props;
 const t = useTranslations(lang);
 const spec = product.specs;
 const rows: [string, string][] = [
@@ -19,10 +23,30 @@ const rows: [string, string][] = [
 ];
 const kind = product.visual;
 const markUrl = asset('brand/yunma-logo.png');
+/* Photographie du packaging quand elle existe ; sinon, le visuel dessiné. */
+const photo = getPackshot(product.slug);
+const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
 ---
 
-<div class={`shot shot--${size} shot--${kind} ${className}`} data-packshot>
+<div
+  class={`shot shot--${size} shot--${kind} ${photo ? 'shot--photo' : ''} ${className}`}
+  data-packshot
+>
   <div class="shot__stage">
+    {photo && (
+      <Image
+        class="shot__photo"
+        src={photo.src}
+        alt={decorative ? '' : photo.alt[lang]}
+        widths={largeurs}
+        sizes={size === 'lg' ? '(min-width: 900px) 52vw, 100vw' : '(min-width: 900px) 30vw, 50vw'}
+        loading="lazy"
+        decoding="async"
+      />
+    )}
+
+    {!photo && (
+    <>
     {(kind === 'bundle') && (
       <div class="shot__group">
         <div class="pouch pouch--back pouch--t1"><span class="pouch__mark" /></div>
@@ -58,6 +82,8 @@ const markUrl = asset('brand/yunma-logo.png');
         <span class="pouch__lot">{product.lot} · {product.variants[0].label[lang]}</span>
       </div>
     )}
+    </>
+    )}
   </div>
 </div>
 
@@ -88,6 +114,22 @@ const markUrl = asset('brand/yunma-logo.png');
     display: grid;
     place-items: center;
     transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* --- Photographie de packaging --- */
+  .shot__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    padding: 6%;
+    /* Le fichier porte déjà son ombre portée : le fondu multiplicatif la pose
+       sur le fond crème sans y ajouter de halo blanc. */
+    mix-blend-mode: multiply;
+  }
+
+  .shot--lg .shot__photo {
+    padding: 8%;
   }
 
   /* --- Sachet --- */

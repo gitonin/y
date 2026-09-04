@@ -5,7 +5,11 @@ Déposez ici les photographies des packagings, une par référence.
 ## Comment déposer
 
 Depuis GitHub, sur la branche `claude/yunma-site-v2` :
-**Add file → Upload files**, puis glissez les fichiers dans ce dossier.
+**Add file → Upload files**, ou directement par ce lien :
+<https://github.com/gitonin/y/upload/claude/yunma-site-v2/src/assets/produits>
+
+Déposer un fichier sous un nom déjà présent le remplace : rien d'autre n'est
+à modifier, le site reprend le nouveau visuel au déploiement suivant.
 
 ## Nommage attendu
 

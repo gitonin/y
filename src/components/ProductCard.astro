@@ -22,7 +22,7 @@ const aPartirDe = hasPriceRange(product);
 <article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
   <a class="pcard__link media-link" href={productUrl(lang, product.slug)}>
     <div class="media pcard__media">
-      <Packshot product={product} lang={lang} size={compact ? 'sm' : 'md'} />
+      <Packshot product={product} lang={lang} size={compact ? 'sm' : 'md'} decorative />
     </div>
     <div class="pcard__body">
       <h3 class="pcard__name">{product.name[lang]}</h3>
