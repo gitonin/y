@@ -1,6 +1,5 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
@@ -8,7 +7,7 @@ import ProBand from '../../components/ProBand.astro';
 import ClosingBand from '../../components/ClosingBand.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, route, url, postUrl, formatDate, absolute, type Lang } from '../../i18n/utils';
+import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
 import { products } from '../../data/products';
 import { SITE } from '../../consts';
 
@@ -17,10 +16,9 @@ export const getStaticPaths: GetStaticPaths = () => langPaths();
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 
-const posts = (await getCollection('journal'))
-  .filter((p) => p.id.startsWith(`${lang}/`) && !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+/* L'accueil ne montre que trois références : la première en pleine largeur,
+   les deux suivantes côte à côte. Le reste de la gamme est sur la page cafés. */
+const [enAvant, ...suivants] = products.slice(0, 3);
 
 const base = Astro.site ?? new URL('https://yunma.fr');
 const jsonld = [
@@ -78,115 +76,37 @@ const jsonld = [
     <span class="hero__scroll label" aria-hidden="true">{t.common.scroll}</span>
   </section>
 
-  <!-- ============ ORIGINE ============ -->
-  <section class="section" aria-labelledby="h-origine">
-    <div class="wrap grid grid--sidebar">
-      <div data-reveal>
-        <span class="label">{t.home.originLabel}</span>
-      </div>
-      <div>
-        <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title" />
-        <p class="lead muted origin__text" data-reveal id="h-origine">{t.home.originText}</p>
-        <a class="link" href={route(lang, 'origine')} data-reveal>
-          {t.home.originCta}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
+  <!-- ============ PRÉSENTATION ============ -->
+  <section class="intro" aria-labelledby="h-intro">
+    <div class="wrap wrap--narrow">
+      <span class="label" data-reveal>{t.home.originLabel}</span>
+      <p class="intro__text lead" data-reveal id="h-intro">{t.home.originText}</p>
     </div>
-
-    <figure class="bleed">
-      <div class="media media--wide">
-        <Photo name="recolte-cueilleurs" lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
-      </div>
-    </figure>
   </section>
 
   <!-- ============ CAFÉS ============ -->
-  <section class="section section--tight panel" aria-labelledby="h-cafes">
+  <section class="cafes" aria-labelledby="h-cafes">
     <div class="wrap">
-      <header class="shead">
-        <div>
-          <span class="label" data-reveal>{t.home.coffeesLabel}</span>
-          <SplitTitle text={t.home.coffeesTitle} as="h2" size="lg" class="sec-title" />
-        </div>
-        <div class="shead__aside">
-          <p class="muted" data-reveal id="h-cafes">{t.home.coffeesText}</p>
-          <a class="link" href={route(lang, 'cafes')} data-reveal>
-            {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-      </header>
+      <SplitTitle text={t.home.coffeesTitle} as="h2" size="lg" class="cafes__title" />
+      <p class="visually-hidden" id="h-cafes">{t.home.coffeesTitle.split('\n').join(' ')}</p>
 
-      <div class="pgrid">
-        {products.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
+      <ProductCard product={enAvant} lang={lang} feature />
+
+      <div class="cafes__duo">
+        {suivants.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
       </div>
+
+      <a class="btn cafes__btn" href={route(lang, 'cafes')}>
+        {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
 
-  <!-- ============ APPROCHE ============ -->
-  <section class="section" aria-labelledby="h-approche">
-    <div class="wrap approach">
-      <div class="approach__text">
-        <span class="label" data-reveal>{t.home.approachLabel}</span>
-        <SplitTitle text={t.home.approachTitle} as="h2" size="lg" class="sec-title" />
-        <p class="lead muted" data-reveal id="h-approche">{t.home.approachText}</p>
-        <a class="link" href={`${route(lang, 'origine')}#savoir-faire`} data-reveal>
-          {t.home.approachCta}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
-      <figure class="approach__media">
-        <div class="media media--tall">
-          <Photo name="cerises-branche" lang={lang} position="60% 55%" sizes="(min-width: 860px) 52vw, 100vw" />
-        </div>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ============ JOURNAL ============ -->
-  {
-    posts.length > 0 && (
-      <section class="section section--tight panel panel--soft" aria-labelledby="h-journal">
-        <div class="wrap">
-          <header class="shead">
-            <div>
-              <span class="label" data-reveal>{t.home.journalLabel}</span>
-              <SplitTitle text={t.home.journalTitle} as="h2" size="md" />
-            </div>
-            <div class="shead__aside">
-              <a class="link" href={route(lang, 'journal')} data-reveal id="h-journal">
-                {t.journal.all}
-                <span class="arrow" aria-hidden="true">
-                  →
-                </span>
-              </a>
-            </div>
-          </header>
-
-          <ul class="jgrid">
-            {posts.map((post, i) => (
-              <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
-                <a class="jcard media-link" href={postUrl(lang, post.id.split('/')[1])}>
-                  <div class="media media--wide">
-                    <Photo name={post.data.photo} lang={lang} decorative sizes="(min-width: 760px) 32vw, 100vw" />
-                  </div>
-                  <time class="label jcard__date" datetime={post.data.date.toISOString()}>
-                    {formatDate(post.data.date, lang)}
-                  </time>
-                  <h3 class="jcard__title">{post.data.title}</h3>
-                  <p class="small muted jcard__desc">{post.data.description}</p>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- ============ PRO ============ -->
-  <ProBand lang={lang} />
-
-  <!-- ============ IMAGE DE FIN ============ -->
+  <!-- ============ PUSH ORIGINE ============ -->
   <ClosingBand lang={lang} />
+
+  <!-- ============ PUSH PRO ============ -->
+  <ProBand lang={lang} />
 </Base>
 
 <style>
@@ -224,9 +144,9 @@ const jsonld = [
     background:
       linear-gradient(
         180deg,
-        rgba(235, 231, 222, 0.68) 0,
-        rgba(235, 231, 222, 0.64) var(--haut-titre),
-        rgba(235, 231, 222, 0.54) calc(var(--haut-titre) + 11rem),
+        rgba(235, 231, 222, 0.74) 0,
+        rgba(235, 231, 222, 0.7) var(--haut-titre),
+        rgba(235, 231, 222, 0.58) calc(var(--haut-titre) + 11rem),
         rgba(235, 231, 222, 0.28) calc(var(--haut-titre) + 18rem),
         rgba(235, 231, 222, 0) calc(var(--haut-titre) + 25rem)
       ),
@@ -278,118 +198,60 @@ const jsonld = [
     }
   }
 
-  /* ---------- Sections ---------- */
-  :global(.sec-title) {
-    margin-bottom: 1.25rem;
+  /* ---------- Présentation ---------- */
+  .intro {
+    padding-block: clamp(3.5rem, 8vw, 6.5rem);
   }
 
-  .origin__text {
-    max-width: 46ch;
-    margin-bottom: 1.5rem;
+  .intro__text {
+    margin-top: 1rem;
+    text-wrap: pretty;
   }
 
-  .bleed {
-    margin-top: clamp(2.5rem, 6vw, 5rem);
-    padding-inline: var(--gutter);
-    max-width: var(--max);
-    margin-inline: auto;
+  /* ---------- Cafés ---------- */
+  .cafes {
+    padding-bottom: clamp(3.5rem, 8vw, 6.5rem);
   }
 
-  .shead {
-    display: grid;
-    gap: 1.5rem;
-    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  :global(.cafes__title) {
+    margin-bottom: clamp(2rem, 5vw, 3.25rem);
   }
 
-  @media (min-width: 860px) {
-    .shead {
-      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-      align-items: end;
-      gap: clamp(2rem, 6vw, 5rem);
-    }
-  }
-
-  .shead__aside {
-    display: grid;
-    gap: 1rem;
-    justify-items: start;
-    max-width: 44ch;
-  }
-
-  .pgrid {
+  /* Deux références sous celle mise en avant, sur deux colonnes à toutes
+     les largeurs : c'est le rythme demandé, y compris sur téléphone. */
+  .cafes__duo {
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
   }
 
+  /* Dans la paire, chaque visuel garde sa gouttière : sans quoi les deux
+     colonnes se toucheraient. Seul le produit mis en avant sort du cadre. */
+  .cafes__duo :global(.bleed-mobile) {
+    margin-inline: 0;
+    width: 100%;
+  }
+
+  /* Sur grand écran, la paire passe au carré : deux visuels au format
+     portrait dépasseraient en hauteur celui du produit mis en avant, et la
+     hiérarchie de la page s'inverserait. */
   @media (min-width: 700px) {
-    .pgrid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .cafes__duo :global(.shot) {
+      aspect-ratio: 1 / 1;
     }
   }
 
-  @media (min-width: 1100px) {
-    .pgrid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+  .cafes__btn {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  @media (min-width: 700px) {
+    .cafes__btn {
+      width: auto;
+      justify-self: start;
+      padding-inline: 2.5rem;
     }
-  }
-
-  .approach {
-    display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: center;
-  }
-
-  @media (min-width: 860px) {
-    .approach {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    }
-  }
-
-  .approach__text {
-    display: grid;
-    gap: 1rem;
-    justify-items: start;
-  }
-
-  .approach__text .lead {
-    max-width: 42ch;
-  }
-
-  /* ---------- Journal ---------- */
-  .jgrid {
-    display: grid;
-    gap: clamp(1.75rem, 4vw, 2.75rem);
-  }
-
-  @media (min-width: 760px) {
-    .jgrid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .jcard__date {
-    margin-top: 1rem;
-  }
-
-  .jcard__title {
-    margin-top: 0.5rem;
-    font-size: 1.0625rem;
-    line-height: 1.32;
-    transition: color 0.4s var(--ease);
-  }
-
-  .jcard:hover .jcard__title {
-    color: var(--accent);
-  }
-
-  .jcard__desc {
-    margin-top: 0.5rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 
 </style>

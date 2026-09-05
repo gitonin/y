@@ -11,15 +11,17 @@ import { useTranslations, asset } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
+  /** Sur fond sombre, le lettrage passe en clair. */
+  dark?: boolean;
 }
-const { lang } = Astro.props;
+const { lang, dark = false } = Astro.props;
 const t = useTranslations(lang);
 
 /* Assez de répétitions pour couvrir les très larges écrans sans laisser de vide. */
 const motifs = Array.from({ length: 10 });
 /* Le lettrage de la signature est fourni tracé : l'étoile et la typographie
    sont celles de la marque, identiques d'une langue à l'autre. */
-const signe = asset('brand/yunma-signature.svg');
+const signe = asset(dark ? 'brand/yunma-signature-clair.svg' : 'brand/yunma-signature.svg');
 const lecture = `${t.common.signatureStart} — ${t.common.signatureEnd}`;
 ---
 

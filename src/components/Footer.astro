@@ -43,7 +43,7 @@ const rowA = [
 
     <div class="ft__main">
       <a class="ft__logo" href={url(lang)} aria-label={t.a11y.logo}>
-        <img src={asset("brand/yunma-logo.svg")} alt="Yunma" width="430" height="648" loading="lazy" />
+        <img src={asset("brand/yunma-logo-clair.svg")} alt="Yunma" width="430" height="648" loading="lazy" />
       </a>
 
       <nav class="ft__nav" aria-label={t.footer.nav}>
@@ -54,7 +54,6 @@ const rowA = [
         </ul>
         <ul class="ft__row ft__row--soft">
           <li><a href={route(lang, 'faq')}>{t.nav.faq}</a></li>
-          <li><a href={route(lang, 'contact')}>{t.nav.contact}</a></li>
           <li>
             <a href={SHOPIFY.accountUrl || route(lang, 'contact')} rel={SHOPIFY.accountUrl ? 'nofollow' : undefined}>
               {t.nav.account}
@@ -65,6 +64,27 @@ const rowA = [
           </li>
         </ul>
       </nav>
+
+      <ul class="ft__joindre">
+        <li>
+          <a class="ft__pastille" href={route(lang, 'contact')}>
+            <Icon name="mail" size={17} />
+            {t.nav.contact}
+          </a>
+        </li>
+        <li>
+          <a
+            class="ft__pastille"
+            href={SITE.social.instagram}
+            rel="me noopener"
+            target="_blank"
+          >
+            <Icon name="instagram" size={17} />
+            Instagram
+            <span class="visually-hidden">{t.footer.follow}</span>
+          </a>
+        </li>
+      </ul>
 
       <ul class="ft__lang" aria-label={t.nav.language}>
         {languages.map((code) => (
@@ -81,7 +101,7 @@ const rowA = [
 
   </div>
 
-  <SignatureBand lang={lang} />
+  <SignatureBand lang={lang} dark />
 
   <div class="wrap">
     <div class="ft__base small">
@@ -99,11 +119,36 @@ const rowA = [
 </footer>
 
 <style>
+  /* Le pied de page ferme le site sur un aplat sombre. Les couleurs de texte
+     sont redéfinies localement : les variables d'encre du site sont faites
+     pour du texte foncé sur fond clair, c'est ici l'inverse. */
   .ft {
-    border-top: 1px solid var(--line);
+    --ft-fg: #ebe7de;
+    --ft-fg-70: rgba(235, 231, 222, 0.72);
+    --ft-fg-50: rgba(235, 231, 222, 0.55);
+    --ft-line: rgba(235, 231, 222, 0.16);
+    background: #212121;
+    color: var(--ft-fg);
     padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3rem);
     position: relative;
     z-index: 2;
+  }
+
+  /* Le grain du fond de page, en fondu multiplicatif, noircirait l'aplat. */
+  .ft :global(.rule) {
+    background: var(--ft-line);
+  }
+
+  /* Les classes d'usage du site portent une encre foncée : sur cet aplat,
+     elles reprennent les tons clairs du pied de page. */
+  .label,
+  .ft :global(.label) {
+    color: var(--ft-fg-50);
+  }
+
+  .muted,
+  .ft :global(.muted) {
+    color: var(--ft-fg-70);
   }
 
   .ft__news {
@@ -123,7 +168,7 @@ const rowA = [
   .ft__newsText {
     margin-top: 0.65rem;
     max-width: 40ch;
-    color: var(--ink-70);
+    color: var(--ft-fg-70);
     font-size: var(--fs-small);
   }
 
@@ -132,12 +177,16 @@ const rowA = [
     display: flex;
     align-items: center;
     gap: 1rem;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--ft-line);
     transition: border-color 0.4s var(--ease);
   }
 
   .ft__form:focus-within {
-    border-color: var(--ink);
+    border-color: var(--ft-fg);
+  }
+
+  .ft__form input::placeholder {
+    color: var(--ft-fg-50);
   }
 
   .ft__form input {
@@ -174,7 +223,8 @@ const rowA = [
     position: absolute;
     left: 0;
     bottom: -1.75rem;
-    color: var(--accent);
+    /* L'orange de la marque n'a pas assez de contraste sur l'aplat sombre. */
+    color: #e8a074;
   }
 
   .ft__main {
@@ -244,7 +294,35 @@ const rowA = [
   }
 
   .ft__row--soft {
-    color: var(--ink-50);
+    color: var(--ft-fg-50);
+  }
+
+  /* Contact et Instagram, mis en avant : ce sont les deux portes d'entrée
+     vers la marque hors du site. */
+  .ft__joindre {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1rem;
+  }
+
+  .ft__pastille {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.15rem;
+    border: 1px solid var(--ft-line);
+    border-radius: 999px;
+    font-size: var(--fs-small);
+    line-height: 1;
+    transition:
+      border-color 0.4s var(--ease),
+      background-color 0.4s var(--ease);
+  }
+
+  .ft__pastille:hover {
+    border-color: var(--ft-fg-50);
+    background: rgba(235, 231, 222, 0.07);
   }
 
   .ft__lang {
@@ -253,11 +331,14 @@ const rowA = [
     font-size: var(--fs-label);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-    color: var(--ink-30);
+    /* Les langues non retenues restent en retrait, mais assez lisibles pour
+       rester cliquables : sur cet aplat, un ton plus sourd tombait sous le
+       seuil de contraste. */
+    color: var(--ft-fg-50);
   }
 
   .ft__lang a.is-active {
-    color: var(--ink);
+    color: var(--ft-fg);
   }
 
   .ft__base {
@@ -266,8 +347,8 @@ const rowA = [
     align-items: center;
     gap: 0.6rem;
     padding-top: clamp(1.5rem, 3vw, 2rem);
-    border-top: 1px solid var(--line-soft);
-    color: var(--ink-50);
+    border-top: 1px solid var(--ft-line);
+    color: var(--ft-fg-50);
     text-align: center;
   }
 
@@ -275,7 +356,7 @@ const rowA = [
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    color: var(--ink-50);
+    color: var(--ft-fg-50);
   }
 
   .ft__legal {

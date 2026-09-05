@@ -166,11 +166,13 @@ titre('La bande pro et l’image de fin closent aussi la page des cafés');
       return {
         pro: decrire(pro),
         fin: decrire(fin),
-        /* l'infolettre vit dans le pied de page : les deux blocs la précèdent */
+        /* L'infolettre vit dans le pied de page : les deux blocs la précèdent.
+           Depuis la version 3, le renvoi vers l'origine passe avant celui
+           vers l'offre professionnelle. */
         avantLePied: !!pro && !!fin && !!pied
           && !!(pro.compareDocumentPosition(pied) & Node.DOCUMENT_POSITION_FOLLOWING)
           && !!(fin.compareDocumentPosition(pied) & Node.DOCUMENT_POSITION_FOLLOWING)
-          && !!(pro.compareDocumentPosition(fin) & Node.DOCUMENT_POSITION_FOLLOWING),
+          && !!(fin.compareDocumentPosition(pro) & Node.DOCUMENT_POSITION_FOLLOWING),
       };
     });
   };

@@ -1,0 +1,73 @@
+---
+/**
+ * Renvoi vers une autre page du site, en fin de parcours. Une phrase, un lien,
+ * rien de plus : c'est un relais, pas une section.
+ */
+import type { Lang } from '../i18n/utils';
+
+interface Props {
+  label: string;
+  title: string;
+  cta: string;
+  href: string;
+  /** Alterne le fond d'un renvoi à l'autre, pour qu'ils ne se confondent pas. */
+  tone?: 'paper' | 'soft';
+  lang?: Lang;
+}
+const { label, title, cta, href, tone = 'paper' } = Astro.props;
+---
+
+<section class:list={['push', tone === 'soft' && 'panel panel--soft']}>
+  <a class="wrap push__inner" href={href}>
+    <div>
+      <span class="label" data-reveal>{label}</span>
+      <p class="push__title" data-reveal>{title}</p>
+    </div>
+    <span class="link push__cta" data-reveal>
+      {cta}<span class="arrow" aria-hidden="true">→</span>
+    </span>
+  </a>
+</section>
+
+<style>
+  .push {
+    border-top: 1px solid var(--line);
+  }
+
+  .push__inner {
+    display: grid;
+    gap: 1.25rem;
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  @media (min-width: 860px) {
+    .push__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      align-items: end;
+    }
+  }
+
+  .push__title {
+    margin-top: 0.75rem;
+    font-size: var(--fs-h3);
+    font-weight: var(--w-bold);
+    letter-spacing: -0.016em;
+    line-height: 1.2;
+    max-width: 22ch;
+    transition: color 0.4s var(--ease);
+  }
+
+  .push__inner:hover .push__title {
+    color: var(--accent);
+  }
+
+  .push__cta {
+    justify-self: start;
+  }
+
+  @media (min-width: 860px) {
+    .push__cta {
+      justify-self: end;
+    }
+  }
+</style>

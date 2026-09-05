@@ -7,6 +7,8 @@ import AnchorNav from '../../components/AnchorNav.astro';
 import Icon from '../../components/Icon.astro';
 import Poincon from '../../components/Poincon.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
+import Push from '../../components/Push.astro';
+import ProBand from '../../components/ProBand.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, asset, type Lang } from '../../i18n/utils';
@@ -69,11 +71,9 @@ const jsonld = [
 
   <!-- ============ LE YUNNAN ============ -->
   <section id="terroir" class="anchor-target">
-    <div class="wrap">
-      <figure class="media media--wide" data-reveal>
-        <Photo name="cretes-brumeuses" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
-      </figure>
-    </div>
+    <figure class="media ouverture" data-reveal>
+      <Photo name="cretes-brumeuses" lang={lang} priority sizes="100vw" />
+    </figure>
 
     <div class="section">
       <div class="wrap osections">
@@ -85,7 +85,7 @@ const jsonld = [
                 <h2 class="osection__title" data-reveal>{section.title}</h2>
                 <p class="muted" data-reveal>{section.text}</p>
               </div>
-              <figure class="media media--tall osection__media">
+              <figure class="media media--tall osection__media bleed-mobile">
                 <Photo
                   name={sectionPhotos[i % sectionPhotos.length]}
                   lang={lang}
@@ -99,9 +99,9 @@ const jsonld = [
       </div>
     </div>
 
-    <div class="quote panel">
-      <div class="wrap wrap--narrow">
-        <blockquote data-reveal>“{t.origine.quote}”</blockquote>
+    <div class="citation citation--centre">
+      <div class="wrap">
+        <p data-reveal>{t.origine.quote}</p>
       </div>
     </div>
 
@@ -156,21 +156,21 @@ const jsonld = [
 
       <div class="grid grid--sidebar hstory">
         <p class="lead" data-reveal>{t.apropos.storyText}</p>
-        <div class="mission stack">
-          <div data-reveal>
-            <h3 class="mission__title">{t.apropos.missionTitle}</h3>
-            <p class="muted">{t.apropos.missionText}</p>
-          </div>
-          <div data-reveal>
-            <h3 class="mission__title">{t.apropos.approachTitle}</h3>
-            <p class="muted">{t.apropos.approachText}</p>
-          </div>
-        </div>
+        <p class="muted" data-reveal>{t.apropos.missionText}</p>
       </div>
+    </div>
 
-      <figure class="media media--wide hstory__media" data-reveal>
-        <Photo name="recolte-cueilleurs" lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
-      </figure>
+    <figure class="media hstory__media" data-reveal>
+      <Photo name="recolte-cueilleurs" lang={lang} sizes="100vw" />
+    </figure>
+
+    <div class="citation">
+      <div class="wrap">
+        <p data-reveal>{t.origine.pull2}</p>
+      </div>
+    </div>
+
+    <div class="wrap">
 
       <h3 class="label figures__title" data-reveal>{t.apropos.figuresTitle}</h3>
       <dl class="figures">
@@ -185,6 +185,12 @@ const jsonld = [
       </dl>
     </div>
   </section>
+
+  <div class="citation">
+    <div class="wrap">
+      <p data-reveal>{t.origine.pull3}</p>
+    </div>
+  </div>
 
   <!-- ============ SAVOIR-FAIRE ============ -->
   <section id="savoir-faire" class="section panel anchor-target">
@@ -265,23 +271,54 @@ const jsonld = [
     </div>
   </section>
 
-  <!-- ============ CLÔTURE ============ -->
-  <section class="closing">
-    <div class="closing__media media">
-      <Photo name="cretes-brumeuses" lang={lang} decorative sizes="100vw" />
-    </div>
-    <div class="closing__inner wrap">
-      <SplitTitle text={t.apropos.closing} as="p" size="closing" class="on-dark" />
-      <a class="link closing__cta" href={route(lang, 'cafes')}>
-        {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </section>
+  <!-- ============ RENVOIS ============ -->
+  <Push
+    label={t.origine.pushCafesLabel}
+    title={t.origine.pushCafesTitle}
+    cta={t.origine.pushCafesCta}
+    href={route(lang, 'cafes')}
+  />
+  <Push
+    label={t.origine.pushJournalLabel}
+    title={t.origine.pushJournalTitle}
+    cta={t.origine.pushJournalCta}
+    href={route(lang, 'journal')}
+    tone="soft"
+  />
+  <ProBand lang={lang} />
 </Base>
 
 <style>
   .anchor-target {
     scroll-margin-top: calc(var(--header-h) + 3.25rem);
+  }
+
+  /* Photo d'ouverture : pleine largeur, et haute — c'est le Yunnan qui
+     ouvre la page, pas un bandeau. */
+  .ouverture {
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 700px) {
+    .ouverture {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .ouverture {
+      aspect-ratio: 21 / 9;
+    }
+  }
+
+  .hstory__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 700px) {
+    .hstory__media {
+      aspect-ratio: 16 / 9;
+    }
   }
 
   :global(.hsection-title) {
@@ -323,19 +360,6 @@ const jsonld = [
 
   .osection__text p {
     max-width: 46ch;
-  }
-
-  .quote {
-    padding-block: clamp(3.5rem, 8vw, 6rem);
-    text-align: center;
-  }
-
-  .quote blockquote {
-    font-size: var(--fs-h3);
-    line-height: 1.32;
-    letter-spacing: -0.015em;
-    max-width: 24ch;
-    margin-inline: auto;
   }
 
   .terroirs {
@@ -419,15 +443,6 @@ const jsonld = [
 
   .mission {
     --stack: 2rem;
-  }
-
-  .mission__title {
-    font-size: var(--fs-h3);
-    margin-bottom: 0.65rem;
-  }
-
-  .mission p {
-    max-width: 48ch;
   }
 
   .hstory__media {

@@ -62,7 +62,7 @@ const jsonld = [
     {
       featured && (
         <a class="feat media-link" href={postUrl(lang, slugOf(featured.id))} data-reveal>
-          <div class="media feat__media">
+          <div class="media feat__media bleed-mobile">
             <Photo name={featured.data.photo} lang={lang} priority decorative sizes="(min-width: 900px) 58vw, 100vw" />
           </div>
           <div class="feat__body">
@@ -84,7 +84,7 @@ const jsonld = [
           {rest.map((post, i) => (
             <li data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
               <a class="jitem media-link" href={postUrl(lang, slugOf(post.id))}>
-                <div class="media media--wide">
+                <div class="media media--wide bleed-mobile">
                   <Photo name={post.data.photo} lang={lang} decorative sizes="(min-width: 760px) 32vw, 100vw" />
                 </div>
                 <time class="label jitem__date" datetime={post.data.date.toISOString()}>

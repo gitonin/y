@@ -26,16 +26,16 @@ const lines: string[] = text.split('\n');
 
 <style>
   .ttl {
-    font-weight: 400;
-    letter-spacing: -0.02em;
+    font-weight: var(--w-bold);
+    letter-spacing: -0.026em;
     line-height: 1.06;
     text-wrap: balance;
   }
 
   .ttl--hero {
-    font-size: clamp(2.5rem, 1.6rem + 4vw, 5rem);
+    font-size: clamp(2.5625rem, 1.6625rem + 4vw, 5.0625rem);
     line-height: 1.02;
-    letter-spacing: -0.028em;
+    letter-spacing: -0.032em;
     text-shadow: 0 1px 40px rgba(33, 33, 33, 0.22);
   }
 
@@ -50,13 +50,13 @@ const lines: string[] = text.split('\n');
   .ttl--md {
     font-size: var(--fs-h3);
     line-height: 1.2;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.016em;
   }
 
   .ttl--closing {
-    font-size: clamp(1.85rem, 1.2rem + 3vw, 3.5rem);
+    font-size: clamp(1.9125rem, 1.2625rem + 3vw, 3.5625rem);
     line-height: 1.08;
-    letter-spacing: -0.024em;
+    letter-spacing: -0.03em;
     max-width: 20ch;
   }
 

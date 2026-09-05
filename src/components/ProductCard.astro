@@ -10,8 +10,10 @@ interface Props {
   lang: Lang;
   index?: number;
   compact?: boolean;
+  /** Produit mis en avant : visuel et texte côte à côte, sur toute la largeur. */
+  feature?: boolean;
 }
-const { product, lang, index = 0, compact = false } = Astro.props;
+const { product, lang, index = 0, compact = false, feature = false } = Astro.props;
 const t = useTranslations(lang);
 /* Plusieurs formats à des prix différents : on annonce le plus bas, sans le laisser
    passer pour le prix unique. */
@@ -19,19 +21,32 @@ const price = fromPrice(product);
 const aPartirDe = hasPriceRange(product);
 ---
 
-<article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
+<article
+  class:list={['pcard', compact && 'pcard--compact', feature && 'pcard--feature']}
+  data-reveal
+  style={`--reveal-delay:${(index % 3) * 90}ms`}
+>
   <a class="pcard__link media-link" href={productUrl(lang, product.slug)}>
-    <div class="media pcard__media">
-      <Packshot product={product} lang={lang} size={compact ? 'sm' : 'md'} decorative />
+    <div class="media pcard__media bleed-mobile">
+      <Packshot product={product} lang={lang} size={feature ? 'lg' : compact ? 'sm' : 'md'} decorative />
     </div>
     <div class="pcard__body">
       <h3 class="pcard__name">{product.name[lang]}</h3>
       <p class="pcard__sub muted small">{product.subtitle[lang]}</p>
       {!compact && <p class="pcard__notes small">{product.short[lang]}</p>}
+      {feature && <p class="pcard__story muted">{product.description[lang]}</p>}
       <p class="pcard__price mono-num">
         {aPartirDe && <span class="pcard__from">{t.common.from} </span>}
         {formatPrice(price, lang)}
       </p>
+      {feature && (
+        <span class="link pcard__cta">
+          {t.common.discover}
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        </span>
+      )}
     </div>
   </a>
 </article>
@@ -86,5 +101,44 @@ const aPartirDe = hasPriceRange(product);
   .pcard__price {
     margin-top: 0.5rem;
     font-size: var(--fs-small);
+  }
+
+  /* ---------- Produit mis en avant ---------- */
+  .pcard--feature .pcard__link {
+    display: grid;
+    gap: clamp(1rem, 3vw, 3rem);
+    align-items: center;
+  }
+
+  @media (min-width: 800px) {
+    .pcard--feature .pcard__link {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+
+  .pcard--feature .pcard__body {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: start;
+  }
+
+  .pcard--feature .pcard__name {
+    font-size: var(--fs-h3);
+    font-weight: var(--w-bold);
+    letter-spacing: -0.016em;
+  }
+
+  .pcard__story {
+    margin-top: 0.75rem;
+    max-width: 46ch;
+  }
+
+  .pcard--feature .pcard__price {
+    margin-top: 0.75rem;
+    font-size: var(--fs-lead);
+  }
+
+  .pcard__cta {
+    margin-top: 1rem;
   }
 </style>

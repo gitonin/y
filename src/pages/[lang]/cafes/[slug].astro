@@ -24,7 +24,11 @@ const base = Astro.site ?? new URL('https://yunma.fr');
 /* Le prix affiché en haut de page est celui de la variante sélectionnée :
    il est réactualisé par l'encart d'achat à chaque changement de format. */
 const variantePardefaut = defaultVariant(product);
-const related = product.related.map((slug) => getProduct(slug)).filter(Boolean);
+/* Deux suggestions : la grille est sur deux colonnes, une troisième
+   carte resterait seule sur sa ligne. */
+/* Deux suggestions : la grille est sur deux colonnes, une troisième carte
+   resterait seule sur sa ligne. */
+const related = product.related.map((slug) => getProduct(slug)).filter(Boolean).slice(0, 2);
 
 const specRows = [
   { label: t.product.origin, value: product.specs.origin[lang] },
@@ -99,6 +103,10 @@ const jsonld = [
   },
 ];
 
+/* Sous le visuel du producteur, une accroche courte : la première phrase du
+   récit de la ferme. Le texte complet attend dans le tiroir. */
+const accroche = product.farm.text[lang].split('\n')[0].split('. ')[0] + '.';
+
 const seoTitle = `${product.name[lang]} — ${product.subtitle[lang]}`;
 const seoDescription = `${product.short[lang]} ${product.description[lang]}`.slice(0, 300);
 ---
@@ -123,7 +131,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 
     <div class="pdp">
       <div class="pdp__visual">
-        <div class="media pdp__media">
+        <div class="media pdp__media bleed-mobile">
           <Packshot product={product} lang={lang} size="lg" />
         </div>
       </div>
@@ -138,50 +146,41 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 
         <BuyBox product={product} lang={lang} hidePrice />
 
-        <dl class="specs">
-          {
-            specRows.map((row) => (
-              <div class="specs__row">
-                <dt class="label">{row.label}</dt>
-                <dd>{row.value}</dd>
-              </div>
-            ))
-          }
-        </dl>
-
         <a class="link pdp__more" href="#about">
           {t.common.learnMore}<span class="arrow" aria-hidden="true">↓</span>
         </a>
       </div>
     </div>
 
-    <figure class="media pdp__ambiance" data-reveal>
-      <Photo name={product.ambiance} lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
-    </figure>
+    <!-- ============ DERRIÈRE CE CAFÉ ============ -->
+    <section class="prod" data-reveal aria-labelledby="h-prod">
+      <figure class="media prod__media bleed-mobile">
+        <Photo name={product.farm.photo} lang={lang} sizes="(min-width: 900px) 54vw, 100vw" />
+      </figure>
+      <div class="prod__text">
+        <span class="label">{t.product.producerTitle}</span>
+        <h2 class="prod__name" id="h-prod">{product.farm.name}</h2>
+        <p class="small muted prod__place">{product.farm.place[lang]}</p>
+        <p class="prod__body">{accroche}</p>
+      </div>
+    </section>
 
-    <section class="about" id="about" data-reveal>
-      <h2 class="about__title">{t.product.aboutTitle}</h2>
-      <div class="about__grid">
-        <div class="about__text stack">
+    <!-- ============ LE CAFÉ, ET COMMENT LE FAIRE ============ -->
+    <section class="carte bleed-mobile" id="about" data-reveal>
+      <div class="carte__inner">
+        <div class="carte__bloc">
+          <h2 class="carte__titre">{t.product.aboutTitle}</h2>
           <p>{product.description[lang]}</p>
-          <p class="muted">{product.story[lang]}</p>
-          {
-            product.includes && (
-              <ul class="includes">
-                {product.includes.map((item) => (
-                  <li>{item[lang]}</li>
-                ))}
-              </ul>
-            )
-          }
+          <p class="carte__second">{product.story[lang]}</p>
         </div>
-
-        <div class="about__side">
-          <dl class="details">
+        <div class="carte__bloc">
+          <h2 class="carte__titre">{t.product.brewTitle}</h2>
+          <p>{product.brew[lang]}</p>
+          <dl class="carte__reperes">
             {
               detailRows.map((row) => (
-                <div class="details__row">
-                  <Icon name={row.icon} size={22} class="details__icon" />
+                <div>
+                  <Icon name={row.icon} size={20} class="carte__icone" />
                   <div>
                     <dt class="label">{row.label}</dt>
                     <dd>{row.value}</dd>
@@ -192,28 +191,65 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
           </dl>
         </div>
       </div>
-
-      <div class="brew" data-reveal>
-        <h3 class="brew__title">{t.product.brewTitle}</h3>
-        <p class="muted">{product.brew[lang]}</p>
-      </div>
     </section>
 
-    <section class="farm" data-reveal>
-      <div class="farm__media media">
-        <Photo name={product.farm.photo} lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
-      </div>
-      <div class="farm__text">
-        <span class="label">{t.product.farmTitle}</span>
-        <h2 class="farm__name">{product.farm.name}</h2>
-        <p class="small muted farm__place">{product.farm.place[lang]}</p>
-        {
-          /* Le texte de la ferme peut tenir en plusieurs paragraphes. */
-          product.farm.text[lang].split('\n').map((paragraphe) => (
-            <p class="muted farm__body">{paragraphe}</p>
-          ))
-        }
-      </div>
+    <!-- ============ TIROIRS ============ -->
+    <section class="tiroirs" data-reveal aria-labelledby="h-tiroirs">
+      <h2 class="label" id="h-tiroirs">{t.product.drawersTitle}</h2>
+
+      <details class="tiroir" name="pdp">
+        <summary>
+          <span>{t.product.specsDrawer}</span>
+          <span class="tiroir__signe" aria-hidden="true" />
+        </summary>
+        <div class="tiroir__corps">
+          <dl class="fiche">
+            {
+              specRows.map((row) => (
+                <div class="fiche__ligne">
+                  <dt class="label">{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </details>
+
+      <details class="tiroir" name="pdp">
+        <summary>
+          <span>{t.product.farmDrawer}</span>
+          <span class="tiroir__signe" aria-hidden="true" />
+        </summary>
+        <div class="tiroir__corps">
+          <figure class="media tiroir__media bleed-mobile">
+            <Photo name={product.ambiance} lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
+          </figure>
+          {
+            product.farm.text[lang].split('\n').map((paragraphe) => (
+              <p class="muted tiroir__para">{paragraphe}</p>
+            ))
+          }
+        </div>
+      </details>
+
+      {
+        product.includes && (
+          <details class="tiroir" name="pdp">
+            <summary>
+              <span>{t.product.includesDrawer}</span>
+              <span class="tiroir__signe" aria-hidden="true" />
+            </summary>
+            <div class="tiroir__corps">
+              <ul class="includes">
+                {product.includes.map((item) => (
+                  <li>{item[lang]}</li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        )
+      }
     </section>
 
     {
@@ -223,7 +259,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
             {t.product.relatedTitle}
           </h2>
           <div class="related__grid">
-            {related.map((item, i) => item && <ProductCard product={item} lang={lang} index={i} compact />)}
+            {related.map((item, i) => item && <ProductCard product={item} lang={lang} index={i} />)}
           </div>
         </section>
       )
@@ -297,57 +333,203 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
     font-size: var(--fs-small);
   }
 
-  /* Une image du terroir ouvre le récit de la fiche. Elle occupe toute la
-     largeur, mais en bandeau : elle réchauffe la page sans lui voler la
-     vedette, que garde le sachet. */
-  .pdp__ambiance {
-    margin-top: clamp(3.5rem, 8vw, 6rem);
+  /* ---------- Derrière ce café ---------- */
+  .prod {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .prod {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+
+  .prod__media {
     aspect-ratio: 4 / 3;
   }
 
-  @media (min-width: 700px) {
-    .pdp__ambiance {
-      aspect-ratio: 16 / 9;
+  @media (min-width: 900px) {
+    .prod__media {
+      aspect-ratio: 3 / 2;
     }
   }
 
-  @media (min-width: 1100px) {
-    .pdp__ambiance {
-      aspect-ratio: 21 / 9;
-    }
-  }
-
-  .about {
-    margin-top: clamp(2.25rem, 5vw, 3.5rem);
-    scroll-margin-top: calc(var(--header-h) + 2rem);
-  }
-
-  .about__title {
+  .prod__name {
+    margin-top: 0.6rem;
     font-size: var(--fs-h3);
-    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: var(--w-bold);
   }
 
-  .about__grid {
+  .prod__place {
+    margin-top: 0.2rem;
+  }
+
+  .prod__body {
+    margin-top: 1rem;
+    max-width: 44ch;
+  }
+
+  /* ---------- Le café, et comment le faire ---------- */
+  /* Le fond appuyé détache ces deux blocs du reste de la page : c'est là
+     que se joue la décision d'achat, une fois le prix passé. */
+  .carte {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    background: var(--paper-3);
+  }
+
+  .carte__inner {
+    padding: clamp(1.75rem, 5vw, 3.5rem);
     display: grid;
-    gap: clamp(2rem, 4vw, 4rem);
+    gap: clamp(2rem, 5vw, 4rem);
   }
 
-  @media (min-width: 860px) {
-    .about__grid {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  @media (min-width: 900px) {
+    .carte__inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  .about__text {
-    --stack: 1.1rem;
-    max-width: 62ch;
+  .carte__bloc {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    max-width: 52ch;
+  }
+
+  .carte__titre {
+    font-size: var(--fs-h3);
+    font-weight: var(--w-bold);
+    margin-bottom: 0.3rem;
+  }
+
+  .carte__second {
+    color: var(--ink-70);
+  }
+
+  .carte__reperes {
+    margin-top: 0.75rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .carte__reperes > div {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .carte__reperes :global(.carte__icone) {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--ink-50);
+  }
+
+  .carte__reperes dd {
+    margin: 0.15rem 0 0;
+  }
+
+  /* ---------- Tiroirs ---------- */
+  .tiroirs {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .tiroir {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tiroir:first-of-type {
+    border-top: 1px solid var(--line);
+    margin-top: 1.25rem;
+  }
+
+  .tiroir summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: clamp(1.1rem, 2.5vw, 1.5rem);
+    cursor: pointer;
+    list-style: none;
+    font-size: var(--fs-lead);
+    font-weight: var(--w-medium);
+    letter-spacing: -0.01em;
+    transition: color 0.35s var(--ease);
+  }
+
+  .tiroir summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tiroir summary:hover {
+    color: var(--accent);
+  }
+
+  /* Une croix qui devient un trait : le signe dit l'état du tiroir. */
+  .tiroir__signe {
+    position: relative;
+    flex: none;
+    width: 16px;
+    height: 16px;
+  }
+
+  .tiroir__signe::before,
+  .tiroir__signe::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+
+  .tiroir__signe::after {
+    transform: rotate(90deg);
+  }
+
+  .tiroir[open] .tiroir__signe::after {
+    transform: rotate(0deg);
+  }
+
+  .tiroir__corps {
+    padding-bottom: clamp(1.5rem, 3.5vw, 2.25rem);
+    display: grid;
+    gap: 1rem;
+    max-width: 68ch;
+  }
+
+  .tiroir__media {
+    aspect-ratio: 3 / 2;
+    margin-bottom: 0.5rem;
+  }
+
+  .tiroir__para {
+    margin: 0;
+  }
+
+  .fiche {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .fiche {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.1rem 2rem;
+    }
+  }
+
+  .fiche__ligne dd {
+    margin: 0.2rem 0 0;
   }
 
   .includes {
     display: grid;
-    gap: 0.45rem;
-    padding-top: 0.5rem;
-    font-size: var(--fs-small);
+    gap: 0.5rem;
   }
 
   .includes li {
@@ -360,92 +542,32 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
     content: '';
     position: absolute;
     left: 0;
-    top: 0.62em;
-    width: 6px;
-    height: 1px;
+    top: 0.65em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
     background: var(--accent);
   }
 
-  .details {
-    display: grid;
-    gap: 1rem;
-    padding-bottom: 1.5rem;
-  }
-
-  .details__row {
-    display: grid;
-    grid-template-columns: 22px minmax(0, 1fr);
-    align-items: start;
-    gap: 0.2rem 0.9rem;
-    padding-bottom: 0.9rem;
-    border-bottom: 1px solid var(--line-soft);
-  }
-
-  .details__icon {
-    margin-top: 0.1rem;
-    color: var(--ink-50);
-  }
-
-  .details__row dd {
-    margin: 0;
-    font-size: var(--fs-small);
-  }
-
-  .brew {
-    margin-top: clamp(2rem, 4vw, 3rem);
-    padding: clamp(1.5rem, 3vw, 2.25rem);
-    background: var(--paper-soft);
-    max-width: 62ch;
-  }
-
-  .brew__title {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .farm {
-    margin-top: clamp(3.5rem, 8vw, 6rem);
-    padding-top: clamp(2rem, 4vw, 3rem);
-    border-top: 1px solid var(--line);
-    display: grid;
-    gap: clamp(1.5rem, 4vw, 3rem);
-    align-items: center;
-  }
-
-  @media (min-width: 900px) {
-    .farm {
-      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    }
-  }
-
-  .farm__media {
-    aspect-ratio: 4 / 3;
-  }
-
-  .farm__name {
-    margin-top: 0.65rem;
-    font-size: var(--fs-h3);
-  }
-
-  .farm__place {
-    margin-top: 0.2rem;
-  }
-
-  .farm__body {
-    margin-top: 1rem;
-    max-width: 52ch;
-  }
-
+  /* ---------- Vous aimerez aussi ---------- */
   .related {
     margin-top: clamp(3.5rem, 8vw, 6rem);
     padding-top: clamp(2rem, 4vw, 3rem);
     border-top: 1px solid var(--line);
   }
 
+  /* Deux colonnes, à toutes les largeurs. */
   .related__grid {
     margin-top: clamp(1.5rem, 3vw, 2.25rem);
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(1rem, 2.5vw, 2rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
   }
+
+  /* En paire, chaque visuel garde sa gouttière. */
+  .related__grid :global(.bleed-mobile) {
+    margin-inline: 0;
+    width: 100%;
+  }
+
 </style>

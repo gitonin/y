@@ -64,17 +64,36 @@ const jsonld = [
       <p class="lead muted chead__intro" data-reveal>{t.cafes.intro}</p>
     </header>
 
-    <div class="filters" role="group" aria-label={t.cafes.filterAll} data-reveal>
-      {
-        filters.map((f) => (
-          <button type="button" class="filters__btn" data-filter={f.key} aria-pressed={f.key === 'all' ? 'true' : 'false'}>
-            {f.label}
-          </button>
-        ))
-      }
+    <div class="barre" data-reveal>
+      <div class="filters" role="group" aria-label={t.cafes.filterAll}>
+        {
+          filters.map((f) => (
+            <button type="button" class="filters__btn" data-filter={f.key} aria-pressed={f.key === 'all' ? 'true' : 'false'}>
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+
+      {/* Bascule d'affichage — utile là où la grille est la plus étroite. */}
+      <div class="vue" role="group" aria-label={t.cafes.viewLabel}>
+        <button type="button" class="vue__btn" data-cols="1" aria-pressed="true" title={t.cafes.viewOne}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <rect x="4.5" y="4.5" width="15" height="15" />
+          </svg>
+          <span class="visually-hidden">{t.cafes.viewOne}</span>
+        </button>
+        <button type="button" class="vue__btn" data-cols="2" aria-pressed="false" title={t.cafes.viewTwo}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <rect x="4.5" y="4.5" width="6" height="15" />
+            <rect x="13.5" y="4.5" width="6" height="15" />
+          </svg>
+          <span class="visually-hidden">{t.cafes.viewTwo}</span>
+        </button>
+      </div>
     </div>
 
-    <div class="clist" data-product-list>
+    <div class="clist" data-product-list data-colonnes="1">
       {
         products.map((product, i) => (
           <div data-category={product.category}>
@@ -97,11 +116,11 @@ const jsonld = [
     </aside>
   </div>
 
-  <!-- ============ PRO ============ -->
-  <ProBand lang={lang} />
-
-  <!-- ============ IMAGE DE FIN ============ -->
+  <!-- ============ PUSH ORIGINE ============ -->
   <ClosingBand lang={lang} />
+
+  <!-- ============ PUSH PRO ============ -->
+  <ProBand lang={lang} />
 </Base>
 
 <style>
@@ -124,13 +143,55 @@ const jsonld = [
     max-width: 46ch;
   }
 
+  .barre {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
   .filters {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
-    border-bottom: 1px solid var(--line);
-    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .vue {
+    display: flex;
+    flex: none;
+    gap: 0.35rem;
+  }
+
+  /* Au-delà de deux colonnes, la bascule n'a plus d'objet. */
+  @media (min-width: 900px) {
+    .vue {
+      display: none;
+    }
+  }
+
+  .vue__btn {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    color: var(--ink-30);
+    transition:
+      color 0.35s var(--ease),
+      border-color 0.35s var(--ease);
+  }
+
+  .vue__btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .vue__btn[aria-pressed='true'] {
+    color: var(--ink);
+    border-color: var(--ink-30);
   }
 
   .filters__btn {
@@ -157,15 +218,36 @@ const jsonld = [
     color: var(--paper);
   }
 
+  /* Une colonne au départ, comme demandé : le visuel occupe alors toute la
+     largeur de l'écran. La bascule fait passer à deux. */
   .clist {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--colonnes, 1), minmax(0, 1fr));
     gap: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 2.5vw, 2rem);
   }
 
+  .clist[data-colonnes='2'] {
+    --colonnes: 2;
+  }
+
+  /* Sur deux colonnes, chaque visuel reprend sa gouttière : sans quoi les
+     deux colonnes se toucheraient. */
+  .clist[data-colonnes='2'] :global(.bleed-mobile) {
+    margin-inline: 0;
+    width: 100%;
+  }
+
+  @media (min-width: 700px) {
+    .clist,
+    .clist[data-colonnes='2'] {
+      --colonnes: 2;
+    }
+  }
+
   @media (min-width: 900px) {
-    .clist {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .clist,
+    .clist[data-colonnes='2'] {
+      --colonnes: 3;
     }
   }
 
@@ -236,5 +318,52 @@ const jsonld = [
     });
   };
 
+  /**
+   * Choix d'affichage — une ou deux colonnes. Le réglage tient dans le
+   * navigateur du visiteur : il retrouve sa grille d'une visite à l'autre.
+   * Un stockage indisponible (navigation privée, site bloqué) ne doit pas
+   * empêcher la bascule de fonctionner, d'où les gardes.
+   */
+  const CLE = 'yunma:colonnes';
+
+  const lire = () => {
+    try {
+      return localStorage.getItem(CLE);
+    } catch {
+      return null;
+    }
+  };
+
+  const initColonnes = () => {
+    const liste = document.querySelector<HTMLElement>('[data-product-list]');
+    const boutons = document.querySelectorAll<HTMLButtonElement>('[data-cols]');
+    if (!liste || !boutons.length) return;
+
+    const appliquer = (valeur: string) => {
+      liste.dataset.colonnes = valeur;
+      boutons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cols === valeur)));
+    };
+
+    const memorise = lire();
+    if (memorise === '1' || memorise === '2') appliquer(memorise);
+
+    if (liste.dataset.boundCols) return;
+    liste.dataset.boundCols = '1';
+
+    boutons.forEach((b) =>
+      b.addEventListener('click', () => {
+        const valeur = b.dataset.cols!;
+        appliquer(valeur);
+        try {
+          localStorage.setItem(CLE, valeur);
+        } catch {
+          /* le choix vaudra pour cette page seulement */
+        }
+      }),
+    );
+  };
+
   document.addEventListener('astro:page-load', initFilters);
+  document.addEventListener('astro:page-load', initColonnes);
+  initColonnes();
 </script>
