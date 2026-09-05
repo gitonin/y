@@ -106,10 +106,18 @@ for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 9
   const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
   await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
   await pg.waitForTimeout(700);
+  /* On mesure le texte posé à même la photographie : le titre et sa
+     traduction. Le bouton d'appel, lui, est un aplat opaque — sa lisibilité
+     ne dépend pas de l'image mais de son propre fond, vérifié plus bas. */
   const zone = await pg.evaluate(() => {
     const t = document.querySelector('h1').getBoundingClientRect();
-    const c = document.querySelector('.hero__cta').getBoundingClientRect();
-    return { x: Math.round(t.x), y: Math.round(t.y), width: Math.round(Math.max(t.width, c.width)), height: Math.round(c.bottom - t.top) };
+    const a = document.querySelector('.hero__alt').getBoundingClientRect();
+    return {
+      x: Math.round(t.x),
+      y: Math.round(t.y),
+      width: Math.round(Math.max(t.width, a.width)),
+      height: Math.round(a.bottom - t.top),
+    };
   });
   const avec = await enPixels(pg, (await pg.screenshot({ clip: zone })).toString('base64'));
   await pg.evaluate(() => { document.querySelector('.hero__inner').style.visibility = 'hidden'; });
@@ -124,6 +132,55 @@ for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 9
     pire = Math.min(pire, contraste(ENCRE, lum(sans[i], sans[i + 1], sans[i + 2])));
   }
   check(`${w}×${h} — contraste minimal ${pire.toFixed(2)}:1 (seuil 4,5)`, pire >= 4.5, true);
+
+  /* Le bouton porte son propre fond : on vérifie le texte contre cet aplat. */
+  const bouton = await pg.evaluate(() => {
+    const el = document.querySelector('.hero__cta');
+    const st = getComputedStyle(el);
+    const nb = (c) => c.match(/[\d.]+/g).slice(0, 3).map(Number);
+    return { fond: nb(st.backgroundColor), texte: nb(st.color), opaque: !/rgba\(.*,\s*0?\.\d+\)/.test(st.backgroundColor) };
+  });
+  const cBouton = contraste(lum(...bouton.texte), lum(...bouton.fond));
+  check(`${w}×${h} — bouton opaque`, bouton.opaque, true);
+  check(`${w}×${h} — texte du bouton sur son fond (${cBouton.toFixed(2)}:1)`, cBouton >= 4.5, true);
+  await pg.close();
+}
+
+/* --------------------------------- 2 bis. le renvoi vers l'origine */
+titre('La phrase du renvoi origine tient sur la photographie');
+for (const [w, h] of [[390, 844], [768, 1024], [1024, 768], [1440, 900], [1440, 700], [1920, 1080]]) {
+  const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
+  await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+  await pg.addStyleTag({
+    content: `[data-reveal]{opacity:1!important;transform:none!important}
+      .reveal-lines .line>span{transform:none!important}
+      .media>img{transform:none!important;transition:none!important}`,
+  });
+  await pg.locator('.closing').first().scrollIntoViewIfNeeded();
+  await pg.waitForTimeout(800);
+  /* Le pire fond sous les lignes du titre : c'est là que l'encre doit tenir. */
+  const zone = await pg.evaluate(() => {
+    const lignes = [
+      ...document.querySelectorAll('.closing__inner .line > span'),
+      document.querySelector('.closing__cta'),
+    ].filter(Boolean).map((e) => e.getBoundingClientRect());
+    document.querySelector('.closing__inner').style.visibility = 'hidden';
+    const gauche = Math.min(...lignes.map((r) => r.left));
+    const haut = Math.min(...lignes.map((r) => r.top));
+    return {
+      x: Math.round(gauche),
+      y: Math.round(haut),
+      width: Math.round(Math.max(...lignes.map((r) => r.right)) - gauche),
+      height: Math.round(Math.max(...lignes.map((r) => r.bottom)) - haut),
+    };
+  });
+  await pg.waitForTimeout(150);
+  const fond = await enPixels(pg, (await pg.screenshot({ clip: zone })).toString('base64'));
+  let pire = Infinity;
+  for (let i = 0; i < fond.length; i += 4) {
+    pire = Math.min(pire, contraste(ENCRE, lum(fond[i], fond[i + 1], fond[i + 2])));
+  }
+  check(`${w}×${h} — fond sous la phrase de fin (${pire.toFixed(2)}:1, seuil 4,5)`, pire >= 4.5, true);
   await pg.close();
 }
 

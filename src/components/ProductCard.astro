@@ -34,19 +34,11 @@ const aPartirDe = hasPriceRange(product);
       <h3 class="pcard__name">{product.name[lang]}</h3>
       <p class="pcard__sub muted small">{product.subtitle[lang]}</p>
       {!compact && <p class="pcard__notes small">{product.short[lang]}</p>}
-      {feature && <p class="pcard__story muted">{product.description[lang]}</p>}
       <p class="pcard__price mono-num">
         {aPartirDe && <span class="pcard__from">{t.common.from} </span>}
         {formatPrice(price, lang)}
       </p>
-      {feature && (
-        <span class="link pcard__cta">
-          {t.common.discover}
-          <span class="arrow" aria-hidden="true">
-            →
-          </span>
-        </span>
-      )}
+      {feature && <span class="btn pcard__cta">{t.common.discover}</span>}
     </div>
   </a>
 </article>
@@ -77,20 +69,22 @@ const aPartirDe = hasPriceRange(product);
     gap: 0.2rem;
   }
 
+  /* Le nom du produit est un titre : il s'écrit à l'encre du site, en gras.
+     L'orange reste aux liens, pour qu'il continue de signaler l'action. */
   .pcard__name {
-    font-size: 1.0625rem;
-    letter-spacing: -0.01em;
-    color: var(--accent);
+    font-size: 1.125rem;
+    font-weight: var(--w-bold);
+    letter-spacing: -0.016em;
+    color: var(--ink);
     transition: color 0.4s var(--ease);
   }
 
   .pcard--compact .pcard__name {
-    font-size: 0.875rem;
-    color: var(--ink);
+    font-size: 0.9375rem;
   }
 
   .pcard__link:hover .pcard__name {
-    color: var(--accent-deep);
+    color: var(--accent);
   }
 
   .pcard__notes {
@@ -124,13 +118,6 @@ const aPartirDe = hasPriceRange(product);
 
   .pcard--feature .pcard__name {
     font-size: var(--fs-h3);
-    font-weight: var(--w-bold);
-    letter-spacing: -0.016em;
-  }
-
-  .pcard__story {
-    margin-top: 0.75rem;
-    max-width: 46ch;
   }
 
   .pcard--feature .pcard__price {
@@ -139,6 +126,8 @@ const aPartirDe = hasPriceRange(product);
   }
 
   .pcard__cta {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    width: auto;
+    padding-inline: 2.25rem;
   }
 </style>

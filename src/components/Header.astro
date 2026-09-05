@@ -360,11 +360,14 @@ const current = Astro.url.pathname;
     transform: none;
   }
 
+  /* Les grandes sections mènent la navigation : elles sont en gras, et d'un
+     cran au-dessus de la version précédente. */
   .nav__list a {
     display: inline-block;
-    font-size: clamp(1.6rem, min(1.1rem + 3vw, 6.4vh), 3rem);
+    font-size: clamp(1.725rem, min(1.225rem + 3vw, 6.65vh), 3.125rem);
+    font-weight: var(--w-bold);
     line-height: 1.24;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.026em;
     padding-block: 0.06em;
     position: relative;
   }

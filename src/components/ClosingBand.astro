@@ -22,7 +22,7 @@ const t = useTranslations(lang);
     <Photo name="tabouret-terrasse" lang={lang} decorative sizes="100vw" />
   </div>
   <div class="closing__inner wrap">
-    <SplitTitle text={t.home.closingTitle} as="p" size="closing" class="on-dark" />
+    <SplitTitle text={t.home.closingTitle} as="p" size="closing" />
     <a class="link closing__cta" href={`${route(lang, 'origine')}#histoire`} id={id}>
       {t.home.closingCta}<span class="arrow" aria-hidden="true">→</span>
     </a>
@@ -30,11 +30,13 @@ const t = useTranslations(lang);
 </section>
 
 <style>
+  /* La phrase se pose en haut de l'image, à l'encre du site : c'est la partie
+     claire du cadrage, et le noir y porte plus qu'un blanc sur fond sombre. */
   .closing {
     position: relative;
     min-height: 78svh;
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     padding-block: clamp(3rem, 8vw, 6rem);
     overflow: hidden;
   }
@@ -44,21 +46,33 @@ const t = useTranslations(lang);
     inset: 0;
   }
 
+  /* Un voile clair en haut, pour que la phrase se détache de la photographie
+     quel que soit le cadrage. */
   .closing__media::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(33, 33, 33, 0) 24%, rgba(33, 33, 33, 0.28) 62%, rgba(33, 33, 33, 0.6) 100%);
+    /* Le voile est exprimé en longueurs fixes, calées sur la hauteur du bloc
+       de texte, et non en pourcentages : une fenêtre basse et large doit être
+       couverte comme une fenêtre haute. Le cadrage de la photographie change,
+       la lisibilité non. */
+    background: linear-gradient(
+      180deg,
+      rgba(235, 231, 222, 0.9) 0,
+      rgba(235, 231, 222, 0.82) 13rem,
+      rgba(235, 231, 222, 0.6) 22rem,
+      rgba(235, 231, 222, 0.2) 28rem,
+      rgba(235, 231, 222, 0) 34rem
+    );
   }
 
   .closing__inner {
     position: relative;
     z-index: 2;
-    color: var(--white);
+    color: var(--ink);
   }
 
   .closing__cta {
     margin-top: 1.25rem;
-    color: var(--white);
   }
 </style>

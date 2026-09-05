@@ -71,6 +71,8 @@ const fr = {
     seoDescription:
       'Yunma sélectionne des cafés de spécialité du Yunnan (Chine) : lots tracés, producteurs indépendants, torréfaction à Paris. Livraison en France et en Europe.',
     heroTitle: 'Cafés de spécialité\ndu Yunnan.',
+    heroTitleAlt: '云南\n精品咖啡。',
+    introBig: 'Des cafés cultivés\navec passion.',
     heroSub: 'Slow coffee.\nSlow life.',
     heroCta: 'Découvrir nos cafés',
     originLabel: 'À L’origine,',

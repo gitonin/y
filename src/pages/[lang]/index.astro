@@ -68,35 +68,31 @@ const jsonld = [
     </div>
     <div class="hero__inner wrap">
       <SplitTitle text={t.home.heroTitle} as="h1" size="xl" class="hero__title" />
-      <p class="hero__sub label prewrap">{t.home.heroSub}</p>
-      <a class="hero__cta link" href={route(lang, 'cafes')}>
+      {/* Le titre dans l'autre langue de la marque, sous le premier. */}
+      <p class="hero__alt prewrap" lang={lang === 'zh' ? 'fr' : 'zh'}>{t.home.heroTitleAlt}</p>
+      <a class="btn hero__cta" href={route(lang, 'cafes')}>
         {t.home.heroCta}<span class="arrow" aria-hidden="true">→</span>
       </a>
     </div>
     <span class="hero__scroll label" aria-hidden="true">{t.common.scroll}</span>
   </section>
 
-  <!-- ============ PRÉSENTATION ============ -->
-  <section class="intro" aria-labelledby="h-intro">
-    <div class="wrap wrap--narrow">
-      <span class="label" data-reveal>{t.home.originLabel}</span>
-      <p class="intro__text lead" data-reveal id="h-intro">{t.home.originText}</p>
-    </div>
-  </section>
-
   <!-- ============ CAFÉS ============ -->
   <section class="cafes" aria-labelledby="h-cafes">
     <div class="wrap">
-      <SplitTitle text={t.home.coffeesTitle} as="h2" size="lg" class="cafes__title" />
-      <p class="visually-hidden" id="h-cafes">{t.home.coffeesTitle.split('\n').join(' ')}</p>
+      <SplitTitle text={t.home.introBig} as="h2" size="lg" class="cafes__title" />
+      <p class="visually-hidden" id="h-cafes">{t.home.introBig.split('\n').join(' ')}</p>
 
       <ProductCard product={enAvant} lang={lang} feature />
+    </div>
 
-      <div class="cafes__duo">
-        {suivants.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
-      </div>
+    {/* Deux références bord à bord, séparées d'un simple filet. */}
+    <div class="cafes__duo">
+      {suivants.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
+    </div>
 
-      <a class="btn cafes__btn" href={route(lang, 'cafes')}>
+    <div class="wrap">
+      <a class="link cafes__lien" href={route(lang, 'cafes')}>
         {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
       </a>
     </div>
@@ -167,13 +163,21 @@ const jsonld = [
     max-width: 16ch;
   }
 
-  .hero__sub {
-    margin-top: 1.5rem;
-    line-height: 1.7;
+  /* Le titre dans l'autre langue, à la même encre que le premier, plus petit :
+     un écho, pas un sous-titre. */
+  .hero__alt {
+    margin-top: 1rem;
+    font-size: clamp(1.0625rem, 0.8rem + 1.15vw, 1.75rem);
+    font-weight: var(--w-medium);
+    line-height: 1.28;
+    letter-spacing: 0.01em;
+    color: var(--ink);
   }
 
   .hero__cta {
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
+    width: auto;
+    padding-inline: 2.25rem;
   }
 
   .hero__scroll {
@@ -210,27 +214,36 @@ const jsonld = [
 
   /* ---------- Cafés ---------- */
   .cafes {
-    padding-bottom: clamp(3.5rem, 8vw, 6.5rem);
+    padding-block: clamp(3.5rem, 8vw, 6.5rem);
   }
 
   :global(.cafes__title) {
     margin-bottom: clamp(2rem, 5vw, 3.25rem);
   }
 
-  /* Deux références sous celle mise en avant, sur deux colonnes à toutes
-     les largeurs : c'est le rythme demandé, y compris sur téléphone. */
+  /* Deux références bord à bord, sur toute la largeur de l'écran : aucune
+     marge sur les côtés, un simple filet entre les deux colonnes. */
   .cafes__duo {
     margin-top: clamp(2.5rem, 6vw, 4.5rem);
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
+    column-gap: 1px;
+    background: var(--line);
   }
 
-  /* Dans la paire, chaque visuel garde sa gouttière : sans quoi les deux
-     colonnes se toucheraient. Seul le produit mis en avant sort du cadre. */
+  .cafes__duo > :global(*) {
+    background: var(--paper);
+  }
+
+  /* Le visuel remplit sa colonne : le retrait de gouttière n'a plus cours. */
   .cafes__duo :global(.bleed-mobile) {
     margin-inline: 0;
     width: 100%;
+  }
+
+  /* Le texte, lui, garde de l'air sous le visuel. */
+  .cafes__duo :global(.pcard__body) {
+    padding: 1rem var(--gutter) clamp(1.5rem, 4vw, 2.5rem);
   }
 
   /* Sur grand écran, la paire passe au carré : deux visuels au format
@@ -242,16 +255,8 @@ const jsonld = [
     }
   }
 
-  .cafes__btn {
+  .cafes__lien {
     margin-top: clamp(2.5rem, 6vw, 4rem);
-  }
-
-  @media (min-width: 700px) {
-    .cafes__btn {
-      width: auto;
-      justify-self: start;
-      padding-inline: 2.5rem;
-    }
   }
 
 </style>

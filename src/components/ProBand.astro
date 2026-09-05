@@ -15,7 +15,7 @@ const { lang, id = 'h-pro' } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="pro-band panel--olive" aria-labelledby={id}>
+<section class="pro-band" aria-labelledby={id}>
   <div class="wrap pro-band__inner">
     <div>
       <span class="label" data-reveal>{t.home.proLabel}</span>
@@ -28,8 +28,15 @@ const t = useTranslations(lang);
 </section>
 
 <style>
+  /* Aplat sombre : le renvoi professionnel tranche sur le reste de la page. */
   .pro-band {
+    background: #212121;
+    color: #ebe7de;
     padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .pro-band .label {
+    color: rgba(235, 231, 222, 0.55);
   }
 
   .pro-band__inner {
@@ -52,7 +59,7 @@ const t = useTranslations(lang);
   }
 
   .pro-band__cta {
-    color: var(--white);
+    color: #ebe7de;
     justify-self: start;
   }
 
