@@ -4,14 +4,15 @@
 # les deux versions en une seule fois :
 #   https://<utilisateur>.github.io/<dépôt>/     -> version 1
 #   https://<utilisateur>.github.io/<dépôt>/v2/  -> version 2
+#   https://<utilisateur>.github.io/<dépôt>/v4/  -> version 4, ce chantier
 # Après une poussée ici, relancez « Aperçu GitHub Pages » depuis la branche v1
 # (onglet Actions > Run workflow) pour republier.
-name: Vérification v2
+name: Vérification v4
 
 on:
   push:
     branches:
-      - claude/yunma-site-v2
+      - claude/yunma-site-v4
   workflow_dispatch:
 
 permissions:
