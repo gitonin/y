@@ -29,7 +29,9 @@ const t = useTranslations(lang);
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    font-size: var(--fs-label);
+    /* Un point de moins que les autres sur-titres : le fil d'Ariane est un
+       repère, pas une information à lire. */
+    font-size: 0.625rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--ink-50);

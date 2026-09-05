@@ -80,10 +80,11 @@ for (const largeur of [360, 390, 600, 768, 900, 1024, 1280, 1440, 1920]) {
   const pg = await (await navigateur.newContext({ viewport: { width: largeur, height: 900 } })).newPage();
   const accueil = await repere(pg, '/fr/');
   const autre = await repere(pg, '/fr/origine/');
-  /* Deux pixels de tolérance : les deux mises en page empilent des marges
-     élastiques dont les paliers ne tombent pas tout à fait au même endroit. */
-  const ecart = Math.abs(accueil.haut - autre.haut);
-  check(`${largeur} px — hauteur du titre (écart ${ecart} px)`, ecart <= 2, true);
+  /* Le bloc de la bannière commence plus haut que les titres des autres pages :
+     il monte jusqu'à la hauteur de leur fil d'Ariane. On vérifie donc le sens
+     de l'écart, et qu'il reste raisonnable — pas son annulation. */
+  const ecart = autre.haut - accueil.haut;
+  check(`${largeur} px — la bannière ouvre plus haut (${ecart} px)`, ecart > 0 && ecart < 120, true);
   check(`${largeur} px — retrait à gauche`, accueil.gauche, autre.gauche);
   check(`${largeur} px — corps du titre`, accueil.corps, autre.corps);
   check(`${largeur} px — couleur du titre`, accueil.couleur, autre.couleur);
@@ -179,13 +180,18 @@ titre('La bande pro et l’image de fin closent aussi la page des cafés');
     const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
     const accueil = await releve(pg, '/fr/');
     const cafes = await releve(pg, '/fr/cafes/');
-    for (const [nom, cle] of [['bande pro', 'pro'], ['image de fin', 'fin']]) {
-      check(`${appareil} — ${nom} présente sur la page des cafés`, !!cafes[cle], true);
-      check(`${appareil} — ${nom}, même hauteur qu’à l’accueil`, cafes[cle]?.hauteur, accueil[cle]?.hauteur);
-      check(`${appareil} — ${nom}, même fond`, cafes[cle]?.fond, accueil[cle]?.fond);
-      check(`${appareil} — ${nom}, même texte`, cafes[cle]?.texte, accueil[cle]?.texte);
-      check(`${appareil} — ${nom}, même lien`, cafes[cle]?.lien, accueil[cle]?.lien);
-    }
+
+    /* La bande pro clôt les deux pages : elle doit y être identique. */
+    check(`${appareil} — bande pro présente sur la page des cafés`, !!cafes.pro, true);
+    check(`${appareil} — bande pro, même hauteur qu’à l’accueil`, cafes.pro?.hauteur, accueil.pro?.hauteur);
+    check(`${appareil} — bande pro, même fond`, cafes.pro?.fond, accueil.pro?.fond);
+    check(`${appareil} — bande pro, même texte`, cafes.pro?.texte, accueil.pro?.texte);
+    check(`${appareil} — bande pro, même lien`, cafes.pro?.lien, accueil.pro?.lien);
+
+    /* L'image de fin a quitté l'accueil, pour l'alléger ; elle reste sur la
+       page des cafés. */
+    check(`${appareil} — image de fin retirée de l’accueil`, !accueil.fin, true);
+    check(`${appareil} — image de fin conservée sur la page des cafés`, !!cafes.fin, true);
     check(`${appareil} — les deux blocs précèdent l’infolettre`, cafes.avantLePied, true);
     await pg.close();
   }

@@ -62,20 +62,22 @@ const aPartirDe = hasPriceRange(product);
     gap: 0.2rem;
   }
 
+  /* Le nom du produit est un titre : encre du site, gras, un point de moins.
+     L'orange reste aux liens, où il signale l'action. */
   .pcard__name {
-    font-size: 1.0625rem;
-    letter-spacing: -0.01em;
-    color: var(--accent);
+    font-size: 1rem;
+    font-weight: var(--w-bold);
+    letter-spacing: -0.014em;
+    color: var(--ink);
     transition: color 0.4s var(--ease);
   }
 
   .pcard--compact .pcard__name {
-    font-size: 0.875rem;
-    color: var(--ink);
+    font-size: 0.8125rem;
   }
 
   .pcard__link:hover .pcard__name {
-    color: var(--accent-deep);
+    color: var(--accent);
   }
 
   .pcard__notes {

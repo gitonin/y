@@ -25,7 +25,7 @@ const t = useTranslations(lang);
 
 <style>
   .phero {
-    padding-top: clamp(1.5rem, 4vw, 3rem);
+    padding-top: clamp(0.75rem, 2vw, 1.5rem);
     padding-bottom: clamp(2rem, 5vw, 3.5rem);
   }
 
@@ -34,7 +34,7 @@ const t = useTranslations(lang);
   }
 
   :global(.phero__title) {
-    margin-top: 0.75rem;
+    margin-top: var(--espace-surtitre);
   }
 
   :global(.phero__title--lg) {
@@ -46,7 +46,7 @@ const t = useTranslations(lang);
   }
 
   .phero__intro {
-    margin-top: 1.5rem;
+    margin-top: var(--espace-titre);
     max-width: 52ch;
   }
 </style>

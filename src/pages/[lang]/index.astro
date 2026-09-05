@@ -5,7 +5,6 @@ import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import ProBand from '../../components/ProBand.astro';
-import ClosingBand from '../../components/ClosingBand.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, url, postUrl, formatDate, absolute, type Lang } from '../../i18n/utils';
@@ -70,7 +69,8 @@ const jsonld = [
     </div>
     <div class="hero__inner wrap">
       <SplitTitle text={t.home.heroTitle} as="h1" size="xl" class="hero__title" />
-      <p class="hero__sub label prewrap">{t.home.heroSub}</p>
+      {/* Le titre dans l'autre langue de la marque, sur une ligne. */}
+      <p class="hero__alt" lang={lang === 'zh' ? 'fr' : 'zh'}>{t.home.heroTitleAlt}</p>
       <a class="hero__cta link" href={route(lang, 'cafes')}>
         {t.home.heroCta}<span class="arrow" aria-hidden="true">→</span>
       </a>
@@ -78,30 +78,8 @@ const jsonld = [
     <span class="hero__scroll label" aria-hidden="true">{t.common.scroll}</span>
   </section>
 
-  <!-- ============ ORIGINE ============ -->
-  <section class="section" aria-labelledby="h-origine">
-    <div class="wrap grid grid--sidebar">
-      <div data-reveal>
-        <span class="label">{t.home.originLabel}</span>
-      </div>
-      <div>
-        <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title" />
-        <p class="lead muted origin__text" data-reveal id="h-origine">{t.home.originText}</p>
-        <a class="link" href={route(lang, 'origine')} data-reveal>
-          {t.home.originCta}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-
-    <figure class="bleed">
-      <div class="media media--wide">
-        <Photo name="recolte-cueilleurs" lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
-      </div>
-    </figure>
-  </section>
-
   <!-- ============ CAFÉS ============ -->
-  <section class="section section--tight panel" aria-labelledby="h-cafes">
+  <section class="section section--tight panel panel--soft" aria-labelledby="h-cafes">
     <div class="wrap">
       <header class="shead">
         <div>
@@ -122,29 +100,31 @@ const jsonld = [
     </div>
   </section>
 
-  <!-- ============ APPROCHE ============ -->
-  <section class="section" aria-labelledby="h-approche">
-    <div class="wrap approach">
-      <div class="approach__text">
-        <span class="label" data-reveal>{t.home.approachLabel}</span>
-        <SplitTitle text={t.home.approachTitle} as="h2" size="lg" class="sec-title" />
-        <p class="lead muted" data-reveal id="h-approche">{t.home.approachText}</p>
-        <a class="link" href={`${route(lang, 'origine')}#savoir-faire`} data-reveal>
-          {t.home.approachCta}<span class="arrow" aria-hidden="true">→</span>
+  <!-- ============ ORIGINE ============ -->
+  {/* Le visuel ouvre la section, sur toute la largeur, puis vient le texte. */}
+  <section class="origine" aria-labelledby="h-origine">
+    <figure class="media media--wide origine__media" data-reveal>
+      <Photo name="recolte-cueilleurs" lang={lang} sizes="100vw" />
+    </figure>
+
+    <div class="wrap grid grid--sidebar origine__texte">
+      <div data-reveal>
+        <span class="label">{t.home.originLabel}</span>
+      </div>
+      <div>
+        <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title" />
+        <p class="lead muted origin__text" data-reveal id="h-origine">{t.home.originText}</p>
+        <a class="link" href={route(lang, 'origine')} data-reveal>
+          {t.home.originCta}<span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>
-      <figure class="approach__media">
-        <div class="media media--tall">
-          <Photo name="cerises-branche" lang={lang} position="60% 55%" sizes="(min-width: 860px) 52vw, 100vw" />
-        </div>
-      </figure>
     </div>
   </section>
 
   <!-- ============ JOURNAL ============ -->
   {
     posts.length > 0 && (
-      <section class="section section--tight panel panel--soft" aria-labelledby="h-journal">
+      <section class="section section--tight panel" aria-labelledby="h-journal">
         <div class="wrap">
           <header class="shead">
             <div>
@@ -160,13 +140,17 @@ const jsonld = [
               </a>
             </div>
           </header>
+        </div>
 
-          <ul class="jgrid">
+        {/* Carrousel : les carnets défilent sur une ligne plutôt que de
+            s'empiler, pour que la page reste courte. */}
+        <div class="carrousel" data-carrousel>
+          <ul class="carrousel__piste" tabindex="0" aria-label={t.home.journalTitle}>
             {posts.map((post, i) => (
               <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
                 <a class="jcard media-link" href={postUrl(lang, post.id.split('/')[1])}>
                   <div class="media media--wide">
-                    <Photo name={post.data.photo} lang={lang} decorative sizes="(min-width: 760px) 32vw, 100vw" />
+                    <Photo name={post.data.photo} lang={lang} decorative sizes="(min-width: 760px) 32vw, 80vw" />
                   </div>
                   <time class="label jcard__date" datetime={post.data.date.toISOString()}>
                     {formatDate(post.data.date, lang)}
@@ -184,9 +168,6 @@ const jsonld = [
 
   <!-- ============ PRO ============ -->
   <ProBand lang={lang} />
-
-  <!-- ============ IMAGE DE FIN ============ -->
-  <ClosingBand lang={lang} />
 </Base>
 
 <style>
@@ -199,7 +180,10 @@ const jsonld = [
        L'en-tête est fixe : on ajoute sa hauteur — plus le filet d'un pixel
        qui la souligne — au retrait commun aux grands titres. */
     align-items: flex-start;
-    --haut-titre: calc(var(--header-h) + 1px + var(--titre-page-haut));
+    /* Le bloc remonte : il commence désormais juste sous l'en-tête, à la
+       hauteur du fil d'Ariane des autres pages plutôt qu'à celle de leur
+       titre. Le voile de la photographie suit ce déplacement. */
+    --haut-titre: calc(var(--header-h) + 1px + clamp(2.5rem, 6vw, 4.5rem));
     padding-top: var(--haut-titre);
     padding-bottom: clamp(3rem, 8vh, 6rem);
     overflow: hidden;
@@ -224,11 +208,12 @@ const jsonld = [
     background:
       linear-gradient(
         180deg,
-        rgba(235, 231, 222, 0.68) 0,
-        rgba(235, 231, 222, 0.64) var(--haut-titre),
-        rgba(235, 231, 222, 0.54) calc(var(--haut-titre) + 11rem),
-        rgba(235, 231, 222, 0.28) calc(var(--haut-titre) + 18rem),
-        rgba(235, 231, 222, 0) calc(var(--haut-titre) + 25rem)
+        rgba(235, 231, 222, 0.6) 0,
+        rgba(235, 231, 222, 0.58) var(--haut-titre),
+        rgba(235, 231, 222, 0.56) calc(var(--haut-titre) + 10rem),
+        rgba(235, 231, 222, 0.52) calc(var(--haut-titre) + 18rem),
+        rgba(235, 231, 222, 0.24) calc(var(--haut-titre) + 22rem),
+        rgba(235, 231, 222, 0) calc(var(--haut-titre) + 26rem)
       ),
       linear-gradient(
         180deg,
@@ -247,9 +232,13 @@ const jsonld = [
     max-width: 16ch;
   }
 
-  .hero__sub {
-    margin-top: 1.5rem;
-    line-height: 1.7;
+  .hero__alt {
+    margin-top: var(--espace-titre);
+    font-size: clamp(1rem, 0.82rem + 0.85vw, 1.5rem);
+    font-weight: var(--w-bold);
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    color: var(--ink);
   }
 
   .hero__cta {
@@ -280,19 +269,12 @@ const jsonld = [
 
   /* ---------- Sections ---------- */
   :global(.sec-title) {
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--espace-titre);
   }
 
   .origin__text {
     max-width: 46ch;
     margin-bottom: 1.5rem;
-  }
-
-  .bleed {
-    margin-top: clamp(2.5rem, 6vw, 5rem);
-    padding-inline: var(--gutter);
-    max-width: var(--max);
-    margin-inline: auto;
   }
 
   .shead {
@@ -334,37 +316,56 @@ const jsonld = [
     }
   }
 
-  .approach {
-    display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: center;
+  /* ---------- Origine ---------- */
+  .origine {
+    padding-bottom: var(--section);
   }
 
-  @media (min-width: 860px) {
-    .approach {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    }
-  }
-
-  .approach__text {
-    display: grid;
-    gap: 1rem;
-    justify-items: start;
-  }
-
-  .approach__text .lead {
-    max-width: 42ch;
+  .origine__texte {
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
   }
 
   /* ---------- Journal ---------- */
-  .jgrid {
+  /* Les carnets défilent sur une ligne. La piste déborde volontairement de la
+     gouttière à droite : une carte coupée au bord dit qu'il y en a d'autres. */
+  .carrousel {
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .carrousel__piste {
     display: grid;
-    gap: clamp(1.75rem, 4vw, 2.75rem);
+    grid-auto-flow: column;
+    /* Largeur exprimée par rapport à l'écran : dans une piste qui déborde,
+       un pourcentage se résout sur le contenu et non sur la fenêtre. */
+    grid-auto-columns: 76vw;
+    gap: clamp(1rem, 3vw, 2rem);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    padding-inline: var(--gutter);
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+  }
+
+  .carrousel__piste > li {
+    scroll-snap-align: start;
+  }
+
+  .carrousel__piste:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
   }
 
   @media (min-width: 760px) {
-    .jgrid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .carrousel__piste {
+      grid-auto-columns: 34vw;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .carrousel__piste {
+      grid-auto-columns: 26vw;
     }
   }
 

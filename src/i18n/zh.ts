@@ -73,6 +73,7 @@ const zh: Dict = {
     seoDescription:
       '云马 Yunma 精选来自中国云南的精品咖啡：批次可溯源、与独立咖农合作、在巴黎烘焙。发往法国与欧洲各地。',
     heroTitle: '云南\n精品咖啡。',
+    heroTitleAlt: 'Cafés de spécialité du Yunnan',
     heroSub: '慢咖啡。\n慢生活。',
     heroCta: '探索我们的咖啡',
     originLabel: '一切始于',
@@ -81,7 +82,7 @@ const zh: Dict = {
       '在中国西南，海拔 1300 至 2000 米之间，云南出产着仍少为人知的咖啡。我们在云南挑选的每一支咖啡都有它的故事——关于一片风土，或者一位与我们抱有相同生活理念的咖农。',
     originCta: '了解产地',
     coffeesLabel: '我们的咖啡',
-    coffeesTitle: '用热爱栽培的\n云南咖啡。',
+    coffeesTitle: '采于云南，\n烘焙于巴黎。',
     coffeesText: '三款 200 克季节批次、便携挂耳咖啡，或者可以一次全部品尝的礼盒。小批量、稳定地烘焙。',
     coffeesCta: '探索我们的云南咖啡',
     approachLabel: '我们的理念',

@@ -73,6 +73,7 @@ const en: Dict = {
     seoDescription:
       'Yunma sources specialty coffee from Yunnan, China: traceable lots, independent growers, roasted in Paris. Shipping across France and Europe.',
     heroTitle: 'Specialty coffee\nfrom Yunnan.',
+    heroTitleAlt: '云南精品咖啡',
     heroSub: 'Slow coffee.\nSlow life.',
     heroCta: 'Discover our coffees',
     originLabel: 'In the beginning,',
@@ -81,7 +82,7 @@ const en: Dict = {
       'In south-west China, between 1,300 and 2,000 metres of altitude, Yunnan grows a coffee still little known. Every coffee we select in Yunnan tells a story — that of a terroir, or of a grower with whom we share a certain philosophy of life.',
     originCta: 'Discover the origin',
     coffeesLabel: 'Our coffees',
-    coffeesTitle: 'Coffees from Yunnan,\ngrown with passion.',
+    coffeesTitle: 'Picked in Yunnan,\nroasted in Paris.',
     coffeesText:
       'Three seasonal lots in 200 g bags, drip bags to take away, or the box to taste everything. Roasted in small batches, regularly.',
     coffeesCta: 'Discover our Yunnan coffees',
