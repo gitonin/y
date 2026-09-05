@@ -10,10 +10,8 @@ interface Props {
   lang: Lang;
   index?: number;
   compact?: boolean;
-  /** Produit mis en avant : visuel et texte côte à côte, sur toute la largeur. */
-  feature?: boolean;
 }
-const { product, lang, index = 0, compact = false, feature = false } = Astro.props;
+const { product, lang, index = 0, compact = false } = Astro.props;
 const t = useTranslations(lang);
 /* Plusieurs formats à des prix différents : on annonce le plus bas, sans le laisser
    passer pour le prix unique. */
@@ -21,14 +19,10 @@ const price = fromPrice(product);
 const aPartirDe = hasPriceRange(product);
 ---
 
-<article
-  class:list={['pcard', compact && 'pcard--compact', feature && 'pcard--feature']}
-  data-reveal
-  style={`--reveal-delay:${(index % 3) * 90}ms`}
->
+<article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
   <a class="pcard__link media-link" href={productUrl(lang, product.slug)}>
     <div class="media pcard__media">
-      <Packshot product={product} lang={lang} size={feature ? 'lg' : compact ? 'sm' : 'md'} decorative />
+      <Packshot product={product} lang={lang} size={compact ? 'sm' : 'md'} decorative />
     </div>
     <div class="pcard__body">
       <h3 class="pcard__name">{product.name[lang]}</h3>
@@ -59,7 +53,7 @@ const aPartirDe = hasPriceRange(product);
     font-size: var(--fs-label);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-    color: var(--ink);
+    color: var(--ink-50);
   }
 
   .pcard__body {
@@ -71,7 +65,7 @@ const aPartirDe = hasPriceRange(product);
   .pcard__name {
     font-size: 1.0625rem;
     letter-spacing: -0.01em;
-    color: var(--ink);
+    color: var(--accent);
     transition: color 0.4s var(--ease);
   }
 
@@ -85,39 +79,12 @@ const aPartirDe = hasPriceRange(product);
   }
 
   .pcard__notes {
-    color: var(--ink);
+    color: var(--ink-70);
     margin-top: 0.35rem;
   }
 
   .pcard__price {
     margin-top: 0.5rem;
     font-size: var(--fs-small);
-  }
-
-  /* ---------- Produit mis en avant ----------
-     Pas de bouton : toute la carte est un lien, visuel et texte compris. */
-  .pcard--feature .pcard__link {
-    display: grid;
-    gap: clamp(1.25rem, 3vw, 3rem);
-    align-items: center;
-  }
-
-  @media (min-width: 800px) {
-    .pcard--feature .pcard__link {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    }
-  }
-
-  .pcard--feature .pcard__body {
-    padding-top: 0;
-  }
-
-  .pcard--feature .pcard__name {
-    font-size: var(--fs-h3);
-  }
-
-  .pcard--feature .pcard__price {
-    margin-top: 0.9rem;
-    font-size: var(--fs-lead);
   }
 </style>

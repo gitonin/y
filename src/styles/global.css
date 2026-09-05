@@ -168,12 +168,10 @@ body::before {
 }
 
 /* ---------- Typographie ---------- */
-/* Les titres du site sont en gras. Les tailles ne changent pas : seule la
-   graisse porte l'accent. */
 .display,
 h1,
 h2 {
-  font-weight: var(--w-bold);
+  font-weight: var(--w-regular);
   line-height: 1.04;
   letter-spacing: -0.018em;
   text-wrap: balance;
@@ -189,7 +187,7 @@ h2 {
 
 h3 {
   font-size: var(--fs-h3);
-  font-weight: var(--w-bold);
+  font-weight: var(--w-regular);
   line-height: 1.2;
   letter-spacing: -0.012em;
   margin: 0;
@@ -206,7 +204,7 @@ h3 {
   font-size: var(--fs-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--ink-50);
   font-weight: var(--w-medium);
   display: block;
 }
@@ -220,7 +218,7 @@ h3 {
 }
 
 .muted {
-  color: var(--ink);
+  color: var(--ink-70);
 }
 
 .small {
@@ -514,7 +512,7 @@ a.media-link:hover .media > img {
   font-size: var(--fs-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--ink-50);
   margin-bottom: 0.5rem;
 }
 
