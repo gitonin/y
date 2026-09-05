@@ -1,12 +1,16 @@
 # Publication de l'aperçu sur GitHub Pages.
 #
-# Une seule publication contient les deux versions du site :
+# Une seule publication contient les trois versions du site :
 #   https://<utilisateur>.github.io/<dépôt>/       -> version 1
 #   https://<utilisateur>.github.io/<dépôt>/v2/    -> version 2
+#   https://<utilisateur>.github.io/<dépôt>/v3/    -> version 3
 #
 # Le déploiement part toujours de cette branche : c'est elle qui publie.
-# Une poussée sur la branche v2 déclenche, de son côté, une simple
-# vérification de build (voir le workflow de cette branche-là).
+# Une poussée sur une branche de version déclenche, de son côté, une simple
+# vérification de build (voir le workflow de la branche concernée).
+#
+# La version 3 est le chantier en cours : elle a sa propre adresse pour que
+# la version 2 reste consultable, inchangée, pendant les travaux.
 #
 # À faire une seule fois si rien ne se publie :
 #   Settings > Pages > Build and deployment > Source : « GitHub Actions »
@@ -31,6 +35,7 @@ concurrency:
 
 env:
   V2_BRANCH: claude/yunma-site-v2
+  V3_BRANCH: claude/yunma-site-v3
 
 jobs:
   build:
@@ -47,6 +52,12 @@ jobs:
           ref: ${{ env.V2_BRANCH }}
           path: v2
 
+      - name: Récupérer la version 3
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.V3_BRANCH }}
+          path: v3
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -56,7 +67,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       # GitHub renvoie le chemin de base tantôt avec, tantôt sans barre oblique
-      # finale : on le normalise avant d'en dériver celui de la version 2.
+      # finale : on le normalise avant d'en dériver ceux des autres versions.
       - name: Calculer les chemins de publication
         id: paths
         run: |
@@ -64,8 +75,10 @@ jobs:
           base="${base%/}"
           echo "v1=${base}/" >> "$GITHUB_OUTPUT"
           echo "v2=${base}/v2/" >> "$GITHUB_OUTPUT"
+          echo "v3=${base}/v3/" >> "$GITHUB_OUTPUT"
           echo "version 1 -> ${base}/"
           echo "version 2 -> ${base}/v2/"
+          echo "version 3 -> ${base}/v3/"
 
       - name: Construire la version 1
         working-directory: v1
@@ -91,18 +104,32 @@ jobs:
           npm ci
           npm run build
 
-      - name: Assembler les deux versions
+      - name: Construire la version 3
+        working-directory: v3
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.paths.outputs.v3 }}
+          PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
+          PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+          PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Assembler les trois versions
         run: |
           mkdir -p site
           cp -r v1/dist/. site/
           mkdir -p site/v2
           cp -r v2/dist/. site/v2/
-          echo "Publié : / (v1) et /v2/ (v2)"
-          ls site site/v2 | head -30
+          mkdir -p site/v3
+          cp -r v3/dist/. site/v3/
+          echo "Publié : / (v1), /v2/ (v2) et /v3/ (v3)"
+          ls site site/v2 site/v3 | head -40
 
       # Filet de sécurité : si une version pointait vers un mauvais dossier,
       # la publication s'arrête ici plutôt que de mettre en ligne un site cassé.
-      - name: Vérifier les chemins des deux versions
+      - name: Vérifier les chemins des trois versions
         run: |
           check() {
             local page="$1" expected="$2" nom="$3"
@@ -117,6 +144,7 @@ jobs:
           }
           check site/fr/index.html    '${{ steps.paths.outputs.v1 }}' 'version 1'
           check site/v2/fr/index.html '${{ steps.paths.outputs.v2 }}' 'version 2'
+          check site/v3/fr/index.html '${{ steps.paths.outputs.v3 }}' 'version 3'
 
       - uses: actions/upload-pages-artifact@v3
         with:
