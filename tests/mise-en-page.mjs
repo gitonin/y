@@ -68,8 +68,12 @@ const repere = async (pg, chemin) => {
     const h1 = document.querySelector('h1');
     const r = h1.getBoundingClientRect();
     const ligne = h1.querySelector('span span') ?? h1;
+    /* Sur l'accueil, c'est le logo qui ouvre le bloc : le repère de hauteur
+       est donc le haut du logo, et non celui du titre. Ailleurs, les deux
+       se confondent. */
+    const ouverture = document.querySelector('[data-logo-accueil]') ?? h1;
     return {
-      haut: Math.round(r.top),
+      haut: Math.round(ouverture.getBoundingClientRect().top),
       gauche: Math.round(r.left),
       corps: getComputedStyle(ligne).fontSize,
       couleur: getComputedStyle(h1).color,
@@ -83,7 +87,7 @@ for (const largeur of [360, 390, 600, 768, 900, 1024, 1280, 1440, 1920]) {
   /* Deux pixels de tolérance : les deux mises en page empilent des marges
      élastiques dont les paliers ne tombent pas tout à fait au même endroit. */
   const ecart = Math.abs(accueil.haut - autre.haut);
-  check(`${largeur} px — hauteur du titre (écart ${ecart} px)`, ecart <= 2, true);
+  check(`${largeur} px — hauteur d’ouverture du bloc (écart ${ecart} px)`, ecart <= 2, true);
   check(`${largeur} px — retrait à gauche`, accueil.gauche, autre.gauche);
   check(`${largeur} px — corps du titre`, accueil.corps, autre.corps);
   check(`${largeur} px — couleur du titre`, accueil.couleur, autre.couleur);

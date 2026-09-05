@@ -69,11 +69,11 @@ const jsonld = [
 
   <!-- ============ LE YUNNAN ============ -->
   <section id="terroir" class="anchor-target">
-    <div class="wrap">
-      <figure class="media media--wide" data-reveal>
-        <Photo name="cretes-brumeuses" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
-      </figure>
-    </div>
+    {/* Ouverture pleine largeur ; les photographies des sections qui suivent
+        restent alignées sur le texte. */}
+    <figure class="media media--wide" data-reveal>
+      <Photo name="cretes-brumeuses" lang={lang} priority sizes="100vw" />
+    </figure>
 
     <div class="section">
       <div class="wrap osections">
@@ -502,11 +502,11 @@ const jsonld = [
   }
 
   .step__icon {
-    color: var(--ink-70);
+    color: var(--ink);
   }
 
   .step__n {
-    color: var(--accent);
+    color: var(--ink);
   }
 
   .step__title {
@@ -552,14 +552,14 @@ const jsonld = [
   .brews__time :global(svg) {
     display: inline-block;
     vertical-align: -0.24em;
-    color: var(--ink-50);
+    color: var(--ink);
   }
 
   .brews thead th {
     font-size: var(--fs-label);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-    color: var(--ink-50);
+    color: var(--ink);
   }
 
   .brews tbody th {

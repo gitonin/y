@@ -155,10 +155,14 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
       </div>
     </div>
 
-    <figure class="media pdp__ambiance" data-reveal>
-      <Photo name={product.ambiance} lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
-    </figure>
+  </div>
 
+  {/* Seul visuel de la fiche à traverser l'écran : il ouvre le récit. */}
+  <figure class="media pdp__ambiance" data-reveal>
+    <Photo name={product.ambiance} lang={lang} sizes="100vw" />
+  </figure>
+
+  <div class="wrap page-bas">
     <section class="about" id="about" data-reveal>
       <h2 class="about__title">{t.product.aboutTitle}</h2>
       <div class="about__grid">
@@ -234,6 +238,9 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 <style>
   .page-top {
     padding-top: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .page-bas {
     padding-bottom: var(--section);
   }
 
@@ -261,7 +268,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 
   .pdp__title {
     font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
-    color: var(--accent);
+    color: var(--ink);
     letter-spacing: -0.015em;
   }
 
@@ -353,7 +360,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
   .includes li {
     padding-left: 1.1rem;
     position: relative;
-    color: var(--ink-70);
+    color: var(--ink);
   }
 
   .includes li::before {
@@ -383,7 +390,7 @@ const seoDescription = `${product.short[lang]} ${product.description[lang]}`.sli
 
   .details__icon {
     margin-top: 0.1rem;
-    color: var(--ink-50);
+    color: var(--ink);
   }
 
   .details__row dd {
