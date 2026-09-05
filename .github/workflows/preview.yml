@@ -4,6 +4,7 @@
 #   https://<utilisateur>.github.io/<dépôt>/       -> version 1
 #   https://<utilisateur>.github.io/<dépôt>/v2/    -> version 2
 #   https://<utilisateur>.github.io/<dépôt>/v3/    -> version 3
+#   https://<utilisateur>.github.io/<dépôt>/v4/    -> version 4
 #
 # Le déploiement part toujours de cette branche : c'est elle qui publie.
 # Une poussée sur une branche de version déclenche, de son côté, une simple
@@ -36,6 +37,7 @@ concurrency:
 env:
   V2_BRANCH: claude/yunma-site-v2
   V3_BRANCH: claude/yunma-site-v3
+  V4_BRANCH: claude/yunma-site-v4
 
 jobs:
   build:
@@ -58,6 +60,12 @@ jobs:
           ref: ${{ env.V3_BRANCH }}
           path: v3
 
+      - name: Récupérer la version 4
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.V4_BRANCH }}
+          path: v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -76,9 +84,11 @@ jobs:
           echo "v1=${base}/" >> "$GITHUB_OUTPUT"
           echo "v2=${base}/v2/" >> "$GITHUB_OUTPUT"
           echo "v3=${base}/v3/" >> "$GITHUB_OUTPUT"
+          echo "v4=${base}/v4/" >> "$GITHUB_OUTPUT"
           echo "version 1 -> ${base}/"
           echo "version 2 -> ${base}/v2/"
           echo "version 3 -> ${base}/v3/"
+          echo "version 4 -> ${base}/v4/"
 
       - name: Construire la version 1
         working-directory: v1
@@ -116,7 +126,19 @@ jobs:
           npm ci
           npm run build
 
-      - name: Assembler les trois versions
+      - name: Construire la version 4
+        working-directory: v4
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.paths.outputs.v4 }}
+          PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
+          PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+          PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Assembler les quatre versions
         run: |
           mkdir -p site
           cp -r v1/dist/. site/
@@ -124,12 +146,14 @@ jobs:
           cp -r v2/dist/. site/v2/
           mkdir -p site/v3
           cp -r v3/dist/. site/v3/
-          echo "Publié : / (v1), /v2/ (v2) et /v3/ (v3)"
-          ls site site/v2 site/v3 | head -40
+          mkdir -p site/v4
+          cp -r v4/dist/. site/v4/
+          echo "Publié : / (v1), /v2/, /v3/ et /v4/"
+          ls site site/v2 site/v3 site/v4 | head -50
 
       # Filet de sécurité : si une version pointait vers un mauvais dossier,
       # la publication s'arrête ici plutôt que de mettre en ligne un site cassé.
-      - name: Vérifier les chemins des trois versions
+      - name: Vérifier les chemins des quatre versions
         run: |
           check() {
             local page="$1" expected="$2" nom="$3"
@@ -145,6 +169,7 @@ jobs:
           check site/fr/index.html    '${{ steps.paths.outputs.v1 }}' 'version 1'
           check site/v2/fr/index.html '${{ steps.paths.outputs.v2 }}' 'version 2'
           check site/v3/fr/index.html '${{ steps.paths.outputs.v3 }}' 'version 3'
+          check site/v4/fr/index.html '${{ steps.paths.outputs.v4 }}' 'version 4'
 
       - uses: actions/upload-pages-artifact@v3
         with:
