@@ -1,17 +1,18 @@
-# Vérification de construction de la version 2.
+# Vérification de construction de la version 3 — le chantier en cours.
 #
 # La publication de l'aperçu est faite depuis la branche v1, qui met en ligne
-# les deux versions en une seule fois :
+# les trois versions en une seule fois :
 #   https://<utilisateur>.github.io/<dépôt>/     -> version 1
-#   https://<utilisateur>.github.io/<dépôt>/v2/  -> version 2
+#   https://<utilisateur>.github.io/<dépôt>/v2/  -> version 2, inchangée
+#   https://<utilisateur>.github.io/<dépôt>/v3/  -> version 3, ce chantier
 # Après une poussée ici, relancez « Aperçu GitHub Pages » depuis la branche v1
 # (onglet Actions > Run workflow) pour republier.
-name: Vérification v2
+name: Vérification v3
 
 on:
   push:
     branches:
-      - claude/yunma-site-v2
+      - claude/yunma-site-v3
   workflow_dispatch:
 
 permissions:
