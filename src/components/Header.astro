@@ -201,11 +201,27 @@ const current = Astro.url.pathname;
     height: 34px;
     width: auto;
     object-fit: contain;
+    transform-origin: top center;
+    transition: height 0.5s var(--ease-out-expo);
   }
 
   @media (min-width: 900px) {
     .hd__logo img {
       height: 42px;
+    }
+  }
+
+  /* Sur l'accueil, et là seulement, le logo arrive à la taille de celui du
+     pied de page, puis se réduit au défilement jusqu'à s'ajuster à la barre.
+     Il déborde sous la barre le temps d'être grand : l'en-tête y est
+     transparent, et le contenu de la bannière commence plus bas. */
+  :global(html.logo-grand) .hd__logo img {
+    height: 81px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hd__logo img {
+      transition: none;
     }
   }
 
@@ -324,8 +340,10 @@ const current = Astro.url.pathname;
     }
   }
 
+  /* Le retrait haut l'emporte sur le bas : l'ensemble des liens et des filets
+     descend, et le vide se répartit mieux entre le haut et le pied du menu. */
   .nav__col {
-    padding: clamp(1.25rem, 3vh, 3rem) var(--gutter) clamp(1.75rem, 4vh, 4rem);
+    padding: clamp(2.75rem, 8vh, 7rem) var(--gutter) clamp(1rem, 2.5vh, 2.25rem);
     max-width: 640px;
     width: 100%;
     margin-left: auto;

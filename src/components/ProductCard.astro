@@ -80,6 +80,13 @@ const aPartirDe = hasPriceRange(product);
     color: var(--accent);
   }
 
+  /* Interlignage resserré : ces descriptions tiennent en deux ou trois lignes,
+     elles n'ont pas besoin de l'aération d'un paragraphe courant. */
+  .pcard__sub,
+  .pcard__notes {
+    line-height: 1.35;
+  }
+
   .pcard__notes {
     color: var(--ink-70);
     margin-top: 0.35rem;

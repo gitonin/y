@@ -80,11 +80,11 @@ for (const largeur of [360, 390, 600, 768, 900, 1024, 1280, 1440, 1920]) {
   const pg = await (await navigateur.newContext({ viewport: { width: largeur, height: 900 } })).newPage();
   const accueil = await repere(pg, '/fr/');
   const autre = await repere(pg, '/fr/origine/');
-  /* Le bloc de la bannière commence plus haut que les titres des autres pages :
-     il monte jusqu'à la hauteur de leur fil d'Ariane. On vérifie donc le sens
-     de l'écart, et qu'il reste raisonnable — pas son annulation. */
-  const ecart = autre.haut - accueil.haut;
-  check(`${largeur} px — la bannière ouvre plus haut (${ecart} px)`, ecart > 0 && ecart < 120, true);
+  /* La bannière n'est plus calée sur les titres des autres pages : son bloc a
+     sa propre hauteur, réglée à l'œil. On vérifie seulement qu'elle reste dans
+     la même région — un écart de plus de 120 px signalerait un déréglage. */
+  const ecart = Math.abs(autre.haut - accueil.haut);
+  check(`${largeur} px — la bannière ouvre dans la même région (${ecart} px)`, ecart < 120, true);
   check(`${largeur} px — retrait à gauche`, accueil.gauche, autre.gauche);
   check(`${largeur} px — corps du titre`, accueil.corps, autre.corps);
   check(`${largeur} px — couleur du titre`, accueil.couleur, autre.couleur);
@@ -125,6 +125,46 @@ for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 9
     pire = Math.min(pire, contraste(ENCRE, lum(sans[i], sans[i + 1], sans[i + 2])));
   }
   check(`${w}×${h} — contraste minimal ${pire.toFixed(2)}:1 (seuil 4,5)`, pire >= 4.5, true);
+  await pg.close();
+}
+
+/* --------------------------------- 2 bis. la mise en avant produit */
+titre('La mise en avant tient sur sa photographie');
+for (const [w, h] of [[390, 844], [768, 1024], [1024, 768], [1440, 900], [1440, 700], [1920, 1080]]) {
+  const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
+  await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+  await pg.addStyleTag({
+    content: `[data-reveal]{opacity:1!important;transform:none!important}
+      .media>img{transform:none!important;transition:none!important}`,
+  });
+  await pg.locator('.avant').scrollIntoViewIfNeeded();
+  await pg.waitForTimeout(800);
+  /* Sous les éléments de texte eux-mêmes : leur conteneur s'étend jusqu'au
+     bord droit, loin des lettres, et fausserait la mesure. */
+  const zone = await pg.evaluate(() => {
+    const bloc = document.querySelector('.avant').getBoundingClientRect();
+    const els = [...document.querySelectorAll('.avant__inner > *')].map((e) => e.getBoundingClientRect());
+    document.querySelector('.avant__inner').style.visibility = 'hidden';
+    const gauche = Math.min(...els.map((r) => r.left));
+    const haut = Math.min(...els.map((r) => r.top));
+    return {
+      x: Math.round(gauche - bloc.left),
+      y: Math.round(haut - bloc.top),
+      width: Math.round(Math.max(...els.map((r) => r.right)) - gauche),
+      height: Math.round(Math.max(...els.map((r) => r.bottom)) - haut),
+    };
+  });
+  await pg.waitForTimeout(150);
+  const cadre = await pg.locator('.avant').boundingBox();
+  const fond = await enPixels(
+    pg,
+    (await pg.screenshot({ clip: { x: cadre.x + zone.x, y: cadre.y + zone.y, width: zone.width, height: zone.height } })).toString('base64'),
+  );
+  let pire = Infinity;
+  for (let i = 0; i < fond.length; i += 4) {
+    pire = Math.min(pire, contraste(ENCRE, lum(fond[i], fond[i + 1], fond[i + 2])));
+  }
+  check(`${w}×${h} — fond sous la mise en avant (${pire.toFixed(2)}:1, seuil 4,5)`, pire >= 4.5, true);
   await pg.close();
 }
 

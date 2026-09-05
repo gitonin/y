@@ -85,7 +85,7 @@ const en: Dict = {
     coffeesTitle: 'Picked in Yunnan,\nroasted in Paris.',
     coffeesText:
       'Three seasonal lots in 200 g bags, drip bags to take away, or the box to taste everything. Roasted in small batches, regularly.',
-    coffeesCta: 'Discover our Yunnan coffees',
+    coffeesCta: 'Discover our coffees',
     approachLabel: 'Our philosophy',
     approachTitle: 'Time,\nflavour\nand nature.',
     approachText:

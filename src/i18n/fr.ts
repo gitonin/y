@@ -83,7 +83,7 @@ const fr = {
     coffeesTitle: 'Cueillis au Yunnan,\ntorréfiés à Paris.',
     coffeesText:
       'Trois lots de saison en sachet de 200 g, des drip bags à emporter, ou le coffret pour tout goûter. Torréfiés en petites séries, de manière régulière.',
-    coffeesCta: 'Découvrir nos cafés du Yunnan',
+    coffeesCta: 'Découvrir nos cafés',
     approachLabel: 'Notre philosophie',
     approachTitle: 'Du temps,\ndes saveurs\net la nature.',
     approachText:

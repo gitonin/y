@@ -84,7 +84,7 @@ const zh: Dict = {
     coffeesLabel: '我们的咖啡',
     coffeesTitle: '采于云南，\n烘焙于巴黎。',
     coffeesText: '三款 200 克季节批次、便携挂耳咖啡，或者可以一次全部品尝的礼盒。小批量、稳定地烘焙。',
-    coffeesCta: '探索我们的云南咖啡',
+    coffeesCta: '探索我们的咖啡',
     approachLabel: '我们的理念',
     approachTitle: '时间、\n风味\n与自然。',
     approachText:

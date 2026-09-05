@@ -88,10 +88,11 @@ const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
 </div>
 
 <style define:vars={{ markUrl: `url(${markUrl})` }}>
+  /* Le fond des visuels produits est carré, à toutes les tailles. */
   .shot {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     display: grid;
     place-items: center;
     background: linear-gradient(168deg, var(--paper-soft) 0%, var(--paper-2) 58%, var(--paper-3) 100%);
@@ -325,10 +326,6 @@ const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
   /* --- Tailles --- */
   .shot--sm .pouch--hero {
     width: 58%;
-  }
-
-  .shot--lg {
-    aspect-ratio: 1 / 1;
   }
 
   @media (hover: hover) {
