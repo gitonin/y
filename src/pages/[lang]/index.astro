@@ -21,6 +21,10 @@ const posts = (await getCollection('journal'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
+/* L'accueil ne montre que quatre références — de quoi remplir la grille sans
+   ligne orpheline. Le lien de la section mène à la gamme complète. */
+const vitrine = products.slice(0, 4);
+
 const base = Astro.site ?? new URL('https://yunma.fr');
 const jsonld = [
   {
@@ -36,7 +40,7 @@ const jsonld = [
   {
     '@type': 'ItemList',
     name: t.cafes.title,
-    itemListElement: products.map((p, i) => ({
+    itemListElement: vitrine.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       url: absolute(Astro.site, `${lang}/cafes/${p.slug}/`),
@@ -95,7 +99,7 @@ const jsonld = [
       </header>
 
       <div class="pgrid">
-        {products.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
+        {vitrine.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
       </div>
     </div>
   </section>
@@ -298,21 +302,17 @@ const jsonld = [
     max-width: 44ch;
   }
 
+  /* Quatre références : deux colonnes, puis quatre d'un coup. Trois colonnes
+     laisseraient une carte seule sur sa ligne. */
   .pgrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
   }
 
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .pgrid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .pgrid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
