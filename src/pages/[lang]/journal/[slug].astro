@@ -1,6 +1,8 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { photos } from '../../../data/photos';
 import Base from '../../../layouts/Base.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Photo from '../../../components/Photo.astro';
@@ -34,6 +36,13 @@ const alternates = Object.fromEntries(
   languages.map((code) => [code, available.has(code) ? postUrl(code, slug) : route(code, 'journal')])
 ) as Record<Lang, string>;
 
+/* L'illustration de l'article, et non le visuel de partage générique :
+   c'est elle que Google Discover et les moteurs de réponse affichent. */
+const imageArticle = new URL(
+  (await getImage({ src: photos[post.data.photo].src, width: 1200 })).src,
+  base
+).href;
+
 const words = post.body?.split(/\s+/).length ?? 0;
 const readingTime = Math.max(2, Math.round(words / (lang === 'zh' ? 300 : 200)));
 
@@ -51,7 +60,7 @@ const jsonld = [
     author: { '@type': 'Organization', name: post.data.author, url: base.origin },
     publisher: { '@id': `${base.origin}/#organization` },
     mainEntityOfPage: canonical,
-    image: absolute(Astro.site, 'og/yunma-og.png'),
+    image: imageArticle,
   },
   {
     '@type': 'BreadcrumbList',

@@ -8,7 +8,9 @@ import ProductCard from '../../../components/ProductCard.astro';
 import Photo from '../../../components/Photo.astro';
 import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
+import { getImage } from 'astro:assets';
 import { languages, useTranslations, url, route, formatPrice, absolute, type Lang } from '../../../i18n/utils';
+import { getPackshot } from '../../../data/packshots';
 import type { Product } from '../../../data/products';
 import { products, getProduct, fromPrice, toPrice, defaultVariant } from '../../../data/products';
 import { SITE } from '../../../consts';
@@ -42,6 +44,29 @@ const detailRows: { label: string; value: string; icon: IconName }[] = [
 
 const canonical = new URL(Astro.url.pathname, base).href;
 
+/* Google demande une photographie du produit lui-même : on donne le packshot,
+   pas le visuel de partage générique. */
+const packshot = getPackshot(product.slug);
+const imageProduit = packshot
+  ? new URL((await getImage({ src: packshot.src, width: 1200, format: 'png' })).src, base).href
+  : absolute(Astro.site, 'og/yunma-og.png');
+
+/* Ce que nous annonçons noir sur blanc dans la FAQ, et rien de plus :
+   expédition sous deux jours ouvrés, 2 à 6 jours de transport, 14 jours pour
+   changer d'avis. Les frais de retour ne sont pas déclarés faute d'être fixés. */
+const livraison = {
+  '@type': 'ShippingDeliveryTime',
+  handlingTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 2, unitCode: 'DAY' },
+  transitTime: { '@type': 'QuantitativeValue', minValue: 2, maxValue: 6, unitCode: 'DAY' },
+};
+const retours = {
+  '@type': 'MerchantReturnPolicy',
+  applicableCountry: 'FR',
+  returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+  merchantReturnDays: 14,
+  returnMethod: 'https://schema.org/ReturnByMail',
+};
+
 /* Une offre par format ; regroupées quand les prix diffèrent, pour que Google
    annonce une fourchette plutôt qu'un prix unique. */
 const offres = product.variants.map((variant) => ({
@@ -56,7 +81,9 @@ const offres = product.variants.map((variant) => ({
   shippingDetails: {
     '@type': 'OfferShippingDetails',
     shippingDestination: { '@type': 'DefinedRegion', addressCountry: ['FR', 'BE', 'DE', 'ES', 'IT', 'NL'] },
+    deliveryTime: livraison,
   },
+  hasMerchantReturnPolicy: retours,
 }));
 const offreProduit =
   product.variants.length > 1
@@ -80,7 +107,7 @@ const jsonld = [
     category: product.category === 'grain' ? 'Coffee beans' : product.category === 'drip' ? 'Drip coffee bags' : 'Coffee gift set',
     brand: { '@type': 'Brand', name: SITE.name },
     url: canonical,
-    image: absolute(Astro.site, 'og/yunma-og.png'),
+    image: imageProduit,
     countryOfOrigin: 'CN',
     additionalProperty: [...specRows, ...detailRows].map((row) => ({
       '@type': 'PropertyValue',
@@ -99,8 +126,19 @@ const jsonld = [
   },
 ];
 
-const seoTitle = `${product.name[lang]} — ${product.subtitle[lang]}`;
-const seoDescription = `${product.short[lang]} ${product.description[lang]}`.slice(0, 300);
+/* Coupe un texte à la longueur utile d'un résultat de recherche, sur un mot
+   entier quand la langue en a (le chinois s'écrit sans espaces). */
+const resume = (texte: string, max: number) => {
+  if (texte.length <= max) return texte;
+  const coupe = texte.lastIndexOf(' ', max - 1);
+  return `${texte.slice(0, coupe > max * 0.6 ? coupe : max - 1).trimEnd()}…`;
+};
+
+/* Google n'affiche qu'une soixantaine de signes de titre et environ 155 de
+   description : au-delà, la phrase est tronquée au milieu d'un mot. */
+const titreLong = `${product.name[lang]} — ${product.subtitle[lang]}`;
+const seoTitle = titreLong.length > 52 ? product.name[lang] : titreLong;
+const seoDescription = resume(`${product.short[lang]} ${product.description[lang]}`, 155);
 ---
 
 <Base

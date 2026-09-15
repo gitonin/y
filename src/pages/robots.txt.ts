@@ -26,6 +26,14 @@ const AI_CRAWLERS = [
 export const GET: APIRoute = ({ site }) => {
   const origin = (site ?? new URL('https://yunma.fr')).origin;
 
+  /* Aperçu publié dans un sous-dossier : on ferme la porte, pour qu'une copie
+     de travail ne vienne jamais concurrencer le site en ligne. */
+  if (import.meta.env.BASE_URL !== '/') {
+    return new Response(['# Aperçu de travail — ne pas indexer', '', 'User-agent: *', 'Disallow: /', ''].join('\n'), {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  }
+
   const body = [
     '# Yunma — cafés de spécialité du Yunnan',
     '# Les moteurs de recherche et les assistants IA sont les bienvenus.',

@@ -256,7 +256,7 @@ const en: Dict = {
     closingCta: 'Read the journal',
   },
   pro: {
-    seoTitle: 'Trade — specialty coffee for cafés, hotels and restaurants',
+    seoTitle: 'Specialty coffee for cafés, hotels and restaurants',
     seoDescription:
       'Yunma supports roasters, coffee shops, hotels, restaurants and fine grocers: Yunnan specialty coffee, trade pricing, training and dedicated support.',
     label: 'Trade',

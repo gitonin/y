@@ -1,6 +1,6 @@
 ---
 title: 'Carnet de récolte : trois semaines à Baoshan'
-description: "Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaosheng, notre partenaire à Baoshan."
+description: "Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaosheng."
 date: 2025-02-18
 author: Yunma
 tags: ['Yunnan', 'Récolte', 'Voyage']

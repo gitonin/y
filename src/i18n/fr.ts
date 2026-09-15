@@ -100,7 +100,7 @@ const fr = {
   cafes: {
     seoTitle: 'Nos cafés de spécialité du Yunnan — Yunma',
     seoDescription:
-      'Découvrez les cafés Yunma : cafés de spécialité du Yunnan (Chine) en 200 g, drip bags en boîte de 8 ou coffret découverte. Des origine tracées, la torréfaction à Paris.',
+      'Les cafés Yunma : cafés de spécialité du Yunnan en 200 g, drip bags en boîte de 8 ou coffret découverte. Origines tracées, torréfaction à Paris.',
     label: 'Notre spécialité',
     title: 'Cafés du Yunnan',
     intro:
@@ -131,7 +131,7 @@ const fr = {
     brewTitle: 'Conseils de préparation',
   },
   origine: {
-    seoTitle: 'Origine, histoire et savoir-faire — Yunma, cafés de spécialité du Yunnan',
+    seoTitle: 'Origine, histoire et savoir-faire du café du Yunnan',
     seoDescription:
       'Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.',
     label: 'À l’origine,',
@@ -257,7 +257,7 @@ const fr = {
     closingCta: 'Découvrir le journal',
   },
   pro: {
-    seoTitle: 'Espace professionnels — cafés de spécialité pour cafés, hôtels et restaurants',
+    seoTitle: 'Café de spécialité pour cafés, hôtels et restaurants',
     seoDescription:
       'Yunma accompagne torréfacteurs, coffee shops, hôtels, restaurants et épiceries fines : cafés de spécialité du Yunnan, tarifs pro, formation et supports dédiés.',
     label: 'Espace pro',
