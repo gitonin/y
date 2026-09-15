@@ -4,9 +4,9 @@ Déposez ici les photographies des packagings, une par référence.
 
 ## Comment déposer
 
-Depuis GitHub, sur la branche `claude/yunma-site-v2` :
+Depuis GitHub, sur la branche `claude/yunma-site-v4` :
 **Add file → Upload files**, ou directement par ce lien :
-<https://github.com/gitonin/y/upload/claude/yunma-site-v2/src/assets/produits>
+<https://github.com/gitonin/y/upload/claude/yunma-site-v4/src/assets/produits>
 
 Déposer un fichier sous un nom déjà présent le remplace : rien d'autre n'est
 à modifier, le site reprend le nouveau visuel au déploiement suivant.
@@ -18,12 +18,15 @@ Déposer un fichier sous un nom déjà présent le remplace : rien d'autre n'est
 | `torch-estate-lot-01.png`    | Torch Estate, Lot 01 — 200 g   |
 | `torch-estate-lot-02.png`    | Torch Estate, Lot 02 — 200 g   |
 | `yun-lan-estate.png`         | Yun Lan Estate — 200 g         |
-| `drip-bags-catimor.png`      | Drip Bags Catimor, boîte de 5  |
-| `drip-bags-bourbon-jaune.png`| Drip Bags Bourbon jaune, ×5    |
+| `drip-bags-catimor.png`      | Gaosheng — Catimor, boîte de 5 |
+| `drip-bags-bourbon-jaune.png`| Gaosheng — Bourbon jaune, ×5   |
 | `coffret-decouverte.png`     | Coffret Découverte             |
 
 Un nom différent ne pose pas de problème : il suffit de préciser à quelle
 référence correspond chaque fichier.
+
+> Les deux boîtes de cinq portent aujourd'hui **la même photographie d'attente**.
+> Déposer un fichier propre sous chacun des deux noms suffit à les distinguer.
 
 ## Format
 

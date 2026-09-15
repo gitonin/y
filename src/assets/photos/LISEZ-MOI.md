@@ -4,49 +4,50 @@ Déposez ici les photographies de reportage — paysages, gestes, portraits.
 
 ## Comment déposer
 
-Depuis GitHub, sur la branche `claude/yunma-site-v2` :
+Depuis GitHub, sur la branche `claude/yunma-site-v4` :
 **Add file → Upload files**, ou directement par ce lien :
-<https://github.com/gitonin/y/upload/claude/yunma-site-v2/src/assets/photos>
+<https://github.com/gitonin/y/upload/claude/yunma-site-v4/src/assets/photos>
 
-## Photos déjà en place — à remplacer sous le même nom
+Déposer un fichier sous un nom déjà présent le remplace : rien d'autre n'est à
+modifier, le site reprend le nouveau visuel à la publication suivante. Le texte
+alternatif, lui, vit dans `src/data/photos.ts` — dites-moi s'il doit changer.
 
-Ces cinq images sont utilisées partout dans le site (accueil, Origine, Pro,
-bandeaux). Déposer un fichier du même nom suffit à le remplacer : rien
-d'autre n'est à modifier.
+## Ambiances
 
-| Fichier                    | Sujet attendu                                      | Où elle paraît                          |
-| -------------------------- | -------------------------------------------------- | --------------------------------------- |
-| `cretes-brumeuses.jpg`     | Crêtes et vallées du Yunnan dans la brume          | Bandeau d'accueil, Origine, menu        |
-| `recolte-cueilleurs.jpg`   | Cueilleurs à la récolte, à flanc de montagne       | Accueil, Origine                        |
-| `cerises-branche.jpg`      | Branche chargée de cerises rouges et jaunes        | Accueil                                 |
-| `sechage-lits.jpg`         | Séchage sur lits surélevés en bambou               | Origine                                 |
-| `tabouret-terrasse.jpg`    | Nature morte, terrasse face aux montagnes          | Pro, bloc de fin de page                |
+| Fichier | Sujet attendu | Où elle paraît |
+| --- | --- | --- |
+| `cretes-brumeuses.jpg` | Crêtes et vallées du Yunnan dans la brume | Bannière d'accueil, ouverture d'Origine, menu ouvert, 404 |
+| `recolte-cueilleurs.jpg` | Cueilleurs à la récolte, à flanc de montagne | Accueil (bloc « À l'origine »), Origine, article Baoshan |
+| `cerises-branche.jpg` | Branche chargée de cerises rouges et jaunes | Origine (« De décembre à mars »), fiche Catimor |
+| `sechage-lits.jpg` | Séchage sur lits surélevés en bambou | Origine (avant le savoir-faire), fiche Lot 02 |
+| `tabouret-terrasse.jpg` | Nature morte, terrasse face aux montagnes | Clôture d'Origine et de la page Cafés, Pro, article drip bag |
 
-## Fermes et producteurs
+## Fermes
 
-| Fichier                          | Sujet                                                          | Où elle paraît                    |
-| -------------------------------- | -------------------------------------------------------------- | --------------------------------- |
-| `ferme-torch-estate.jpg`         | Torch Estate, Pu'er                                            | Fiches Lot 01 et Lot 02           |
-| `ferme-yun-lan-estate.jpg`       | Yun Lan Estate, Xishuangbanna                                  | Fiche Yun Lan Estate              |
-| `ferme-gaosheng.jpg`             | Gaosheng Manor, Baoshan                                        | Fiches drip bags et coffret       |
-| `producteur-torch-estate.jpg`    | Les producteurs de Torch Estate                                | En réserve                        |
-| `producteur-yun-lan-estate.jpg`  | Cueilleur de Yun Lan Estate                                    | En réserve                        |
-| `producteur-gaosheng.jpg`        | Tri des cerises au dépulpeur, Gaosheng                         | En réserve                        |
+| Fichier | Sujet | Où elle paraît |
+| --- | --- | --- |
+| `ferme-torch-estate.jpg` | Torch Estate, Pu'er | Bloc « La ferme » des Lots 01 et 02 |
+| `ferme-yun-lan-estate.jpg` | Yun Lan Estate, Xishuangbanna | Fiche Yun Lan, coffret, grand visuel d'Origine |
+| `ferme-gaosheng.jpg` | Gaosheng Manor, Baoshan | Fiches Catimor et Bourbon jaune, Origine |
 
-Les trois photos « ferme » illustrent le bloc *La ferme* de chaque fiche
-produit. Les trois « producteur » sont enregistrées et prêtes à servir : elles
-peuvent illustrer une section de la page Origine ou un article du journal.
+## Producteurs
+
+| Fichier | Sujet | Où elle paraît |
+| --- | --- | --- |
+| `producteur-torch-estate.jpg` | Les producteurs de Torch Estate | Photographie d'ambiance du Lot 01, Origine |
+| `producteur-yun-lan-estate.jpg` | Cueilleur de Yun Lan Estate | Photographie d'ambiance de la fiche Yun Lan |
+| `producteur-gaosheng.jpg` | Tri des cerises au dépulpeur, Gaosheng | Photographie d'ambiance du Bourbon jaune |
 
 ## Format
 
 - **JPEG qualité 85 à 95**, profil sRGB
-- **3000 px de large au minimum** pour les paysages et les bandeaux,
+- **3000 px de large au minimum** pour les paysages et les bannières,
   2000 px pour les portraits
-- **Format paysage** (3/2 ou 16/9) pour les fermes et les bandeaux,
+- **Format paysage** (3/2 ou 16/9) pour les fermes et les bannières,
   **portrait ou carré** pour les producteurs
 - Les fichiers d'origine, pas des versions réduites : le site fabrique
   lui-même toutes les tailles dont il a besoin, en WebP
-- Laissez un peu d'air autour du sujet : les bandeaux recadrent selon la
+- Laissez un peu d'air autour du sujet : les bannières recadrent selon la
   largeur de l'écran
 - Pas de filigrane, pas de texte incrusté
 
@@ -55,8 +56,9 @@ peuvent illustrer une section de la page Origine ou un article du journal.
 N'envoyez que des images dont vous détenez les droits, ou dont la licence
 autorise un usage commercial. Précisez le crédit à porter, s'il y en a un.
 
-## Éléments de marque
+## Ailleurs dans le projet
 
-Le fichier source du logo, de la signature et du poinçon vit dans
-`src/assets/marque/elements-yunma.svg`. Les trois éléments en sont extraits,
-un par fichier, dans `public/brand/`.
+- `src/assets/produits/` — les visuels de packaging, un par référence
+- `public/brand/` — logo, poinçon, signature, favicons
+- `src/assets/marque/elements-yunma.svg` — le fichier source de la marque,
+  d'où le logo, la signature et le poinçon ont été extraits
