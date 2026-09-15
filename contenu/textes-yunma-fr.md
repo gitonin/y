@@ -103,7 +103,7 @@ Découvrir l’origine
 Nos cafés
 
 **Titre** `[accueil.coffeesTitle]`
-Cueillis au Yunnan,
+Récoltés au Yunnan,
 torréfiés à Paris.
 
 **Texte** `[accueil.coffeesText]`

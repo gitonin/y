@@ -6,10 +6,9 @@ import Photo from '../../components/Photo.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import ProBand from '../../components/ProBand.astro';
 import ProductCard from '../../components/ProductCard.astro';
-import MiseEnAvant from '../../components/MiseEnAvant.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, url, postUrl, formatDate, absolute, type Lang } from '../../i18n/utils';
-import { products } from '../../data/products';
+import { getProduct, type Product } from '../../data/products';
 import { SITE } from '../../consts';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
@@ -22,10 +21,12 @@ const posts = (await getCollection('journal'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-/* Deux références en grille, et une troisième mise en avant sur photographie,
-   juste en dessous. La gamme complète est à un lien de là. */
-const vitrine = products.slice(0, 2);
-const enAvant = products.find((p) => p.slug === 'coffret-decouverte') ?? products[2];
+/* La vitrine : une référence en tête sur toute la largeur, puis deux côte à
+   côte. Les trois sont nommées ici — l'ordre du catalogue n'a pas à décider de
+   ce que l'accueil met en avant. */
+const vitrine = ['drip-bags-bourbon-jaune', 'torch-estate-lot-01', 'yun-lan-estate']
+  .map((slug) => getProduct(slug))
+  .filter((p): p is Product => !!p);
 
 const base = Astro.site ?? new URL('https://yunma.fr');
 const jsonld = [
@@ -101,12 +102,12 @@ const jsonld = [
         </div>
       </header>
 
+      {/* La première carte prend toute la largeur, les deux suivantes se
+          partagent la ligne : mêmes gouttières, donc mêmes alignements. */}
       <div class="pgrid">
         {vitrine.map((product, i) => <ProductCard product={product} lang={lang} index={i} />)}
       </div>
     </div>
-
-    <MiseEnAvant product={enAvant} lang={lang} />
   </section>
 
   <!-- ============ ORIGINE ============ -->
@@ -297,7 +298,7 @@ const jsonld = [
 
   .shead {
     display: grid;
-    gap: var(--espace-titre);
+    gap: var(--espace-surtitre);
     margin-bottom: clamp(2rem, 5vw, 3.5rem);
   }
 
@@ -322,22 +323,39 @@ const jsonld = [
     max-width: 44ch;
   }
 
-  /* Deux références côte à côte, à toutes les largeurs. */
+  /* La référence de tête occupe la ligne entière, les deux suivantes se la
+     partagent — même gouttière de part et d'autre, donc bords alignés. */
   .pgrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 2.5rem);
-    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
   }
 
-  /* Le fond clair de la section court jusqu'à la mise en avant, qui porte sa
-     propre photographie et n'a donc pas besoin de retrait bas. */
-  /* La section se termine sur le bloc de mise en avant, qui va jusqu'au bord :
-     pas de marge basse, sinon une bande de fond traînerait sous la
-     photographie. */
+  /* :global() est nécessaire : la carte vient d'un composant, elle ne porte
+     donc pas la portée de cette page. */
+  .pgrid > :global(:first-child) {
+    grid-column: 1 / -1;
+  }
+
+  /* Sur grand écran, un carré pleine largeur ferait plus d'un écran de haut
+     pour un seul sachet. Le carré reste, mais le texte vient se poser à côté :
+     il est alors plus grand que les deux cartes du dessous, et les bords
+     coïncident toujours avec elles. */
+  @media (min-width: 900px) {
+    .pgrid > :global(:first-child .pcard__link) {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: center;
+    }
+
+    .pgrid > :global(:first-child .pcard__body) {
+      padding-top: 0;
+    }
+  }
+
   .cafes {
     padding-top: var(--section);
-    padding-bottom: 0;
   }
 
   /* ---------- Origine ---------- */

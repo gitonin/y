@@ -54,7 +54,7 @@ const current = Astro.url.pathname;
 </header>
 
 <nav class="nav" id="site-nav" aria-label={t.nav.primary} data-nav hidden>
-  <div class="nav__sheet">
+  <div class="nav__sheet" tabindex="-1" data-nav-sheet>
     <div class="nav__bar">
       <button class="nav__close" type="button" data-nav-close>
         <svg viewBox="0 0 22 22" aria-hidden="true"
@@ -324,6 +324,15 @@ const current = Astro.url.pathname;
     display: none;
   }
 
+  /* Le panneau reçoit le focus à l'ouverture, à la place de la croix : c'est
+     lui qui doit retenir le clavier, et poser le focus sur un bouton faisait
+     apparaître son contour orange au premier appui, alors que le geste était
+     tactile. */
+  .nav__sheet:focus,
+  .nav__sheet:focus-visible {
+    outline: none;
+  }
+
   .nav__sheet {
     height: 100%;
     display: flex;
@@ -571,7 +580,7 @@ const current = Astro.url.pathname;
     document.body.classList.add('is-locked');
     requestAnimationFrame(() => nav.classList.add('is-open'));
     document.querySelectorAll('[data-nav-open]').forEach((b) => b.setAttribute('aria-expanded', 'true'));
-    window.setTimeout(() => nav.querySelector<HTMLElement>('[data-nav-close]')?.focus(), 140);
+    window.setTimeout(() => nav.querySelector<HTMLElement>('[data-nav-sheet]')?.focus({ preventScroll: true }), 140);
   };
 
   const bindGlobals = () => {
@@ -590,7 +599,8 @@ const current = Astro.url.pathname;
         if (!items.length) return;
         const first = items[0];
         const last = items[items.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
+        const sheet = nav.querySelector<HTMLElement>('[data-nav-sheet]');
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === sheet)) {
           e.preventDefault();
           last.focus();
         } else if (!e.shiftKey && document.activeElement === last) {

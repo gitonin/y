@@ -128,43 +128,33 @@ for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 9
   await pg.close();
 }
 
-/* --------------------------------- 2 bis. la mise en avant produit */
-titre('La mise en avant tient sur sa photographie');
-for (const [w, h] of [[390, 844], [768, 1024], [1024, 768], [1440, 900], [1440, 700], [1920, 1080]]) {
+/* --------------------------------- 2 bis. la vitrine de l'accueil */
+titre('La référence de tête s’aligne sur les deux cartes du dessous');
+for (const [w, h] of [[390, 844], [768, 1024], [1280, 900], [1440, 900], [1920, 1080]]) {
   const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
   await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
-  await pg.addStyleTag({
-    content: `[data-reveal]{opacity:1!important;transform:none!important}
-      .media>img{transform:none!important;transition:none!important}`,
-  });
-  await pg.locator('.avant').scrollIntoViewIfNeeded();
-  await pg.waitForTimeout(800);
-  /* Sous les éléments de texte eux-mêmes : leur conteneur s'étend jusqu'au
-     bord droit, loin des lettres, et fausserait la mesure. */
-  const zone = await pg.evaluate(() => {
-    const bloc = document.querySelector('.avant').getBoundingClientRect();
-    const els = [...document.querySelectorAll('.avant__inner > *')].map((e) => e.getBoundingClientRect());
-    document.querySelector('.avant__inner').style.visibility = 'hidden';
-    const gauche = Math.min(...els.map((r) => r.left));
-    const haut = Math.min(...els.map((r) => r.top));
-    return {
-      x: Math.round(gauche - bloc.left),
-      y: Math.round(haut - bloc.top),
-      width: Math.round(Math.max(...els.map((r) => r.right)) - gauche),
-      height: Math.round(Math.max(...els.map((r) => r.bottom)) - haut),
-    };
-  });
-  await pg.waitForTimeout(150);
-  const cadre = await pg.locator('.avant').boundingBox();
-  const fond = await enPixels(
-    pg,
-    (await pg.screenshot({ clip: { x: cadre.x + zone.x, y: cadre.y + zone.y, width: zone.width, height: zone.height } })).toString('base64'),
+  const cartes = await pg.evaluate(() =>
+    [...document.querySelectorAll('.pgrid .pcard')].map((c) => {
+      const r = c.getBoundingClientRect();
+      const m = c.querySelector('.pcard__media').getBoundingClientRect();
+      return {
+        nom: c.querySelector('.pcard__name').textContent.trim(),
+        gauche: Math.round(r.left),
+        droite: Math.round(r.right),
+        carre: Math.abs(m.width - m.height) <= 1,
+      };
+    })
   );
-  let pire = Infinity;
-  for (let i = 0; i < fond.length; i += 4) {
-    pire = Math.min(pire, contraste(ENCRE, lum(fond[i], fond[i + 1], fond[i + 2])));
-  }
-  check(`${w}×${h} — fond sous la mise en avant (${pire.toFixed(2)}:1, seuil 4,5)`, pire >= 4.5, true);
+  check(`${w}px — trois références`, cartes.length, 3);
+  check(`${w}px — la tête est le Bourbon jaune`, cartes[0]?.nom.includes('Bourbon jaune'), true);
+  check(`${w}px — puis Torch Estate Lot 01`, cartes[1]?.nom.includes('Lot 01'), true);
+  check(`${w}px — puis Yun Lan Estate`, cartes[2]?.nom.includes('Yun Lan'), true);
+  /* Le bord gauche de la tête sur celui de la deuxième, son bord droit sur
+     celui de la troisième : c'est ce qui fait tenir la colonne. */
+  check(`${w}px — bord gauche aligné`, cartes[0]?.gauche, cartes[1]?.gauche);
+  check(`${w}px — bord droit aligné`, cartes[0]?.droite, cartes[2]?.droite);
+  check(`${w}px — la tête occupe la ligne entière`, cartes[0]?.droite - cartes[0]?.gauche > cartes[1]?.droite - cartes[1]?.gauche, true);
+  check(`${w}px — visuels carrés`, cartes.every((c) => c.carre), true);
   await pg.close();
 }
 
