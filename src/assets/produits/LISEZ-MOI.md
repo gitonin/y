@@ -18,7 +18,6 @@ Déposer un fichier sous un nom déjà présent le remplace : rien d'autre n'est
 | `torch-estate-lot-01.png`    | Torch Estate, Lot 01 — 200 g   |
 | `torch-estate-lot-02.png`    | Torch Estate, Lot 02 — 200 g   |
 | `yun-lan-estate.png`         | Yun Lan Estate — 200 g         |
-| `drip-bags-x8.png`           | Drip Bags, boîte de 8          |
 | `drip-bags-catimor.png`      | Drip Bags Catimor, boîte de 5  |
 | `drip-bags-bourbon-jaune.png`| Drip Bags Bourbon jaune, ×5    |
 | `coffret-decouverte.png`     | Coffret Découverte             |

@@ -4,7 +4,6 @@ import type { Lang } from '../i18n/utils';
 import torchEstateLot01 from '../assets/produits/torch-estate-lot-01.png';
 import torchEstateLot02 from '../assets/produits/torch-estate-lot-02.png';
 import yunLanEstate from '../assets/produits/yun-lan-estate.png';
-import dripBagsX8 from '../assets/produits/drip-bags-x8.png';
 import dripBagsCatimor from '../assets/produits/drip-bags-catimor.png';
 import dripBagsBourbonJaune from '../assets/produits/drip-bags-bourbon-jaune.png';
 import coffretDecouverte from '../assets/produits/coffret-decouverte.png';
@@ -44,14 +43,6 @@ export const packshots = {
       fr: 'Sachet de café Yunma Yun Lan Estate, 200 g de grains de Xishuangbanna, Yunnan, sur fond crème',
       en: 'Yunma Yun Lan Estate coffee pouch, 200 g of beans from Xishuangbanna, Yunnan, on a cream background',
       zh: 'Yunma 云澜庄园咖啡袋，200 克云南西双版纳咖啡豆，米色背景',
-    },
-  },
-  'drip-bags-x8': {
-    src: dripBagsX8,
-    alt: {
-      fr: 'Boîte Yunma de 8 drip bags de café du Yunnan, filtres individuels de 10 g, sur fond crème',
-      en: 'Yunma box of 8 Yunnan coffee drip bags, single-serve 10 g filters, on a cream background',
-      zh: 'Yunma 云南挂耳咖啡 8 片装，每片 10 克，米色背景',
     },
   },
   /* Les deux boîtes de 5 partagent pour l'instant le même visuel d'attente :

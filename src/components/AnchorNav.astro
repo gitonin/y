@@ -100,42 +100,62 @@ const { items, ariaLabel } = Astro.props;
 </style>
 
 <script>
+  /* Sommaire d'une page longue : l'item allumé est celui de la partie que l'on
+     est en train de lire. On compare la position de chaque section à une ligne
+     de lecture posée juste sous le sommaire — la dernière section franchie
+     l'emporte. Un observateur d'intersection ne convenait pas : entre deux
+     sections ancrées, la page porte des visuels et des citations qui
+     n'appartiennent à aucune, et le sommaire s'éteignait tout entier. */
+  let detacher: (() => void) | null = null;
+
   const initAnchorNav = () => {
+    detacher?.();
+    detacher = null;
+
     const nav = document.querySelector<HTMLElement>('[data-anchor-nav]');
-    if (!nav || nav.dataset.bound) return;
-    nav.dataset.bound = '1';
+    if (!nav) return;
 
     const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-anchor-link]')];
     const sections = links
       .map((link) => document.getElementById(link.dataset.anchorLink!))
       .filter((el): el is HTMLElement => !!el);
-    if (!sections.length || !('IntersectionObserver' in window)) return;
+    if (!sections.length) return;
 
-    const seen = new Map<string, number>();
+    let attendu = false;
+
     const marquer = () => {
-      let courante = '';
-      let meilleur = 0;
-      for (const [id, ratio] of seen) {
-        if (ratio > meilleur) {
-          meilleur = ratio;
-          courante = id;
-        }
+      attendu = false;
+      /* La ligne de lecture suit le sommaire, qui remonte quand l'en-tête
+         s'efface : on la relit à chaque fois plutôt que de la figer. */
+      const ligne = nav.getBoundingClientRect().bottom + 8;
+      let courante = sections[0].id;
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= ligne) courante = section.id;
       }
+      /* Arrivé en bas, la dernière partie est celle que l'on regarde, même si
+         elle est trop courte pour franchir la ligne. */
+      const fond = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (fond) courante = sections[sections.length - 1].id;
+
       links.forEach((link) => {
-        const actif = link.dataset.anchorLink === courante;
-        if (actif) link.setAttribute('aria-current', 'true');
+        if (link.dataset.anchorLink === courante) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
       });
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => seen.set(entry.target.id, entry.intersectionRatio));
-        marquer();
-      },
-      { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.15, 0.4, 0.75, 1] }
-    );
-    sections.forEach((section) => observer.observe(section));
+    const planifier = () => {
+      if (attendu) return;
+      attendu = true;
+      requestAnimationFrame(marquer);
+    };
+
+    window.addEventListener('scroll', planifier, { passive: true });
+    window.addEventListener('resize', planifier);
+    detacher = () => {
+      window.removeEventListener('scroll', planifier);
+      window.removeEventListener('resize', planifier);
+    };
+    marquer();
   };
 
   document.addEventListener('astro:page-load', initAnchorNav);

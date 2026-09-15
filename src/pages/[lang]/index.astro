@@ -213,7 +213,8 @@ const jsonld = [
     /* Deux voiles superposés. Celui du haut protège la lecture du titre : il
        est exprimé en longueurs fixes, calées sur la hauteur du bloc de titre,
        pour qu'une fenêtre basse soit couverte comme une fenêtre haute — le
-       cadrage de la photo change, la lisibilité non. Celui du bas donne de la
+       cadrage de la photo change, la lisibilité non. Sa descente suit le bas
+       du bloc de titre : le titre est passé à trois lignes, le voile aussi.  Celui du bas donne de la
        profondeur et porte l'invitation à défiler. */
     background:
       linear-gradient(
@@ -221,9 +222,9 @@ const jsonld = [
         rgba(235, 231, 222, 0.6) 0,
         rgba(235, 231, 222, 0.58) var(--haut-titre),
         rgba(235, 231, 222, 0.56) calc(var(--haut-titre) + 10rem),
-        rgba(235, 231, 222, 0.52) calc(var(--haut-titre) + 18rem),
-        rgba(235, 231, 222, 0.24) calc(var(--haut-titre) + 22rem),
-        rgba(235, 231, 222, 0) calc(var(--haut-titre) + 26rem)
+        rgba(235, 231, 222, 0.52) calc(var(--haut-titre) + 21rem),
+        rgba(235, 231, 222, 0.24) calc(var(--haut-titre) + 25rem),
+        rgba(235, 231, 222, 0) calc(var(--haut-titre) + 29rem)
       ),
       linear-gradient(
         180deg,
@@ -243,9 +244,14 @@ const jsonld = [
   }
 
   /* La traduction se lit comme une ligne de plus du titre : même corps, même
-     interligne, même encre — seule la graisse la distingue. */
+     interligne, même encre — seule la graisse la distingue.
+     Les idéogrammes remplissent presque toute la hauteur d'em, là où les
+     capitales latines n'en occupent que les trois quarts : à interlignage
+     égal, le blanc au-dessus du chinois se referme. La marge le rouvre : elle
+     vaut l'écart mesuré entre les deux hauteurs d'encre (0,836 em contre
+     0,692 em), pour que tous les intervalles du bloc se valent. */
   .hero__alt {
-    margin-top: 0;
+    margin-top: 0.15em;
     font-size: var(--fs-h1);
     font-weight: var(--w-light);
     line-height: 1.04;

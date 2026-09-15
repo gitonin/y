@@ -68,7 +68,8 @@ Yunma sélectionne des cafés de spécialité du Yunnan (Chine) : lots tracés, 
 ### Bandeau d’ouverture
 
 **Titre** `[accueil.heroTitle]`
-Cafés de spécialité
+Cafés
+de spécialité
 du Yunnan.
 
 **Sous-titre** `[accueil.heroSub]`
@@ -170,7 +171,7 @@ Découvrir Yunma
 Nos cafés de spécialité du Yunnan — Yunma
 
 **Description affichée dans Google (≈ 155 signes)** `[cafes.seoDescription]`
-Les cafés Yunma : cafés de spécialité du Yunnan en 200 g, drip bags en boîte de 8 ou coffret découverte. Origines tracées, torréfaction à Paris.
+Les cafés Yunma : cafés de spécialité du Yunnan en 200 g, drip bags en boîte de 5 ou coffret découverte. Origines tracées, torréfaction à Paris.
 
 
 ### En-tête
@@ -388,72 +389,6 @@ Créée en 1999 par Zhang Hongjun, cette ferme est l’une des plus anciennes fe
 
 **Format et prix** `[produit.yun-lan-estate.prix.1]`
 200 g — 17.00 €
-
-
-### Drip Bags — Boîte de 8 — Catimor et Bourbon
-
-**Nom** `[produit.drip-bags-x8.nom]`
-Drip Bags — Boîte de 8
-
-**Sous-titre** `[produit.drip-bags-x8.sousTitre]`
-Catimor et Bourbon
-
-**Accroche (une phrase, sous le prix)** `[produit.drip-bags-x8.accroche]`
-Un filtre individuel de café du Yunnan à emporter partout.
-
-**Description** `[produit.drip-bags-x8.description]`
-Huit sachets filtres individuels de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. L’assemblage de saison réunit quatre Catimor et quatre Bourbon jaune de la ferme Gaosheng : de la légèreté et assez de douceur pour se passer de sucre.
-
-**Histoire du lot** `[produit.drip-bags-x8.histoire]`
-Pensés pour le bureau, les voyages ou les matins pressés — sans jamais renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, savourez.
-
-**Fiche : origine** `[produit.drip-bags-x8.origine]`
-Yunnan, Chine — Baoshan
-
-**Fiche : altitude** `[produit.drip-bags-x8.altitude]`
-1300 – 1850 m
-
-**Fiche : variété** `[produit.drip-bags-x8.variete]`
-Catimor et Bourbon Jaune
-
-**Fiche : process** `[produit.drip-bags-x8.process]`
-Honey & lavé
-
-**Fiche : notes de dégustation** `[produit.drip-bags-x8.notes]`
-Amande, cacao au lait, fruits jaunes
-
-**Fiche : séchage** `[produit.drip-bags-x8.sechage]`
-Lits africains surélevés
-
-**Fiche : récolte** `[produit.drip-bags-x8.recolte]`
-À la main, cerises mûres
-
-**Fiche : profil (filtre ou espresso)** `[produit.drip-bags-x8.profil]`
-Filtre
-
-**Conseils de préparation** `[produit.drip-bags-x8.preparation]`
-Posez le sachet sur le mug, versez 30 ml à 90 °C pour humidifier, attendez 30 secondes, puis complétez à 120 - 150 ml en deux versements.
-
-**Contenu, ligne 1** `[produit.drip-bags-x8.contenu.1]`
-4x2 sachets filtres de 10 g
-
-**Contenu, ligne 2** `[produit.drip-bags-x8.contenu.2]`
-Variétés Catimor et Bourbon Jaune
-
-**Contenu, ligne 3** `[produit.drip-bags-x8.contenu.3]`
-Boîte et sachets recyclables
-
-**Ferme : nom** `[produit.drip-bags-x8.ferme.nom]`
-Gaosheng Manor
-
-**Ferme : lieu** `[produit.drip-bags-x8.ferme.lieu]`
-Baoshan, Yunnan
-
-**Ferme : présentation** `[produit.drip-bags-x8.ferme.texte]`
-La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
-
-**Format et prix** `[produit.drip-bags-x8.prix.1]`
-Boîte de 8 — 16.50 €
 
 
 ### Drip Bags — Catimor — Ferme de Gaosheng, Baoshan

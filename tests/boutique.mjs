@@ -121,16 +121,16 @@ const ajouter = async (slug, qte = 1) => {
 };
 await ajouter('drip-bags-catimor', 1);
 await ajouter('drip-bags-bourbon-jaune', 1);
-await ajouter('drip-bags-x8', 2);
+await ajouter('yun-lan-estate', 2);
 await pg.click('[data-cart-toggle]');
 await pg.waitForTimeout(500);
 
 const lignes = pg.locator('.cline');
 check('lignes distinctes', await lignes.count(), 3);
-for (const [i, montant] of [[0, 9], [1, 11], [2, 33]]) {
+for (const [i, montant] of [[0, 9], [1, 11], [2, 34]]) {
   check(`ligne ${i + 1} — montant`, await lignes.nth(i).locator('.cline__price').innerText(), euros(montant));
 }
-check('total', await pg.locator('[data-cart-total]').innerText(), euros(53));
+check('total', await pg.locator('[data-cart-total]').innerText(), euros(54));
 check('compteur', await pg.locator('[data-cart-count]').first().innerText(), 4);
 
 titre('La même référence ajoutée deux fois ne crée pas de doublon');
@@ -140,7 +140,7 @@ await pg.click('[data-cart-toggle]');
 await pg.waitForTimeout(400);
 check('lignes après le second ajout', await pg.locator('.cline').count(), 3);
 check('ligne « Bourbon jaune » regroupée', await pg.locator('.cline').nth(1).locator('.cline__price').innerText(), euros(22));
-check('total après regroupement', await pg.locator('[data-cart-total]').innerText(), euros(64));
+check('total après regroupement', await pg.locator('[data-cart-total]').innerText(), euros(65));
 
 titre('Quantités et suppression depuis le panier');
 await pg.locator('.cline').nth(1).locator('[data-line-dec]').click();
@@ -149,7 +149,7 @@ check('après −1', await pg.locator('.cline').nth(1).locator('.cline__price').
 await pg.locator('.cline').nth(1).locator('[data-line-remove]').click();
 await pg.waitForTimeout(250);
 check('lignes après suppression', await pg.locator('.cline').count(), 2);
-check('total après suppression', await pg.locator('[data-cart-total]').innerText(), euros(42));
+check('total après suppression', await pg.locator('[data-cart-total]').innerText(), euros(43));
 
 titre('Panier conservé d’une page à l’autre et d’une langue à l’autre');
 await pg.goto(`${B}/fr/cafes/`, { waitUntil: 'networkidle' });
