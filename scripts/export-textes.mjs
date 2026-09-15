@@ -10,7 +10,13 @@ import { build } from 'esbuild';
 import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ecrire } from './lib/document.mjs';
+
+/* Ce module sert deux usages : lancé seul, il écrit son propre document ;
+   importé, il ne fournit que son plan, que l'export global assemble avec
+   celui du journal. */
+const seul = !!process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'contenu');
@@ -82,7 +88,7 @@ const labelFor = (key) => {
 };
 
 /* ---------------------------------------------------------------- plan */
-const doc = [];
+export const doc = [];
 const chapter = (title, note) => doc.push({ type: 'chapter', title, note });
 const section = (title, note) => doc.push({ type: 'section', title, note });
 const note = (text) => doc.push({ type: 'note', text });
@@ -100,6 +106,7 @@ const fields = (prefix, obj, only) => {
 };
 
 /* ------- mode d'emploi ------- */
+if (seul) {
 chapter('Comment utiliser ce document');
 note(
   "Ce document contient tous les textes du site en français. Modifiez-les librement, puis renvoyez-moi le fichier : je les réinjecte dans le site et je m'occupe des traductions anglaise et chinoise."
@@ -109,7 +116,8 @@ note('1. Ne touchez pas au code entre crochets, par exemple [accueil.titre]. C�
 note('2. Écrivez sous le code, à la place du texte existant. Vous pouvez tout réécrire, rallonger, raccourcir.');
 note('3. Quand un texte est sur plusieurs lignes, les retours à la ligne sont volontaires : ils dessinent la mise en page du titre. Gardez-en le nombre, ou dites-moi si vous voulez en changer.');
 note('Pour supprimer un texte, écrivez « SUPPRIMER » à la place. Pour en ajouter un qui n’existe pas encore, écrivez-le en commentaire à la fin, je m’occupe du reste.');
-note('Les textes des articles du journal ne sont pas ici : ce sont des documents séparés, un par article. Dites-moi si vous voulez le même système pour eux.');
+note('Les textes des articles du journal ne sont pas ici : ils ont leur propre document. Le document « yunma-contenu-fr » réunit les deux.');
+}
 
 /* ------- coordonnées ------- */
 chapter('Coordonnées et informations pratiques');
@@ -128,7 +136,7 @@ field('site.premiereRecolte', site.founded, 'Année de la première récolte imp
 chapter('Page d’accueil');
 const homeSections = [
   ['Référencement de la page', ['seoTitle', 'seoDescription']],
-  ['Bandeau d’ouverture', ['heroTitle', 'heroSub', 'heroCta']],
+  ['Bandeau d’ouverture', ['heroTitle', 'heroTitleAlt', 'heroCta']],
   ['Bloc « Notre origine »', ['originLabel', 'originTitle', 'originText', 'originCta']],
   ['Bloc « Nos cafés »', ['coffeesLabel', 'coffeesTitle', 'coffeesText', 'coffeesCta']],
   ['Bloc « Notre approche »', ['approachLabel', 'approachTitle', 'approachText', 'approachCta']],
@@ -192,8 +200,14 @@ t.origine.sections.forEach((s, i) => {
   field(`origine.bloc.${i + 1}.titre`, s.title, 'Titre');
   field(`origine.bloc.${i + 1}.texte`, s.text, 'Texte');
 });
-section('Citation et terroirs');
-field('origine.citation', t.origine.quote, 'Citation');
+section('Phrases mises en avant');
+note('Ces quatre phrases s’affichent en très grand, seules, pour ponctuer la lecture de la page.');
+field('origine.citation', t.origine.quote, 'Phrase manifeste, après les trois blocs ci-dessus');
+field('origine.phrase.terroir', t.origine.pulls.terroir, 'Phrase avant les terroirs');
+field('origine.phrase.histoire', t.origine.pulls.histoire, 'Phrase après notre histoire');
+field('origine.phrase.savoirFaire', t.origine.pulls.savoirFaire, 'Phrase entre les étapes et le tableau');
+
+section('Terroirs');
 fields('origine', t.origine, ['mapTitle', 'mapText']);
 t.origine.terroirs.forEach((terroir, i) => {
   field(`origine.terroir.${i + 1}.nom`, terroir.name, `Terroir ${i + 1} : nom`);
@@ -222,7 +236,11 @@ t.savoirFaire.steps.forEach((s, i) => {
   field(`savoirFaire.etape.${i + 1}.texte`, s.text, 'Texte');
 });
 section('Tableau de préparation');
-fields('savoirFaire', t.savoirFaire, ['brewTitle', 'brewText', 'brewMethod']);
+fields('savoirFaire', t.savoirFaire, ['brewTitle', 'brewText']);
+field('savoirFaire.colonneMethode', t.savoirFaire.brewMethod, 'En-tête de colonne');
+field('savoirFaire.colonneRatio', t.savoirFaire.brewRatio, 'En-tête de colonne');
+field('savoirFaire.colonneTemperature', t.savoirFaire.brewTemp, 'En-tête de colonne');
+field('savoirFaire.colonneDuree', t.savoirFaire.brewTime, 'En-tête de colonne');
 t.savoirFaire.brews.forEach((b, i) => {
   field(`savoirFaire.methode.${i + 1}`, `${b.name} — ${b.ratio} — ${b.temp} — ${b.time}`, 'Méthode, ratio, température, durée');
 });
@@ -268,6 +286,7 @@ t.pro.offers.forEach((o, i) => {
   field(`pro.offre.${i + 1}.titre`, o.title, `Offre ${i + 1} — titre`);
   field(`pro.offre.${i + 1}.texte`, o.text, `Offre ${i + 1} — texte`);
 });
+field('pro.pourQuiTitre', t.pro.forWhoTitle, 'Sur-titre « Pour qui ? »');
 t.pro.forWho.forEach((w, i) => field(`pro.cible.${i + 1}`, w, `Type de client ${i + 1}`));
 section('Comment démarrer');
 field('pro.demarrerTitre', t.pro.stepsTitle, 'Sur-titre');
@@ -280,11 +299,16 @@ fields('pro', t.pro, ['contactTitle', 'contactText', 'formIntro']);
 
 /* ------- journal ------- */
 chapter('Page « Journal »');
-note('Cette page liste les articles. Le texte des articles eux-mêmes se modifie ailleurs — dites-moi si vous voulez un document par article.');
+note('Cette page liste les articles. Le texte des articles eux-mêmes se trouve dans la seconde partie du document.');
 section('Référencement de la page');
 fields('journal', t.journal, ['seoTitle', 'seoDescription']);
 section('En-tête');
 fields('journal', t.journal, ['label', 'title', 'intro']);
+section('Libellés de la liste');
+field('journal.dernierArticle', t.journal.latest, 'Mention du dernier article');
+field('journal.tousLesArticles', t.journal.all, 'Lien vers tous les articles');
+field('journal.sujets', t.journal.tags, 'Titre des mots-clés');
+field('journal.vide', t.journal.empty, 'Message quand il n’y a encore aucun article');
 
 /* ------- faq ------- */
 chapter('Page « Questions fréquentes »');
@@ -337,6 +361,11 @@ const legalChapter = (titre, prefix, sections) => {
 };
 legalChapter('Mentions légales', 'mentions', mentions.fr);
 legalChapter('Conditions générales de vente', 'cgv', cgv.fr);
+section('Libellés communs aux deux pages');
+field('juridique.titreMentions', t.legal.mentionsTitle, 'Titre de la page « Mentions légales »');
+field('juridique.titreCgv', t.legal.cgvTitle, 'Titre de la page « Conditions générales »');
+field('juridique.miseAJour', t.legal.updated, 'Mention « Dernière mise à jour »');
+field('juridique.avertissement', t.legal.placeholder, 'Avertissement en haut de page');
 
 /* ------- libellés d'interface ------- */
 chapter('Petits libellés d’interface');
@@ -355,10 +384,12 @@ section('Panier');
 fields('panier', t.cart, ['title', 'empty', 'total', 'checkout', 'continue', 'notice']);
 
 /* ---------------------------------------------------------------- sortie */
-const { champs, word } = await ecrire(doc, {
-  dossier: OUT,
-  nom: 'textes-yunma-fr',
-  titre: 'Yunma — textes du site (français)',
-  consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
-});
-console.log(`${champs} textes exportés · contenu/textes-yunma-fr.md${word ? ' + .docx' : ''}`);
+if (seul) {
+  const { champs, word } = await ecrire(doc, {
+    dossier: OUT,
+    nom: 'textes-yunma-fr',
+    titre: 'Yunma — textes du site (français)',
+    consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
+  });
+  console.log(`${champs} textes exportés · contenu/textes-yunma-fr.md${word ? ' + .docx' : ''}`);
+}

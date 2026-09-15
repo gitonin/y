@@ -128,14 +128,18 @@ qu'ils vivent avec les fichiers plutôt qu'avec les textes de page.
 
 ### Relire les textes dans Word
 
-`contenu/textes-yunma-fr.docx` rassemble les mêmes textes français, chacun
-précédé d'un code stable entre crochets (`[accueil.heroTitle]`). On modifie sous
-le code, on renvoie le document, et son contenu repart dans `contenu/textes.json` :
+`contenu/yunma-contenu-fr.docx` réunit tout le contenu français — pages, fiches
+produits, mentions légales et articles du journal — chacun précédé d'un code
+stable entre crochets (`[accueil.heroTitle]`). On modifie sous le code, on
+renvoie le document, et son contenu repart dans les fichiers de `contenu/` :
 
 ```bash
-node scripts/export-textes.mjs                                   # régénère le document
-python3 scripts/importer-textes.py contenu/textes-yunma-fr.docx  # le réinjecte
+npm run export-contenu                                            # régénère le document
+python3 scripts/importer-textes.py contenu/yunma-contenu-fr.docx  # le réinjecte
 ```
+
+`node scripts/export-textes.mjs` et `node scripts/export-journal.mjs` produisent
+les deux moitiés séparément, si l'on ne veut relire que l'une d'elles.
 
 ---
 

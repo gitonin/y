@@ -5,7 +5,7 @@ l'auteur, en s'appuyant sur les codes entre crochets.
 
     python3 scripts/importer-textes.py chemin/vers/document.docx [--essai]
 
-Le document de référence (contenu/textes-yunma-fr.md) donne le plan : l'ordre
+Le document de référence (contenu/yunma-contenu-fr.md) donne le plan : l'ordre
 des chapitres, des sections et des champs, avec la valeur actuelle de chacun.
 On s'en sert pour deux choses :
 
@@ -26,7 +26,7 @@ import sys
 import zipfile
 
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REFERENCE = os.path.join(RACINE, 'contenu', 'textes-yunma-fr.md')
+REFERENCE = os.path.join(RACINE, 'contenu', 'yunma-contenu-fr.md')
 
 CIBLES = {
     # Depuis la v4, tout le texte du site vit dans contenu/ : les fichiers .ts
@@ -179,9 +179,12 @@ def main():
         apres = nouveau.get(code)
         if apres is None or apres == avant:
             continue
-        f = CIBLES.get(code.split('.')[0])
+        prefixe = code.split('.')[0]
+        f = CIBLES.get(prefixe)
         if not f:
-            restes.append((code, 'hors dictionnaires (prix, coordonnées…)')); continue
+            pourquoi = ('article du journal — à reporter dans contenu/journal/'
+                        if prefixe == 'article' else 'hors dictionnaires (prix, coordonnées…)')
+            restes.append((code, pourquoi)); continue
         if f not in fichiers:
             fichiers[f] = io.open(os.path.join(RACINE, f), encoding='utf-8').read()
         champ = code.split('.', 2)[-1] if code.startswith('produit.') else code.split('.')[-1]

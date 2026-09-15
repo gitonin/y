@@ -10,7 +10,12 @@
  */
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ecrire } from './lib/document.mjs';
+
+/* Comme pour les textes du site : lancé seul, ce module écrit son document ;
+   importé, il ne fournit que son plan. */
+const seul = !!process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SOURCE = path.join(ROOT, 'contenu/journal/fr');
@@ -61,7 +66,7 @@ const LIBELLES = {
 const PHOTOS = ['recolte-cueilleurs', 'cretes-brumeuses', 'cerises-branche', 'sechage-lits', 'tabouret-terrasse'];
 
 /* ------------------------------------------------------------ plan */
-const doc = [];
+export const doc = [];
 const chapter = (title) => doc.push({ type: 'chapter', title });
 const section = (title) => doc.push({ type: 'section', title });
 const note = (text) => doc.push({ type: 'note', text });
@@ -70,6 +75,7 @@ const field = (code, valeur, label) => {
   doc.push({ type: 'field', code, label, lines: String(valeur).split('\n') });
 };
 
+if (seul) {
 chapter('Comment utiliser ce document');
 note(
   'Ce document contient les articles du journal en français. Modifiez-les librement, puis renvoyez-moi le fichier : je les réinjecte dans le site et je m’occupe des traductions anglaise et chinoise.'
@@ -85,6 +91,7 @@ note('Le titre et la description comptent double : ce sont eux qui s’affichent
 note(
   'Les mots entourés de deux étoiles, comme **ceci**, s’affichent en gras sur le site. Gardez les étoiles si vous voulez garder le gras, retirez-les sinon.'
 );
+}
 
 const fichiers = (await readdir(SOURCE)).filter((f) => f.endsWith('.md')).sort();
 const articles = [];
@@ -112,10 +119,14 @@ articles.forEach((article, i) => {
   });
 });
 
-const { champs, word } = await ecrire(doc, {
-  dossier: OUT,
-  nom: 'journal-yunma-fr',
-  titre: 'Yunma — articles du journal (français)',
-  consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
-});
-console.log(`${articles.length} articles · ${champs} textes exportés · contenu/journal-yunma-fr.md${word ? ' + .docx' : ''}`);
+export const nombreArticles = articles.length;
+
+if (seul) {
+  const { champs, word } = await ecrire(doc, {
+    dossier: OUT,
+    nom: 'journal-yunma-fr',
+    titre: 'Yunma — articles du journal (français)',
+    consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
+  });
+  console.log(`${articles.length} articles · ${champs} textes exportés · contenu/journal-yunma-fr.md${word ? ' + .docx' : ''}`);
+}

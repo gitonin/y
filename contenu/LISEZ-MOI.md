@@ -173,17 +173,21 @@ les moteurs de recherche et illisible pour les lecteurs d'écran.
 
 ## L'autre façon de faire : le document Word
 
-Si vous préférez relire les textes dans Word plutôt que dans un fichier
-technique, `textes-yunma-fr.docx` et `journal-yunma-fr.docx` rassemblent les
-mêmes textes en français, chacun précédé d'un code entre crochets. Vous
-modifiez, vous renvoyez le document, et son contenu est réinjecté dans
-`textes.json` puis traduit.
+Si vous préférez relire dans Word plutôt que dans un fichier technique,
+**`yunma-contenu-fr.docx`** réunit *tout* le contenu du site en français — les
+textes des pages, les fiches produits, les mentions légales et les articles du
+journal — chacun précédé d'un code stable entre crochets. Vous modifiez sous le
+code, vous renvoyez le document, et son contenu repart dans `textes.json`,
+`produits.json` et `journal/`.
 
 ```bash
-node scripts/export-textes.mjs          # régénère le document depuis le site
-python3 scripts/importer-textes.py contenu/textes-yunma-fr.docx --essai
+npm run export-contenu                                        # régénère le document
+python3 scripts/importer-textes.py contenu/yunma-contenu-fr.docx --essai
 ```
 
-Les deux chemins mènent au même endroit. Le fichier JSON va plus vite quand on
-sait où l'on va ; le document Word est plus confortable pour une relecture au
+Le document se régénère à partir du site : il ne se périme jamais. Régénérez-le
+avant chaque relecture plutôt que de repartir d'une copie ancienne.
+
+Les deux chemins mènent au même endroit. Les fichiers JSON vont plus vite quand
+on sait où l'on va ; le document Word est plus confortable pour une relecture au
 long cours.
