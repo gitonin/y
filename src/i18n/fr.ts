@@ -156,6 +156,13 @@ const fr = {
       },
     ],
     quote: 'Un café ne se fabrique pas. Il se cultive, puis se respecte.',
+    /* Phrases courtes sorties du texte : elles coupent le défilement entre
+       deux sous-parties et rappellent l'essentiel d'un coup d'œil. */
+    pulls: {
+      terroir: 'À 1 500 mètres, ce sont les nuits fraîches qui font le travail.',
+      histoire: 'Nous achetons en direct, au-dessus du prix du marché.',
+      savoirFaire: 'De la cerise à la tasse, chaque geste se retrouve dans le verre.',
+    },
     mapTitle: 'Nos terroirs',
     mapText: 'Trois zones, trois profils de tasse.',
     terroirs: [

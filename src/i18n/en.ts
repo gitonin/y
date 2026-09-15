@@ -158,6 +158,11 @@ const en: Dict = {
       },
     ],
     quote: 'Coffee is not manufactured. It is grown, then respected.',
+    pulls: {
+      terroir: 'At 1,500 metres, it is the cold nights that do the work.',
+      histoire: 'We buy direct, above the market price.',
+      savoirFaire: 'From cherry to cup, every gesture shows up in the glass.',
+    },
     mapTitle: 'Our terroirs',
     mapText: 'Three areas, three cup profiles.',
     terroirs: [

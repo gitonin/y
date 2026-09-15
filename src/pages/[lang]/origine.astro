@@ -5,7 +5,6 @@ import PageHero from '../../components/PageHero.astro';
 import Photo from '../../components/Photo.astro';
 import AnchorNav from '../../components/AnchorNav.astro';
 import Icon from '../../components/Icon.astro';
-import Poincon from '../../components/Poincon.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
@@ -17,7 +16,9 @@ const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
 
-const sectionPhotos = ['cretes-brumeuses', 'recolte-cueilleurs', 'sechage-lits'] as const;
+/* La page est longue : les sous-parties sont séparées par de grands visuels
+   pleine largeur, et ponctuées de phrases courtes sorties du texte. */
+const sectionPhotos = ['ferme-gaosheng', 'producteur-torch-estate', 'cerises-branche'] as const;
 /* Une icône par étape, dans l'ordre du tableau `steps` des dictionnaires. */
 const stepIcons: IconName[] = ['cherries', 'droplet', 'dry', 'funnel', 'bean', 'cup'];
 /* Dans l'ordre des engagements du dictionnaire. */
@@ -68,45 +69,53 @@ const jsonld = [
   <AnchorNav items={anchors} ariaLabel={t.common.breadcrumb} />
 
   <!-- ============ LE YUNNAN ============ -->
-  <section id="terroir" class="anchor-target">
+  <figure class="media grand-visuel" data-reveal>
+    <Photo name="cretes-brumeuses" lang={lang} priority sizes="100vw" />
+  </figure>
+
+  <section id="terroir" class="section section--souffle anchor-target">
+    <div class="wrap osections">
+      {
+        t.origine.sections.map((section, i) => (
+          <article class="osection">
+            <div class="osection__text">
+              <span class="label" data-reveal>{section.label}</span>
+              <h2 class="osection__title" data-reveal>{section.title}</h2>
+              <p class="muted" data-reveal>{section.text}</p>
+            </div>
+            <figure class="media media--tall osection__media" data-reveal>
+              <Photo
+                name={sectionPhotos[i % sectionPhotos.length]}
+                lang={lang}
+                position="50% 55%"
+                sizes="(min-width: 860px) 56vw, 100vw"
+              />
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Phrase manifeste, entre le terroir et les fermes -->
+  <div class="citation panel--soft">
     <div class="wrap">
-      <figure class="media media--wide" data-reveal>
-        <Photo name="cretes-brumeuses" lang={lang} priority sizes="(min-width: 1560px) 1560px, 100vw" />
-      </figure>
+      <p class="display" data-reveal>{t.origine.quote}</p>
     </div>
+  </div>
 
-    <div class="section">
-      <div class="wrap osections">
-        {
-          t.origine.sections.map((section, i) => (
-            <article class="osection">
-              <div class="osection__text">
-                <span class="label" data-reveal>{section.label}</span>
-                <h2 class="osection__title" data-reveal>{section.title}</h2>
-                <p class="muted" data-reveal>{section.text}</p>
-              </div>
-              <figure class="media media--tall osection__media">
-                <Photo
-                  name={sectionPhotos[i % sectionPhotos.length]}
-                  lang={lang}
-                  position="50% 55%"
-                  sizes="(min-width: 860px) 56vw, 100vw"
-                />
-              </figure>
-            </article>
-          ))
-        }
+  <figure class="media grand-visuel" data-reveal>
+    <Photo name="recolte-cueilleurs" lang={lang} sizes="100vw" />
+  </figure>
+
+  <!-- ============ NOS TERROIRS ============ -->
+  <section class="section panel">
+    <div class="wrap">
+      <div class="citation citation--inline">
+        <p class="display" data-reveal>{t.origine.pulls.terroir}</p>
       </div>
-    </div>
 
-    <div class="quote panel">
-      <div class="wrap wrap--narrow">
-        <blockquote data-reveal>“{t.origine.quote}”</blockquote>
-      </div>
-    </div>
-
-    <div class="section section--tight">
-      <div class="wrap terroirs">
+      <div class="terroirs">
         <div>
           <span class="label" data-reveal>{t.origine.mapTitle}</span>
           <p class="lead terroirs__lead" data-reveal>{t.origine.mapText}</p>
@@ -148,8 +157,12 @@ const jsonld = [
     </div>
   </section>
 
+  <figure class="media grand-visuel" data-reveal>
+    <Photo name="ferme-yun-lan-estate" lang={lang} sizes="100vw" />
+  </figure>
+
   <!-- ============ NOTRE HISTOIRE ============ -->
-  <section id="histoire" class="section anchor-target">
+  <section id="histoire" class="section section--souffle anchor-target">
     <div class="wrap">
       <span class="label" data-reveal>{t.apropos.label}</span>
       <SplitTitle text={t.apropos.title} as="h2" size="lg" class="hsection-title" />
@@ -168,10 +181,6 @@ const jsonld = [
         </div>
       </div>
 
-      <figure class="media media--wide hstory__media" data-reveal>
-        <Photo name="recolte-cueilleurs" lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
-      </figure>
-
       <h3 class="label figures__title" data-reveal>{t.apropos.figuresTitle}</h3>
       <dl class="figures">
         {
@@ -186,8 +195,19 @@ const jsonld = [
     </div>
   </section>
 
+  <!-- Phrase sortie du récit -->
+  <div class="citation panel">
+    <div class="wrap">
+      <p class="display" data-reveal>{t.origine.pulls.histoire}</p>
+    </div>
+  </div>
+
+  <figure class="media grand-visuel" data-reveal>
+    <Photo name="sechage-lits" lang={lang} sizes="100vw" />
+  </figure>
+
   <!-- ============ SAVOIR-FAIRE ============ -->
-  <section id="savoir-faire" class="section panel anchor-target">
+  <section id="savoir-faire" class="section section--souffle panel panel--soft anchor-target">
     <div class="wrap">
       <span class="label" data-reveal>{t.savoirFaire.label}</span>
       <SplitTitle text={t.savoirFaire.title} as="h2" size="lg" class="hsection-title" />
@@ -208,7 +228,9 @@ const jsonld = [
         }
       </ol>
 
-      <Poincon />
+      <div class="citation citation--inline">
+        <p class="display" data-reveal>{t.origine.pulls.savoirFaire}</p>
+      </div>
 
       <div class="brews__head">
         <div>
@@ -248,7 +270,7 @@ const jsonld = [
   </section>
 
   <!-- ============ ENGAGEMENTS ============ -->
-  <section id="engagements" class="section section--tight anchor-target">
+  <section id="engagements" class="section panel anchor-target">
     <div class="wrap">
       <h2 class="label" data-reveal>{t.apropos.valuesTitle}</h2>
       <ul class="values">
@@ -268,7 +290,7 @@ const jsonld = [
   <!-- ============ CLÔTURE ============ -->
   <section class="closing">
     <div class="closing__media media">
-      <Photo name="cretes-brumeuses" lang={lang} decorative sizes="100vw" />
+      <Photo name="tabouret-terrasse" lang={lang} decorative sizes="100vw" />
     </div>
     <div class="closing__inner wrap">
       <SplitTitle text={t.apropos.closing} as="p" size="closing" class="on-dark" />
@@ -284,15 +306,59 @@ const jsonld = [
     scroll-margin-top: calc(var(--header-h) + 3.25rem);
   }
 
+  /* La page est dense : ses grandes sections respirent un cran de plus que
+     le reste du site. */
+  .section--souffle {
+    padding-block: clamp(5rem, 10vw, 11rem);
+  }
+
   :global(.hsection-title) {
     margin-top: var(--espace-surtitre);
     margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
   }
 
+  /* ---------- Grands visuels d'entre-deux ---------- */
+  /* Pleine largeur, sans gouttière : ils séparent les sous-parties et
+     laissent l'œil se reposer entre deux blocs de texte. */
+  .grand-visuel {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 760px) {
+    .grand-visuel {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  /* ---------- Citations ---------- */
+  /* De grandes phrases courtes, tirées du propos, qui coupent le défilement
+     et donnent un point d'appui d'une sous-partie à l'autre. */
+  .citation {
+    padding-block: clamp(4rem, 10vw, 8.5rem);
+  }
+
+  .citation p {
+    font-size: clamp(1.75rem, 1.05rem + 3.1vw, 3.5rem);
+    line-height: 1.1;
+    max-width: 17ch;
+  }
+
+  /* Variante posée à l'intérieur d'une section, sans changement de fond. */
+  .citation--inline {
+    padding-block: 0;
+    margin-block: clamp(2.75rem, 7vw, 5rem);
+  }
+
+  .citation--inline p {
+    font-size: clamp(1.4375rem, 1rem + 2.1vw, 2.5rem);
+    max-width: 20ch;
+  }
+
   /* ---------- Le Yunnan ---------- */
   .osections {
     display: grid;
-    gap: clamp(3rem, 7vw, 6rem);
+    gap: clamp(3.5rem, 8vw, 7rem);
   }
 
   .osection {
@@ -323,19 +389,6 @@ const jsonld = [
 
   .osection__text p {
     max-width: 46ch;
-  }
-
-  .quote {
-    padding-block: clamp(3.5rem, 8vw, 6rem);
-    text-align: center;
-  }
-
-  .quote blockquote {
-    font-size: var(--fs-h3);
-    line-height: 1.32;
-    letter-spacing: -0.015em;
-    max-width: 24ch;
-    margin-inline: auto;
   }
 
   .terroirs {
@@ -371,7 +424,7 @@ const jsonld = [
 
   /* ---------- ORO Yunnan ---------- */
   .oro {
-    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    padding-block: clamp(3rem, 7vw, 5.5rem);
   }
 
   .oro__inner {
@@ -430,12 +483,8 @@ const jsonld = [
     max-width: 48ch;
   }
 
-  .hstory__media {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
-  }
-
   .figures__title {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
+    margin-top: clamp(3rem, 7vw, 5rem);
   }
 
   .figures {
@@ -519,7 +568,6 @@ const jsonld = [
   .brews__head {
     display: grid;
     gap: 1rem;
-    margin-top: clamp(3rem, 7vw, 5rem);
     margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
   }
 

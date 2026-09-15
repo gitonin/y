@@ -155,6 +155,11 @@ const zh: Dict = {
       },
     ],
     quote: '咖啡不是制造出来的，而是种出来、并被尊重的。',
+    pulls: {
+      terroir: '海拔 1500 米，真正干活的是清凉的夜。',
+      histoire: '我们直接向农场采购，价格高于市场。',
+      savoirFaire: '从果实到杯中，每一个动作都留在味道里。',
+    },
     mapTitle: '我们的风土',
     mapText: '三个产区，三种风味。',
     terroirs: [

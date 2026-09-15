@@ -156,6 +156,7 @@ const current = Astro.url.pathname;
   }
 
   .hd__inner {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -165,7 +166,10 @@ const current = Astro.url.pathname;
     margin-inline: auto;
   }
 
+  /* Le logo étant hors flux, les deux icônes sont placées à la main : sans
+     cela le panier remonterait dans la colonne centrale laissée vide. */
   .hd__burger {
+    grid-column: 1;
     justify-self: start;
     display: flex;
     align-items: center;
@@ -197,6 +201,19 @@ const current = Astro.url.pathname;
     width: 22px;
   }
 
+  /* Le logo est sorti du flux de la barre. C'est ce qui permet de l'agrandir
+     sur l'accueil sans que la rangée ne grandisse avec lui : le burger et le
+     panier, eux, restent centrés sur une hauteur qui ne bouge jamais. */
+  .hd__logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition:
+      top 0.5s var(--ease-out-expo),
+      transform 0.5s var(--ease-out-expo);
+  }
+
   .hd__logo img {
     height: 34px;
     width: auto;
@@ -211,21 +228,34 @@ const current = Astro.url.pathname;
     }
   }
 
-  /* Sur l'accueil, et là seulement, le logo arrive à la taille de celui du
-     pied de page, puis se réduit au défilement jusqu'à s'ajuster à la barre.
-     Il déborde sous la barre le temps d'être grand : l'en-tête y est
-     transparent, et le contenu de la bannière commence plus bas. */
+  /* Sur l'accueil, et là seulement, le logo arrive en grand, puis se réduit au
+     défilement jusqu'à s'ajuster à la barre. En grand il s'accroche au haut de
+     la barre — jamais au bord de la page, d'où la réserve — et déborde vers le
+     bas : l'en-tête y est transparent, et la bannière commence plus bas. */
+  :global(html.logo-grand) .hd__logo {
+    top: 10px;
+    transform: translate(-50%, 0);
+  }
+
   :global(html.logo-grand) .hd__logo img {
-    height: 81px;
+    height: 65px;
+  }
+
+  @media (min-width: 900px) {
+    :global(html.logo-grand) .hd__logo {
+      top: 14px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .hd__logo,
     .hd__logo img {
       transition: none;
     }
   }
 
   .hd__cart {
+    grid-column: 3;
     justify-self: end;
     position: relative;
     padding: 12px 0 12px 12px;
@@ -378,12 +408,13 @@ const current = Astro.url.pathname;
     transform: none;
   }
 
-  /* Les grandes sections mènent la navigation : en gras, et d'un point plus
-     petites qu'en graisse normale. */
+  /* Les grandes sections mènent la navigation : en semi-gras, et d'un point
+     plus petites qu'en graisse normale. */
   .nav__list a {
     display: inline-block;
     font-size: clamp(1.5375rem, min(1.0375rem + 3vw, 6.4vh), 2.9375rem);
-    font-weight: var(--w-bold);
+    font-family: var(--font-titre);
+    font-weight: var(--w-semi);
     line-height: 1.24;
     letter-spacing: -0.022em;
     padding-block: 0.06em;
