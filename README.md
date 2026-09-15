@@ -16,19 +16,26 @@ npm run preview  # prévisualise dist/
 ## 1. Structure
 
 ```
+contenu/                     TOUT LE CONTENU — se modifie et se téléverse seul
+├─ LISEZ-MOI.md              Mode d'emploi de ce dossier
+├─ textes.json               Tous les textes du site, en fr / en / zh
+├─ produits.json             Les cafés : fermes, prix, formats, fiches techniques
+└─ journal/fr|en|zh/         Le blog : un fichier Markdown par article et par langue
+
 src/
 ├─ consts.ts                 Coordonnées, réseaux sociaux, config Shopify
 ├─ data/
-│  ├─ products.ts            LES 5 PRODUITS (textes 3 langues, prix, IDs Shopify)
-│  └─ legal.ts               Mentions légales & CGV (3 langues)
+│  ├─ products.ts            Types et calculs — lit contenu/produits.json
+│  ├─ photos.ts              Photographies et leurs textes alternatifs
+│  └─ legal.ts               Lit les pages légales de contenu/textes.json
 ├─ i18n/
-│  ├─ fr.ts / en.ts / zh.ts  TOUS LES TEXTES DU SITE (même structure dans les 3)
+│  ├─ fr.ts / en.ts / zh.ts  Lecteurs de contenu/textes.json, et garde-fou de typage
 │  └─ utils.ts               Helpers de langue et d'URL
-├─ content/journal/
-│  ├─ fr/ en/ zh/            LE BLOG : un fichier Markdown par article et par langue
 ├─ components/               Header + navigation, panier, packshots, visuels…
 ├─ layouts/Base.astro        <head>, SEO, transitions de page
 └─ pages/[lang]/             Toutes les pages, générées dans les 3 langues
+
+outils/verifier-contenu.mjs  Relit contenu/ avant chaque publication
 ```
 
 ### Pages générées (× 3 langues)
@@ -69,76 +76,66 @@ reste inactif.
    ```
 
 3. Créez les 5 produits dans Shopify, puis reportez l'**ID de variante** dans
-   `src/data/products.ts` (champ `shopifyVariantId`, format
+   `contenu/produits.json` (champ `shopifyVariantId`, format
    `gid://shopify/ProductVariant/1234567890`). On le trouve dans l'URL de la variante
    dans l'admin Shopify, ou via l'API Storefront.
 4. `npm run build` : le panier bascule automatiquement en mode réel et
    « Passer commande » ouvre le tunnel de paiement Shopify (CB, Apple Pay, PayPal,
    Shop Pay…), qui gère aussi les frais et étiquettes d'expédition.
 
-> Les prix affichés sur le site viennent de `products.ts` (affichage). Les prix
-> réellement facturés sont ceux de Shopify : gardez-les synchronisés.
+> Les prix affichés sur le site viennent de `contenu/produits.json` (affichage).
+> Les prix réellement facturés sont ceux de Shopify : gardez-les synchronisés.
 
 ---
 
 ## 3. Modifier le contenu
 
-### Par document (recommandé pour les textes rédactionnels)
+Tout le contenu éditorial vit dans **`contenu/`**, à la racine du projet — trois
+fichiers qui se modifient et se téléversent sans toucher au code :
 
-`contenu/textes-yunma-fr.docx` (et sa version texte `.md`) rassemble les 338 textes
-du site en français, chacun précédé d'un code stable entre crochets, par exemple
-`[accueil.heroTitle]`. On modifie le texte sous le code, on renvoie le document,
-et les modifications sont réinjectées au bon endroit puis traduites.
+| Fichier | Ce qu'il contient |
+| --- | --- |
+| `contenu/textes.json` | tous les textes du site, en français, anglais et chinois, plus les mentions légales et les CGV |
+| `contenu/produits.json` | les fermes et les cafés : prix, formats, fiches techniques, suggestions |
+| `contenu/journal/{fr,en,zh}/*.md` | les articles du journal, un fichier par langue |
 
-Le document se régénère depuis les fichiers du site — il ne se périme donc jamais :
+`contenu/LISEZ-MOI.md` en donne le mode d'emploi détaillé.
+
+Une vérification tourne avant chaque publication et dit en français ce qui
+cloche — virgule oubliée, traduction manquante, ferme inconnue, prix écrit en
+toutes lettres :
 
 ```bash
-node scripts/export-textes.mjs
+npm run verifier-contenu
 ```
 
-### Directement dans le code
+Tant qu'elle signale un problème, rien n'est mis en ligne : le site en place
+reste celui d'avant.
 
-**Un texte de page** → `src/i18n/fr.ts` (puis `en.ts` et `zh.ts` : même structure,
-mêmes clés). Les retours à la ligne `\n` dans les titres créent les lignes animées.
+### Ce qui reste dans le code
 
-**Un produit** → `src/data/products.ts`. Chaque produit contient son nom, sa
-description, son histoire, sa fiche technique et ses conseils d'extraction dans les
-trois langues, plus ses variantes (prix + ID Shopify).
+**Coordonnées, e-mails, adresse, seuil de livraison offerte** → `src/consts.ts`.
 
-**Un article de journal** → créer trois fichiers portant **le même nom** :
-
-```
-src/content/journal/fr/mon-article.md
-src/content/journal/en/mon-article.md
-src/content/journal/zh/mon-article.md
-```
-
-```md
----
-title: 'Titre de l’article'
-description: 'Résumé affiché dans les listes et sur Google (150-160 caractères).'
-date: 2025-09-01
-tags: ['Yunnan', 'Récolte']
-scene: terraces      # ridges | terraces | cherries | canopy | counter | portrait
-tone: warm           # warm | cool | deep
-draft: false
----
-
-Le corps de l’article en Markdown.
-```
-
-Le slug identique dans les trois dossiers relie automatiquement les versions
-linguistiques (`hreflang`). Un article publié dans une seule langue reste valide :
-les autres langues pointent vers le journal.
-
-**Coordonnées, e-mails, adresse** → `src/consts.ts`.
+**Textes alternatifs des photographies** → `src/data/photos.ts` et
+`src/data/packshots.ts`. Une image sans texte alternatif est perdue pour les
+moteurs de recherche et illisible pour les lecteurs d'écran : c'est pour cela
+qu'ils vivent avec les fichiers plutôt qu'avec les textes de page.
 
 > Le formulaire de contact compose un e-mail dans le client de l'utilisateur et le
 > champ newsletter n'enregistre rien : branchez le service de votre choix
 > (Formspree, Basin, Brevo, Shopify Forms…) dans `src/pages/[lang]/contact.astro`
 > et `src/components/Footer.astro` quand vous le souhaitez.
-**Mentions légales / CGV** → `src/data/legal.ts` (modèles à compléter avec vos
-informations définitives : SIREN, RCS, TVA, hébergeur).
+
+### Relire les textes dans Word
+
+`contenu/textes-yunma-fr.docx` rassemble les mêmes textes français, chacun
+précédé d'un code stable entre crochets (`[accueil.heroTitle]`). On modifie sous
+le code, on renvoie le document, et son contenu repart dans `contenu/textes.json` :
+
+```bash
+node scripts/export-textes.mjs                                   # régénère le document
+python3 scripts/importer-textes.py contenu/textes-yunma-fr.docx  # le réinjecte
+```
 
 ---
 
@@ -219,8 +216,16 @@ image Open Graph dans `public/og/`).
   (GPTBot, ClaudeBot, PerplexityBot, Google-Extended…).
 - **`/llms.txt`** : résumé structuré de la marque, des produits et des pages,
   destiné aux IA (ChatGPT, Claude, Perplexity). Il est généré automatiquement à
-  partir de `products.ts` et des dictionnaires — il reste donc toujours à jour.
+  partir de `contenu/produits.json` et de `contenu/textes.json` — il reste donc
+  toujours à jour.
 - HTML sémantique, contenu rendu côté serveur (pas de JS requis pour lire le site).
+- Titres et descriptions calibrés sur ce que Google affiche réellement : environ
+  60 signes de titre, 155 de description, coupés sur un mot entier.
+- Chaque fiche produit déclare son packshot, ses délais d'expédition et sa
+  fenêtre de rétractation ; chaque article du journal déclare sa photographie.
+- Les aperçus publiés dans un sous-dossier (`BASE_PATH`) sont en `noindex` et
+  leur `robots.txt` interdit tout : une copie de travail ne peut pas
+  concurrencer le site en ligne.
 
 Après mise en ligne : déclarez `https://votre-domaine/sitemap-index.xml` dans la
 Search Console et vérifiez les rich results produits.

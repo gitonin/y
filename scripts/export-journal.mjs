@@ -13,7 +13,7 @@ import path from 'node:path';
 import { ecrire } from './lib/document.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const SOURCE = path.join(ROOT, 'src/content/journal/fr');
+const SOURCE = path.join(ROOT, 'contenu/journal/fr');
 const OUT = path.join(ROOT, 'contenu');
 
 /* ------------------------------------------------------------ lecture */

@@ -29,20 +29,22 @@ RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REFERENCE = os.path.join(RACINE, 'contenu', 'textes-yunma-fr.md')
 
 CIBLES = {
-    'accueil': 'src/i18n/fr.ts', 'cafes': 'src/i18n/fr.ts', 'origine': 'src/i18n/fr.ts',
-    'savoirFaire': 'src/i18n/fr.ts', 'apropos': 'src/i18n/fr.ts', 'pro': 'src/i18n/fr.ts',
-    'journal': 'src/i18n/fr.ts', 'contact': 'src/i18n/fr.ts', 'nav': 'src/i18n/fr.ts',
-    'pied': 'src/i18n/fr.ts', 'panier': 'src/i18n/fr.ts', 'produitPage': 'src/i18n/fr.ts',
-    'faq': 'src/i18n/fr.ts',
-    'produit': 'src/data/products.ts',
-    'mentions': 'src/data/legal.ts', 'cgv': 'src/data/legal.ts',
+    # Depuis la v4, tout le texte du site vit dans contenu/ : les fichiers .ts
+    # ne font plus que le lire. C'est donc là que l'on réinjecte.
+    'accueil': 'contenu/textes.json', 'cafes': 'contenu/textes.json', 'origine': 'contenu/textes.json',
+    'savoirFaire': 'contenu/textes.json', 'apropos': 'contenu/textes.json', 'pro': 'contenu/textes.json',
+    'journal': 'contenu/textes.json', 'contact': 'contenu/textes.json', 'nav': 'contenu/textes.json',
+    'pied': 'contenu/textes.json', 'panier': 'contenu/textes.json', 'produitPage': 'contenu/textes.json',
+    'faq': 'contenu/textes.json',
+    'produit': 'contenu/produits.json',
+    'mentions': 'contenu/textes.json', 'cgv': 'contenu/textes.json',
 }
 CLES_PRODUIT = {
     'nom': 'name', 'sousTitre': 'subtitle', 'accroche': 'short', 'description': 'description',
     'histoire': 'story', 'origine': 'origin', 'altitude': 'altitude', 'variete': 'variety',
     'process': 'process', 'notes': 'notes', 'sechage': 'drying', 'recolte': 'harvest',
     'profil': 'roast', 'preparation': 'brew',
-    'ferme.nom': 'name', 'ferme.lieu': 'place', 'ferme.texte': 'text',
+    'ferme.nom': 'nom', 'ferme.lieu': 'place', 'ferme.texte': 'text',
 }
 CODE = re.compile(r'^(.*?)\s*\[([A-Za-z0-9._\-]+)\]\s*$')
 

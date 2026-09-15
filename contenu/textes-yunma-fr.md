@@ -1,6 +1,6 @@
 # Yunma — textes du site (français)
 
-_Document généré le 04/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 15/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -102,14 +102,14 @@ Découvrir l’origine
 Nos cafés
 
 **Titre** `[accueil.coffeesTitle]`
-Des cafés du Yunnan,
-cultivés avec passion.
+Cueillis au Yunnan,
+torréfiés à Paris.
 
 **Texte** `[accueil.coffeesText]`
 Trois lots de saison en sachet de 200 g, des drip bags à emporter, ou le coffret pour tout goûter. Torréfiés en petites séries, de manière régulière.
 
 **Libellé du lien** `[accueil.coffeesCta]`
-Découvrir nos cafés du Yunnan
+Découvrir nos cafés
 
 
 ### Bloc « Notre approche »
@@ -170,7 +170,7 @@ Découvrir Yunma
 Nos cafés de spécialité du Yunnan — Yunma
 
 **Description affichée dans Google (≈ 155 signes)** `[cafes.seoDescription]`
-Découvrez les cafés Yunma : cafés de spécialité du Yunnan (Chine) en 200 g, drip bags en boîte de 8 ou coffret découverte. Des origine tracées, la torréfaction à Paris.
+Les cafés Yunma : cafés de spécialité du Yunnan en 200 g, drip bags en boîte de 8 ou coffret découverte. Origines tracées, torréfaction à Paris.
 
 
 ### En-tête
@@ -609,7 +609,7 @@ Coffret complet — 60.00 €
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[origine.seoTitle]`
-Origine, histoire et savoir-faire — Yunma, cafés de spécialité du Yunnan
+Origine, histoire et savoir-faire du café du Yunnan
 
 **Description affichée dans Google (≈ 155 signes)** `[origine.seoDescription]`
 Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.
@@ -949,7 +949,7 @@ Découvrir le journal
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[pro.seoTitle]`
-Espace professionnels — cafés de spécialité pour cafés, hôtels et restaurants
+Café de spécialité pour cafés, hôtels et restaurants
 
 **Description affichée dans Google (≈ 155 signes)** `[pro.seoDescription]`
 Yunma accompagne torréfacteurs, coffee shops, hôtels, restaurants et épiceries fines : cafés de spécialité du Yunnan, tarifs pro, formation et supports dédiés.

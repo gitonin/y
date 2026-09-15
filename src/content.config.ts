@@ -3,12 +3,13 @@ import { glob } from 'astro/loaders';
 import { photoNames } from './data/photos';
 
 /**
- * Journal — un dossier par langue : src/content/journal/{fr,en,zh}/mon-article.md
- * Le nom de fichier (slug) doit être identique dans les trois langues
- * pour que les liens hreflang se fassent automatiquement.
+ * Journal — un dossier par langue : contenu/journal/{fr,en,zh}/mon-article.md
+ * Déposer un fichier suffit à publier un article ; aucune autre modification
+ * n'est nécessaire. Le nom de fichier (slug) doit être identique dans les
+ * trois langues pour que les liens hreflang se fassent automatiquement.
  */
 const journal = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/journal' }),
+  loader: glob({ pattern: '**/*.md', base: './contenu/journal' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

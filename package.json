@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "verifier-contenu": "node outils/verifier-contenu.mjs",
+    "prebuild": "node outils/verifier-contenu.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
