@@ -456,76 +456,136 @@ La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la pr
 Boîte de 8 — 16.50 €
 
 
-### Drip Bags — Composez votre boîte — Ferme de Gaosheng, Baoshan
+### Drip Bags — Catimor — Ferme de Gaosheng, Baoshan
 
-**Nom** `[produit.drip-bags-a-composer.nom]`
-Drip Bags — Composez votre boîte
+**Nom** `[produit.drip-bags-catimor.nom]`
+Drip Bags — Catimor
 
-**Sous-titre** `[produit.drip-bags-a-composer.sousTitre]`
+**Sous-titre** `[produit.drip-bags-catimor.sousTitre]`
 Ferme de Gaosheng, Baoshan
 
-**Accroche (une phrase, sous le prix)** `[produit.drip-bags-a-composer.accroche]`
-Huit sachets, deux variétés au choix.
+**Accroche (une phrase, sous le prix)** `[produit.drip-bags-catimor.accroche]`
+Cinq filtres individuels, ronds et cacaotés.
 
-**Description** `[produit.drip-bags-a-composer.description]`
-Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaosheng : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d’une seule, ou quatre de chaque pour les comparer tasse après tasse.
+**Description** `[produit.drip-bags-catimor.description]`
+Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Le Catimor de Gaosheng donne une tasse ronde et cacaotée, avec une pointe de noisette : le café que l’on sert à tout le monde sans avoir besoin de l’expliquer.
 
-**Histoire du lot** `[produit.drip-bags-a-composer.histoire]`
-Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C’est la comparaison la plus honnête que l’on puisse proposer, et la plus instructive. La plupart des gens ne s’entendent pas dire « je préfère le Bourbon jaune » avant d’avoir bu les deux à la suite.
+**Histoire du lot** `[produit.drip-bags-catimor.histoire]`
+Pensés pour le bureau, les voyages ou les matins pressés — sans renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, et c’est prêt.
 
-**Fiche : origine** `[produit.drip-bags-a-composer.origine]`
+**Fiche : origine** `[produit.drip-bags-catimor.origine]`
 Yunnan, Chine — Gaosheng, Baoshan
 
-**Fiche : altitude** `[produit.drip-bags-a-composer.altitude]`
+**Fiche : altitude** `[produit.drip-bags-catimor.altitude]`
 1300 – 1850 m
 
-**Fiche : variété** `[produit.drip-bags-a-composer.variete]`
-Catimor et / ou Bourbon jaune
+**Fiche : variété** `[produit.drip-bags-catimor.variete]`
+Catimor
 
-**Fiche : process** `[produit.drip-bags-a-composer.process]`
+**Fiche : process** `[produit.drip-bags-catimor.process]`
 Lavé traditionnel
 
-**Fiche : notes de dégustation** `[produit.drip-bags-a-composer.notes]`
-Catimor : cacao, noisette · Bourbon jaune : jasmin, sucre roux
+**Fiche : notes de dégustation** `[produit.drip-bags-catimor.notes]`
+Cacao, noisette, sucre roux
 
-**Fiche : séchage** `[produit.drip-bags-a-composer.sechage]`
+**Fiche : séchage** `[produit.drip-bags-catimor.sechage]`
 Lits africains surélevés, 14 jours
 
-**Fiche : récolte** `[produit.drip-bags-a-composer.recolte]`
+**Fiche : récolte** `[produit.drip-bags-catimor.recolte]`
 À la main, cerises mûres
 
-**Fiche : profil (filtre ou espresso)** `[produit.drip-bags-a-composer.profil]`
+**Fiche : profil (filtre ou espresso)** `[produit.drip-bags-catimor.profil]`
 Filtre
 
-**Conseils de préparation** `[produit.drip-bags-a-composer.preparation]`
+**Conseils de préparation** `[produit.drip-bags-catimor.preparation]`
 Posez le sachet sur le mug, versez 30 ml à 90 °C pour humidifier, attendez 30 secondes, puis complétez à 120 - 150 ml en deux versements.
 
-**Contenu, ligne 1** `[produit.drip-bags-a-composer.contenu.1]`
-8 sachets filtres de 10 g
+**Contenu, ligne 1** `[produit.drip-bags-catimor.contenu.1]`
+5 sachets filtres de 10 g
 
-**Contenu, ligne 2** `[produit.drip-bags-a-composer.contenu.2]`
-Variétés Catimor et / ou Bourbon Jaune
+**Contenu, ligne 2** `[produit.drip-bags-catimor.contenu.2]`
+Variété Catimor, lavée
 
-**Contenu, ligne 3** `[produit.drip-bags-a-composer.contenu.3]`
+**Contenu, ligne 3** `[produit.drip-bags-catimor.contenu.3]`
 Boîte et sachets recyclables
 
-**Ferme : nom** `[produit.drip-bags-a-composer.ferme.nom]`
+**Ferme : nom** `[produit.drip-bags-catimor.ferme.nom]`
 Ferme de Gaosheng
 
-**Ferme : lieu** `[produit.drip-bags-a-composer.ferme.lieu]`
+**Ferme : lieu** `[produit.drip-bags-catimor.ferme.lieu]`
 Baoshan, Yunnan
 
-**Ferme : présentation** `[produit.drip-bags-a-composer.ferme.texte]`
+**Ferme : présentation** `[produit.drip-bags-catimor.ferme.texte]`
 La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
 
-**Format et prix** `[produit.drip-bags-a-composer.prix.1]`
-8 × Catimor — 15.00 €
+**Format et prix** `[produit.drip-bags-catimor.prix.1]`
+Boîte de 5 — 9.00 €
 
-**Format et prix** `[produit.drip-bags-a-composer.prix.2]`
-8 × Bourbon jaune — 18.00 €
 
-**Format et prix** `[produit.drip-bags-a-composer.prix.3]`
-4 × Catimor + 4 × Bourbon jaune — 16.50 €
+### Drip Bags — Bourbon jaune — Ferme de Gaosheng, Baoshan
+
+**Nom** `[produit.drip-bags-bourbon-jaune.nom]`
+Drip Bags — Bourbon jaune
+
+**Sous-titre** `[produit.drip-bags-bourbon-jaune.sousTitre]`
+Ferme de Gaosheng, Baoshan
+
+**Accroche (une phrase, sous le prix)** `[produit.drip-bags-bourbon-jaune.accroche]`
+Cinq filtres individuels, fins et floraux.
+
+**Description** `[produit.drip-bags-bourbon-jaune.description]`
+Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Le Bourbon jaune est plus rare et moins productif que le Catimor, sur la même ferme et à la même altitude : la tasse y gagne en finesse, sur le jasmin et le sucre roux.
+
+**Histoire du lot** `[produit.drip-bags-bourbon-jaune.histoire]`
+Même terre, même altitude, même traitement, même torréfaction que notre Catimor : seule la variété change. C’est la comparaison la plus honnête que l’on puisse proposer, et la plus instructive — une fois les deux bues à la suite.
+
+**Fiche : origine** `[produit.drip-bags-bourbon-jaune.origine]`
+Yunnan, Chine — Gaosheng, Baoshan
+
+**Fiche : altitude** `[produit.drip-bags-bourbon-jaune.altitude]`
+1300 – 1850 m
+
+**Fiche : variété** `[produit.drip-bags-bourbon-jaune.variete]`
+Bourbon jaune
+
+**Fiche : process** `[produit.drip-bags-bourbon-jaune.process]`
+Lavé traditionnel
+
+**Fiche : notes de dégustation** `[produit.drip-bags-bourbon-jaune.notes]`
+Jasmin, sucre roux, agrumes
+
+**Fiche : séchage** `[produit.drip-bags-bourbon-jaune.sechage]`
+Lits africains surélevés, 14 jours
+
+**Fiche : récolte** `[produit.drip-bags-bourbon-jaune.recolte]`
+À la main, cerises mûres
+
+**Fiche : profil (filtre ou espresso)** `[produit.drip-bags-bourbon-jaune.profil]`
+Filtre
+
+**Conseils de préparation** `[produit.drip-bags-bourbon-jaune.preparation]`
+Posez le sachet sur le mug, versez 30 ml à 90 °C pour humidifier, attendez 30 secondes, puis complétez à 120 - 150 ml en deux versements.
+
+**Contenu, ligne 1** `[produit.drip-bags-bourbon-jaune.contenu.1]`
+5 sachets filtres de 10 g
+
+**Contenu, ligne 2** `[produit.drip-bags-bourbon-jaune.contenu.2]`
+Variété Bourbon jaune, lavée
+
+**Contenu, ligne 3** `[produit.drip-bags-bourbon-jaune.contenu.3]`
+Boîte et sachets recyclables
+
+**Ferme : nom** `[produit.drip-bags-bourbon-jaune.ferme.nom]`
+Ferme de Gaosheng
+
+**Ferme : lieu** `[produit.drip-bags-bourbon-jaune.ferme.lieu]`
+Baoshan, Yunnan
+
+**Ferme : présentation** `[produit.drip-bags-bourbon-jaune.ferme.texte]`
+La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
+
+**Format et prix** `[produit.drip-bags-bourbon-jaune.prix.1]`
+Boîte de 5 — 11.00 €
 
 
 ### Coffret Découverte — 3 × 200 g + 1 boîte de drip bags

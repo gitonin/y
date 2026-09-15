@@ -5,7 +5,8 @@ import torchEstateLot01 from '../assets/produits/torch-estate-lot-01.png';
 import torchEstateLot02 from '../assets/produits/torch-estate-lot-02.png';
 import yunLanEstate from '../assets/produits/yun-lan-estate.png';
 import dripBagsX8 from '../assets/produits/drip-bags-x8.png';
-import dripBagsAComposer from '../assets/produits/drip-bags-a-composer.png';
+import dripBagsCatimor from '../assets/produits/drip-bags-catimor.png';
+import dripBagsBourbonJaune from '../assets/produits/drip-bags-bourbon-jaune.png';
 import coffretDecouverte from '../assets/produits/coffret-decouverte.png';
 
 export type Packshot = {
@@ -53,12 +54,23 @@ export const packshots = {
       zh: 'Yunma 云南挂耳咖啡 8 片装，每片 10 克，米色背景',
     },
   },
-  'drip-bags-a-composer': {
-    src: dripBagsAComposer,
+  /* Les deux boîtes de 5 partagent pour l'instant le même visuel d'attente :
+     déposer le bon fichier sous chacun de ces deux noms suffira à les
+     distinguer, sans rien changer au code. */
+  'drip-bags-catimor': {
+    src: dripBagsCatimor,
     alt: {
-      fr: 'Boîte Yunma de drip bags à composer, filtres individuels Catimor et Bourbon jaune au choix, sur fond crème',
-      en: 'Yunma build-your-own drip bag box, single-serve Catimor and Yellow Bourbon filters, on a cream background',
-      zh: 'Yunma 自选挂耳咖啡盒，可选卡蒂姆与黄波旁单片滤包，米色背景',
+      fr: 'Boîte Yunma de 5 drip bags Catimor, filtres individuels de 10 g, sur fond crème',
+      en: 'Yunma box of 5 Catimor drip bags, single-serve 10 g filters, on a cream background',
+      zh: 'Yunma 卡蒂姆挂耳咖啡 5 片装，每片 10 克，米色背景',
+    },
+  },
+  'drip-bags-bourbon-jaune': {
+    src: dripBagsBourbonJaune,
+    alt: {
+      fr: 'Boîte Yunma de 5 drip bags Bourbon jaune, filtres individuels de 10 g, sur fond crème',
+      en: 'Yunma box of 5 Yellow Bourbon drip bags, single-serve 10 g filters, on a cream background',
+      zh: 'Yunma 黄波旁挂耳咖啡 5 片装，每片 10 克，米色背景',
     },
   },
   'coffret-decouverte': {

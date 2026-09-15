@@ -1,6 +1,6 @@
 # Yunma — articles du journal (français)
 
-_Document généré le 03/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 15/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -31,7 +31,7 @@ _Document généré le 03/09/2026 à partir du site. Modifiez les textes sous le
 Carnet de récolte : trois semaines à Baoshan
 
 **Description affichée dans Google (≈ 155 signes)** `[article.carnet-de-recolte-baoshan.description]`
-Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaosheng, notre partenaire à Baoshan.
+Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaosheng.
 
 **Date de publication (année-mois-jour)** `[article.carnet-de-recolte-baoshan.date]`
 2025-02-18

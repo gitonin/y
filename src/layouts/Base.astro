@@ -13,6 +13,8 @@ interface Props {
   title: string;
   description: string;
   transparentHeader?: boolean;
+  /** Accueil : le logo de la barre y arrive en grand, puis se réduit. */
+  accueil?: boolean;
   alternates?: Partial<Record<Lang, string>>;
   jsonld?: Record<string, unknown>[];
   type?: 'website' | 'article' | 'product';
@@ -26,6 +28,7 @@ const {
   title,
   description,
   transparentHeader = false,
+  accueil = false,
   alternates,
   jsonld = [],
   type = 'website',
@@ -71,7 +74,7 @@ const t = useTranslations(lang);
   </head>
 
   <body>
-    <Header lang={lang} transparent={transparentHeader} />
+    <Header lang={lang} transparent={transparentHeader} accueil={accueil} />
 
     <main id="main" class:list={['main', transparentHeader && 'main--flush']}>
       <slot />

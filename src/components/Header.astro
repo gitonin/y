@@ -7,8 +7,10 @@ import Photo from './Photo.astro';
 interface Props {
   lang: Lang;
   transparent?: boolean;
+  /** Accueil : le logo y arrive en grand et se réduit au premier défilement. */
+  accueil?: boolean;
 }
-const { lang, transparent = false } = Astro.props;
+const { lang, transparent = false, accueil = false } = Astro.props;
 const t = useTranslations(lang);
 const alt = defaultAlternates(Astro.url.pathname);
 
@@ -29,7 +31,7 @@ const current = Astro.url.pathname;
 
 <a class="skip-link" href="#main">{t.nav.skip}</a>
 
-<header class:list={['hd', transparent && 'hd--over']} data-header>
+<header class:list={['hd', transparent && 'hd--over', accueil && 'hd--accueil']} data-header>
   <div class="hd__inner">
     <button class="hd__burger" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-open>
       <span class="hd__burger-lines" aria-hidden="true"><i></i><i></i></span>
@@ -155,6 +157,22 @@ const current = Astro.url.pathname;
     transform: translateY(-100%);
   }
 
+  /* Les trois mesures du logo, réunies : taille au repos, taille d'arrivée sur
+     l'accueil, et hauteur à laquelle il s'accroche quand il est grand. */
+  .hd {
+    --logo-petit: 34px;
+    --logo-grand: 65px;
+    --logo-haut: 10px;
+    --logo-repos: calc((var(--header-h) - var(--logo-petit)) / 2);
+  }
+
+  @media (min-width: 900px) {
+    .hd {
+      --logo-petit: 42px;
+      --logo-haut: 14px;
+    }
+  }
+
   .hd__inner {
     position: relative;
     display: grid;
@@ -203,53 +221,57 @@ const current = Astro.url.pathname;
 
   /* Le logo est sorti du flux de la barre. C'est ce qui permet de l'agrandir
      sur l'accueil sans que la rangée ne grandisse avec lui : le burger et le
-     panier, eux, restent centrés sur une hauteur qui ne bouge jamais. */
+     panier, eux, restent centrés sur une hauteur qui ne bouge jamais.
+     Deux longueurs seulement l'animent, la hauteur de l'image et sa distance
+     au bord — jamais un pourcentage, qui se recalculerait au fil de la
+     réduction et ferait vaciller le logo. */
   .hd__logo {
     position: absolute;
-    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    transition:
-      top 0.5s var(--ease-out-expo),
-      transform 0.5s var(--ease-out-expo);
+    translate: -50% 0;
+    top: var(--logo-repos);
   }
 
   .hd__logo img {
-    height: 34px;
+    height: var(--logo-petit);
     width: auto;
     object-fit: contain;
-    transform-origin: top center;
+  }
+
+  /* L'animation n'est branchée qu'une fois le premier état posé (classe
+     ajoutée en script) : au chargement, le logo est déjà à sa place. */
+  .hd--anime .hd__logo {
+    transition: top 0.5s var(--ease-out-expo);
+  }
+
+  .hd--anime .hd__logo img {
     transition: height 0.5s var(--ease-out-expo);
   }
 
-  @media (min-width: 900px) {
-    .hd__logo img {
-      height: 42px;
-    }
+  /* Sur l'accueil, et là seulement, le logo arrive en grand — l'état est écrit
+     dans la page, rien ne saute au chargement — puis se réduit au défilement
+     jusqu'à s'ajuster à la barre. En grand il s'accroche sous le bord de la
+     page, jamais dessus, et déborde vers le bas : l'en-tête y est transparent
+     et la bannière commence plus bas. */
+  .hd--accueil .hd__logo {
+    top: var(--logo-haut);
   }
 
-  /* Sur l'accueil, et là seulement, le logo arrive en grand, puis se réduit au
-     défilement jusqu'à s'ajuster à la barre. En grand il s'accroche au haut de
-     la barre — jamais au bord de la page, d'où la réserve — et déborde vers le
-     bas : l'en-tête y est transparent, et la bannière commence plus bas. */
-  :global(html.logo-grand) .hd__logo {
-    top: 10px;
-    transform: translate(-50%, 0);
+  .hd--accueil .hd__logo img {
+    height: var(--logo-grand);
   }
 
-  :global(html.logo-grand) .hd__logo img {
-    height: 65px;
+  .hd--accueil.hd--petit .hd__logo {
+    top: var(--logo-repos);
   }
 
-  @media (min-width: 900px) {
-    :global(html.logo-grand) .hd__logo {
-      top: 14px;
-    }
+  .hd--accueil.hd--petit .hd__logo img {
+    height: var(--logo-petit);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hd__logo,
-    .hd__logo img {
+    .hd--anime .hd__logo,
+    .hd--anime .hd__logo img {
       transition: none;
     }
   }
@@ -594,6 +616,15 @@ const current = Astro.url.pathname;
     let idleTimer = 0;
     let ticking = false;
 
+    /* Le grand logo de l'accueil se réduit passé quelques dizaines de pixels et
+       ne revient qu'une fois presque en haut : deux seuils distincts, pour
+       qu'un doigt qui hésite ne le fasse pas battre d'une taille à l'autre. */
+    const reglerLogo = (header: HTMLElement, y: number) => {
+      if (!header.classList.contains('hd--accueil')) return;
+      if (y > 48) header.classList.add('hd--petit');
+      else if (y < 24) header.classList.remove('hd--petit');
+    };
+
     const setHidden = (hidden: boolean) => {
       const header = document.querySelector<HTMLElement>('[data-header]');
       const nav = getNav();
@@ -615,6 +646,7 @@ const current = Astro.url.pathname;
       lastY = y;
 
       header.classList.toggle('is-solid', y > 24);
+      reglerLogo(header, y);
 
       window.clearTimeout(idleTimer);
       idleTimer = window.setTimeout(() => {
@@ -663,6 +695,12 @@ const current = Astro.url.pathname;
       header.classList.remove('is-hidden');
       document.documentElement.classList.remove('header-hidden');
       header.classList.toggle('is-solid', window.scrollY > 24);
+      /* On cale d'abord le logo sur la position de défilement réelle — un
+         rechargement peut rendre la page à mi-hauteur — puis seulement on
+         branche l'animation, pour que ce calage ne se voie pas. */
+      header.classList.remove('hd--anime');
+      header.classList.toggle('hd--petit', header.classList.contains('hd--accueil') && window.scrollY > 48);
+      requestAnimationFrame(() => header.classList.add('hd--anime'));
     }
     bindGlobals();
   };

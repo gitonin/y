@@ -460,61 +460,39 @@
         }
       ],
       "related": [
-        "drip-bags-a-composer",
+        "drip-bags-catimor",
         "coffret-decouverte",
         "torch-estate-lot-02"
       ],
       "fermeNom": "Gaosheng Manor"
     },
     {
-      "slug": "drip-bags-a-composer",
-      "sku": "YUN-DRIP-COMPO",
+      "slug": "drip-bags-catimor",
+      "sku": "YUN-DRIP-CAT-5",
       "category": "drip",
       "lot": "Drip",
       "visual": "box",
       "ambiance": "cerises-branche",
-      "shopifyHandle": "drip-bags-a-composer",
+      "shopifyHandle": "drip-bags-catimor",
       "shopifyProductId": "",
       "ferme": "gaosheng",
       "variants": [
         {
           "shopifyVariantId": "",
           "label": {
-            "fr": "8 × Catimor",
-            "en": "8 × Catimor",
-            "zh": "8 片 卡蒂姆"
+            "fr": "Boîte de 5",
+            "en": "Box of 5",
+            "zh": "5 片装"
           },
-          "price": 15,
-          "weightGrams": 80,
-          "available": true
-        },
-        {
-          "shopifyVariantId": "",
-          "label": {
-            "fr": "8 × Bourbon jaune",
-            "en": "8 × Yellow Bourbon",
-            "zh": "8 片 黄波旁"
-          },
-          "price": 18,
-          "weightGrams": 80,
-          "available": true
-        },
-        {
-          "shopifyVariantId": "",
-          "label": {
-            "fr": "4 × Catimor + 4 × Bourbon jaune",
-            "en": "4 × Catimor + 4 × Yellow Bourbon",
-            "zh": "4 片卡蒂姆 + 4 片黄波旁"
-          },
-          "price": 16.5,
-          "weightGrams": 80,
+          "price": 9,
+          "weightGrams": 50,
           "available": true
         }
       ],
       "name": {
-        "fr": "Drip Bags — Composez votre boîte",
-        "en": "Drip Bags — Build your own box",
-        "zh": "挂耳咖啡 — 自选组合"
+        "fr": "Drip Bags — Catimor",
+        "en": "Drip Bags — Catimor",
+        "zh": "挂耳咖啡 — 卡蒂姆"
       },
       "subtitle": {
         "fr": "Ferme de Gaosheng, Baoshan",
@@ -522,19 +500,19 @@
         "zh": "保山 高神农场"
       },
       "short": {
-        "fr": "Huit sachets, deux variétés au choix.",
-        "en": "Eight sachets, two varieties to choose from.",
-        "zh": "八片挂耳，两个品种任选。"
+        "fr": "Cinq filtres individuels, ronds et cacaotés.",
+        "en": "Five single-serve filters, round and cocoa-like.",
+        "zh": "五片独立滤袋，圆润，带可可感。"
       },
       "description": {
-        "fr": "Une boîte de huit drip bags composée par vous, à partir de deux variétés cultivées sur la même ferme, à Gaosheng : le Catimor, rond et cacaoté, et le Bourbon jaune, plus fin et floral. Prenez-en huit d’une seule, ou quatre de chaque pour les comparer tasse après tasse.",
-        "en": "A box of eight drip bags composed by you, from two varieties grown on the same farm at Gaosheng: Catimor, round and cocoa-like, and Yellow Bourbon, finer and floral. Take eight of one, or four of each to compare them cup after cup.",
-        "zh": "由你自己搭配的八片挂耳，来自高神同一座农场的两个品种：卡蒂姆圆润带可可感，黄波旁更细腻、更具花香。可以八片同一款，也可以各四片，一杯一杯地对比。"
+        "fr": "Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Le Catimor de Gaosheng donne une tasse ronde et cacaotée, avec une pointe de noisette : le café que l’on sert à tout le monde sans avoir besoin de l’expliquer.",
+        "en": "Five 10 g filter sachets, ground and packed under protective atmosphere on roasting day. The Catimor from Gaosheng gives a round, cocoa-like cup with a hint of hazelnut: the coffee you can serve to anyone without explaining it.",
+        "zh": "五片 10 克滤袋，于烘焙当天研磨并充氮封装。高神的卡蒂姆冲出圆润带可可感的一杯，尾韵有一点榛果：端给任何人都不必多作解释的咖啡。"
       },
       "story": {
-        "fr": "Même terre, même altitude, même traitement, même torréfaction : seule la variété change. C’est la comparaison la plus honnête que l’on puisse proposer, et la plus instructive. La plupart des gens ne s’entendent pas dire « je préfère le Bourbon jaune » avant d’avoir bu les deux à la suite.",
-        "en": "Same soil, same altitude, same processing, same roast: only the variety changes. It is the most honest comparison we can offer, and the most instructive. Most people never hear themselves say “I prefer the Yellow Bourbon” until they have drunk both in a row.",
-        "zh": "同一片土地、同样的海拔、同样的处理与烘焙：只有品种不同。这是我们能提供的最诚实、也最有启发的比较。多数人要连着喝过两杯，才会听见自己说出\"我更喜欢黄波旁\"。"
+        "fr": "Pensés pour le bureau, les voyages ou les matins pressés — sans renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, et c’est prêt.",
+        "en": "Made for the office, for travelling or for rushed mornings — without giving up on the cup. Rest the sachet on your mug, pour in three stages, remove: three minutes, and it is ready.",
+        "zh": "为办公室、旅途与匆忙的清晨而做，却不必牺牲杯中的品质。挂在杯口，分三次注水，取下即可：三分钟，就好了。"
       },
       "specs": {
         "origin": {
@@ -547,20 +525,10 @@
           "en": "1,300 – 1,850 m",
           "zh": "1300 – 1850 米"
         },
-        "variety": {
-          "fr": "Catimor et / ou Bourbon jaune",
-          "en": "Catimor and / or Yellow Bourbon",
-          "zh": "卡蒂姆与／或黄波旁"
-        },
         "process": {
           "fr": "Lavé traditionnel",
           "en": "Traditional washed",
           "zh": "传统水洗"
-        },
-        "notes": {
-          "fr": "Catimor : cacao, noisette · Bourbon jaune : jasmin, sucre roux",
-          "en": "Catimor: cocoa, hazelnut · Yellow Bourbon: jasmine, brown sugar",
-          "zh": "卡蒂姆：可可、榛果 · 黄波旁：茉莉、红糖"
         },
         "drying": {
           "fr": "Lits africains surélevés, 14 jours",
@@ -576,6 +544,16 @@
           "fr": "Filtre",
           "en": "Filter",
           "zh": "手冲"
+        },
+        "variety": {
+          "fr": "Catimor",
+          "en": "Catimor",
+          "zh": "卡蒂姆"
+        },
+        "notes": {
+          "fr": "Cacao, noisette, sucre roux",
+          "en": "Cocoa, hazelnut, brown sugar",
+          "zh": "可可、榛果、红糖"
         }
       },
       "brew": {
@@ -585,14 +563,14 @@
       },
       "includes": [
         {
-          "fr": "8 sachets filtres de 10 g",
-          "en": "8 filter sachets of 10 g",
-          "zh": "8 片 10 克滤袋"
+          "fr": "5 sachets filtres de 10 g",
+          "en": "5 filter sachets of 10 g",
+          "zh": "5 片 10 克滤袋"
         },
         {
-          "fr": "Variétés Catimor et / ou Bourbon Jaune",
-          "en": "Catimor and / or Yellow Bourbon varieties",
-          "zh": "卡蒂姆与／或黄波旁品种"
+          "fr": "Variété Catimor, lavée",
+          "en": "Catimor variety, washed",
+          "zh": "卡蒂姆品种，水洗处理"
         },
         {
           "fr": "Boîte et sachets recyclables",
@@ -601,9 +579,127 @@
         }
       ],
       "related": [
+        "drip-bags-bourbon-jaune",
         "drip-bags-x8",
-        "torch-estate-lot-02",
         "coffret-decouverte"
+      ]
+    },
+    {
+      "slug": "drip-bags-bourbon-jaune",
+      "sku": "YUN-DRIP-BJ-5",
+      "category": "drip",
+      "lot": "Drip",
+      "visual": "box",
+      "ambiance": "producteur-gaosheng",
+      "shopifyHandle": "drip-bags-bourbon-jaune",
+      "shopifyProductId": "",
+      "ferme": "gaosheng",
+      "variants": [
+        {
+          "shopifyVariantId": "",
+          "label": {
+            "fr": "Boîte de 5",
+            "en": "Box of 5",
+            "zh": "5 片装"
+          },
+          "price": 11,
+          "weightGrams": 50,
+          "available": true
+        }
+      ],
+      "name": {
+        "fr": "Drip Bags — Bourbon jaune",
+        "en": "Drip Bags — Yellow Bourbon",
+        "zh": "挂耳咖啡 — 黄波旁"
+      },
+      "subtitle": {
+        "fr": "Ferme de Gaosheng, Baoshan",
+        "en": "Gaosheng farm, Baoshan",
+        "zh": "保山 高神农场"
+      },
+      "short": {
+        "fr": "Cinq filtres individuels, fins et floraux.",
+        "en": "Five single-serve filters, fine and floral.",
+        "zh": "五片独立滤袋，细腻，带花香。"
+      },
+      "description": {
+        "fr": "Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Le Bourbon jaune est plus rare et moins productif que le Catimor, sur la même ferme et à la même altitude : la tasse y gagne en finesse, sur le jasmin et le sucre roux.",
+        "en": "Five 10 g filter sachets, ground and packed under protective atmosphere on roasting day. Yellow Bourbon is rarer and lower-yielding than Catimor, on the same farm and at the same altitude: the cup gains in finesse, on jasmine and brown sugar.",
+        "zh": "五片 10 克滤袋，于烘焙当天研磨并充氮封装。在同一座农场、同样的海拔上，黄波旁比卡蒂姆更稀少、产量更低：杯中因此更显细腻，落在茉莉与红糖之间。"
+      },
+      "story": {
+        "fr": "Même terre, même altitude, même traitement, même torréfaction que notre Catimor : seule la variété change. C’est la comparaison la plus honnête que l’on puisse proposer, et la plus instructive — une fois les deux bues à la suite.",
+        "en": "Same soil, same altitude, same processing, same roast as our Catimor: only the variety changes. It is the most honest comparison we can offer, and the most instructive — once you have drunk both in a row.",
+        "zh": "与我们的卡蒂姆同一片土地、同样的海拔、同样的处理与烘焙：只有品种不同。这是我们能提供的最诚实、也最有启发的比较——只要把两杯连着喝完。"
+      },
+      "specs": {
+        "origin": {
+          "fr": "Yunnan, Chine — Gaosheng, Baoshan",
+          "en": "Yunnan, China — Gaosheng, Baoshan",
+          "zh": "中国云南 — 保山 高神"
+        },
+        "altitude": {
+          "fr": "1300 – 1850 m",
+          "en": "1,300 – 1,850 m",
+          "zh": "1300 – 1850 米"
+        },
+        "process": {
+          "fr": "Lavé traditionnel",
+          "en": "Traditional washed",
+          "zh": "传统水洗"
+        },
+        "drying": {
+          "fr": "Lits africains surélevés, 14 jours",
+          "en": "Raised African beds, 14 days",
+          "zh": "非洲高架床，14 天"
+        },
+        "harvest": {
+          "fr": "À la main, cerises mûres",
+          "en": "Hand-picked, ripe cherries",
+          "zh": "手工采摘，成熟果实"
+        },
+        "roast": {
+          "fr": "Filtre",
+          "en": "Filter",
+          "zh": "手冲"
+        },
+        "variety": {
+          "fr": "Bourbon jaune",
+          "en": "Yellow Bourbon",
+          "zh": "黄波旁"
+        },
+        "notes": {
+          "fr": "Jasmin, sucre roux, agrumes",
+          "en": "Jasmine, brown sugar, citrus",
+          "zh": "茉莉、红糖、柑橘"
+        }
+      },
+      "brew": {
+        "fr": "Posez le sachet sur le mug, versez 30 ml à 90 °C pour humidifier, attendez 30 secondes, puis complétez à 120 - 150 ml en deux versements.",
+        "en": "Rest the sachet on your mug, pour 30 ml at 90 °C to bloom, wait 30 seconds, then top up to 120–150 ml in two pours.",
+        "zh": "将滤袋挂在杯口，先以 90 °C 注入 30 毫升闷蒸 30 秒，再分两次注水至 120–150 毫升。"
+      },
+      "includes": [
+        {
+          "fr": "5 sachets filtres de 10 g",
+          "en": "5 filter sachets of 10 g",
+          "zh": "5 片 10 克滤袋"
+        },
+        {
+          "fr": "Variété Bourbon jaune, lavée",
+          "en": "Yellow Bourbon variety, washed",
+          "zh": "黄波旁品种，水洗处理"
+        },
+        {
+          "fr": "Boîte et sachets recyclables",
+          "en": "Recyclable box and sachets",
+          "zh": "外盒与滤袋均可回收"
+        }
+      ],
+      "related": [
+        "drip-bags-catimor",
+        "drip-bags-x8",
+        "yun-lan-estate"
       ]
     },
     {

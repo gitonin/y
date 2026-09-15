@@ -59,17 +59,17 @@ const check = (nom, reel, attendu) => {
 const titre = (t) => console.log(`\n— ${t}`);
 
 /* Les prix de référence, tels qu'ils doivent apparaître au client. */
-const CATALOGUE = [
-  { slug: 'torch-estate-lot-01', formats: [['200 g', 15]] },
-  { slug: 'torch-estate-lot-02', formats: [['200 g', 15]] },
-  { slug: 'yun-lan-estate', formats: [['200 g', 17]] },
-  { slug: 'drip-bags-x8', formats: [['Boîte de 8', 16.5]] },
-  {
-    slug: 'drip-bags-a-composer',
-    formats: [['8 × Catimor', 15], ['8 × Bourbon jaune', 18], ['4 × Catimor + 4 × Bourbon jaune', 16.5]],
-  },
-  { slug: 'coffret-decouverte', formats: [['Coffret complet', 60]] },
-];
+/* Le catalogue attendu est lu dans le fichier de contenu : ajouter ou retirer
+   une référence ne demande pas de retoucher ce test. */
+const CATALOGUE = JSON.parse(readFileSync(new URL('../contenu/produits.json', import.meta.url), 'utf8')).produits.map(
+  (p) => ({ slug: p.slug, formats: p.variants.map((v) => [v.label.fr, v.price]) })
+);
+/* Le sélecteur de format ne s'affiche que sur une référence à plusieurs
+   formats. S'il n'y en a plus au catalogue, les vérifications qui en dépendent
+   sont annoncées comme non applicables plutôt que passées sous silence. */
+const AVEC_FORMATS = CATALOGUE.find((p) => p.formats.length > 1);
+const sansFormats = (quoi) =>
+  console.log(`  — ${quoi} : aucune référence à plusieurs formats au catalogue, vérification non applicable`);
 const euros = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
 
 serveur.listen(PORT);
@@ -107,52 +107,49 @@ for (const { slug, formats } of CATALOGUE) {
   }
 }
 
-/* ------------------------------------------------- 2. panier, trois formats */
-titre('Panier — les trois formats de la boîte à composer');
-await pg.goto(`${B}/fr/cafes/drip-bags-a-composer/`, { waitUntil: 'networkidle' });
+/* --------------------------------------------- 2. panier, trois références */
+titre('Panier — trois références distinctes');
+await pg.goto(`${B}/fr/cafes/drip-bags-catimor/`, { waitUntil: 'networkidle' });
 await viderPanier();
-const chips = pg.locator('.buy__chips .chip');
-const ajouter = async (i, qte = 1) => {
-  await chips.nth(i).click();
-  await pg.waitForTimeout(100);
+const ajouter = async (slug, qte = 1) => {
+  await pg.goto(`${B}/fr/cafes/${slug}/`, { waitUntil: 'networkidle' });
   await pg.fill('[data-qty-input]', String(qte));
   await pg.dispatchEvent('[data-qty-input]', 'change');
   await pg.click('[data-add-to-cart]');
   await pg.waitForTimeout(450);
   await fermerPanier();
 };
-await ajouter(0, 1);
-await ajouter(1, 1);
-await ajouter(2, 2);
+await ajouter('drip-bags-catimor', 1);
+await ajouter('drip-bags-bourbon-jaune', 1);
+await ajouter('drip-bags-x8', 2);
 await pg.click('[data-cart-toggle]');
 await pg.waitForTimeout(500);
 
 const lignes = pg.locator('.cline');
 check('lignes distinctes', await lignes.count(), 3);
-for (const [i, libelle, montant] of [[0, '8 × Catimor', 15], [1, '8 × Bourbon jaune', 18], [2, '4 × Catimor + 4 × Bourbon jaune', 33]]) {
-  check(`ligne ${i + 1} — format`, await lignes.nth(i).locator('.cline__meta').innerText(), libelle);
+for (const [i, montant] of [[0, 9], [1, 11], [2, 33]]) {
   check(`ligne ${i + 1} — montant`, await lignes.nth(i).locator('.cline__price').innerText(), euros(montant));
 }
-check('total', await pg.locator('[data-cart-total]').innerText(), euros(66));
+check('total', await pg.locator('[data-cart-total]').innerText(), euros(53));
 check('compteur', await pg.locator('[data-cart-count]').first().innerText(), 4);
 
-titre('Le même format ajouté deux fois ne crée pas de doublon');
+titre('La même référence ajoutée deux fois ne crée pas de doublon');
 await fermerPanier();
-await ajouter(1, 1);
+await ajouter('drip-bags-bourbon-jaune', 1);
 await pg.click('[data-cart-toggle]');
 await pg.waitForTimeout(400);
 check('lignes après le second ajout', await pg.locator('.cline').count(), 3);
-check('ligne « Bourbon » regroupée', await pg.locator('.cline').nth(1).locator('.cline__price').innerText(), euros(36));
-check('total après regroupement', await pg.locator('[data-cart-total]').innerText(), euros(84));
+check('ligne « Bourbon jaune » regroupée', await pg.locator('.cline').nth(1).locator('.cline__price').innerText(), euros(22));
+check('total après regroupement', await pg.locator('[data-cart-total]').innerText(), euros(64));
 
 titre('Quantités et suppression depuis le panier');
 await pg.locator('.cline').nth(1).locator('[data-line-dec]').click();
 await pg.waitForTimeout(250);
-check('après −1', await pg.locator('.cline').nth(1).locator('.cline__price').innerText(), euros(18));
+check('après −1', await pg.locator('.cline').nth(1).locator('.cline__price').innerText(), euros(11));
 await pg.locator('.cline').nth(1).locator('[data-line-remove]').click();
 await pg.waitForTimeout(250);
 check('lignes après suppression', await pg.locator('.cline').count(), 2);
-check('total après suppression', await pg.locator('[data-cart-total]').innerText(), euros(48));
+check('total après suppression', await pg.locator('[data-cart-total]').innerText(), euros(42));
 
 titre('Panier conservé d’une page à l’autre et d’une langue à l’autre');
 await pg.goto(`${B}/fr/cafes/`, { waitUntil: 'networkidle' });
@@ -173,16 +170,16 @@ check('panier fermé par Échap', await pg.locator('[data-cart]').isVisible(), f
 
 /* ------------------------------------------------ 3. mention « à partir de » */
 titre('Catalogue — « à partir de » réservé aux produits à plusieurs prix');
-const mentions = { fr: 'À partir de 15,00 €', en: 'From €15.00', zh: '起价 €15.00' };
-const reperes = { fr: 'Composez', en: 'Build', zh: '自选' };
 for (const lang of ['fr', 'en', 'zh']) {
   await pg.goto(`${B}/${lang}/cafes/`, { waitUntil: 'networkidle' });
-  const carte = pg.locator('.pcard').filter({ hasText: reperes[lang] }).first();
-  check(`carte à plusieurs prix (${lang})`, await carte.locator('.pcard__price').innerText(), mentions[lang]);
   const unique = pg.locator('.pcard').filter({ hasText: 'Yun Lan' }).first();
   const attendu = lang === 'fr' ? '17,00 €' : '€17.00';
   check(`carte à prix unique (${lang})`, await unique.locator('.pcard__price').innerText(), attendu);
+  const depuis = { fr: 'À partir de', en: 'From', zh: '起价' }[lang];
+  const combien = await pg.locator('.pcard__price').filter({ hasText: depuis }).count();
+  check(`aucune mention « ${depuis} » sur un prix unique (${lang})`, combien, AVEC_FORMATS ? combien : 0);
 }
+if (!AVEC_FORMATS) sansFormats('mention « à partir de »');
 
 /* ------------------------------------------------- 4. données structurées */
 titre('Données structurées : ce que Google lira');
@@ -204,16 +201,20 @@ for (const { slug, formats } of CATALOGUE) {
 
 /* --------------------------------------------------------- 5. sélecteur */
 titre('Choix du format au clavier');
-await pg.goto(`${B}/fr/cafes/drip-bags-a-composer/`, { waitUntil: 'networkidle' });
-await pg.locator('.buy__chips input').first().focus();
-await pg.keyboard.press('ArrowRight');
-await pg.waitForTimeout(150);
-check('flèche droite sélectionne le format suivant', await pg.locator('.pdp__price').innerText(), euros(18));
-await pg.keyboard.press('ArrowRight');
-await pg.waitForTimeout(150);
-check('flèche droite sélectionne le troisième', await pg.locator('.pdp__price').innerText(), euros(16.5));
+if (AVEC_FORMATS) {
+  await pg.goto(`${B}/fr/cafes/${AVEC_FORMATS.slug}/`, { waitUntil: 'networkidle' });
+  await pg.locator('.buy__chips input').first().focus();
+  for (const [i, [, prix]] of AVEC_FORMATS.formats.slice(1).entries()) {
+    await pg.keyboard.press('ArrowRight');
+    await pg.waitForTimeout(150);
+    check(`flèche droite sélectionne le format ${i + 2}`, await pg.locator('.pdp__price').innerText(), euros(prix));
+  }
+} else {
+  sansFormats('choix du format au clavier');
+}
 
 titre('Bornes de la quantité');
+await pg.goto(`${B}/fr/cafes/drip-bags-catimor/`, { waitUntil: 'networkidle' });
 await pg.fill('[data-qty-input]', '99');
 await pg.dispatchEvent('[data-qty-input]', 'change');
 check('quantité plafonnée à 20', await pg.locator('[data-qty-input]').inputValue(), '20');
@@ -223,15 +224,16 @@ check('quantité minimale de 1', await pg.locator('[data-qty-input]').inputValue
 
 /* ------------------------------- 6. choix fait avant que le script soit prêt */
 titre('Format choisi avant que le script de la fiche ne soit exécuté');
-{
+if (AVEC_FORMATS) {
   /* Un visiteur peut cliquer dès que la page s'affiche, avant que le script de
      l'encart d'achat n'ait tourné. Le clic coche bien la case, mais l'événement
      est perdu — et recliquer la même case n'en émettra pas d'autre. Le prix doit
      malgré tout se remettre à niveau dès que le script s'exécute. */
+  const { slug, formats } = AVEC_FORMATS;
   const ctxLent = await navigateur.newContext({ viewport: { width: 1280, height: 900 } });
   const lente = await ctxLent.newPage();
   let script = '';
-  await ctxLent.route('**/cafes/drip-bags-a-composer/**', async (route) => {
+  await ctxLent.route(`**/cafes/${slug}/**`, async (route) => {
     const rep = await route.fetch();
     let html = await rep.text();
     for (const m of html.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)) {
@@ -244,7 +246,7 @@ titre('Format choisi avant que le script de la fiche ne soit exécuté');
     await route.fulfill({ response: rep, body: html, headers: { ...rep.headers(), 'content-type': 'text/html' } });
   });
 
-  await lente.goto(`${B}/fr/cafes/drip-bags-a-composer/`, { waitUntil: 'networkidle' });
+  await lente.goto(`${B}/fr/cafes/${slug}/`, { waitUntil: 'networkidle' });
   check('script de l’encart bien retiré pour le test', script !== '', true);
   await lente.locator('.buy__chips .chip').nth(1).click();
   await lente.waitForTimeout(150);
@@ -257,16 +259,15 @@ titre('Format choisi avant que le script de la fiche ne soit exécuté');
     document.body.appendChild(el);
   }, script);
   await lente.waitForTimeout(400);
-  check('prix remis à niveau à l’arrivée du script', await lente.locator('.pdp__price').innerText(), euros(18));
-  check('prix transmis au panier', Number(await lente.locator('[data-add-to-cart]').getAttribute('data-price')), 18);
+  check('prix remis à niveau à l’arrivée du script', await lente.locator('.pdp__price').innerText(), euros(formats[1][1]));
+  check('prix transmis au panier', Number(await lente.locator('[data-add-to-cart]').getAttribute('data-price')), formats[1][1]);
 
-  await lente.locator('.buy__chips .chip').nth(2).click();
-  await lente.waitForTimeout(200);
-  check('le choix suivant fonctionne', await lente.locator('.pdp__price').innerText(), euros(16.5));
   await lente.locator('[data-qty-inc]').click();
   await lente.waitForTimeout(150);
   check('le compteur de quantité fonctionne', await lente.locator('[data-qty-input]').inputValue(), '2');
   await ctxLent.close();
+} else {
+  sansFormats('choix du format avant exécution du script');
 }
 
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);

@@ -57,6 +57,7 @@ const jsonld = [
   title={t.home.seoTitle}
   description={t.home.seoDescription}
   transparentHeader
+  accueil
   jsonld={jsonld}
   keywords={[
     'café de spécialité',
@@ -325,13 +326,17 @@ const jsonld = [
 
   /* Le fond clair de la section court jusqu'à la mise en avant, qui porte sa
      propre photographie et n'a donc pas besoin de retrait bas. */
+  /* La section se termine sur le bloc de mise en avant, qui va jusqu'au bord :
+     pas de marge basse, sinon une bande de fond traînerait sous la
+     photographie. */
   .cafes {
     padding-top: var(--section);
+    padding-bottom: 0;
   }
 
   /* ---------- Origine ---------- */
   .origine__texte {
-    padding-block: var(--section) clamp(2.5rem, 6vw, 4.5rem);
+    padding-block: var(--espace-apres-visuel);
   }
 
   /* ---------- Journal ---------- */
@@ -409,33 +414,3 @@ const jsonld = [
   }
 
 </style>
-
-<script>
-  /**
-   * Le logo de l'en-tête arrive en grand sur l'accueil et se réduit dès qu'on
-   * commence à défiler ; il retrouve sa taille en revenant en haut.
-   *
-   * La classe vit sur l'élément racine, hors de la page : elle doit donc être
-   * retirée en quittant l'accueil, sans quoi le logo resterait grand ailleurs
-   * sur le site.
-   */
-  const SEUIL = 40;
-  let surAccueil = false;
-
-  const ajuster = () => {
-    document.documentElement.classList.toggle('logo-grand', surAccueil && window.scrollY < SEUIL);
-  };
-
-  const initLogo = () => {
-    surAccueil = !!document.querySelector('[data-accueil]');
-    ajuster();
-  };
-
-  window.addEventListener('scroll', ajuster, { passive: true });
-  document.addEventListener('astro:page-load', initLogo);
-  document.addEventListener('astro:before-swap', () => {
-    surAccueil = false;
-    document.documentElement.classList.remove('logo-grand');
-  });
-  initLogo();
-</script>

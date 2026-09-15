@@ -312,6 +312,12 @@ const jsonld = [
     padding-block: clamp(5rem, 10vw, 11rem);
   }
 
+  /* Sauf juste après un grand visuel : la photographie fait la séparation, et
+     la pleine respiration n'ajouterait qu'une bande de fond vide. */
+  .grand-visuel + .section {
+    padding-top: var(--espace-apres-visuel);
+  }
+
   :global(.hsection-title) {
     margin-top: var(--espace-surtitre);
     margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
