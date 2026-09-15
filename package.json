@@ -8,6 +8,7 @@
     "start": "astro dev",
     "verifier-contenu": "node outils/verifier-contenu.mjs",
     "export-contenu": "node scripts/export-contenu.mjs",
+    "importer-contenu": "node scripts/importer-contenu.mjs",
     "prebuild": "node outils/verifier-contenu.mjs",
     "build": "astro build",
     "preview": "astro preview",

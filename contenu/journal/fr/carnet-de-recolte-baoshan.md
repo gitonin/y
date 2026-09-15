@@ -29,4 +29,4 @@ Les lits africains sont installés en pente douce, orientés est-ouest. Les prem
 
 Nous avons terminé par une table de dix-huit tasses, avec l'équipe de la ferme et les producteurs voisins. C'est le moment que nous préférons : les producteurs goûtent leur propre café, à l'aveugle, à côté de celui de leurs voisins. Les discussions qui suivent valent tous les rapports d'analyse.
 
-Deux variétés sont parties à l'export cette année : le Catimor des parcelles basses et le Bourbon jaune des terrasses hautes. Vous les retrouverez dans nos drip bags — seules, ou côte à côte dans la boîte à composer.
+Deux variétés sont parties à l'export cette année : le Catimor des parcelles basses et le Bourbon jaune des terrasses hautes. Vous les retrouverez dans nos sachets filtres.

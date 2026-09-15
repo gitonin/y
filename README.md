@@ -134,9 +134,13 @@ stable entre crochets (`[accueil.heroTitle]`). On modifie sous le code, on
 renvoie le document, et son contenu repart dans les fichiers de `contenu/` :
 
 ```bash
-npm run export-contenu                                            # régénère le document
-python3 scripts/importer-textes.py contenu/yunma-contenu-fr.docx  # le réinjecte
+npm run export-contenu                                       # régénère le document
+npm run importer-contenu -- contenu/yunma-contenu-fr.docx    # le réinjecte
 ```
+
+L'export note d'où vient chaque texte (`scripts/lib/tracer.mjs`) : la
+réinjection écrit donc à la clé exacte, sans chercher la valeur à remplacer.
+Ajoutez `--essai` pour voir ce qui changerait, `--detail` pour l'avant/après.
 
 `node scripts/export-textes.mjs` et `node scripts/export-journal.mjs` produisent
 les deux moitiés séparément, si l'on ne veut relire que l'une d'elles.

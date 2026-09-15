@@ -73,15 +73,15 @@
         "seoDescription": "Yunma sélectionne des cafés de spécialité du Yunnan (Chine) : lots tracés, producteurs indépendants, torréfaction à Paris. Livraison en France et en Europe.",
         "heroTitle": "Cafés\nde spécialité\ndu Yunnan.",
         "heroTitleAlt": "云南精品咖啡",
-        "heroCta": "Découvrir nos cafés",
+        "heroCta": "Découvrir les cafés Yunma",
         "originLabel": "À L’origine,",
         "originTitle": "le Yunnan.\nUn terroir.\nUne philosophie.",
-        "originText": "Au sud-ouest de la Chine, entre 1300 et 2000 mètres d’altitude, le Yunnan cultive un café encore peu connu. Chaque café que nous sélectionnons au Yunnan raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons une certaine philosophie de vie.",
+        "originText": "Au sud-ouest de la Chine, entre 1300 et 1800 mètres d’altitude, le Yunnan cultive des cafés encore peu connus. Chaque café que Yunma sélectionne raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons la même philosophie de vie.",
         "originCta": "Découvrir l’origine",
-        "coffeesLabel": "Nos cafés",
+        "coffeesLabel": "Les cafés Yunma",
         "coffeesTitle": "Récoltés au Yunnan,\ntorréfiés à Paris.",
-        "coffeesText": "Trois lots de saison en sachet de 200 g, des drip bags à emporter, ou le coffret pour tout goûter. Torréfiés en petites séries, de manière régulière.",
-        "coffeesCta": "Découvrir nos cafés",
+        "coffeesText": "Trois terroirs du Yunnan à découvrir en grains, sachets filtres individuels, ou en coffret découverte pour tout goûter. Cafés torréfiés en petites séries, à Paris.",
+        "coffeesCta": "Découvrir les cafés Yunma",
         "approachLabel": "Notre philosophie",
         "approachTitle": "Du temps,\ndes saveurs\net la nature.",
         "approachText": "Notre approche est de révéler les terroirs distinctifs du Yunnan. Pas de mélanges standardisés, mais des cafés tracés, à déguster comme on le ferait pour des grands vins.",
@@ -96,17 +96,17 @@
       },
       "cafes": {
         "seoTitle": "Nos cafés de spécialité du Yunnan — Yunma",
-        "seoDescription": "Les cafés Yunma : cafés de spécialité du Yunnan en 200 g, drip bags en boîte de 5 ou coffret découverte. Origines tracées, torréfaction à Paris.",
+        "seoDescription": "Les cafés Yunma : cafés de spécialité du Yunnan. Origines tracées, torréfaction à Paris.",
         "label": "Notre spécialité",
         "title": "Cafés du Yunnan",
-        "intro": "Nos cafés de spécialité sont issus de trois terroirs du Yunnan, torréfiés régulièrement pour révéler ce que les montagnes du Yunnan ont à nous offrir.",
+        "intro": "Nos cafés de spécialité sont issus de trois terroirs du Yunnan, torréfiés régulièrement à Paris pour préserver leur fraîcheur.",
         "filterAll": "Tout",
         "filterGrains": "Cafés en grains",
-        "filterDrip": "Drip bags",
+        "filterDrip": "Sachets filtres",
         "filterSets": "Coffrets",
         "empty": "Aucun produit dans cette sélection.",
         "helpTitle": "Besoin de conseils ?",
-        "helpText": "Dites-nous comment vous préparez votre café, nous vous orienterons vers le lot qui vous conviendra le mieux."
+        "helpText": "Dites-nous comment vous préparez votre café, nous vous conseillerons le lot qui vous conviendra le mieux."
       },
       "product": {
         "aboutTitle": "À propos de ce café",
@@ -126,11 +126,11 @@
         "brewTitle": "Conseils de préparation"
       },
       "origine": {
-        "seoTitle": "Origine, histoire et savoir-faire du café du Yunnan",
-        "seoDescription": "Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et notre savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.",
+        "seoTitle": "Origine et savoir-faire des cafés Yunma du Yunnan",
+        "seoDescription": "Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et le savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.",
         "label": "À l’origine,",
-        "title": "le Yunnan.\nUn terroir.\nUne philosophie.",
-        "intro": "Le Yunnan produit plus de 95 % du café chinois. La Chine n’exporte que 5 % de sa production aux marchés extérieurs. Des cafés rares et d’une grande finesse portés par une nouvelle génération de producteurs.",
+        "title": "le Yunnan.\nUne région.\nUne philosophie.",
+        "intro": "Le Yunnan produit 95% du café chinois. La Chine n’exporte que 5% de sa production aux marchés extérieurs. Des cafés rares et d’une grande finesse portés par une nouvelle génération de producteurs.",
         "sections": [
           {
             "label": "La région",
@@ -139,28 +139,28 @@
           },
           {
             "label": "Les fermes",
-            "title": "Des relations humaines, une philosophie de vie",
-            "text": "Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons à un prix supérieur au marché, et nous nous engageons afin que chacune puisse perpétuer dans ses parcelles et ses infrastructures de cafés de spécialité."
+            "title": "Des rencontres, une philosophie de vie",
+            "text": "Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons à un prix équitable, et nous nous engageons à ce que chacune des fermes puisse perpétuer leurs passions pour les cafés de spécialité."
           },
           {
             "label": "La saison",
             "title": "De décembre à mars",
-            "text": "La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées le jour même. Les lots arrivent en France au printemps pour être torréfiés tout au long de l’année."
+            "text": "La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées le jour même. Les lots arrivent en France au printemps et sont torréfiés tout au long de l’année."
           }
         ],
         "quote": "Un café ne se fabrique pas. Il se cultive, puis se respecte.",
         "pulls": {
           "terroir": "À 1 500 mètres, ce sont les nuits fraîches qui font le travail.",
-          "histoire": "Nous achetons en direct, au-dessus du prix du marché.",
+          "histoire": "Nous achetons aux producteurs, aux prix équitables.",
           "savoirFaire": "De la cerise à la tasse, chaque geste se retrouve dans le verre."
         },
         "mapTitle": "Nos terroirs",
-        "mapText": "Trois zones, trois profils de tasse.",
+        "mapText": "Trois lieux, trois profils.",
         "terroirs": [
           {
             "name": "Baoshan",
             "detail": "1 550 – 1 750 m · Catimor et Bourbon jaune",
-            "text": "Les hauteurs de Gaosheng, où une même exploitation conduit deux variétés côte à côte. C’est de là que viennent nos drip bags."
+            "text": "Les hauteurs de Gaosheng, où une même exploitation conduit deux variétés côte à côte. C’est de là que viennent nos sachets filtres."
           },
           {
             "name": "Pu’er",
@@ -170,7 +170,7 @@
           {
             "name": "Xishuangbanna",
             "detail": "1 600 – 1 800 m · Pacamara",
-            "text": "L’extrême sud du Yunnan et nos parcelles les plus hautes, à Yun Lan Estate, où mûrit un Pacamara lavé, rare et peu productif."
+            "text": "L’extrême sud du Yunnan et nos parcelles les plus hautes, à Yun Lan Estate, où mûrit un Pacamara lavé, rare."
           }
         ],
         "anchors": {
@@ -182,14 +182,14 @@
         "oroLabel": "Avec le soutien de",
         "oroName": "ORO Yunnan",
         "oroFull": "Bureau de représentation commerciale du Yunnan en France (Paris)",
-        "oroText": "ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques qui s'y développent. Un appui précieux pour acheter en direct à dix mille kilomètres, et pour faire connaître ici un terroir que l'on découvre à peine."
+        "oroText": "ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique."
       },
       "savoirFaire": {
         "seoTitle": "Savoir-faire Yunma — traitement, séchage et torréfaction",
-        "seoDescription": "Fermentation contrôlée, séchage sur lits africains, tri manuel et torréfaction claire en petites séries : le savoir-faire Yunma, étape par étape.",
+        "seoDescription": "Fermentation contrôlée, séchage sur lits surélevés, tri manuel et torréfaction à Paris en petites séries : le savoir-faire de Yunma et des producteurs.",
         "label": "Notre approche",
-        "title": "Le temps,\nla nature\net la précision.",
-        "intro": "Rien de spectaculaire : des gestes justes, répétés, mesurés. Notre travail consiste à ne rien ajouter — et à ne rien perdre en chemin.",
+        "title": "Le temps,\nla nature\net le geste.",
+        "intro": "Rien de spectaculaire : des gestes justes, répétés, mesurés. Un travail consiste à ne rien ajouter de plus — et à ne rien perdre des terroirs dans la tasse.",
         "steps": [
           {
             "n": "01",
@@ -204,7 +204,7 @@
           {
             "n": "03",
             "title": "Séchage",
-            "text": "Lits africains surélevés, à l’ombre les premiers jours, retournés toutes les deux heures. Entre 12 et 20 jours."
+            "text": "Lits surélevés, à l’ombre les premiers jours, retournés toutes les deux heures. Entre 12 et 20 jours."
           },
           {
             "n": "04",
@@ -248,7 +248,7 @@
             "time": "4 min"
           },
           {
-            "name": "Drip bag",
+            "name": "Sachet filtre",
             "ratio": "10 g / 180 ml",
             "temp": "92 °C",
             "time": "3 versements"
@@ -261,24 +261,24 @@
         "label": "À propos",
         "title": "Notre histoire",
         "intro": "Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité.",
-        "storyText": "En 2019, un voyage dans les montagnes de Baoshan. Des caféiers plantés entre les théiers, des familles qui vendaient leur récolte au poids sans jamais goûter la tasse. Nous sommes revenus l’année suivante avec un cupping set et quelques sacs. Yunma est né de ces allers-retours.",
+        "storyText": "En 2019, notre premier voyage dans les montagnes de Baoshan. Des caféiers plantés entre les théiers, des familles qui vendaient leur récolte au poids sans jamais goûter la tasse. Nous sommes revenus l’année suivante avec un cupping set et quelques sacs. Yunma est né de ces allers-retours.",
         "missionTitle": "Notre mission",
         "missionText": "Mettre en lumière le terroir du Yunnan à travers des cafés d’exception, en respectant les hommes et la nature.",
         "approachTitle": "Notre approche",
-        "approachText": "Nous travaillons main dans la main avec des producteurs passionnés pour offrir des cafés traçables, durables et uniques. Peu de références, choisies, suivies, renouvelées au rythme des saisons.",
+        "approachText": "Nous travaillons avec des producteurs passionnés pour offrir des cafés traçables, rares et uniques. Peu de références, choisies, qui seront renouvelées au rythme des saisons.",
         "valuesTitle": "Nos engagements",
         "values": [
           {
             "title": "Qualité d’exception",
-            "text": "Des lots choisis à la tasse, un par un, et suivis d’une récolte à l’autre."
+            "text": "Des lots choisis et suivis d’une récolte à l’autre."
           },
           {
             "title": "Relations directes",
-            "text": "Partenariats durables avec nos producteurs, prix d’achat au-dessus du marché."
+            "text": "Partenariats durables avec nos producteurs, prix d’achat équitable."
           },
           {
             "title": "Juste mesure",
-            "text": "Petites séries, emballages recyclables, transport maritime privilégié."
+            "text": "Petites séries, emballages recyclables, transport maritime ou ferroviaire privilégié."
           }
         ],
         "figuresTitle": "Yunma en quelques repères",
@@ -296,16 +296,16 @@
             "label": "altitude de nos parcelles"
           },
           {
-            "value": "2019",
-            "label": "première récolte importée"
+            "value": "2026",
+            "label": "Premiers grains importés"
           }
         ],
-        "closing": "Le temps révèle les arômes.",
-        "closingCta": "Découvrir le journal"
+        "closing": "Notre philosophie, le « slow coffee, slow life ».",
+        "closingCta": "Découvrir notre journal"
       },
       "pro": {
-        "seoTitle": "Café de spécialité pour cafés, hôtels et restaurants",
-        "seoDescription": "Yunma accompagne torréfacteurs, coffee shops, hôtels, restaurants et épiceries fines : cafés de spécialité du Yunnan, tarifs pro, formation et supports dédiés.",
+        "seoTitle": "Café de spécialité pour Coffee shop, sociétés, hôtels / restaurants, épiceries",
+        "seoDescription": "Yunma accompagne torréfacteurs, coffee shops, sociétés, hôtels, restaurants et épiceries fines : cafés de spécialité du Yunnan aux tarifs professionnels.",
         "label": "Espace pro",
         "title": "Espace\nprofessionnels",
         "intro": "Des cafés de spécialité pour les professionnels exigeants.",
@@ -318,15 +318,15 @@
           },
           {
             "title": "Relations directes",
-            "text": "Partenariats durables avec nos producteurs, transparence sur les prix payés."
+            "text": "Partenariats durables et équitables avec nos producteurs."
           },
           {
             "title": "Accompagnement",
-            "text": "Conseils, réglages, formation et supports dédiés à votre activité."
+            "text": "Conseils, réglages, et supports dédiés à votre activité."
           }
         ],
         "forWhoTitle": "Pour qui ?",
-        "forWhoText": "Torréfacteurs, coffee shops, hôtels, restaurants et épiceries fines.",
+        "forWhoText": "Torréfacteurs, coffee shops, sociétés, hôtels / restaurants et épiceries fines.",
         "forWho": [
           "Coffee shops",
           "Hôtels & restaurants",
@@ -338,11 +338,11 @@
         "offers": [
           {
             "title": "Grains 1 kg",
-            "text": "Nos trois lots de saison en sac de 1 kg, torréfiés à la commande chaque semaine."
+            "text": "Nos trois lots de saison en sac de 1 kg, torréfiés à Paris."
           },
           {
-            "title": "Drip bags personnalisés",
-            "text": "Boîtes de 8 ou sachets à votre marque, à partir de 500 unités."
+            "title": "Sachets filtres pour vos clients, ou déplacements de vos équipes",
+            "text": "Boîtes de 5 ou sachets à votre marque, à partir de 500 unités."
           },
           {
             "title": "Formation & réglages",
@@ -364,7 +364,7 @@
           {
             "n": "03",
             "title": "On installe",
-            "text": "Réglages sur site, livraison hebdomadaire, tarifs dégressifs."
+            "text": "Livraison hebdomadaire, tarifs dégressifs."
           }
         ],
         "contactTitle": "Contact",
@@ -393,23 +393,23 @@
         "items": [
           {
             "q": "Quand mon café est-il torréfié ?",
-            "a": "Nous torréfions chaque semaine, en petites séries. Votre commande part sous 48 heures ouvrées après la torréfaction la plus proche, jamais depuis un stock ancien."
+            "a": "Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après la torréfaction la plus proche."
           },
           {
             "q": "Quels sont les délais de livraison ?",
-            "a": "France : 2 à 3 jours ouvrés via Colissimo ou Mondial Relay. Union européenne : 3 à 6 jours ouvrés. Livraison offerte à partir de 50 € d’achat en France métropolitaine."
+            "a": "France : 2 à 3 jours ouvrés. Union européenne : 3 à 6 jours ouvrés. Livraison offerte à partir de 50 € d’achat en France métropolitaine."
           },
           {
             "q": "Vendez-vous du café moulu ?",
-            "a": "Nos paquets sont vendus en grains pour préserver les arômes. Vous pouvez demander une mouture adaptée à votre méthode dans les commentaires de commande, sans supplément."
+            "a": "Nos paquets sont vendus en grains pour préserver les arômes."
           },
           {
             "q": "Comment conserver mon café ?",
             "a": "Dans son sachet refermable, à l’abri de la lumière, à température ambiante. Évitez le réfrigérateur. Consommez de préférence dans les six semaines après ouverture."
           },
           {
-            "q": "Qu’est-ce qu’un drip bag ?",
-            "a": "Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur votre tasse et versez de l’eau chaude en trois fois : un filtre propre, sans matériel, en trois minutes."
+            "q": "Qu’est-ce qu’un sachet filtre ?",
+            "a": "Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur votre mug et versez de l’eau chaude en trois fois : un café sans matériel, en trois minutes"
           },
           {
             "q": "Puis-je commander en tant que professionnel ?",
@@ -421,7 +421,7 @@
           },
           {
             "q": "Puis-je retourner une commande ?",
-            "a": "Vous disposez de 14 jours pour changer d’avis sur un produit non ouvert. Écrivez-nous et nous organisons le retour. Les denrées ouvertes ne sont pas reprises, pour des raisons d’hygiène."
+            "a": "Vous disposez de 14 jours pour changer d’avis sur un produit non ouvert. Les denrées ouvertes ne sont pas reprises, pour des raisons d’hygiène."
           }
         ]
       },
@@ -430,13 +430,13 @@
         "seoDescription": "Une question sur nos cafés, une commande ou un projet professionnel ? Écrivez à l’équipe Yunma.",
         "label": "Contact",
         "title": "Écrivez-nous",
-        "intro": "Une question ? Un projet ? Nous répondons sous un jour ouvré.",
+        "intro": "Une question ? Un projet ? Nous répondons rapidement.",
         "generalTitle": "Une question sur nos cafés",
-        "generalText": "Un conseil sur le lot qui vous conviendrait, une commande à suivre, un doute sur une mouture ou une méthode : écrivez-nous, c’est nous qui répondons.",
+        "generalText": "Un conseil sur le lot qui vous conviendrait, une commande à suivre, un doute sur une mouture ou une méthode : écrivez-nous.",
         "proTitle": "Cafés, hôtels, restaurants",
-        "proText": "Tarifs dégressifs, grains en 1 kg, drip bags à votre marque, réglages sur site et formation. Dites-nous ce que vous servez, nous vous envoyons des échantillons.",
+        "proText": "Tarifs dégressifs, grains en 1 kg, sachets filtres, conseils. Dites-nous ce que vous recherchez, nous pouvons aussi vous envoyer des échantillons.",
         "pressTitle": "Presse & partenariats",
-        "pressText": "Visuels, informations sur les fermes partenaires, visites de l’atelier : nous répondons volontiers, et nous préférons les sujets qui vont regarder d’un peu plus près.",
+        "pressText": "Des visuels, des informations sur nos cafés, notre histoire ou sur nos fermes partenaires : nous répondons volontiers, et nous serions ravis que vous parliez de nous.",
         "hoursTitle": "Atelier",
         "hoursText": "Visites sur rendez-vous, du mardi au vendredi.",
         "writeUs": "Écrire"
@@ -547,15 +547,15 @@
         "seoDescription": "Yunma sources specialty coffee from Yunnan, China: traceable lots, independent growers, roasted in Paris. Shipping across France and Europe.",
         "heroTitle": "Specialty\ncoffee\nfrom Yunnan.",
         "heroTitleAlt": "云南精品咖啡",
-        "heroCta": "Discover our coffees",
+        "heroCta": "Discover Yunma coffees",
         "originLabel": "In the beginning,",
         "originTitle": "Yunnan.\nA terroir.\nA philosophy.",
-        "originText": "In south-west China, between 1,300 and 2,000 metres of altitude, Yunnan grows a coffee still little known. Every coffee we select in Yunnan tells a story — that of a terroir, or of a grower with whom we share a certain philosophy of life.",
+        "originText": "In south-west China, between 1,300 and 1,800 metres of altitude, Yunnan grows coffees still little known. Every coffee Yunma selects tells a story — that of a terroir, or of a grower with whom we share the same philosophy of life.",
         "originCta": "Discover the origin",
-        "coffeesLabel": "Our coffees",
+        "coffeesLabel": "Yunma coffees",
         "coffeesTitle": "Harvested in Yunnan,\nroasted in Paris.",
-        "coffeesText": "Three seasonal lots in 200 g bags, drip bags to take away, or the box to taste everything. Roasted in small batches, regularly.",
-        "coffeesCta": "Discover our coffees",
+        "coffeesText": "Three Yunnan terroirs to discover as whole beans, single-serve drip bags, or a discovery set to taste them all. Roasted in small batches, in Paris.",
+        "coffeesCta": "Discover Yunma coffees",
         "approachLabel": "Our philosophy",
         "approachTitle": "Time,\nflavour\nand nature.",
         "approachText": "Our approach is to reveal the distinctive terroirs of Yunnan. No standardised blends, but traceable coffees, to be tasted the way one tastes fine wine.",
@@ -570,17 +570,17 @@
       },
       "cafes": {
         "seoTitle": "Our Yunnan specialty coffees — Yunma",
-        "seoDescription": "Discover Yunma coffees: Yunnan (China) specialty coffees in 200 g, drip bags in boxes of 5 or a discovery set. Traceable origins, roasted in Paris.",
+        "seoDescription": "Yunma coffees: specialty coffee from Yunnan. Traceable origins, roasted in Paris.",
         "label": "Our specialty",
         "title": "Coffees from Yunnan",
-        "intro": "Our specialty coffees come from three Yunnan terroirs, roasted regularly to reveal what the mountains of Yunnan have to offer.",
+        "intro": "Our specialty coffees come from three Yunnan terroirs, roasted regularly in Paris to keep them fresh.",
         "filterAll": "All",
         "filterGrains": "Whole bean",
         "filterDrip": "Drip bags",
         "filterSets": "Sets",
         "empty": "No product in this selection.",
         "helpTitle": "Need some advice?",
-        "helpText": "Tell us how you brew and we will point you to the lot that will suit you best."
+        "helpText": "Tell us how you brew and we will recommend the lot that suits you best."
       },
       "product": {
         "aboutTitle": "About this coffee",
@@ -600,11 +600,11 @@
         "brewTitle": "Brewing guide"
       },
       "origine": {
-        "seoTitle": "Origin, story and craft — Yunma, Yunnan specialty coffee",
-        "seoDescription": "Yunnan coffees and their terroirs, the story of Yunma, and our craft from cherry to cup: harvest, processing, drying, roasting.",
+        "seoTitle": "Origin and craft of Yunma’s Yunnan coffees",
+        "seoDescription": "Yunnan coffees and their terroirs, the story of Yunma, and the craft from cherry to cup: harvest, processing, drying, roasting.",
         "label": "In the beginning,",
-        "title": "Yunnan.\nA terroir.\nA philosophy.",
-        "intro": "Yunnan grows more than 95% of Chinese coffee, and China exports only 5% of what it produces. Rare coffees of great finesse, carried by a new generation of producers.",
+        "title": "Yunnan.\nA region.\nA philosophy.",
+        "intro": "Yunnan grows 95% of Chinese coffee, and China exports only 5% of what it produces. Rare coffees of great finesse, carried by a new generation of producers.",
         "sections": [
           {
             "label": "The region",
@@ -613,23 +613,23 @@
           },
           {
             "label": "The farms",
-            "title": "Human relationships, a philosophy of life",
-            "text": "We work with three farms, in Baoshan, Pu’er and Xishuangbanna. We buy above market price and commit over time, so that each of them can keep investing in their plots and their specialty-coffee facilities."
+            "title": "Encounters, a philosophy of life",
+            "text": "We work with three farms, in Baoshan, Pu’er and Xishuangbanna. We buy at a fair price, and we commit so that each farm can carry on its passion for specialty coffee."
           },
           {
             "label": "The season",
             "title": "From December to March",
-            "text": "The harvest spans four months in Yunnan. Coffee cherries are picked by hand at ripeness, then sorted the same day. Lots reach France in spring, to be roasted throughout the year."
+            "text": "The harvest spans four months in Yunnan. Coffee cherries are picked by hand at ripeness, then sorted the same day. Lots reach France in spring and are roasted throughout the year."
           }
         ],
         "quote": "Coffee is not manufactured. It is grown, then respected.",
         "pulls": {
           "terroir": "At 1,500 metres, it is the cold nights that do the work.",
-          "histoire": "We buy direct, above the market price.",
+          "histoire": "We buy from the growers, at fair prices.",
           "savoirFaire": "From cherry to cup, every gesture shows up in the glass."
         },
         "mapTitle": "Our terroirs",
-        "mapText": "Three areas, three cup profiles.",
+        "mapText": "Three places, three profiles.",
         "terroirs": [
           {
             "name": "Baoshan",
@@ -644,7 +644,7 @@
           {
             "name": "Xishuangbanna",
             "detail": "1,600 – 1,800 m · Pacamara",
-            "text": "The far south of Yunnan and our highest plots, at Yun Lan Estate, where a rare, low-yielding washed Pacamara ripens."
+            "text": "The far south of Yunnan and our highest plots, at Yun Lan Estate, where a rare washed Pacamara ripens."
           }
         ],
         "anchors": {
@@ -656,14 +656,14 @@
         "oroLabel": "With the support of",
         "oroName": "ORO Yunnan",
         "oroFull": "Yunnan Commercial Representative Office in Paris, France",
-        "oroText": "ORO Yunnan supports our work with growers and the promotion of the province in France: its mountain farming, its landscapes, and the ecological practices taking root there. Valuable help for buying directly from ten thousand kilometres away, and for making known here a terroir that is only beginning to be discovered."
+        "oroText": "ORO Yunnan supports our work with growers and the promotion of the province in France: its mountain farming, its landscapes, and the region’s ecological practices. Valuable help for buying directly from the growers, and for making a magnificent terroir known here."
       },
       "savoirFaire": {
         "seoTitle": "Yunma craft — processing, drying and roasting",
-        "seoDescription": "Controlled fermentation, drying on raised beds, hand sorting and small-batch light roasting: the Yunma craft, step by step.",
+        "seoDescription": "Controlled fermentation, drying on raised beds, hand sorting and small-batch roasting in Paris: the craft of Yunma and of its growers.",
         "label": "Our approach",
-        "title": "Time,\nnature\nand precision.",
-        "intro": "Nothing spectacular: precise gestures, repeated and measured. Our work is to add nothing — and to lose nothing along the way.",
+        "title": "Time,\nnature\nand the hand.",
+        "intro": "Nothing spectacular: precise gestures, repeated and measured. The work is to add nothing more — and to lose nothing of the terroir in the cup.",
         "steps": [
           {
             "n": "01",
@@ -678,7 +678,7 @@
           {
             "n": "03",
             "title": "Drying",
-            "text": "Raised African beds, in the shade for the first days, turned every two hours. Between 12 and 20 days."
+            "text": "Raised beds, in the shade for the first days, turned every two hours. Between 12 and 20 days."
           },
           {
             "n": "04",
@@ -735,24 +735,24 @@
         "label": "About",
         "title": "Our story",
         "intro": "Yunma was born from an encounter between Yunnan and a passion for specialty coffee.",
-        "storyText": "In 2019, a journey into the mountains of Baoshan. Coffee trees planted among tea bushes, families selling their harvest by weight without ever tasting the cup. We came back the following year with a cupping set and a few bags. Yunma was born from those trips.",
+        "storyText": "In 2019, our first journey into the mountains of Baoshan. Coffee trees planted among tea bushes, families selling their harvest by weight without ever tasting the cup. We came back the following year with a cupping set and a few bags. Yunma was born from those trips.",
         "missionTitle": "Our mission",
         "missionText": "To bring the terroir of Yunnan to light through exceptional coffees, respecting both people and nature.",
         "approachTitle": "Our approach",
-        "approachText": "We work hand in hand with passionate producers to offer traceable, sustainable and unique coffees. Few references, carefully chosen, followed and renewed with the seasons.",
+        "approachText": "We work with passionate growers to offer traceable, rare and unique coffees. Few references, carefully chosen, renewed with the seasons.",
         "valuesTitle": "Our commitments",
         "values": [
           {
             "title": "Exceptional quality",
-            "text": "Lots chosen in the cup, one by one, and followed from one harvest to the next."
+            "text": "Lots chosen and followed from one harvest to the next."
           },
           {
             "title": "Direct relationships",
-            "text": "Lasting partnerships with our growers, purchase prices above market."
+            "text": "Lasting partnerships with our growers, fair purchase prices."
           },
           {
             "title": "Right measure",
-            "text": "Small batches, recyclable packaging, sea freight wherever possible."
+            "text": "Small batches, recyclable packaging, sea or rail freight wherever possible."
           }
         ],
         "figuresTitle": "Yunma in a few figures",
@@ -770,16 +770,16 @@
             "label": "altitude of our plots"
           },
           {
-            "value": "2019",
-            "label": "first harvest imported"
+            "value": "2026",
+            "label": "first beans imported"
           }
         ],
-        "closing": "Time reveals the aromas.",
-        "closingCta": "Read the journal"
+        "closing": "Our philosophy: slow coffee, slow life.",
+        "closingCta": "Read our journal"
       },
       "pro": {
-        "seoTitle": "Specialty coffee for cafés, hotels and restaurants",
-        "seoDescription": "Yunma supports roasters, coffee shops, hotels, restaurants and fine grocers: Yunnan specialty coffee, trade pricing, training and dedicated support.",
+        "seoTitle": "Specialty coffee for coffee shops, offices, hotels and grocers",
+        "seoDescription": "Yunma supports roasters, coffee shops, offices, hotels, restaurants and fine grocers: Yunnan specialty coffee at trade prices.",
         "label": "Trade",
         "title": "For\nprofessionals",
         "intro": "Specialty coffee for demanding professionals.",
@@ -792,15 +792,15 @@
           },
           {
             "title": "Direct relationships",
-            "text": "Lasting partnerships with our growers, transparency on the prices paid."
+            "text": "Lasting, fair partnerships with our growers."
           },
           {
             "title": "Support",
-            "text": "Advice, dialling in, training and materials dedicated to your business."
+            "text": "Advice, dialling in, and materials dedicated to your business."
           }
         ],
         "forWhoTitle": "Who is it for?",
-        "forWhoText": "Roasters, coffee shops, hotels, restaurants and fine grocers.",
+        "forWhoText": "Roasters, coffee shops, offices, hotels / restaurants and fine grocers.",
         "forWho": [
           "Coffee shops",
           "Hotels & restaurants",
@@ -812,11 +812,11 @@
         "offers": [
           {
             "title": "1 kg whole bean",
-            "text": "Our three seasonal lots in 1 kg bags, roasted to order every week."
+            "text": "Our three seasonal lots in 1 kg bags, roasted in Paris."
           },
           {
-            "title": "Custom drip bags",
-            "text": "Boxes of 8 or single sachets under your own brand, from 500 units."
+            "title": "Drip bags for your customers, or for your teams on the move",
+            "text": "Boxes of 5 or single sachets under your own brand, from 500 units."
           },
           {
             "title": "Training & dialling in",
@@ -838,7 +838,7 @@
           {
             "n": "03",
             "title": "We set up",
-            "text": "On-site dialling in, weekly delivery, volume pricing."
+            "text": "Weekly delivery, volume pricing."
           }
         ],
         "contactTitle": "Contact",
@@ -867,15 +867,15 @@
         "items": [
           {
             "q": "When is my coffee roasted?",
-            "a": "We roast every week, in small batches. Your order ships within 48 business hours of the closest roast, never from old stock."
+            "a": "We roast regularly, in small batches. Your order ships within 48 business hours of the closest roast."
           },
           {
             "q": "What are the delivery times?",
-            "a": "France: 2 to 3 business days via Colissimo or Mondial Relay. European Union: 3 to 6 business days. Free delivery from €50 within mainland France."
+            "a": "France: 2 to 3 business days. European Union: 3 to 6 business days. Free delivery from €50 within mainland France."
           },
           {
             "q": "Do you sell ground coffee?",
-            "a": "Our bags are sold as whole beans to preserve the aromatics. You can request a grind matched to your method in the order notes, at no extra cost."
+            "a": "Our bags are sold as whole beans to preserve the aromatics."
           },
           {
             "q": "How should I store my coffee?",
@@ -883,7 +883,7 @@
           },
           {
             "q": "What is a drip bag?",
-            "a": "An individual filter sachet holding 10 g of ground coffee. You rest it on your cup and pour hot water in three stages: a clean filter cup, no equipment, in three minutes."
+            "a": "An individual filter sachet holding 10 g of ground coffee. You rest it on your mug and pour hot water in three stages: coffee with no equipment, in three minutes."
           },
           {
             "q": "Can I order as a professional?",
@@ -895,7 +895,7 @@
           },
           {
             "q": "Can I return an order?",
-            "a": "You have 14 days to change your mind on an unopened product. Write to us and we will arrange the return. Opened food products cannot be taken back, for hygiene reasons."
+            "a": "You have 14 days to change your mind on an unopened product. Opened food products cannot be taken back, for hygiene reasons."
           }
         ]
       },
@@ -904,13 +904,13 @@
         "seoDescription": "A question about our coffees, an order or a trade project? Write to the Yunma team.",
         "label": "Contact",
         "title": "Write to us",
-        "intro": "A question? A project? We reply within one business day.",
+        "intro": "A question? A project? We reply quickly.",
         "generalTitle": "A question about our coffees",
-        "generalText": "Advice on the lot that would suit you, an order to follow, a doubt about a grind or a method: write to us — we answer ourselves.",
+        "generalText": "Advice on the lot that would suit you, an order to follow, a doubt about a grind or a method: write to us.",
         "proTitle": "Cafés, hotels, restaurants",
-        "proText": "Volume pricing, 1 kg whole bean, drip bags under your own brand, on-site dialling in and training. Tell us what you serve and we will send samples.",
+        "proText": "Volume pricing, 1 kg whole bean, drip bags, advice. Tell us what you are looking for — we can also send you samples.",
         "pressTitle": "Press & partnerships",
-        "pressText": "Images, information about our partner farms, visits to the roastery: we answer gladly, and we prefer the stories that look a little closer.",
+        "pressText": "Images, information about our coffees, our story or our partner farms: we answer gladly, and we would be delighted if you wrote about us.",
         "hoursTitle": "Roastery",
         "hoursText": "Visits by appointment, Tuesday to Friday.",
         "writeUs": "Write"
@@ -1021,15 +1021,15 @@
         "seoDescription": "云马 Yunma 精选来自中国云南的精品咖啡：批次可溯源、与独立咖农合作、在巴黎烘焙。发往法国与欧洲各地。",
         "heroTitle": "云南\n精品咖啡。",
         "heroTitleAlt": "Cafés de spécialité du Yunnan",
-        "heroCta": "探索我们的咖啡",
+        "heroCta": "探索云马的咖啡",
         "originLabel": "一切始于",
         "originTitle": "云南。\n一片风土。\n一种生活哲学。",
-        "originText": "在中国西南，海拔 1300 至 2000 米之间，云南出产着仍少为人知的咖啡。我们在云南挑选的每一支咖啡都有它的故事——关于一片风土，或者一位与我们抱有相同生活理念的咖农。",
+        "originText": "在中国西南，海拔 1300 至 1800 米之间，云南出产着仍少为人知的咖啡。云马挑选的每一支咖啡都有它的故事——关于一片风土，或者一位与我们抱有相同生活理念的咖农。",
         "originCta": "了解产地",
-        "coffeesLabel": "我们的咖啡",
+        "coffeesLabel": "云马的咖啡",
         "coffeesTitle": "采于云南，\n烘焙于巴黎。",
-        "coffeesText": "三款 200 克季节批次、便携挂耳咖啡，或者可以一次全部品尝的礼盒。小批量、稳定地烘焙。",
-        "coffeesCta": "探索我们的咖啡",
+        "coffeesText": "三片云南风土，可选咖啡豆、单片挂耳，或一次全部品尝的发现礼盒。于巴黎小批量烘焙。",
+        "coffeesCta": "探索云马的咖啡",
         "approachLabel": "我们的理念",
         "approachTitle": "时间、\n风味\n与自然。",
         "approachText": "我们想做的，是让云南各处风土的差异显现出来。不做标准化拼配，只做可溯源的咖啡——像品鉴名庄葡萄酒那样去品尝。",
@@ -1044,10 +1044,10 @@
       },
       "cafes": {
         "seoTitle": "云南精品咖啡系列 — Yunma 云马",
-        "seoDescription": "探索云马的咖啡：来自中国云南的 200 克精品咖啡、5 片装挂耳咖啡，以及发现礼盒。产地可溯源，在巴黎烘焙。",
+        "seoDescription": "云马的咖啡：来自云南的精品咖啡。产地可溯源，在巴黎烘焙。",
         "label": "我们的专长",
         "title": "云南咖啡",
-        "intro": "我们的精品咖啡来自云南三片风土，定期烘焙，让云南的群山所能给予的风味充分显现。",
+        "intro": "我们的精品咖啡来自云南三片风土，在巴黎定期烘焙，以保持新鲜。",
         "filterAll": "全部",
         "filterGrains": "咖啡豆",
         "filterDrip": "挂耳咖啡",
@@ -1074,11 +1074,11 @@
         "brewTitle": "冲煮建议"
       },
       "origine": {
-        "seoTitle": "产地、故事与工艺 — Yunma 云马，云南精品咖啡",
-        "seoDescription": "云南的咖啡与风土、云马的故事，以及我们从果实到杯中的工艺：采收、处理、晾晒、烘焙。",
+        "seoTitle": "云马云南咖啡的产地与工艺",
+        "seoDescription": "云南的咖啡与风土、云马的故事，以及从果实到杯中的工艺：采收、处理、晾晒、烘焙。",
         "label": "一切始于",
-        "title": "云南。\n一片风土。\n一种生活哲学。",
-        "intro": "云南出产中国 95% 以上的咖啡，而中国仅有 5% 的产量销往海外。这是一批稀有而细腻的咖啡，由新一代咖农带来。",
+        "title": "云南。\n一个地区。\n一种生活哲学。",
+        "intro": "云南出产中国 95% 的咖啡，而中国仅有 5% 的产量销往海外。这是一批稀有而细腻的咖啡，由新一代咖农带来。",
         "sections": [
           {
             "label": "这片地区",
@@ -1087,8 +1087,8 @@
           },
           {
             "label": "合作农场",
-            "title": "人与人的关系，一种生活哲学",
-            "text": "我们与保山、普洱和西双版纳的三座农场合作。以高于市场的价格采购，并作出长期承诺，让每一座农场都能持续投入自己的地块与精品咖啡设施。"
+            "title": "相遇，一种生活哲学",
+            "text": "我们与保山、普洱和西双版纳的三座农场合作。以公平的价格采购，并作出承诺，让每一座农场都能延续他们对精品咖啡的热情。"
           },
           {
             "label": "产季",
@@ -1099,11 +1099,11 @@
         "quote": "咖啡不是制造出来的，而是种出来、并被尊重的。",
         "pulls": {
           "terroir": "海拔 1500 米，真正干活的是清凉的夜。",
-          "histoire": "我们直接向农场采购，价格高于市场。",
+          "histoire": "我们向咖农采购，价格公平。",
           "savoirFaire": "从果实到杯中，每一个动作都留在味道里。"
         },
         "mapTitle": "我们的风土",
-        "mapText": "三个产区，三种风味。",
+        "mapText": "三个地方，三种风味。",
         "terroirs": [
           {
             "name": "保山",
@@ -1118,7 +1118,7 @@
           {
             "name": "西双版纳",
             "detail": "1600 – 1800 米 · 帕卡马拉",
-            "text": "云南最南端，也是我们海拔最高的地块。云澜庄园在此种植稀少而低产的水洗帕卡马拉。"
+            "text": "云南最南端，也是我们海拔最高的地块。云澜庄园在此种植稀少的水洗帕卡马拉。"
           }
         ],
         "anchors": {
@@ -1130,14 +1130,14 @@
         "oroLabel": "支持机构",
         "oroName": "ORO Yunnan",
         "oroFull": "云南省驻法国（巴黎）商务代表处",
-        "oroText": "ORO Yunnan 支持我们与咖农的合作，并在法国推广云南：山地农业、自然风景，以及正在当地生根的生态实践。这份支持让我们得以在万里之外直接采购，也让这片刚刚被认识的风土在这里被更多人看见。"
+        "oroText": "ORO Yunnan 支持我们与咖农的合作，并在法国推广云南：山地农业、自然风景，以及这片地区的生态实践。这份支持让我们得以直接向咖农采购，也让这片美好的风土在这里被更多人看见。"
       },
       "savoirFaire": {
         "seoTitle": "云马工艺 — 处理、晾晒与烘焙",
-        "seoDescription": "可控发酵、非洲高架床晾晒、人工筛选与小批量浅烘：云马的工艺，一步一步。",
+        "seoDescription": "可控发酵、高架床晾晒、人工筛选与巴黎小批量烘焙：云马与咖农的工艺。",
         "label": "我们的方式",
-        "title": "时间、\n自然\n与精准。",
-        "intro": "没有惊天动地的操作：只有精准、重复、可量化的动作。我们的工作是不添加任何东西，也不在途中损失任何东西。",
+        "title": "时间、\n自然\n与手上的功夫。",
+        "intro": "没有惊天动地的操作：只有精准、重复、可量化的动作。这份工作是不多加任何东西——也不让风土在杯中有所损失。",
         "steps": [
           {
             "n": "01",
@@ -1152,7 +1152,7 @@
           {
             "n": "03",
             "title": "晾晒",
-            "text": "非洲高架床，最初几日置于阴凉处，每两小时翻动一次，历时 12 至 20 天。"
+            "text": "高架床，最初几日置于阴凉处，每两小时翻动一次，历时 12 至 20 天。"
           },
           {
             "n": "04",
@@ -1209,24 +1209,24 @@
         "label": "关于",
         "title": "我们的故事",
         "intro": "云马诞生于云南与精品咖啡热情的相遇。",
-        "storyText": "2019 年，一次前往保山山区的旅行。咖啡树种在茶树之间，咖农按重量卖出收成，却从未品尝过自己的那杯咖啡。第二年我们带着杯测器具和几袋生豆回到那里。云马就诞生于这些往返之间。",
+        "storyText": "2019 年，我们第一次前往保山山区。咖啡树种在茶树之间，咖农按重量卖出收成，却从未品尝过自己的那杯咖啡。第二年我们带着杯测器具和几袋生豆回到那里。云马就诞生于这些往返之间。",
         "missionTitle": "我们的使命",
         "missionText": "以卓越的咖啡呈现云南风土，尊重土地，也尊重种植它的人。",
         "approachTitle": "我们的方式",
-        "approachText": "我们与充满热情的咖农携手，提供可溯源、可持续且独特的咖啡。产品不多，但每一款都经过挑选、跟踪，并随季节更新。",
+        "approachText": "我们与充满热情的咖农合作，提供可溯源、稀有而独特的咖啡。产品不多，每一款都经过挑选，并随季节更新。",
         "valuesTitle": "我们的承诺",
         "values": [
           {
             "title": "卓越品质",
-            "text": "每一支批次都经杯测逐一挑选，并逐季跟踪。"
+            "text": "每一支批次都经挑选，并逐季跟踪。"
           },
           {
             "title": "直接合作",
-            "text": "与咖农建立长期伙伴关系，采购价高于市场。"
+            "text": "与咖农建立长期伙伴关系，采购价格公平。"
           },
           {
             "title": "适度而行",
-            "text": "小批量生产、可回收包装、优先海运。"
+            "text": "小批量生产、可回收包装、优先海运或铁路运输。"
           }
         ],
         "figuresTitle": "云马的几个数字",
@@ -1244,16 +1244,16 @@
             "label": "地块海拔"
           },
           {
-            "value": "2019",
-            "label": "首次进口采收季"
+            "value": "2026",
+            "label": "首批咖啡豆进口"
           }
         ],
-        "closing": "时间让香气显现。",
-        "closingCta": "阅读手记"
+        "closing": "我们的理念：慢咖啡，慢生活。",
+        "closingCta": "阅读我们的手记"
       },
       "pro": {
-        "seoTitle": "商用方案 — 为咖啡馆、酒店与餐厅提供精品咖啡",
-        "seoDescription": "云马为烘焙商、咖啡馆、酒店、餐厅与精品食品店提供云南精品咖啡、商用价格、培训与专属支持。",
+        "seoTitle": "为咖啡馆、企业、酒店餐厅与食品店提供精品咖啡",
+        "seoDescription": "云马为烘焙商、咖啡馆、企业、酒店、餐厅与精品食品店提供云南精品咖啡，价格面向专业客户。",
         "label": "商用",
         "title": "专业\n合作",
         "intro": "为要求严苛的专业客户提供的精品咖啡。",
@@ -1266,15 +1266,15 @@
           },
           {
             "title": "直接合作",
-            "text": "与咖农建立长期伙伴关系，采购价格公开透明。"
+            "text": "与咖农建立长期而公平的伙伴关系。"
           },
           {
             "title": "专业支持",
-            "text": "为您的业务提供建议、调试、培训与物料支持。"
+            "text": "为您的业务提供建议、调试与专属物料。"
           }
         ],
         "forWhoTitle": "适合谁？",
-        "forWhoText": "烘焙商、咖啡馆、酒店、餐厅与精品食品店。",
+        "forWhoText": "烘焙商、咖啡馆、企业、酒店／餐厅与精品食品店。",
         "forWho": [
           "咖啡馆",
           "酒店与餐厅",
@@ -1286,11 +1286,11 @@
         "offers": [
           {
             "title": "1 公斤咖啡豆",
-            "text": "三款季节批次的 1 公斤装，每周按订单烘焙。"
+            "text": "三款季节批次的 1 公斤装，于巴黎烘焙。"
           },
           {
-            "title": "定制挂耳咖啡",
-            "text": "8 片装礼盒或单片包装，可印制您的品牌，500 件起订。"
+            "title": "为您的客户，或出差在外的团队准备的挂耳咖啡",
+            "text": "5 片装礼盒或单片包装，可印制您的品牌，500 件起订。"
           },
           {
             "title": "培训与调试",
@@ -1312,7 +1312,7 @@
           {
             "n": "03",
             "title": "落地",
-            "text": "上门调试、每周配送、阶梯价格。"
+            "text": "每周配送、阶梯价格。"
           }
         ],
         "contactTitle": "联系",
@@ -1341,15 +1341,15 @@
         "items": [
           {
             "q": "咖啡什么时候烘焙？",
-            "a": "我们每周小批量烘焙。订单会在最近一次烘焙后的 48 个工作小时内发出，绝不使用陈旧库存。"
+            "a": "我们定期小批量烘焙。订单会在最近一次烘焙后的 48 个工作小时内发出。"
           },
           {
             "q": "配送需要多久？",
-            "a": "法国境内：2 至 3 个工作日（Colissimo 或 Mondial Relay）。欧盟：3 至 6 个工作日。法国本土满 50 欧元免运费。"
+            "a": "法国境内：2 至 3 个工作日。欧盟：3 至 6 个工作日。法国本土满 50 欧元免运费。"
           },
           {
             "q": "有咖啡粉出售吗？",
-            "a": "我们的包装均为咖啡豆，以保留香气。您可以在订单备注中注明冲煮方式，我们免费为您研磨。"
+            "a": "我们的包装均为咖啡豆，以保留香气。"
           },
           {
             "q": "如何保存咖啡？",
@@ -1357,7 +1357,7 @@
           },
           {
             "q": "什么是挂耳咖啡？",
-            "a": "一片独立滤袋，内含 10 克咖啡粉。挂在杯口，分三次注入热水：无需器具，三分钟得到一杯干净的手冲。"
+            "a": "一片独立滤袋，内含 10 克咖啡粉。挂在马克杯口，分三次注入热水：无需器具，三分钟一杯咖啡。"
           },
           {
             "q": "可以商用采购吗？",
@@ -1369,7 +1369,7 @@
           },
           {
             "q": "可以退货吗？",
-            "a": "未开封商品可在 14 天内退货。请来信，我们将安排退回。出于食品卫生考虑，已开封商品不予退换。"
+            "a": "未开封商品可在 14 天内退货。出于食品卫生考虑，已开封商品不予退换。"
           }
         ]
       },
@@ -1378,13 +1378,13 @@
         "seoDescription": "关于咖啡、订单或商用合作有疑问？欢迎联系云马团队。",
         "label": "联系",
         "title": "给我们留言",
-        "intro": "有问题？有项目？我们将在一个工作日内回复。",
+        "intro": "有问题？有项目？我们会尽快回复。",
         "generalTitle": "关于咖啡的疑问",
-        "generalText": "想知道哪一支适合您、追踪订单、对研磨度或冲煮方式拿不准：来信即可，回复的是我们本人。",
+        "generalText": "想知道哪一支适合您、追踪订单、对研磨度或冲煮方式拿不准：来信即可。",
         "proTitle": "咖啡馆、酒店与餐厅",
-        "proText": "阶梯价格、1 公斤装咖啡豆、可印您品牌的挂耳、上门调试与培训。告诉我们您在供应什么，我们寄样品过去。",
+        "proText": "阶梯价格、1 公斤装咖啡豆、挂耳咖啡、专业建议。告诉我们您在寻找什么，我们也可以寄样品过去。",
         "pressTitle": "媒体与合作",
-        "pressText": "图片素材、合作农场的信息、工坊参观：我们乐于回复，也更喜欢愿意走近一点看的选题。",
+        "pressText": "图片素材，关于我们的咖啡、我们的故事或合作农场的信息：我们乐于回复，也很高兴您愿意介绍我们。",
         "hoursTitle": "烘焙工坊",
         "hoursText": "周二至周五，预约参观。",
         "writeUs": "写信"

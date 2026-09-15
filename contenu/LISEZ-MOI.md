@@ -181,9 +181,15 @@ code, vous renvoyez le document, et son contenu repart dans `textes.json`,
 `produits.json` et `journal/`.
 
 ```bash
-npm run export-contenu                                        # régénère le document
-python3 scripts/importer-textes.py contenu/yunma-contenu-fr.docx --essai
+npm run export-contenu                                                  # régénère le document
+npm run importer-contenu -- contenu/yunma-contenu-fr.docx --essai       # montre ce qui changerait
+npm run importer-contenu -- contenu/yunma-contenu-fr.docx               # réinjecte
 ```
+
+La réinjection ne devine rien : l'export note au passage d'où vient chaque
+texte, et l'import écrit à cette clé exacte. Ce qu'il ne peut pas placer sans
+risque — les coordonnées, qui vivent dans le code — il le dit au lieu de le
+supposer. `--detail` affiche l'avant et l'après de chaque modification.
 
 Le document se régénère à partir du site : il ne se périme jamais. Régénérez-le
 avant chaque relecture plutôt que de repartir d'une copie ancienne.

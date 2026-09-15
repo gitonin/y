@@ -9,13 +9,15 @@
  * `contenu/textes.json`, `contenu/produits.json` ou `contenu/journal/`.
  */
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ecrire } from './lib/document.mjs';
 import { doc as planSite } from './export-textes.mjs';
 import { doc as planJournal, nombreArticles } from './export-journal.mjs';
 
 const OUT = path.join(path.resolve(import.meta.dirname, '..'), 'contenu');
+const seul = !!process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
 
-const doc = [];
+export const doc = [];
 const chapter = (title) => doc.push({ type: 'chapter', title });
 const note = (text) => doc.push({ type: 'note', text });
 
@@ -51,12 +53,16 @@ doc.push(...planSite);
 chapter('Seconde partie — les articles du journal');
 doc.push(...planJournal);
 
-const { champs, word } = await ecrire(doc, {
-  dossier: OUT,
-  nom: 'yunma-contenu-fr',
-  titre: 'Yunma — tout le contenu du site (français)',
-  consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
-});
-console.log(
-  `${champs} textes exportés, dont ${nombreArticles} articles de journal · contenu/yunma-contenu-fr.md${word ? ' + .docx' : ''}`
-);
+export const TITRE = 'Yunma — tout le contenu du site (français)';
+
+if (seul) {
+  const { champs, word } = await ecrire(doc, {
+    dossier: OUT,
+    nom: 'yunma-contenu-fr',
+    titre: TITRE,
+    consigne: 'Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes.',
+  });
+  console.log(
+    `${champs} textes exportés, dont ${nombreArticles} articles de journal · contenu/yunma-contenu-fr.md${word ? ' + .docx' : ''}`
+  );
+}

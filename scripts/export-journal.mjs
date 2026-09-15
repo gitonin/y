@@ -120,6 +120,9 @@ articles.forEach((article, i) => {
 });
 
 export const nombreArticles = articles.length;
+/* L'import a besoin du découpage : sans le genre de chaque bloc, il ne saurait
+   pas s'il réécrit un intertitre, un paragraphe ou une liste. */
+export const articlesJournal = articles;
 
 if (seul) {
   const { champs, word } = await ecrire(doc, {

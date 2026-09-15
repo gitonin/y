@@ -36,10 +36,12 @@ const specRows = [
   { label: t.product.notes, value: product.specs.notes[lang] },
 ];
 
+/* Le profil manque aux assortiments, qui mêlent plusieurs torréfactions :
+   la ligne disparaît alors, plutôt que de rester vide. */
 const detailRows: { label: string; value: string; icon: IconName }[] = [
   { label: t.product.drying, value: product.specs.drying[lang], icon: 'dry' },
   { label: t.product.harvest, value: product.specs.harvest[lang], icon: 'cherries' },
-  { label: t.product.roast, value: product.specs.roast[lang], icon: 'bean' },
+  ...(product.specs.roast ? [{ label: t.product.roast, value: product.specs.roast[lang], icon: 'bean' as IconName }] : []),
 ];
 
 const canonical = new URL(Astro.url.pathname, base).href;

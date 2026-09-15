@@ -1,18 +1,18 @@
 ---
 title: 'How to brew a great drip bag'
-description: 'The complete drip bag method: temperature, ratio, three pours, common mistakes. A clean filter cup in three minutes, with no equipment.'
-date: 2025-06-12
+description: 'The complete drip bag method: temperature, ratio, three pours, common mistakes. A clean cup in three minutes, with no equipment.'
+date: 2026-09-15
 author: Yunma
 tags: ['Method', 'Brewing', 'Drip bag']
 photo: tabouret-terrasse
 ---
 
-A drip bag is not an emergency coffee. It is a real filter brew, simply pre-dosed and pre-ground. Done properly, it has nothing to envy a V60 — and it fits in a pocket.
+A drip bag is not an emergency coffee. It is a real filter brew, simply pre-dosed and pre-ground. Done properly, it has nothing to envy a V60 — and it fits in the pocket.
 
 ## What you need
 
 - A cup of about 250 ml, taller rather than wider
-- Water at 92 °C, meaning boiled water rested for a minute
+- Water at 92 °C, meaning boiled water rested for one to two minutes
 - Three minutes of your time
 
 ## The method, in three pours
@@ -35,4 +35,4 @@ A drip bag is not an emergency coffee. It is a real filter brew, simply pre-dose
 
 ## What about storage?
 
-Our drip bags are ground and packed under protective atmosphere on roasting day. Unopened, they keep their aromatics for about three months. Once opened, use them straight away: one sachet, one cup.
+Our drip bags are ground and packed under protective atmosphere in Yunnan, on roasting day. Unopened, they keep their best aromatics for about three months, and stay drinkable for over a year. Once opened, use them straight away: one sachet, one cup.

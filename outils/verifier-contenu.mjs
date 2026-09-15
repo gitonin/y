@@ -134,8 +134,13 @@ if (catalogue) {
     for (const champ of ['name', 'subtitle', 'short', 'description', 'story', 'brew']) {
       for (const l of LANGUES) if (!p?.[champ]?.[l]) erreur(`contenu/produits.json : « ${nom} » — « ${champ} » manque en ${l}.`);
     }
-    for (const champ of ['origin', 'altitude', 'variety', 'process', 'notes', 'drying', 'harvest', 'roast']) {
+    for (const champ of ['origin', 'altitude', 'variety', 'process', 'notes', 'drying', 'harvest']) {
       for (const l of LANGUES) if (!p?.specs?.[champ]?.[l]) erreur(`contenu/produits.json : « ${nom} » — la fiche technique « ${champ} » manque en ${l}.`);
+    }
+    /* Le profil est facultatif — un assortiment n'en a pas — mais s'il est là,
+       il doit l'être dans les trois langues. */
+    if (p?.specs?.roast) {
+      for (const l of LANGUES) if (!p.specs.roast[l]) erreur(`contenu/produits.json : « ${nom} » — le profil manque en ${l}.`);
     }
     if (!Array.isArray(p.variants) || p.variants.length === 0) erreur(`contenu/produits.json : « ${nom} » n'a aucun format en vente.`);
     for (const v of p.variants ?? []) {

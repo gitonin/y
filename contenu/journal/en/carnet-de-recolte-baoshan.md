@@ -29,4 +29,4 @@ The raised beds sit on a gentle slope, oriented east to west. For the first days
 
 We ended with a table of eighteen cups, with the farm team and neighbouring growers. It is our favourite moment: producers taste their own coffee blind, next to their neighbours'. The conversations that follow are worth more than any analysis report.
 
-Two varieties were exported this year: the Catimor from the lower plots and the Yellow Bourbon from the high terraces. You will find them in our drip bags — on their own, or side by side in the build-your-own box.
+Two varieties were exported this year: the Catimor from the lower plots and the Yellow Bourbon from the high terraces. You will find them in our drip bags.

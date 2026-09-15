@@ -4,8 +4,8 @@ export const SITE = {
   domain: 'yunma.fr',
   url: import.meta.env.SITE || 'https://yunma.fr',
   email: 'hello@yunma.fr',
-  proEmail: 'pro@yunma.fr',
-  pressEmail: 'presse@yunma.fr',
+  proEmail: 'hello@yunma.fr',
+  pressEmail: 'hello@yunma.fr',
   phone: '+33 6 42 05 04 58',
   phoneHref: '+33642050458',
   address: {

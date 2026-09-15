@@ -37,8 +37,9 @@ export type Product = {
     notes: L;
     drying: L;
     harvest: L;
-    /** Profil : filtre ou espresso, comme indiqué sur l'étiquette. */
-    roast: L;
+    /** Profil : filtre ou espresso, comme indiqué sur l'étiquette.
+        Absent d'un assortiment, qui mêle plusieurs torréfactions. */
+    roast?: L;
   };
   brew: L;
   includes?: L[];

@@ -12,6 +12,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ecrire } from './lib/document.mjs';
+import { tracer } from './lib/tracer.mjs';
 
 /* Ce module sert deux usages : lancé seul, il écrit son propre document ;
    importé, il ne fournit que son plan, que l'export global assemble avec
@@ -42,10 +43,19 @@ async function loadConsts() {
   };
 }
 
-const { default: t } = await load('src/i18n/fr.ts');
-const { products } = await load('src/data/products.ts');
-const { mentions, cgv } = await load('src/data/legal.ts');
+const { default: tBrut } = await load('src/i18n/fr.ts');
+const { products: produitsBruts } = await load('src/data/products.ts');
+const { mentions: mentionsBrutes, cgv: cgvBrutes } = await load('src/data/legal.ts');
 const site = await loadConsts();
+
+/* Avec YUNMA_TRACE=1, chaque texte exporté retient d'où il vient : c'est cette
+   carte que l'import relit pour réinjecter une correction au bon endroit. */
+const trace = process.env.YUNMA_TRACE === '1' ? tracer() : null;
+export const chemins = {};
+const t = trace ? trace.suivre(tBrut, 'textes') : tBrut;
+const products = trace ? trace.suivre(produitsBruts, 'produits') : produitsBruts;
+const mentions = trace ? trace.suivre(mentionsBrutes, 'mentions') : mentionsBrutes;
+const cgv = trace ? trace.suivre(cgvBrutes, 'cgv') : cgvBrutes;
 
 /* ---------------------------------------------------------------- libellés */
 const EXACT = {
@@ -93,12 +103,19 @@ const chapter = (title, note) => doc.push({ type: 'chapter', title, note });
 const section = (title, note) => doc.push({ type: 'section', title, note });
 const note = (text) => doc.push({ type: 'note', text });
 const field = (code, value, label, hint) => {
+  if (trace) {
+    chemins[code] = trace.dernier();
+    trace.oublier();
+  }
   if (value === undefined || value === null || value === '') return;
   doc.push({ type: 'field', code, label: label ?? labelFor(code.split('.').pop()), hint, lines: String(value).split('\n') });
 };
 /** Toutes les clés d'un objet, dans l'ordre, en filtrant celles à ignorer. */
 const fields = (prefix, obj, only) => {
-  for (const [key, value] of Object.entries(obj)) {
+  for (const key of Object.keys(obj)) {
+    /* On relit la clé ici, et non par déstructuration plus haut : c'est cette
+       lecture-là qui note le chemin de la valeur, juste avant son export. */
+    const value = obj[key];
     if (typeof value !== 'string') continue;
     if (only && !only.includes(key)) continue;
     field(`${prefix}.${key}`, value);
@@ -178,7 +195,7 @@ for (const p of products) {
   field(`${c}.notes`, p.specs.notes.fr, 'Fiche : notes de dégustation');
   field(`${c}.sechage`, p.specs.drying.fr, 'Fiche : séchage');
   field(`${c}.recolte`, p.specs.harvest.fr, 'Fiche : récolte');
-  field(`${c}.profil`, p.specs.roast.fr, 'Fiche : profil (filtre ou espresso)');
+  field(`${c}.profil`, p.specs.roast?.fr, 'Fiche : profil (filtre ou espresso)');
   field(`${c}.preparation`, p.brew.fr, 'Conseils de préparation');
   (p.includes ?? []).forEach((item, i) => field(`${c}.contenu.${i + 1}`, item.fr, `Contenu, ligne ${i + 1}`));
   field(`${c}.ferme.nom`, p.farm.name, 'Ferme : nom');
@@ -216,7 +233,11 @@ t.origine.terroirs.forEach((terroir, i) => {
 });
 
 section('Sommaire de la page');
-Object.entries(t.origine.anchors).forEach(([cle, valeur]) => field(`origine.sommaire.${cle}`, valeur, 'Entrée du sommaire'));
+/* Relecture clé par clé : déstructurer les entrées d'un coup ferait perdre le
+   chemin de chacune, toutes lues avant le premier export. */
+for (const cle of Object.keys(t.origine.anchors)) {
+  field(`origine.sommaire.${cle}`, t.origine.anchors[cle], 'Entrée du sommaire');
+}
 
 section('Soutien d’ORO Yunnan');
 field('origine.oro.surTitre', t.origine.oroLabel, 'Sur-titre');
@@ -378,7 +399,6 @@ field('produit.fraicheur', t.product.freshness, 'Mention de fraîcheur');
 field('produit.expedition', t.product.shipping, 'Mention d’expédition');
 field('produit.aProposTitre', t.product.aboutTitle, 'Titre « À propos de ce café »');
 field('produit.similairesTitre', t.product.relatedTitle, 'Titre « Vous aimerez aussi »');
-field('produit.fermeCta', t.product.farmCta, 'Lien « Découvrir la ferme »');
 field('produit.preparationTitre', t.product.brewTitle, 'Titre « Conseils de préparation »');
 section('Panier');
 fields('panier', t.cart, ['title', 'empty', 'total', 'checkout', 'continue', 'notice']);

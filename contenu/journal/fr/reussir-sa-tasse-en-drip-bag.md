@@ -1,18 +1,18 @@
 ---
-title: 'Réussir sa tasse en drip bag'
-description: "Le mode d'emploi complet du drip bag : température, ratio, trois versements, erreurs fréquentes. Une tasse filtre propre en trois minutes, sans matériel."
-date: 2025-06-12
+title: "Réussir sa tasse en sachet filtre"
+description: "Le mode d'emploi complet du sachet filtre : température, ratio, trois versements, erreurs fréquentes. Une tasse propre en trois minutes, sans matériel."
+date: 2026-09-15
 author: Yunma
-tags: ['Méthode', 'Extraction', 'Drip bag']
+tags: ['Méthode', 'Extraction', 'Sachet filtre']
 photo: tabouret-terrasse
 ---
 
-Le drip bag n'est pas un café de dépannage. C'est un vrai filtre, simplement pré-dosé et pré-moulu. Bien préparé, il n'a rien à envier à une V60 — et il tient dans une poche.
+Le sachet filtre n'est pas un café de dépannage. C'est un vrai filtre, simplement pré-dosé et pré-moulu. Bien préparé, il n'a rien à envier à une V60 — et il tient dans la poche.
 
 ## Ce qu'il vous faut
 
 - Une tasse d'environ 250 ml, plutôt haute que large
-- De l'eau à 92 °C, soit de l'eau bouillie puis reposée une minute
+- De l'eau à 92 °C, soit de l'eau bouillie puis reposée une à deux minutes
 - Trois minutes devant vous
 
 ## Le geste, en trois versements
@@ -35,4 +35,4 @@ Le drip bag n'est pas un café de dépannage. C'est un vrai filtre, simplement p
 
 ## Et la conservation ?
 
-Nos drip bags sont moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Non ouverts, ils gardent leurs arômes environ trois mois. Ouverts, ils s'utilisent immédiatement : un sachet, une tasse.
+Nos sachets filtres sont moulus et conditionnés sous atmosphère protectrice au Yunnan le jour de la torréfaction. Non ouverts, ils gardent leurs meilleurs arômes environ trois mois. Mais restent comestibles plus d’un an. Ouverts, ils s'utilisent immédiatement : un sachet, une tasse.

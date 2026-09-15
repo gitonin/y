@@ -1,13 +1,13 @@
 ---
 title: 'Pourquoi le Yunnan produit-il un si bon café ?'
 description: "Altitude, amplitude thermique, variétés et nouvelle génération de producteurs : ce qui fait la singularité du café de spécialité du Yunnan, en Chine."
-date: 2025-04-06
+date: 2026-09-11
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Comprendre']
 photo: cretes-brumeuses
 ---
 
-Le Yunnan produit aujourd'hui plus de 95 % du café chinois, et la Chine est entrée dans le top 15 mondial. Pourtant, la province reste presque absente des cartes de cafés de spécialité européennes. Voici pourquoi cela change — et pourquoi cela mérite votre attention.
+Le Yunnan produit aujourd'hui plus de 95% du café chinois, et la Chine est entrée dans le top 15 mondial. Pourtant, la province reste presque absente des cartes de cafés de spécialité européennes. Voici pourquoi cela change — et pourquoi cela mérite votre attention.
 
 ## Une géographie faite pour le café
 
