@@ -196,14 +196,14 @@ const jsonld = [
   }
 
   .post__title {
-    margin-top: 0.85rem;
+    margin-top: var(--espace-surtitre);
     font-size: clamp(1.85rem, 1.4rem + 2vw, 3rem);
     letter-spacing: -0.022em;
     line-height: 1.1;
   }
 
   .post__lead {
-    margin-top: 1.25rem;
+    margin-top: var(--espace-titre);
   }
 
   .post__cover {
@@ -281,8 +281,12 @@ const jsonld = [
 
   .post__foot {
     display: grid;
-    gap: 1rem;
+    gap: var(--espace-surtitre);
     justify-items: start;
+  }
+
+  .post__foot .link {
+    margin-top: var(--espace-carte);
   }
 
   .post__tags {

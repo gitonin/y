@@ -6,6 +6,8 @@ import Photo from '../../components/Photo.astro';
 import AnchorNav from '../../components/AnchorNav.astro';
 import Icon from '../../components/Icon.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
+import Poincon from '../../components/Poincon.astro';
+import PushFin from '../../components/PushFin.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, asset, type Lang } from '../../i18n/utils';
@@ -93,8 +95,12 @@ const jsonld = [
     </div>
   </section>
 
+  {/* Le poinçon marque le passage du terroir aux fermes, et la citation reste
+      sur le fond de la page : la respiration suffit à la détacher. */}
+  <Poincon />
+
   <!-- Phrase manifeste, entre le terroir et les fermes -->
-  <div class="citation panel--soft">
+  <div class="citation">
     <div class="wrap">
       <p class="display" data-reveal>{t.origine.quote}</p>
     </div>
@@ -105,7 +111,7 @@ const jsonld = [
   </figure>
 
   <!-- ============ NOS TERROIRS ============ -->
-  <section class="section panel">
+  <section class="section panel panel--soft">
     <div class="wrap">
       <div class="citation citation--inline">
         <p class="display" data-reveal>{t.origine.pulls.terroir}</p>
@@ -170,7 +176,7 @@ const jsonld = [
   <section id="histoire" class="section section--souffle anchor-target">
     <div class="wrap">
       <span class="label" data-reveal>{t.apropos.label}</span>
-      <SplitTitle text={t.apropos.title} as="h2" size="lg" class="hsection-title" />
+      <SplitTitle text={t.apropos.title} as="h2" size="lg" class="sec-title hsection-title" />
 
       <div class="grid grid--sidebar hstory">
         <p class="lead" data-reveal>{t.apropos.storyText}</p>
@@ -200,8 +206,10 @@ const jsonld = [
     </div>
   </section>
 
+  <Poincon />
+
   <!-- Phrase sortie du récit -->
-  <div class="citation panel">
+  <div class="citation">
     <div class="wrap">
       <p class="display" data-reveal>{t.origine.pulls.histoire}</p>
     </div>
@@ -212,10 +220,10 @@ const jsonld = [
   </figure>
 
   <!-- ============ SAVOIR-FAIRE ============ -->
-  <section id="savoir-faire" class="section section--souffle panel panel--soft anchor-target">
+  <section id="savoir-faire" class="section section--souffle anchor-target">
     <div class="wrap">
       <span class="label" data-reveal>{t.savoirFaire.label}</span>
-      <SplitTitle text={t.savoirFaire.title} as="h2" size="lg" class="hsection-title" />
+      <SplitTitle text={t.savoirFaire.title} as="h2" size="lg" class="sec-title hsection-title" />
       <p class="lead muted craft__intro" data-reveal>{t.savoirFaire.intro}</p>
 
       <ol class="steps">
@@ -282,17 +290,7 @@ const jsonld = [
   </section>
 
   <!-- ============ CLÔTURE ============ -->
-  <section class="closing">
-    <div class="closing__media media">
-      <Photo name="tabouret-terrasse" lang={lang} decorative sizes="100vw" />
-    </div>
-    <div class="closing__inner wrap">
-      <SplitTitle text={t.apropos.closing} as="p" size="closing" class="on-dark" />
-      <a class="link closing__cta" href={route(lang, 'cafes')}>
-        {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </section>
+  <PushFin lang={lang} text={t.apropos.closing} cta={t.home.coffeesCta} href={route(lang, 'cafes')} />
 </Base>
 
 <style>
@@ -312,10 +310,6 @@ const jsonld = [
     padding-top: var(--espace-apres-visuel);
   }
 
-  :global(.hsection-title) {
-    margin-top: var(--espace-surtitre);
-    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
-  }
 
   /* ---------- Grands visuels d'entre-deux ---------- */
   /* Pleine largeur, sans gouttière : ils séparent les sous-parties et
@@ -336,6 +330,11 @@ const jsonld = [
      et donnent un point d'appui d'une sous-partie à l'autre. */
   .citation {
     padding-block: clamp(4rem, 10vw, 8.5rem);
+  }
+
+  /* Quand un poinçon précède la citation, il tient lieu de respiration haute. */
+  :global(.poincon) + .citation {
+    padding-top: 0;
   }
 
   .citation p {
@@ -384,11 +383,11 @@ const jsonld = [
 
   .osection__title {
     margin-top: var(--espace-surtitre);
+    margin-bottom: var(--espace-titre);
     font-size: var(--fs-h3);
   }
 
   .osection__text p {
-    margin-top: var(--espace-titre);
     max-width: 46ch;
   }
 
@@ -399,7 +398,7 @@ const jsonld = [
   }
 
   .terroirs__lead {
-    margin-top: 0.75rem;
+    margin-top: var(--espace-surtitre);
   }
 
   .terroirs__list {
@@ -458,11 +457,11 @@ const jsonld = [
   }
 
   .oro__full {
-    margin-top: 0.25rem;
+    margin-top: var(--espace-carte);
   }
 
   .oro__body {
-    margin-top: 1rem;
+    margin-top: var(--espace-titre);
     max-width: 62ch;
   }
 
@@ -493,7 +492,7 @@ const jsonld = [
   }
 
   .figures {
-    margin-top: clamp(1.25rem, 3vw, 2rem);
+    margin-top: var(--espace-titre);
     display: grid;
     gap: 1.5rem;
   }
@@ -636,36 +635,4 @@ const jsonld = [
     color: var(--ink);
   }
 
-  /* ---------- Clôture ---------- */
-  .closing {
-    position: relative;
-    min-height: 70svh;
-    display: flex;
-    align-items: flex-end;
-    padding-block: clamp(3rem, 8vw, 6rem);
-    overflow: hidden;
-  }
-
-  .closing__media {
-    position: absolute;
-    inset: 0;
-  }
-
-  .closing__media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(33, 33, 33, 0) 24%, rgba(33, 33, 33, 0.28) 62%, rgba(33, 33, 33, 0.6) 100%);
-  }
-
-  .closing__inner {
-    position: relative;
-    z-index: 2;
-    color: var(--white);
-  }
-
-  .closing__cta {
-    margin-top: 1.25rem;
-    color: var(--white);
-  }
 </style>

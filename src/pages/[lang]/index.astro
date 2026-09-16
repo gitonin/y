@@ -112,17 +112,13 @@ const jsonld = [
   <!-- ============ ORIGINE ============ -->
   {/* Le visuel ouvre la section, sur toute la largeur, puis vient le texte. */}
   <section class="origine" aria-labelledby="h-origine">
-    <div class="wrap grid grid--sidebar origine__texte">
-      <div data-reveal>
-        <span class="label">{t.home.originLabel}</span>
-      </div>
-      <div>
-        <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title" />
-        <p class="lead muted origin__text" data-reveal id="h-origine">{t.home.originText}</p>
-        <a class="link" href={route(lang, 'origine')} data-reveal>
-          {t.home.originCta}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
+    <div class="wrap origine__texte">
+      <span class="label" data-reveal>{t.home.originLabel}</span>
+      <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title origine__titre" />
+      <p class="lead muted origin__text" data-reveal id="h-origine">{t.home.originText}</p>
+      <a class="link" href={route(lang, 'origine')} data-reveal>
+        {t.home.originCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
     </div>
 
     {/* Le visuel referme la section, sur toute la largeur. */}
@@ -137,14 +133,14 @@ const jsonld = [
   <!-- ============ JOURNAL ============ -->
   {
     posts.length > 0 && (
-      <section class="section section--tight panel" aria-labelledby="h-journal">
+      <section class="section section--tight" aria-labelledby="h-journal">
         <div class="wrap">
           <header class="shead">
             <div>
               <span class="label" data-reveal>{t.home.journalLabel}</span>
-              <SplitTitle text={t.home.journalTitle} as="h2" size="md" />
+              <SplitTitle text={t.home.journalTitle} as="h2" size="md" class="sec-title" />
             </div>
-            <div class="shead__aside">
+            <div class="shead__aside shead__aside--lien">
               <a class="link" href={route(lang, 'journal')} data-reveal id="h-journal">
                 {t.journal.all}
                 <span class="arrow" aria-hidden="true">
@@ -204,6 +200,25 @@ const jsonld = [
     position: absolute;
     inset: 0;
     background: var(--paper-10);
+    /* L'épaisseur du voile est un réglage, non une valeur en dur : le mobile
+       la reprend plus bas, pour laisser voir les montagnes. */
+    --v1: 0.5;
+    --v2: 0.48;
+    --v3: 0.47;
+    --v4: 0.45;
+    --v5: 0.21;
+  }
+
+  /* Sur un écran étroit, le titre couvre une part bien plus large de la photo
+       et s'en détache mieux : le voile peut s'alléger sans gêner la lecture. */
+  @media (max-width: 720px) {
+    .hero__media {
+      --v1: 0.22;
+      --v2: 0.2;
+      --v3: 0.19;
+      --v4: 0.17;
+      --v5: 0.08;
+    }
   }
 
   .hero__media::after {
@@ -219,11 +234,11 @@ const jsonld = [
     background:
       linear-gradient(
         180deg,
-        rgba(235, 231, 222, 0.5) 0,
-        rgba(235, 231, 222, 0.48) var(--haut-titre),
-        rgba(235, 231, 222, 0.47) calc(var(--haut-titre) + 10rem),
-        rgba(235, 231, 222, 0.45) calc(var(--haut-titre) + 21rem),
-        rgba(235, 231, 222, 0.21) calc(var(--haut-titre) + 25rem),
+        rgba(235, 231, 222, var(--v1)) 0,
+        rgba(235, 231, 222, var(--v2)) var(--haut-titre),
+        rgba(235, 231, 222, var(--v3)) calc(var(--haut-titre) + 10rem),
+        rgba(235, 231, 222, var(--v4)) calc(var(--haut-titre) + 21rem),
+        rgba(235, 231, 222, var(--v5)) calc(var(--haut-titre) + 25rem),
         rgba(235, 231, 222, 0) calc(var(--haut-titre) + 29rem)
       ),
       linear-gradient(
@@ -290,9 +305,8 @@ const jsonld = [
   }
 
   /* ---------- Sections ---------- */
-  :global(.sec-title) {
-    margin-top: var(--espace-surtitre);
-    margin-bottom: var(--espace-titre);
+  :global(.origine__titre) {
+    max-width: 20ch;
   }
 
   .origin__text {
@@ -302,21 +316,18 @@ const jsonld = [
 
   .shead {
     display: grid;
-    gap: var(--espace-surtitre);
+    gap: var(--espace-titre);
     margin-bottom: clamp(2rem, 5vw, 3.5rem);
   }
 
-  /* Le texte se cale en haut de la colonne, contre le titre, plutôt qu'au
-     ras du bas : l'écart entre les deux s'en trouve réduit d'autant. */
+  /* Le texte et le lien se calent sur le bas du titre, et non sur son haut :
+     c'est l'alignement de la bande professionnelle, repris ici. */
   @media (min-width: 860px) {
     .shead {
       grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-      align-items: start;
-      gap: clamp(2rem, 6vw, 5rem);
-    }
-
-    .shead__aside {
-      padding-top: 0.35rem;
+      align-items: end;
+      row-gap: 0;
+      column-gap: clamp(2rem, 6vw, 5rem);
     }
   }
 
@@ -325,6 +336,14 @@ const jsonld = [
     gap: 1rem;
     justify-items: start;
     max-width: 44ch;
+  }
+
+  /* Quand la colonne ne porte qu'un lien, il se ferre à droite, comme celui
+     de la bande professionnelle. Une colonne de texte, elle, reste à gauche. */
+  @media (min-width: 860px) {
+    .shead__aside--lien {
+      justify-items: end;
+    }
   }
 
   /* La référence de tête occupe la ligne entière, les deux suivantes se la

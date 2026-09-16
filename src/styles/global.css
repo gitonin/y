@@ -259,6 +259,19 @@ h3 {
   display: block;
 }
 
+/* Sur-titre, titre, texte : le même empilement revient d'une page à l'autre.
+   Ses deux intervalles tiennent ici, une fois pour toutes — une page applique
+   `.sec-title` à son titre et n'a plus de marge à régler elle-même. */
+.sec-title {
+  margin-top: var(--espace-surtitre);
+  margin-bottom: var(--espace-titre);
+}
+
+/* Un titre que rien ne suit ne pousse pas le bloc suivant. */
+.sec-title:last-child {
+  margin-bottom: 0;
+}
+
 .lead {
   font-size: var(--fs-lead);
   line-height: 1.45;

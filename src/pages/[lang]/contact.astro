@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
+import PushFin from '../../components/PushFin.astro';
 import { langPaths } from '../../i18n/paths';
 import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
 import { SITE } from '../../consts';
@@ -78,14 +79,8 @@ const jsonld = [
     </aside>
   </div>
 
-  <!-- ============ VERS LES CAFÉS ============ -->
-  <section class="section section--tight cvers">
-    <div class="wrap">
-      <a class="link" href={route(lang, 'cafes')} data-reveal>
-        {t.contact.discoverCta}<span class="arrow" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </section>
+  {/* La page se referme comme la page Origine, sur le même bloc. */}
+  <PushFin lang={lang} text={t.apropos.closing} cta={t.contact.discoverCta} href={route(lang, 'cafes')} />
 </Base>
 
 
@@ -159,10 +154,6 @@ const jsonld = [
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem clamp(1.5rem, 4vw, 2.5rem);
-  }
-
-  .cvers {
-    padding-top: 0;
   }
 
 </style>

@@ -62,7 +62,7 @@ const jsonld = [
     <div class="wrap phead__inner">
       <div class="phead__text">
         <span class="label" data-reveal>{t.pro.label}</span>
-        <SplitTitle text={t.pro.title} as="h1" size="xl" class="phead__title" />
+        <SplitTitle text={t.pro.title} as="h1" size="xl" class="sec-title phead__title" />
         <p class="lead muted phead__intro" data-reveal>{t.pro.intro}</p>
         <a class="link" href="#contact-pro" data-reveal>
           {t.pro.cta}<span class="arrow" aria-hidden="true">→</span>
@@ -157,10 +157,6 @@ const jsonld = [
     justify-items: start;
   }
 
-  :global(.phead__title) {
-    margin-top: var(--espace-surtitre);
-  }
-
   .phead__intro {
     max-width: 34ch;
   }
@@ -176,7 +172,12 @@ const jsonld = [
   }
 
   .commits,
-  .offers,
+  .offers {
+    margin-top: var(--espace-titre);
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
   @media (min-width: 800px) {
     .commits,
     .offers {
@@ -193,12 +194,12 @@ const jsonld = [
   .offers__name {
     font-size: 1.0625rem;
     margin-top: var(--espace-carte);
-    margin-bottom: 0.4rem;
+    margin-bottom: var(--espace-carte);
   }
 
   .offers__head {
     display: grid;
-    gap: 0.75rem;
+    gap: var(--espace-titre);
     max-width: 46ch;
   }
 
@@ -206,7 +207,6 @@ const jsonld = [
     font-size: var(--fs-h2);
   }
 
-  .offers > li,
   .tags {
     margin-top: clamp(2rem, 4vw, 3rem);
     display: flex;
@@ -248,7 +248,7 @@ const jsonld = [
   }
 
   .pcontact__meta {
-    margin-top: 0.75rem;
+    margin-top: var(--espace-titre);
     color: rgba(251, 250, 247, 0.66);
   }
 

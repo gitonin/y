@@ -1,0 +1,68 @@
+---
+/**
+ * Bloc de fin de page : une photographie pleine largeur, une phrase posée
+ * dessus et un lien. Partagé par la page Origine et la page Contact, pour que
+ * les deux se referment de la même manière.
+ */
+import Photo from './Photo.astro';
+import SplitTitle from './SplitTitle.astro';
+import type { PhotoName } from '../data/photos';
+import type { Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** La phrase posée sur la photographie. */
+  text: string;
+  /** Le libellé du lien. */
+  cta: string;
+  href: string;
+  photo?: PhotoName;
+}
+const { lang, text, cta, href, photo = 'tabouret-terrasse' } = Astro.props;
+---
+
+<section class="closing">
+  <div class="closing__media media">
+    <Photo name={photo} lang={lang} decorative sizes="100vw" />
+  </div>
+  <div class="closing__inner wrap">
+    <SplitTitle text={text} as="p" size="closing" class="on-dark" />
+    <a class="link closing__cta" href={href}>
+      {cta}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .closing {
+    position: relative;
+    min-height: 70svh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    overflow: hidden;
+  }
+
+  .closing__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .closing__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(33, 33, 33, 0) 24%, rgba(33, 33, 33, 0.28) 62%, rgba(33, 33, 33, 0.6) 100%);
+  }
+
+  .closing__inner {
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+  }
+
+  .closing__cta {
+    margin-top: var(--espace-titre);
+    color: var(--white);
+  }
+</style>

@@ -15,7 +15,8 @@
     "check": "astro check",
     "test:boutique": "node tests/boutique.mjs",
     "test:mise-en-page": "node tests/mise-en-page.mjs",
-    "test": "npm run test:boutique && npm run test:mise-en-page"
+    "test:blocs": "node tests/blocs-de-texte.mjs",
+    "test": "npm run test:boutique && npm run test:mise-en-page && npm run test:blocs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

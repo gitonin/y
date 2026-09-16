@@ -468,11 +468,11 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
   }
 
   .farm__place {
-    margin-top: 0.2rem;
+    margin-top: var(--espace-carte);
   }
 
   .farm__body {
-    margin-top: 1rem;
+    margin-top: var(--espace-titre);
     max-width: 52ch;
   }
 
@@ -483,7 +483,7 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
   }
 
   .related__grid {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    margin-top: var(--espace-titre);
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(1rem, 2.5vw, 2rem);

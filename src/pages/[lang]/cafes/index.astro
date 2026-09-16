@@ -59,7 +59,7 @@ const jsonld = [
 
     <header class="chead">
       <span class="label" data-reveal>{t.cafes.label}</span>
-      <SplitTitle text={t.cafes.title} as="h1" size="xl" class="chead__title" />
+      <SplitTitle text={t.cafes.title} as="h1" size="xl" class="sec-title chead__title" />
       <p class="lead muted chead__intro" data-reveal>{t.cafes.intro}</p>
     </header>
 
@@ -114,12 +114,10 @@ const jsonld = [
   }
 
   :global(.chead__title) {
-    margin-top: var(--espace-surtitre);
     max-width: 14ch;
   }
 
   .chead__intro {
-    margin-top: var(--espace-titre);
     max-width: 46ch;
   }
 

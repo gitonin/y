@@ -127,11 +127,12 @@ const jsonld = [
 
   .feat__body {
     display: grid;
-    gap: 0.75rem;
     align-content: center;
   }
 
   .feat__title {
+    margin-top: var(--espace-surtitre);
+    margin-bottom: var(--espace-titre);
     font-size: var(--fs-h2);
     line-height: 1.12;
     transition: color 0.4s var(--ease);
@@ -146,6 +147,7 @@ const jsonld = [
   }
 
   .feat__meta {
+    margin-top: var(--espace-carte);
     color: var(--ink-50);
     letter-spacing: 0.02em;
   }
