@@ -5,6 +5,7 @@ date: 2025-02-18
 author: Yunma
 tags: ['Yunnan', 'Récolte', 'Voyage']
 photo: recolte-cueilleurs
+photoMilieu: sechage-lits
 ---
 
 Nous sommes arrivés à Baoshan le premier jour de février, au milieu de la récolte. La route monte lentement, entre les rizières en terrasses et les premiers caféiers plantés à l'ombre des manguiers. À 1 600 mètres, l'air est sec et les nuits descendent à 8 °C — exactement ce qu'il faut pour que les cerises mûrissent lentement.

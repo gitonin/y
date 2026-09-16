@@ -5,6 +5,7 @@ date: 2026-09-11
 author: Yunma
 tags: ['云南', '风土', '知识']
 photo: cretes-brumeuses
+photoMilieu: producteur-gaosheng
 ---
 
 云南如今出产中国 95% 以上的咖啡，中国也已跻身全球产量前十五。然而在欧洲的精品咖啡单上，这个省份几乎仍是缺席的。以下是这一状况正在改变的原因，也是它值得关注的原因。

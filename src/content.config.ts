@@ -21,6 +21,8 @@ const journal = defineCollection({
     photo: z
       .enum(photoNames)
       .default('cretes-brumeuses'),
+    /** Photographie glissée au milieu de l'article, pour rythmer la lecture. */
+    photoMilieu: z.enum(photoNames).optional(),
     draft: z.boolean().default(false),
   }),
 });

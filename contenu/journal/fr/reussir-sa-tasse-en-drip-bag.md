@@ -5,6 +5,7 @@ date: 2026-09-15
 author: Yunma
 tags: ['Méthode', 'Extraction', 'Sachet filtre']
 photo: tabouret-terrasse
+photoMilieu: cerises-branche
 ---
 
 Le sachet filtre n'est pas un café de dépannage. C'est un vrai filtre, simplement pré-dosé et pré-moulu. Bien préparé, il n'a rien à envier à une V60 — et il tient dans la poche.

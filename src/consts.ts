@@ -6,8 +6,9 @@ export const SITE = {
   email: 'hello@yunma.fr',
   proEmail: 'hello@yunma.fr',
   pressEmail: 'hello@yunma.fr',
-  phone: '+33 6 42 05 04 58',
-  phoneHref: '+33642050458',
+  /* Le contact direct passe par WhatsApp : c'est lui qui remplace le numéro,
+     sur le site comme dans les données envoyées aux moteurs. */
+  whatsapp: 'https://wa.me/yunma.coffee',
   address: {
     street: '1 rue Ordener',
     postalCode: '75018',

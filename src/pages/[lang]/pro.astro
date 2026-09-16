@@ -62,7 +62,7 @@ const jsonld = [
     <div class="wrap phead__inner">
       <div class="phead__text">
         <span class="label" data-reveal>{t.pro.label}</span>
-        <SplitTitle text={t.pro.title} as="h1" size="xl" />
+        <SplitTitle text={t.pro.title} as="h1" size="xl" class="phead__title" />
         <p class="lead muted phead__intro" data-reveal>{t.pro.intro}</p>
         <a class="link" href="#contact-pro" data-reveal>
           {t.pro.cta}<span class="arrow" aria-hidden="true">→</span>
@@ -71,23 +71,6 @@ const jsonld = [
       <figure class="media phead__media">
         <Photo name="tabouret-terrasse" lang={lang} priority sizes="(min-width: 900px) 54vw, 100vw" />
       </figure>
-    </div>
-  </section>
-
-  <section class="section section--tight">
-    <div class="wrap">
-      <h2 class="label" data-reveal>{t.pro.commitmentsTitle}</h2>
-      <ul class="commits">
-        {
-          t.pro.commitments.map((item, i) => (
-            <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
-              <Icon name={commitIcons[i]} size={28} class="commits__icon" />
-              <h3 class="commits__title">{item.title}</h3>
-              <p class="small muted">{item.text}</p>
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
@@ -115,18 +98,18 @@ const jsonld = [
 
   <section class="section section--tight">
     <div class="wrap">
-      <h2 class="label" data-reveal>{t.pro.stepsTitle}</h2>
-      <ol class="psteps">
+      <h2 class="label" data-reveal>{t.pro.commitmentsTitle}</h2>
+      <ul class="commits">
         {
-          t.pro.steps.map((step, i) => (
+          t.pro.commitments.map((item, i) => (
             <li data-reveal style={`--reveal-delay:${i * 80}ms`}>
-              <span class="label psteps__n">{step.n}</span>
-              <h3 class="psteps__title">{step.title}</h3>
-              <p class="small muted">{step.text}</p>
+              <Icon name={commitIcons[i]} size={28} class="commits__icon" />
+              <h3 class="commits__title">{item.title}</h3>
+              <p class="small muted">{item.text}</p>
             </li>
           ))
         }
-      </ol>
+      </ul>
     </div>
   </section>
 
@@ -139,7 +122,9 @@ const jsonld = [
       </div>
       <ul class="pcontact__links" data-reveal>
         <li><a href={`mailto:${SITE.proEmail}`}>{SITE.proEmail}</a></li>
-        <li><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></li>
+        <li>
+          <a href={SITE.whatsapp} target="_blank" rel="noopener">{t.common.whatsapp}</a>
+        </li>
         <li><a href={route(lang, 'contact')}>{t.nav.contact}</a></li>
       </ul>
     </div>
@@ -169,8 +154,11 @@ const jsonld = [
 
   .phead__text {
     display: grid;
-    gap: 1rem;
     justify-items: start;
+  }
+
+  :global(.phead__title) {
+    margin-top: var(--espace-surtitre);
   }
 
   .phead__intro {
@@ -189,16 +177,9 @@ const jsonld = [
 
   .commits,
   .offers,
-  .psteps {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    display: grid;
-    gap: clamp(1.75rem, 4vw, 3rem);
-  }
-
   @media (min-width: 800px) {
     .commits,
-    .offers,
-    .psteps {
+    .offers {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
@@ -209,9 +190,9 @@ const jsonld = [
   }
 
   .commits__title,
-  .offers__name,
-  .psteps__title {
+  .offers__name {
     font-size: 1.0625rem;
+    margin-top: var(--espace-carte);
     margin-bottom: 0.4rem;
   }
 
@@ -226,16 +207,6 @@ const jsonld = [
   }
 
   .offers > li,
-  .psteps > li {
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--line);
-  }
-
-  .psteps__n {
-    color: var(--accent);
-    margin-bottom: 0.6rem;
-  }
-
   .tags {
     margin-top: clamp(2rem, 4vw, 3rem);
     display: flex;

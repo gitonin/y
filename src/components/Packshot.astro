@@ -95,7 +95,7 @@ const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
     aspect-ratio: 1 / 1;
     display: grid;
     place-items: center;
-    background: linear-gradient(168deg, var(--paper-soft) 0%, var(--paper-2) 58%, var(--paper-3) 100%);
+    background: linear-gradient(168deg, var(--paper) 0%, var(--paper-5) 58%, var(--paper-10) 100%);
     overflow: hidden;
     container-type: inline-size;
   }
@@ -124,9 +124,6 @@ const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
     object-fit: contain;
     object-position: center;
     padding: 6%;
-    /* Le fichier porte déjà son ombre portée : le fondu multiplicatif la pose
-       sur le fond crème sans y ajouter de halo blanc. */
-    mix-blend-mode: multiply;
   }
 
   .shot--lg .shot__photo {

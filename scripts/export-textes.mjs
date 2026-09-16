@@ -244,6 +244,7 @@ field('origine.oro.surTitre', t.origine.oroLabel, 'Sur-titre');
 field('origine.oro.nom', t.origine.oroName, 'Nom');
 field('origine.oro.nomComplet', t.origine.oroFull, 'Nom complet');
 field('origine.oro.texte', t.origine.oroText, 'Texte');
+field('origine.oro.lien', t.origine.oroCta, 'Libellé du lien vers le site d’ORO Yunnan');
 
 /* ------- savoir-faire ------- */
 chapter('Origine — partie « Savoir-faire »');
@@ -274,12 +275,6 @@ section('En-tête et récit');
 fields('apropos', t.apropos, ['label', 'title', 'intro', 'storyText']);
 section('Mission et approche');
 fields('apropos', t.apropos, ['missionTitle', 'missionText', 'approachTitle', 'approachText']);
-section('Nos engagements');
-field('apropos.engagementsTitre', t.apropos.valuesTitle, 'Sur-titre');
-t.apropos.values.forEach((v, i) => {
-  field(`apropos.engagement.${i + 1}.titre`, v.title, `Engagement ${i + 1} — titre`);
-  field(`apropos.engagement.${i + 1}.texte`, v.text, `Engagement ${i + 1} — texte`);
-});
 section('Quelques repères');
 field('apropos.reperesTitre', t.apropos.figuresTitle, 'Sur-titre');
 t.apropos.figures.forEach((f, i) => {
@@ -295,12 +290,6 @@ section('Référencement de la page');
 fields('pro', t.pro, ['seoTitle', 'seoDescription']);
 section('En-tête');
 fields('pro', t.pro, ['label', 'title', 'intro', 'cta']);
-section('Nos engagements');
-field('pro.engagementsTitre', t.pro.commitmentsTitle, 'Sur-titre');
-t.pro.commitments.forEach((c, i) => {
-  field(`pro.engagement.${i + 1}.titre`, c.title, `Engagement ${i + 1} — titre`);
-  field(`pro.engagement.${i + 1}.texte`, c.text, `Engagement ${i + 1} — texte`);
-});
 section('L’offre professionnelle');
 fields('pro', t.pro, ['offerTitle', 'forWhoText']);
 t.pro.offers.forEach((o, i) => {
@@ -308,12 +297,13 @@ t.pro.offers.forEach((o, i) => {
   field(`pro.offre.${i + 1}.texte`, o.text, `Offre ${i + 1} — texte`);
 });
 field('pro.pourQuiTitre', t.pro.forWhoTitle, 'Sur-titre « Pour qui ? »');
+field('pro.pourQuiLien', t.pro.forWhoCta, 'Libellé du lien, repris sur la page Contact');
 t.pro.forWho.forEach((w, i) => field(`pro.cible.${i + 1}`, w, `Type de client ${i + 1}`));
-section('Comment démarrer');
-field('pro.demarrerTitre', t.pro.stepsTitle, 'Sur-titre');
-t.pro.steps.forEach((s, i) => {
-  field(`pro.etape.${i + 1}.titre`, s.title, `Étape ${i + 1} — titre`);
-  field(`pro.etape.${i + 1}.texte`, s.text, `Étape ${i + 1} — texte`);
+section('Nos engagements');
+field('pro.engagementsTitre', t.pro.commitmentsTitle, 'Sur-titre');
+t.pro.commitments.forEach((c, i) => {
+  field(`pro.engagement.${i + 1}.titre`, c.title, `Engagement ${i + 1} — titre`);
+  field(`pro.engagement.${i + 1}.texte`, c.text, `Engagement ${i + 1} — texte`);
 });
 section('Bandeau de contact');
 fields('pro', t.pro, ['contactTitle', 'contactText', 'formIntro']);
@@ -351,8 +341,9 @@ section('En-tête');
 fields('contact', t.contact, ['label', 'title', 'intro']);
 section('Les trois interlocuteurs');
 fields('contact', t.contact, ['generalTitle', 'generalText', 'proTitle', 'proText', 'pressTitle', 'pressText']);
-section('Atelier');
-fields('contact', t.contact, ['hoursTitle', 'hoursText']);
+section('Invitation à écrire');
+fields('contact', t.contact, ['writeIntro', 'writeUs']);
+field('contact.versLesCafes', t.contact.discoverCta, 'Libellé du lien vers les cafés');
 
 /* ------- pied de page ------- */
 chapter('Pied de page et newsletter');

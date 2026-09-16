@@ -5,6 +5,7 @@ date: 2025-02-18
 author: Yunma
 tags: ['Yunnan', 'Harvest', 'Travel']
 photo: recolte-cueilleurs
+photoMilieu: sechage-lits
 ---
 
 We arrived in Baoshan on the first day of February, in the middle of the harvest. The road climbs slowly, between terraced rice paddies and the first coffee trees planted in the shade of mango trees. At 1,600 metres the air is dry and nights fall to 8 °C — exactly what cherries need to ripen slowly.

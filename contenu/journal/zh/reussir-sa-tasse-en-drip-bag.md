@@ -5,6 +5,7 @@ date: 2026-09-15
 author: Yunma
 tags: ['方法', '萃取', '挂耳']
 photo: tabouret-terrasse
+photoMilieu: cerises-branche
 ---
 
 挂耳咖啡不是应急之选。它是真正的滤泡式咖啡，只是预先称量并研磨好了。冲得好，它不逊于 V60——而且能装进口袋。

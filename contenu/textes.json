@@ -25,8 +25,7 @@
         "contact": "Contact",
         "account": "Mon compte",
         "cart": "Panier",
-        "language": "Langue",
-        "skip": "Aller au contenu"
+        "language": "Langue"
       },
       "common": {
         "brand": "Yunma",
@@ -66,7 +65,8 @@
         "newsletterTitle": "Le carnet Yunma",
         "newsletterText": "Nouveaux lots, carnets de récolte et rendez-vous. Une lettre par saison, rien de plus.",
         "newsletterCta": "S’inscrire",
-        "newsletterOk": "Merci, votre inscription est enregistrée."
+        "newsletterOk": "Merci, votre inscription est enregistrée.",
+        "whatsapp": "WhatsApp"
       },
       "home": {
         "seoTitle": "Yunma — Cafés de spécialité du Yunnan, torréfiés à Paris",
@@ -176,13 +176,13 @@
         "anchors": {
           "terroir": "Le Yunnan",
           "histoire": "Notre histoire",
-          "savoirFaire": "Savoir-faire",
-          "engagements": "Engagements"
+          "savoirFaire": "Savoir-faire"
         },
         "oroLabel": "Avec le soutien de",
         "oroName": "ORO Yunnan",
         "oroFull": "Bureau de représentation commerciale du Yunnan en France (Paris)",
-        "oroText": "ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique."
+        "oroText": "ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique.",
+        "oroCta": "Le café du Yunnan par ORO"
       },
       "savoirFaire": {
         "seoTitle": "Savoir-faire Yunma — traitement, séchage et torréfaction",
@@ -266,21 +266,6 @@
         "missionText": "Mettre en lumière le terroir du Yunnan à travers des cafés d’exception, en respectant les hommes et la nature.",
         "approachTitle": "Notre approche",
         "approachText": "Nous travaillons avec des producteurs passionnés pour offrir des cafés traçables, rares et uniques. Peu de références, choisies, qui seront renouvelées au rythme des saisons.",
-        "valuesTitle": "Nos engagements",
-        "values": [
-          {
-            "title": "Qualité d’exception",
-            "text": "Des lots choisis et suivis d’une récolte à l’autre."
-          },
-          {
-            "title": "Relations directes",
-            "text": "Partenariats durables avec nos producteurs, prix d’achat équitable."
-          },
-          {
-            "title": "Juste mesure",
-            "text": "Petites séries, emballages recyclables, transport maritime ou ferroviaire privilégié."
-          }
-        ],
         "figuresTitle": "Yunma en quelques repères",
         "figures": [
           {
@@ -347,24 +332,6 @@
           {
             "title": "Formation & réglages",
             "text": "Une demi-journée sur site pour caler extraction, recettes et discours en salle."
-          }
-        ],
-        "stepsTitle": "Comment démarrer",
-        "steps": [
-          {
-            "n": "01",
-            "title": "On échange",
-            "text": "Un appel de vingt minutes pour comprendre votre carte et votre matériel."
-          },
-          {
-            "n": "02",
-            "title": "On déguste",
-            "text": "Nous envoyons un coffret d’échantillons adapté à votre extraction."
-          },
-          {
-            "n": "03",
-            "title": "On installe",
-            "text": "Livraison hebdomadaire, tarifs dégressifs."
           }
         ],
         "contactTitle": "Contact",
@@ -437,9 +404,9 @@
         "proText": "Tarifs dégressifs, grains en 1 kg, sachets filtres, conseils. Dites-nous ce que vous recherchez, nous pouvons aussi vous envoyer des échantillons.",
         "pressTitle": "Presse & partenariats",
         "pressText": "Des visuels, des informations sur nos cafés, notre histoire ou sur nos fermes partenaires : nous répondons volontiers, et nous serions ravis que vous parliez de nous.",
-        "hoursTitle": "Atelier",
-        "hoursText": "Visites sur rendez-vous, du mardi au vendredi.",
-        "writeUs": "Écrire"
+        "writeUs": "Nous écrire",
+        "discoverCta": "Découvrir les cafés Yunma",
+        "writeIntro": "Une seule adresse pour tout, ou un mot sur WhatsApp."
       },
       "legal": {
         "mentionsTitle": "Mentions légales",
@@ -499,8 +466,7 @@
         "contact": "Contact",
         "account": "My account",
         "cart": "Cart",
-        "language": "Language",
-        "skip": "Skip to content"
+        "language": "Language"
       },
       "common": {
         "brand": "Yunma",
@@ -540,7 +506,8 @@
         "newsletterTitle": "The Yunma notebook",
         "newsletterText": "New lots, harvest notes and events. One letter per season, nothing more.",
         "newsletterCta": "Subscribe",
-        "newsletterOk": "Thank you, your subscription is confirmed."
+        "newsletterOk": "Thank you, your subscription is confirmed.",
+        "whatsapp": "WhatsApp"
       },
       "home": {
         "seoTitle": "Yunma — Specialty coffee from Yunnan, roasted in Paris",
@@ -650,13 +617,13 @@
         "anchors": {
           "terroir": "Yunnan",
           "histoire": "Our story",
-          "savoirFaire": "Craft",
-          "engagements": "Commitments"
+          "savoirFaire": "Craft"
         },
         "oroLabel": "With the support of",
         "oroName": "ORO Yunnan",
         "oroFull": "Yunnan Commercial Representative Office in Paris, France",
-        "oroText": "ORO Yunnan supports our work with growers and the promotion of the province in France: its mountain farming, its landscapes, and the region’s ecological practices. Valuable help for buying directly from the growers, and for making a magnificent terroir known here."
+        "oroText": "ORO Yunnan supports our work with growers and the promotion of the province in France: its mountain farming, its landscapes, and the region’s ecological practices. Valuable help for buying directly from the growers, and for making a magnificent terroir known here.",
+        "oroCta": "Yunnan coffee, by ORO"
       },
       "savoirFaire": {
         "seoTitle": "Yunma craft — processing, drying and roasting",
@@ -740,21 +707,6 @@
         "missionText": "To bring the terroir of Yunnan to light through exceptional coffees, respecting both people and nature.",
         "approachTitle": "Our approach",
         "approachText": "We work with passionate growers to offer traceable, rare and unique coffees. Few references, carefully chosen, renewed with the seasons.",
-        "valuesTitle": "Our commitments",
-        "values": [
-          {
-            "title": "Exceptional quality",
-            "text": "Lots chosen and followed from one harvest to the next."
-          },
-          {
-            "title": "Direct relationships",
-            "text": "Lasting partnerships with our growers, fair purchase prices."
-          },
-          {
-            "title": "Right measure",
-            "text": "Small batches, recyclable packaging, sea or rail freight wherever possible."
-          }
-        ],
         "figuresTitle": "Yunma in a few figures",
         "figures": [
           {
@@ -821,24 +773,6 @@
           {
             "title": "Training & dialling in",
             "text": "Half a day on site to set extraction, recipes and the story your team tells."
-          }
-        ],
-        "stepsTitle": "How to start",
-        "steps": [
-          {
-            "n": "01",
-            "title": "We talk",
-            "text": "A twenty-minute call to understand your menu and your equipment."
-          },
-          {
-            "n": "02",
-            "title": "We taste",
-            "text": "We send a sample box matched to your brewing method."
-          },
-          {
-            "n": "03",
-            "title": "We set up",
-            "text": "Weekly delivery, volume pricing."
           }
         ],
         "contactTitle": "Contact",
@@ -911,9 +845,9 @@
         "proText": "Volume pricing, 1 kg whole bean, drip bags, advice. Tell us what you are looking for — we can also send you samples.",
         "pressTitle": "Press & partnerships",
         "pressText": "Images, information about our coffees, our story or our partner farms: we answer gladly, and we would be delighted if you wrote about us.",
-        "hoursTitle": "Roastery",
-        "hoursText": "Visits by appointment, Tuesday to Friday.",
-        "writeUs": "Write"
+        "writeUs": "Write to us",
+        "discoverCta": "Discover Yunma coffees",
+        "writeIntro": "One address for everything, or a message on WhatsApp."
       },
       "legal": {
         "mentionsTitle": "Legal notice",
@@ -973,8 +907,7 @@
         "contact": "联系我们",
         "account": "我的账户",
         "cart": "购物车",
-        "language": "语言",
-        "skip": "跳到主要内容"
+        "language": "语言"
       },
       "common": {
         "brand": "Yunma 云马",
@@ -1014,7 +947,8 @@
         "newsletterTitle": "云马通讯",
         "newsletterText": "新批次、采收手记与活动信息。每季一封，仅此而已。",
         "newsletterCta": "订阅",
-        "newsletterOk": "感谢订阅，我们已收到。"
+        "newsletterOk": "感谢订阅，我们已收到。",
+        "whatsapp": "WhatsApp"
       },
       "home": {
         "seoTitle": "Yunma 云马 — 云南精品咖啡，巴黎小批量烘焙",
@@ -1124,13 +1058,13 @@
         "anchors": {
           "terroir": "云南",
           "histoire": "我们的故事",
-          "savoirFaire": "工艺",
-          "engagements": "承诺"
+          "savoirFaire": "工艺"
         },
         "oroLabel": "支持机构",
         "oroName": "ORO Yunnan",
         "oroFull": "云南省驻法国（巴黎）商务代表处",
-        "oroText": "ORO Yunnan 支持我们与咖农的合作，并在法国推广云南：山地农业、自然风景，以及这片地区的生态实践。这份支持让我们得以直接向咖农采购，也让这片美好的风土在这里被更多人看见。"
+        "oroText": "ORO Yunnan 支持我们与咖农的合作，并在法国推广云南：山地农业、自然风景，以及这片地区的生态实践。这份支持让我们得以直接向咖农采购，也让这片美好的风土在这里被更多人看见。",
+        "oroCta": "ORO 眼中的云南咖啡"
       },
       "savoirFaire": {
         "seoTitle": "云马工艺 — 处理、晾晒与烘焙",
@@ -1214,21 +1148,6 @@
         "missionText": "以卓越的咖啡呈现云南风土，尊重土地，也尊重种植它的人。",
         "approachTitle": "我们的方式",
         "approachText": "我们与充满热情的咖农合作，提供可溯源、稀有而独特的咖啡。产品不多，每一款都经过挑选，并随季节更新。",
-        "valuesTitle": "我们的承诺",
-        "values": [
-          {
-            "title": "卓越品质",
-            "text": "每一支批次都经挑选，并逐季跟踪。"
-          },
-          {
-            "title": "直接合作",
-            "text": "与咖农建立长期伙伴关系，采购价格公平。"
-          },
-          {
-            "title": "适度而行",
-            "text": "小批量生产、可回收包装、优先海运或铁路运输。"
-          }
-        ],
         "figuresTitle": "云马的几个数字",
         "figures": [
           {
@@ -1295,24 +1214,6 @@
           {
             "title": "培训与调试",
             "text": "半天上门服务，完成萃取参数、配方与门店话术。"
-          }
-        ],
-        "stepsTitle": "如何开始",
-        "steps": [
-          {
-            "n": "01",
-            "title": "沟通",
-            "text": "二十分钟通话，了解您的菜单与设备。"
-          },
-          {
-            "n": "02",
-            "title": "品鉴",
-            "text": "我们寄出与您冲煮方式匹配的样品礼盒。"
-          },
-          {
-            "n": "03",
-            "title": "落地",
-            "text": "每周配送、阶梯价格。"
           }
         ],
         "contactTitle": "联系",
@@ -1385,9 +1286,9 @@
         "proText": "阶梯价格、1 公斤装咖啡豆、挂耳咖啡、专业建议。告诉我们您在寻找什么，我们也可以寄样品过去。",
         "pressTitle": "媒体与合作",
         "pressText": "图片素材，关于我们的咖啡、我们的故事或合作农场的信息：我们乐于回复，也很高兴您愿意介绍我们。",
-        "hoursTitle": "烘焙工坊",
-        "hoursText": "周二至周五，预约参观。",
-        "writeUs": "写信"
+        "writeUs": "写信给我们",
+        "discoverCta": "探索云马的咖啡",
+        "writeIntro": "一个邮箱应对所有问题，也可以在 WhatsApp 上给我们留言。"
       },
       "legal": {
         "mentionsTitle": "法律声明",

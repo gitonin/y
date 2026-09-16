@@ -43,6 +43,8 @@ const { items, ariaLabel } = Astro.props;
 
   .anchors__inner {
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-behavior: smooth;
     scrollbar-width: none;
   }
 
@@ -54,6 +56,9 @@ const { items, ariaLabel } = Astro.props;
     display: flex;
     gap: clamp(1.25rem, 3vw, 2.5rem);
     padding-block: 0.9rem;
+    /* Une réserve au bout de la piste : le dernier lien ne vient pas se coller
+       au bord quand on fait défiler le sommaire au doigt. */
+    padding-inline-end: var(--gutter);
     white-space: nowrap;
   }
 
@@ -102,10 +107,10 @@ const { items, ariaLabel } = Astro.props;
 <script>
   /* Sommaire d'une page longue : l'item allumé est celui de la partie que l'on
      est en train de lire. On compare la position de chaque section à une ligne
-     de lecture posée juste sous le sommaire — la dernière section franchie
-     l'emporte. Un observateur d'intersection ne convenait pas : entre deux
-     sections ancrées, la page porte des visuels et des citations qui
-     n'appartiennent à aucune, et le sommaire s'éteignait tout entier. */
+     de lecture posée sous le sommaire — la dernière franchie l'emporte. Un
+     observateur d'intersection ne convenait pas : entre deux sections ancrées,
+     la page porte des visuels et des citations qui n'appartiennent à aucune, et
+     le sommaire s'éteignait tout entier. */
   let detacher: (() => void) | null = null;
 
   const initAnchorNav = () => {
@@ -115,6 +120,7 @@ const { items, ariaLabel } = Astro.props;
     const nav = document.querySelector<HTMLElement>('[data-anchor-nav]');
     if (!nav) return;
 
+    const piste = nav.querySelector<HTMLElement>('.anchors__inner');
     const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-anchor-link]')];
     const sections = links
       .map((link) => document.getElementById(link.dataset.anchorLink!))
@@ -122,12 +128,50 @@ const { items, ariaLabel } = Astro.props;
     if (!sections.length) return;
 
     let attendu = false;
+    let actuel = '';
+    /* Un clic impose sa section le temps que le défilement se pose : sans cela
+       la ligne de lecture, encore au-dessus de la cible, désignerait la
+       précédente pendant toute la glissade. */
+    let impose = '';
+    let minuteur = 0;
+
+    /* Le sommaire déborde de l'écran sur les petites largeurs : on fait glisser
+       la piste pour que l'item allumé soit toujours visible. */
+    const montrer = (lien: HTMLElement) => {
+      if (!piste || piste.scrollWidth <= piste.clientWidth + 1) return;
+      const l = lien.getBoundingClientRect();
+      const c = piste.getBoundingClientRect();
+      const marge = 24;
+      if (l.left < c.left + marge) piste.scrollBy({ left: l.left - c.left - marge });
+      else if (l.right > c.right - marge) piste.scrollBy({ left: l.right - c.right + marge });
+    };
+
+    const poser = (id: string) => {
+      if (id === actuel) return;
+      actuel = id;
+      links.forEach((lien) => {
+        const actif = lien.dataset.anchorLink === id;
+        if (actif) {
+          lien.setAttribute('aria-current', 'true');
+          montrer(lien);
+        } else {
+          lien.removeAttribute('aria-current');
+        }
+      });
+    };
 
     const marquer = () => {
       attendu = false;
-      /* La ligne de lecture suit le sommaire, qui remonte quand l'en-tête
-         s'efface : on la relit à chaque fois plutôt que de la figer. */
-      const ligne = nav.getBoundingClientRect().bottom + 8;
+      if (impose) {
+        poser(impose);
+        return;
+      }
+      /* La ligne de lecture ne peut pas être plus haute que l'endroit où une
+         ancre dépose sa section : au bout d'un long glissement l'en-tête s'est
+         effacé, le sommaire est remonté, et la section visée resterait sous la
+         ligne — c'est la précédente qui s'allumerait. */
+      const depot = parseFloat(getComputedStyle(sections[0]).scrollMarginTop) || 0;
+      const ligne = Math.max(nav.getBoundingClientRect().bottom + 24, depot + 8);
       let courante = sections[0].id;
       for (const section of sections) {
         if (section.getBoundingClientRect().top <= ligne) courante = section.id;
@@ -136,11 +180,7 @@ const { items, ariaLabel } = Astro.props;
          elle est trop courte pour franchir la ligne. */
       const fond = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       if (fond) courante = sections[sections.length - 1].id;
-
-      links.forEach((link) => {
-        if (link.dataset.anchorLink === courante) link.setAttribute('aria-current', 'true');
-        else link.removeAttribute('aria-current');
-      });
+      poser(courante);
     };
 
     const planifier = () => {
@@ -149,9 +189,23 @@ const { items, ariaLabel } = Astro.props;
       requestAnimationFrame(marquer);
     };
 
+    const auClic = (e: Event) => {
+      const lien = e.currentTarget as HTMLAnchorElement;
+      impose = lien.dataset.anchorLink!;
+      poser(impose);
+      window.clearTimeout(minuteur);
+      minuteur = window.setTimeout(() => {
+        impose = '';
+        marquer();
+      }, 900);
+    };
+
+    links.forEach((lien) => lien.addEventListener('click', auClic));
     window.addEventListener('scroll', planifier, { passive: true });
     window.addEventListener('resize', planifier);
     detacher = () => {
+      window.clearTimeout(minuteur);
+      links.forEach((lien) => lien.removeEventListener('click', auClic));
       window.removeEventListener('scroll', planifier);
       window.removeEventListener('resize', planifier);
     };

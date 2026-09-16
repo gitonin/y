@@ -33,7 +33,7 @@ export const GET: APIRoute = async ({ site }) => {
     `- Origine des cafés : Yunnan, Chine (Baoshan, Pu'er, Xishuangbanna), altitude 1 300–1 800 m`,
     `- Première récolte importée : ${SITE.founded}`,
     `- Adresse : ${SITE.address.street}, ${SITE.address.postalCode} ${SITE.address.city}, France`,
-    `- Contact : ${SITE.email} — professionnels : ${SITE.proEmail} — ${SITE.phone}`,
+    `- Contact : ${SITE.email} — professionnels : ${SITE.proEmail} — WhatsApp : ${SITE.whatsapp}`,
     `- Livraison : France 2–3 jours ouvrés, Union européenne 3–6 jours ouvrés, offerte dès ${SITE.freeShippingFrom} € en France métropolitaine`,
     `- Langues : ${languages.map((l) => dictionaries[l].meta.label).join(', ')}`,
     '',

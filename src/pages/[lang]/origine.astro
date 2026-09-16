@@ -21,14 +21,10 @@ const base = Astro.site ?? new URL('https://yunma.fr');
 const sectionPhotos = ['ferme-gaosheng', 'producteur-torch-estate', 'cerises-branche'] as const;
 /* Une icône par étape, dans l'ordre du tableau `steps` des dictionnaires. */
 const stepIcons: IconName[] = ['cherries', 'droplet', 'dry', 'funnel', 'bean', 'cup'];
-/* Dans l'ordre des engagements du dictionnaire. */
-const valueIcons: IconName[] = ['leaf', 'community', 'sprout'];
-
 const anchors = [
   { id: 'terroir', label: t.origine.anchors.terroir },
   { id: 'histoire', label: t.origine.anchors.histoire },
   { id: 'savoir-faire', label: t.origine.anchors.savoirFaire },
-  { id: 'engagements', label: t.origine.anchors.engagements },
 ];
 
 const jsonld = [
@@ -153,6 +149,15 @@ const jsonld = [
         <h2 class="oro__name" data-reveal>{t.origine.oroName}</h2>
         <p class="small muted oro__full" data-reveal>{t.origine.oroFull}</p>
         <p class="muted oro__body" data-reveal>{t.origine.oroText}</p>
+        <a
+          class="link oro__cta"
+          href="https://oroyunnanfr.com/fr/le-cafe-du-yunnan/"
+          target="_blank"
+          rel="noopener"
+          data-reveal
+        >
+          {t.origine.oroCta}<span class="arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </section>
@@ -231,7 +236,14 @@ const jsonld = [
       <div class="citation citation--inline">
         <p class="display" data-reveal>{t.origine.pulls.savoirFaire}</p>
       </div>
+    </div>
+  </section>
 
+  <!-- ============ PRÉPARER UN CAFÉ YUNMA ============ -->
+  {/* Sur fond anthracite : c'est un mode d'emploi, pas un récit — il se
+      détache du reste de la page. */}
+  <section class="section brews-bloc panel--ink">
+    <div class="wrap">
       <div class="brews__head">
         <div>
           <h3 class="brews__title">{t.savoirFaire.brewTitle}</h3>
@@ -266,24 +278,6 @@ const jsonld = [
           }
         </tbody>
       </table>
-    </div>
-  </section>
-
-  <!-- ============ ENGAGEMENTS ============ -->
-  <section id="engagements" class="section panel anchor-target">
-    <div class="wrap">
-      <h2 class="label" data-reveal>{t.apropos.valuesTitle}</h2>
-      <ul class="values">
-        {
-          t.apropos.values.map((value, i) => (
-            <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
-              <Icon name={valueIcons[i]} size={28} class="values__icon" />
-              <h3 class="values__title">{value.title}</h3>
-              <p class="small muted">{value.text}</p>
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
@@ -385,15 +379,16 @@ const jsonld = [
 
   .osection__text {
     display: grid;
-    gap: 0.85rem;
     align-content: start;
   }
 
   .osection__title {
+    margin-top: var(--espace-surtitre);
     font-size: var(--fs-h3);
   }
 
   .osection__text p {
+    margin-top: var(--espace-titre);
     max-width: 46ch;
   }
 
@@ -425,7 +420,7 @@ const jsonld = [
   }
 
   .terroirs__list p {
-    margin-top: 0.35rem;
+    margin-top: var(--espace-carte);
   }
 
   /* ---------- ORO Yunnan ---------- */
@@ -469,6 +464,10 @@ const jsonld = [
   .oro__body {
     margin-top: 1rem;
     max-width: 62ch;
+  }
+
+  .oro__cta {
+    margin-top: var(--espace-titre);
   }
 
   /* ---------- Notre histoire ---------- */
@@ -571,6 +570,23 @@ const jsonld = [
     font-weight: var(--w-regular);
   }
 
+  /* ---------- Préparer un café ---------- */
+  /* Le tableau vit sur l'anthracite : ses filets et ses en-têtes reprennent la
+     teinte du papier, en retrait, plutôt que l'encre qui s'y perdrait. */
+  .brews-bloc :global(.brews thead th),
+  .brews-bloc :global(.brews__time svg) {
+    color: rgba(235, 231, 222, 0.62);
+  }
+
+  .brews-bloc .brews th,
+  .brews-bloc .brews td {
+    border-bottom-color: rgba(235, 231, 222, 0.22);
+  }
+
+  .brews-bloc .brews tbody th {
+    color: var(--paper);
+  }
+
   .brews__head {
     display: grid;
     gap: 1rem;
@@ -618,29 +634,6 @@ const jsonld = [
 
   .brews tbody th {
     color: var(--ink);
-  }
-
-  /* ---------- Engagements ---------- */
-  .values {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    display: grid;
-    gap: clamp(1.75rem, 4vw, 3rem);
-  }
-
-  @media (min-width: 800px) {
-    .values {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .values__icon {
-    margin-bottom: 1.1rem;
-    color: var(--accent);
-  }
-
-  .values__title {
-    font-size: 1.0625rem;
-    margin-bottom: 0.4rem;
   }
 
   /* ---------- Clôture ---------- */

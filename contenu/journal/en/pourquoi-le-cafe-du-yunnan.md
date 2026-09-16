@@ -5,6 +5,7 @@ date: 2026-09-11
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Understanding']
 photo: cretes-brumeuses
+photoMilieu: producteur-gaosheng
 ---
 
 Yunnan now grows more than 95% of Chinese coffee, and China has entered the world top 15. Yet the province is still almost absent from European specialty menus. Here is why that is changing — and why it deserves your attention.

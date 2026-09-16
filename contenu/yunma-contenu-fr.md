@@ -1,6 +1,6 @@
 # Yunma — tout le contenu du site (français)
 
-_Document généré le 15/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 16/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -41,9 +41,6 @@ hello@yunma.fr
 
 **Adresse e-mail presse** `[site.emailPresse]`
 hello@yunma.fr
-
-**Téléphone** `[site.telephone]`
-+33 6 42 05 04 58
 
 **Adresse** `[site.adresse]`
 1 rue Ordener
@@ -729,9 +726,6 @@ Notre histoire
 **Entrée du sommaire** `[origine.sommaire.savoirFaire]`
 Savoir-faire
 
-**Entrée du sommaire** `[origine.sommaire.engagements]`
-Engagements
-
 
 ### Soutien d’ORO Yunnan
 
@@ -746,6 +740,9 @@ Bureau de représentation commerciale du Yunnan en France (Paris)
 
 **Texte** `[origine.oro.texte]`
 ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique.
+
+**Libellé du lien vers le site d’ORO Yunnan** `[origine.oro.lien]`
+Le café du Yunnan par ORO
 
 
 ## Origine — partie « Savoir-faire »
@@ -903,30 +900,6 @@ Notre approche
 Nous travaillons avec des producteurs passionnés pour offrir des cafés traçables, rares et uniques. Peu de références, choisies, qui seront renouvelées au rythme des saisons.
 
 
-### Nos engagements
-
-**Sur-titre** `[apropos.engagementsTitre]`
-Nos engagements
-
-**Engagement 1 — titre** `[apropos.engagement.1.titre]`
-Qualité d’exception
-
-**Engagement 1 — texte** `[apropos.engagement.1.texte]`
-Des lots choisis et suivis d’une récolte à l’autre.
-
-**Engagement 2 — titre** `[apropos.engagement.2.titre]`
-Relations directes
-
-**Engagement 2 — texte** `[apropos.engagement.2.texte]`
-Partenariats durables avec nos producteurs, prix d’achat équitable.
-
-**Engagement 3 — titre** `[apropos.engagement.3.titre]`
-Juste mesure
-
-**Engagement 3 — texte** `[apropos.engagement.3.texte]`
-Petites séries, emballages recyclables, transport maritime ou ferroviaire privilégié.
-
-
 ### Quelques repères
 
 **Sur-titre** `[apropos.reperesTitre]`
@@ -994,30 +967,6 @@ Des cafés de spécialité pour les professionnels exigeants.
 Nous contacter
 
 
-### Nos engagements
-
-**Sur-titre** `[pro.engagementsTitre]`
-Nos engagements
-
-**Engagement 1 — titre** `[pro.engagement.1.titre]`
-Qualité d’exception
-
-**Engagement 1 — texte** `[pro.engagement.1.texte]`
-Cafés tracés et sélectionnés avec soin, lots réguliers sur la saison.
-
-**Engagement 2 — titre** `[pro.engagement.2.titre]`
-Relations directes
-
-**Engagement 2 — texte** `[pro.engagement.2.texte]`
-Partenariats durables et équitables avec nos producteurs.
-
-**Engagement 3 — titre** `[pro.engagement.3.titre]`
-Accompagnement
-
-**Engagement 3 — texte** `[pro.engagement.3.texte]`
-Conseils, réglages, et supports dédiés à votre activité.
-
-
 ### L’offre professionnelle
 
 **Phrase** `[pro.forWhoText]`
@@ -1047,6 +996,9 @@ Une demi-journée sur site pour caler extraction, recettes et discours en salle.
 **Sur-titre « Pour qui ? »** `[pro.pourQuiTitre]`
 Pour qui ?
 
+**Libellé du lien, repris sur la page Contact** `[pro.pourQuiLien]`
+Découvrir l’offre
+
 **Type de client 1** `[pro.cible.1]`
 Coffee shops
 
@@ -1060,28 +1012,28 @@ Hôtels & restaurants
 Bureaux & entreprises
 
 
-### Comment démarrer
+### Nos engagements
 
-**Sur-titre** `[pro.demarrerTitre]`
-Comment démarrer
+**Sur-titre** `[pro.engagementsTitre]`
+Nos engagements
 
-**Étape 1 — titre** `[pro.etape.1.titre]`
-On échange
+**Engagement 1 — titre** `[pro.engagement.1.titre]`
+Qualité d’exception
 
-**Étape 1 — texte** `[pro.etape.1.texte]`
-Un appel de vingt minutes pour comprendre votre carte et votre matériel.
+**Engagement 1 — texte** `[pro.engagement.1.texte]`
+Cafés tracés et sélectionnés avec soin, lots réguliers sur la saison.
 
-**Étape 2 — titre** `[pro.etape.2.titre]`
-On déguste
+**Engagement 2 — titre** `[pro.engagement.2.titre]`
+Relations directes
 
-**Étape 2 — texte** `[pro.etape.2.texte]`
-Nous envoyons un coffret d’échantillons adapté à votre extraction.
+**Engagement 2 — texte** `[pro.engagement.2.texte]`
+Partenariats durables et équitables avec nos producteurs.
 
-**Étape 3 — titre** `[pro.etape.3.titre]`
-On installe
+**Engagement 3 — titre** `[pro.engagement.3.titre]`
+Accompagnement
 
-**Étape 3 — texte** `[pro.etape.3.texte]`
-Livraison hebdomadaire, tarifs dégressifs.
+**Engagement 3 — texte** `[pro.engagement.3.texte]`
+Conseils, réglages, et supports dédiés à votre activité.
 
 
 ### Bandeau de contact
@@ -1278,13 +1230,16 @@ Presse & partenariats
 Des visuels, des informations sur nos cafés, notre histoire ou sur nos fermes partenaires : nous répondons volontiers, et nous serions ravis que vous parliez de nous.
 
 
-### Atelier
+### Invitation à écrire
 
-**Titre** `[contact.hoursTitle]`
-Atelier
+**writeUs** `[contact.writeUs]`
+Nous écrire
 
-**Précision** `[contact.hoursText]`
-Visites sur rendez-vous, du mardi au vendredi.
+**Introduction** `[contact.writeIntro]`
+Une seule adresse pour tout, ou un mot sur WhatsApp.
+
+**Libellé du lien vers les cafés** `[contact.versLesCafes]`
+Découvrir les cafés Yunma
 
 
 ## Pied de page et newsletter

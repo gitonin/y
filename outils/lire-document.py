@@ -18,7 +18,7 @@ import zipfile
 TEXTE = re.compile(r'<w:t(?:\s[^>]*)?>(.*?)</w:t>|<w:br\s*/>|<w:tab\s*/>', re.S)
 PARA = re.compile(r'<w:p(?:\s[^>]*)?>.*?</w:p>|<w:p(?:\s[^>]*)?/>', re.S)
 STYLE = re.compile(r'<w:pStyle w:val="([^"]+)"')
-ENTITES = [('&lt;', '<'), ('&gt;', '>'), ('&quot;', '"'), ('&#39;', "'"), ('&amp;', '&')]
+ENTITES = [('&lt;', '<'), ('&gt;', '>'), ('&quot;', '"'), ('&apos;', "'"), ('&#39;', "'"), ('&amp;', '&')]
 
 
 def paragraphes(chemin):

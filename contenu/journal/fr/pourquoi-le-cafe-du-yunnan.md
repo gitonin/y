@@ -5,6 +5,7 @@ date: 2026-09-11
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Comprendre']
 photo: cretes-brumeuses
+photoMilieu: producteur-gaosheng
 ---
 
 Le Yunnan produit aujourd'hui plus de 95% du café chinois, et la Chine est entrée dans le top 15 mondial. Pourtant, la province reste presque absente des cartes de cafés de spécialité européennes. Voici pourquoi cela change — et pourquoi cela mérite votre attention.

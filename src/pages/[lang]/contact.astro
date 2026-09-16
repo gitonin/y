@@ -42,48 +42,50 @@ const jsonld = [
   />
 
   <div class="wrap contact">
+    {/* Les trois sujets d'abord, sans adresse répétée sous chacun : une seule
+        adresse pour tout le monde, donnée une fois, en bas. */}
     <ul class="ccards">
       <li class="ccard" data-reveal>
         <span class="label">{t.contact.generalTitle}</span>
         <p class="muted ccard__text">{t.contact.generalText}</p>
-        <a class="link ccard__link" href={`mailto:${SITE.email}`}>
-          {SITE.email}<span class="arrow" aria-hidden="true">→</span>
-        </a>
       </li>
 
       <li class="ccard" data-reveal style="--reveal-delay:90ms">
         <span class="label">{t.contact.proTitle}</span>
         <p class="muted ccard__text">{t.contact.proText}</p>
-        <a class="link ccard__link" href={`mailto:${SITE.proEmail}`}>
-          {SITE.proEmail}<span class="arrow" aria-hidden="true">→</span>
-        </a>
         <a class="small muted ccard__more" href={route(lang, 'pro')}>{t.pro.forWhoCta}</a>
       </li>
 
       <li class="ccard" data-reveal style="--reveal-delay:180ms">
         <span class="label">{t.contact.pressTitle}</span>
         <p class="muted ccard__text">{t.contact.pressText}</p>
-        <a class="link ccard__link" href={`mailto:${SITE.pressEmail}`}>
-          {SITE.pressEmail}<span class="arrow" aria-hidden="true">→</span>
-        </a>
       </li>
     </ul>
 
-    <aside class="cplace panel panel--soft" data-reveal>
+    <aside class="cecrire panel panel--soft" data-reveal>
       <div>
-        <span class="label">{t.contact.hoursTitle}</span>
-        <address class="cplace__address">
-          {SITE.address.street}<br />
-          {SITE.address.postalCode} {SITE.address.city}
-        </address>
-        <p class="small muted">{t.contact.hoursText}</p>
-      </div>
-      <div class="cplace__phone">
         <span class="label">{t.nav.contact}</span>
-        <a class="link link--ink" href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+        <p class="lead cecrire__intro">{t.contact.writeIntro}</p>
+      </div>
+      <div class="cecrire__liens">
+        <a class="link" href={`mailto:${SITE.email}`}>
+          {t.contact.writeUs}<span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="link" href={SITE.whatsapp} target="_blank" rel="noopener">
+          {t.common.whatsapp}<span class="arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </aside>
   </div>
+
+  <!-- ============ VERS LES CAFÉS ============ -->
+  <section class="section section--tight cvers">
+    <div class="wrap">
+      <a class="link" href={route(lang, 'cafes')} data-reveal>
+        {t.contact.discoverCta}<span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
 </Base>
 
 
@@ -109,7 +111,7 @@ const jsonld = [
   .ccard {
     display: grid;
     justify-items: start;
-    gap: 0.75rem;
+    gap: var(--espace-carte);
     padding-top: 1.25rem;
     border-top: 1px solid var(--line);
   }
@@ -135,28 +137,32 @@ const jsonld = [
     border-color: var(--accent);
   }
 
-  .cplace {
-    padding: clamp(1.5rem, 3vw, 2.5rem);
+  .cecrire {
     display: grid;
-    gap: clamp(1.25rem, 3vw, 2.5rem);
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
   }
 
-  @media (min-width: 700px) {
-    .cplace {
+  @media (min-width: 760px) {
+    .cecrire {
       grid-template-columns: minmax(0, 1fr) auto;
-      align-items: start;
+      align-items: center;
     }
   }
 
-  .cplace__address {
-    font-style: normal;
-    line-height: 1.6;
-    margin-block: 0.5rem 0.4rem;
+  .cecrire__intro {
+    margin-top: var(--espace-surtitre);
+    max-width: 40ch;
   }
 
-  .cplace__phone {
-    display: grid;
-    gap: 0.4rem;
-    justify-items: start;
+  .cecrire__liens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem clamp(1.5rem, 4vw, 2.5rem);
   }
+
+  .cvers {
+    padding-top: 0;
+  }
+
 </style>

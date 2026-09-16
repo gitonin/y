@@ -45,8 +45,25 @@ const aPartirDe = hasPriceRange(product);
     background: none;
   }
 
+  /* Le visuel ne se déforme pas au repos ; il avance à peine quand la carte
+     est survolée, juste assez pour dire qu'elle est cliquable. */
   .pcard__media :global(.shot) {
     transform: none;
+    transition: transform 0.9s var(--ease-out-expo);
+  }
+
+  .pcard__link:hover .pcard__media :global(.shot) {
+    transform: scale(1.025);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pcard__media :global(.shot) {
+      transition: none;
+    }
+
+    .pcard__link:hover .pcard__media :global(.shot) {
+      transform: none;
+    }
   }
 
   .pcard__from {

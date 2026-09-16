@@ -2,13 +2,13 @@
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
+import { createSatteriMarkdownProcessor } from '@astrojs/markdown-satteri';
 import { photos } from '../../../data/photos';
 import Base from '../../../layouts/Base.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Photo from '../../../components/Photo.astro';
 import Poincon from '../../../components/Poincon.astro';
 import { languages, useTranslations, url, route, postUrl, formatDate, absolute, type Lang } from '../../../i18n/utils';
-import { SITE } from '../../../consts';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection('journal');
@@ -42,6 +42,26 @@ const imageArticle = new URL(
   (await getImage({ src: photos[post.data.photo].src, width: 1200 })).src,
   base
 ).href;
+
+/* Le corps est coupé en deux à l'intertitre le plus proche du milieu, et une
+   photographie se glisse dans la coupure : l'article n'est plus un seul bloc
+   de texte. Sans `photoMilieu`, ou sans intertitre, le corps reste d'un tenant. */
+const couper = (markdown: string): [string, string] | null => {
+  const reperes = [...markdown.matchAll(/^## /gm)].map((m) => m.index ?? 0).filter((i) => i > 0);
+  if (reperes.length === 0) return null;
+  const milieu = markdown.length / 2;
+  const coupe = reperes.reduce((a, b) => (Math.abs(b - milieu) < Math.abs(a - milieu) ? b : a));
+  return [markdown.slice(0, coupe), markdown.slice(coupe)];
+};
+
+const moities = post.data.photoMilieu && post.body ? couper(post.body) : null;
+let avant = '';
+let apres = '';
+if (moities) {
+  const processeur = await createSatteriMarkdownProcessor({});
+  avant = (await processeur.render(moities[0])).code;
+  apres = (await processeur.render(moities[1])).code;
+}
 
 const words = post.body?.split(/\s+/).length ?? 0;
 const readingTime = Math.max(2, Math.round(words / (lang === 'zh' ? 300 : 200)));
@@ -109,9 +129,27 @@ const jsonld = [
       </div>
     </figure>
 
-    <div class="wrap wrap--narrow post__body">
-      <Content />
-    </div>
+    {
+      moities && post.data.photoMilieu ? (
+        <>
+          <div class="wrap wrap--narrow post__body" set:html={avant} />
+          <figure class="wrap post__milieu">
+            <div class="media media--wide">
+              <Photo
+                name={post.data.photoMilieu}
+                lang={lang}
+                sizes="(min-width: 1560px) 1560px, 100vw"
+              />
+            </div>
+          </figure>
+          <div class="wrap wrap--narrow post__body post__body--suite" set:html={apres} />
+        </>
+      ) : (
+        <div class="wrap wrap--narrow post__body">
+          <Content />
+        </div>
+      )
+    }
 
     {
       post.data.tags.length > 0 && (
@@ -170,6 +208,15 @@ const jsonld = [
 
   .post__cover {
     margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .post__milieu {
+    margin-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  /* L'intertitre qui ouvre la seconde moitié suit déjà la photographie. */
+  .post__body--suite :global(h2:first-child) {
+    margin-top: 0;
   }
 
   .post__body {

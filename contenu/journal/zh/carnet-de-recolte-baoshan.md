@@ -5,6 +5,7 @@ date: 2025-02-18
 author: Yunma
 tags: ['云南', '采收', '旅行']
 photo: recolte-cueilleurs
+photoMilieu: sechage-lits
 ---
 
 我们在二月的第一天抵达保山，正值采收季中段。公路缓缓上行，穿过层层稻田梯田，两旁是种在芒果树荫下的第一批咖啡树。海拔 1600 米处空气干燥，夜间气温降至 8 °C——正是咖啡果缓慢成熟所需要的条件。
