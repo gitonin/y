@@ -15,12 +15,12 @@ Déposer un fichier sous un nom déjà présent le remplace : rien d'autre n'est
 
 | Fichier                      | Produit                        |
 | ---------------------------- | ------------------------------ |
-| `torch-estate-lot-01.png`    | Torch Estate, Lot 01 — 200 g   |
-| `torch-estate-lot-02.png`    | Torch Estate, Lot 02 — 200 g   |
-| `yun-lan-estate.png`         | Yun Lan Estate — 200 g         |
-| `drip-bags-catimor.png`      | Gaosheng — Catimor, boîte de 5 |
-| `drip-bags-bourbon-jaune.png`| Gaosheng — Bourbon jaune, ×5   |
-| `coffret-decouverte.png`     | Coffret Découverte             |
+| `torch-estate-lot-01.jpg`    | Torch Estate, Lot 01 — 200 g   |
+| `torch-estate-lot-02.jpg`    | Torch Estate, Lot 02 — 200 g   |
+| `yun-lan-estate.jpg`         | Yun Lan Estate — 200 g         |
+| `drip-bags-catimor.jpg`      | Gaosheng — Catimor, boîte de 5 |
+| `drip-bags-bourbon-jaune.jpg`| Gaosheng — Bourbon jaune, ×5   |
+| `coffret-decouverte.jpg`     | Coffret Découverte             |
 
 Un nom différent ne pose pas de problème : il suffit de préciser à quelle
 référence correspond chaque fichier.
@@ -31,8 +31,9 @@ référence correspond chaque fichier.
 ## Format
 
 - Cadrage **carré**, 2000 × 2000 px au minimum
-- **PNG détouré, fond transparent** de préférence — les fiches et les cartes
-  du catalogue sont sur fond crème, un fond blanc y ferait un rectangle
-- À défaut, JPEG qualité 90 sur un fond crème uni proche du `#ebe7de`
+- **JPEG, qualité 90, sur un fond uni** : la photographie remplit la tuile
+  du catalogue de bord à bord, c'est donc elle qui porte le fond
+- Un fond proche du `#ebe7de` du site, et **le même d'une référence à
+  l'autre** : côte à côte dans la grille, deux fonds différents se voient
 - Les fichiers d'origine, pas des versions réduites : le site fabrique
   lui-même toutes les tailles dont il a besoin

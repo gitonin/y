@@ -1,12 +1,12 @@
 import type { ImageMetadata } from 'astro';
 import type { Lang } from '../i18n/utils';
 
-import torchEstateLot01 from '../assets/produits/torch-estate-lot-01.png';
-import torchEstateLot02 from '../assets/produits/torch-estate-lot-02.png';
-import yunLanEstate from '../assets/produits/yun-lan-estate.png';
-import dripBagsCatimor from '../assets/produits/drip-bags-catimor.png';
-import dripBagsBourbonJaune from '../assets/produits/drip-bags-bourbon-jaune.png';
-import coffretDecouverte from '../assets/produits/coffret-decouverte.png';
+import torchEstateLot01 from '../assets/produits/torch-estate-lot-01.jpg';
+import torchEstateLot02 from '../assets/produits/torch-estate-lot-02.jpg';
+import yunLanEstate from '../assets/produits/yun-lan-estate.jpg';
+import dripBagsCatimor from '../assets/produits/drip-bags-catimor.jpg';
+import dripBagsBourbonJaune from '../assets/produits/drip-bags-bourbon-jaune.jpg';
+import coffretDecouverte from '../assets/produits/coffret-decouverte.jpg';
 
 export type Packshot = {
   src: ImageMetadata;

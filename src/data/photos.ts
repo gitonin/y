@@ -30,9 +30,9 @@ export const photos = {
   'recolte-cueilleurs': {
     src: recolteCueilleurs,
     alt: {
-      fr: 'Cueilleurs récoltant les cerises de café à flanc de montagne, au lever du jour, dans la brume du Yunnan',
-      en: 'Pickers harvesting coffee cherries on a mountainside at sunrise, in the mist of Yunnan',
-      zh: '清晨薄雾中，采摘工在云南山坡上采收咖啡果',
+      fr: 'Vue aérienne d’une vallée du Yunnan : la ferme et ses hangars au premier plan, les parcelles de caféiers et les montagnes au fond',
+      en: 'Aerial view of a Yunnan valley: the farm and its sheds in the foreground, coffee plots and mountains beyond',
+      zh: '云南山谷航拍：前景是农场与厂房，远处是咖啡地块与群山',
     },
     position: '62% 70%',
   },
@@ -57,18 +57,18 @@ export const photos = {
   'sechage-lits': {
     src: sechageLits,
     alt: {
-      fr: 'Producteur retournant les cerises de café sur des lits de séchage surélevés en bambou',
-      en: 'Producer turning coffee cherries on raised bamboo drying beds',
-      zh: '咖农在竹制高架晾晒床上翻动咖啡果',
+      fr: 'Les mains d’un producteur trient les cerises de café dans le bac de lavage, après le dépulpage',
+      en: 'A producer’s hands sorting coffee cherries in the washing tank, after pulping',
+      zh: '咖农的双手在脱皮后的水洗池中挑拣咖啡果',
     },
-    position: '72% 66%',
+    position: '55% 40%',
   },
   'tabouret-terrasse': {
     src: tabouretTerrasse,
     alt: {
-      fr: 'Tabouret de bois et de paille tressée sur une terrasse de pierre, face aux montagnes brumeuses',
-      en: 'Woven wooden stool on a stone terrace, facing the misty mountains',
-      zh: '石砌露台上的木制藤编凳，面朝云雾中的群山',
+      fr: 'Vue aérienne d’une rivière turquoise serpentant entre les collines boisées et les parcelles cultivées du Yunnan',
+      en: 'Aerial view of a turquoise river winding between the wooded hills and cultivated plots of Yunnan',
+      zh: '航拍云南：碧绿的河流蜿蜒穿过林木山丘与农田之间',
     },
     position: '58% 74%',
   },

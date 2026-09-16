@@ -117,17 +117,22 @@ const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
     transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* --- Photographie de packaging --- */
+  /* --- Photographie de packaging ---
+     Elle est carrée et porte déjà son propre fond : elle occupe tout le cadre,
+     sans marge ni dégradé sous elle, qui ne feraient qu'un liseré autour. */
+  .shot--photo {
+    background: none;
+  }
+
+  .shot--photo::after {
+    display: none;
+  }
+
   .shot__photo {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
-    padding: 6%;
-  }
-
-  .shot--lg .shot__photo {
-    padding: 8%;
   }
 
   /* --- Sachet --- */
@@ -329,6 +334,13 @@ const largeurs = size === 'lg' ? [420, 640, 900, 1200] : [280, 420, 640, 900];
     :global(a:hover) .shot__stage,
     .shot:hover .shot__stage {
       transform: translateY(-6px) scale(1.015);
+    }
+
+    /* Une photographie remplit son cadre : la soulever découvrirait le vide
+       sous elle. Elle s'agrandit sur place, sans se déplacer. */
+    :global(a:hover) .shot--photo .shot__stage,
+    .shot--photo:hover .shot__stage {
+      transform: scale(1.02);
     }
   }
 
