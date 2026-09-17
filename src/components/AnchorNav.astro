@@ -56,10 +56,17 @@ const { items, ariaLabel } = Astro.props;
     display: flex;
     gap: clamp(1.25rem, 3vw, 2.5rem);
     padding-block: 0.9rem;
-    /* Une réserve au bout de la piste : le dernier lien ne vient pas se coller
-       au bord quand on fait défiler le sommaire au doigt. */
-    padding-inline-end: var(--gutter);
     white-space: nowrap;
+  }
+
+  /* Une réserve au bout de la piste, posée comme un élément et non comme une
+     marge : la marge de fin d'un conteneur qui déborde n'entre pas dans la zone
+     défilable, si bien que le dernier lien venait se coller au bord dès que le
+     sommaire était trop long pour l'écran — ce qui arrive en français vers
+     320 px. Un élément, lui, en fait toujours partie. */
+  ul::after {
+    content: '';
+    flex: 0 0 var(--gutter);
   }
 
   a {

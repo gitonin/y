@@ -12,6 +12,10 @@ import fermeGaosheng from '../assets/photos/ferme-gaosheng.jpg';
 import producteurTorchEstate from '../assets/photos/producteur-torch-estate.jpg';
 import producteurYunLanEstate from '../assets/photos/producteur-yun-lan-estate.jpg';
 import producteurGaosheng from '../assets/photos/producteur-gaosheng.jpg';
+import cerisesBranche02 from '../assets/photos/cerises-branche-02.jpg';
+import fermiersCafe from '../assets/photos/fermiers-cafe.jpg';
+import mainPlante from '../assets/photos/main-plante.jpg';
+import panneauPlantation from '../assets/photos/panneau-plantation.jpg';
 
 export type Photo = {
   src: ImageMetadata;
@@ -128,6 +132,42 @@ export const photos = {
       zh: '高晟庄园，咖农的双手在脱皮机旁挑选咖啡果',
     },
     position: '55% 55%',
+  },
+  'cerises-branche-02': {
+    src: cerisesBranche02,
+    alt: {
+      fr: 'Branche de caféier chargée de cerises rouges, orange et vertes, les montagnes du Yunnan en arrière-plan',
+      en: 'A coffee branch laden with red, orange and green cherries, the Yunnan mountains behind',
+      zh: '咖啡枝上挂满红、橙、绿的咖啡果，背景是云南群山',
+    },
+    position: '65% 55%',
+  },
+  'fermiers-cafe': {
+    src: fermiersCafe,
+    alt: {
+      fr: 'Deux hommes près de sacs de café vert empilés, devant la machine de décorticage',
+      en: 'Two men beside stacked sacks of green coffee, in front of the hulling machine',
+      zh: '两位工人站在成堆的生豆麻袋旁，身后是脱壳机',
+    },
+    position: '50% 45%',
+  },
+  'main-plante': {
+    src: mainPlante,
+    alt: {
+      fr: 'Deux mains tenant deux jeunes plants de caféier dans leurs godets de terre',
+      en: 'Two hands holding two young coffee seedlings in their soil pots',
+      zh: '双手捧着两株育苗盆中的咖啡幼苗',
+    },
+    position: '50% 55%',
+  },
+  'panneau-plantation': {
+    src: panneauPlantation,
+    alt: {
+      fr: 'Panneau de bois « 加工种植区 — Coffee plantation » planté au milieu des rangs de caféiers',
+      en: 'A wooden sign reading “加工种植区 — Coffee plantation” standing among the rows of coffee trees',
+      zh: '咖啡林间立着写有「加工种植区 — Coffee plantation」的木牌',
+    },
+    position: '50% 60%',
   },
 } satisfies Record<string, Photo>;
 

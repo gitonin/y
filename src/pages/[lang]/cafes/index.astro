@@ -215,16 +215,15 @@ const jsonld = [
 
   /* Sur grand écran, un carré pleine largeur ferait plus d'un écran de haut
      pour un seul sachet. Le carré reste, mais le texte vient se poser à côté. */
+  /* Sur grand écran, le rythme cède la place à trois colonnes égales : aucune
+     référence n'est mise en avant, le catalogue se lit d'un coup d'œil. */
   @media (min-width: 900px) {
-    .clist > :nth-child(3n + 1) :global(.pcard__link) {
-      display: grid;
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: clamp(2rem, 4vw, 4rem);
-      align-items: center;
+    .clist {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .clist > :nth-child(3n + 1) :global(.pcard__body) {
-      padding-top: 0;
+    .clist > :nth-child(3n + 1) {
+      grid-column: auto;
     }
   }
 

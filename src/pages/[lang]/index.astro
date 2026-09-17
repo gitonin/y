@@ -378,8 +378,9 @@ const jsonld = [
     }
   }
 
-  /* La référence de tête occupe la ligne entière, les deux suivantes se la
-     partagent — même gouttière de part et d'autre, donc bords alignés. */
+  /* Sur petit écran, la référence de tête occupe la ligne entière et les deux
+     suivantes se la partagent. Sur grand écran, les trois se rangent en autant
+     de colonnes égales : aucune n'est mise en avant. */
   .pgrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -392,20 +393,13 @@ const jsonld = [
     grid-column: 1 / -1;
   }
 
-  /* Sur grand écran, un carré pleine largeur ferait plus d'un écran de haut
-     pour un seul sachet. Le carré reste, mais le texte vient se poser à côté :
-     il est alors plus grand que les deux cartes du dessous, et les bords
-     coïncident toujours avec elles. */
   @media (min-width: 900px) {
-    .pgrid > :global(:first-child .pcard__link) {
-      display: grid;
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: clamp(2rem, 4vw, 4rem);
-      align-items: center;
+    .pgrid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .pgrid > :global(:first-child .pcard__body) {
-      padding-top: 0;
+    .pgrid > :global(:first-child) {
+      grid-column: auto;
     }
   }
 
