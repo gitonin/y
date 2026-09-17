@@ -229,7 +229,13 @@ const multi = product.variants.length > 1;
       : document.documentElement.lang.startsWith('en')
         ? 'en-GB'
         : 'fr-FR';
-    return new Intl.NumberFormat(lang, { style: 'currency', currency: 'EUR' }).format(value);
+    /* Même règle qu'ailleurs : pas de décimales sur un prix rond. */
+    return new Intl.NumberFormat(lang, {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+      maximumFractionDigits: 2,
+    }).format(value);
   };
 
   const borner = (n: number) => Math.min(20, Math.max(1, Number.isNaN(n) ? 1 : n));

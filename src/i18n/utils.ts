@@ -73,12 +73,19 @@ export function defaultAlternates(pathname: string): Record<Lang, string> {
   };
 }
 
+/**
+ * Un prix rond s'écrit sans décimales : « 17 € » plutôt que « 17,00 € ».
+ * Les centimes, eux, s'affichent toujours — les taire reviendrait à annoncer un
+ * prix qui n'est pas celui du paiement.
+ */
 export function formatPrice(value: number, lang: Lang, currency = 'EUR'): string {
   const locales: Record<Lang, string> = { fr: 'fr-FR', en: 'en-GB', zh: 'zh-CN' };
+  const rond = Number.isInteger(value);
   return new Intl.NumberFormat(locales[lang], {
     style: 'currency',
     currency,
-    minimumFractionDigits: Number.isInteger(value) ? 2 : 2,
+    minimumFractionDigits: rond ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(value);
 }
 

@@ -380,8 +380,12 @@ h3 {
   color: var(--ink);
 }
 
+/* Les boutons pleins portent l'orange foncé de la marque — panier, achat,
+   appels à l'action. C'est le cran sombre et non l'orange vif : le libellé est
+   en petites capitales, et l'orange vif ne donnerait que 3,6 de contraste avec
+   la couleur du papier, sous le seuil de 4,5 ; le foncé en donne 4,9. */
 .btn {
-  --btn-bg: var(--ink);
+  --btn-bg: var(--accent-deep);
   --btn-fg: var(--paper);
   position: relative;
   display: inline-flex;
@@ -420,7 +424,7 @@ h3 {
 
 .btn:hover,
 .btn:focus-visible {
-  color: var(--ink);
+  color: var(--accent-deep);
 }
 
 .btn:active {
@@ -439,13 +443,13 @@ h3 {
 }
 
 .btn--ghost::before {
-  background: var(--ink);
+  background: var(--accent-deep);
 }
 
 .btn--ghost:hover,
 .btn--ghost:focus-visible {
   color: var(--paper);
-  border-color: var(--ink);
+  border-color: var(--accent-deep);
 }
 
 .btn--auto {

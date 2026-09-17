@@ -15,6 +15,30 @@ const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
 
+/**
+ * L'ordre de la vitrine, qui n'est pas celui du fichier de contenu : il sert le
+ * rythme de la page. Une référence seule ouvre, deux se partagent la ligne
+ * suivante, et la figure se répète — les deux cafés en grains encadrés par leur
+ * aîné, puis le coffret seul avant les deux boîtes de sachets.
+ *
+ * Une référence absente de cette liste vient à la suite, plutôt que de
+ * disparaître : ajouter un café au catalogue ne doit pas demander de penser à
+ * ce tableau.
+ */
+const ORDRE = [
+  'yun-lan-estate',
+  'torch-estate-lot-01',
+  'torch-estate-lot-02',
+  'coffret-decouverte',
+  'drip-bags-catimor',
+  'drip-bags-bourbon-jaune',
+];
+const rang = (slug: string) => {
+  const i = ORDRE.indexOf(slug);
+  return i === -1 ? ORDRE.length : i;
+};
+const vitrine = [...products].sort((a, b) => rang(a.slug) - rang(b.slug));
+
 const filters = [
   { key: 'all', label: t.cafes.filterAll },
   { key: 'grain', label: t.cafes.filterGrains },
@@ -34,8 +58,8 @@ const jsonld = [
   {
     '@type': 'ItemList',
     name: t.cafes.title,
-    numberOfItems: products.length,
-    itemListElement: products.map((p, i) => ({
+    numberOfItems: vitrine.length,
+    itemListElement: vitrine.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       url: absolute(Astro.site, `${lang}/cafes/${p.slug}/`),
@@ -72,7 +96,7 @@ const jsonld = [
 
     <div class="clist" data-product-list>
       {
-        products.map((product, i) => (
+        vitrine.map((product, i) => (
           <div data-category={product.category}>
             <ProductCard product={product} lang={lang} index={i} />
           </div>
@@ -126,10 +150,13 @@ const jsonld = [
     margin-bottom: clamp(2rem, 4vw, 3rem);
   }
 
+  /* Sur un écran étroit, les quatre filtres passent avant le catalogue : ils
+     s'effacent donc de deux points et se resserrent, pour annoncer sans
+     occuper. Ils retrouvent leur taille dès qu'il y a de la place. */
   .filters__btn {
-    padding: 0.55rem 1.1rem;
+    padding: 0.4rem 0.8rem;
     border: 1px solid var(--line);
-    font-size: var(--fs-label);
+    font-size: 0.5625rem;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--ink-50);
@@ -139,14 +166,24 @@ const jsonld = [
       background-color 0.35s var(--ease);
   }
 
+  @media (min-width: 600px) {
+    .filters__btn {
+      padding: 0.55rem 1.1rem;
+      font-size: var(--fs-label);
+    }
+  }
+
   .filters__btn:hover {
     color: var(--ink);
     border-color: var(--ink-30);
   }
 
+  /* Le filtre actif porte l'orange foncé de la marque. C'est bien le cran
+     sombre : sur le clair, l'orange vif ne donne que 3,6 de contraste avec le
+     papier, sous le seuil d'un texte de cette taille ; le foncé en donne 4,9. */
   .filters__btn[aria-pressed='true'] {
-    background: var(--ink);
-    border-color: var(--ink);
+    background: var(--accent-deep);
+    border-color: var(--accent-deep);
     color: var(--paper);
   }
 
@@ -156,9 +193,32 @@ const jsonld = [
     gap: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 2.5vw, 2rem);
   }
 
+  /* Le rythme de la page : une carte prend toute la largeur, les deux suivantes
+     se partagent la ligne, et ainsi de suite. C'est la figure de l'accueil,
+     répétée. :global() est nécessaire — la carte vient d'un composant et ne
+     porte pas la portée de cette page.
+
+     Le compte porte sur toutes les cartes, y compris celles qu'un filtre
+     masque. C'est voulu : avec l'ordre ci-dessus, chaque filtre retombe sur une
+     mise en page juste — les trois cafés en grains gardent leur aîné en tête,
+     le coffret reste seul et pleine largeur, les deux boîtes se partagent
+     la ligne. */
+  .clist > :nth-child(3n + 1) {
+    grid-column: 1 / -1;
+  }
+
+  /* Sur grand écran, un carré pleine largeur ferait plus d'un écran de haut
+     pour un seul sachet. Le carré reste, mais le texte vient se poser à côté. */
   @media (min-width: 900px) {
-    .clist {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .clist > :nth-child(3n + 1) :global(.pcard__link) {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: center;
+    }
+
+    .clist > :nth-child(3n + 1) :global(.pcard__body) {
+      padding-top: 0;
     }
   }
 

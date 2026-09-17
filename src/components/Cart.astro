@@ -327,11 +327,17 @@ const config = {
 
   const isLive = () => !!(cfg?.domain && cfg?.token);
 
+  /* Même règle que sur le reste du site : un prix rond s'écrit sans décimales,
+     des centimes s'affichent toujours. Le panier a son propre formateur — il
+     compose dans le navigateur, hors de portée de celui des pages. */
   const money = (amount: number, currency: string) => {
     const locales = { fr: 'fr-FR', en: 'en-GB', zh: 'zh-CN' } as const;
+    const rond = Number.isInteger(amount);
     return new Intl.NumberFormat(locales[cfg?.lang ?? 'fr'], {
       style: 'currency',
       currency: currency || cfg?.currency || 'EUR',
+      minimumFractionDigits: rond ? 0 : 2,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
