@@ -40,9 +40,9 @@ export const packshots = {
   'yun-lan-estate': {
     src: yunLanEstate,
     alt: {
-      fr: 'Sachet de café Yunma Yun Lan Estate, 200 g de grains de Xishuangbanna, Yunnan, sur fond crème',
-      en: 'Yunma Yun Lan Estate coffee pouch, 200 g of beans from Xishuangbanna, Yunnan, on a cream background',
-      zh: 'Yunma 云澜庄园咖啡袋，200 克云南西双版纳咖啡豆，米色背景',
+      fr: 'Sachet de café Yunma Yun Lan Estate, 200 g de grains de Xishuangbanna, Yunnan, posé sur un lit de café moulu',
+      en: 'Yunma Yun Lan Estate coffee pouch, 200 g of beans from Xishuangbanna, Yunnan, resting on a bed of ground coffee',
+      zh: 'Yunma 云澜庄园咖啡袋，200 克云南西双版纳咖啡豆，置于咖啡粉之上',
     },
   },
   /* Les deux boîtes de 5 partagent pour l'instant le même visuel d'attente :
@@ -88,11 +88,16 @@ export const getPackshot = (slug: string): Packshot | undefined =>
  *
  * Relevé par `node outils/fond-packshots.mjs` ; à relancer après remplacement
  * d'un visuel. Une référence absente retombe sur le beige du site.
+ *
+ * Le raccord n'est invisible que si le fond de la photographie est uni. Sur un
+ * décor travaillé, la bande reste une teinte moyenne et la limite du cadre se
+ * devine : c'est alors un visuel au format paysage qu'il faut, plutôt qu'un
+ * carré élargi.
  */
 const fonds = {
   'torch-estate-lot-01': '#dcd2c5',
   'torch-estate-lot-02': '#cec2b5',
-  'yun-lan-estate': '#e6e0d5',
+  'yun-lan-estate': '#5e514a',
   'drip-bags-catimor': '#d6d3ca',
   'drip-bags-bourbon-jaune': '#d6d3ca',
   'coffret-decouverte': '#ded6c8',
