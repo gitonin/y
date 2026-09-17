@@ -52,11 +52,11 @@
       "visual": "bag-01",
       "ambiance": "producteur-torch-estate",
       "shopifyHandle": "torch-estate-lot-01",
-      "shopifyProductId": "",
+      "shopifyProductId": "gid://shopify/Product/16181351678277",
       "ferme": "torch-estate",
       "variants": [
         {
-          "shopifyVariantId": "",
+          "shopifyVariantId": "gid://shopify/ProductVariant/59384683823429",
           "label": {
             "fr": "200 g",
             "en": "200 g",
@@ -153,11 +153,11 @@
       "visual": "bag-03",
       "ambiance": "sechage-lits",
       "shopifyHandle": "torch-estate-lot-02",
-      "shopifyProductId": "",
+      "shopifyProductId": "gid://shopify/Product/15854631813445",
       "ferme": "torch-estate",
       "variants": [
         {
-          "shopifyVariantId": "",
+          "shopifyVariantId": "gid://shopify/ProductVariant/57861263163717",
           "label": {
             "fr": "200 g",
             "en": "200 g",
@@ -254,11 +254,11 @@
       "visual": "bag-05",
       "ambiance": "producteur-yun-lan-estate",
       "shopifyHandle": "yun-lan-estate",
-      "shopifyProductId": "",
+      "shopifyProductId": "gid://shopify/Product/15854632534341",
       "ferme": "yun-lan-estate",
       "variants": [
         {
-          "shopifyVariantId": "",
+          "shopifyVariantId": "gid://shopify/ProductVariant/57861264539973",
           "label": {
             "fr": "200 g",
             "en": "200 g",
@@ -355,11 +355,11 @@
       "visual": "box",
       "ambiance": "cerises-branche",
       "shopifyHandle": "drip-bags-catimor",
-      "shopifyProductId": "",
+      "shopifyProductId": "gid://shopify/Product/16181907358021",
       "ferme": "gaosheng",
       "variants": [
         {
-          "shopifyVariantId": "",
+          "shopifyVariantId": "gid://shopify/ProductVariant/59385549488453",
           "label": {
             "fr": "Boîte de 5",
             "en": "Box of 5",
@@ -473,11 +473,11 @@
       "visual": "box",
       "ambiance": "producteur-gaosheng",
       "shopifyHandle": "drip-bags-bourbon-jaune",
-      "shopifyProductId": "",
+      "shopifyProductId": "gid://shopify/Product/16181919318341",
       "ferme": "gaosheng",
       "variants": [
         {
-          "shopifyVariantId": "",
+          "shopifyVariantId": "gid://shopify/ProductVariant/59385573179717",
           "label": {
             "fr": "Boîte de 5",
             "en": "Box of 5",
@@ -591,11 +591,11 @@
       "visual": "bundle",
       "ambiance": "recolte-cueilleurs",
       "shopifyHandle": "coffret-decouverte",
-      "shopifyProductId": "",
+      "shopifyProductId": "gid://shopify/Product/16181926494533",
       "ferme": "yun-lan-estate",
       "variants": [
         {
-          "shopifyVariantId": "",
+          "shopifyVariantId": "gid://shopify/ProductVariant/59385585893701",
           "label": {
             "fr": "Coffret complet",
             "en": "Complete set",
