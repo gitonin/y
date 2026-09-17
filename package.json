@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "verifier-contenu": "node outils/verifier-contenu.mjs",
+    "ids-shopify": "node outils/ids-shopify.mjs",
     "export-contenu": "node scripts/export-contenu.mjs",
     "importer-contenu": "node scripts/importer-contenu.mjs",
     "prebuild": "node outils/verifier-contenu.mjs",
