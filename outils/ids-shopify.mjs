@@ -93,6 +93,14 @@ async function chercher(handle) {
     },
     body: JSON.stringify({ query: REQUETE, variables: { handle } }),
   });
+  if (res.status === 401 || res.status === 403) {
+    throw new Error(
+      `${res.status} — ce jeton n'est pas accepté par l'API Storefront.\n` +
+        "      Soit ce n'est pas un jeton Storefront, soit l'application n'a pas\n" +
+        "      l'autorisation de lire les produits. Vérifiez dans l'administration\n" +
+        '      Shopify que le jeton vient bien de la section « API Storefront ».'
+    );
+  }
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   const { data, errors } = await res.json();
   if (errors?.length) throw new Error(errors.map((e) => e.message).join(' · '));
@@ -100,6 +108,35 @@ async function chercher(handle) {
 }
 
 /* -------------------------------------------------------------------- corps */
+
+/* Une requête d'essai avant tout le reste : si le jeton ne convient pas, mieux
+   vaut le dire une fois clairement que six fois de suite, une par produit. */
+try {
+  const res = await fetch(`https://${domaine}/api/${VERSION_API}/graphql.json`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Shopify-Storefront-Access-Token': jeton },
+    body: JSON.stringify({ query: '{ shop { name } }' }),
+  });
+  if (res.status === 401 || res.status === 403) {
+    console.error(
+      `Shopify refuse ce jeton (${res.status}).\n\n` +
+        "Ce n'est pas un jeton d'API Storefront, ou l'application qui l'a émis n'a pas\n" +
+        "l'autorisation de lire le catalogue. Dans l'administration Shopify, ouvrez votre\n" +
+        'application, onglet « Identifiants d\'API », et prenez le jeton affiché sous\n' +
+        '« API Storefront » — pas celui affiché sous « API Admin ».'
+    );
+    process.exit(1);
+  }
+  if (!res.ok) {
+    console.error(`La boutique ${domaine} répond ${res.status} ${res.statusText}. Domaine correct ?`);
+    process.exit(1);
+  }
+  const { data } = await res.json();
+  if (data?.shop?.name) console.log(`Connecté à « ${data.shop.name} ».`);
+} catch (e) {
+  console.error(`Impossible de joindre ${domaine} : ${e.message}`);
+  process.exit(1);
+}
 
 const contenu = JSON.parse(readFileSync(FICHIER, 'utf8'));
 const avertissements = [];
