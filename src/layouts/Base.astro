@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Cart from '../components/Cart.astro';
 import Seo from '../components/Seo.astro';
+import type { Maillon } from '../components/FilAriane.astro';
 
 interface Props {
   lang: Lang;
@@ -21,6 +22,8 @@ interface Props {
   image?: string;
   keywords?: string[];
   noindex?: boolean;
+  /** Le chemin affiché en pied de page, sans l'accueil. */
+  fil?: Maillon[];
 }
 
 const {
@@ -35,6 +38,7 @@ const {
   image,
   keywords,
   noindex,
+  fil,
 } = Astro.props;
 
 const t = useTranslations(lang);
@@ -80,7 +84,7 @@ const t = useTranslations(lang);
       <slot />
     </main>
 
-    <Footer lang={lang} />
+    <Footer lang={lang} fil={fil} />
     <Cart lang={lang} />
 
     <style is:global>

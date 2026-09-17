@@ -1,6 +1,6 @@
 # Yunma — tout le contenu du site (français)
 
-_Document généré le 16/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 17/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -1235,29 +1235,11 @@ Des visuels, des informations sur nos cafés, notre histoire ou sur nos fermes p
 **writeUs** `[contact.writeUs]`
 Nous écrire
 
-**Introduction** `[contact.writeIntro]`
-Une seule adresse pour tout, ou un mot sur WhatsApp.
-
 **Libellé du lien vers les cafés** `[contact.versLesCafes]`
 Découvrir les cafés Yunma
 
 
-## Pied de page et newsletter
-
-
-### Newsletter
-
-**Titre** `[newsletter.titre]`
-Le carnet Yunma
-
-**Texte** `[newsletter.texte]`
-Nouveaux lots, carnets de récolte et rendez-vous. Une lettre par saison, rien de plus.
-
-**Bouton** `[newsletter.bouton]`
-S’inscrire
-
-**Message de confirmation** `[newsletter.confirmation]`
-Merci, votre inscription est enregistrée.
+## Pied de page
 
 
 ### Signature défilante

@@ -62,10 +62,6 @@
         "minRead": "min de lecture",
         "backToJournal": "Retour au journal",
         "backToCafes": "Retour aux cafés",
-        "newsletterTitle": "Le carnet Yunma",
-        "newsletterText": "Nouveaux lots, carnets de récolte et rendez-vous. Une lettre par saison, rien de plus.",
-        "newsletterCta": "S’inscrire",
-        "newsletterOk": "Merci, votre inscription est enregistrée.",
         "whatsapp": "WhatsApp"
       },
       "home": {
@@ -405,8 +401,7 @@
         "pressTitle": "Presse & partenariats",
         "pressText": "Des visuels, des informations sur nos cafés, notre histoire ou sur nos fermes partenaires : nous répondons volontiers, et nous serions ravis que vous parliez de nous.",
         "writeUs": "Nous écrire",
-        "discoverCta": "Découvrir les cafés Yunma",
-        "writeIntro": "Une seule adresse pour tout, ou un mot sur WhatsApp."
+        "discoverCta": "Découvrir les cafés Yunma"
       },
       "legal": {
         "mentionsTitle": "Mentions légales",
@@ -503,10 +498,6 @@
         "minRead": "min read",
         "backToJournal": "Back to the journal",
         "backToCafes": "Back to the coffees",
-        "newsletterTitle": "The Yunma notebook",
-        "newsletterText": "New lots, harvest notes and events. One letter per season, nothing more.",
-        "newsletterCta": "Subscribe",
-        "newsletterOk": "Thank you, your subscription is confirmed.",
         "whatsapp": "WhatsApp"
       },
       "home": {
@@ -846,8 +837,7 @@
         "pressTitle": "Press & partnerships",
         "pressText": "Images, information about our coffees, our story or our partner farms: we answer gladly, and we would be delighted if you wrote about us.",
         "writeUs": "Write to us",
-        "discoverCta": "Discover Yunma coffees",
-        "writeIntro": "One address for everything, or a message on WhatsApp."
+        "discoverCta": "Discover Yunma coffees"
       },
       "legal": {
         "mentionsTitle": "Legal notice",
@@ -944,10 +934,6 @@
         "minRead": "分钟阅读",
         "backToJournal": "返回手记",
         "backToCafes": "返回咖啡列表",
-        "newsletterTitle": "云马通讯",
-        "newsletterText": "新批次、采收手记与活动信息。每季一封，仅此而已。",
-        "newsletterCta": "订阅",
-        "newsletterOk": "感谢订阅，我们已收到。",
         "whatsapp": "WhatsApp"
       },
       "home": {
@@ -1287,8 +1273,7 @@
         "pressTitle": "媒体与合作",
         "pressText": "图片素材，关于我们的咖啡、我们的故事或合作农场的信息：我们乐于回复，也很高兴您愿意介绍我们。",
         "writeUs": "写信给我们",
-        "discoverCta": "探索云马的咖啡",
-        "writeIntro": "一个邮箱应对所有问题，也可以在 WhatsApp 上给我们留言。"
+        "discoverCta": "探索云马的咖啡"
       },
       "legal": {
         "mentionsTitle": "法律声明",

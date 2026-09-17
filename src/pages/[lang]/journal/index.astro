@@ -47,7 +47,13 @@ const jsonld = [
 ];
 ---
 
-<Base lang={lang} title={t.journal.seoTitle} description={t.journal.seoDescription} jsonld={jsonld}>
+<Base
+  lang={lang}
+  title={t.journal.seoTitle}
+  description={t.journal.seoDescription}
+  jsonld={jsonld}
+  fil={[{ label: t.nav.journal }]}
+>
   <PageHero
     lang={lang}
     label={t.journal.label}

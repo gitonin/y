@@ -9,7 +9,7 @@ import Photo from '../../../components/Photo.astro';
 import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
 import { getImage } from 'astro:assets';
-import { languages, useTranslations, absolute, type Lang } from '../../../i18n/utils';
+import { languages, useTranslations, route, absolute, type Lang } from '../../../i18n/utils';
 import { getPackshot, fondPackshot } from '../../../data/packshots';
 import type { Product } from '../../../data/products';
 import { products, getProduct, fromPrice, toPrice } from '../../../data/products';
@@ -147,6 +147,7 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
   type="product"
   jsonld={jsonld}
   keywords={[product.name[lang], product.subtitle[lang], t.common.tagline]}
+  fil={[{ href: route(lang, 'cafes'), label: t.nav.cafes }, { label: product.name[lang] }]}
 >
   {/* Le sachet ouvre la page, pleine largeur et collé sous la barre de
       navigation. La bande reprend le fond de la photographie : le raccord ne se

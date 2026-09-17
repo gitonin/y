@@ -1,0 +1,75 @@
+---
+/**
+ * Fil d'Ariane, en pied de page.
+ *
+ * Il ne figure plus en tête des pages : il y prenait la place du sur-titre sans
+ * rien apprendre à qui vient d'arriver. En bas, il retrouve son usage — dire où
+ * l'on se trouve à qui a lu jusqu'au bout et cherche par où continuer.
+ *
+ * Les données structurées qui le doublent, elles, vivent dans chaque page :
+ * ce sont elles que les moteurs lisent, et c'est le chemin qu'ils affichent
+ * sous un résultat de recherche.
+ */
+import { url, useTranslations, type Lang } from '../i18n/utils';
+
+export type Maillon = { href?: string; label: string };
+
+interface Props {
+  lang: Lang;
+  /** Le chemin, sans l'accueil : celui-ci est ajouté ici. */
+  fil: Maillon[];
+}
+const { lang, fil } = Astro.props;
+const t = useTranslations(lang);
+
+const maillons: Maillon[] = [{ href: url(lang), label: t.common.home }, ...fil];
+---
+
+<nav class="fil" aria-label={t.common.breadcrumb}>
+  <ol>
+    {
+      maillons.map((m, i) => (
+        <li>
+          {m.href && i < maillons.length - 1 ? (
+            <a href={m.href}>{m.label}</a>
+          ) : (
+            <span aria-current="page">{m.label}</span>
+          )}
+          {i < maillons.length - 1 && (
+            <span class="fil__sep" aria-hidden="true">
+              /
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .fil ol {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+
+  .fil li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .fil a:hover {
+    color: var(--ink);
+  }
+
+  .fil__sep {
+    color: var(--ink-30);
+  }
+</style>

@@ -32,7 +32,13 @@ const jsonld = [
 ];
 ---
 
-<Base lang={lang} title={t.contact.seoTitle} description={t.contact.seoDescription} jsonld={jsonld}>
+<Base
+  lang={lang}
+  title={t.contact.seoTitle}
+  description={t.contact.seoDescription}
+  jsonld={jsonld}
+  fil={[{ label: t.nav.contact }]}
+>
   <PageHero
     lang={lang}
     label={t.contact.label}
@@ -40,6 +46,17 @@ const jsonld = [
     intro={t.contact.intro}
     size="md"
   />
+
+  {/* Les deux façons de nous joindre, aussitôt après l'introduction : c'est ce
+      que l'on vient chercher ici, cela n'a pas à attendre le bas de page. */}
+  <div class="wrap cjoindre" data-reveal>
+    <a class="link" href={`mailto:${SITE.email}`}>
+      {t.contact.writeUs}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="link" href={SITE.whatsapp} target="_blank" rel="noopener">
+      {t.common.whatsapp}<span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
 
   <div class="wrap contact">
     {/* Les trois sujets d'abord, sans adresse répétée sous chacun : une seule
@@ -61,21 +78,6 @@ const jsonld = [
         <p class="muted ccard__text">{t.contact.pressText}</p>
       </li>
     </ul>
-
-    <aside class="cecrire panel panel--soft" data-reveal>
-      <div>
-        <span class="label">{t.nav.contact}</span>
-        <p class="lead cecrire__intro">{t.contact.writeIntro}</p>
-      </div>
-      <div class="cecrire__liens">
-        <a class="link" href={`mailto:${SITE.email}`}>
-          {t.contact.writeUs}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-        <a class="link" href={SITE.whatsapp} target="_blank" rel="noopener">
-          {t.common.whatsapp}<span class="arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
-    </aside>
   </div>
 
   {/* La page se referme comme la page Origine, sur le même bloc. */}
@@ -131,28 +133,13 @@ const jsonld = [
     border-color: var(--accent);
   }
 
-  .cecrire {
-    display: grid;
-    gap: clamp(1.5rem, 4vw, 2.5rem);
-    padding: clamp(1.75rem, 4vw, 2.75rem);
-  }
-
-  @media (min-width: 760px) {
-    .cecrire {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-    }
-  }
-
-  .cecrire__intro {
-    margin-top: var(--espace-surtitre);
-    max-width: 40ch;
-  }
-
-  .cecrire__liens {
+  /* Les deux liens suivent l'introduction de près : un simple rang, sans cadre
+     ni fond, pour qu'ils se lisent comme la suite de la phrase. */
+  .cjoindre {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem clamp(1.5rem, 4vw, 2.5rem);
+    padding-bottom: clamp(2rem, 5vw, 3rem);
   }
 
 </style>

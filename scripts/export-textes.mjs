@@ -342,16 +342,11 @@ fields('contact', t.contact, ['label', 'title', 'intro']);
 section('Les trois interlocuteurs');
 fields('contact', t.contact, ['generalTitle', 'generalText', 'proTitle', 'proText', 'pressTitle', 'pressText']);
 section('Invitation à écrire');
-fields('contact', t.contact, ['writeIntro', 'writeUs']);
+fields('contact', t.contact, ['writeUs']);
 field('contact.versLesCafes', t.contact.discoverCta, 'Libellé du lien vers les cafés');
 
 /* ------- pied de page ------- */
-chapter('Pied de page et newsletter');
-section('Newsletter');
-field('newsletter.titre', t.common.newsletterTitle, 'Titre');
-field('newsletter.texte', t.common.newsletterText, 'Texte');
-field('newsletter.bouton', t.common.newsletterCta, 'Bouton');
-field('newsletter.confirmation', t.common.newsletterOk, 'Message de confirmation');
+chapter('Pied de page');
 section('Signature défilante');
 note(
   'La bande qui défile en bas de chaque page. Elle reste en anglais dans les trois versions du site : c’est une signature de marque. L’étoile entre les deux moitiés est un dessin, elle ne se modifie pas ici.'

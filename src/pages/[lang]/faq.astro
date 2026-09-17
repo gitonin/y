@@ -32,7 +32,13 @@ const jsonld = [
 ];
 ---
 
-<Base lang={lang} title={t.faq.seoTitle} description={t.faq.seoDescription} jsonld={jsonld}>
+<Base
+  lang={lang}
+  title={t.faq.seoTitle}
+  description={t.faq.seoDescription}
+  jsonld={jsonld}
+  fil={[{ label: t.nav.faq }]}
+>
   <PageHero lang={lang} label={t.faq.label} title={t.faq.title} intro={t.faq.intro} size="md" />
 
   <div class="wrap faq">

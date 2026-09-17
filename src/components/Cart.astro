@@ -2,12 +2,31 @@
 import type { Lang } from '../i18n/utils';
 import { useTranslations, route, asset } from '../i18n/utils';
 import { SHOPIFY, SITE } from '../consts';
+import { getImage } from 'astro:assets';
+import { products } from '../data/products';
+import { getPackshot } from '../data/packshots';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
+/* La vignette du panier vient de nos propres visuels, désignés par le handle
+   Shopify — le même que celui du site. Passer par eux plutôt que par l'image
+   renvoyée par Shopify garantit que le panier montre le sachet tel qu'il
+   apparaît sur la fiche, et que la vignette existe aussi hors connexion, quand
+   le panier fonctionne en démonstration. */
+const vignettes = Object.fromEntries(
+  await Promise.all(
+    products.map(async (p) => {
+      const packshot = getPackshot(p.slug);
+      if (!packshot) return [p.shopifyHandle, ''];
+      const image = await getImage({ src: packshot.src, width: 160, format: 'webp' });
+      return [p.shopifyHandle, image.src];
+    }),
+  ),
+).valueOf() as Record<string, string>;
 
 const config = {
   domain: SHOPIFY.domain,
@@ -16,6 +35,7 @@ const config = {
   lang,
   currency: SITE.currency,
   markUrl: asset('brand/yunma-mark.svg'),
+  vignettes,
   strings: {
     empty: t.cart.empty,
     total: t.cart.total,
@@ -197,6 +217,19 @@ const config = {
     opacity: 0.75;
   }
 
+  /* Avec un vrai visuel, la vignette n'est plus un fond gris portant une
+     marque : la photographie l'occupe entièrement. */
+  :global(.cline__thumb--photo) {
+    background: none;
+  }
+
+  :global(.cline__thumb--photo img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+  }
+
   :global(.cline__title) {
     font-size: var(--fs-small);
     line-height: 1.4;
@@ -294,6 +327,9 @@ const config = {
     variantTitle: string;
     amount: number;
     currency: string;
+    /* Le handle Shopify, qui désigne la vignette. Une ligne enregistrée avant
+       cette version n'en a pas : elle retombe alors sur la marque. */
+    handle?: string;
     url?: string;
   };
 
@@ -304,6 +340,7 @@ const config = {
     lang: 'fr' | 'en' | 'zh';
     currency: string;
     markUrl: string;
+    vignettes: Record<string, string>;
     strings: Record<string, string>;
   };
 
@@ -330,6 +367,9 @@ const config = {
   /* Même règle que sur le reste du site : un prix rond s'écrit sans décimales,
      des centimes s'affichent toujours. Le panier a son propre formateur — il
      compose dans le navigateur, hors de portée de celui des pages. */
+  /** Le visuel d'une ligne, ou rien si la référence n'en a pas. */
+  const vignette = (l: Line) => (l.handle ? (cfg?.vignettes?.[l.handle] ?? '') : '');
+
   const money = (amount: number, currency: string) => {
     const locales = { fr: 'fr-FR', en: 'en-GB', zh: 'zh-CN' } as const;
     const rond = Number.isInteger(amount);
@@ -396,6 +436,7 @@ const config = {
       variantTitle: node.merchandise?.title === 'Default Title' ? '' : (node.merchandise?.title ?? ''),
       amount: Number(node.merchandise?.price?.amount ?? 0),
       currency: node.merchandise?.price?.currencyCode ?? cfg?.currency ?? 'EUR',
+      handle: node.merchandise?.product?.handle ?? '',
     }));
     return true;
   };
@@ -487,7 +528,9 @@ const config = {
       .map(
         (l) => `
         <li class="cline" data-line="${l.id}">
-          <span class="cline__thumb"><img src="${cfg?.markUrl ?? ''}" alt="" loading="lazy" /></span>
+          <span class="cline__thumb${vignette(l) ? ' cline__thumb--photo' : ''}">
+            <img src="${vignette(l) || cfg?.markUrl || ''}" alt="" loading="lazy" />
+          </span>
           <div>
             <p class="cline__title">${l.title}</p>
             ${l.variantTitle ? `<p class="cline__meta">${l.variantTitle}</p>` : ''}
@@ -564,6 +607,7 @@ const config = {
             variantTitle: btn.dataset.variantTitle || '',
             amount: Number(btn.dataset.price || 0),
             currency: cfg?.currency || 'EUR',
+            handle: btn.dataset.handle || '',
           });
         saveDemo();
       }

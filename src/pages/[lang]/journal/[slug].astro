@@ -100,6 +100,7 @@ const jsonld = [
   alternates={alternates}
   jsonld={jsonld}
   keywords={post.data.tags}
+  fil={[{ href: route(lang, 'journal'), label: t.nav.journal }, { label: post.data.title }]}
 >
   <article class="post">
     <header class="post__head wrap wrap--narrow">

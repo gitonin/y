@@ -4,11 +4,14 @@ import { useTranslations, route, url, defaultAlternates, languages, dictionaries
 import { SITE, SHOPIFY } from '../consts';
 import Icon from './Icon.astro';
 import SignatureBand from './SignatureBand.astro';
+import FilAriane, { type Maillon } from './FilAriane.astro';
 
 interface Props {
   lang: Lang;
+  /** Le chemin de la page, sans l'accueil. Absent, le fil ne s'affiche pas. */
+  fil?: Maillon[];
 }
-const { lang } = Astro.props;
+const { lang, fil } = Astro.props;
 const t = useTranslations(lang);
 const alt = defaultAlternates(Astro.url.pathname);
 const year = new Date().getFullYear();
@@ -23,21 +26,12 @@ const rowA = [
 
 <footer class="ft">
   <div class="wrap">
-    <div class="ft__news" data-reveal>
-      <div>
-        <span class="label">{t.common.newsletterTitle}</span>
-        <p class="ft__newsText">{t.common.newsletterText}</p>
+    {/* Le fil d'Ariane ouvre le pied de page, avant le logo. */}
+    {fil && fil.length > 0 && (
+      <div class="ft__fil" data-reveal>
+        <FilAriane lang={lang} fil={fil} />
       </div>
-      <form class="ft__form" data-newsletter novalidate>
-        <label class="visually-hidden" for="ft-email">{t.common.email}</label>
-        <input id="ft-email" type="email" name="email" required placeholder="hello@exemple.com" autocomplete="email" />
-        <button class="ft__submit" type="submit">
-          {t.common.newsletterCta}
-          <span aria-hidden="true">→</span>
-        </button>
-        <p class="ft__ok small" data-newsletter-ok hidden>{t.common.newsletterOk}</p>
-      </form>
-    </div>
+    )}
 
     <div class="ft__main">
       <a class="ft__logo" href={url(lang)} aria-label={t.a11y.logo}>
@@ -104,75 +98,8 @@ const rowA = [
     z-index: 2;
   }
 
-  .ft__news {
-    display: grid;
-    gap: 1.75rem;
-    padding-bottom: clamp(2rem, 5vw, 3.5rem);
-  }
-
-  @media (min-width: 860px) {
-    .ft__news {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      align-items: end;
-      gap: clamp(2rem, 6vw, 5rem);
-    }
-  }
-
-  .ft__newsText {
-    margin-top: var(--espace-surtitre);
-    max-width: 40ch;
-    color: var(--ink-70);
-    font-size: var(--fs-small);
-  }
-
-  .ft__form {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    border-bottom: 1px solid var(--line);
-    transition: border-color 0.4s var(--ease);
-  }
-
-  .ft__form:focus-within {
-    border-color: var(--ink);
-  }
-
-  .ft__form input {
-    flex: 1;
-    min-width: 0;
-    padding: 0.85rem 0;
-    background: none;
-    border: 0;
-  }
-
-  .ft__form input:focus {
-    outline: none;
-  }
-
-  .ft__submit {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6em;
-    font-size: var(--fs-label);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .ft__submit span {
-    transition: transform 0.5s var(--ease-out-expo);
-  }
-
-  .ft__submit:hover span {
-    transform: translateX(4px);
-  }
-
-  .ft__ok {
-    position: absolute;
-    left: 0;
-    bottom: -1.75rem;
-    color: var(--accent);
+  .ft__fil {
+    padding-bottom: clamp(1.75rem, 4vw, 2.75rem);
   }
 
   /* Le pied de page reprend la disposition du menu ouvert : tout est ferré à
@@ -294,25 +221,3 @@ const rowA = [
     }
   }
 </style>
-
-<script>
-  const initNewsletter = () => {
-    document.querySelectorAll<HTMLFormElement>('[data-newsletter]').forEach((form) => {
-      if (form.dataset.bound) return;
-      form.dataset.bound = '1';
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const input = form.querySelector<HTMLInputElement>('input[type="email"]');
-        if (!input || !input.value.includes('@')) {
-          input?.focus();
-          return;
-        }
-        form.querySelector<HTMLElement>('[data-newsletter-ok]')?.removeAttribute('hidden');
-        input.value = '';
-        input.blur();
-      });
-    });
-  };
-
-  document.addEventListener('astro:page-load', initNewsletter);
-</script>

@@ -76,7 +76,13 @@ const jsonld = [
 ];
 ---
 
-<Base lang={lang} title={t.cafes.seoTitle} description={t.cafes.seoDescription} jsonld={jsonld}>
+<Base
+  lang={lang}
+  title={t.cafes.seoTitle}
+  description={t.cafes.seoDescription}
+  jsonld={jsonld}
+  fil={[{ label: t.nav.cafes }]}
+>
   <div class="wrap page-top">
     <header class="chead">
       <span class="label" data-reveal>{t.cafes.label}</span>
