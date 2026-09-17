@@ -1,13 +1,12 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import SplitTitle from '../../components/SplitTitle.astro';
 import Photo from '../../components/Photo.astro';
 import Icon from '../../components/Icon.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, url, route, absolute, type Lang } from '../../i18n/utils';
+import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
 import { SITE } from '../../consts';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
@@ -54,10 +53,6 @@ const jsonld = [
 ---
 
 <Base lang={lang} title={t.pro.seoTitle} description={t.pro.seoDescription} jsonld={jsonld}>
-  <div class="wrap page-top">
-    <Breadcrumbs lang={lang} items={[{ href: url(lang), label: t.common.home }, { label: t.nav.pro }]} />
-  </div>
-
   <section class="phead">
     <div class="wrap phead__inner">
       <div class="phead__text">
@@ -132,10 +127,6 @@ const jsonld = [
 </Base>
 
 <style>
-  .page-top {
-    padding-top: clamp(0.75rem, 2vw, 1.5rem);
-  }
-
   .phead {
     padding-block: clamp(1.5rem, 4vw, 3rem) clamp(2.5rem, 6vw, 4.5rem);
   }

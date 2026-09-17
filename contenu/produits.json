@@ -62,6 +62,11 @@
             "en": "200 g",
             "zh": "200 克"
           },
+          "mesure": {
+            "fr": "200 g",
+            "en": "200 g",
+            "zh": "200 克"
+          },
           "price": 15,
           "weightGrams": 200,
           "available": true
@@ -159,6 +164,11 @@
         {
           "shopifyVariantId": "gid://shopify/ProductVariant/57861263163717",
           "label": {
+            "fr": "200 g",
+            "en": "200 g",
+            "zh": "200 克"
+          },
+          "mesure": {
             "fr": "200 g",
             "en": "200 g",
             "zh": "200 克"
@@ -264,6 +274,11 @@
             "en": "200 g",
             "zh": "200 克"
           },
+          "mesure": {
+            "fr": "200 g",
+            "en": "200 g",
+            "zh": "200 克"
+          },
           "price": 17,
           "weightGrams": 200,
           "available": true
@@ -363,6 +378,11 @@
           "label": {
             "fr": "Boîte de 5",
             "en": "Box of 5",
+            "zh": "5 片装"
+          },
+          "mesure": {
+            "fr": "5 sachets",
+            "en": "5 sachets",
             "zh": "5 片装"
           },
           "price": 9,
@@ -481,6 +501,11 @@
           "label": {
             "fr": "Boîte de 5",
             "en": "Box of 5",
+            "zh": "5 片装"
+          },
+          "mesure": {
+            "fr": "5 sachets",
+            "en": "5 sachets",
             "zh": "5 片装"
           },
           "price": 11,

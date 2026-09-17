@@ -148,6 +148,12 @@ if (catalogue) {
       if (typeof v.weightGrams !== 'number') erreur(`contenu/produits.json : « ${nom} » — « weightGrams » doit être un nombre.`);
       if (typeof v.available !== 'boolean') erreur(`contenu/produits.json : « ${nom} » — « available » doit valoir true ou false, sans guillemets.`);
       for (const l of LANGUES) if (!v?.label?.[l]) erreur(`contenu/produits.json : « ${nom} » — le nom d'un format manque en ${l}.`);
+      /* La mesure est facultative — un assortiment n'en a pas — mais si elle
+         est là, elle doit l'être dans les trois langues : une mention qui
+         disparaît d'une version à l'autre se remarque tout de suite. */
+      if (v?.mesure)
+        for (const l of LANGUES)
+          if (!v.mesure[l]) erreur(`contenu/produits.json : « ${nom} » — le grammage d'un format manque en ${l}.`);
     }
   }
   for (const p of produits ?? []) {

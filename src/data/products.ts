@@ -8,6 +8,12 @@ export type Variant = {
   /** ID de variante Shopify (Storefront API, format gid://shopify/ProductVariant/...) */
   shopifyVariantId: string;
   label: L;
+  /**
+   * Grammage ou quantité, affiché à la suite du prix : « 15,00 € | 200 g ».
+   * Absent d'un assortiment, qui en réunit plusieurs — la mention disparaît
+   * alors, plutôt que d'annoncer un contenu qui n'en résume aucun.
+   */
+  mesure?: L;
   price: number;
   weightGrams: number;
   available: boolean;

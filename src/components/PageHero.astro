@@ -1,23 +1,19 @@
 ---
 import type { Lang } from '../i18n/utils';
-import Breadcrumbs from './Breadcrumbs.astro';
 import SplitTitle from './SplitTitle.astro';
-import { url, useTranslations } from '../i18n/utils';
 
 interface Props {
-  lang: Lang;
+  /* Conservé pour l'appel, même si l'entrée de page n'a plus de texte à traduire. */
+  lang?: Lang;
   label: string;
   title: string;
   intro?: string;
-  crumb: string;
   size?: 'lg' | 'md';
 }
-const { lang, label, title, intro, crumb, size = 'lg' } = Astro.props;
-const t = useTranslations(lang);
+const { label, title, intro, size = 'lg' } = Astro.props;
 ---
 
 <header class="phero wrap">
-  <Breadcrumbs lang={lang} items={[{ href: url(lang), label: t.common.home }, { label: crumb }]} />
   <span class="label phero__label" data-reveal>{label}</span>
   <SplitTitle text={title} as="h1" size={size === 'lg' ? 'xl' : 'lg'} class={`sec-title phero__title phero__title--${size}`} />
   {intro && <p class="lead muted phero__intro" data-reveal>{intro}</p>}
@@ -25,12 +21,8 @@ const t = useTranslations(lang);
 
 <style>
   .phero {
-    padding-top: clamp(0.75rem, 2vw, 1.5rem);
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
     padding-bottom: clamp(2rem, 5vw, 3.5rem);
-  }
-
-  .phero__label {
-    margin-top: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   :global(.phero__title--lg) {

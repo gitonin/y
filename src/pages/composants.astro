@@ -14,7 +14,6 @@ import { join } from 'node:path';
 
 import Base from '../layouts/Base.astro';
 import AnchorNav from '../components/AnchorNav.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 import BuyBox from '../components/BuyBox.astro';
 import ClosingBand from '../components/ClosingBand.astro';
 import Icon from '../components/Icon.astro';
@@ -132,14 +131,8 @@ const familles: { titre: string; id: string; propos: string; fiches: Fiche[] }[]
       {
         nom: 'PageHero',
         dossier: 'components',
-        role: 'Entrée de page : fil d’Ariane, sur-titre, grand titre et chapeau. Il assemble Breadcrumbs et SplitTitle.',
-        reglages: ['lang', 'label', 'title', 'intro', 'crumb', 'size'],
-      },
-      {
-        nom: 'Breadcrumbs',
-        dossier: 'components',
-        role: 'Fil d’Ariane, avec ses données structurées pour les moteurs de recherche.',
-        reglages: ['lang', 'items'],
+        role: 'Entrée de page : sur-titre, grand titre et chapeau. Il s’appuie sur SplitTitle.',
+        reglages: ['lang', 'label', 'title', 'intro', 'size'],
       },
       {
         nom: 'AnchorNav',
@@ -363,16 +356,9 @@ const iconesDemo: IconName[] = ['leaf', 'mountains', 'cherries', 'droplet', 'dry
                         label="Origine"
                         title={'Le Yunnan,\nde la cerise à la tasse'}
                         intro="Trois fermes, trois terroirs, une même exigence."
-                        crumb="Origine"
                         size="md"
                       />
                     </div>
-                  )}
-                  {fiche.nom === 'Breadcrumbs' && (
-                    <Breadcrumbs
-                      lang={lang}
-                      items={[{ href: url(lang), label: t.common.home }, { label: 'Origine' }]}
-                    />
                   )}
                   {fiche.nom === 'AnchorNav' && (
                     <p class="pl-note">

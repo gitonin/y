@@ -1,18 +1,18 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
-import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Packshot from '../../../components/Packshot.astro';
 import BuyBox from '../../../components/BuyBox.astro';
+import Prix from '../../../components/Prix.astro';
 import ProductCard from '../../../components/ProductCard.astro';
 import Photo from '../../../components/Photo.astro';
 import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
 import { getImage } from 'astro:assets';
-import { languages, useTranslations, url, route, formatPrice, absolute, type Lang } from '../../../i18n/utils';
-import { getPackshot } from '../../../data/packshots';
+import { languages, useTranslations, absolute, type Lang } from '../../../i18n/utils';
+import { getPackshot, fondPackshot } from '../../../data/packshots';
 import type { Product } from '../../../data/products';
-import { products, getProduct, fromPrice, toPrice, defaultVariant } from '../../../data/products';
+import { products, getProduct, fromPrice, toPrice } from '../../../data/products';
 import { SITE } from '../../../consts';
 
 export const getStaticPaths: GetStaticPaths = () =>
@@ -23,9 +23,6 @@ const lang = Astro.params.lang as Lang;
 const product = Astro.props.product as Product;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
-/* Le prix affiché en haut de page est celui de la variante sélectionnée :
-   il est réactualisé par l'encart d'achat à chaque changement de format. */
-const variantePardefaut = defaultVariant(product);
 const related = product.related.map((slug) => getProduct(slug)).filter(Boolean);
 
 const specRows = [
@@ -151,29 +148,19 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
   jsonld={jsonld}
   keywords={[product.name[lang], product.subtitle[lang], t.common.tagline]}
 >
+  {/* Le sachet ouvre la page, pleine largeur et collé sous la barre de
+      navigation. La bande reprend le fond de la photographie : le raccord ne se
+      voit pas, et le visuel n'a pas besoin d'être rogné pour s'élargir. */}
+  <div class="pdp__banniere" style={`--fond:${fondPackshot(product.slug)}`}>
+    <Packshot product={product} lang={lang} size="lg" />
+  </div>
+
   <div class="wrap page-top">
-    <Breadcrumbs
-      lang={lang}
-      items={[
-        { href: url(lang), label: t.common.home },
-        { href: route(lang, 'cafes'), label: t.nav.cafes },
-        { label: product.name[lang] },
-      ]}
-    />
-
     <div class="pdp">
-      <div class="pdp__visual">
-        <div class="media pdp__media">
-          <Packshot product={product} lang={lang} size="lg" />
-        </div>
-      </div>
-
       <div class="pdp__info">
         <h1 class="pdp__title">{product.name[lang]}</h1>
         <p class="pdp__sub muted">{product.subtitle[lang]}</p>
-        <p class="pdp__price mono-num" data-price-display data-product={product.slug}>
-          {formatPrice(variantePardefaut.price, lang)}
-        </p>
+        <Prix product={product} lang={lang} vivant class="pdp__price" />
         <p class="pdp__short">{product.short[lang]}</p>
 
         <BuyBox product={product} lang={lang} hidePrice />
@@ -273,30 +260,40 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
 
 <style>
   .page-top {
-    padding-top: clamp(0.75rem, 2vw, 1.5rem);
+    padding-top: clamp(1.75rem, 4vw, 3rem);
     padding-bottom: var(--section);
   }
 
-  .pdp {
+  /* Les packshots sont carrés et le sachet y occupe presque toute la hauteur :
+     un cadrage panoramique le couperait. La bande s'élargit donc sans rogner —
+     le visuel garde ses proportions, et le fond de la bande, repris de la
+     photographie elle-même, prolonge le décor jusqu'aux bords. */
+  .pdp__banniere {
+    background: var(--fond, var(--paper));
     display: grid;
-    gap: clamp(1.75rem, 4vw, 4rem);
-    margin-top: clamp(1.25rem, 3vw, 2.25rem);
+    place-items: center;
+  }
+
+  /* Sur un écran étroit, le visuel occupe toute la largeur : le carré tombe
+     bord à bord, sans bande résiduelle. */
+  .pdp__banniere :global(.shot) {
+    width: 100%;
+    margin-inline: auto;
   }
 
   @media (min-width: 900px) {
-    .pdp {
-      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-      align-items: start;
-    }
-
-    .pdp__visual {
-      position: sticky;
-      top: calc(var(--header-h) + 1.5rem);
+    .pdp__banniere :global(.shot) {
+      /* Assez grand pour ouvrir la page, assez court pour ne pas la remplir. */
+      width: min(100%, 78svh);
     }
   }
 
-  .pdp__media {
-    background: none;
+  .pdp {
+    margin-top: 0;
+  }
+
+  .pdp__info {
+    max-width: 44ch;
   }
 
   .pdp__title {

@@ -1,13 +1,12 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
-import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ProductCard from '../../../components/ProductCard.astro';
 import SplitTitle from '../../../components/SplitTitle.astro';
 import ProBand from '../../../components/ProBand.astro';
 import ClosingBand from '../../../components/ClosingBand.astro';
 import { langPaths } from '../../../i18n/paths';
-import { useTranslations, url, route, absolute, type Lang } from '../../../i18n/utils';
+import { useTranslations, route, absolute, type Lang } from '../../../i18n/utils';
 import { products } from '../../../data/products';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
@@ -55,8 +54,6 @@ const jsonld = [
 
 <Base lang={lang} title={t.cafes.seoTitle} description={t.cafes.seoDescription} jsonld={jsonld}>
   <div class="wrap page-top">
-    <Breadcrumbs lang={lang} items={[{ href: url(lang), label: t.common.home }, { label: t.nav.cafes }]} />
-
     <header class="chead">
       <span class="label" data-reveal>{t.cafes.label}</span>
       <SplitTitle text={t.cafes.title} as="h1" size="xl" class="sec-title chead__title" />
@@ -105,7 +102,6 @@ const jsonld = [
 
 <style>
   .page-top {
-    padding-top: clamp(0.75rem, 2vw, 1.5rem);
     padding-bottom: var(--section);
   }
 

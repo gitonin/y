@@ -21,7 +21,6 @@ const config = {
     total: t.cart.total,
     checkout: t.cart.checkout,
     notice: t.cart.notice,
-    added: t.common.added,
     error: t.common.error,
     shopSoon: t.common.shopSoon,
     remove: t.nav.close,
@@ -236,16 +235,25 @@ const config = {
     text-align: right;
   }
 
+  /* Supprimer une ligne se vise au pouce : la croix fait 44 px de côté, le
+     minimum tenable sur un écran tactile, et son trait est assez épais pour se
+     voir. Le dessin reste discret — c'est la surface qui grandit, pas le gris. */
   :global(.cline__remove) {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: var(--fs-label);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-30);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-top: 0.35rem;
+    margin-inline-start: auto;
+    margin-inline-end: -0.6rem;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--ink-50);
+    transition: color 0.3s var(--ease);
   }
 
-  :global(.cline__remove:hover) {
+  :global(.cline__remove:hover),
+  :global(.cline__remove:focus-visible) {
     color: var(--accent);
   }
 
@@ -485,7 +493,7 @@ const config = {
           </div>
           <div>
             <p class="cline__price">${money(l.amount * l.quantity, l.currency)}</p>
-            <button type="button" class="cline__remove" data-line-remove>×</button>
+            <button type="button" class="cline__remove" data-line-remove aria-label="${cfg?.strings.remove ?? ''}">×</button>
           </div>
         </li>`
       )
@@ -555,7 +563,6 @@ const config = {
       }
       render();
       openCart();
-      toast(cfg?.strings.added ?? '');
     } catch (err) {
       console.error('[yunma] cart', err);
       toast(cfg?.strings.error ?? '');

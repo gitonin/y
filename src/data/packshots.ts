@@ -77,3 +77,27 @@ export const packshots = {
 /** Visuel photographique d'une référence, s'il en existe un. */
 export const getPackshot = (slug: string): Packshot | undefined =>
   (packshots as Record<string, Packshot>)[slug];
+
+/**
+ * Couleur de fond de chaque photographie.
+ *
+ * La fiche produit ouvre sur une bande pleine largeur : elle reprend cette
+ * couleur pour que le raccord entre la photographie et la bande ne se voie pas.
+ * Les six visuels n'ont pas tout à fait le même beige — d'où un relevé par
+ * référence, plutôt qu'une teinte commune qui jurerait avec cinq d'entre eux.
+ *
+ * Relevé par `node outils/fond-packshots.mjs` ; à relancer après remplacement
+ * d'un visuel. Une référence absente retombe sur le beige du site.
+ */
+const fonds = {
+  'torch-estate-lot-01': '#dcd2c5',
+  'torch-estate-lot-02': '#cec2b5',
+  'yun-lan-estate': '#e6e0d5',
+  'drip-bags-catimor': '#d6d3ca',
+  'drip-bags-bourbon-jaune': '#d6d3ca',
+  'coffret-decouverte': '#ded6c8',
+} satisfies Record<string, string>;
+
+/** Couleur de fond du visuel d'une référence, ou le beige du site à défaut. */
+export const fondPackshot = (slug: string): string =>
+  (fonds as Record<string, string>)[slug] ?? 'var(--paper)';

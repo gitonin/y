@@ -62,7 +62,7 @@ const titre = (t) => console.log(`\n— ${t}`);
 /* Le catalogue attendu est lu dans le fichier de contenu : ajouter ou retirer
    une référence ne demande pas de retoucher ce test. */
 const CATALOGUE = JSON.parse(readFileSync(new URL('../contenu/produits.json', import.meta.url), 'utf8')).produits.map(
-  (p) => ({ slug: p.slug, formats: p.variants.map((v) => [v.label.fr, v.price]) })
+  (p) => ({ slug: p.slug, formats: p.variants.map((v) => [v.label.fr, v.price, v.mesure?.fr ?? '']) })
 );
 /* Le sélecteur de format ne s'affiche que sur une référence à plusieurs
    formats. S'il n'y en a plus au catalogue, les vérifications qui en dépendent
@@ -95,13 +95,20 @@ for (const { slug, formats } of CATALOGUE) {
   await pg.goto(`${B}/fr/cafes/${slug}/`, { waitUntil: 'networkidle' });
   const chips = pg.locator('.buy__chips .chip');
   check(`${slug} — nombre de formats`, await chips.count(), formats.length > 1 ? formats.length : 0);
-  for (const [i, [libelle, prix]] of formats.entries()) {
+  for (const [i, [libelle, prix, mesure]] of formats.entries()) {
     if (formats.length > 1) {
       await chips.nth(i).click();
       await pg.waitForTimeout(120);
       check(`${slug} — libellé du format ${i + 1}`, await chips.nth(i).innerText(), libelle);
     }
-    check(`${slug} — prix affiché (${libelle})`, await pg.locator('.pdp__price').innerText(), euros(prix));
+    check(`${slug} — prix affiché (${libelle})`, await pg.locator('.pdp__price .prix__montant').innerText(), euros(prix));
+    /* Le grammage se lit à la suite du prix. Un assortiment n'en annonce pas :
+       la mention disparaît alors entièrement, barre comprise. */
+    check(
+      `${slug} — grammage à côté du prix (${libelle})`,
+      await pg.locator('.pdp__price .prix__mesure').count() ? await pg.locator('.pdp__price .prix__mesure').innerText() : '',
+      mesure,
+    );
     check(`${slug} — prix de l'encart (${libelle})`, await pg.locator('.buy__price').innerText(), euros(prix));
     check(`${slug} — prix transmis au panier (${libelle})`, Number(await pg.locator('[data-add-to-cart]').getAttribute('data-price')), prix);
   }
@@ -174,7 +181,10 @@ for (const lang of ['fr', 'en', 'zh']) {
   await pg.goto(`${B}/${lang}/cafes/`, { waitUntil: 'networkidle' });
   const unique = pg.locator('.pcard').filter({ hasText: 'Yun Lan' }).first();
   const attendu = lang === 'fr' ? '17,00 €' : '€17.00';
-  check(`carte à prix unique (${lang})`, await unique.locator('.pcard__price').innerText(), attendu);
+  check(`carte à prix unique (${lang})`, await unique.locator('.pcard__price .prix__montant').innerText(), attendu);
+  /* Sur la carte aussi, le grammage suit le prix. */
+  check(`carte — grammage (${lang})`, await unique.locator('.pcard__price .prix__mesure').innerText(),
+    lang === 'zh' ? '200 克' : '200 g');
   const depuis = { fr: 'À partir de', en: 'From', zh: '起价' }[lang];
   const combien = await pg.locator('.pcard__price').filter({ hasText: depuis }).count();
   check(`aucune mention « ${depuis} » sur un prix unique (${lang})`, combien, AVEC_FORMATS ? combien : 0);

@@ -38,6 +38,7 @@ const multi = product.variants.length > 1;
                 data-variant-index={i}
                 data-price={v.price}
                 data-label={v.label[lang]}
+                data-mesure={v.mesure?.[lang] ?? ''}
                 disabled={!v.available}
               />
               <span>{v.label[lang]}</span>
@@ -45,15 +46,6 @@ const multi = product.variants.length > 1;
           ))}
         </div>
       </fieldset>
-    )
-  }
-
-  {
-    !multi && (
-      <p class="buy__single">
-        <span class="label">{t.common.format}</span>
-        <span>{first.label[lang]}</span>
-      </p>
     )
   }
 
@@ -157,17 +149,6 @@ const multi = product.variants.length > 1;
     opacity: 0.4;
     text-decoration: line-through;
     cursor: not-allowed;
-  }
-
-  .buy__single {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    font-size: var(--fs-small);
-  }
-
-  .buy__single .label {
-    display: inline;
   }
 
   .buy__qty {
@@ -275,6 +256,16 @@ const multi = product.variants.length > 1;
     ];
     cibles.forEach((el) => {
       el.textContent = affiche;
+    });
+
+    /* Le grammage se lit à la suite du prix : il doit suivre le même format. */
+    const mesure = radio.dataset.mesure ?? '';
+    const mesures = [
+      ...box.querySelectorAll<HTMLElement>('[data-mesure-display]'),
+      ...document.querySelectorAll<HTMLElement>(`[data-product="${slug}"] ~ [data-mesure-display]`),
+    ];
+    mesures.forEach((el) => {
+      el.textContent = mesure;
     });
   };
 

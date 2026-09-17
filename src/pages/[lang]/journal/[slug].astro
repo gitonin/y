@@ -5,10 +5,9 @@ import { getImage } from 'astro:assets';
 import { createSatteriMarkdownProcessor } from '@astrojs/markdown-satteri';
 import { photos } from '../../../data/photos';
 import Base from '../../../layouts/Base.astro';
-import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Photo from '../../../components/Photo.astro';
 import Poincon from '../../../components/Poincon.astro';
-import { languages, useTranslations, url, route, postUrl, formatDate, absolute, type Lang } from '../../../i18n/utils';
+import { languages, useTranslations, route, postUrl, formatDate, absolute, type Lang } from '../../../i18n/utils';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection('journal');
@@ -102,17 +101,6 @@ const jsonld = [
   jsonld={jsonld}
   keywords={post.data.tags}
 >
-  <div class="wrap page-top">
-    <Breadcrumbs
-      lang={lang}
-      items={[
-        { href: url(lang), label: t.common.home },
-        { href: route(lang, 'journal'), label: t.nav.journal },
-        { label: post.data.title },
-      ]}
-    />
-  </div>
-
   <article class="post">
     <header class="post__head wrap wrap--narrow">
       <p class="label post__meta">
@@ -179,10 +167,6 @@ const jsonld = [
 </Base>
 
 <style>
-  .page-top {
-    padding-top: clamp(0.75rem, 2vw, 1.5rem);
-  }
-
   .post {
     padding-bottom: var(--section);
   }

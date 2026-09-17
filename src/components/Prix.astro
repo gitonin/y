@@ -1,0 +1,69 @@
+---
+/**
+ * Prix et mesure sur une seule ligne : « 15,00 € | 200 g ».
+ *
+ * Le grammage — ou la quantité, pour les sachets filtres — se lit à la suite du
+ * prix, dans la même typographie : c'est une seule information d'achat, pas
+ * deux. Un assortiment n'en annonce aucune, la barre disparaît alors avec elle.
+ *
+ * Partagé par la carte produit et la fiche, pour que les deux ne divergent pas.
+ */
+import { formatPrice, useTranslations, type Lang } from '../i18n/utils';
+import type { Product } from '../data/products';
+import { defaultVariant, fromPrice, hasPriceRange } from '../data/products';
+
+interface Props {
+  product: Product;
+  lang: Lang;
+  /** Sur la fiche produit, le prix suit le format choisi : le script le réécrit. */
+  vivant?: boolean;
+  class?: string;
+}
+const { product, lang, vivant = false, class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+
+const variante = defaultVariant(product);
+/* Plusieurs formats à des prix différents : une carte annonce le plus bas, et
+   se garde de le faire passer pour le prix unique. La fiche, elle, montre le
+   format sélectionné. */
+const fourchette = hasPriceRange(product) && !vivant;
+const prix = vivant ? variante.price : fromPrice(product);
+/* Une fourchette ne peut pas annoncer de mesure : elle en couvre plusieurs. */
+const mesure = fourchette ? '' : (variante.mesure?.[lang] ?? '');
+---
+
+<p class:list={['prix', 'mono-num', className]}>
+  {fourchette && <span class="prix__depuis">{t.common.from} </span>}<span
+    class="prix__montant"
+    data-price-display={vivant ? '' : undefined}
+    data-product={vivant ? product.slug : undefined}>{formatPrice(prix, lang)}</span
+  >{
+    mesure && (
+      <>
+        <span class="prix__barre" aria-hidden="true">|</span>
+        <span class="prix__mesure" data-mesure-display>
+          {mesure}
+        </span>
+      </>
+    )
+  }
+</p>
+
+<style>
+  .prix {
+    /* La barre ne doit jamais se retrouver seule en début de ligne. */
+    white-space: nowrap;
+  }
+
+  .prix__depuis {
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+
+  .prix__barre {
+    margin-inline: 0.45em;
+    color: var(--ink-30);
+  }
+</style>
