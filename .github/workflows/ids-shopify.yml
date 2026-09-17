@@ -66,8 +66,10 @@ jobs:
             node outils/ids-shopify.mjs
           fi
 
-      # Le fichier modifié repart en pièce jointe plutôt qu'en commit : la suite
-      # se relit avant d'entrer dans le dépôt.
+      # Le fichier modifié ne part pas en commit : il se relit d'abord. Il sort
+      # de deux façons — en pièce jointe pour qui travaille dans le navigateur,
+      # et en clair dans le journal, seul canal lisible depuis un poste dont
+      # l'accès au stockage GitHub est filtré.
       - name: Déposer le fichier mis à jour
         if: ${{ inputs.ecrire }}
         uses: actions/upload-artifact@v4
@@ -75,3 +77,10 @@ jobs:
           name: produits-json
           path: contenu/produits.json
           if-no-files-found: error
+
+      - name: Afficher les identifiants retenus
+        if: ${{ inputs.ecrire }}
+        run: |
+          echo "----- début contenu/produits.json -----"
+          cat contenu/produits.json
+          echo "----- fin contenu/produits.json -----"
