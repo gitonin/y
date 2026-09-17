@@ -228,4 +228,11 @@ const rowA = [
       justify-content: space-between;
     }
   }
+  /* Un idéogramme remplit son cadre bien plus qu'une capitale latine : à 11 px,
+     « 中文 » donne 12 px d'encre contre 8 px pour « FR ». L'égaler exactement
+     demanderait 7,3 px — trop petit pour se lire. À 9 px, l'écart passe de 50 %
+     à 22 % et le libellé reste net. */
+  .ft__lang a:lang(zh) {
+    font-size: 9px;
+  }
 </style>

@@ -288,10 +288,21 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
        lignes de droite : l'encart d'achat, puis le récit. Il reste en place
        pendant qu'on les lit, et repart avec la page quand le texte s'achève.
        C'est la longueur du texte qui fait l'effet — sans le récit dans cette
-       colonne, tout tiendrait à l'écran et il n'y aurait rien à retenir. */
+       colonne, tout tiendrait à l'écran et il n'y aurait rien à retenir.
+
+       Deux éléments, et non un seul : le cadre s'étire sur toute la zone de
+       grille, et c'est la photographie qui colle à l'intérieur. Un élément de
+       grille collant sur une grille en `align-items: start` n'est pas borné par
+       sa zone — il reste accroché au-delà, et la section suivante lui passe
+       dessus. En donnant au collant un parent qui remplit la zone, sa course
+       est celle qu'on attend. */
     .pdp__visual {
       grid-column: 1;
       grid-row: 1 / span 2;
+      align-self: stretch;
+    }
+
+    .pdp__media {
       position: sticky;
       top: calc(var(--header-h) + 1.5rem);
     }

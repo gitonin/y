@@ -387,11 +387,29 @@ const current = Astro.url.pathname;
 
   /* Le logo se centre dans le panneau des liens, et non sur la largeur entière
      du menu : autrefois centré sur l'écran, il se posait sur la photographie. */
-  /* Le logo se détache nettement des liens, et l'ensemble remonte : il était
-     trop près du premier item, et le bloc trop bas dans le panneau. */
   .nav__logo {
     align-self: center;
     margin-bottom: clamp(2.75rem, 7vh, 5.5rem);
+  }
+
+  /* Sur petit écran, le logo reprend exactement la place qu'il occupe dans la
+     barre de l'accueil — même hauteur depuis le bord, même centrage — pour que
+     l'ouverture du menu ne le fasse pas sauter. Il quitte donc le flux, et tout
+     le reste — liens, filets, langues — se centre dans la hauteur restante. */
+  @media (max-width: 899px) {
+    .nav__logo {
+      position: absolute;
+      top: var(--logo-haut);
+      left: 50%;
+      translate: -50% 0;
+      margin: 0;
+      z-index: 2;
+    }
+
+    .nav__col {
+      padding-top: calc(var(--logo-haut) + var(--logo-grand) + clamp(1rem, 3vh, 2rem));
+      justify-content: center;
+    }
   }
 
   /* Il reprend le logo tel qu'il apparaît en arrivant sur l'accueil — sa grande
@@ -403,6 +421,7 @@ const current = Astro.url.pathname;
   }
 
   .nav__body {
+    position: relative;
     flex: 1;
     min-height: 100%;
     display: grid;
@@ -424,17 +443,21 @@ const current = Astro.url.pathname;
   /* Le retrait haut l'emporte sur le bas : l'ensemble des liens et des filets
      descend, et le vide se répartit mieux entre le haut et le pied du menu. */
   .nav__col {
-    padding: calc(var(--header-h) + clamp(0.5rem, 2vh, 1.5rem)) var(--gutter) clamp(1rem, 2.5vh, 2.25rem);
+    padding: clamp(1rem, 3vh, 2.5rem) var(--gutter) clamp(1rem, 2.5vh, 2.25rem);
     max-width: 640px;
     width: 100%;
     margin-left: auto;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
   }
 
+  /* Sur grand écran, le menu part du haut : centré verticalement, il laissait
+     un vide en tête et repoussait l'ensemble vers le bas. */
   @media (min-width: 900px) {
     .nav__col {
-      justify-content: center;
+      justify-content: flex-start;
+      padding-top: clamp(1.5rem, 5vh, 3.5rem);
       padding-left: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
       max-width: none;
       margin-left: 0;
@@ -587,6 +610,13 @@ const current = Astro.url.pathname;
     .nav.is-open .nav__visual :global(img) {
       transform: scale(1);
     }
+  }
+  /* Un idéogramme remplit son cadre bien plus qu'une capitale latine : à 11 px,
+     « 中文 » donne 12 px d'encre contre 8 px pour « FR ». L'égaler exactement
+     demanderait 7,3 px — trop petit pour se lire. À 9 px, l'écart passe de 50 %
+     à 22 % et le libellé reste net. */
+  .nav__lang a:lang(zh) {
+    font-size: 9px;
   }
 </style>
 
