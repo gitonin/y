@@ -1,0 +1,26 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Yunma — renvoi vers le site",
+    "theme_version": "1.0.0",
+    "theme_author": "Yunma",
+    "theme_documentation_url": "https://github.com/gitonin/y",
+    "theme_support_url": "https://github.com/gitonin/y"
+  },
+  {
+    "name": "Site Yunma",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Ce thème n'affiche aucune boutique : il renvoie vers le site Yunma toute personne qui aboutirait sur une page Shopify — depuis un courriel de commande, la fin du paiement, ou le bouton « Acheter à nouveau » de l'espace client."
+      },
+      {
+        "type": "text",
+        "id": "adresse_site",
+        "label": "Adresse du site",
+        "default": "https://gitonin.github.io/y/v4",
+        "info": "Sans barre oblique finale. Pour l'aperçu : https://gitonin.github.io/y/v4 — le jour du vrai domaine : https://yunma.fr"
+      }
+    ]
+  }
+]

@@ -1,24 +1,11 @@
 ---
 /**
- * Passerelle depuis Shopify : /products/{handle}/ → la fiche du café sur le site.
- *
- * Shopify ne connaît de nos références que leur « handle », et construit tous
- * ses liens de retour sur un seul modèle : {boutique}/products/{handle}. C'est
- * ce que fabriquent le bouton « Racheter » de l'espace client et l'historique
- * des commandes. Or nos fiches vivent ailleurs — /fr/cafes/{slug}/ — et sont
- * déclinées en trois langues, deux choses que Shopify ignore.
- *
- * Cette page comble l'écart. Elle n'a pas de contenu propre : elle reçoit
- * l'adresse que Shopify a fabriquée et renvoie aussitôt vers la vraie fiche,
- * dans la langue du visiteur. Sans elle, régler l'adresse de la boutique dans
- * le canal Headless ne ferait que déplacer le problème : les liens arriveraient
- * bien sur le site, mais sur une page inexistante.
- *
- * Les moteurs de recherche n'ont rien à y voir : la fiche canonique est la
- * fiche française, et ces passerelles sont marquées noindex.
+ * /products/{handle}/ — la forme qu'emploie Shopify pour désigner un produit,
+ * dans ses courriels de commande comme dans les liens de son thème.
  */
+import Passerelle from '../../components/Passerelle.astro';
 import { products } from '../../data/products';
-import { asset, absolute, productUrl, languages } from '../../i18n/utils';
+import { absolute, productUrl, languages, type Lang } from '../../i18n/utils';
 
 export const prerender = true;
 
@@ -30,57 +17,13 @@ export function getStaticPaths() {
 }
 
 const { slug, nom } = Astro.props;
-
-/* Les trois destinations possibles, résolues au build : le script n'a plus
-   qu'à choisir la langue, sans rien avoir à reconstruire. */
-const destinations = Object.fromEntries(languages.map((code) => [code, productUrl(code, slug)]));
-const secours = destinations.fr;
-const canonical = absolute(Astro.site, `fr/cafes/${slug}/`);
+const destinations = Object.fromEntries(
+  languages.map((code) => [code, productUrl(code, slug)]),
+) as Record<Lang, string>;
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{nom} — Yunma</title>
-    <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href={canonical} />
-    <link rel="icon" href={asset('brand/favicon-96.png')} type="image/png" sizes="96x96" />
-    <meta http-equiv="refresh" content={`0; url=${secours}`} />
-    <script is:inline define:vars={{ destinations, secours }}>
-      (function () {
-        var stored = null;
-        try {
-          stored = localStorage.getItem('yunma:lang');
-        } catch (e) {}
-        var nav = (navigator.language || 'fr').toLowerCase();
-        var guess = nav.indexOf('zh') === 0 ? 'zh' : nav.indexOf('en') === 0 ? 'en' : 'fr';
-        var lang = stored && destinations[stored] ? stored : guess;
-        location.replace(destinations[lang] || secours);
-      })();
-    </script>
-    <style>
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background: #ebe7de;
-        color: #212121;
-        font-family: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', sans-serif;
-        font-size: 14px;
-        letter-spacing: 0.02em;
-      }
-      a {
-        color: #b95f2c;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Visible seulement si le script et la redirection sont tous deux hors service. -->
-    <main>
-      <a href={secours}>{nom}</a>
-    </main>
-  </body>
-</html>
+<Passerelle
+  destinations={destinations}
+  canonical={absolute(Astro.site, `fr/cafes/${slug}/`)}
+  titre={nom}
+/>

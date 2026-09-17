@@ -1,0 +1,21 @@
+---
+/**
+ * /collections/all/ — la forme qu'emploie Shopify pour une liste de produits.
+ * Le thème de renvoi y dirige toutes les collections, ainsi que les paniers
+ * qui contiennent plus d'une référence : la liste des cafés y répond.
+ */
+import Passerelle from '../../components/Passerelle.astro';
+import { absolute, route, languages, type Lang } from '../../i18n/utils';
+
+export const prerender = true;
+
+const destinations = Object.fromEntries(
+  languages.map((code) => [code, route(code, 'cafes')]),
+) as Record<Lang, string>;
+---
+
+<Passerelle
+  destinations={destinations}
+  canonical={absolute(Astro.site, 'fr/cafes/')}
+  titre="Nos cafés"
+/>

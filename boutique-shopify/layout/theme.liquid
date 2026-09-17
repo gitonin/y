@@ -1,0 +1,9 @@
+{%- comment -%}
+  Ce gabarit n'est jamais utilisé : chaque modèle déclare « layout none » et
+  rend lui-même une page complète. Shopify exige néanmoins sa présence.
+{%- endcomment -%}
+<!doctype html>
+<html lang="fr">
+  <head>{{ content_for_header }}</head>
+  <body>{{ content_for_layout }}</body>
+</html>

@@ -1,0 +1,27 @@
+{% layout none %}
+{%- comment -%}
+  Pas de renvoi : le code de la carte cadeau n'existe que sur cette page.
+  L'envoyer ailleurs reviendrait à le faire disparaître.
+{%- endcomment -%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yunma — carte cadeau</title>
+    <style>
+      body { margin:0; min-height:100vh; display:grid; place-items:center;
+             background:#ebe7de; color:#212121; text-align:center;
+             font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; }
+      .code { font-size:1.5rem; letter-spacing:.12em; margin:1rem 0; }
+      a { color:#b95f2c; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>Carte cadeau Yunma — {{ gift_card.balance | money }}</p>
+      <p class="code">{{ gift_card.code | format_code }}</p>
+      <p><a href="{{ settings.adresse_site | default: '/' }}">Utiliser sur yunma.fr</a></p>
+    </main>
+  </body>
+</html>

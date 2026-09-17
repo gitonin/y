@@ -1,0 +1,29 @@
+{% layout none %}
+{%- comment -%}
+  Le panier est le modèle qui compte.
+
+  C'est ici qu'aboutit le bouton « Acheter à nouveau » de l'espace client :
+  Shopify résout d'abord son identifiant de panier (cart_link_id) sur ses
+  propres serveurs, remplit le panier, puis affiche cette page. À cet instant,
+  et à cet instant seulement, le contenu de la commande est connu — c'est ce
+  que le site, lui, ne pouvait pas deviner d'un identifiant opaque.
+
+  On s'en sert pour viser juste : une seule référence renvoie sur sa fiche,
+  plusieurs renvoient sur la liste des cafés.
+{%- endcomment -%}
+
+{%- assign poignees = '' -%}
+{%- for ligne in cart.items -%}
+  {%- assign poignees = poignees | append: ligne.product.handle | append: ',' -%}
+{%- endfor -%}
+{%- assign distinctes = poignees | split: ',' | uniq -%}
+
+{%- if distinctes.size == 1 -%}
+  {%- assign cible = '/products/' | append: distinctes.first | append: '/' -%}
+{%- elsif distinctes.size > 1 -%}
+  {%- assign cible = '/collections/all/' -%}
+{%- else -%}
+  {%- assign cible = '/' -%}
+{%- endif -%}
+
+{% render 'renvoi', cible: cible, racine: settings.adresse_site %}

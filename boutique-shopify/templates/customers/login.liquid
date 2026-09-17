@@ -1,0 +1,33 @@
+{% layout none %}
+{%- comment -%}
+  Aucun renvoi ici, volontairement.
+
+  Le site renvoie « Mon compte » vers l'espace client Shopify. Si ce thème
+  renvoyait l'espace client vers le site, les deux se renverraient la balle
+  indéfiniment et le visiteur ne verrait jamais son compte. Ces pages restent
+  donc entre les mains de Shopify.
+
+  Elles ne servent d'ailleurs qu'aux anciens comptes clients : avec les
+  nouveaux, Shopify affiche son propre espace et ne passe pas par ici.
+{%- endcomment -%}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Yunma — mon compte</title>
+    <style>
+      body { margin:0; min-height:100vh; display:grid; place-items:center;
+             background:#ebe7de; color:#212121;
+             font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+             font-size:14px; letter-spacing:.02em; text-align:center; }
+      a { color:#b95f2c; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p><a href="{{ settings.adresse_site | default: '/' }}">Retour à la boutique Yunma</a></p>
+    </main>
+  </body>
+</html>

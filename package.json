@@ -8,6 +8,7 @@
     "start": "astro dev",
     "verifier-contenu": "node outils/verifier-contenu.mjs",
     "ids-shopify": "node outils/ids-shopify.mjs",
+    "theme-zip": "sh outils/theme-zip.sh",
     "export-contenu": "node scripts/export-contenu.mjs",
     "importer-contenu": "node scripts/importer-contenu.mjs",
     "prebuild": "node outils/verifier-contenu.mjs",
@@ -17,7 +18,8 @@
     "test:boutique": "node tests/boutique.mjs",
     "test:mise-en-page": "node tests/mise-en-page.mjs",
     "test:blocs": "node tests/blocs-de-texte.mjs",
-    "test": "npm run test:boutique && npm run test:mise-en-page && npm run test:blocs"
+    "test:theme": "node tests/theme-shopify.mjs",
+    "test": "npm run test:boutique && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
@@ -26,6 +28,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "docx": "^9.7.1",
+    "liquidjs": "^10.29.0",
+    "playwright": "^1.63.0",
     "typescript": "^6.0.3"
   }
 }

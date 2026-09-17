@@ -1,0 +1,75 @@
+---
+/**
+ * Passerelle depuis Shopify.
+ *
+ * Shopify ne connaît du site ni ses chemins ni ses langues : il fabrique ses
+ * liens sur ses propres modèles — /products/{handle}, /collections/{handle},
+ * /blogs/… — et les envoie tels quels. Ces pages reçoivent la forme Shopify et
+ * renvoient aussitôt vers la vraie page, dans la langue du visiteur.
+ *
+ * Elles n'ont pas de contenu propre : marquées noindex, tenues hors du plan du
+ * site, et désignant la page française comme canonique.
+ */
+import { asset, languages, type Lang } from '../i18n/utils';
+
+interface Props {
+  /** Une destination par langue : c'est le script qui choisit. */
+  destinations: Record<Lang, string>;
+  /** L'adresse canonique, absolue. */
+  canonical: string;
+  /** Le titre de l'onglet, et le libellé du lien de secours. */
+  titre: string;
+}
+const { destinations, canonical, titre } = Astro.props;
+
+/* Le français fait office de secours : c'est lui que suit la balise « refresh »
+   quand JavaScript est hors service. */
+const secours = destinations.fr;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre} — Yunma</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={asset('brand/favicon-96.png')} type="image/png" sizes="96x96" />
+    <meta http-equiv="refresh" content={`0; url=${secours}`} />
+    <script is:inline define:vars={{ destinations, secours }}>
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem('yunma:lang');
+        } catch (e) {}
+        var nav = (navigator.language || 'fr').toLowerCase();
+        var guess = nav.indexOf('zh') === 0 ? 'zh' : nav.indexOf('en') === 0 ? 'en' : 'fr';
+        var lang = stored && destinations[stored] ? stored : guess;
+        location.replace(destinations[lang] || secours);
+      })();
+    </script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #ebe7de;
+        color: #212121;
+        font-family: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.02em;
+      }
+      a {
+        color: #b95f2c;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Visible seulement si le script et la balise « refresh » sont tous deux hors service. -->
+    <main>
+      <a href={secours}>{titre}</a>
+    </main>
+  </body>
+</html>

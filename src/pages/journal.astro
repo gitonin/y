@@ -1,0 +1,20 @@
+---
+/**
+ * /journal/ — où le thème de renvoi dirige le blog Shopify, inutilisé : les
+ * carnets vivent ici.
+ */
+import Passerelle from '../components/Passerelle.astro';
+import { absolute, route, languages, type Lang } from '../i18n/utils';
+
+export const prerender = true;
+
+const destinations = Object.fromEntries(
+  languages.map((code) => [code, route(code, 'journal')]),
+) as Record<Lang, string>;
+---
+
+<Passerelle
+  destinations={destinations}
+  canonical={absolute(Astro.site, 'fr/journal/')}
+  titre="Les carnets de Yunma"
+/>

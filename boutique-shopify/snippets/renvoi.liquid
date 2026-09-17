@@ -1,0 +1,67 @@
+{%- comment -%}
+  Renvoi vers le site Yunma.
+
+  Un thème Liquid ne peut pas répondre par une redirection HTTP : il ne sait que
+  rendre une page. On s'appuie donc sur les deux moyens dont dispose une page —
+  la balise « refresh », qui agit sans JavaScript, et location.replace(), qui
+  agit tout de suite et n'ajoute rien à l'historique du navigateur (le bouton
+  « retour » ramène là d'où l'on vient, pas sur cette page de passage).
+
+  Paramètres attendus :
+    · `cible`  — un chemin commençant par « / » ;
+    · `racine` — l'adresse du site, passée explicitement.
+
+  Un snippet rendu par `render` n'hérite pas des variables de l'appelant. Shopify
+  y expose bien les objets globaux, `settings` compris, mais on préfère passer
+  l'adresse en clair : ce qui est explicite se vérifie.
+{%- endcomment -%}
+
+{%- comment -%}
+  On n'ôte la barre oblique finale que si elle est bien finale. `remove_last`
+  retire la dernière barre où qu'elle soit : appliqué sans garde à une adresse
+  contenant un sous-dossier, il transforme « …github.io/y/v4 » en
+  « …github.io/yv4 » et casse tous les renvois.
+{%- endcomment -%}
+{%- assign base = racine | default: '' | strip -%}
+{%- assign dernier = base | slice: -1 -%}
+{%- if dernier == '/' -%}
+  {%- assign base = base | remove_last: '/' -%}
+{%- endif -%}
+{%- assign destination = base | append: cible -%}
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Yunma</title>
+    {%- if base != blank -%}
+      <meta http-equiv="refresh" content="0; url={{ destination }}">
+      <script>location.replace({{ destination | json }});</script>
+    {%- endif -%}
+    <style>
+      body { margin:0; min-height:100vh; display:grid; place-items:center;
+             background:#ebe7de; color:#212121;
+             font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+             font-size:14px; letter-spacing:.02em; text-align:center; }
+      a { color:#b95f2c; }
+    </style>
+  </head>
+  <body>
+    {%- comment -%}
+      Visible seulement si l'adresse du site n'est pas renseignée dans les
+      réglages du thème, ou si les deux moyens de renvoi sont hors service.
+    {%- endcomment -%}
+    <main>
+      {%- if base == blank -%}
+        <p>
+          L'adresse du site n'est pas renseignée.<br>
+          Personnaliser le thème &rsaquo; Réglages du thème &rsaquo; Site Yunma.
+        </p>
+      {%- else -%}
+        <p><a href="{{ destination }}">Continuer vers yunma.fr</a></p>
+      {%- endif -%}
+    </main>
+  </body>
+</html>
