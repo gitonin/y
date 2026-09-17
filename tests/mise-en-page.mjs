@@ -129,10 +129,18 @@ for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 9
 }
 
 /* --------------------------------- 2 bis. la vitrine de l'accueil */
-titre('La référence de tête s’aligne sur les deux cartes du dessous');
+/* Deux mises en page, selon la place : sur petit écran une référence ouvre la
+   ligne et les deux suivantes se la partagent ; sur grand écran les trois se
+   rangent en colonnes égales, aucune n'étant mise en avant. Dans les deux cas,
+   les bords extérieurs doivent tomber sur la même verticale. */
+titre('La vitrine de l’accueil, selon la largeur');
 for (const [w, h] of [[390, 844], [768, 1024], [1280, 900], [1440, 900], [1920, 1080]]) {
   const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
   await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+  const grille = await pg.evaluate(() => {
+    const g = document.querySelector('.pgrid').getBoundingClientRect();
+    return { gauche: Math.round(g.left), droite: Math.round(g.right) };
+  });
   const cartes = await pg.evaluate(() =>
     [...document.querySelectorAll('.pgrid .pcard')].map((c) => {
       const r = c.getBoundingClientRect();
@@ -149,11 +157,22 @@ for (const [w, h] of [[390, 844], [768, 1024], [1280, 900], [1440, 900], [1920, 
   check(`${w}px — la tête est le Bourbon jaune`, cartes[0]?.nom.includes('Bourbon jaune'), true);
   check(`${w}px — puis Torch Estate Lot 01`, cartes[1]?.nom.includes('Lot 01'), true);
   check(`${w}px — puis Yun Lan Estate`, cartes[2]?.nom.includes('Yun Lan'), true);
-  /* Le bord gauche de la tête sur celui de la deuxième, son bord droit sur
-     celui de la troisième : c'est ce qui fait tenir la colonne. */
-  check(`${w}px — bord gauche aligné`, cartes[0]?.gauche, cartes[1]?.gauche);
-  check(`${w}px — bord droit aligné`, cartes[0]?.droite, cartes[2]?.droite);
-  check(`${w}px — la tête occupe la ligne entière`, cartes[0]?.droite - cartes[0]?.gauche > cartes[1]?.droite - cartes[1]?.gauche, true);
+  /* La vitrine remplit sa gouttière : la première carte touche le bord gauche
+     de la grille, la dernière son bord droit. C'est vrai des deux mises en
+     page, là où comparer deux cartes entre elles ne le serait pas — en trois
+     colonnes, la première et la deuxième n'ont pas le même bord gauche. */
+  check(`${w}px — bord gauche de la vitrine`, cartes[0]?.gauche, grille.gauche);
+  check(`${w}px — bord droit de la vitrine`, cartes[cartes.length - 1]?.droite, grille.droite);
+
+  const largeur = (c) => (c ? c.droite - c.gauche : 0);
+  if (w >= 900) {
+    /* Trois colonnes égales : la tolérance d'un pixel absorbe l'arrondi d'une
+       largeur qui ne se divise pas en trois. */
+    const ecart = Math.max(...cartes.map(largeur)) - Math.min(...cartes.map(largeur));
+    check(`${w}px — trois colonnes égales`, ecart <= 1, true);
+  } else {
+    check(`${w}px — la tête occupe la ligne entière`, largeur(cartes[0]) > largeur(cartes[1]), true);
+  }
   check(`${w}px — visuels carrés`, cartes.every((c) => c.carre), true);
   await pg.close();
 }
