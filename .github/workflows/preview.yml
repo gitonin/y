@@ -1,18 +1,21 @@
-# Vérification de construction de la version 2.
+# Vérification de construction de la version 5.
 #
-# La publication de l'aperçu est faite depuis la branche v1, qui met en ligne
-# les deux versions en une seule fois :
+# La publication de l'aperçu est faite depuis la branche de publication
+# (claude/yunma-coffee-ecommerce-l4qy1c), qui met en ligne toutes les versions
+# en une seule fois :
 #   https://<utilisateur>.github.io/<dépôt>/     -> version 1
 #   https://<utilisateur>.github.io/<dépôt>/v2/  -> version 2
-#   https://<utilisateur>.github.io/<dépôt>/v4/  -> version 4, ce chantier
-# Après une poussée ici, relancez « Aperçu GitHub Pages » depuis la branche v1
-# (onglet Actions > Run workflow) pour republier.
-name: Vérification v4
+#   https://<utilisateur>.github.io/<dépôt>/v3/  -> version 3
+#   https://<utilisateur>.github.io/<dépôt>/v4/  -> version 4
+#   https://<utilisateur>.github.io/<dépôt>/v5/  -> version 5, ce chantier
+# Après une poussée ici, relancez « Aperçu GitHub Pages » depuis la branche de
+# publication (onglet Actions > Run workflow) pour republier.
+name: Vérification v5
 
 on:
   push:
     branches:
-      - claude/yunma-site-v4
+      - claude/yunma-site-v5
   workflow_dispatch:
 
 permissions:
