@@ -25,6 +25,7 @@ export default defineConfig({
       // Exclut la racine (page de redirection), la 404 et la planche de travail
       filter: (page) =>
         !page.includes('/404') &&
+        !page.includes('/experience/') &&
         !page.includes('/composants/') &&
         !page.includes('/savoir-faire/') &&
         !page.includes('/a-propos/') &&

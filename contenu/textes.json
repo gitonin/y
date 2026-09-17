@@ -25,7 +25,8 @@
         "contact": "Contact",
         "account": "Mon compte",
         "cart": "Panier",
-        "language": "Langue"
+        "language": "Langue",
+        "experience": "Expérience"
       },
       "common": {
         "brand": "Yunma",
@@ -392,6 +393,27 @@
           }
         ]
       },
+      "experience": {
+        "seoTitle": "L’expérience Yunma — tenez la tasse",
+        "seoDescription": "Un petit jeu d’équilibre : votre caméra, le capteur de mouvement de votre téléphone, et une tasse de café qu’il ne faut pas renverser.",
+        "label": "Expérience",
+        "title": "Ne renversez pas.",
+        "intro": "Posez la tasse dans votre main, inclinez doucement, et tenez le plus longtemps possible. Le café, lui, ne pardonne rien.",
+        "cameraNote": "La caméra ne sert qu’à l’affichage, sur votre appareil. Rien n’est enregistré, rien n’est envoyé.",
+        "start": "Commencer",
+        "permission": "Votre navigateur va demander l’accès à la caméra et au capteur de mouvement.",
+        "noCamera": "Sans caméra, la tasse se pose sur un fond uni : le jeu reste entier.",
+        "noMotion": "Sans capteur de mouvement, inclinez au doigt ou à la souris.",
+        "howto": "Inclinez doucement.",
+        "score": "Tenue",
+        "best": "Record",
+        "spilled": "Renversé.",
+        "again": "Reprendre une tasse",
+        "close": "Fermer",
+        "seconds": "s",
+        "level": "Remplissage",
+        "back": "Revenir au site"
+      },
       "contact": {
         "seoTitle": "Contact — Yunma",
         "seoDescription": "Une question sur nos cafés, une commande ou un projet professionnel ? Écrivez à l’équipe Yunma.",
@@ -466,7 +488,8 @@
         "contact": "Contact",
         "account": "My account",
         "cart": "Cart",
-        "language": "Language"
+        "language": "Language",
+        "experience": "Experience"
       },
       "common": {
         "brand": "Yunma",
@@ -833,6 +856,27 @@
           }
         ]
       },
+      "experience": {
+        "seoTitle": "The Yunma experience — hold the cup",
+        "seoDescription": "A small balancing game: your camera, your phone’s motion sensor, and a cup of coffee you must not spill.",
+        "label": "Experience",
+        "title": "Don’t spill it.",
+        "intro": "Set the cup in your hand, tilt gently, and hold on as long as you can. Coffee forgives nothing.",
+        "cameraNote": "The camera is only used for display, on your device. Nothing is recorded, nothing is sent.",
+        "start": "Start",
+        "permission": "Your browser will ask for camera and motion sensor access.",
+        "noCamera": "Without a camera, the cup sits on a plain background — the game is unchanged.",
+        "noMotion": "Without a motion sensor, tilt with your finger or the mouse.",
+        "howto": "Tilt gently.",
+        "score": "Held",
+        "best": "Best",
+        "spilled": "Spilled.",
+        "again": "Pour another",
+        "close": "Close",
+        "seconds": "s",
+        "level": "Fill",
+        "back": "Back to the site"
+      },
       "contact": {
         "seoTitle": "Contact — Yunma",
         "seoDescription": "A question about our coffees, an order or a trade project? Write to the Yunma team.",
@@ -907,7 +951,8 @@
         "contact": "联系我们",
         "account": "我的账户",
         "cart": "购物车",
-        "language": "语言"
+        "language": "语言",
+        "experience": "体验"
       },
       "common": {
         "brand": "Yunma 云马",
@@ -1273,6 +1318,27 @@
             "a": "未开封商品可在 14 天内退货。出于食品卫生考虑，已开封商品不予退换。"
           }
         ]
+      },
+      "experience": {
+        "seoTitle": "云马体验——端稳这杯咖啡",
+        "seoDescription": "一个小小的平衡游戏：用你的摄像头、手机的运动传感器，端住一杯不能洒的咖啡。",
+        "label": "体验",
+        "title": "别洒了。",
+        "intro": "把杯子放进手心，轻轻倾斜，尽量端得久一些。咖啡可不留情。",
+        "cameraNote": "摄像头仅用于在你的设备上显示画面。不录制，不上传。",
+        "start": "开始",
+        "permission": "浏览器将请求使用摄像头与运动传感器。",
+        "noCamera": "没有摄像头，杯子会放在纯色背景上——玩法不变。",
+        "noMotion": "没有运动传感器，可用手指或鼠标倾斜。",
+        "howto": "轻轻倾斜。",
+        "score": "坚持",
+        "best": "最佳",
+        "spilled": "洒了。",
+        "again": "再来一杯",
+        "close": "关闭",
+        "seconds": "秒",
+        "level": "杯满度",
+        "back": "返回网站"
       },
       "contact": {
         "seoTitle": "联系我们 — Yunma 云马",

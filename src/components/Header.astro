@@ -24,6 +24,9 @@ const primary = [
 const secondary = [
   { href: route(lang, 'faq'), label: t.nav.faq },
   { href: route(lang, 'contact'), label: t.nav.contact },
+  /* v5 : l'expérience est aussi au menu, le bouton flottant ne paraissant
+     qu'une fois la bannière passée. */
+  { href: route(lang, 'experience'), label: t.nav.experience },
 ];
 
 const current = Astro.url.pathname;

@@ -1,0 +1,131 @@
+---
+/**
+ * Le bouton flottant de la v5, en bas à droite : il ouvre l'expérience.
+ * Il ne se montre qu'une fois la bannière passée, pour ne pas venir se poser
+ * sur le grand titre de l'accueil dès l'arrivée.
+ */
+import type { Lang } from '../i18n/utils';
+import { route, useTranslations, asset } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<a class="flot" href={route(lang, 'experience')} data-flot>
+  <span class="flot__rond" aria-hidden="true">
+    <img src={asset('brand/yunma-poincon.svg')} alt="" width="285" height="285" />
+  </span>
+  <span class="flot__texte">{t.experience.label}</span>
+</a>
+
+<style>
+  .flot {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 110;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.5rem 1.1rem 0.5rem 0.5rem;
+    border-radius: 999px;
+    color: var(--paper);
+    background: rgba(33, 33, 33, 0.82);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    box-shadow: 0 10px 30px -14px rgba(33, 33, 33, 0.6);
+    /* Rangé tant que la page n'a pas défilé. */
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+    pointer-events: none;
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.6s var(--ease-out-expo);
+  }
+
+  .flot.is-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .flot__rond {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--paper);
+  }
+
+  .flot__rond img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .flot__texte {
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    font-weight: var(--w-medium);
+  }
+
+  /* Le poinçon respire doucement : de quoi attirer l'œil sans l'agiter. */
+  @media (prefers-reduced-motion: no-preference) {
+    .flot.is-visible .flot__rond {
+      animation: flot-souffle 3.4s var(--ease) infinite;
+    }
+  }
+
+  @keyframes flot-souffle {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.08);
+    }
+  }
+
+  @media (hover: hover) {
+    .flot:hover {
+      background: var(--ink);
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Sur un écran étroit, le libellé s'efface : le poinçon suffit. */
+  @media (max-width: 520px) {
+    .flot {
+      padding: 0.45rem;
+    }
+
+    .flot__texte {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+</style>
+
+<script>
+  /* Le bouton arrive une fois la première hauteur d'écran passée. */
+  const initFlot = () => {
+    const flot = document.querySelector<HTMLElement>('[data-flot]');
+    if (!flot) return;
+    const regler = () => flot.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+    regler();
+    window.addEventListener('scroll', regler, { passive: true });
+    document.addEventListener('astro:before-swap', () => window.removeEventListener('scroll', regler), {
+      once: true,
+    });
+  };
+
+  document.addEventListener('astro:page-load', initFlot);
+</script>

@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Cart from '../components/Cart.astro';
 import Seo from '../components/Seo.astro';
+import BoutonExperience from '../components/BoutonExperience.astro';
 
 interface Props {
   lang: Lang;
@@ -82,6 +83,7 @@ const t = useTranslations(lang);
 
     <Footer lang={lang} />
     <Cart lang={lang} />
+    <BoutonExperience lang={lang} />
 
     <style is:global>
       .main {

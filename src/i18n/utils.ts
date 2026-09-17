@@ -39,6 +39,7 @@ export const routes = {
   pro: 'pro',
   journal: 'journal',
   faq: 'faq',
+  experience: 'experience',
   contact: 'contact',
   mentions: 'mentions-legales',
   cgv: 'conditions-generales',
