@@ -17,10 +17,19 @@ const alt = defaultAlternates(Astro.url.pathname);
 /* Les cafés ouvrent le menu : c'est ce que l'on vient chercher. L'origine, qui
    les explique, vient juste après. */
 const primary = [
-  { href: route(lang, 'cafes'), label: t.nav.cafes },
-  { href: route(lang, 'origine'), label: t.nav.origine },
-  { href: route(lang, 'pro'), label: t.nav.pro },
-  { href: route(lang, 'journal'), label: t.nav.journal },
+  { href: route(lang, 'cafes'), label: t.nav.cafes, photo: 'cerises-branche' as const },
+  { href: route(lang, 'origine'), label: t.nav.origine, photo: 'cretes-brumeuses' as const },
+  { href: route(lang, 'pro'), label: t.nav.pro, photo: 'sechage-lits' as const },
+  { href: route(lang, 'journal'), label: t.nav.journal, photo: 'recolte-cueilleurs' as const },
+];
+
+/* Le menu ouvert montre une photographie, qui change au survol des quatre
+   grandes entrées. Toutes sont posées l'une sur l'autre et n'attendent qu'un
+   changement d'opacité : survoler ne déclenche aucun chargement, et rien ne
+   clignote. La première de la liste est celle du repos. */
+const visuels = [
+  { nom: 'tabouret-terrasse' as const, cle: 'repos' },
+  ...primary.map((item) => ({ nom: item.photo, cle: item.href })),
 ];
 
 const secondary = [
@@ -55,25 +64,29 @@ const current = Astro.url.pathname;
 
 <nav class="nav" id="site-nav" aria-label={t.nav.primary} data-nav hidden>
   <div class="nav__sheet" tabindex="-1" data-nav-sheet>
-    <div class="nav__bar">
-      <button class="nav__close" type="button" data-nav-close>
-        <svg viewBox="0 0 22 22" aria-hidden="true"
-          ><path d="M3 3l16 16M19 3L3 19" stroke="currentColor" stroke-width="1.2" /></svg
-        >
-        <span class="visually-hidden">{t.nav.close}</span>
-      </button>
-      <a class="nav__logo" href={url(lang)} aria-label={t.a11y.logo}>
-        <img src={asset("brand/yunma-logo.svg")} alt="" width="430" height="648" />
-      </a>
-      <span class="nav__spacer"></span>
-    </div>
+    {/* La croix se pose sur le panneau plutôt que dans un bandeau : sans bandeau
+        en travers, la photographie occupe toute la hauteur. */}
+    <button class="nav__close" type="button" data-nav-close>
+      <svg viewBox="0 0 22 22" aria-hidden="true"
+        ><path d="M3 3l16 16M19 3L3 19" stroke="currentColor" stroke-width="1.2" /></svg
+      >
+      <span class="visually-hidden">{t.nav.close}</span>
+    </button>
 
     <div class="nav__body">
       <div class="nav__col">
+        <a class="nav__logo" href={url(lang)} aria-label={t.a11y.logo}>
+          <img src={asset("brand/yunma-logo.svg")} alt="" width="430" height="648" />
+        </a>
+
         <ul class="nav__list">
           {primary.map((item, i) => (
             <li style={`--i:${i}`}>
-              <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+              <a
+                href={item.href}
+                aria-current={current === item.href ? 'page' : undefined}
+                data-nav-visuel={item.href}
+              >
                 <span>{item.label}</span>
               </a>
             </li>
@@ -119,8 +132,12 @@ const current = Astro.url.pathname;
         </ul>
       </div>
 
-      <div class="nav__visual" aria-hidden="true">
-        <Photo name="cretes-brumeuses" lang={lang} decorative position="50% 60%" sizes="(min-width: 900px) 50vw, 100vw" />
+      <div class="nav__visual" aria-hidden="true" data-nav-visuels>
+        {visuels.map((v, i) => (
+          <div class="nav__vue" data-vue={v.cle} data-active={i === 0 ? '' : undefined}>
+            <Photo name={v.nom} lang={lang} decorative position="50% 60%" sizes="(min-width: 900px) 50vw, 100vw" />
+          </div>
+        ))}
       </div>
     </div>
   </div>
@@ -335,6 +352,7 @@ const current = Astro.url.pathname;
   }
 
   .nav__sheet {
+    position: relative;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -346,21 +364,15 @@ const current = Astro.url.pathname;
     clip-path: inset(0 0 0 0);
   }
 
-  .nav__bar {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    height: var(--header-h);
-    padding-inline: var(--gutter);
-    max-width: var(--max);
-    width: 100%;
-    margin-inline: auto;
-    flex: none;
-  }
-
+  /* La croix se pose par-dessus le panneau, à la place qu'elle occupait dans le
+     bandeau : celui-ci a disparu pour libérer toute la hauteur au visuel. */
   .nav__close {
-    justify-self: start;
-    padding: 12px 12px 12px 0;
+    position: absolute;
+    top: calc((var(--header-h) - 42px) / 2);
+    left: var(--gutter);
+    z-index: 3;
+    padding: 12px;
+    margin-left: -12px;
   }
 
   .nav__close svg {
@@ -373,15 +385,24 @@ const current = Astro.url.pathname;
     transform: rotate(90deg);
   }
 
-  /* Le menu ouvert reprend le logo tel qu'il apparaît en arrivant sur
-     l'accueil — sa grande taille, la même à toutes les largeurs. */
+  /* Le logo se centre dans le panneau des liens, et non sur la largeur entière
+     du menu : autrefois centré sur l'écran, il se posait sur la photographie. */
+  .nav__logo {
+    align-self: center;
+    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  }
+
+  /* Il reprend le logo tel qu'il apparaît en arrivant sur l'accueil — sa grande
+     taille, la même à toutes les largeurs. */
   .nav__logo img {
     height: var(--logo-grand);
     width: auto;
+    display: block;
   }
 
   .nav__body {
     flex: 1;
+    min-height: 100%;
     display: grid;
     grid-template-columns: 1fr;
     min-height: 0;
@@ -401,7 +422,7 @@ const current = Astro.url.pathname;
   /* Le retrait haut l'emporte sur le bas : l'ensemble des liens et des filets
      descend, et le vide se répartit mieux entre le haut et le pied du menu. */
   .nav__col {
-    padding: clamp(2.75rem, 8vh, 7rem) var(--gutter) clamp(1rem, 2.5vh, 2.25rem);
+    padding: calc(var(--header-h) + clamp(1.5rem, 5vh, 4rem)) var(--gutter) clamp(1rem, 2.5vh, 2.25rem);
     max-width: 640px;
     width: 100%;
     margin-left: auto;
@@ -538,6 +559,19 @@ const current = Astro.url.pathname;
       margin: 0 0 0 auto;
       width: 100%;
       height: 100%;
+    }
+
+    /* Les cinq vues se superposent ; seule celle qui porte `data-active` se
+       voit. Le fondu est court : le survol doit répondre, pas traîner. */
+    .nav__vue {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.55s var(--ease);
+    }
+
+    .nav__vue[data-active] {
+      opacity: 1;
     }
 
     .nav__visual :global(img) {
@@ -693,7 +727,39 @@ const current = Astro.url.pathname;
     onScroll();
   };
 
+  /**
+   * Le visuel du menu suit le survol des quatre grandes entrées, et revient à
+   * sa vue de repos dès que le pointeur les quitte.
+   *
+   * Le clavier compte autant que la souris : `focusin` accompagne `mouseenter`,
+   * sans quoi celui qui parcourt le menu à la tabulation verrait l'image figée.
+   */
+  const brancherVisuels = () => {
+    const pile = document.querySelector<HTMLElement>('[data-nav-visuels]');
+    if (!pile || pile.dataset.bound) return;
+    pile.dataset.bound = '1';
+
+    const vues = pile.querySelectorAll<HTMLElement>('.nav__vue');
+    const montrer = (cle: string) => {
+      vues.forEach((v) => v.toggleAttribute('data-active', v.dataset.vue === cle));
+    };
+
+    const liste = document.querySelector<HTMLElement>('.nav__list');
+    liste?.querySelectorAll<HTMLElement>('[data-nav-visuel]').forEach((lien) => {
+      const cle = lien.dataset.navVisuel ?? 'repos';
+      lien.addEventListener('mouseenter', () => montrer(cle));
+      lien.addEventListener('focusin', () => montrer(cle));
+    });
+    liste?.addEventListener('mouseleave', () => montrer('repos'));
+    liste?.addEventListener('focusout', (e) => {
+      /* Le focus peut passer d'un lien à l'autre : on ne revient au repos que
+         s'il quitte la liste pour de bon. */
+      if (!liste.contains((e as FocusEvent).relatedTarget as Node | null)) montrer('repos');
+    });
+  };
+
   const init = () => {
+    brancherVisuels();
     document.querySelectorAll('[data-nav-open]').forEach((b) => b.addEventListener('click', openNav));
     document.querySelectorAll('[data-nav-close]').forEach((b) => b.addEventListener('click', closeNav));
     getNav()?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav));

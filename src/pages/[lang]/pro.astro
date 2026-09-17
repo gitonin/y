@@ -212,10 +212,12 @@ const jsonld = [
     gap: clamp(1.5rem, 4vw, 3rem);
   }
 
+  /* Les liens se calent sur le bas du texte de gauche, et non sur son haut :
+     les deux colonnes se referment sur la même ligne. */
   @media (min-width: 860px) {
     .pcontact__inner {
       grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-      align-items: start;
+      align-items: end;
     }
   }
 

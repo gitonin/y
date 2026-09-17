@@ -10,7 +10,7 @@ import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
 import { getImage } from 'astro:assets';
 import { languages, useTranslations, route, absolute, type Lang } from '../../../i18n/utils';
-import { getPackshot, fondPackshot } from '../../../data/packshots';
+import { getPackshot } from '../../../data/packshots';
 import type { Product } from '../../../data/products';
 import { products, getProduct, fromPrice, toPrice } from '../../../data/products';
 import { SITE } from '../../../consts';
@@ -149,15 +149,17 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
   keywords={[product.name[lang], product.subtitle[lang], t.common.tagline]}
   fil={[{ href: route(lang, 'cafes'), label: t.nav.cafes }, { label: product.name[lang] }]}
 >
-  {/* Le sachet ouvre la page, pleine largeur et collé sous la barre de
-      navigation. La bande reprend le fond de la photographie : le raccord ne se
-      voit pas, et le visuel n'a pas besoin d'être rogné pour s'élargir. */}
-  <div class="pdp__banniere" style={`--fond:${fondPackshot(product.slug)}`}>
-    <Packshot product={product} lang={lang} size="lg" />
-  </div>
-
   <div class="wrap page-top">
     <div class="pdp">
+      {/* Sur grand écran, le sachet tient la colonne de gauche pendant que la
+          fiche défile à droite, puis repart avec elle une fois le texte épuisé.
+          Sur mobile, il ouvre simplement la page. */}
+      <div class="pdp__visual">
+        <div class="media pdp__media">
+          <Packshot product={product} lang={lang} size="lg" />
+        </div>
+      </div>
+
       <div class="pdp__info">
         <h1 class="pdp__title">{product.name[lang]}</h1>
         <p class="pdp__sub muted">{product.subtitle[lang]}</p>
@@ -181,51 +183,51 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
           {t.common.learnMore}<span class="arrow" aria-hidden="true">↓</span>
         </a>
       </div>
+
+      <section class="about" id="about" data-reveal>
+        <h2 class="about__title">{t.product.aboutTitle}</h2>
+        <div class="about__grid">
+          <div class="about__text stack">
+            <p>{product.description[lang]}</p>
+            <p class="muted">{product.story[lang]}</p>
+            {
+              product.includes && (
+                <ul class="includes">
+                  {product.includes.map((item) => (
+                    <li>{item[lang]}</li>
+                  ))}
+                </ul>
+              )
+            }
+          </div>
+
+          <div class="about__side">
+            <dl class="details">
+              {
+                detailRows.map((row) => (
+                  <div class="details__row">
+                    <Icon name={row.icon} size={22} class="details__icon" />
+                    <div>
+                      <dt class="label">{row.label}</dt>
+                      <dd>{row.value}</dd>
+                    </div>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+        </div>
+
+        <div class="brew" data-reveal>
+          <h3 class="brew__title">{t.product.brewTitle}</h3>
+          <p class="muted">{product.brew[lang]}</p>
+        </div>
+      </section>
     </div>
 
     <figure class="media pdp__ambiance" data-reveal>
       <Photo name={product.ambiance} lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
     </figure>
-
-    <section class="about" id="about" data-reveal>
-      <h2 class="about__title">{t.product.aboutTitle}</h2>
-      <div class="about__grid">
-        <div class="about__text stack">
-          <p>{product.description[lang]}</p>
-          <p class="muted">{product.story[lang]}</p>
-          {
-            product.includes && (
-              <ul class="includes">
-                {product.includes.map((item) => (
-                  <li>{item[lang]}</li>
-                ))}
-              </ul>
-            )
-          }
-        </div>
-
-        <div class="about__side">
-          <dl class="details">
-            {
-              detailRows.map((row) => (
-                <div class="details__row">
-                  <Icon name={row.icon} size={22} class="details__icon" />
-                  <div>
-                    <dt class="label">{row.label}</dt>
-                    <dd>{row.value}</dd>
-                  </div>
-                </div>
-              ))
-            }
-          </dl>
-        </div>
-      </div>
-
-      <div class="brew" data-reveal>
-        <h3 class="brew__title">{t.product.brewTitle}</h3>
-        <p class="muted">{product.brew[lang]}</p>
-      </div>
-    </section>
 
     <section class="farm" data-reveal>
       <div class="farm__media media">
@@ -265,36 +267,50 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
     padding-bottom: var(--section);
   }
 
-  /* Les packshots sont carrés et le sachet y occupe presque toute la hauteur :
-     un cadrage panoramique le couperait. La bande s'élargit donc sans rogner —
-     le visuel garde ses proportions, et le fond de la bande, repris de la
-     photographie elle-même, prolonge le décor jusqu'aux bords. */
-  .pdp__banniere {
-    background: var(--fond, var(--paper));
+  .pdp {
     display: grid;
-    place-items: center;
+    gap: clamp(1.75rem, 4vw, 4rem);
   }
 
-  /* Sur un écran étroit, le visuel occupe toute la largeur : le carré tombe
-     bord à bord, sans bande résiduelle. */
-  .pdp__banniere :global(.shot) {
-    width: 100%;
-    margin-inline: auto;
+  .pdp__media {
+    background: none;
   }
 
   @media (min-width: 900px) {
-    .pdp__banniere :global(.shot) {
-      /* Assez grand pour ouvrir la page, assez court pour ne pas la remplir. */
-      width: min(100%, 78svh);
+    .pdp {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      grid-template-rows: auto auto;
+      align-items: start;
+      column-gap: clamp(2rem, 5vw, 4.5rem);
     }
-  }
 
-  .pdp {
-    margin-top: 0;
-  }
+    /* Le sachet occupe la colonne de gauche sur toute la hauteur des deux
+       lignes de droite : l'encart d'achat, puis le récit. Il reste en place
+       pendant qu'on les lit, et repart avec la page quand le texte s'achève.
+       C'est la longueur du texte qui fait l'effet — sans le récit dans cette
+       colonne, tout tiendrait à l'écran et il n'y aurait rien à retenir. */
+    .pdp__visual {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+    }
 
-  .pdp__info {
-    max-width: 44ch;
+    .pdp__info {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .pdp > .about {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    /* La colonne est trop étroite pour les deux colonnes du récit : elles se
+       remettent l'une sous l'autre. */
+    .pdp > .about .about__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .pdp__title {

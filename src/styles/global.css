@@ -138,7 +138,13 @@ body {
   letter-spacing: 0.005em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* `clip` et non `hidden` : brider un axe avec `hidden` force l'autre à
+     `auto`, ce qui fait du corps un conteneur de défilement — et un conteneur
+     de défilement neutralise tout `position: sticky` qu'il contient. `clip`
+     retient de la même façon ce qui déborde sur les côtés, en laissant l'axe
+     vertical à `visible`. C'est ce qui permet au visuel d'une fiche produit de
+     tenir en place pendant que le texte défile à côté. */
+  overflow-x: clip;
 }
 
 body.is-locked {

@@ -93,7 +93,7 @@ const jsonld = [
           <span class="label" data-reveal>{t.home.coffeesLabel}</span>
           <SplitTitle text={t.home.coffeesTitle} as="h2" size="lg" class="sec-title" />
         </div>
-        <div class="shead__aside">
+        <div class="shead__aside shead__aside--texte">
           <p class="muted" data-reveal id="h-cafes">{t.home.coffeesText}</p>
           <a class="link" href={route(lang, 'cafes')} data-reveal>
             {t.home.coffeesCta}<span class="arrow" aria-hidden="true">→</span>
@@ -325,9 +325,16 @@ const jsonld = [
   @media (min-width: 860px) {
     .shead {
       grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      grid-template-rows: auto auto;
       align-items: end;
       row-gap: 0;
       column-gap: clamp(2rem, 6vw, 5rem);
+    }
+
+    /* Le titre garde la première ligne : c'est sur son bas que tout se cale. */
+    .shead > :first-child {
+      grid-column: 1;
+      grid-row: 1;
     }
   }
 
@@ -336,6 +343,31 @@ const jsonld = [
     gap: 1rem;
     justify-items: start;
     max-width: 44ch;
+  }
+
+  /* Sur grand écran, c'est le bas du paragraphe qui doit venir sur le bas du
+     titre, et non le bas du bloc entier — sans quoi c'est le lien qui s'aligne
+     et le texte flotte au-dessus. Le cadre s'efface donc (`display: contents`)
+     et ses deux enfants prennent place eux-mêmes : le paragraphe sur la ligne
+     du titre, le lien sur une seconde ligne, sous l'alignement. */
+  @media (min-width: 860px) {
+    .shead__aside--texte {
+      display: contents;
+    }
+
+    .shead__aside--texte > p {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: end;
+      max-width: 44ch;
+    }
+
+    .shead__aside--texte > a {
+      grid-column: 2;
+      grid-row: 2;
+      justify-self: start;
+      margin-top: 1rem;
+    }
   }
 
   /* Quand la colonne ne porte qu'un lien, il se ferre à droite, comme celui
@@ -382,6 +414,16 @@ const jsonld = [
   }
 
   /* ---------- Origine ---------- */
+  /* Sur grand écran, le 4/3 de ce visuel faisait près d'un écran de haut : on
+     n'en voyait pas le bout au défilement. Le cadre se réduit de moitié et
+     rogne la photographie plutôt que de la réduire — elle reste un bandeau,
+     pas un mur. Sur mobile, où la largeur est petite, le 4/3 convient. */
+  @media (min-width: 900px) {
+    .origine__media {
+      aspect-ratio: 8 / 3;
+    }
+  }
+
   .origine__texte {
     padding-block: var(--espace-apres-visuel);
   }

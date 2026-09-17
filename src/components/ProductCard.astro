@@ -99,4 +99,26 @@ const { product, lang, index = 0, compact = false } = Astro.props;
     margin-top: 0.5rem;
     font-size: var(--fs-small);
   }
+
+  /* Sur un écran de bureau, la carte a de la place et le lecteur du recul : les
+     quatre lignes gagnent deux points. Sur mobile, où la carte est déjà près de
+     l'œil et la largeur comptée, elles gardent leur taille. */
+  @media (min-width: 900px) {
+    .pcard__name {
+      font-size: 1.125rem;
+    }
+
+    .pcard--compact .pcard__name {
+      font-size: 0.9375rem;
+    }
+
+    .pcard__sub,
+    .pcard__notes {
+      font-size: 0.9375rem;
+    }
+
+    :global(.pcard__price) {
+      font-size: 0.9375rem;
+    }
+  }
 </style>
