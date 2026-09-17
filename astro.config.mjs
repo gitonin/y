@@ -22,9 +22,11 @@ export default defineConfig({
         defaultLocale: 'fr',
         locales: { fr: 'fr-FR', en: 'en', zh: 'zh-Hans' },
       },
-      // Exclut la racine (page de redirection), la 404 et la planche de travail
+      // Exclut les pages de redirection (racine, passerelles Shopify), la 404
+      // et la planche de travail
       filter: (page) =>
         !page.includes('/404') &&
+        !page.includes('/products/') &&
         !page.includes('/composants/') &&
         !page.includes('/savoir-faire/') &&
         !page.includes('/a-propos/') &&
