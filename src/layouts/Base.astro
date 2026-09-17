@@ -129,6 +129,61 @@ const t = useTranslations(lang);
     </style>
 
     <script>
+      /* ---------- v5 : la teinte du fond suit la lecture ----------
+         Chaque section peut déclarer la teinte qu'elle appelle. Celle qui
+         croise la ligne de lecture l'emporte, et le fond y glisse en fondu —
+         le changement se sent au défilement sans jamais se voir arriver. */
+      const TEINTES: Record<string, string> = {
+        papier: 'var(--teinte-papier)',
+        terroir: 'var(--teinte-terroir)',
+        cafe: 'var(--teinte-cafe)',
+        carnet: 'var(--teinte-carnet)',
+      };
+
+      let detacherTeintes: (() => void) | null = null;
+
+      const initTeintes = () => {
+        detacherTeintes?.();
+        detacherTeintes = null;
+
+        const racine = document.documentElement;
+        const zones = [...document.querySelectorAll<HTMLElement>('[data-teinte]')];
+        racine.style.setProperty('--teinte', TEINTES.papier);
+        if (zones.length === 0) return;
+
+        /* La ligne de lecture est posée au tiers de l'écran : c'est la hauteur
+           où l'œil se trouve quand on descend une page. */
+        const regler = () => {
+          const ligne = window.innerHeight / 3;
+          let choisie = 'papier';
+          for (const zone of zones) {
+            const r = zone.getBoundingClientRect();
+            if (r.top <= ligne && r.bottom > ligne) choisie = zone.dataset.teinte ?? 'papier';
+          }
+          racine.style.setProperty('--teinte', TEINTES[choisie] ?? TEINTES.papier);
+        };
+
+        let enAttente = false;
+        const auDefilement = () => {
+          if (enAttente) return;
+          enAttente = true;
+          requestAnimationFrame(() => {
+            enAttente = false;
+            regler();
+          });
+        };
+
+        regler();
+        window.addEventListener('scroll', auDefilement, { passive: true });
+        window.addEventListener('resize', auDefilement, { passive: true });
+        detacherTeintes = () => {
+          window.removeEventListener('scroll', auDefilement);
+          window.removeEventListener('resize', auDefilement);
+        };
+      };
+
+      document.addEventListener('astro:page-load', initTeintes);
+
       /* Révélations au scroll — partagées par toutes les pages */
       let observer: IntersectionObserver | null = null;
 

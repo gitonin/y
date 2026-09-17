@@ -67,11 +67,11 @@ const jsonld = [
   <AnchorNav items={anchors} ariaLabel={t.common.breadcrumb} />
 
   <!-- ============ LE YUNNAN ============ -->
-  <figure class="media grand-visuel" data-reveal>
+  <figure class="media grand-visuel" data-reveal data-parallaxe>
     <Photo name="cretes-brumeuses" lang={lang} priority sizes="100vw" />
   </figure>
 
-  <section id="terroir" class="section section--souffle anchor-target">
+  <section id="terroir" class="section section--souffle anchor-target" data-teinte="terroir">
     <div class="wrap osections">
       {
         t.origine.sections.map((section, i) => (
@@ -106,12 +106,12 @@ const jsonld = [
     </div>
   </div>
 
-  <figure class="media grand-visuel" data-reveal>
+  <figure class="media grand-visuel" data-reveal data-parallaxe>
     <Photo name="recolte-cueilleurs" lang={lang} sizes="100vw" />
   </figure>
 
   <!-- ============ NOS TERROIRS ============ -->
-  <section class="section panel panel--soft">
+  <section class="section panel panel--soft" data-teinte="terroir">
     <div class="wrap">
       <div class="citation citation--inline">
         <p class="display" data-reveal>{t.origine.pulls.terroir}</p>
@@ -168,7 +168,7 @@ const jsonld = [
     </div>
   </section>
 
-  <figure class="media grand-visuel" data-reveal>
+  <figure class="media grand-visuel" data-reveal data-parallaxe>
     <Photo name="ferme-yun-lan-estate" lang={lang} sizes="100vw" />
   </figure>
 
@@ -215,12 +215,12 @@ const jsonld = [
     </div>
   </div>
 
-  <figure class="media grand-visuel" data-reveal>
+  <figure class="media grand-visuel" data-reveal data-parallaxe>
     <Photo name="sechage-lits" lang={lang} sizes="100vw" />
   </figure>
 
   <!-- ============ SAVOIR-FAIRE ============ -->
-  <section id="savoir-faire" class="section section--souffle anchor-target">
+  <section id="savoir-faire" class="section section--souffle anchor-target" data-teinte="cafe">
     <div class="wrap">
       <span class="label" data-reveal>{t.savoirFaire.label}</span>
       <SplitTitle text={t.savoirFaire.title} as="h2" size="lg" class="sec-title hsection-title" />

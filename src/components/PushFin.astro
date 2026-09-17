@@ -22,7 +22,7 @@ const { lang, text, cta, href, photo = 'tabouret-terrasse' } = Astro.props;
 ---
 
 <section class="closing">
-  <div class="closing__media media">
+  <div class="closing__media media" data-parallaxe>
     <Photo name={photo} lang={lang} decorative sizes="100vw" />
   </div>
   <div class="closing__inner wrap">

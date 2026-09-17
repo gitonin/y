@@ -30,6 +30,9 @@ const current = Astro.url.pathname;
 ---
 
 <header class:list={['hd', transparent && 'hd--over', accueil && 'hd--accueil']} data-header>
+  {/* Le voile ne porte aucune couleur pleine : il floute ce qui passe dessous
+      et s'éteint vers le bas, pour qu'aucune arête ne coupe la page. */}
+  <div class="hd__voile" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="hd__inner">
     <button class="hd__burger" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-open>
       <span class="hd__burger-lines" aria-hidden="true"><i></i><i></i></span>
@@ -131,24 +134,69 @@ const current = Astro.url.pathname;
     left: 0;
     right: 0;
     z-index: 90;
-    background: var(--paper);
-    border-bottom: 1px solid var(--line-soft);
-    transform: translateY(0);
-    transition:
-      transform 0.55s var(--ease-out-expo),
-      background-color 0.5s var(--ease),
-      border-color 0.5s var(--ease);
-  }
-
-  .hd--over {
     background: transparent;
-    border-color: transparent;
+    transform: translateY(0);
+    transition: transform 0.55s var(--ease-out-expo);
   }
 
-  .hd.is-solid {
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(14px) saturate(1.1);
-    border-color: var(--line-soft);
+  /* ---------- Le voile ----------
+     Trois couches de flou empilées, de la plus légère à la plus forte, chacune
+     masquée un peu plus haut que la précédente. Le flou ne s'arrête donc jamais
+     sur une ligne : il s'éteint. C'est ce qui distingue l'effet d'un simple
+     bandeau flouté, où l'on voit toujours le bord du bandeau. */
+  .hd__voile {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: calc(var(--header-h) * 1.9);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s var(--ease);
+  }
+
+  .hd__voile i {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .hd__voile i:nth-child(1) {
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 100%);
+  }
+
+  .hd__voile i:nth-child(2) {
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 78%);
+  }
+
+  .hd__voile i:nth-child(3) {
+    backdrop-filter: blur(22px) saturate(1.08);
+    -webkit-backdrop-filter: blur(22px) saturate(1.08);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 22%, transparent 52%);
+    /* Un souffle de papier, juste de quoi asseoir le logo et les deux icônes
+       sur une photographie claire — pas un fond. */
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--teinte, var(--paper)) 42%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Le voile n'apparaît qu'une fois la page défilée : en haut, il n'y a rien
+     à flouter, et la bannière doit rester nette. */
+  .hd.is-solid .hd__voile {
+    opacity: 1;
+  }
+
+  /* Sans flou d'arrière-plan, on retombe sur un bandeau de papier : moins beau,
+     mais le logo et les icônes restent lisibles, ce qui est l'essentiel. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .hd.is-solid .hd__voile i:nth-child(3) {
+      background: color-mix(in srgb, var(--teinte, var(--paper)) 92%, transparent);
+      mask-image: none;
+    }
   }
 
   .hd.is-hidden {
@@ -173,6 +221,8 @@ const current = Astro.url.pathname;
 
   .hd__inner {
     position: relative;
+    /* Au-dessus du voile, qui est en position absolue dans le même en-tête. */
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;

@@ -107,6 +107,18 @@
      sur-titre) pour que le titre de l'accueil se cale exactement sur celui
      des autres pages. tests/boutique.mjs vérifie que les deux restent alignés. */
   --titre-page-haut: clamp(5.9375rem, 3.25rem + 7.42vw, 8.4375rem);
+
+  /* ---------- v5 : matière et mouvement ----------
+     Le grain passe au-dessus de tout, y compris du menu ouvert et du panier :
+     c'est une couche de pellicule, pas un élément de la page. */
+  --z-grain: 300;
+
+  /* Les teintes de fond, une par famille de contenu. Elles ne s'éloignent
+     jamais beaucoup du papier : on doit les sentir plus que les voir. */
+  --teinte-papier: #ebe7de;
+  --teinte-terroir: #e6e8dd;
+  --teinte-cafe: #efe6d8;
+  --teinte-carnet: #ece4e0;
 }
 
 @media (min-width: 900px) {
@@ -129,7 +141,10 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--paper);
+  /* La teinte du fond est posée par le script des sections : elle glisse d'une
+     partie à l'autre au lieu de changer d'un coup. `--paper` reste le repli. */
+  background-color: var(--teinte, var(--paper));
+  transition: background-color 1.4s var(--ease);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--fs-body);
@@ -203,16 +218,29 @@ a {
   color: var(--paper);
 }
 
-/* Grain très léger — donne de la matière au fond */
-body::before {
+/* Grain argentique — il passe sur toute la page, photographies comprises, pour
+   que l'écran ait la même matière que les images de la marque. Deux couches :
+   un grain fin qui donne le piqué, un grain plus large qui donne le corps.
+   Elles se posent par-dessus tout, sans jamais intercepter un clic. */
+body::before,
+body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: var(--z-grain);
   pointer-events: none;
-  opacity: 0.34;
+}
+
+body::before {
+  opacity: 0.5;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+}
+
+body::after {
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.32' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 /* ---------- Typographie ---------- */
@@ -540,13 +568,16 @@ a.media-link:hover .media > img {
 }
 
 /* ---------- Blocs de couleur ---------- */
+/* Les deux crans d'ombre ne sont plus des couleurs figées mais des voiles
+   d'encre : sur le papier ils donnent exactement `--paper-10` et `--paper-5`
+   comme avant, et quand le fond glisse d'une teinte à l'autre, ils suivent. */
 .panel {
-  background: var(--paper-10);
+  background: rgba(33, 33, 33, 0.114);
 }
 
 /* Un cran seulement sous le fond, pour alterner sans creuser */
 .panel--soft {
-  background: var(--paper-5);
+  background: rgba(33, 33, 33, 0.059);
 }
 
 .panel--olive {
@@ -663,5 +694,77 @@ html:not(.js) .media > svg {
   .media > img,
   .media > svg {
     transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   v5 — Mouvement au défilement
+   ==========================================================================
+   Les animations sont pilotées par le défilement lui-même (`animation-timeline`)
+   plutôt que par un script : le navigateur les fait avancer sur le fil de
+   composition, elles ne peuvent donc pas saccader, et rien ne tourne quand la
+   section est hors champ. Là où la propriété manque, la page reste simplement
+   immobile — elle ne perd rien d'autre. */
+
+@keyframes yunma-parallaxe {
+  from {
+    transform: translate3d(0, -7%, 0) scale(1.16);
+  }
+  to {
+    transform: translate3d(0, 7%, 0) scale(1.16);
+  }
+}
+
+@keyframes yunma-montee {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* La photographie glisse plus lentement que la page dans son cadre. Le
+       cadre, lui, ne bouge pas : c'est ce décalage qui donne la profondeur. */
+    /* La timeline est nommée sur le cadre, et non laissée à `view()` sur la
+       photographie : le cadre est en `overflow: hidden`, il compte donc lui-même
+       comme conteneur de défilement, et une timeline anonyme posée sur l'image
+       s'y référerait — sans rien à faire défiler, elle resterait figée à
+       mi-course. Déclarée sur le cadre, elle se mesure sur la page. */
+    [data-parallaxe] {
+      view-timeline-name: --yunma-cadre;
+      view-timeline-axis: block;
+    }
+
+    /* Les propriétés sont écrites au long, jamais en raccourci : le raccourci
+       `animation` remet `animation-timeline` à `auto`, et un minificateur qui
+       replie les unes dans l'autre casserait l'animation en silence. */
+    [data-parallaxe] > img,
+    [data-parallaxe] > picture > img {
+      animation-name: yunma-parallaxe;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --yunma-cadre;
+      animation-range: cover 0% cover 100%;
+      /* La révélation d'échelle du média ne s'applique plus : l'animation
+         tient déjà le cadrage, et deux transformations se contrarieraient. */
+      transition: none;
+    }
+
+    /* Les blocs montent à l'entrée, sur leur propre passage à l'écran. Le
+       script de révélation garde la main sur tout le reste. */
+    [data-monte] {
+      animation-name: yunma-montee;
+      animation-duration: auto;
+      animation-timing-function: var(--ease-out-expo);
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 32%;
+    }
   }
 }

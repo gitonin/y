@@ -86,7 +86,7 @@ const jsonld = [
   </section>
 
   <!-- ============ CAFÉS ============ -->
-  <section class="cafes section--tight panel panel--soft" aria-labelledby="h-cafes">
+  <section class="cafes section--tight panel panel--soft" aria-labelledby="h-cafes" data-teinte="cafe">
     <div class="wrap">
       <header class="shead">
         <div>
@@ -111,7 +111,7 @@ const jsonld = [
 
   <!-- ============ ORIGINE ============ -->
   {/* Le visuel ouvre la section, sur toute la largeur, puis vient le texte. */}
-  <section class="origine" aria-labelledby="h-origine">
+  <section class="origine" aria-labelledby="h-origine" data-teinte="terroir">
     <div class="wrap origine__texte">
       <span class="label" data-reveal>{t.home.originLabel}</span>
       <SplitTitle text={t.home.originTitle} as="h2" size="lg" class="sec-title origine__titre" />
@@ -122,7 +122,7 @@ const jsonld = [
     </div>
 
     {/* Le visuel referme la section, sur toute la largeur. */}
-    <figure class="media media--wide origine__media" data-reveal>
+    <figure class="media media--wide origine__media" data-reveal data-parallaxe>
       <Photo name="recolte-cueilleurs" lang={lang} sizes="100vw" />
     </figure>
   </section>
@@ -133,7 +133,7 @@ const jsonld = [
   <!-- ============ JOURNAL ============ -->
   {
     posts.length > 0 && (
-      <section class="section section--tight" aria-labelledby="h-journal">
+      <section class="section section--tight" aria-labelledby="h-journal" data-teinte="carnet">
         <div class="wrap">
           <header class="shead">
             <div>

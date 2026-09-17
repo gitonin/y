@@ -31,8 +31,9 @@ const { items, ariaLabel } = Astro.props;
     position: sticky;
     top: var(--header-h);
     z-index: 40;
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
-    backdrop-filter: blur(12px) saturate(1.1);
+    background: color-mix(in srgb, var(--teinte, var(--paper)) 82%, transparent);
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
     border-block: 1px solid var(--line-soft);
     transition: top 0.55s var(--ease-out-expo);
   }
