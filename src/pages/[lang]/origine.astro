@@ -576,20 +576,18 @@ const jsonld = [
   }
 
   /* ---------- Préparer un café ---------- */
-  /* Le tableau vit sur l'anthracite : ses filets et ses en-têtes reprennent la
-     teinte du papier, en retrait, plutôt que l'encre qui s'y perdrait. */
-  .brews-bloc :global(.brews thead th),
-  .brews-bloc :global(.brews__time svg) {
-    color: rgba(235, 231, 222, 0.62);
-  }
+  /* Le tableau vit sur l'anthracite : ses en-têtes et ses filets reprennent la
+     teinte du papier, en retrait, plutôt que l'encre qui s'y perdrait.
 
-  .brews-bloc .brews th,
-  .brews-bloc .brews td {
-    border-bottom-color: rgba(235, 231, 222, 0.22);
-  }
-
-  .brews-bloc .brews tbody th {
-    color: var(--paper);
+     Ces trois teintes passent par des variables, et non par des sélecteurs plus
+     appuyés. La version précédente s'y était fait prendre : la règle claire,
+     écrite en tête, était écrasée par une règle sombre écrite plus bas, et les
+     en-têtes se retrouvaient à 52 % d'encre sur de l'anthracite — illisibles.
+     Une variable se transmet à l'élément et ne se dispute avec personne. */
+  .brews-bloc .brews {
+    --brews-entete: rgba(235, 231, 222, 0.62);
+    --brews-filet: rgba(235, 231, 222, 0.22);
+    --brews-corps: var(--paper);
   }
 
   .brews__head {
@@ -616,29 +614,36 @@ const jsonld = [
     font-size: var(--fs-small);
   }
 
+  /* Les teintes du tableau sur fond clair ; le bloc anthracite les redéfinit. */
+  .brews {
+    --brews-entete: var(--ink-50);
+    --brews-filet: var(--line);
+    --brews-corps: var(--ink);
+  }
+
   .brews th,
   .brews td {
     text-align: left;
     padding: 0.9rem 0.75rem 0.9rem 0;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--brews-filet);
     font-weight: var(--w-regular);
   }
 
   .brews__time :global(svg) {
     display: inline-block;
     vertical-align: -0.24em;
-    color: var(--ink-50);
+    color: var(--brews-entete);
   }
 
   .brews thead th {
     font-size: var(--fs-label);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-    color: var(--ink-50);
+    color: var(--brews-entete);
   }
 
   .brews tbody th {
-    color: var(--ink);
+    color: var(--brews-corps);
   }
 
 </style>

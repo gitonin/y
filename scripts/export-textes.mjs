@@ -298,7 +298,6 @@ t.pro.offers.forEach((o, i) => {
 });
 field('pro.pourQuiTitre', t.pro.forWhoTitle, 'Sur-titre « Pour qui ? »');
 field('pro.pourQuiLien', t.pro.forWhoCta, 'Libellé du lien, repris sur la page Contact');
-t.pro.forWho.forEach((w, i) => field(`pro.cible.${i + 1}`, w, `Type de client ${i + 1}`));
 section('Nos engagements');
 field('pro.engagementsTitre', t.pro.commitmentsTitle, 'Sur-titre');
 t.pro.commitments.forEach((c, i) => {

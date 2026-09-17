@@ -51,17 +51,17 @@ export const packshots = {
   'drip-bags-catimor': {
     src: dripBagsCatimor,
     alt: {
-      fr: 'Boîte Yunma de 5 drip bags Catimor, filtres individuels de 10 g, sur fond crème',
-      en: 'Yunma box of 5 Catimor drip bags, single-serve 10 g filters, on a cream background',
-      zh: 'Yunma 卡蒂姆挂耳咖啡 5 片装，每片 10 克，米色背景',
+      fr: 'Boîte Yunma de 5 drip bags Catimor, filtres individuels de 10 g, posée sur du café liquide',
+      en: 'Yunma box of 5 Catimor drip bags, single-serve 10 g filters, resting on brewed coffee',
+      zh: 'Yunma 卡蒂姆挂耳咖啡 5 片装，每片 10 克，置于咖啡液面之上',
     },
   },
   'drip-bags-bourbon-jaune': {
     src: dripBagsBourbonJaune,
     alt: {
-      fr: 'Boîte Yunma de 5 drip bags Bourbon jaune, filtres individuels de 10 g, sur fond crème',
-      en: 'Yunma box of 5 Yellow Bourbon drip bags, single-serve 10 g filters, on a cream background',
-      zh: 'Yunma 黄波旁挂耳咖啡 5 片装，每片 10 克，米色背景',
+      fr: 'Boîte Yunma de 5 drip bags Bourbon jaune, filtres individuels de 10 g, posée sur du café liquide',
+      en: 'Yunma box of 5 Yellow Bourbon drip bags, single-serve 10 g filters, resting on brewed coffee',
+      zh: 'Yunma 黄波旁挂耳咖啡 5 片装，每片 10 克，置于咖啡液面之上',
     },
   },
   'coffret-decouverte': {
@@ -98,8 +98,8 @@ const fonds = {
   'torch-estate-lot-01': '#dcd2c5',
   'torch-estate-lot-02': '#cec2b5',
   'yun-lan-estate': '#5e514a',
-  'drip-bags-catimor': '#d6d3ca',
-  'drip-bags-bourbon-jaune': '#d6d3ca',
+  'drip-bags-catimor': '#694c43',
+  'drip-bags-bourbon-jaune': '#694c43',
   'coffret-decouverte': '#ded6c8',
 } satisfies Record<string, string>;
 

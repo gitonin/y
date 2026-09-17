@@ -14,9 +14,11 @@ const { lang, transparent = false, accueil = false } = Astro.props;
 const t = useTranslations(lang);
 const alt = defaultAlternates(Astro.url.pathname);
 
+/* Les cafés ouvrent le menu : c'est ce que l'on vient chercher. L'origine, qui
+   les explique, vient juste après. */
 const primary = [
-  { href: route(lang, 'origine'), label: t.nav.origine },
   { href: route(lang, 'cafes'), label: t.nav.cafes },
+  { href: route(lang, 'origine'), label: t.nav.origine },
   { href: route(lang, 'pro'), label: t.nav.pro },
   { href: route(lang, 'journal'), label: t.nav.journal },
 ];
@@ -157,7 +159,8 @@ const current = Astro.url.pathname;
 
   /* Les trois mesures du logo, réunies : taille au repos, taille d'arrivée sur
      l'accueil, et hauteur à laquelle il s'accroche quand il est grand. */
-  .hd {
+  .hd,
+  .nav {
     --logo-petit: 34px;
     --logo-grand: 65px;
     --logo-haut: 10px;
@@ -370,15 +373,11 @@ const current = Astro.url.pathname;
     transform: rotate(90deg);
   }
 
+  /* Le menu ouvert reprend le logo tel qu'il apparaît en arrivant sur
+     l'accueil — sa grande taille, la même à toutes les largeurs. */
   .nav__logo img {
-    height: 34px;
+    height: var(--logo-grand);
     width: auto;
-  }
-
-  @media (min-width: 900px) {
-    .nav__logo img {
-      height: 42px;
-    }
   }
 
   .nav__body {

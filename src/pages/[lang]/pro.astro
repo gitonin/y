@@ -6,7 +6,7 @@ import Photo from '../../components/Photo.astro';
 import Icon from '../../components/Icon.astro';
 import type { IconName } from '../../components/Icon.astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, route, absolute, type Lang } from '../../i18n/utils';
+import { useTranslations, absolute, type Lang } from '../../i18n/utils';
 import { SITE } from '../../consts';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
@@ -75,7 +75,9 @@ const jsonld = [
     </div>
   </section>
 
-  <section class="section section--tight panel">
+  {/* Même olive que le bloc de contact qui referme la page : les deux blocs
+      « pro » se répondent, au lieu d'un gris de plus. */}
+  <section class="section section--tight panel--olive">
     <div class="wrap offers__wrap">
       <header class="offers__head">
         <h2 class="offers__title">{t.pro.offerTitle}</h2>
@@ -90,9 +92,6 @@ const jsonld = [
             </li>
           ))
         }
-      </ul>
-      <ul class="tags">
-        {t.pro.forWho.map((item) => <li data-reveal>{item}</li>)}
       </ul>
     </div>
   </section>
@@ -126,7 +125,6 @@ const jsonld = [
         <li>
           <a href={SITE.whatsapp} target="_blank" rel="noopener">{t.common.whatsapp}</a>
         </li>
-        <li><a href={route(lang, 'contact')}>{t.nav.contact}</a></li>
       </ul>
     </div>
   </section>
@@ -202,23 +200,6 @@ const jsonld = [
 
   .offers__title {
     font-size: var(--fs-h2);
-  }
-
-  .tags {
-    margin-top: clamp(2rem, 4vw, 3rem);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .tags li {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    font-size: var(--fs-label);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-70);
   }
 
   .pcontact {

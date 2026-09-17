@@ -231,12 +231,14 @@ const multi = product.variants.length > 1;
         ? 'en-GB'
         : 'fr-FR';
     /* Même règle qu'ailleurs : pas de décimales sur un prix rond. */
-    return new Intl.NumberFormat(lang, {
+    const ecrit = new Intl.NumberFormat(lang, {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
       maximumFractionDigits: 2,
     }).format(value);
+    /* Le symbole colle au nombre, sans toucher au séparateur de milliers. */
+    return ecrit.replace(/[\s\u202f\u00a0]+(?=[€$£¥])/g, '');
   };
 
   const borner = (n: number) => Math.min(20, Math.max(1, Number.isNaN(n) ? 1 : n));

@@ -206,7 +206,8 @@ const config = {
   }
 
   :global(.cline__thumb) {
-    aspect-ratio: 4 / 5;
+    /* Carrée comme les packshots : le sachet y tient entier, sans rognage. */
+    aspect-ratio: 1 / 1;
     background: var(--paper-10);
     display: grid;
     place-items: center;
@@ -373,12 +374,14 @@ const config = {
   const money = (amount: number, currency: string) => {
     const locales = { fr: 'fr-FR', en: 'en-GB', zh: 'zh-CN' } as const;
     const rond = Number.isInteger(amount);
-    return new Intl.NumberFormat(locales[cfg?.lang ?? 'fr'], {
+    const ecrit = new Intl.NumberFormat(locales[cfg?.lang ?? 'fr'], {
       style: 'currency',
       currency: currency || cfg?.currency || 'EUR',
       minimumFractionDigits: rond ? 0 : 2,
       maximumFractionDigits: 2,
     }).format(amount);
+    /* Le symbole colle au nombre, sans toucher au séparateur de milliers. */
+    return ecrit.replace(/[\s\u202f\u00a0]+(?=[€$£¥])/g, '');
   };
 
   const toast = (message: string) => {

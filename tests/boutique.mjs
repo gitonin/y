@@ -70,15 +70,18 @@ const CATALOGUE = JSON.parse(readFileSync(new URL('../contenu/produits.json', im
 const AVEC_FORMATS = CATALOGUE.find((p) => p.formats.length > 1);
 const sansFormats = (quoi) =>
   console.log(`  — ${quoi} : aucune référence à plusieurs formats au catalogue, vérification non applicable`);
-/* Le site n'écrit les décimales que lorsqu'il y en a : « 17 € », « 17,50 € ».
-   Le test applique la même règle, sans quoi il vérifierait un autre site. */
+/* Le site n'écrit les décimales que lorsqu'il y en a et colle le symbole au
+   nombre : « 17€ », « 17,50€ ». Le test applique la même règle, sans quoi il
+   vérifierait un autre site. L'espace des milliers, elle, est préservée. */
 const euros = (n) =>
   new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
     maximumFractionDigits: 2,
-  }).format(n);
+  })
+    .format(n)
+    .replace(/[\s\u202f\u00a0]+(?=[€$£¥])/g, '');
 
 serveur.listen(PORT);
 const navigateur = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
@@ -188,7 +191,7 @@ titre('Catalogue — « à partir de » réservé aux produits à plusieurs prix
 for (const lang of ['fr', 'en', 'zh']) {
   await pg.goto(`${B}/${lang}/cafes/`, { waitUntil: 'networkidle' });
   const unique = pg.locator('.pcard').filter({ hasText: 'Yun Lan' }).first();
-  const attendu = lang === 'fr' ? '17 €' : '€17';
+  const attendu = lang === 'fr' ? '17€' : '€17';
   check(`carte à prix unique (${lang})`, await unique.locator('.pcard__price .prix__montant').innerText(), attendu);
   /* Sur la carte aussi, le grammage suit le prix. */
   check(`carte — grammage (${lang})`, await unique.locator('.pcard__price .prix__mesure').innerText(),

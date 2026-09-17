@@ -17,8 +17,8 @@ const alt = defaultAlternates(Astro.url.pathname);
 const year = new Date().getFullYear();
 
 const rowA = [
-  { href: route(lang, 'origine'), label: t.nav.origine },
   { href: route(lang, 'cafes'), label: t.nav.cafes },
+  { href: route(lang, 'origine'), label: t.nav.origine },
   { href: route(lang, 'pro'), label: t.nav.pro },
   { href: route(lang, 'journal'), label: t.nav.journal },
 ];
@@ -133,6 +133,14 @@ const rowA = [
     gap: 0.6rem clamp(1rem, 3vw, 2.25rem);
     font-size: var(--fs-small);
     line-height: 1.4;
+  }
+
+  /* Les quatre grandes sections portent la graisse du menu ouvert — même
+     caractère, même poids — mais gardent la taille du pied de page : elles
+     annoncent sans crier. Le second rang, lui, reste en texte courant. */
+  .ft__row:not(.ft__row--soft) a {
+    font-family: var(--font-titre);
+    font-weight: var(--w-semi);
   }
 
   .ft__row li {

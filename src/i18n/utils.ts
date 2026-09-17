@@ -81,12 +81,16 @@ export function defaultAlternates(pathname: string): Record<Lang, string> {
 export function formatPrice(value: number, lang: Lang, currency = 'EUR'): string {
   const locales: Record<Lang, string> = { fr: 'fr-FR', en: 'en-GB', zh: 'zh-CN' };
   const rond = Number.isInteger(value);
-  return new Intl.NumberFormat(locales[lang], {
+  const ecrit = new Intl.NumberFormat(locales[lang], {
     style: 'currency',
     currency,
     minimumFractionDigits: rond ? 0 : 2,
     maximumFractionDigits: 2,
   }).format(value);
+  /* Le symbole colle au nombre : « 17€ ». En français, Intl insère une espace
+  fine insécable avant l'euro — on ne retire que celle-là, jamais celles qui
+  séparent les milliers, sans quoi « 1 000 € » deviendrait illisible. */
+  return ecrit.replace(/[\s\u202f\u00a0]+(?=[€$£¥])/g, '');
 }
 
 export function formatDate(date: Date, lang: Lang): string {
