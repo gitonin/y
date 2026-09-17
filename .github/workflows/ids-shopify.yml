@@ -1,0 +1,70 @@
+# Lit les identifiants Shopify depuis GitHub, pour n'avoir rien à installer.
+#
+# L'outil `outils/ids-shopify.mjs` se lance normalement sur un poste de travail.
+# Ce workflow le lance ici, dans une machine GitHub, avec les deux secrets du
+# dépôt : il suffit alors d'un navigateur pour brancher la boutique.
+#
+# À faire une seule fois, avant le premier lancement :
+#   Settings > Secrets and variables > Actions > New repository secret
+#     PUBLIC_SHOPIFY_DOMAIN            ex. yunma-2.myshopify.com
+#     PUBLIC_SHOPIFY_STOREFRONT_TOKEN  le jeton d'accès *public* du canal Headless
+#
+# Le jeton ne transite par aucun fichier du dépôt, et GitHub le masque dans les
+# journaux. L'outil, lui, ne l'affiche jamais.
+name: Identifiants Shopify
+
+on:
+  workflow_dispatch:
+    inputs:
+      ecrire:
+        description: 'Reporter les identifiants dans contenu/produits.json'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  lire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Vérifier que les secrets sont en place
+        env:
+          DOMAINE: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
+          JETON: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+        run: |
+          manque=0
+          [ -z "$DOMAINE" ] && echo "::error::Le secret PUBLIC_SHOPIFY_DOMAIN n'est pas défini." && manque=1
+          [ -z "$JETON" ] && echo "::error::Le secret PUBLIC_SHOPIFY_STOREFRONT_TOKEN n'est pas défini." && manque=1
+          if [ "$manque" = "1" ]; then
+            echo "À renseigner dans Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          echo "Les deux secrets sont là."
+
+      - name: Interroger la boutique
+        env:
+          PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
+          PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+        run: |
+          if [ "${{ inputs.ecrire }}" = "true" ]; then
+            node outils/ids-shopify.mjs --ecrire
+          else
+            node outils/ids-shopify.mjs
+          fi
+
+      # Le fichier modifié repart en pièce jointe plutôt qu'en commit : la suite
+      # se relit avant d'entrer dans le dépôt.
+      - name: Déposer le fichier mis à jour
+        if: ${{ inputs.ecrire }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: produits-json
+          path: contenu/produits.json
+          if-no-files-found: error
