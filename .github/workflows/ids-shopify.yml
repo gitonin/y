@@ -13,7 +13,14 @@
 # journaux. L'outil, lui, ne l'affiche jamais.
 name: Identifiants Shopify
 
+# GitHub n'accepte de lancer un workflow sur commande qu'une fois qu'il l'a vu
+# tourner : le démarrage sur sa propre poussée sert à cette première fois.
 on:
+  push:
+    branches:
+      - claude/yunma-site-v4
+    paths:
+      - .github/workflows/ids-shopify.yml
   workflow_dispatch:
     inputs:
       ecrire:
