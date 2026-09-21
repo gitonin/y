@@ -23,13 +23,17 @@
 }
 
 :root {
-  /* Couleurs — le beige crème #ebe7de porte tous les fonds du site. Il n'en
-     existe pas d'autre : le rythme d'une section à l'autre se fait en
-     l'assombrissant de 5 % puis de 10 % de noir, et rien de plus. Seul le vert
-     olive fait exception, réservé aux blocs professionnels. */
-  --paper: #ebe7de;
-  --paper-5: #dfdbd3;
-  --paper-10: #d4d0c8;
+  /* Couleurs — le beige crème #efebe2 porte tous les fonds du site, d'un
+     bout à l'autre : les pages ne s'assombrissent plus d'une section à
+     l'autre, elles tiennent sur une seule teinte.
+     Les deux crans plus sombres subsistent, mais pour les seuls petits
+     encarts qui mettent en avant un conseil ou un contact — pas pour rythmer
+     une page. Ils valent toujours 5 % et 10 % de noir par-dessus le papier.
+     Deux fonds font exception et restent pleins : le vert olive des blocs
+     professionnels, et l'anthracite des conseils de préparation. */
+  --paper: #efebe2;
+  --paper-5: #e3dfd7;
+  --paper-10: #d7d4cb;
   --ink: #212121;
   --ink-70: rgba(33, 33, 33, 0.7);
   --ink-50: rgba(33, 33, 33, 0.52);
@@ -549,12 +553,15 @@ a.media-link:hover .media > img {
   transform: scale(1.04);
 }
 
-/* ---------- Blocs de couleur ---------- */
+/* ---------- Blocs de couleur ----------
+   Ces fonds ne servent plus à rythmer une page — elle tient sur une seule
+   teinte — mais à détacher un encart : un conseil, un contact, une mention.
+   D'où leur petite taille : un bloc large sur ce cran creuserait la page. */
 .panel {
   background: var(--paper-10);
 }
 
-/* Un cran seulement sous le fond, pour alterner sans creuser */
+/* Un cran seulement sous le fond : de quoi se détacher, pas de quoi trouer */
 .panel--soft {
   background: var(--paper-5);
 }
@@ -576,7 +583,7 @@ a.media-link:hover .media > img {
 
 .panel--ink .label,
 .panel--ink .muted {
-  color: rgba(235, 231, 222, 0.66);
+  color: rgba(239, 235, 226, 0.66);
 }
 
 .panel--ink .link {

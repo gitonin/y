@@ -86,7 +86,7 @@ const jsonld = [
   </section>
 
   <!-- ============ CAFÉS ============ -->
-  <section class="cafes section--tight panel panel--soft" aria-labelledby="h-cafes">
+  <section class="cafes section--tight" aria-labelledby="h-cafes">
     <div class="wrap">
       <header class="shead">
         <div>
@@ -196,10 +196,12 @@ const jsonld = [
     color: var(--ink);
   }
 
+  /* Le fond posé derrière la photographie, le temps qu'elle charge : celui de
+     la page, pour qu'aucun rectangle plus sombre n'apparaisse avant elle. */
   .hero__media {
     position: absolute;
     inset: 0;
-    background: var(--paper-10);
+    background: var(--paper);
   }
 
   /* La photographie se donne telle quelle : aucun voile clair par-dessus. Seul

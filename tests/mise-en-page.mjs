@@ -103,19 +103,21 @@ const enPixels = (pg, base64) => pg.evaluate(async (d) => {
   return Array.from(cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data);
 }, base64);
 
-/* La bannière d'accueil se donne sans aucun voile : la photographie prime, et
-   c'est une décision prise en connaissance de cause. Sur un écran court — un
-   téléphone de 667 px, format d'un iPhone SE — les dernières lignes du titre
-   descendent alors sur les cerises et le contraste n'atteint pas le seuil.
-   L'exception est nommée ici plutôt que retirée du test : toutes les autres
-   tailles restent tenues aux 4,5, et la valeur de ce cas est tout de même
-   relevée à chaque passage, pour qu'une aggravation se voie. */
-const CONTRASTE_ASSUME = new Set(['390×667']);
-
+/* La mesure se fait en « mouvement réduit », et ce n'est pas un détail : le
+   titre de la bannière arrive ligne à ligne, chacune décalée de 90 ms sur une
+   transition d'une seconde — la dernière n'est donc en place qu'au bout de
+   1,3 s environ. Mesuré plus tôt, le masque de glyphes compare un titre encore
+   en mouvement et rend un chiffre qui ne veut rien dire : c'est ce qui a fait
+   croire un temps à un défaut de contraste sur les écrans de 667 px, là où le
+   titre est en réalité parfaitement lisible. Sous « mouvement réduit », le
+   site pose le texte à sa place finale d'emblée, et l'on mesure ce que voit
+   vraiment un visiteur. */
 for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 900], [1440, 700], [1920, 1080]]) {
-  const pg = await (await navigateur.newContext({ viewport: { width: w, height: h } })).newPage();
+  const pg = await (
+    await navigateur.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' })
+  ).newPage();
   await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
-  await pg.waitForTimeout(700);
+  await pg.waitForTimeout(300);
   const zone = await pg.evaluate(() => {
     const t = document.querySelector('h1').getBoundingClientRect();
     const c = document.querySelector('.hero__cta').getBoundingClientRect();
@@ -133,11 +135,7 @@ for (const [w, h] of [[390, 844], [390, 667], [768, 1024], [1024, 768], [1440, 9
     if (diff < 90) continue;                       // on écarte les bords adoucis
     pire = Math.min(pire, contraste(ENCRE, lum(sans[i], sans[i + 1], sans[i + 2])));
   }
-  if (CONTRASTE_ASSUME.has(`${w}×${h}`)) {
-    console.log(`  —     ${w}×${h} — contraste ${pire.toFixed(2)}:1, sous le seuil : bannière sans voile, choix assumé`);
-  } else {
-    check(`${w}×${h} — contraste minimal ${pire.toFixed(2)}:1 (seuil 4,5)`, pire >= 4.5, true);
-  }
+  check(`${w}×${h} — contraste minimal ${pire.toFixed(2)}:1 (seuil 4,5)`, pire >= 4.5, true);
   await pg.close();
 }
 

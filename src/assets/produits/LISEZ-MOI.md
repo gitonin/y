@@ -33,7 +33,7 @@ référence correspond chaque fichier.
 - Cadrage **carré**, 2000 × 2000 px au minimum
 - **JPEG, qualité 90, sur un fond uni** : la photographie remplit la tuile
   du catalogue de bord à bord, c'est donc elle qui porte le fond
-- Un fond proche du `#ebe7de` du site, et **le même d'une référence à
+- Un fond proche du `#efebe2` du site, et **le même d'une référence à
   l'autre** : côte à côte dans la grille, deux fonds différents se voient
 - Les fichiers d'origine, pas des versions réduites : le site fabrique
   lui-même toutes les tailles dont il a besoin
