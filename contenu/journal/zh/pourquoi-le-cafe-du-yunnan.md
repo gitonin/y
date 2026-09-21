@@ -1,7 +1,7 @@
 ---
 title: 为什么云南能种出这么好的咖啡？
 description: 海拔、昼夜温差、品种与新一代咖农：中国云南精品咖啡独特之处的完整解读。
-date: 2026-09-11
+date: 2026-09-15
 author: Yunma
 tags: ['云南', '风土', '知识']
 photo: cretes-brumeuses

@@ -119,9 +119,9 @@ dossiers** `fr/`, `en/` et `zh/`. C'est ce nom commun qui relie les versions
 entre elles pour Google.
 
 ```
-contenu/journal/fr/carnet-de-recolte-baoshan.md
-contenu/journal/en/carnet-de-recolte-baoshan.md
-contenu/journal/zh/carnet-de-recolte-baoshan.md
+contenu/journal/fr/pourquoi-le-cafe-du-yunnan.md
+contenu/journal/en/pourquoi-le-cafe-du-yunnan.md
+contenu/journal/zh/pourquoi-le-cafe-du-yunnan.md
 ```
 
 Chaque fichier commence par un en-tête entre deux lignes de trois tirets :

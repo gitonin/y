@@ -44,7 +44,6 @@ const organization = {
   url: base.origin,
   logo: absolute(Astro.site, 'brand/icon-512.png'),
   email: SITE.email,
-  foundingDate: SITE.founded,
   description: dictionaries[lang].home.seoDescription,
   address: {
     '@type': 'PostalAddress',
@@ -53,7 +52,9 @@ const organization = {
     addressLocality: SITE.address.city,
     addressCountry: SITE.address.country,
   },
-  sameAs: [SITE.social.instagram, SITE.social.linkedin],
+  /* Seuls les comptes réellement ouverts : un lien vide vaut moins que pas
+     de lien du tout aux yeux d'un moteur. */
+  sameAs: Object.values(SITE.social).filter(Boolean),
 };
 
 const website = {

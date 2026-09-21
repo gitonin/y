@@ -15,13 +15,14 @@ export const SITE = {
     city: 'Paris',
     country: 'FR',
   },
+  /* Instagram seul : la page LinkedIn a été retirée. En ajouter une autre
+     un jour se fait ici, et elle rejoindra d'elle-même le pied de page et les
+     données envoyées aux moteurs. */
   social: {
     instagram: 'https://www.instagram.com/yunma.coffee/',
-    linkedin: 'https://www.linkedin.com/company/yunma/',
   },
   currency: 'EUR',
   freeShippingFrom: 50,
-  founded: '2019',
 };
 
 /** Shopify — renseigner les variables d'environnement (voir .env.example). */

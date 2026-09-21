@@ -71,7 +71,7 @@ const HORS_PORTEE = '.cart, dl, .specs';
 
 const PAGES = [
   '/fr/', '/fr/cafes/', '/fr/cafes/torch-estate-lot-01/', '/fr/origine/',
-  '/fr/pro/', '/fr/contact/', '/fr/journal/', '/fr/journal/carnet-de-recolte-baoshan/', '/fr/faq/',
+  '/fr/pro/', '/fr/contact/', '/fr/journal/', '/fr/journal/pourquoi-le-cafe-du-yunnan/', '/fr/faq/',
   '/en/', '/en/origine/', '/zh/', '/zh/origine/',
 ];
 

@@ -17,7 +17,7 @@ alternatif, lui, vit dans `src/data/photos.ts` — dites-moi s'il doit changer.
 | Fichier | Sujet attendu | Où elle paraît |
 | --- | --- | --- |
 | `cretes-brumeuses.jpg` | Crêtes et vallées du Yunnan dans la brume | Bannière d'accueil, ouverture d'Origine, menu ouvert, 404 |
-| `recolte-cueilleurs.jpg` | Cueilleurs à la récolte, à flanc de montagne | Accueil (bloc « À l'origine »), Origine, article Baoshan |
+| `recolte-cueilleurs.jpg` | Cueilleurs à la récolte, à flanc de montagne | Accueil (bloc « À l'origine »), Origine |
 | `cerises-branche.jpg` | Branche chargée de cerises rouges et jaunes | Origine (« De décembre à mars »), fiche Catimor |
 | `sechage-lits.jpg` | Séchage sur lits surélevés en bambou | Origine (avant le savoir-faire), fiche Lot 02 |
 | `tabouret-terrasse.jpg` | Nature morte, terrasse face aux montagnes | Clôture d'Origine et de la page Cafés, Pro, article drip bag |

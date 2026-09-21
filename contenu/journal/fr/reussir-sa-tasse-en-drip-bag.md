@@ -1,7 +1,7 @@
 ---
 title: "Réussir sa tasse en sachet filtre"
 description: "Le mode d'emploi complet du sachet filtre : température, ratio, trois versements, erreurs fréquentes. Une tasse propre en trois minutes, sans matériel."
-date: 2026-09-15
+date: 2026-09-20
 author: Yunma
 tags: ['Méthode', 'Extraction', 'Sachet filtre']
 photo: tabouret-terrasse

@@ -139,13 +139,33 @@ const composites = {
 const faits = [];
 const restes = [];
 const absents = [];
+const vides = [];
+
+/**
+ * Le mode d'emploi du document promet qu'écrire « SUPPRIMER » retire un texte.
+ * On le tient : la valeur devient une chaîne vide, et le site sait déjà ne pas
+ * afficher ce qui est vide — une ligne de fiche technique, une ligne de
+ * contenu, un repère chiffré disparaissent alors au lieu de rester en blanc.
+ *
+ * Ces retraits sont comptés à part : effacer n'est pas corriger, et les voir
+ * listés permet de vérifier d'un coup d'œil qu'on n'a pas effacé de travers.
+ */
+const EFFACER = 'SUPPRIMER';
 
 for (const [code, avant] of actuel) {
   if (!recu.has(code)) {
     absents.push(code);
     continue;
   }
-  const apres = recu.get(code);
+  /* Les espaces en début et en fin de texte ne sont jamais voulus : ils
+     viennent d'une frappe dans le traitement de texte, et se verraient sur la
+     page. Les retours à la ligne internes, eux, sont conservés — ceux-là
+     dessinent la mise en page d'un titre. */
+  let apres = recu.get(code).replace(/^[ \t]+|[ \t]+$/g, '');
+  if (apres === EFFACER) {
+    apres = '';
+    vides.push(code);
+  }
   if (apres === avant) continue;
 
   /* --- articles du journal --- */
@@ -195,6 +215,17 @@ for (const [code, avant] of actuel) {
   } else if (racine === 'produits') {
     const produit = catalogue.produits[Number(segments.shift())];
     if (segments[0] === 'farm') {
+      /* Effacer un champ de ferme ne veut pas dire « vider cette ferme » : elle
+         est partagée entre plusieurs cafés, et la vider les abîmerait tous.
+         Cela veut dire « ce produit ne présente pas de ferme » — un assortiment
+         en réunit plusieurs. On détache donc le produit, sans toucher à la
+         fiche de la ferme, qui continue de servir aux autres. */
+      if (apres === '') {
+        produit.ferme = null;
+        delete produit.fermeNom;
+        faits.push(code);
+        continue;
+      }
       /* La ferme est partagée : on écrit dans sa fiche, pas dans le produit. */
       const ferme = catalogue.fermes[produit.ferme];
       if (segments[1] === 'name') {
@@ -275,6 +306,11 @@ for (const c of faits) {
   console.log(`\n### ${c}\n  − ${JSON.stringify(actuel.get(c))}\n  + ${JSON.stringify(recu.get(c))}`);
 }
 if (absents.length) console.log(`\n${absents.length} code(s) absent(s) du document : ${absents.slice(0, 10).join(', ')}`);
+if (vides.length) {
+  console.log(`\n${vides.length} texte(s) retiré(s) (« SUPPRIMER » dans le document) :`);
+  for (const c of vides) console.log('  ×', c);
+  console.log('  Vérifiez que la page reste juste sans eux, et retirez-les aussi des deux autres langues.');
+}
 const titresRetouches = ecartes.filter(([, ligne]) => ligne.trim() !== '' && !decor.has(ligne.trim()));
 if (titresRetouches.length) {
   console.log(`\n${titresRetouches.length} titre(s) retouché(s), sans effet sur le site (un titre ne porte pas de code) :`);

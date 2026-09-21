@@ -75,10 +75,19 @@ if (textes) {
         for (const c of enTrop.slice(0, 12)) erreur(`contenu/textes.json : « ${c} » existe en ${l} mais pas en français.`);
         if (enTrop.length > 12) erreur(`contenu/textes.json : et ${enTrop.length - 12} autres textes en trop en ${l}.`);
       }
-      for (const l of LANGUES.filter((x) => textes.site[x])) {
+      /* Un texte peut être laissé vide volontairement — une phrase manifeste
+         retirée, par exemple : le bloc disparaît alors de la page. Ce qui reste
+         une erreur, c'est qu'il soit vide ici et rempli là : le site ne dirait
+         pas la même chose selon la langue. Le français fait foi. */
+      const lu = (l, c) => c.split(/[.[\]]+/).filter(Boolean).reduce((o, k) => o?.[k], textes.site[l]);
+      for (const l of LANGUES.filter((x) => x !== 'fr' && textes.site[x])) {
         for (const c of chemins(textes.site[l])) {
-          const valeur = c.split(/[.[\]]+/).filter(Boolean).reduce((o, k) => o?.[k], textes.site[l]);
-          if (typeof valeur === 'string' && valeur.trim() === '') erreur(`contenu/textes.json : « ${c} » est vide en ${l}.`);
+          const valeur = lu(l, c);
+          if (typeof valeur !== 'string') continue;
+          const vide = valeur.trim() === '';
+          const videEnFr = String(lu('fr', c) ?? '').trim() === '';
+          if (vide && !videEnFr) erreur(`contenu/textes.json : « ${c} » est vide en ${l} alors qu'il est renseigné en français.`);
+          if (!vide && videEnFr) erreur(`contenu/textes.json : « ${c} » est renseigné en ${l} alors qu'il a été retiré du français.`);
         }
       }
     }
@@ -127,15 +136,24 @@ if (catalogue) {
 
     if (!CATEGORIES.includes(p.category)) erreur(`contenu/produits.json : « ${nom} » — « category » doit valoir ${CATEGORIES.join(', ')}.`);
     if (!VISUELS.includes(p.visual)) erreur(`contenu/produits.json : « ${nom} » — « visual » doit valoir ${VISUELS.join(', ')}.`);
-    if (!fermes?.[p.ferme]) erreur(`contenu/produits.json : « ${nom} » renvoie à la ferme « ${p.ferme} », qui n'est pas décrite plus haut.`);
+    /* Sans ferme, le produit n'en présente pas — c'est le cas d'un assortiment.
+       Une clé renseignée mais inconnue reste une faute de frappe. */
+    if (p.ferme && !fermes?.[p.ferme]) erreur(`contenu/produits.json : « ${nom} » renvoie à la ferme « ${p.ferme} », qui n'est pas décrite plus haut.`);
     if (PHOTOS.length && !PHOTOS.includes(p.ambiance))
       erreur(`contenu/produits.json : « ${nom} » — la photographie d'ambiance « ${p.ambiance} » n'existe pas.`);
 
     for (const champ of ['name', 'subtitle', 'short', 'description', 'story', 'brew']) {
       for (const l of LANGUES) if (!p?.[champ]?.[l]) erreur(`contenu/produits.json : « ${nom} » — « ${champ} » manque en ${l}.`);
     }
+    /* Une ligne de fiche technique peut être laissée vide : un assortiment n'a
+       ni altitude ni process uniques, et la ligne disparaît alors de la page.
+       Ce qui n'est pas permis, c'est qu'elle soit vide dans une langue et
+       remplie dans une autre — la fiche ne dirait pas la même chose selon le
+       visiteur. */
     for (const champ of ['origin', 'altitude', 'variety', 'process', 'notes', 'drying', 'harvest']) {
-      for (const l of LANGUES) if (!p?.specs?.[champ]?.[l]) erreur(`contenu/produits.json : « ${nom} » — la fiche technique « ${champ} » manque en ${l}.`);
+      const remplies = LANGUES.filter((l) => p?.specs?.[champ]?.[l]);
+      if (remplies.length !== 0 && remplies.length !== LANGUES.length)
+        erreur(`contenu/produits.json : « ${nom} » — la fiche technique « ${champ} » n'est remplie qu'en ${remplies.join(', ')}. Remplissez-la partout, ou nulle part.`);
     }
     /* Le profil est facultatif — un assortiment n'en a pas — mais s'il est là,
        il doit l'être dans les trois langues. */

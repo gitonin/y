@@ -49,14 +49,8 @@ hello@yunma.fr
 **Lien Instagram** `[site.instagram]`
 https://www.instagram.com/yunma.coffee/
 
-**Lien LinkedIn** `[site.linkedin]`
-https://www.linkedin.com/company/yunma/
-
 **Livraison offerte à partir de** `[site.livraisonOfferteDes]`
 50 €
-
-**Année de la première récolte importée** `[site.premiereRecolte]`
-2019
 
 
 ## Page d’accueil
@@ -82,7 +76,7 @@ du Yunnan.
 云南精品咖啡
 
 **Libellé du lien** `[accueil.heroCta]`
-Découvrir les cafés Yunma
+Les cafés Yunma
 
 
 ### Bloc « Notre origine »
@@ -91,12 +85,12 @@ Découvrir les cafés Yunma
 À L’origine,
 
 **Titre** `[accueil.originTitle]`
-le Yunnan.
+Le Yunnan.
 Un terroir.
 Une philosophie.
 
 **Texte** `[accueil.originText]`
-Au sud-ouest de la Chine, entre 1300 et 1800 mètres d’altitude, le Yunnan cultive des cafés encore peu connus. Chaque café que Yunma sélectionne raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons la même philosophie de vie.
+Chaque café du Yunnan que Yunma sélectionne raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons la même philosophie de vie.
 
 **Libellé du lien** `[accueil.originCta]`
 Découvrir l’origine
@@ -112,10 +106,10 @@ Récoltés au Yunnan,
 torréfiés à Paris.
 
 **Texte** `[accueil.coffeesText]`
-Trois terroirs du Yunnan à découvrir en grains, sachets filtres individuels, ou en coffret découverte pour tout goûter. Cafés torréfiés en petites séries, à Paris.
+Trois terroirs du Yunnan à découvrir en grains ou sachets filtres individuels. Cafés torréfiés en petites séries à Paris.
 
 **Libellé du lien** `[accueil.coffeesCta]`
-Découvrir les cafés Yunma
+Les cafés Yunma
 
 
 ### Bloc « Notre approche »
@@ -150,7 +144,7 @@ Carnets de Yunma
 Professionnels
 
 **Titre** `[accueil.proTitle]`
-Cafés de spécialité du Yunnan pour votre Coffee shop, pour les torréfacteurs, hôtels, restaurants et épiceries fine.
+Nos cafés de spécialité du Yunnan, une alternative qualitative et originale pour votre entreprise et vos clients.
 
 **Libellé du lien** `[accueil.proCta]`
 Découvrir notre offre pro
@@ -182,13 +176,13 @@ Les cafés Yunma : cafés de spécialité du Yunnan. Origines tracées, torréfa
 ### En-tête
 
 **Sur-titre** `[cafes.label]`
-Notre spécialité
+La boutique
 
 **Titre** `[cafes.title]`
-Cafés du Yunnan
+Nos cafés du Yunnan
 
 **Introduction** `[cafes.intro]`
-Nos cafés de spécialité sont issus de trois terroirs du Yunnan, torréfiés régulièrement à Paris pour préserver leur fraîcheur.
+Nos cafés de spécialité du Yunnan sont régulièrement torréfiés à Paris pour préserver leur fraîcheur.
 
 
 ### Filtres
@@ -203,7 +197,7 @@ Cafés en grains
 Sachets filtres
 
 **filterSets** `[cafes.filterSets]`
-Coffrets
+Offre
 
 
 ### Encadré « Besoin d’un conseil ? »
@@ -229,13 +223,13 @@ Torch Estate, Lot 01
 Café de Pu’er, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.torch-estate-lot-01.accroche]`
-Café du Yunnan aux notes de fruits tropicaux, baies, vin rouge.
+Notes de fruits tropicaux, baies, vin rouge.
 
 **Description** `[produit.torch-estate-lot-01.description]`
 Une double fermentation anaérobie, menée en cuve fermée avant le séchage honey. Le résultat est clairement aromatique : fruits tropicaux mûrs, baies, une finale qui pointe vers les notes de vin rouge. C’est notre lot le plus démonstratif, celui que l’on sert quand quelqu’un doute encore de ce que le Yunnan sait faire.
 
 **Histoire du lot** `[produit.torch-estate-lot-01.histoire]`
-La fermentation anaérobie double demande une discipline que peu de fermes maîtrisent : deux cycles en cuve fermée, chacun suivi en température et en pH, sans marge d’erreur. Torch Estate s’y est mise il y a trois récoltes, en commençant par des micro-lots.
+La fermentation anaérobie double demande une discipline que peu de fermes maîtrisent : deux cycles en cuve fermée, chacun suivi en température et en pH, sans marge d’erreur. Torch Estate s’y est mise en commençant par des micro-lots.
 
 **Fiche : origine** `[produit.torch-estate-lot-01.origine]`
 Yunnan, Chine — Pu’er
@@ -256,7 +250,7 @@ Fruits tropicaux, baies, vin rouge
 Lits surélevés
 
 **Fiche : récolte** `[produit.torch-estate-lot-01.recolte]`
-À la main, cerises mûres
+À la main, toujours à maturité
 
 **Fiche : profil (filtre ou espresso)** `[produit.torch-estate-lot-01.profil]`
 Filtre et espresso
@@ -271,9 +265,9 @@ Torch Estate
 Pu’er, Yunnan
 
 **Ferme : présentation** `[produit.torch-estate-lot-01.ferme.texte]`
-Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot 01 en fermentation anaérobie double, le Lot 02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot 01 en fermentation anaérobie double, le Lot 02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui ont peu en commun.
 Fondée en 2014, Torch Estate s’est installée directement sur les terres de production, en partenariat étroit avec les producteurs locaux. Leur modèle repose sur une logique de co-création plutôt que d’assistance : ils travaillent avec les fermiers pour développer des variétés (notamment le Catimor) et expérimenter des méthodes de traitement à faible consommation d’eau.
-Torch Estate fait partie de ce qu’ils appellent le « Mountain Man Project », un programme visant à convertir des fermes autrefois tournées vers le commerce de masse vers la production de cafés de spécialité, avec un accompagnement technique et une valorisation économique.
+Torch Estate a créé le « Mountain Man Project », un programme visant à convertir des fermes autrefois tournées vers le commerce de masse vers la production de cafés de spécialité et de qualité, avec un accompagnement technique et une valorisation économique.
 
 **Format et prix** `[produit.torch-estate-lot-01.prix.1]`
 200 g — 15.00 €
@@ -288,13 +282,13 @@ Torch Estate, Lot 02
 Café de Pu’er, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.torch-estate-lot-02.accroche]`
-Café du Yunnan aux notes de Citron vert, olive, liqueur de cacao.
+Notes de Citron vert, olive, liqueur de cacao.
 
 **Description** `[produit.torch-estate-lot-02.description]`
 Un honey traditionnel, pensé pour l’espresso. La mucilage laissée sur le grain donne du corps et une douceur de liqueur de cacao, que vient trancher une acidité de citron vert. Cette note d’olive, presque saline, est la signature du lot: on la retrouve souvent d’une récolte à l’autre.
 
 **Histoire du lot** `[produit.torch-estate-lot-02.histoire]`
-C’est le lot que nous buvons le plus souvent chez nous, en espresso serré le matin. Il tient aussi remarquablement bien au lait : la liqueur de cacao ressort, l’acidité se range. Si vous n’avez qu’une machine, ne cherchez plus, prenez celui-là.
+C’est le lot que nous buvons le plus souvent chez nous, en espresso serré le matin. Il tient aussi remarquablement bien au lait : la liqueur de cacao ressort, l’acidité se range. Si vous aimez un espresso avec du caractère et une pointe d’acidité, ne cherchez plus, prenez celui-là.
 
 **Fiche : origine** `[produit.torch-estate-lot-02.origine]`
 Yunnan, Chine — Pu’er
@@ -315,7 +309,7 @@ Citron vert, olive, liqueur de cacao
 Lits surélevés
 
 **Fiche : récolte** `[produit.torch-estate-lot-02.recolte]`
-À la main, cerises mûres
+À la main, toujours à maturité
 
 **Fiche : profil (filtre ou espresso)** `[produit.torch-estate-lot-02.profil]`
 Espresso
@@ -330,9 +324,9 @@ Torch Estate
 Pu’er, Yunnan
 
 **Ferme : présentation** `[produit.torch-estate-lot-02.ferme.texte]`
-Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot 01 en fermentation anaérobie double, le Lot 02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui n’ont presque rien en commun.
+Torch Estate cultive ses parcelles dans les collines de Pu’er, autour de 1450 mètres. C’est de cette même ferme que viennent nos deux lots honey : le Lot 01 en fermentation anaérobie double, le Lot 02 en honey traditionnel. Même terre, même variété, deux traitements — et deux tasses qui ont peu en commun.
 Fondée en 2014, Torch Estate s’est installée directement sur les terres de production, en partenariat étroit avec les producteurs locaux. Leur modèle repose sur une logique de co-création plutôt que d’assistance : ils travaillent avec les fermiers pour développer des variétés (notamment le Catimor) et expérimenter des méthodes de traitement à faible consommation d’eau.
-Torch Estate fait partie de ce qu’ils appellent le « Mountain Man Project », un programme visant à convertir des fermes autrefois tournées vers le commerce de masse vers la production de cafés de spécialité, avec un accompagnement technique et une valorisation économique.
+Torch Estate a créé le « Mountain Man Project », un programme visant à convertir des fermes autrefois tournées vers le commerce de masse vers la production de cafés de spécialité et de qualité, avec un accompagnement technique et une valorisation économique.
 
 **Format et prix** `[produit.torch-estate-lot-02.prix.1]`
 200 g — 15.00 €
@@ -347,13 +341,13 @@ Yun Lan Estate
 Café de Xishuangbanna, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.yun-lan-estate.accroche]`
-Pamplemousse, prune rouge, thé noir.
+Notes de pamplemousse, prune rouge, thé noir.
 
 **Description** `[produit.yun-lan-estate.description]`
-Du Pacamara cultivé entre 1600 et 1800 mètres, traité en lavé traditionnel : naturel, rien pour masquer, rien pour ajouter. Ce qui reste, c’est la variété et l’altitude — une acidité de pamplemousse, une chair de prune rouge, et une longueur de thé noir qui tient après la tasse.
+Du Pacamara cultivé entre 1600 et 1800 mètres, traité en lavé traditionnel : naturel, rien pour modifier, rien pour dénaturer. Ce qui reste, c’est la variété et l’altitude — une légère acidité de pamplemousse, de la chair de prune rouge, et cette note de thé noir qui tient en bouche.
 
 **Histoire du lot** `[produit.yun-lan-estate.histoire]`
-Le Pacamara est une variété faite de grands arbres, de gros grains, peu de rendement, et une sensibilité qui décourage la plupart des exploitations. Il en existe peu au Yunnan. C’est un lot plutôt exclusif que nous proposons.
+Le Pacamara est une variété faite de grands arbres avec peu de rendement, et une sensibilité aux intempéries qui peut décourager les exploitations. Il en existe peu au Yunnan. C’est un lot plutôt exclusif que nous vous proposons.
 
 **Fiche : origine** `[produit.yun-lan-estate.origine]`
 Yunnan, Chine — Xishuangbanna
@@ -389,7 +383,7 @@ Yun Lan Estate
 Xishuangbanna, Yunnan
 
 **Ferme : présentation** `[produit.yun-lan-estate.ferme.texte]`
-Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1600 et 1800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
+Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1600 et 1800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, ici traitée en lavé traditionnel.
 Créée en 1999 par Zhang Hongjun, cette ferme est l’une des plus anciennes fermes de spécialité du Yunnan. Elle cultive plus de 20 variétés (Geisha, Pacamara, Typica pourpre, sélections locales) avec une approche patiente, artisanale et plutôt traditionnelle (lavé, naturel, honey). Ses cafés sont connus pour leur acidité lumineuse et douce, leurs arômes d’agrumes, de baies, de prune et de thé noir, et leur grande finesse.
 
 **Format et prix** `[produit.yun-lan-estate.prix.1]`
@@ -405,10 +399,10 @@ Gaosheng — Catimor
 Café de Baoshan, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.drip-bags-catimor.accroche]`
-Cinq sachets filtres individuels, tropical épicé.
+Cinq sachets filtres individuels, notes tropicales épicées.
 
 **Description** `[produit.drip-bags-catimor.description]`
-Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Le Catimor de Gaosheng donne une tasse équilibrée, légèrement épicée : le café que l’on sert à tout le monde sans avoir besoin de l’expliquer.
+Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction à Baoshan, en Chine (seule torréfaction Yunma qui n’est pas réalisée à Paris). Le Catimor de Gaosheng donne une tasse équilibrée, légèrement épicée : le café que l’on sert à tout le monde sans avoir besoin de l’expliquer.
 
 **Histoire du lot** `[produit.drip-bags-catimor.histoire]`
 Pensés pour le bureau, les voyages ou les matins pressés — sans renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, et c’est prêt.
@@ -432,7 +426,7 @@ Tropical, épicé
 Lits surélevés
 
 **Fiche : récolte** `[produit.drip-bags-catimor.recolte]`
-À la main, cerises à maturation
+À la main, cerises à maturation complète
 
 **Fiche : profil (filtre ou espresso)** `[produit.drip-bags-catimor.profil]`
 Filtre
@@ -456,7 +450,7 @@ Ferme de Gaosheng
 Baoshan, Yunnan
 
 **Ferme : présentation** `[produit.drip-bags-catimor.ferme.texte]`
-La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
+La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, à proximité de la frontière avec le Myanmar.
 
 **Format et prix** `[produit.drip-bags-catimor.prix.1]`
 Boîte de 5 — 9.00 €
@@ -471,10 +465,10 @@ Gaosheng — Bourbon jaune
 Café de Baoshan, Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.drip-bags-bourbon-jaune.accroche]`
-Cinq sachets filtres individuels, boisés cacaotés.
+Cinq sachets filtres individuels, notes boisés cacaotés.
 
 **Description** `[produit.drip-bags-bourbon-jaune.description]`
-Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction. Le Bourbon jaune est plus rare et moins productif que le Catimor, sur la même ferme et à la même altitude : la tasse y gagne en finesse, avec ses notes de rhum boisé et légèrement cacaoté.
+Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction à Baoshan, en Chine (seule torréfaction Yunma qui n’est pas réalisée à Paris). Le Bourbon jaune est bien plus rare que le Catimor, il vient de plus petites parcelles que notre Catimor de Gaosheng, mais avec la même ferme et à la même altitude : la tasse gagne en finesse, et propose des notes de rhum boisé, légèrement cacaotées.
 
 **Histoire du lot** `[produit.drip-bags-bourbon-jaune.histoire]`
 Même terre, même altitude, même traitement, même torréfaction que notre Catimor : seule la variété change. C’est la comparaison la plus simple que l’on puisse proposer, et la plus instructive en les goûtant à la suite.
@@ -522,22 +516,22 @@ Ferme de Gaosheng
 Baoshan, Yunnan
 
 **Ferme : présentation** `[produit.drip-bags-bourbon-jaune.ferme.texte]`
-La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, près de la frontière avec le Myanmar.
+La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, à proximité de la frontière avec le Myanmar.
 
 **Format et prix** `[produit.drip-bags-bourbon-jaune.prix.1]`
 Boîte de 5 — 11.00 €
 
 
-### Coffret Découverte — 3 × 200 g + 2 boîtes de sachets filtres
+### Offre Découverte — Nos trois terroirs du Yunnan
 
 **Nom** `[produit.coffret-decouverte.nom]`
-Coffret Découverte
+Offre Découverte
 
 **Sous-titre** `[produit.coffret-decouverte.sousTitre]`
-3 × 200 g + 2 boîtes de sachets filtres
+Nos trois terroirs du Yunnan
 
 **Accroche (une phrase, sous le prix)** `[produit.coffret-decouverte.accroche]`
-Nos trois terroirs du Yunnan, .
+Xishuangbanna, Pu’er et Baoshan, pour découvrir tous nos cafés.
 
 **Description** `[produit.coffret-decouverte.description]`
 Le meilleur moyen de comprendre nos cafés du Yunnan : deux honey de Torch Estate — anaérobie double et traditionnel — le lavé de Yun Lan Estate en Pacamara, et deux boîtes de 5 sachets filtres de la ferme de Gaosheng pour emporter un peu de Yunnan partout avec vous.
@@ -548,26 +542,11 @@ Trois fermes, trois terroirs, trois variétés. Dégustez-les ensemble : leurs d
 **Fiche : origine** `[produit.coffret-decouverte.origine]`
 Yunnan, Chine — Pu’er, Baoshan & Xishuangbanna
 
-**Fiche : altitude** `[produit.coffret-decouverte.altitude]`
-1300 –1800 m
-
 **Fiche : variété** `[produit.coffret-decouverte.variete]`
 Catimor, Pacamara et Bourbon jaune
 
-**Fiche : process** `[produit.coffret-decouverte.process]`
-Honey anaérobie, honey, lavé
-
-**Fiche : notes de dégustation** `[produit.coffret-decouverte.notes]`
-Fruits tropicaux, citron vert, pamplemousse, cacao
-
-**Fiche : séchage** `[produit.coffret-decouverte.sechage]`
-Lits surélevés
-
-**Fiche : récolte** `[produit.coffret-decouverte.recolte]`
-Récolte en cours
-
 **Conseils de préparation** `[produit.coffret-decouverte.preparation]`
-Commencez par le Lot.02, puis le Lot.01, terminez par le Yun Lan : du plus rond au plus vif.
+Commencez par le Lot.02, puis le Lot.01, terminez par le Yun Lan : du plus rond au plus expressif.
 
 **Contenu, ligne 1** `[produit.coffret-decouverte.contenu.1]`
 Torch Estate, Lot 01 — 200 g
@@ -579,23 +558,10 @@ Torch Estate, Lot 02 — 200 g
 Yun Lan Estate — 200 g
 
 **Contenu, ligne 4** `[produit.coffret-decouverte.contenu.4]`
-Sachets filtres — 2 boîtes de 5
-
-**Contenu, ligne 5** `[produit.coffret-decouverte.contenu.5]`
-Fiches de dégustation
-
-**Ferme : nom** `[produit.coffret-decouverte.ferme.nom]`
-Yun Lan Estate
-
-**Ferme : lieu** `[produit.coffret-decouverte.ferme.lieu]`
-Xishuangbanna, Yunnan
-
-**Ferme : présentation** `[produit.coffret-decouverte.ferme.texte]`
-Yun Lan Estate se trouve à Xishuangbanna, à l’extrême sud du Yunnan, entre 1600 et 1800 mètres — les parcelles les plus hautes avec lesquelles nous travaillons. La ferme y cultive du Pacamara, une variété rare, peu productive et difficile à mener, qu’elle traite en lavé traditionnel.
-Créée en 1999 par Zhang Hongjun, cette ferme est l’une des plus anciennes fermes de spécialité du Yunnan. Elle cultive plus de 20 variétés (Geisha, Pacamara, Typica pourpre, sélections locales) avec une approche patiente, artisanale et plutôt traditionnelle (lavé, naturel, honey). Ses cafés sont connus pour leur acidité lumineuse et douce, leurs arômes d’agrumes, de baies, de prune et de thé noir, et leur grande finesse.
+Sachets filtres — 2 boîtes de 5 sachets (Catimor et Bourbon jaune)
 
 **Format et prix** `[produit.coffret-decouverte.prix.1]`
-Coffret complet — 60.00 €
+Notre offre — 60.00 €
 
 
 ## Page « Origine » (terroir, histoire et savoir-faire)
@@ -606,10 +572,10 @@ Coffret complet — 60.00 €
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[origine.seoTitle]`
-Origine et savoir-faire des cafés Yunma du Yunnan
+Origine et histoire des cafés Yunma du Yunnan
 
 **Description affichée dans Google (≈ 155 signes)** `[origine.seoDescription]`
-Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et le savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.
+Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et son savoir-faire de la cerise à la tasse : récolte et torréfaction.
 
 
 ### En-tête
@@ -623,7 +589,7 @@ Une région.
 Une philosophie.
 
 **Introduction** `[origine.intro]`
-Le Yunnan produit 95% du café chinois. La Chine n’exporte que 5% de sa production aux marchés extérieurs. Des cafés rares et d’une grande finesse portés par une nouvelle génération de producteurs.
+Le Yunnan produit 98% du café chinois, mais seulement 5% de sa production est destinée aux marchés extérieurs. Des cafés rares, d’une grande finesse portés par une nouvelle génération de producteurs.
 
 
 ### Bloc 1 — Ses montagnes, ses terroirs
@@ -635,7 +601,7 @@ La région
 Ses montagnes, ses terroirs
 
 **Texte** `[origine.bloc.1.texte]`
-Les terroirs de café se situent entre 1300 et 1800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches en altitude ralentissent la maturation des cerises de café et concentrent leurs sucres : c’est ce qui donne au Yunnan ces cafés distinctifs.
+Les terroirs de café se situent entre 1300 et 1800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches dues à l’altitude ralentissent la maturation des cerises de café et concentrent leurs sucres : tout cela donne au Yunnan ces cafés distinctifs.
 
 
 ### Bloc 2 — Des rencontres, une philosophie de vie
@@ -647,7 +613,7 @@ Les fermes
 Des rencontres, une philosophie de vie
 
 **Texte** `[origine.bloc.2.texte]`
-Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons à un prix équitable, et nous nous engageons à ce que chacune des fermes puisse perpétuer leurs passions pour les cafés de spécialité.
+Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons leur grains verts à un prix équitable, ainsi chacune des fermes peut perpétuer leurs passions pour les cafés de spécialité.
 
 
 ### Bloc 3 — De décembre à mars
@@ -659,7 +625,7 @@ La saison
 De décembre à mars
 
 **Texte** `[origine.bloc.3.texte]`
-La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées le jour même. Les lots arrivent en France au printemps et sont torréfiés tout au long de l’année.
+La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées de manière rigoureuse. Les nouveaux lots arrivent en France au printemps et sont torréfiés régulièrement tout au long de l’année pour préserver leur fraîcheur.
 
 
 ### Phrases mises en avant
@@ -667,16 +633,13 @@ La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont
 > Ces quatre phrases s’affichent en très grand, seules, pour ponctuer la lecture de la page.
 
 **Phrase manifeste, après les trois blocs ci-dessus** `[origine.citation]`
-Un café ne se fabrique pas. Il se cultive, puis se respecte.
+De la cerise à la tasse, un café se cultive et se respecte.
 
 **Phrase avant les terroirs** `[origine.phrase.terroir]`
-À 1 500 mètres, ce sont les nuits fraîches qui font le travail.
+L’importance de l’altitude, et des nuits fraîches des terroirs du Yunnan.
 
 **Phrase après notre histoire** `[origine.phrase.histoire]`
-Nous achetons aux producteurs, aux prix équitables.
-
-**Phrase entre les étapes et le tableau** `[origine.phrase.savoirFaire]`
-De la cerise à la tasse, chaque geste se retrouve dans le verre.
+Nous achetons aux producteurs, à prix équitable.
 
 
 ### Terroirs
@@ -739,10 +702,10 @@ ORO Yunnan
 Bureau de représentation commerciale du Yunnan en France (Paris)
 
 **Texte** `[origine.oro.texte]`
-ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique.
+ORO Yunnan accompagne notre travail auprès des fermes de café et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique.
 
 **Libellé du lien vers le site d’ORO Yunnan** `[origine.oro.lien]`
-Le café du Yunnan par ORO
+En savoir plus
 
 
 ## Origine — partie « Savoir-faire »
@@ -786,7 +749,7 @@ Cueillette manuelle des cerises à pleine maturité, passage après passage sur 
 Traitement
 
 **Texte** `[savoirFaire.etape.2.texte]`
-Lavé, honey ou naturel selon le lot. Fermentations suivies en température et en durée, cuve par cuve.
+Lavé, honey ou naturel selon le lot. Des fermentations suivies en température et en durée.
 
 
 ### Étape 03 — Séchage
@@ -795,7 +758,7 @@ Lavé, honey ou naturel selon le lot. Fermentations suivies en température et e
 Séchage
 
 **Texte** `[savoirFaire.etape.3.texte]`
-Lits surélevés, à l’ombre les premiers jours, retournés toutes les deux heures. Entre 12 et 20 jours.
+Lits surélevés. Entre 12 et 20 jours.
 
 
 ### Étape 04 — Tri
@@ -804,7 +767,7 @@ Lits surélevés, à l’ombre les premiers jours, retournés toutes les deux he
 Tri
 
 **Texte** `[savoirFaire.etape.4.texte]`
-Double tri manuel avant export, puis contrôle à l’arrivée. Les défauts partent, la régularité reste.
+Tri manuel contrôlé. Les défauts partent, la régularité reste.
 
 
 ### Étape 05 — Torréfaction
@@ -813,7 +776,7 @@ Double tri manuel avant export, puis contrôle à l’arrivée. Les défauts par
 Torréfaction
 
 **Texte** `[savoirFaire.etape.5.texte]`
-Petites séries, profil clair à moyen, développé pour la tasse filtre comme pour l’espresso.
+Par petites séries, profil moyen en général, développé pour le filtre ou pour l’espresso.
 
 
 ### Étape 06 — Dégustation
@@ -822,7 +785,7 @@ Petites séries, profil clair à moyen, développé pour la tasse filtre comme p
 Dégustation
 
 **Texte** `[savoirFaire.etape.6.texte]`
-Chaque lot est cupé à l’arrivée, à la torréfaction, puis toutes les deux semaines pendant sa vie commerciale.
+Chaque lot est cupé avant et après chaque torréfaction.
 
 
 ### Tableau de préparation
@@ -831,7 +794,7 @@ Chaque lot est cupé à l’arrivée, à la torréfaction, puis toutes les deux 
 Préparer un café Yunma
 
 **Phrase** `[savoirFaire.brewText]`
-Nos repères de base, à ajuster à votre eau et à votre goût.
+Nos repères de base, à ajuster bien évidemment à votre goût.
 
 **En-tête de colonne** `[savoirFaire.colonneMethode]`
 Méthode
@@ -864,7 +827,7 @@ Sachet filtre — 10 g / 180 ml — 92 °C — 3 versements
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[apropos.seoTitle]`
-Notre histoire — Yunma, torréfacteur de cafés du Yunnan
+Notre histoire — Yunma, fournisseur de cafés du Yunnan
 
 **Description affichée dans Google (≈ 155 signes)** `[apropos.seoDescription]`
 Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité. Notre histoire, notre mission et nos engagements.
@@ -882,28 +845,28 @@ Notre histoire
 Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité.
 
 **Le récit** `[apropos.storyText]`
-En 2019, notre premier voyage dans les montagnes de Baoshan. Des caféiers plantés entre les théiers, des familles qui vendaient leur récolte au poids sans jamais goûter la tasse. Nous sommes revenus l’année suivante avec un cupping set et quelques sacs. Yunma est né de ces allers-retours.
+Tout commence en 2019, lors d’un premier voyage au Yunnan. Jixuan (originaire du Sichuan) et Antoine (originaire de France), nous tombons sous le charme de cette région hors du temps. Année après année, nous partons explorer ses montagnes, ses terroirs et ses producteurs. De cette découverte du terroir yunnanais est née une évidence : révéler au monde l’excellence de ces cafés encore trop peu connus du grand public.
 
 
 ### Mission et approche
 
 **Titre** `[apropos.missionTitle]`
-Notre mission
+Notre volonté
 
 **Texte** `[apropos.missionText]`
-Mettre en lumière le terroir du Yunnan à travers des cafés d’exception, en respectant les hommes et la nature.
+Partager cette qualité de vie du Yunnan à travers leur café. Faire connaître ce terroir d’exception et offrir une expérience des cafés de spécialité loin des standards industriels.
 
 **Titre** `[apropos.approachTitle]`
 Notre approche
 
 **Texte** `[apropos.approachText]`
-Nous travaillons avec des producteurs passionnés pour offrir des cafés traçables, rares et uniques. Peu de références, choisies, qui seront renouvelées au rythme des saisons.
+Un travail direct avec des producteurs passionnés pour sélectionner des cafés uniques, traçables. Nous privilégions la qualité à la quantité, en mettant en valeur le caractère unique de chaque récolte et le savoir-faire des producteurs locaux.
 
 
 ### Quelques repères
 
 **Sur-titre** `[apropos.reperesTitre]`
-Yunma en quelques repères
+Yunma en quelques chiffres
 
 **Repère 1 — chiffre** `[apropos.repere.1.valeur]`
 3
@@ -921,22 +884,16 @@ terroirs du Yunnan
 1 300 – 1 800 m
 
 **Repère 3 — légende** `[apropos.repere.3.libelle]`
-altitude de nos parcelles
-
-**Repère 4 — chiffre** `[apropos.repere.4.valeur]`
-2026
-
-**Repère 4 — légende** `[apropos.repere.4.libelle]`
-Premiers grains importés
+altitude des parcelles
 
 
 ### Image de fin
 
 **Phrase de fin** `[apropos.closing]`
-Notre philosophie, le « slow coffee, slow life ».
+Notre philosophie, Slow Coffee Slow Life.
 
 **Libellé du lien** `[apropos.closingCta]`
-Découvrir notre journal
+Découvrir le journal
 
 
 ## Page « Espace professionnels »
@@ -945,10 +902,10 @@ Découvrir notre journal
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[pro.seoTitle]`
-Café de spécialité pour Coffee shop, sociétés, hôtels / restaurants, épiceries
+Cafés de spécialité pour coffee shop, restaurations, épiceries, sociétés
 
 **Description affichée dans Google (≈ 155 signes)** `[pro.seoDescription]`
-Yunma accompagne torréfacteurs, coffee shops, sociétés, hôtels, restaurants et épiceries fines : cafés de spécialité du Yunnan aux tarifs professionnels.
+Yunma accompagne torréfacteurs, coffee shops, sociétés, hôtels, restaurants et épiceries fines : des cafés de spécialité du Yunnan aux tarifs professionnels.
 
 
 ### En-tête
@@ -957,11 +914,11 @@ Yunma accompagne torréfacteurs, coffee shops, sociétés, hôtels, restaurants 
 Espace pro
 
 **Titre** `[pro.title]`
-Espace
-professionnels
+Nos offres B2B
+pour les professionnels
 
 **Introduction** `[pro.intro]`
-Des cafés de spécialité pour les professionnels exigeants.
+Des cafés de spécialité pour les professionnels, votre entreprise, vos clients.
 
 **cta** `[pro.cta]`
 Nous contacter
@@ -976,22 +933,22 @@ Torréfacteurs, coffee shops, sociétés, hôtels / restaurants et épiceries fi
 L’offre pro
 
 **Offre 1 — titre** `[pro.offre.1.titre]`
-Grains 1 kg
+Cafés en grains verts ou torréfiés à façon
 
 **Offre 1 — texte** `[pro.offre.1.texte]`
-Nos trois lots de saison en sac de 1 kg, torréfiés à Paris.
+Nos trois lots de saison en sac de 1 kg ou plus, torréfiés à Paris.
 
 **Offre 2 — titre** `[pro.offre.2.titre]`
-Sachets filtres pour vos clients, ou déplacements de vos équipes
+Sachets filtres pour vos clients, ou les déplacements de vos équipes
 
 **Offre 2 — texte** `[pro.offre.2.texte]`
-Boîtes de 5 ou sachets à votre marque, à partir de 500 unités.
+Boîtes de 5 (contactez-nous pour les quantités ou de la personnalisation).
 
 **Offre 3 — titre** `[pro.offre.3.titre]`
-Formation & réglages
+Accompagnement
 
 **Offre 3 — texte** `[pro.offre.3.texte]`
-Une demi-journée sur site pour caler extraction, recettes et discours en salle.
+Une demi-journée sur site pour caler extraction, recettes ou communication.
 
 **Sur-titre « Pour qui ? »** `[pro.pourQuiTitre]`
 Pour qui ?
@@ -1009,10 +966,10 @@ Nos engagements
 Qualité d’exception
 
 **Engagement 1 — texte** `[pro.engagement.1.texte]`
-Cafés tracés et sélectionnés avec soin, lots réguliers sur la saison.
+Cafés tracés et sélectionnés avec soin, lots réguliers toute l’année.
 
 **Engagement 2 — titre** `[pro.engagement.2.titre]`
-Relations directes
+Relations simples et directes
 
 **Engagement 2 — texte** `[pro.engagement.2.texte]`
 Partenariats durables et équitables avec nos producteurs.
@@ -1021,7 +978,7 @@ Partenariats durables et équitables avec nos producteurs.
 Accompagnement
 
 **Engagement 3 — texte** `[pro.engagement.3.texte]`
-Conseils, réglages, et supports dédiés à votre activité.
+Conseils et supports dédiés à votre activité.
 
 
 ### Bandeau de contact
@@ -1044,22 +1001,22 @@ Réponse sous un jour ouvré.
 ### Référencement de la page
 
 **Titre affiché dans Google (≈ 60 signes)** `[journal.seoTitle]`
-Journal — carnets de récolte et culture café — Yunma
+Journal — carnets de nos aventures café — Yunma
 
 **Description affichée dans Google (≈ 155 signes)** `[journal.seoDescription]`
-Le journal Yunma : carnets de voyage au Yunnan, notes de dégustation, conseils d’extraction et actualités de nos lots de café de spécialité.
+Le journal Yunma : voyage au Yunnan, conseils d’extraction et actualités de nos cafés de spécialité.
 
 
 ### En-tête
 
 **Sur-titre** `[journal.label]`
-Journal
+Journal Yunma
 
 **Titre** `[journal.title]`
-Carnets de récolte
+Nos actualités et conseils
 
 **Introduction** `[journal.intro]`
-Voyages, dégustations, gestes techniques : ce que nous apprenons au fil des saisons, écrit simplement.
+Voyages, dégustations, ou gestes techniques : ce que nous apprenons au fil du temps, tout simplement.
 
 
 ### Libellés de la liste
@@ -1107,7 +1064,7 @@ Tout ce que l’on nous demande le plus souvent. Sinon, écrivez-nous.
 Quand mon café est-il torréfié ?
 
 **Réponse** `[faq.1.reponse]`
-Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après la torréfaction la plus proche.
+Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après votre commande avec la torréfaction la plus proche.
 
 
 ### Question 2
@@ -1143,7 +1100,7 @@ Dans son sachet refermable, à l’abri de la lumière, à température ambiante
 Qu’est-ce qu’un sachet filtre ?
 
 **Réponse** `[faq.5.reponse]`
-Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur votre mug et versez de l’eau chaude en trois fois : un café sans matériel, en trois minutes
+Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur votre mug et versez de l’eau chaude en trois fois : un café sans matériel, en trois minutes.
 
 
 ### Question 6
@@ -1152,7 +1109,7 @@ Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur vot
 Puis-je commander en tant que professionnel ?
 
 **Réponse** `[faq.6.reponse]`
-Oui. Nous livrons coffee shops, hôtels, restaurants et épiceries fines, avec des tarifs dégressifs et un accompagnement sur site. Rendez-vous dans l’espace pro.
+Oui. Nous livrons les coffee shops, hôtels, restaurants et épiceries fines, ou autres entreprises avec des tarifs dégressifs et notre accompagnement. Rendez-vous dans l’espace pro.
 
 
 ### Question 7
@@ -1161,7 +1118,7 @@ Oui. Nous livrons coffee shops, hôtels, restaurants et épiceries fines, avec d
 Quels moyens de paiement acceptez-vous ?
 
 **Réponse** `[faq.7.reponse]`
-Cartes bancaires, Apple Pay, Google Pay, PayPal et Shop Pay. Le paiement et l’expédition sont opérés par Shopify, dans un environnement sécurisé.
+Cartes bancaires, Apple Pay, Google Pay, presque tout ! Le paiement et l’expédition sont opérés par Shopify, dans un environnement sécurisé.
 
 
 ### Question 8
@@ -1206,10 +1163,10 @@ Une question sur nos cafés
 Un conseil sur le lot qui vous conviendrait, une commande à suivre, un doute sur une mouture ou une méthode : écrivez-nous.
 
 **Titre** `[contact.proTitle]`
-Cafés, hôtels, restaurants
+Cafés, restaurants, entreprises
 
 **Texte** `[contact.proText]`
-Tarifs dégressifs, grains en 1 kg, sachets filtres, conseils. Dites-nous ce que vous recherchez, nous pouvons aussi vous envoyer des échantillons.
+Tarifs dégressifs, grains en sachets de 1 kg ou plus, sachets filtres, conseils. Dites-nous ce que vous recherchez, nous vous aiderons à trouver la meilleure solution.
 
 **Titre** `[contact.pressTitle]`
 Presse & partenariats
@@ -1244,7 +1201,7 @@ Slow Life
 ### Mentions du pied de page
 
 **Phrase de présentation** `[piedDePage.tagline]`
-Cafés de spécialité du Yunnan, sélectionnés et torréfiés en petites séries.
+Cafés de spécialité du Yunnan, torréfiés à Paris.
 
 **Mention de droits** `[piedDePage.rights]`
 Tous droits réservés
@@ -1264,16 +1221,16 @@ Paiement sécurisé par Shopify
 Éditeur du site
 
 **Paragraphe 1** `[mentions.1.paragraphe.1]`
-Yunma — SAS au capital de 10 000 €, immatriculée au RCS de Paris sous le numéro 000 000 000.
+Yunma — SIREN 903718120
 
 **Paragraphe 2** `[mentions.1.paragraphe.2]`
-Siège social : 12 rue des Torréfacteurs, 75011 Paris, France.
+Siège social : 1 rue Ordener 75018 Paris, France.
 
 **Paragraphe 3** `[mentions.1.paragraphe.3]`
-Numéro de TVA intracommunautaire : FR00 000000000. Directeur de la publication : la direction de Yunma.
+TVA intracommunautaire : FR07903718120 (TVA non applicable, art. 293 B du CGI). Directeur de la publication : la direction de Yunma.
 
 **Paragraphe 4** `[mentions.1.paragraphe.4]`
-Contact : hello@yunma.fr — +33 6 00 00 00 00.
+Contact : hello@yunma.fr
 
 
 ### 2. Hébergement
@@ -1282,7 +1239,7 @@ Contact : hello@yunma.fr — +33 6 00 00 00 00.
 Hébergement
 
 **Paragraphe 1** `[mentions.2.paragraphe.1]`
-Le site est hébergé sur une plateforme d’hébergement statique. Les paiements, les commandes et les expéditions sont opérés par Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande.
+Le site est hébergé par Infomaniak SA, chemin de la Crétaux 3, 1227 Carouge, Suisse. Les paiements, les commandes et les expéditions sont opérés par Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande.
 
 
 ### 3. Propriété intellectuelle
@@ -1338,7 +1295,7 @@ Les présentes conditions générales régissent les ventes de cafés et accesso
 Produits
 
 **Paragraphe 1** `[cgv.2.paragraphe.1]`
-Les cafés sont vendus en grains, en sachets de 200 g, en drip bags ou en coffrets. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.
+Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.
 
 **Paragraphe 2** `[cgv.2.paragraphe.2]`
 Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable.
@@ -1362,7 +1319,7 @@ Le paiement s’effectue en ligne via Shopify Payments (cartes bancaires, Apple 
 Livraison
 
 **Paragraphe 1** `[cgv.4.paragraphe.1]`
-Les commandes sont préparées sous 48 heures ouvrées après la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.
+Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.
 
 **Paragraphe 2** `[cgv.4.paragraphe.2]`
 La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis.
@@ -1457,7 +1414,7 @@ Panier
 Ajouter au panier
 
 **Mention de fraîcheur** `[produit.fraicheur]`
-Torréfié à la commande, chaque semaine
+Torréfié régulièrement
 
 **Mention d’expédition** `[produit.expedition]`
 Expédié sous 48 h — livraison offerte dès 50 €
@@ -1486,7 +1443,7 @@ Prochaine torréfaction
 Prochaine torréfaction
 
 **Explication** `[produit.rupture.texte]`
-Nous torréfions par petites quantités, chaque semaine : ce lot est parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.
+Nous torréfions par petites quantités, régulièrement : ce lot est déjà parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.
 
 **Bouton « être prévenu »** `[produit.rupture.cta]`
 Être prévenu
@@ -1533,70 +1490,7 @@ Taxes incluses. Frais de livraison calculés au paiement.
 ## Seconde partie — les articles du journal
 
 
-## Article 1 — Carnet de récolte : trois semaines à Baoshan
-
-
-### Fiche de l’article
-
-**Titre de l’article** `[article.carnet-de-recolte-baoshan.titre]`
-Carnet de récolte : trois semaines à Baoshan
-
-**Description affichée dans Google (≈ 155 signes)** `[article.carnet-de-recolte-baoshan.description]`
-Trois semaines dans les montagnes de Baoshan, au cœur de la récolte : cueillette, fermentations, séchage et cupping à la ferme de Gaosheng.
-
-**Date de publication (année-mois-jour)** `[article.carnet-de-recolte-baoshan.date]`
-2025-02-18
-
-**Signature** `[article.carnet-de-recolte-baoshan.auteur]`
-Yunma
-
-**Mots-clés, séparés par des virgules** `[article.carnet-de-recolte-baoshan.motsCles]`
-Yunnan, Récolte, Voyage
-
-**Photo d’en-tête — au choix : recolte-cueilleurs, cretes-brumeuses, cerises-branche, sechage-lits, tabouret-terrasse** `[article.carnet-de-recolte-baoshan.photo]`
-recolte-cueilleurs
-
-
-### Texte de l’article
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.1]`
-Nous sommes arrivés à Baoshan le premier jour de février, au milieu de la récolte. La route monte lentement, entre les rizières en terrasses et les premiers caféiers plantés à l'ombre des manguiers. À 1 600 mètres, l'air est sec et les nuits descendent à 8 °C — exactement ce qu'il faut pour que les cerises mûrissent lentement.
-
-**Intertitre** `[article.carnet-de-recolte-baoshan.bloc.2]`
-La cueillette, passage après passage
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.3]`
-Sur les terrasses hautes de Gaosheng, plantées en Bourbon jaune, on ne récolte pas un arbre en une fois. On y revient tous les dix jours, pour ne prendre que les cerises rouge profond. C'est plus long, plus coûteux, et c'est la seule manière d'obtenir une tasse homogène : une cerise verte, et l'amertume s'installe dans tout le lot.
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.4]`
-Une cueilleuse expérimentée ramasse entre 60 et 80 kilos de cerises par jour. Il en faut cinq à six kilos pour obtenir un kilo de café vert, et six kilos de café vert pour cinq kilos de café torréfié.
-
-**Intertitre** `[article.carnet-de-recolte-baoshan.bloc.5]`
-Les fermentations
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.6]`
-Les cerises sont dépulpées le soir même. Le café passe ensuite en cuve, entre 16 et 20 heures selon la température extérieure, avec un relevé toutes les quatre heures. Trop court, la tasse reste plate ; trop long, des notes de fermentation viennent masquer le fruit.
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.7]`
-Cette année, nous avons essayé un lot avec 24 heures de fermentation sous eau. Le résultat est plus dense, avec une acidité de pomme verte plus marquée. Il partira en torréfaction claire, pour le filtre.
-
-**Intertitre** `[article.carnet-de-recolte-baoshan.bloc.8]`
-Le séchage
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.9]`
-Les lits africains sont installés en pente douce, orientés est-ouest. Les premiers jours, le café reste à l'ombre sous un voile : on cherche à faire descendre l'humidité doucement, de 55 % à 11 %, sur douze à vingt jours. Chaque lit est retourné toutes les deux heures pendant la journée, et couvert la nuit.
-
-**Intertitre** `[article.carnet-de-recolte-baoshan.bloc.10]`
-Le cupping du dernier jour
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.11]`
-Nous avons terminé par une table de dix-huit tasses, avec l'équipe de la ferme et les producteurs voisins. C'est le moment que nous préférons : les producteurs goûtent leur propre café, à l'aveugle, à côté de celui de leurs voisins. Les discussions qui suivent valent tous les rapports d'analyse.
-
-**Paragraphe** `[article.carnet-de-recolte-baoshan.bloc.12]`
-Deux variétés sont parties à l'export cette année : le Catimor des parcelles basses et le Bourbon jaune des terrasses hautes. Vous les retrouverez dans nos sachets filtres.
-
-
-## Article 2 — Pourquoi le Yunnan produit-il un si bon café ?
+## Article 1 — Pourquoi le Yunnan produit-il un si bon café ?
 
 
 ### Fiche de l’article
@@ -1608,7 +1502,7 @@ Pourquoi le Yunnan produit-il un si bon café ?
 Altitude, amplitude thermique, variétés et nouvelle génération de producteurs : ce qui fait la singularité du café de spécialité du Yunnan, en Chine.
 
 **Date de publication (année-mois-jour)** `[article.pourquoi-le-cafe-du-yunnan.date]`
-2026-09-11
+2026-09-15
 
 **Signature** `[article.pourquoi-le-cafe-du-yunnan.auteur]`
 Yunma
@@ -1623,13 +1517,13 @@ cretes-brumeuses
 ### Texte de l’article
 
 **Paragraphe** `[article.pourquoi-le-cafe-du-yunnan.bloc.1]`
-Le Yunnan produit aujourd'hui plus de 95% du café chinois, et la Chine est entrée dans le top 15 mondial. Pourtant, la province reste presque absente des cartes de cafés de spécialité européennes. Voici pourquoi cela change — et pourquoi cela mérite votre attention.
+Le Yunnan produit aujourd'hui plus de 98% du café chinois, et la Chine est entrée dans le top 15 mondial. Pourtant, la province reste presque absente des cartes de cafés de spécialité européennes. Voici pourquoi cela change — et pourquoi cela mérite votre attention.
 
 **Intertitre** `[article.pourquoi-le-cafe-du-yunnan.bloc.2]`
 Une géographie faite pour le café
 
 **Paragraphe** `[article.pourquoi-le-cafe-du-yunnan.bloc.3]`
-Le Yunnan est traversé par les contreforts de l'Himalaya. Les vallées y sont profondes, les versants exposés au sud, et l'altitude des parcelles se situe entre 1 100 et 1 900 mètres. Surtout, l'amplitude thermique entre le jour et la nuit atteint souvent 15 °C en saison sèche : la maturation ralentit, les sucres se concentrent, la densité du grain augmente.
+Le Yunnan est traversé par les contreforts de l'Himalaya. Les vallées y sont profondes, les versants exposés au sud, et l'altitude des parcelles se situe entre 1100 et 1900 mètres. Surtout, l'amplitude thermique entre le jour et la nuit atteint souvent 15°C en saison sèche : la maturation ralentit, les sucres se concentrent, la densité du grain augmente.
 
 **Paragraphe** `[article.pourquoi-le-cafe-du-yunnan.bloc.4]`
 Ces conditions sont celles que l'on retrouve en Éthiopie de l'Ouest ou dans le Chiapas mexicain. Elles ne suffisent pas à faire un grand café, mais sans elles, rien n'est possible.
@@ -1650,7 +1544,7 @@ Ce qui a changé en dix ans
 Trois choses, essentiellement :
 
 **Liste numérotée — une ligne par point** `[article.pourquoi-le-cafe-du-yunnan.bloc.10]`
-**Le séchage.** Les lits africains surélevés se sont généralisés. L'air circule sous le café, l'humidité descend régulièrement, les moisissures disparaissent.
+**Le séchage.** Les lits surélevés se sont généralisés. L'air circule sous le café, l'humidité descend régulièrement, les moisissures disparaissent.
 **La récolte sélective.** Payer la cerise mûre plus cher que la cerise verte a suffi à transformer les pratiques en trois saisons.
 **Le cupping local.** Il existe aujourd'hui des laboratoires de dégustation à Pu'er et à Baoshan. Les producteurs goûtent leur café, et ajustent.
 
@@ -1661,7 +1555,7 @@ Trois choses, essentiellement :
 À quoi ressemble un café du Yunnan en tasse ?
 
 **Paragraphe** `[article.pourquoi-le-cafe-du-yunnan.bloc.13]`
-Sur nos lots : une acidité modérée, jamais agressive, une texture ronde, et un registre aromatique qui va du thé noir et de l'abricot (lavé) à la pêche blanche et au miel (honey), jusqu'à la fraise et au cacao sur les naturels.
+Sur nos lots : une acidité modérée, jamais agressive, une texture ronde, et un registre aromatique qui va du thé noir aux agrumes, jusqu’au cacao sur certains.
 
 **Paragraphe** `[article.pourquoi-le-cafe-du-yunnan.bloc.14]`
 C'est un café qui plaît immédiatement, y compris à ceux qui trouvent les cafés de spécialité « trop acides ». C'est aussi un café qui supporte très bien le lait, ce qui en fait une base intéressante pour les cafés et les restaurants.
@@ -1670,10 +1564,10 @@ C'est un café qui plaît immédiatement, y compris à ceux qui trouvent les caf
 Ce que nous cherchons
 
 **Paragraphe** `[article.pourquoi-le-cafe-du-yunnan.bloc.16]`
-Nous ne cherchons pas le lot spectaculaire d’une saison. Nous cherchons la régularité : un café que l'on peut boire tous les matins, dont la qualité ne dépend pas d'un coup de chance, et dont on connaît le producteur par son nom.
+Nous ne cherchons pas le lot spectaculaire Nous cherchons une régularité : un café que l'on peut boire et qui traduit naturellement son terroir, dont la qualité ne dépend pas d'un coup de chance, et dont on connaît le producteur par son nom.
 
 
-## Article 3 — Réussir sa tasse en sachet filtre
+## Article 2 — Réussir sa tasse en sachet filtre
 
 
 ### Fiche de l’article
@@ -1685,7 +1579,7 @@ Réussir sa tasse en sachet filtre
 Le mode d'emploi complet du sachet filtre : température, ratio, trois versements, erreurs fréquentes. Une tasse propre en trois minutes, sans matériel.
 
 **Date de publication (année-mois-jour)** `[article.reussir-sa-tasse-en-drip-bag.date]`
-2026-09-15
+2026-09-20
 
 **Signature** `[article.reussir-sa-tasse-en-drip-bag.auteur]`
 Yunma

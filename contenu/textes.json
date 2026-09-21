@@ -69,15 +69,15 @@
         "seoDescription": "Yunma sélectionne des cafés de spécialité du Yunnan (Chine) : lots tracés, producteurs indépendants, torréfaction à Paris. Livraison en France et en Europe.",
         "heroTitle": "Cafés\nde spécialité\ndu Yunnan.",
         "heroTitleAlt": "云南精品咖啡",
-        "heroCta": "Découvrir les cafés Yunma",
+        "heroCta": "Les cafés Yunma",
         "originLabel": "À L’origine,",
-        "originTitle": "le Yunnan.\nUn terroir.\nUne philosophie.",
-        "originText": "Au sud-ouest de la Chine, entre 1300 et 1800 mètres d’altitude, le Yunnan cultive des cafés encore peu connus. Chaque café que Yunma sélectionne raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons la même philosophie de vie.",
+        "originTitle": "Le Yunnan.\nUn terroir.\nUne philosophie.",
+        "originText": "Chaque café du Yunnan que Yunma sélectionne raconte une histoire… celle d’un terroir ou d’un producteur avec lequel nous partageons la même philosophie de vie.",
         "originCta": "Découvrir l’origine",
         "coffeesLabel": "Les cafés Yunma",
         "coffeesTitle": "Récoltés au Yunnan,\ntorréfiés à Paris.",
-        "coffeesText": "Trois terroirs du Yunnan à découvrir en grains, sachets filtres individuels, ou en coffret découverte pour tout goûter. Cafés torréfiés en petites séries, à Paris.",
-        "coffeesCta": "Découvrir les cafés Yunma",
+        "coffeesText": "Trois terroirs du Yunnan à découvrir en grains ou sachets filtres individuels. Cafés torréfiés en petites séries à Paris.",
+        "coffeesCta": "Les cafés Yunma",
         "approachLabel": "Notre philosophie",
         "approachTitle": "Du temps,\ndes saveurs\net la nature.",
         "approachText": "Notre approche est de révéler les terroirs distinctifs du Yunnan. Pas de mélanges standardisés, mais des cafés tracés, à déguster comme on le ferait pour des grands vins.",
@@ -87,19 +87,19 @@
         "journalLabel": "Journal",
         "journalTitle": "Carnets de Yunma",
         "proLabel": "Professionnels",
-        "proTitle": "Cafés de spécialité du Yunnan pour votre Coffee shop, pour les torréfacteurs, hôtels, restaurants et épiceries fine.",
+        "proTitle": "Nos cafés de spécialité du Yunnan, une alternative qualitative et originale pour votre entreprise et vos clients.",
         "proCta": "Découvrir notre offre pro"
       },
       "cafes": {
         "seoTitle": "Nos cafés de spécialité du Yunnan — Yunma",
         "seoDescription": "Les cafés Yunma : cafés de spécialité du Yunnan. Origines tracées, torréfaction à Paris.",
-        "label": "Notre spécialité",
-        "title": "Cafés du Yunnan",
-        "intro": "Nos cafés de spécialité sont issus de trois terroirs du Yunnan, torréfiés régulièrement à Paris pour préserver leur fraîcheur.",
+        "label": "La boutique",
+        "title": "Nos cafés du Yunnan",
+        "intro": "Nos cafés de spécialité du Yunnan sont régulièrement torréfiés à Paris pour préserver leur fraîcheur.",
         "filterAll": "Tout",
         "filterGrains": "Cafés en grains",
         "filterDrip": "Sachets filtres",
-        "filterSets": "Coffrets",
+        "filterSets": "Offre",
         "empty": "Aucun produit dans cette sélection.",
         "helpTitle": "Besoin de conseils ?",
         "helpText": "Dites-nous comment vous préparez votre café, nous vous conseillerons le lot qui vous conviendra le mieux."
@@ -118,12 +118,12 @@
         "farmTitle": "La ferme",
         "relatedTitle": "Vous aimerez aussi",
         "shipping": "Expédié sous 48 h — livraison offerte dès 50 €",
-        "freshness": "Torréfié à la commande, chaque semaine",
+        "freshness": "Torréfié régulièrement",
         "brewTitle": "Conseils de préparation",
         "rupture": {
           "badge": "Prochaine torréfaction",
           "titre": "Prochaine torréfaction",
-          "texte": "Nous torréfions par petites quantités, chaque semaine : ce lot est parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.",
+          "texte": "Nous torréfions par petites quantités, régulièrement : ce lot est déjà parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.",
           "cta": "Être prévenu",
           "champLabel": "Votre adresse e-mail",
           "placeholder": "vous@exemple.fr",
@@ -133,33 +133,33 @@
         }
       },
       "origine": {
-        "seoTitle": "Origine et savoir-faire des cafés Yunma du Yunnan",
-        "seoDescription": "Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et le savoir-faire de la cerise à la tasse : récolte, traitement, séchage, torréfaction.",
+        "seoTitle": "Origine et histoire des cafés Yunma du Yunnan",
+        "seoDescription": "Les cafés du Yunnan et leur terroirs, l’histoire de Yunma, et son savoir-faire de la cerise à la tasse : récolte et torréfaction.",
         "label": "À l’origine,",
         "title": "le Yunnan.\nUne région.\nUne philosophie.",
-        "intro": "Le Yunnan produit 95% du café chinois. La Chine n’exporte que 5% de sa production aux marchés extérieurs. Des cafés rares et d’une grande finesse portés par une nouvelle génération de producteurs.",
+        "intro": "Le Yunnan produit 98% du café chinois, mais seulement 5% de sa production est destinée aux marchés extérieurs. Des cafés rares, d’une grande finesse portés par une nouvelle génération de producteurs.",
         "sections": [
           {
             "label": "La région",
             "title": "Ses montagnes, ses terroirs",
-            "text": "Les terroirs de café se situent entre 1300 et 1800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches en altitude ralentissent la maturation des cerises de café et concentrent leurs sucres : c’est ce qui donne au Yunnan ces cafés distinctifs."
+            "text": "Les terroirs de café se situent entre 1300 et 1800 mètres, sur des sols volcaniques et argileux. Les nuits fraîches dues à l’altitude ralentissent la maturation des cerises de café et concentrent leurs sucres : tout cela donne au Yunnan ces cafés distinctifs."
           },
           {
             "label": "Les fermes",
             "title": "Des rencontres, une philosophie de vie",
-            "text": "Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons à un prix équitable, et nous nous engageons à ce que chacune des fermes puisse perpétuer leurs passions pour les cafés de spécialité."
+            "text": "Nous travaillons avec trois fermes, à Baoshan, Pu’er et Xishuangbanna. Nous achetons leur grains verts à un prix équitable, ainsi chacune des fermes peut perpétuer leurs passions pour les cafés de spécialité."
           },
           {
             "label": "La saison",
             "title": "De décembre à mars",
-            "text": "La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées le jour même. Les lots arrivent en France au printemps et sont torréfiés tout au long de l’année."
+            "text": "La récolte s’étale sur quatre mois dans le Yunnan. Les cerises de café sont cueillies à la main, à maturité, puis triées de manière rigoureuse. Les nouveaux lots arrivent en France au printemps et sont torréfiés régulièrement tout au long de l’année pour préserver leur fraîcheur."
           }
         ],
-        "quote": "Un café ne se fabrique pas. Il se cultive, puis se respecte.",
+        "quote": "De la cerise à la tasse, un café se cultive et se respecte.",
         "pulls": {
-          "terroir": "À 1 500 mètres, ce sont les nuits fraîches qui font le travail.",
-          "histoire": "Nous achetons aux producteurs, aux prix équitables.",
-          "savoirFaire": "De la cerise à la tasse, chaque geste se retrouve dans le verre."
+          "terroir": "L’importance de l’altitude, et des nuits fraîches des terroirs du Yunnan.",
+          "histoire": "Nous achetons aux producteurs, à prix équitable.",
+          "savoirFaire": ""
         },
         "mapTitle": "Nos terroirs",
         "mapText": "Trois lieux, trois profils.",
@@ -188,8 +188,8 @@
         "oroLabel": "Avec le soutien de",
         "oroName": "ORO Yunnan",
         "oroFull": "Bureau de représentation commerciale du Yunnan en France (Paris)",
-        "oroText": "ORO Yunnan accompagne notre travail auprès des producteurs et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique.",
-        "oroCta": "Le café du Yunnan par ORO"
+        "oroText": "ORO Yunnan accompagne notre travail auprès des fermes de café et la promotion de la province en France : son agriculture de montagne, ses paysages, et les démarches écologiques de la région. Un appui précieux pour acheter en direct aux producteurs, et pour faire connaître ici un terroir magnifique.",
+        "oroCta": "En savoir plus"
       },
       "savoirFaire": {
         "seoTitle": "Savoir-faire Yunma — traitement, séchage et torréfaction",
@@ -206,27 +206,27 @@
           {
             "n": "02",
             "title": "Traitement",
-            "text": "Lavé, honey ou naturel selon le lot. Fermentations suivies en température et en durée, cuve par cuve."
+            "text": "Lavé, honey ou naturel selon le lot. Des fermentations suivies en température et en durée."
           },
           {
             "n": "03",
             "title": "Séchage",
-            "text": "Lits surélevés, à l’ombre les premiers jours, retournés toutes les deux heures. Entre 12 et 20 jours."
+            "text": "Lits surélevés. Entre 12 et 20 jours."
           },
           {
             "n": "04",
             "title": "Tri",
-            "text": "Double tri manuel avant export, puis contrôle à l’arrivée. Les défauts partent, la régularité reste."
+            "text": "Tri manuel contrôlé. Les défauts partent, la régularité reste."
           },
           {
             "n": "05",
             "title": "Torréfaction",
-            "text": "Petites séries, profil clair à moyen, développé pour la tasse filtre comme pour l’espresso."
+            "text": "Par petites séries, profil moyen en général, développé pour le filtre ou pour l’espresso."
           },
           {
             "n": "06",
             "title": "Dégustation",
-            "text": "Chaque lot est cupé à l’arrivée, à la torréfaction, puis toutes les deux semaines pendant sa vie commerciale."
+            "text": "Chaque lot est cupé avant et après chaque torréfaction."
           }
         ],
         "brewTitle": "Préparer un café Yunma",
@@ -234,7 +234,7 @@
         "brewRatio": "Ratio",
         "brewTemp": "T°",
         "brewTime": "Durée",
-        "brewText": "Nos repères de base, à ajuster à votre eau et à votre goût.",
+        "brewText": "Nos repères de base, à ajuster bien évidemment à votre goût.",
         "brews": [
           {
             "name": "Filtre V60",
@@ -263,17 +263,17 @@
         ]
       },
       "apropos": {
-        "seoTitle": "Notre histoire — Yunma, torréfacteur de cafés du Yunnan",
+        "seoTitle": "Notre histoire — Yunma, fournisseur de cafés du Yunnan",
         "seoDescription": "Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité. Notre histoire, notre mission et nos engagements.",
         "label": "À propos",
         "title": "Notre histoire",
         "intro": "Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité.",
-        "storyText": "En 2019, notre premier voyage dans les montagnes de Baoshan. Des caféiers plantés entre les théiers, des familles qui vendaient leur récolte au poids sans jamais goûter la tasse. Nous sommes revenus l’année suivante avec un cupping set et quelques sacs. Yunma est né de ces allers-retours.",
-        "missionTitle": "Notre mission",
-        "missionText": "Mettre en lumière le terroir du Yunnan à travers des cafés d’exception, en respectant les hommes et la nature.",
+        "storyText": "Tout commence en 2019, lors d’un premier voyage au Yunnan. Jixuan (originaire du Sichuan) et Antoine (originaire de France), nous tombons sous le charme de cette région hors du temps. Année après année, nous partons explorer ses montagnes, ses terroirs et ses producteurs. De cette découverte du terroir yunnanais est née une évidence : révéler au monde l’excellence de ces cafés encore trop peu connus du grand public.",
+        "missionTitle": "Notre volonté",
+        "missionText": "Partager cette qualité de vie du Yunnan à travers leur café. Faire connaître ce terroir d’exception et offrir une expérience des cafés de spécialité loin des standards industriels.",
         "approachTitle": "Notre approche",
-        "approachText": "Nous travaillons avec des producteurs passionnés pour offrir des cafés traçables, rares et uniques. Peu de références, choisies, qui seront renouvelées au rythme des saisons.",
-        "figuresTitle": "Yunma en quelques repères",
+        "approachText": "Un travail direct avec des producteurs passionnés pour sélectionner des cafés uniques, traçables. Nous privilégions la qualité à la quantité, en mettant en valeur le caractère unique de chaque récolte et le savoir-faire des producteurs locaux.",
+        "figuresTitle": "Yunma en quelques chiffres",
         "figures": [
           {
             "value": "3",
@@ -285,36 +285,32 @@
           },
           {
             "value": "1 300 – 1 800 m",
-            "label": "altitude de nos parcelles"
-          },
-          {
-            "value": "2026",
-            "label": "Premiers grains importés"
+            "label": "altitude des parcelles"
           }
         ],
-        "closing": "Notre philosophie, le « slow coffee, slow life ».",
-        "closingCta": "Découvrir notre journal"
+        "closing": "Notre philosophie, Slow Coffee Slow Life.",
+        "closingCta": "Découvrir le journal"
       },
       "pro": {
-        "seoTitle": "Café de spécialité pour Coffee shop, sociétés, hôtels / restaurants, épiceries",
-        "seoDescription": "Yunma accompagne torréfacteurs, coffee shops, sociétés, hôtels, restaurants et épiceries fines : cafés de spécialité du Yunnan aux tarifs professionnels.",
+        "seoTitle": "Cafés de spécialité pour coffee shop, restaurations, épiceries, sociétés",
+        "seoDescription": "Yunma accompagne torréfacteurs, coffee shops, sociétés, hôtels, restaurants et épiceries fines : des cafés de spécialité du Yunnan aux tarifs professionnels.",
         "label": "Espace pro",
-        "title": "Espace\nprofessionnels",
-        "intro": "Des cafés de spécialité pour les professionnels exigeants.",
+        "title": "Nos offres B2B\npour les professionnels",
+        "intro": "Des cafés de spécialité pour les professionnels, votre entreprise, vos clients.",
         "cta": "Nous contacter",
         "commitmentsTitle": "Nos engagements",
         "commitments": [
           {
             "title": "Qualité d’exception",
-            "text": "Cafés tracés et sélectionnés avec soin, lots réguliers sur la saison."
+            "text": "Cafés tracés et sélectionnés avec soin, lots réguliers toute l’année."
           },
           {
-            "title": "Relations directes",
+            "title": "Relations simples et directes",
             "text": "Partenariats durables et équitables avec nos producteurs."
           },
           {
             "title": "Accompagnement",
-            "text": "Conseils, réglages, et supports dédiés à votre activité."
+            "text": "Conseils et supports dédiés à votre activité."
           }
         ],
         "forWhoTitle": "Pour qui ?",
@@ -323,16 +319,16 @@
         "offerTitle": "L’offre pro",
         "offers": [
           {
-            "title": "Grains 1 kg",
-            "text": "Nos trois lots de saison en sac de 1 kg, torréfiés à Paris."
+            "title": "Cafés en grains verts ou torréfiés à façon",
+            "text": "Nos trois lots de saison en sac de 1 kg ou plus, torréfiés à Paris."
           },
           {
-            "title": "Sachets filtres pour vos clients, ou déplacements de vos équipes",
-            "text": "Boîtes de 5 ou sachets à votre marque, à partir de 500 unités."
+            "title": "Sachets filtres pour vos clients, ou les déplacements de vos équipes",
+            "text": "Boîtes de 5 (contactez-nous pour les quantités ou de la personnalisation)."
           },
           {
-            "title": "Formation & réglages",
-            "text": "Une demi-journée sur site pour caler extraction, recettes et discours en salle."
+            "title": "Accompagnement",
+            "text": "Une demi-journée sur site pour caler extraction, recettes ou communication."
           }
         ],
         "contactTitle": "Contact",
@@ -340,11 +336,11 @@
         "formIntro": "Réponse sous un jour ouvré."
       },
       "journal": {
-        "seoTitle": "Journal — carnets de récolte et culture café — Yunma",
-        "seoDescription": "Le journal Yunma : carnets de voyage au Yunnan, notes de dégustation, conseils d’extraction et actualités de nos lots de café de spécialité.",
-        "label": "Journal",
-        "title": "Carnets de récolte",
-        "intro": "Voyages, dégustations, gestes techniques : ce que nous apprenons au fil des saisons, écrit simplement.",
+        "seoTitle": "Journal — carnets de nos aventures café — Yunma",
+        "seoDescription": "Le journal Yunma : voyage au Yunnan, conseils d’extraction et actualités de nos cafés de spécialité.",
+        "label": "Journal Yunma",
+        "title": "Nos actualités et conseils",
+        "intro": "Voyages, dégustations, ou gestes techniques : ce que nous apprenons au fil du temps, tout simplement.",
         "latest": "Dernier article",
         "all": "Tous les articles",
         "empty": "Les premiers articles arrivent bientôt.",
@@ -361,7 +357,7 @@
         "items": [
           {
             "q": "Quand mon café est-il torréfié ?",
-            "a": "Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après la torréfaction la plus proche."
+            "a": "Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après votre commande avec la torréfaction la plus proche."
           },
           {
             "q": "Quels sont les délais de livraison ?",
@@ -377,15 +373,15 @@
           },
           {
             "q": "Qu’est-ce qu’un sachet filtre ?",
-            "a": "Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur votre mug et versez de l’eau chaude en trois fois : un café sans matériel, en trois minutes"
+            "a": "Un sachet filtre individuel contenant 10 g de café moulu. Vous le posez sur votre mug et versez de l’eau chaude en trois fois : un café sans matériel, en trois minutes."
           },
           {
             "q": "Puis-je commander en tant que professionnel ?",
-            "a": "Oui. Nous livrons coffee shops, hôtels, restaurants et épiceries fines, avec des tarifs dégressifs et un accompagnement sur site. Rendez-vous dans l’espace pro."
+            "a": "Oui. Nous livrons les coffee shops, hôtels, restaurants et épiceries fines, ou autres entreprises avec des tarifs dégressifs et notre accompagnement. Rendez-vous dans l’espace pro."
           },
           {
             "q": "Quels moyens de paiement acceptez-vous ?",
-            "a": "Cartes bancaires, Apple Pay, Google Pay, PayPal et Shop Pay. Le paiement et l’expédition sont opérés par Shopify, dans un environnement sécurisé."
+            "a": "Cartes bancaires, Apple Pay, Google Pay, presque tout ! Le paiement et l’expédition sont opérés par Shopify, dans un environnement sécurisé."
           },
           {
             "q": "Puis-je retourner une commande ?",
@@ -401,8 +397,8 @@
         "intro": "Une question ? Un projet ? Nous répondons rapidement.",
         "generalTitle": "Une question sur nos cafés",
         "generalText": "Un conseil sur le lot qui vous conviendrait, une commande à suivre, un doute sur une mouture ou une méthode : écrivez-nous.",
-        "proTitle": "Cafés, hôtels, restaurants",
-        "proText": "Tarifs dégressifs, grains en 1 kg, sachets filtres, conseils. Dites-nous ce que vous recherchez, nous pouvons aussi vous envoyer des échantillons.",
+        "proTitle": "Cafés, restaurants, entreprises",
+        "proText": "Tarifs dégressifs, grains en sachets de 1 kg ou plus, sachets filtres, conseils. Dites-nous ce que vous recherchez, nous vous aiderons à trouver la meilleure solution.",
         "pressTitle": "Presse & partenariats",
         "pressText": "Des visuels, des informations sur nos cafés, notre histoire ou sur nos fermes partenaires : nous répondons volontiers, et nous serions ravis que vous parliez de nous.",
         "writeUs": "Nous écrire",
@@ -417,7 +413,7 @@
         "placeholder": "Ce document est un modèle à compléter avec vos informations légales définitives."
       },
       "footer": {
-        "tagline": "Cafés de spécialité du Yunnan, sélectionnés et torréfiés en petites séries.",
+        "tagline": "Cafés de spécialité du Yunnan, torréfiés à Paris.",
         "nav": "Navigation",
         "help": "Aide",
         "legal": "Légal",
@@ -510,15 +506,15 @@
         "seoDescription": "Yunma sources specialty coffee from Yunnan, China: traceable lots, independent growers, roasted in Paris. Shipping across France and Europe.",
         "heroTitle": "Specialty\ncoffee\nfrom Yunnan.",
         "heroTitleAlt": "云南精品咖啡",
-        "heroCta": "Discover Yunma coffees",
+        "heroCta": "Yunma coffees",
         "originLabel": "In the beginning,",
         "originTitle": "Yunnan.\nA terroir.\nA philosophy.",
-        "originText": "In south-west China, between 1,300 and 1,800 metres of altitude, Yunnan grows coffees still little known. Every coffee Yunma selects tells a story — that of a terroir, or of a grower with whom we share the same philosophy of life.",
+        "originText": "Every Yunnan coffee Yunma selects tells a story — that of a terroir, or of a grower with whom we share the same philosophy of life.",
         "originCta": "Discover the origin",
         "coffeesLabel": "Yunma coffees",
         "coffeesTitle": "Harvested in Yunnan,\nroasted in Paris.",
-        "coffeesText": "Three Yunnan terroirs to discover as whole beans, single-serve drip bags, or a discovery set to taste them all. Roasted in small batches, in Paris.",
-        "coffeesCta": "Discover Yunma coffees",
+        "coffeesText": "Three Yunnan terroirs to discover as whole beans or single-serve drip bags. Roasted in small batches, in Paris.",
+        "coffeesCta": "Yunma coffees",
         "approachLabel": "Our philosophy",
         "approachTitle": "Time,\nflavour\nand nature.",
         "approachText": "Our approach is to reveal the distinctive terroirs of Yunnan. No standardised blends, but traceable coffees, to be tasted the way one tastes fine wine.",
@@ -528,19 +524,19 @@
         "journalLabel": "Journal",
         "journalTitle": "Yunma notebooks",
         "proLabel": "Trade",
-        "proTitle": "Yunnan specialty coffee for your coffee shop, for roasters, hotels, restaurants and fine grocers.",
+        "proTitle": "Yunnan specialty coffee: a distinctive, high-quality choice for your business and your customers.",
         "proCta": "Discover our trade offer"
       },
       "cafes": {
         "seoTitle": "Our Yunnan specialty coffees — Yunma",
         "seoDescription": "Yunma coffees: specialty coffee from Yunnan. Traceable origins, roasted in Paris.",
-        "label": "Our specialty",
-        "title": "Coffees from Yunnan",
-        "intro": "Our specialty coffees come from three Yunnan terroirs, roasted regularly in Paris to keep them fresh.",
+        "label": "The shop",
+        "title": "Our Yunnan coffees",
+        "intro": "Our Yunnan specialty coffees are roasted regularly in Paris, to keep them fresh.",
         "filterAll": "All",
         "filterGrains": "Whole bean",
         "filterDrip": "Drip bags",
-        "filterSets": "Sets",
+        "filterSets": "Set",
         "empty": "No product in this selection.",
         "helpTitle": "Need some advice?",
         "helpText": "Tell us how you brew and we will recommend the lot that suits you best."
@@ -559,12 +555,12 @@
         "farmTitle": "The farm",
         "relatedTitle": "You may also like",
         "shipping": "Ships within 48 h — free delivery from €50",
-        "freshness": "Roasted to order, every week",
+        "freshness": "Roasted regularly",
         "brewTitle": "Brewing guide",
         "rupture": {
           "badge": "Next roast",
           "titre": "Next roast",
-          "texte": "We roast in small batches, every week: this lot has gone. Leave your address and we’ll let you know as soon as the next one is out.",
+          "texte": "We roast in small batches, regularly: this lot has gone. Leave your address and we’ll let you know as soon as the next one is out.",
           "cta": "Notify me",
           "champLabel": "Your email address",
           "placeholder": "you@example.com",
@@ -574,33 +570,33 @@
         }
       },
       "origine": {
-        "seoTitle": "Origin and craft of Yunma’s Yunnan coffees",
-        "seoDescription": "Yunnan coffees and their terroirs, the story of Yunma, and the craft from cherry to cup: harvest, processing, drying, roasting.",
+        "seoTitle": "Origin and story of Yunma’s Yunnan coffees",
+        "seoDescription": "Yunnan coffees and their terroirs, the story of Yunma, and its craft from cherry to cup: harvest and roasting.",
         "label": "In the beginning,",
         "title": "Yunnan.\nA region.\nA philosophy.",
-        "intro": "Yunnan grows 95% of Chinese coffee, and China exports only 5% of what it produces. Rare coffees of great finesse, carried by a new generation of producers.",
+        "intro": "Yunnan grows 98% of Chinese coffee, yet only 5% of its production goes to markets abroad. Rare coffees of great finesse, carried by a new generation of producers.",
         "sections": [
           {
             "label": "The region",
             "title": "Its mountains, its terroirs",
-            "text": "The coffee terroirs sit between 1,300 and 1,800 metres, on volcanic and clay soils. Cool nights at altitude slow the ripening of the cherries and concentrate their sugars: this is what gives Yunnan these distinctive coffees."
+            "text": "The coffee terroirs sit between 1,300 and 1,800 metres, on volcanic and clay soils. Cool nights at altitude slow the ripening of the cherries and concentrate their sugars: all of this gives Yunnan its distinctive coffees."
           },
           {
             "label": "The farms",
             "title": "Encounters, a philosophy of life",
-            "text": "We work with three farms, in Baoshan, Pu’er and Xishuangbanna. We buy at a fair price, and we commit so that each farm can carry on its passion for specialty coffee."
+            "text": "We work with three farms, in Baoshan, Pu’er and Xishuangbanna. We buy their green coffee at a fair price, so that each farm can carry on its passion for specialty coffee."
           },
           {
             "label": "The season",
             "title": "From December to March",
-            "text": "The harvest spans four months in Yunnan. Coffee cherries are picked by hand at ripeness, then sorted the same day. Lots reach France in spring and are roasted throughout the year."
+            "text": "The harvest spans four months in Yunnan. Coffee cherries are picked by hand at ripeness, then rigorously sorted. New lots reach France in spring and are roasted regularly throughout the year, to keep them fresh."
           }
         ],
-        "quote": "Coffee is not manufactured. It is grown, then respected.",
+        "quote": "From cherry to cup, coffee is grown, and respected.",
         "pulls": {
-          "terroir": "At 1,500 metres, it is the cold nights that do the work.",
+          "terroir": "Altitude, and the cool nights of Yunnan’s terroirs.",
           "histoire": "We buy from the growers, at fair prices.",
-          "savoirFaire": "From cherry to cup, every gesture shows up in the glass."
+          "savoirFaire": ""
         },
         "mapTitle": "Our terroirs",
         "mapText": "Three places, three profiles.",
@@ -629,8 +625,8 @@
         "oroLabel": "With the support of",
         "oroName": "ORO Yunnan",
         "oroFull": "Yunnan Commercial Representative Office in Paris, France",
-        "oroText": "ORO Yunnan supports our work with growers and the promotion of the province in France: its mountain farming, its landscapes, and the region’s ecological practices. Valuable help for buying directly from the growers, and for making a magnificent terroir known here.",
-        "oroCta": "Yunnan coffee, by ORO"
+        "oroText": "ORO Yunnan supports our work with the coffee farms and the promotion of the province in France: its mountain farming, its landscapes, and the region’s ecological practices. Valuable help for buying directly from the growers, and for making a magnificent terroir known here.",
+        "oroCta": "Learn more"
       },
       "savoirFaire": {
         "seoTitle": "Yunma craft — processing, drying and roasting",
@@ -647,27 +643,27 @@
           {
             "n": "02",
             "title": "Processing",
-            "text": "Washed, honey or natural depending on the lot. Fermentation monitored for temperature and duration, tank by tank."
+            "text": "Washed, honey or natural depending on the lot. Fermentation monitored for temperature and duration."
           },
           {
             "n": "03",
             "title": "Drying",
-            "text": "Raised beds, in the shade for the first days, turned every two hours. Between 12 and 20 days."
+            "text": "Raised beds. Between 12 and 20 days."
           },
           {
             "n": "04",
             "title": "Sorting",
-            "text": "Double hand sorting before export, then a control on arrival. Defects go, consistency stays."
+            "text": "Controlled hand sorting. Defects go, consistency stays."
           },
           {
             "n": "05",
             "title": "Roasting",
-            "text": "Small batches, light to medium profile, developed for filter as much as for espresso."
+            "text": "Small batches, generally a medium profile, developed for filter or for espresso."
           },
           {
             "n": "06",
             "title": "Cupping",
-            "text": "Every lot is cupped on arrival, at roasting, then every two weeks throughout its commercial life."
+            "text": "Every lot is cupped before and after each roast."
           }
         ],
         "brewTitle": "Brewing a Yunma coffee",
@@ -675,7 +671,7 @@
         "brewRatio": "Ratio",
         "brewTemp": "T°",
         "brewTime": "Time",
-        "brewText": "Our starting points, to adjust to your water and your taste.",
+        "brewText": "Our starting points — adjust them to your taste, of course.",
         "brews": [
           {
             "name": "V60 filter",
@@ -704,16 +700,16 @@
         ]
       },
       "apropos": {
-        "seoTitle": "Our story — Yunma, roaster of Yunnan coffees",
+        "seoTitle": "Our story — Yunma, supplier of Yunnan coffees",
         "seoDescription": "Yunma was born from an encounter between Yunnan and a passion for specialty coffee. Our story, our mission and our commitments.",
         "label": "About",
         "title": "Our story",
         "intro": "Yunma was born from an encounter between Yunnan and a passion for specialty coffee.",
-        "storyText": "In 2019, our first journey into the mountains of Baoshan. Coffee trees planted among tea bushes, families selling their harvest by weight without ever tasting the cup. We came back the following year with a cupping set and a few bags. Yunma was born from those trips.",
-        "missionTitle": "Our mission",
-        "missionText": "To bring the terroir of Yunnan to light through exceptional coffees, respecting both people and nature.",
+        "storyText": "It all begins in 2019, on a first journey to Yunnan. Jixuan, from Sichuan, and Antoine, from France, fell for this region out of time. Year after year, we go back to explore its mountains, its terroirs and its growers. Out of that discovery came something obvious: to show the world the excellence of these coffees, still so little known.",
+        "missionTitle": "What drives us",
+        "missionText": "To share Yunnan’s quality of life through its coffee. To make this exceptional terroir known, and to offer a specialty coffee experience far from industrial standards.",
         "approachTitle": "Our approach",
-        "approachText": "We work with passionate growers to offer traceable, rare and unique coffees. Few references, carefully chosen, renewed with the seasons.",
+        "approachText": "Working directly with passionate growers to select unique, traceable coffees. We favour quality over quantity, bringing out the character of each harvest and the craft of the local producers.",
         "figuresTitle": "Yunma in a few figures",
         "figures": [
           {
@@ -726,36 +722,32 @@
           },
           {
             "value": "1,300 – 1,800 m",
-            "label": "altitude of our plots"
-          },
-          {
-            "value": "2026",
-            "label": "first beans imported"
+            "label": "altitude of the plots"
           }
         ],
-        "closing": "Our philosophy: slow coffee, slow life.",
-        "closingCta": "Read our journal"
+        "closing": "Our philosophy: Slow Coffee, Slow Life.",
+        "closingCta": "Discover the journal"
       },
       "pro": {
-        "seoTitle": "Specialty coffee for coffee shops, offices, hotels and grocers",
-        "seoDescription": "Yunma supports roasters, coffee shops, offices, hotels, restaurants and fine grocers: Yunnan specialty coffee at trade prices.",
+        "seoTitle": "Specialty coffee for coffee shops, restaurants, grocers and companies",
+        "seoDescription": "Yunma supports roasters, coffee shops, companies, hotels, restaurants and fine grocers: Yunnan specialty coffee at trade prices.",
         "label": "Trade",
-        "title": "For\nprofessionals",
-        "intro": "Specialty coffee for demanding professionals.",
+        "title": "Our B2B offers\nfor professionals",
+        "intro": "Specialty coffee for professionals, for your business and your customers.",
         "cta": "Contact us",
         "commitmentsTitle": "Our commitments",
         "commitments": [
           {
             "title": "Exceptional quality",
-            "text": "Traceable coffees selected with care, consistent lots throughout the season."
+            "text": "Traceable coffees selected with care, regular lots all year round."
           },
           {
-            "title": "Direct relationships",
+            "title": "Simple, direct relationships",
             "text": "Lasting, fair partnerships with our growers."
           },
           {
             "title": "Support",
-            "text": "Advice, dialling in, and materials dedicated to your business."
+            "text": "Advice and materials dedicated to your business."
           }
         ],
         "forWhoTitle": "Who is it for?",
@@ -764,16 +756,16 @@
         "offerTitle": "The trade offer",
         "offers": [
           {
-            "title": "1 kg whole bean",
-            "text": "Our three seasonal lots in 1 kg bags, roasted in Paris."
+            "title": "Green beans, or roasted to your profile",
+            "text": "Our three seasonal lots in bags of 1 kg or more, roasted in Paris."
           },
           {
             "title": "Drip bags for your customers, or for your teams on the move",
-            "text": "Boxes of 5 or single sachets under your own brand, from 500 units."
+            "text": "Boxes of 5 — contact us for volumes or custom branding."
           },
           {
-            "title": "Training & dialling in",
-            "text": "Half a day on site to set extraction, recipes and the story your team tells."
+            "title": "Support",
+            "text": "Half a day on site to set extraction, recipes or the way you talk about the coffee."
           }
         ],
         "contactTitle": "Contact",
@@ -781,11 +773,11 @@
         "formIntro": "We reply within one business day."
       },
       "journal": {
-        "seoTitle": "Journal — harvest notebooks and coffee culture — Yunma",
-        "seoDescription": "The Yunma journal: travel notebooks from Yunnan, tasting notes, brewing advice and news about our specialty coffee lots.",
-        "label": "Journal",
-        "title": "Harvest notebooks",
-        "intro": "Travels, tastings, technical gestures: what we learn season after season, written simply.",
+        "seoTitle": "Journal — notebooks from our coffee adventures — Yunma",
+        "seoDescription": "The Yunma journal: travels in Yunnan, brewing advice and news about our specialty coffees.",
+        "label": "Yunma journal",
+        "title": "News and advice",
+        "intro": "Travels, tastings, technical gestures: what we learn along the way, simply told.",
         "latest": "Latest article",
         "all": "All articles",
         "empty": "The first articles are coming soon.",
@@ -802,7 +794,7 @@
         "items": [
           {
             "q": "When is my coffee roasted?",
-            "a": "We roast regularly, in small batches. Your order ships within 48 business hours of the closest roast."
+            "a": "We roast regularly, in small batches. Your order ships within 48 business hours, with the coffee from the closest roast."
           },
           {
             "q": "What are the delivery times?",
@@ -822,11 +814,11 @@
           },
           {
             "q": "Can I order as a professional?",
-            "a": "Yes. We supply coffee shops, hotels, restaurants and fine grocers, with volume pricing and on-site support. See the trade section."
+            "a": "Yes. We supply coffee shops, hotels, restaurants, fine grocers and other businesses, with volume pricing and our support. See the trade section."
           },
           {
             "q": "Which payment methods do you accept?",
-            "a": "Credit and debit cards, Apple Pay, Google Pay, PayPal and Shop Pay. Payment and shipping are handled by Shopify, in a secure environment."
+            "a": "Credit and debit cards, Apple Pay, Google Pay — almost everything. Payment and shipping are handled by Shopify, in a secure environment."
           },
           {
             "q": "Can I return an order?",
@@ -842,8 +834,8 @@
         "intro": "A question? A project? We reply quickly.",
         "generalTitle": "A question about our coffees",
         "generalText": "Advice on the lot that would suit you, an order to follow, a doubt about a grind or a method: write to us.",
-        "proTitle": "Cafés, hotels, restaurants",
-        "proText": "Volume pricing, 1 kg whole bean, drip bags, advice. Tell us what you are looking for — we can also send you samples.",
+        "proTitle": "Coffee shops, restaurants, companies",
+        "proText": "Volume pricing, whole beans in bags of 1 kg or more, drip bags, advice. Tell us what you are looking for and we will help you find the best fit.",
         "pressTitle": "Press & partnerships",
         "pressText": "Images, information about our coffees, our story or our partner farms: we answer gladly, and we would be delighted if you wrote about us.",
         "writeUs": "Write to us",
@@ -858,7 +850,7 @@
         "placeholder": "This document is a template to be completed with your final legal information."
       },
       "footer": {
-        "tagline": "Specialty coffee from Yunnan, sourced and roasted in small batches.",
+        "tagline": "Specialty coffee from Yunnan, roasted in Paris.",
         "nav": "Navigation",
         "help": "Help",
         "legal": "Legal",
@@ -951,15 +943,15 @@
         "seoDescription": "云马 Yunma 精选来自中国云南的精品咖啡：批次可溯源、与独立咖农合作、在巴黎烘焙。发往法国与欧洲各地。",
         "heroTitle": "云南\n精品咖啡。",
         "heroTitleAlt": "Cafés de spécialité du Yunnan",
-        "heroCta": "探索云马的咖啡",
+        "heroCta": "云马的咖啡",
         "originLabel": "一切始于",
         "originTitle": "云南。\n一片风土。\n一种生活哲学。",
-        "originText": "在中国西南，海拔 1300 至 1800 米之间，云南出产着仍少为人知的咖啡。云马挑选的每一支咖啡都有它的故事——关于一片风土，或者一位与我们抱有相同生活理念的咖农。",
+        "originText": "云马挑选的每一支云南咖啡都有它的故事——关于一片风土，或是一位与我们抱有相同生活理念的咖农。",
         "originCta": "了解产地",
         "coffeesLabel": "云马的咖啡",
         "coffeesTitle": "采于云南，\n烘焙于巴黎。",
-        "coffeesText": "三片云南风土，可选咖啡豆、单片挂耳，或一次全部品尝的发现礼盒。于巴黎小批量烘焙。",
-        "coffeesCta": "探索云马的咖啡",
+        "coffeesText": "三片云南风土，可选咖啡豆或单片挂耳。于巴黎小批量烘焙。",
+        "coffeesCta": "云马的咖啡",
         "approachLabel": "我们的理念",
         "approachTitle": "时间、\n风味\n与自然。",
         "approachText": "我们想做的，是让云南各处风土的差异显现出来。不做标准化拼配，只做可溯源的咖啡——像品鉴名庄葡萄酒那样去品尝。",
@@ -969,15 +961,15 @@
         "journalLabel": "手记",
         "journalTitle": "云马手记",
         "proLabel": "商用",
-        "proTitle": "为咖啡馆、烘焙商、酒店、餐厅与精品食材店提供的云南精品咖啡。",
+        "proTitle": "云南精品咖啡：为您的企业与客户带来兼具品质与特色的选择。",
         "proCta": "了解我们的商用方案"
       },
       "cafes": {
         "seoTitle": "云南精品咖啡系列 — Yunma 云马",
         "seoDescription": "云马的咖啡：来自云南的精品咖啡。产地可溯源，在巴黎烘焙。",
-        "label": "我们的专长",
-        "title": "云南咖啡",
-        "intro": "我们的精品咖啡来自云南三片风土，在巴黎定期烘焙，以保持新鲜。",
+        "label": "商店",
+        "title": "我们的云南咖啡",
+        "intro": "我们的云南精品咖啡在巴黎定期烘焙，以保持新鲜。",
         "filterAll": "全部",
         "filterGrains": "咖啡豆",
         "filterDrip": "挂耳咖啡",
@@ -1000,12 +992,12 @@
         "farmTitle": "这座农场",
         "relatedTitle": "您可能也喜欢",
         "shipping": "48 小时内发出 — 满 50 欧元免运费",
-        "freshness": "每周按订单新鲜烘焙",
+        "freshness": "定期烘焙",
         "brewTitle": "冲煮建议",
         "rupture": {
           "badge": "下批烘焙",
           "titre": "下批烘焙",
-          "texte": "我们每周只烘焙少量咖啡：本批次已经售完。留下您的邮箱，下一批出炉时即刻通知您。",
+          "texte": "我们定期小批量烘焙：本批次已经售完。留下您的邮箱，下一批出炉时即刻通知您。",
           "cta": "通知我",
           "champLabel": "您的电子邮箱",
           "placeholder": "you@example.com",
@@ -1015,33 +1007,33 @@
         }
       },
       "origine": {
-        "seoTitle": "云马云南咖啡的产地与工艺",
-        "seoDescription": "云南的咖啡与风土、云马的故事，以及从果实到杯中的工艺：采收、处理、晾晒、烘焙。",
+        "seoTitle": "云马云南咖啡的产地与故事",
+        "seoDescription": "云南的咖啡与风土、云马的故事，以及从果实到杯中的工艺：采收与烘焙。",
         "label": "一切始于",
         "title": "云南。\n一个地区。\n一种生活哲学。",
-        "intro": "云南出产中国 95% 的咖啡，而中国仅有 5% 的产量销往海外。这是一批稀有而细腻的咖啡，由新一代咖农带来。",
+        "intro": "云南出产中国 98% 的咖啡，其中仅有 5% 销往海外市场。这是一批稀有而细腻的咖啡，由新一代咖农带来。",
         "sections": [
           {
             "label": "这片地区",
             "title": "群山之间，几片风土",
-            "text": "咖啡产区位于海拔 1300 至 1800 米之间，土壤为火山土与黏土。高海拔凉爽的夜晚减缓咖啡果成熟、积累糖分，造就了云南这些辨识度鲜明的咖啡。"
+            "text": "咖啡产区位于海拔 1300 至 1800 米之间，土壤为火山土与黏土。高海拔凉爽的夜晚减缓咖啡果成熟、积累糖分：这一切造就了云南这些辨识度鲜明的咖啡。"
           },
           {
             "label": "合作农场",
             "title": "相遇，一种生活哲学",
-            "text": "我们与保山、普洱和西双版纳的三座农场合作。以公平的价格采购，并作出承诺，让每一座农场都能延续他们对精品咖啡的热情。"
+            "text": "我们与保山、普洱和西双版纳的三座农场合作。以公平的价格采购他们的生豆，让每一座农场都能延续对精品咖啡的热情。"
           },
           {
             "label": "产季",
             "title": "十二月至三月",
-            "text": "云南的采收期持续四个月。咖啡果在成熟时手工采摘，当天完成筛选。批次于春季抵达法国，全年分批烘焙。"
+            "text": "云南的采收期持续四个月。咖啡果在成熟时手工采摘，并经过严格筛选。新批次于春季抵达法国，全年定期烘焙，以保持新鲜。"
           }
         ],
-        "quote": "咖啡不是制造出来的，而是种出来、并被尊重的。",
+        "quote": "从果实到杯中，咖啡是种出来的，也是被尊重的。",
         "pulls": {
-          "terroir": "海拔 1500 米，真正干活的是清凉的夜。",
+          "terroir": "海拔，以及云南风土里清凉的夜。",
           "histoire": "我们向咖农采购，价格公平。",
-          "savoirFaire": "从果实到杯中，每一个动作都留在味道里。"
+          "savoirFaire": ""
         },
         "mapTitle": "我们的风土",
         "mapText": "三个地方，三种风味。",
@@ -1070,8 +1062,8 @@
         "oroLabel": "支持机构",
         "oroName": "ORO Yunnan",
         "oroFull": "云南省驻法国（巴黎）商务代表处",
-        "oroText": "ORO Yunnan 支持我们与咖农的合作，并在法国推广云南：山地农业、自然风景，以及这片地区的生态实践。这份支持让我们得以直接向咖农采购，也让这片美好的风土在这里被更多人看见。",
-        "oroCta": "ORO 眼中的云南咖啡"
+        "oroText": "ORO Yunnan 支持我们与咖啡农场的合作，并在法国推广云南：山地农业、自然风景，以及这片地区的生态实践。这份支持让我们得以直接向咖农采购，也让这片美好的风土在这里被更多人看见。",
+        "oroCta": "了解更多"
       },
       "savoirFaire": {
         "seoTitle": "云马工艺 — 处理、晾晒与烘焙",
@@ -1088,27 +1080,27 @@
           {
             "n": "02",
             "title": "处理",
-            "text": "依批次采用水洗、蜜处理或日晒。逐槽记录发酵温度与时长。"
+            "text": "依批次采用水洗、蜜处理或日晒。发酵全程记录温度与时长。"
           },
           {
             "n": "03",
             "title": "晾晒",
-            "text": "高架床，最初几日置于阴凉处，每两小时翻动一次，历时 12 至 20 天。"
+            "text": "高架床。历时 12 至 20 天。"
           },
           {
             "n": "04",
             "title": "筛选",
-            "text": "出口前两次人工筛选，抵达后再次质检。剔除瑕疵，保留稳定。"
+            "text": "人工筛选并复核。剔除瑕疵，保留稳定。"
           },
           {
             "n": "05",
             "title": "烘焙",
-            "text": "小批量，浅至中度曲线，兼顾手冲与意式浓缩。"
+            "text": "小批量，通常为中度曲线，针对手冲或意式分别调整。"
           },
           {
             "n": "06",
             "title": "杯测",
-            "text": "每个批次在抵达时、烘焙时杯测，并在销售期内每两周复测一次。"
+            "text": "每个批次在每次烘焙前后都会杯测。"
           }
         ],
         "brewTitle": "冲煮一杯云马",
@@ -1116,7 +1108,7 @@
         "brewRatio": "粉水比",
         "brewTemp": "水温",
         "brewTime": "时间",
-        "brewText": "以下是基础参数，请根据水质与口味调整。",
+        "brewText": "以下是基础参数，当然可以按你的口味调整。",
         "brews": [
           {
             "name": "V60 手冲",
@@ -1145,16 +1137,16 @@
         ]
       },
       "apropos": {
-        "seoTitle": "我们的故事 — Yunma 云马，云南咖啡烘焙商",
+        "seoTitle": "我们的故事 — 云马，云南咖啡供应商",
         "seoDescription": "云马诞生于云南与精品咖啡热情的相遇。我们的故事、使命与承诺。",
         "label": "关于",
         "title": "我们的故事",
         "intro": "云马诞生于云南与精品咖啡热情的相遇。",
-        "storyText": "2019 年，我们第一次前往保山山区。咖啡树种在茶树之间，咖农按重量卖出收成，却从未品尝过自己的那杯咖啡。第二年我们带着杯测器具和几袋生豆回到那里。云马就诞生于这些往返之间。",
-        "missionTitle": "我们的使命",
-        "missionText": "以卓越的咖啡呈现云南风土，尊重土地，也尊重种植它的人。",
+        "storyText": "一切始于 2019 年的第一次云南之行。来自四川的 Jixuan 与来自法国的 Antoine，被这片仿佛停在时间之外的土地深深吸引。年复一年，我们走进它的山林、风土与咖农之间。正是在这样的发现里，一件事变得不言自明：让世界看见这些仍鲜为人知的咖啡有多出色。",
+        "missionTitle": "我们的初衷",
+        "missionText": "以咖啡分享云南的生活质感。让这片出众的风土被认识，并提供一种远离工业标准的精品咖啡体验。",
         "approachTitle": "我们的方式",
-        "approachText": "我们与充满热情的咖农合作，提供可溯源、稀有而独特的咖啡。产品不多，每一款都经过挑选，并随季节更新。",
+        "approachText": "与充满热情的咖农直接合作，挑选独特且可溯源的咖啡。我们重质不重量，突出每一季收成的个性，以及当地咖农的手艺。",
         "figuresTitle": "云马的几个数字",
         "figures": [
           {
@@ -1168,35 +1160,31 @@
           {
             "value": "1300 – 1800 米",
             "label": "地块海拔"
-          },
-          {
-            "value": "2026",
-            "label": "首批咖啡豆进口"
           }
         ],
-        "closing": "我们的理念：慢咖啡，慢生活。",
-        "closingCta": "阅读我们的手记"
+        "closing": "我们的理念：Slow Coffee, Slow Life。",
+        "closingCta": "浏览我们的手记"
       },
       "pro": {
-        "seoTitle": "为咖啡馆、企业、酒店餐厅与食品店提供精品咖啡",
+        "seoTitle": "为咖啡馆、餐饮、食品店与企业提供精品咖啡",
         "seoDescription": "云马为烘焙商、咖啡馆、企业、酒店、餐厅与精品食品店提供云南精品咖啡，价格面向专业客户。",
         "label": "商用",
-        "title": "专业\n合作",
-        "intro": "为要求严苛的专业客户提供的精品咖啡。",
+        "title": "面向专业客户\n的 B2B 方案",
+        "intro": "为专业客户、您的企业与您的客人准备的精品咖啡。",
         "cta": "联系我们",
         "commitmentsTitle": "我们的承诺",
         "commitments": [
           {
             "title": "卓越品质",
-            "text": "可溯源、精心挑选的咖啡，整季供应稳定。"
+            "text": "可溯源、精心挑选的咖啡，全年批次稳定。"
           },
           {
-            "title": "直接合作",
+            "title": "简单直接的合作",
             "text": "与咖农建立长期而公平的伙伴关系。"
           },
           {
             "title": "专业支持",
-            "text": "为您的业务提供建议、调试与专属物料。"
+            "text": "为您的业务提供建议与专属物料。"
           }
         ],
         "forWhoTitle": "适合谁？",
@@ -1205,16 +1193,16 @@
         "offerTitle": "商用产品",
         "offers": [
           {
-            "title": "1 公斤咖啡豆",
-            "text": "三款季节批次的 1 公斤装，于巴黎烘焙。"
+            "title": "生豆，或按您的曲线代烘",
+            "text": "三款季节批次，1 公斤及以上包装，于巴黎烘焙。"
           },
           {
             "title": "为您的客户，或出差在外的团队准备的挂耳咖啡",
-            "text": "5 片装礼盒或单片包装，可印制您的品牌，500 件起订。"
+            "text": "5 片装礼盒——数量或定制需求请与我们联系。"
           },
           {
-            "title": "培训与调试",
-            "text": "半天上门服务，完成萃取参数、配方与门店话术。"
+            "title": "陪伴与支持",
+            "text": "半天上门服务，调校萃取、配方或门店表达。"
           }
         ],
         "contactTitle": "联系",
@@ -1222,11 +1210,11 @@
         "formIntro": "我们将在一个工作日内回复。"
       },
       "journal": {
-        "seoTitle": "手记 — 采收笔记与咖啡文化 — Yunma 云马",
-        "seoDescription": "云马手记：云南旅行笔记、风味记录、冲煮建议与精品咖啡批次动态。",
-        "label": "手记",
-        "title": "采收手记",
-        "intro": "旅行、杯测、技术细节：我们在每一季学到的东西，用最朴素的方式写下。",
+        "seoTitle": "手记 — 我们的咖啡旅程笔记 — 云马",
+        "seoDescription": "云马手记：云南之行、冲煮建议，以及我们精品咖啡的近况。",
+        "label": "云马手记",
+        "title": "近况与建议",
+        "intro": "旅行、品鉴、技术细节：我们一路学到的东西，如实写下。",
         "latest": "最新文章",
         "all": "全部文章",
         "empty": "首批文章即将发布。",
@@ -1243,7 +1231,7 @@
         "items": [
           {
             "q": "咖啡什么时候烘焙？",
-            "a": "我们定期小批量烘焙。订单会在最近一次烘焙后的 48 个工作小时内发出。"
+            "a": "我们定期小批量烘焙。您的订单将在 48 个工作小时内发出，使用最近一次烘焙的咖啡。"
           },
           {
             "q": "配送需要多久？",
@@ -1263,11 +1251,11 @@
           },
           {
             "q": "可以商用采购吗？",
-            "a": "可以。我们为咖啡馆、酒店、餐厅与精品食品店供货，提供阶梯价格与上门支持。请查看商用页面。"
+            "a": "可以。我们为咖啡馆、酒店、餐厅、精品食品店及其他企业供货，提供阶梯价格与专业支持。请查看商用页面。"
           },
           {
             "q": "支持哪些支付方式？",
-            "a": "银行卡、Apple Pay、Google Pay、PayPal 与 Shop Pay。支付与配送由 Shopify 在安全环境中处理。"
+            "a": "银行卡、Apple Pay、Google Pay，几乎都支持。支付与配送由 Shopify 在安全环境中处理。"
           },
           {
             "q": "可以退货吗？",
@@ -1283,8 +1271,8 @@
         "intro": "有问题？有项目？我们会尽快回复。",
         "generalTitle": "关于咖啡的疑问",
         "generalText": "想知道哪一支适合您、追踪订单、对研磨度或冲煮方式拿不准：来信即可。",
-        "proTitle": "咖啡馆、酒店与餐厅",
-        "proText": "阶梯价格、1 公斤装咖啡豆、挂耳咖啡、专业建议。告诉我们您在寻找什么，我们也可以寄样品过去。",
+        "proTitle": "咖啡馆、餐厅与企业",
+        "proText": "阶梯价格、1 公斤及以上的咖啡豆包装、挂耳咖啡、专业建议。告诉我们您的需求，我们会帮您找到最合适的方案。",
         "pressTitle": "媒体与合作",
         "pressText": "图片素材，关于我们的咖啡、我们的故事或合作农场的信息：我们乐于回复，也很高兴您愿意介绍我们。",
         "writeUs": "写信给我们",
@@ -1299,7 +1287,7 @@
         "placeholder": "本文件为模板，请补充您最终的法律信息。"
       },
       "footer": {
-        "tagline": "云南精品咖啡，精选并小批量烘焙。",
+        "tagline": "云南精品咖啡，于巴黎烘焙。",
         "nav": "导航",
         "help": "帮助",
         "legal": "法律",
@@ -1329,16 +1317,16 @@
       {
         "title": "Éditeur du site",
         "body": [
-          "Yunma — SAS au capital de 10 000 €, immatriculée au RCS de Paris sous le numéro 000 000 000.",
-          "Siège social : 12 rue des Torréfacteurs, 75011 Paris, France.",
-          "Numéro de TVA intracommunautaire : FR00 000000000. Directeur de la publication : la direction de Yunma.",
-          "Contact : hello@yunma.fr — +33 6 00 00 00 00."
+          "Yunma — SIREN 903718120",
+          "Siège social : 1 rue Ordener 75018 Paris, France.",
+          "TVA intracommunautaire : FR07903718120 (TVA non applicable, art. 293 B du CGI). Directeur de la publication : la direction de Yunma.",
+          "Contact : hello@yunma.fr"
         ]
       },
       {
         "title": "Hébergement",
         "body": [
-          "Le site est hébergé sur une plateforme d’hébergement statique. Les paiements, les commandes et les expéditions sont opérés par Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande."
+          "Le site est hébergé par Infomaniak SA, chemin de la Crétaux 3, 1227 Carouge, Suisse. Les paiements, les commandes et les expéditions sont opérés par Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande."
         ]
       },
       {
@@ -1364,75 +1352,75 @@
     ],
     "en": [
       {
-        "title": "Site publisher",
+        "title": "Éditeur du site",
         "body": [
-          "Yunma — SAS with capital of €10,000, registered with the Paris Trade Register under number 000 000 000.",
-          "Registered office: 12 rue des Torréfacteurs, 75011 Paris, France.",
-          "EU VAT number: FR00 000000000. Publication director: Yunma management.",
-          "Contact: hello@yunma.fr — +33 6 00 00 00 00."
+          "Yunma — SIREN 903718120",
+          "Siège social : 1 rue Ordener 75018 Paris, France.",
+          "TVA intracommunautaire : FR07903718120 (TVA non applicable, art. 293 B du CGI). Directeur de la publication : la direction de Yunma.",
+          "Contact : hello@yunma.fr"
         ]
       },
       {
-        "title": "Hosting",
+        "title": "Hébergement",
         "body": [
-          "The site is hosted on a static hosting platform. Payments, orders and shipping are operated by Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Ireland."
+          "Le site est hébergé par Infomaniak SA, chemin de la Crétaux 3, 1227 Carouge, Suisse. Les paiements, les commandes et les expéditions sont opérés par Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande."
         ]
       },
       {
-        "title": "Intellectual property",
+        "title": "Propriété intellectuelle",
         "body": [
-          "All site content (texts, photographs, illustrations, visual identity, the Yunma trademark) is protected by copyright and trademark law. Any reproduction, even partial, is prohibited without prior written permission."
+          "L’ensemble des contenus du site (textes, photographies, illustrations, identité visuelle, marque Yunma) est protégé par le droit d’auteur et le droit des marques. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable."
         ]
       },
       {
-        "title": "Personal data",
+        "title": "Données personnelles",
         "body": [
-          "Data collected through the forms (name, email, message) is used solely to handle your request. Order data is processed by Shopify as a processor.",
-          "Under the GDPR you have the right to access, rectify, erase, restrict and port your data: write to hello@yunma.fr.",
-          "A complaint may be filed with the French data protection authority (www.cnil.fr)."
+          "Les données collectées via les formulaires (nom, e-mail, message) servent uniquement à traiter votre demande. Les données de commande sont traitées par Shopify en qualité de sous-traitant.",
+          "Conformément au RGPD, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation et de portabilité de vos données : écrivez à hello@yunma.fr.",
+          "Une réclamation peut être adressée à la CNIL (www.cnil.fr)."
         ]
       },
       {
         "title": "Cookies",
         "body": [
-          "The site sets no advertising cookies. Only cookies strictly necessary for the cart and checkout (Shopify) are used."
+          "Le site ne dépose aucun cookie publicitaire. Seuls des cookies strictement nécessaires au fonctionnement du panier et du paiement (Shopify) sont utilisés."
         ]
       }
     ],
     "zh": [
       {
-        "title": "网站出版方",
+        "title": "Éditeur du site",
         "body": [
-          "Yunma——注册资本 10,000 欧元的简易股份公司，巴黎商业登记号 000 000 000。",
-          "注册地址：12 rue des Torréfacteurs, 75011 Paris, France。",
-          "欧盟增值税号：FR00 000000000。出版负责人：云马管理层。",
-          "联系方式：hello@yunma.fr — +33 6 00 00 00 00。"
+          "Yunma — SIREN 903718120",
+          "Siège social : 1 rue Ordener 75018 Paris, France.",
+          "TVA intracommunautaire : FR07903718120 (TVA non applicable, art. 293 B du CGI). Directeur de la publication : la direction de Yunma.",
+          "Contact : hello@yunma.fr"
         ]
       },
       {
-        "title": "托管",
+        "title": "Hébergement",
         "body": [
-          "本网站托管于静态托管平台。支付、订单与配送由 Shopify International Limited（Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Ireland）负责。"
+          "Le site est hébergé par Infomaniak SA, chemin de la Crétaux 3, 1227 Carouge, Suisse. Les paiements, les commandes et les expéditions sont opérés par Shopify International Limited, Victoria Buildings, 1-2 Haddington Road, Dublin 4, D04 XN32, Irlande."
         ]
       },
       {
-        "title": "知识产权",
+        "title": "Propriété intellectuelle",
         "body": [
-          "网站全部内容（文字、图片、插画、视觉识别、Yunma 商标）受著作权与商标法保护。未经事先书面许可，禁止任何形式的复制，包括部分复制。"
+          "L’ensemble des contenus du site (textes, photographies, illustrations, identité visuelle, marque Yunma) est protégé par le droit d’auteur et le droit des marques. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable."
         ]
       },
       {
-        "title": "个人数据",
+        "title": "Données personnelles",
         "body": [
-          "通过表单收集的数据（姓名、邮箱、留言）仅用于处理您的请求。订单数据由 Shopify 作为受托方处理。",
-          "根据 GDPR，您享有访问、更正、删除、限制处理与数据可携权：请来信 hello@yunma.fr。",
-          "您也可向法国数据保护机构 CNIL（www.cnil.fr）投诉。"
+          "Les données collectées via les formulaires (nom, e-mail, message) servent uniquement à traiter votre demande. Les données de commande sont traitées par Shopify en qualité de sous-traitant.",
+          "Conformément au RGPD, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation et de portabilité de vos données : écrivez à hello@yunma.fr.",
+          "Une réclamation peut être adressée à la CNIL (www.cnil.fr)."
         ]
       },
       {
-        "title": "Cookie",
+        "title": "Cookies",
         "body": [
-          "本网站不投放广告 Cookie，仅使用购物车与支付（Shopify）所必需的 Cookie。"
+          "Le site ne dépose aucun cookie publicitaire. Seuls des cookies strictement nécessaires au fonctionnement du panier et du paiement (Shopify) sont utilisés."
         ]
       }
     ]
@@ -1448,7 +1436,7 @@
       {
         "title": "Produits",
         "body": [
-          "Les cafés sont vendus en grains, en sachets de 200 g, en drip bags ou en coffrets. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
+          "Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
           "Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable."
         ]
       },
@@ -1462,7 +1450,7 @@
       {
         "title": "Livraison",
         "body": [
-          "Les commandes sont préparées sous 48 heures ouvrées après la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
+          "Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
           "La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis."
         ]
       },
@@ -1488,97 +1476,97 @@
     ],
     "en": [
       {
-        "title": "Purpose and scope",
+        "title": "Objet et champ d’application",
         "body": [
-          "These terms govern the sale of coffee and accessories by Yunma to consumers through the online shop. Placing an order implies unreserved acceptance of these terms."
+          "Les présentes conditions générales régissent les ventes de cafés et accessoires réalisées par Yunma auprès des consommateurs, via la boutique en ligne. Toute commande implique leur acceptation sans réserve."
         ]
       },
       {
-        "title": "Products",
+        "title": "Produits",
         "body": [
-          "Coffees are sold as whole beans in 200 g bags, as drip bags or as sets. Photographs and illustrations are as faithful as possible but do not constitute a contractual commitment on the exact appearance of the product.",
-          "As lots come from seasonal harvests, a reference may be replaced by an equivalent lot, with prior notice."
+          "Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
+          "Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable."
         ]
       },
       {
-        "title": "Prices and payment",
+        "title": "Prix et paiement",
         "body": [
-          "Prices are shown in euros, all taxes included, excluding delivery costs. Shipping is calculated at checkout.",
-          "Payment is made online through Shopify Payments (cards, Apple Pay, Google Pay, PayPal, Shop Pay). The order is confirmed once payment is authorised."
+          "Les prix sont indiqués en euros, toutes taxes comprises, hors frais de livraison. Les frais de port sont calculés au moment du paiement.",
+          "Le paiement s’effectue en ligne via Shopify Payments (cartes bancaires, Apple Pay, Google Pay, PayPal, Shop Pay). La commande est validée après autorisation du paiement."
         ]
       },
       {
-        "title": "Delivery",
+        "title": "Livraison",
         "body": [
-          "Orders are prepared within 48 business hours of the closest roast. Indicative times: 2 to 3 business days in France, 3 to 6 business days within the European Union.",
-          "Delivery is free from €50 within mainland France. Risk transfers on handover of the parcel."
+          "Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
+          "La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis."
         ]
       },
       {
-        "title": "Right of withdrawal",
+        "title": "Droit de rétractation",
         "body": [
-          "Under articles L221-18 et seq. of the French Consumer Code, you have 14 days from receipt to exercise your right of withdrawal on an unopened product, by writing to hello@yunma.fr.",
-          "Food products unsealed after delivery cannot be returned for hygiene reasons (article L221-28)."
+          "Conformément aux articles L221-18 et suivants du Code de la consommation, vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation sur un produit non ouvert, en écrivant à hello@yunma.fr.",
+          "Les denrées alimentaires descellées après la livraison ne peuvent être reprises pour des raisons d’hygiène (article L221-28)."
         ]
       },
       {
-        "title": "Warranties and claims",
+        "title": "Garanties et réclamations",
         "body": [
-          "Statutory warranties of conformity and against hidden defects apply. For a damaged parcel or a non-conforming product, write to hello@yunma.fr within 14 days with a photograph."
+          "Les garanties légales de conformité et des vices cachés s’appliquent. En cas de colis endommagé ou de produit non conforme, écrivez à hello@yunma.fr sous 14 jours avec une photographie."
         ]
       },
       {
-        "title": "Governing law and disputes",
+        "title": "Droit applicable et litiges",
         "body": [
-          "These terms are governed by French law. In the event of a dispute, an amicable solution will be sought before any legal action. The European online dispute resolution platform is available at ec.europa.eu/consumers/odr."
+          "Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. La plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr."
         ]
       }
     ],
     "zh": [
       {
-        "title": "目的与适用范围",
+        "title": "Objet et champ d’application",
         "body": [
-          "本条款适用于云马通过在线商店向消费者销售咖啡及相关产品的行为。下单即表示无保留地接受本条款。"
+          "Les présentes conditions générales régissent les ventes de cafés et accessoires réalisées par Yunma auprès des consommateurs, via la boutique en ligne. Toute commande implique leur acceptation sans réserve."
         ]
       },
       {
-        "title": "产品",
+        "title": "Produits",
         "body": [
-          "咖啡以 200 克咖啡豆、挂耳咖啡或礼盒形式销售。图片与插画力求真实，但不构成对产品外观的合同承诺。",
-          "由于批次来自季节性采收，某一款可能以同等品质的批次替代，我们会提前告知。"
+          "Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
+          "Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable."
         ]
       },
       {
-        "title": "价格与支付",
+        "title": "Prix et paiement",
         "body": [
-          "价格以欧元标示，含税，不含运费。运费在结算时计算。",
-          "支付通过 Shopify Payments 在线完成（银行卡、Apple Pay、Google Pay、PayPal、Shop Pay）。支付授权后订单方才生效。"
+          "Les prix sont indiqués en euros, toutes taxes comprises, hors frais de livraison. Les frais de port sont calculés au moment du paiement.",
+          "Le paiement s’effectue en ligne via Shopify Payments (cartes bancaires, Apple Pay, Google Pay, PayPal, Shop Pay). La commande est validée après autorisation du paiement."
         ]
       },
       {
-        "title": "配送",
+        "title": "Livraison",
         "body": [
-          "订单在最近一次烘焙后的 48 个工作小时内备货。参考时效：法国境内 2 至 3 个工作日，欧盟 3 至 6 个工作日。",
-          "法国本土满 50 欧元免运费。风险自包裹交付时转移。"
+          "Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
+          "La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis."
         ]
       },
       {
-        "title": "撤回权",
+        "title": "Droit de rétractation",
         "body": [
-          "根据法国消费法典 L221-18 及以下条款，未开封商品自收货起 14 天内可行使撤回权，请来信 hello@yunma.fr。",
-          "出于卫生原因，交付后已拆封的食品不予退回（L221-28 条）。"
+          "Conformément aux articles L221-18 et suivants du Code de la consommation, vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation sur un produit non ouvert, en écrivant à hello@yunma.fr.",
+          "Les denrées alimentaires descellées après la livraison ne peuvent être reprises pour des raisons d’hygiène (article L221-28)."
         ]
       },
       {
-        "title": "保证与投诉",
+        "title": "Garanties et réclamations",
         "body": [
-          "法定的符合性保证与隐蔽瑕疵保证均适用。若包裹损坏或商品不符，请在 14 天内附照片来信 hello@yunma.fr。"
+          "Les garanties légales de conformité et des vices cachés s’appliquent. En cas de colis endommagé ou de produit non conforme, écrivez à hello@yunma.fr sous 14 jours avec une photographie."
         ]
       },
       {
-        "title": "适用法律与争议",
+        "title": "Droit applicable et litiges",
         "body": [
-          "本条款适用法国法律。发生争议时，将优先寻求友好解决。欧盟在线争议解决平台：ec.europa.eu/consumers/odr。"
+          "Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. La plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr."
         ]
       }
     ]

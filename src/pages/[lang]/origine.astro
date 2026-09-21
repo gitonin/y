@@ -201,7 +201,9 @@ const jsonld = [
       <h3 class="label figures__title" data-reveal>{t.apropos.figuresTitle}</h3>
       <dl class="figures">
         {
-          t.apropos.figures.map((figure, i) => (
+          /* Un repère vidé de son chiffre s'en va : la rangée se resserre sur
+             ceux qui restent, plutôt que de garder une colonne blanche. */
+          t.apropos.figures.filter((f) => f.value?.trim()).map((figure, i) => (
             <div data-reveal style={`--reveal-delay:${i * 70}ms`}>
               <dt class="figures__value">{figure.value}</dt>
               <dd class="small muted">{figure.label}</dd>
@@ -247,9 +249,13 @@ const jsonld = [
         }
       </ol>
 
-      <div class="citation citation--inline">
-        <p class="display" data-reveal>{t.origine.pulls.savoirFaire}</p>
-      </div>
+      {/* Une phrase manifeste vidée emporte son encadré : sans texte, le cadre
+          ne laisserait qu'un blanc au milieu de la page. */}
+      {t.origine.pulls.savoirFaire && (
+        <div class="citation citation--inline">
+          <p class="display" data-reveal>{t.origine.pulls.savoirFaire}</p>
+        </div>
+      )}
     </div>
   </section>
 

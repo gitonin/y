@@ -51,8 +51,13 @@ export type Product = {
   includes?: L[];
   /** Photographie d'ambiance, en pleine largeur au-dessus du récit de la fiche. */
   ambiance: PhotoName;
-  /** Ferme productrice, présentée directement sur la fiche produit. */
-  farm: {
+  /**
+   * Ferme productrice, présentée directement sur la fiche produit.
+   *
+   * Facultative : un assortiment réunit plusieurs fermes et n'en présente donc
+   * aucune. La fiche omet alors le bloc entier plutôt que d'en montrer un vide.
+   */
+  farm?: {
     name: string;
     place: L;
     text: L;
@@ -66,7 +71,7 @@ export type Product = {
    et se téléverse sans toucher au code. Chaque produit y désigne sa ferme par
    une clé, et peut lui donner un autre nom d'affichage avec `fermeNom`. */
 type FermeJson = { nom: string; place: L; text: L; photo: string };
-type ProduitJson = Omit<Product, 'farm'> & { ferme: string; fermeNom?: string };
+type ProduitJson = Omit<Product, 'farm'> & { ferme?: string | null; fermeNom?: string };
 
 const { fermes, produits } = contenu as unknown as {
   fermes: Record<string, FermeJson>;
@@ -74,6 +79,10 @@ const { fermes, produits } = contenu as unknown as {
 };
 
 export const products: Product[] = produits.map(({ ferme, fermeNom, ...reste }) => {
+  /* Sans clé de ferme, le produit n'en présente pas : c'est le cas d'un
+     assortiment, qui en réunit plusieurs. Une clé inconnue reste une erreur,
+     elle — c'est une faute de frappe, pas une intention. */
+  if (!ferme) return reste as Product;
   const source = fermes[ferme];
   if (!source) throw new Error(`contenu/produits.json : le produit « ${reste.slug} » renvoie à la ferme inconnue « ${ferme} ».`);
   return {

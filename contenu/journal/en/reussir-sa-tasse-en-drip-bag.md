@@ -1,7 +1,7 @@
 ---
 title: 'How to brew a great drip bag'
 description: 'The complete drip bag method: temperature, ratio, three pours, common mistakes. A clean cup in three minutes, with no equipment.'
-date: 2026-09-15
+date: 2026-09-20
 author: Yunma
 tags: ['Method', 'Brewing', 'Drip bag']
 photo: tabouret-terrasse

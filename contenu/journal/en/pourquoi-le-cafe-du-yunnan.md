@@ -1,7 +1,7 @@
 ---
 title: 'Why does Yunnan grow such good coffee?'
 description: 'Altitude, day-night temperature swing, varieties and a new generation of producers: what makes specialty coffee from Yunnan, China, so distinctive.'
-date: 2026-09-11
+date: 2026-09-15
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Understanding']
 photo: cretes-brumeuses

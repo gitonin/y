@@ -198,9 +198,11 @@ for (const p of products) {
   field(`${c}.profil`, p.specs.roast?.fr, 'Fiche : profil (filtre ou espresso)');
   field(`${c}.preparation`, p.brew.fr, 'Conseils de préparation');
   (p.includes ?? []).forEach((item, i) => field(`${c}.contenu.${i + 1}`, item.fr, `Contenu, ligne ${i + 1}`));
-  field(`${c}.ferme.nom`, p.farm.name, 'Ferme : nom');
-  field(`${c}.ferme.lieu`, p.farm.place.fr, 'Ferme : lieu');
-  field(`${c}.ferme.texte`, p.farm.text.fr, 'Ferme : présentation');
+  /* Un assortiment ne présente aucune ferme : les trois champs sont alors
+     absents du document, plutôt que vides. */
+  field(`${c}.ferme.nom`, p.farm?.name, 'Ferme : nom');
+  field(`${c}.ferme.lieu`, p.farm?.place.fr, 'Ferme : lieu');
+  field(`${c}.ferme.texte`, p.farm?.text.fr, 'Ferme : présentation');
   p.variants.forEach((v, i) => field(`${c}.prix.${i + 1}`, `${v.label.fr} — ${v.price.toFixed(2)} €`, 'Format et prix'));
 }
 

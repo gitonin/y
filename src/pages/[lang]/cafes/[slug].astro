@@ -25,21 +25,30 @@ const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
 const related = product.related.map((slug) => getProduct(slug)).filter(Boolean);
 
-const specRows = [
+/* Une ligne de fiche technique vide disparaît, plutôt que d'afficher son
+   intitulé suivi de rien. C'est le cas des assortiments, qui n'ont ni altitude
+   ni process uniques : leurs lignes sont laissées vides dans le contenu, et
+   c'est ici qu'elles s'effacent. */
+const renseignees = <T extends { value: string }>(rows: T[]) => rows.filter((row) => row.value?.trim());
+
+const specRows = renseignees([
   { label: t.product.origin, value: product.specs.origin[lang] },
   { label: t.product.altitude, value: product.specs.altitude[lang] },
   { label: t.product.variety, value: product.specs.variety[lang] },
   { label: t.product.process, value: product.specs.process[lang] },
   { label: t.product.notes, value: product.specs.notes[lang] },
-];
+]);
 
 /* Le profil manque aux assortiments, qui mêlent plusieurs torréfactions :
    la ligne disparaît alors, plutôt que de rester vide. */
-const detailRows: { label: string; value: string; icon: IconName }[] = [
+const detailRows = renseignees<{ label: string; value: string; icon: IconName }>([
   { label: t.product.drying, value: product.specs.drying[lang], icon: 'dry' },
   { label: t.product.harvest, value: product.specs.harvest[lang], icon: 'cherries' },
   ...(product.specs.roast ? [{ label: t.product.roast, value: product.specs.roast[lang], icon: 'bean' as IconName }] : []),
-];
+]);
+
+/* Même règle pour le détail d'un assortiment : une ligne vidée s'en va. */
+const contenu = (product.includes ?? []).filter((item) => item[lang]?.trim());
 
 const canonical = new URL(Astro.url.pathname, base).href;
 
@@ -195,9 +204,9 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
             <p>{product.description[lang]}</p>
             <p class="muted">{product.story[lang]}</p>
             {
-              product.includes && (
+              contenu.length > 0 && (
                 <ul class="includes">
-                  {product.includes.map((item) => (
+                  {contenu.map((item) => (
                     <li>{item[lang]}</li>
                   ))}
                 </ul>
@@ -229,22 +238,27 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
       </section>
     </div>
 
-    <section class="farm" data-reveal>
-      <div class="farm__media media">
-        <Photo name={product.farm.photo} lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
-      </div>
-      <div class="farm__text">
-        <span class="label">{t.product.farmTitle}</span>
-        <h2 class="farm__name">{product.farm.name}</h2>
-        <p class="small muted farm__place">{product.farm.place[lang]}</p>
-        {
-          /* Le texte de la ferme peut tenir en plusieurs paragraphes. */
-          product.farm.text[lang].split('\n').map((paragraphe) => (
-            <p class="muted farm__body">{paragraphe}</p>
-          ))
-        }
-      </div>
-    </section>
+    {
+      /* Un assortiment réunit plusieurs fermes : il n'en présente aucune, et la
+         fiche passe directement aux suggestions plutôt que d'ouvrir un bloc
+         vide. */
+      product.farm && (
+        <section class="farm" data-reveal>
+          <div class="farm__media media">
+            <Photo name={product.farm.photo} lang={lang} sizes="(min-width: 900px) 46vw, 100vw" />
+          </div>
+          <div class="farm__text">
+            <span class="label">{t.product.farmTitle}</span>
+            <h2 class="farm__name">{product.farm.name}</h2>
+            <p class="small muted farm__place">{product.farm.place[lang]}</p>
+            {/* Le texte de la ferme peut tenir en plusieurs paragraphes. */}
+            {product.farm.text[lang].split('\n').map((paragraphe) => (
+              <p class="muted farm__body">{paragraphe}</p>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     {
       related.length > 0 && (
