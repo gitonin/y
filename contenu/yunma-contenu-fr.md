@@ -845,7 +845,7 @@ Notre histoire
 Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité.
 
 **Le récit** `[apropos.storyText]`
-Tout commence en 2019, lors d’un premier voyage au Yunnan. Jixuan (originaire du Sichuan) et Antoine (originaire de France), nous tombons sous le charme de cette région hors du temps. Année après année, nous partons explorer ses montagnes, ses terroirs et ses producteurs. De cette découverte du terroir yunnanais est née une évidence : révéler au monde l’excellence de ces cafés encore trop peu connus du grand public.
+Tout commence en 2019, lors d’un premier voyage au Yunnan. Nous, Jixuan (originaire du Sichuan) et Antoine (originaire de France), tombons sous le charme de cette région hors du temps. Année après année, nous partons explorer ses montagnes, ses terroirs et ses producteurs. De cette découverte du terroir yunnanais est née une évidence : révéler au monde l’excellence de ces cafés encore trop peu connus du grand public.
 
 
 ### Mission et approche
@@ -1064,7 +1064,7 @@ Tout ce que l’on nous demande le plus souvent. Sinon, écrivez-nous.
 Quand mon café est-il torréfié ?
 
 **Réponse** `[faq.1.reponse]`
-Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après votre commande avec la torréfaction la plus proche.
+Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées, avec les cafés issus de la torréfaction la plus proche.
 
 
 ### Question 2
@@ -1417,7 +1417,7 @@ Ajouter au panier
 Torréfié régulièrement
 
 **Mention d’expédition** `[produit.expedition]`
-Expédié sous 48 h — livraison offerte dès 50 €
+Expédié sous 48 h ouvrées — livraison offerte dès 50 €
 
 **Titre « À propos de ce café »** `[produit.aProposTitre]`
 À propos de ce café

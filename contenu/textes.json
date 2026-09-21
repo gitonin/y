@@ -117,7 +117,7 @@
         "roast": "Profil",
         "farmTitle": "La ferme",
         "relatedTitle": "Vous aimerez aussi",
-        "shipping": "Expédié sous 48 h — livraison offerte dès 50 €",
+        "shipping": "Expédié sous 48 h ouvrées — livraison offerte dès 50 €",
         "freshness": "Torréfié régulièrement",
         "brewTitle": "Conseils de préparation",
         "rupture": {
@@ -268,7 +268,7 @@
         "label": "À propos",
         "title": "Notre histoire",
         "intro": "Yunma est né d’une rencontre entre le Yunnan et la passion du café de spécialité.",
-        "storyText": "Tout commence en 2019, lors d’un premier voyage au Yunnan. Jixuan (originaire du Sichuan) et Antoine (originaire de France), nous tombons sous le charme de cette région hors du temps. Année après année, nous partons explorer ses montagnes, ses terroirs et ses producteurs. De cette découverte du terroir yunnanais est née une évidence : révéler au monde l’excellence de ces cafés encore trop peu connus du grand public.",
+        "storyText": "Tout commence en 2019, lors d’un premier voyage au Yunnan. Nous, Jixuan (originaire du Sichuan) et Antoine (originaire de France), tombons sous le charme de cette région hors du temps. Année après année, nous partons explorer ses montagnes, ses terroirs et ses producteurs. De cette découverte du terroir yunnanais est née une évidence : révéler au monde l’excellence de ces cafés encore trop peu connus du grand public.",
         "missionTitle": "Notre volonté",
         "missionText": "Partager cette qualité de vie du Yunnan à travers leur café. Faire connaître ce terroir d’exception et offrir une expérience des cafés de spécialité loin des standards industriels.",
         "approachTitle": "Notre approche",
@@ -357,7 +357,7 @@
         "items": [
           {
             "q": "Quand mon café est-il torréfié ?",
-            "a": "Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées après votre commande avec la torréfaction la plus proche."
+            "a": "Nous torréfions régulièrement en petites séries. Votre commande part sous 48 heures ouvrées, avec les cafés issus de la torréfaction la plus proche."
           },
           {
             "q": "Quels sont les délais de livraison ?",
@@ -554,7 +554,7 @@
         "roast": "Profile",
         "farmTitle": "The farm",
         "relatedTitle": "You may also like",
-        "shipping": "Ships within 48 h — free delivery from €50",
+        "shipping": "Ships within 48 business hours — free delivery from €50",
         "freshness": "Roasted regularly",
         "brewTitle": "Brewing guide",
         "rupture": {
@@ -705,7 +705,7 @@
         "label": "About",
         "title": "Our story",
         "intro": "Yunma was born from an encounter between Yunnan and a passion for specialty coffee.",
-        "storyText": "It all begins in 2019, on a first journey to Yunnan. Jixuan, from Sichuan, and Antoine, from France, fell for this region out of time. Year after year, we go back to explore its mountains, its terroirs and its growers. Out of that discovery came something obvious: to show the world the excellence of these coffees, still so little known.",
+        "storyText": "It all begins in 2019, on a first journey to Yunnan. We — Jixuan, from Sichuan, and Antoine, from France — fell for this region out of time. Year after year, we go back to explore its mountains, its terroirs and its growers. Out of that discovery came something obvious: to show the world the excellence of these coffees, still so little known.",
         "missionTitle": "What drives us",
         "missionText": "To share Yunnan’s quality of life through its coffee. To make this exceptional terroir known, and to offer a specialty coffee experience far from industrial standards.",
         "approachTitle": "Our approach",
@@ -991,7 +991,7 @@
         "roast": "烘焙定位",
         "farmTitle": "这座农场",
         "relatedTitle": "您可能也喜欢",
-        "shipping": "48 小时内发出 — 满 50 欧元免运费",
+        "shipping": "48 个工作小时内发出 — 满 50 欧元免运费",
         "freshness": "定期烘焙",
         "brewTitle": "冲煮建议",
         "rupture": {
@@ -1142,7 +1142,7 @@
         "label": "关于",
         "title": "我们的故事",
         "intro": "云马诞生于云南与精品咖啡热情的相遇。",
-        "storyText": "一切始于 2019 年的第一次云南之行。来自四川的 Jixuan 与来自法国的 Antoine，被这片仿佛停在时间之外的土地深深吸引。年复一年，我们走进它的山林、风土与咖农之间。正是在这样的发现里，一件事变得不言自明：让世界看见这些仍鲜为人知的咖啡有多出色。",
+        "storyText": "一切始于 2019 年的第一次云南之行。我们——来自四川的 Jixuan 与来自法国的 Antoine——被这片仿佛停在时间之外的土地深深吸引。年复一年，我们走进它的山林、风土与咖农之间。正是在这样的发现里，一件事变得不言自明：让世界看见这些仍鲜为人知的咖啡有多出色。",
         "missionTitle": "我们的初衷",
         "missionText": "以咖啡分享云南的生活质感。让这片出众的风土被认识，并提供一种远离工业标准的精品咖啡体验。",
         "approachTitle": "我们的方式",
