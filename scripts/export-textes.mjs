@@ -385,6 +385,25 @@ field('produit.expedition', t.product.shipping, 'Mention d’expédition');
 field('produit.aProposTitre', t.product.aboutTitle, 'Titre « À propos de ce café »');
 field('produit.similairesTitre', t.product.relatedTitle, 'Titre « Vous aimerez aussi »');
 field('produit.preparationTitre', t.product.brewTitle, 'Titre « Conseils de préparation »');
+
+section('Café épuisé — annonce de la prochaine torréfaction');
+note(
+  'Ce bloc remplace le bouton d’achat quand un café n’est plus disponible. Il ne s’affiche aujourd’hui sur aucune fiche : il n’apparaîtra que le jour où vous marquerez un café épuisé.'
+);
+field('produit.rupture.etat', t.common.soldOut, 'Sur-titre, au-dessus du titre du bloc');
+field('produit.rupture.badge', t.product.rupture.badge, 'Mention sous le prix, dans la vitrine');
+field('produit.rupture.titre', t.product.rupture.titre, 'Titre du bloc');
+field('produit.rupture.texte', t.product.rupture.texte, 'Explication');
+field('produit.rupture.cta', t.product.rupture.cta, 'Bouton « être prévenu »');
+note(
+  'Les quatre textes suivants n’apparaîtront qu’une fois le service de liste d’attente installé. D’ici là, le bouton ouvre un courriel pré-rempli.'
+);
+field('produit.rupture.champLabel', t.product.rupture.champLabel, 'Libellé du champ e-mail (lu par les lecteurs d’écran)');
+field('produit.rupture.placeholder', t.product.rupture.placeholder, 'Exemple affiché en gris dans le champ');
+field('produit.rupture.confirmation', t.product.rupture.confirmation, 'Message après l’envoi');
+field('produit.rupture.erreur', t.product.rupture.erreur, 'Message si l’envoi échoue');
+field('produit.rupture.sujet', t.product.rupture.sujet, 'Objet du courriel pré-rempli (le nom du café est ajouté après)');
+
 section('Panier');
 fields('panier', t.cart, ['title', 'empty', 'total', 'checkout', 'continue', 'notice']);
 

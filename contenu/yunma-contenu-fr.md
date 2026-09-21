@@ -1,6 +1,6 @@
 # Yunma — tout le contenu du site (français)
 
-_Document généré le 17/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 21/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
@@ -999,18 +999,6 @@ Pour qui ?
 **Libellé du lien, repris sur la page Contact** `[pro.pourQuiLien]`
 Découvrir l’offre
 
-**Type de client 1** `[pro.cible.1]`
-Coffee shops
-
-**Type de client 2** `[pro.cible.2]`
-Hôtels & restaurants
-
-**Type de client 3** `[pro.cible.3]`
-Épiceries fines
-
-**Type de client 4** `[pro.cible.4]`
-Bureaux & entreprises
-
 
 ### Nos engagements
 
@@ -1482,6 +1470,43 @@ Vous aimerez aussi
 
 **Titre « Conseils de préparation »** `[produit.preparationTitre]`
 Conseils de préparation
+
+
+### Café épuisé — annonce de la prochaine torréfaction
+
+> Ce bloc remplace le bouton d’achat quand un café n’est plus disponible. Il ne s’affiche aujourd’hui sur aucune fiche : il n’apparaîtra que le jour où vous marquerez un café épuisé.
+
+**Sur-titre, au-dessus du titre du bloc** `[produit.rupture.etat]`
+Épuisé
+
+**Mention sous le prix, dans la vitrine** `[produit.rupture.badge]`
+Prochaine torréfaction
+
+**Titre du bloc** `[produit.rupture.titre]`
+Prochaine torréfaction
+
+**Explication** `[produit.rupture.texte]`
+Nous torréfions par petites quantités, chaque semaine : ce lot est parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.
+
+**Bouton « être prévenu »** `[produit.rupture.cta]`
+Être prévenu
+
+> Les quatre textes suivants n’apparaîtront qu’une fois le service de liste d’attente installé. D’ici là, le bouton ouvre un courriel pré-rempli.
+
+**Libellé du champ e-mail (lu par les lecteurs d’écran)** `[produit.rupture.champLabel]`
+Votre adresse e-mail
+
+**Exemple affiché en gris dans le champ** `[produit.rupture.placeholder]`
+vous@exemple.fr
+
+**Message après l’envoi** `[produit.rupture.confirmation]`
+C’est noté. Vous serez prévenu dès la prochaine sortie.
+
+**Message si l’envoi échoue** `[produit.rupture.erreur]`
+L’envoi n’a pas abouti. Réessayez dans un instant.
+
+**Objet du courriel pré-rempli (le nom du café est ajouté après)** `[produit.rupture.sujet]`
+Prévenez-moi
 
 
 ### Panier
