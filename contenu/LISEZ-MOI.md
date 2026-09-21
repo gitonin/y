@@ -154,7 +154,7 @@ photographie porte déjà son texte alternatif dans les trois langues.
 `recolte-cueilleurs` · `cretes-brumeuses` · `cerises-branche` · `sechage-lits` ·
 `tabouret-terrasse` · `ferme-torch-estate` · `ferme-yun-lan-estate` ·
 `ferme-gaosheng` · `producteur-torch-estate` · `producteur-yun-lan-estate` ·
-`producteur-gaosheng`
+`producteur-gaosheng` · `fondateurs-mer-de-nuages`
 
 Pour en ajouter une : déposez le fichier dans `src/assets/photos/` et décrivez-la
 dans `src/data/photos.ts` — c'est le seul endroit du code où il faut passer,

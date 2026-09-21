@@ -16,6 +16,7 @@ alternatif, lui, vit dans `src/data/photos.ts` — dites-moi s'il doit changer.
 
 | Fichier | Sujet attendu | Où elle paraît |
 | --- | --- | --- |
+| `fondateurs-mer-de-nuages.jpg` | Jixuan et Antoine au-dessus d'une mer de nuages, au lever du jour | Origine (entre ORO et « Notre histoire ») — **photographie verticale**, donc fortement recadrée dans la bande 16/9 du grand écran |
 | `cretes-brumeuses.jpg` | Crêtes et vallées du Yunnan dans la brume | Bannière d'accueil, ouverture d'Origine, menu ouvert, 404 |
 | `recolte-cueilleurs.jpg` | Cueilleurs à la récolte, à flanc de montagne | Accueil (bloc « À l'origine »), Origine |
 | `cerises-branche.jpg` | Branche chargée de cerises rouges et jaunes | Origine (« De décembre à mars »), fiche Catimor |
@@ -27,7 +28,7 @@ alternatif, lui, vit dans `src/data/photos.ts` — dites-moi s'il doit changer.
 | Fichier | Sujet | Où elle paraît |
 | --- | --- | --- |
 | `ferme-torch-estate.jpg` | Torch Estate, Pu'er | Bloc « La ferme » des Lots 01 et 02 |
-| `ferme-yun-lan-estate.jpg` | Yun Lan Estate, Xishuangbanna | Fiche Yun Lan, coffret, grand visuel d'Origine |
+| `ferme-yun-lan-estate.jpg` | Yun Lan Estate, Xishuangbanna | Fiche Yun Lan |
 | `ferme-gaosheng.jpg` | Gaosheng Manor, Baoshan | Fiches Catimor et Bourbon jaune, Origine |
 
 ## Producteurs

@@ -16,6 +16,7 @@ import cerisesBranche02 from '../assets/photos/cerises-branche-02.jpg';
 import fermiersCafe from '../assets/photos/fermiers-cafe.jpg';
 import mainPlante from '../assets/photos/main-plante.jpg';
 import panneauPlantation from '../assets/photos/panneau-plantation.jpg';
+import fondateursMerDeNuages from '../assets/photos/fondateurs-mer-de-nuages.jpg';
 
 export type Photo = {
   src: ImageMetadata;
@@ -31,6 +32,18 @@ export type Photo = {
  * et changez l'import ci-dessous — aucune autre modification n'est nécessaire.
  */
 export const photos = {
+  'fondateurs-mer-de-nuages': {
+    src: fondateursMerDeNuages,
+    /* Photographie verticale, affichée dans une bande 16/9 sur grand écran :
+       le cadrage est calé sur les deux visages, qui se tiennent entre le tiers
+       et la moitié de la hauteur. Descendre ce réglage couperait les têtes. */
+    alt: {
+      fr: 'Jixuan et Antoine, fondateurs de Yunma, au lever du jour sur une crête du Yunnan au-dessus d’une mer de nuages, un café à la main',
+      en: 'Jixuan and Antoine, founders of Yunma, at daybreak on a Yunnan ridge above a sea of clouds, coffee in hand',
+      zh: '云马创始人 Jixuan 与 Antoine 清晨站在云南山脊上，脚下是云海，手中各捧一杯咖啡',
+    },
+    position: 'center 40%',
+  },
   'recolte-cueilleurs': {
     src: recolteCueilleurs,
     alt: {
