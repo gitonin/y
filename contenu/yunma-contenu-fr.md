@@ -1272,7 +1272,13 @@ Une réclamation peut être adressée à la CNIL (www.cnil.fr).
 Cookies
 
 **Paragraphe 1** `[mentions.5.paragraphe.1]`
-Le site ne dépose aucun cookie publicitaire. Seuls des cookies strictement nécessaires au fonctionnement du panier et du paiement (Shopify) sont utilisés.
+Le site ne dépose aucun cookie — ni publicitaire, ni de mesure d’audience. Il n’y a pas d’outil de statistiques, pas de bouton de réseau social traçant, et aucune police ni ressource chargée depuis un service tiers : toutes les pages sont servies par le site lui-même.
+
+**Paragraphe 2** `[mentions.5.paragraphe.2]`
+Deux informations sont conservées dans la mémoire locale de votre navigateur : la langue que vous avez choisie, et le contenu de votre panier. Elles y restent, ne sont transmises à personne, et servent uniquement à vous éviter de tout ressaisir d’une page à l’autre. Vous pouvez les effacer à tout moment en vidant les données du site depuis votre navigateur.
+
+**Paragraphe 3** `[mentions.5.paragraphe.3]`
+Le panier s’appuie sur l’interface de vente de Shopify, et le paiement se déroule ensuite sur le domaine de Shopify, qui dépose ses propres cookies et applique sa propre politique de confidentialité.
 
 
 ## Conditions générales de vente
