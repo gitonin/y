@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/utils';
-import { productUrl } from '../i18n/utils';
+import { productUrl, useTranslations } from '../i18n/utils';
 import type { Product } from '../data/products';
 import Packshot from './Packshot.astro';
 import Prix from './Prix.astro';
@@ -12,6 +12,11 @@ interface Props {
   compact?: boolean;
 }
 const { product, lang, index = 0, compact = false } = Astro.props;
+const t = useTranslations(lang);
+
+/* La grille dit la vérité : un café dont plus aucun format n'est disponible
+   porte sa mention dès la vitrine, plutôt que de la réserver à la fiche. */
+const epuise = product.variants.every((v) => !v.available);
 ---
 
 <article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
@@ -24,6 +29,7 @@ const { product, lang, index = 0, compact = false } = Astro.props;
       <p class="pcard__sub muted small">{product.subtitle[lang]}</p>
       {!compact && <p class="pcard__notes small">{product.short[lang]}</p>}
       <Prix product={product} lang={lang} class="pcard__price" />
+      {epuise && <p class="label pcard__rupture">{t.product.rupture.badge}</p>}
     </div>
   </a>
 </article>
@@ -98,6 +104,14 @@ const { product, lang, index = 0, compact = false } = Astro.props;
   :global(.pcard__price) {
     margin-top: 0.5rem;
     font-size: var(--fs-small);
+  }
+
+  /* La mention se pose sous le prix, dans l'orange foncé des libellés actifs.
+     Elle informe, elle ne barre rien : le café reste désirable, il est
+     simplement en attente de sa prochaine torréfaction. */
+  .pcard__rupture {
+    margin-top: 0.35rem;
+    color: var(--accent-deep);
   }
 
   /* Sur un écran de bureau, la carte a de la place et le lecteur du recul : les

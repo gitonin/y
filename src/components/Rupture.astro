@@ -1,0 +1,229 @@
+---
+/**
+ * L'état d'un café épuisé, sur la fiche produit.
+ *
+ * Il remplace le sélecteur de quantité et le bouton d'achat — il ne s'y ajoute
+ * pas. Le ton n'est pas celui de l'excuse : Yunma torréfie par petites
+ * quantités, l'absence de stock est la conséquence de la méthode, pas un
+ * incident. Le bloc le dit, et propose d'être prévenu.
+ *
+ * Deux formes, selon qu'un service d'enregistrement existe ou non :
+ *
+ *   — service renseigné  : un champ de saisie, envoyé sans quitter la page ;
+ *   — service absent     : un lien qui ouvre un courriel pré-rempli.
+ *
+ * La seconde est celle d'aujourd'hui, et elle fonctionne vraiment. C'est
+ * délibéré : un champ qui avale une adresse sans l'enregistrer nulle part
+ * trahit le visiteur, alors qu'un courriel arrive. Le jour où le service
+ * existe, la première apparaît sans que ce dessin change.
+ */
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import type { Product } from '../data/products';
+import { LISTE_ATTENTE, SITE } from '../consts';
+
+interface Props {
+  product: Product;
+  lang: Lang;
+}
+const { product, lang } = Astro.props;
+const t = useTranslations(lang);
+const r = t.product.rupture;
+
+const enLigne = !!LISTE_ATTENTE.url;
+
+/* Le courriel de repli porte le café dans son objet : la demande arrive
+   identifiée, sans que le visiteur ait à préciser laquelle. */
+const sujet = `${r.sujet} — ${product.name[lang]}`;
+const lienMail = `mailto:${SITE.email}?subject=${encodeURIComponent(sujet)}`;
+const champId = `attente-${product.slug}`;
+---
+
+<section class="rupture" data-rupture aria-labelledby={`${champId}-titre`}>
+  {/* Le sur-titre dit l'état, le titre dit la suite. Ce n'est pas le badge de
+      la vitrine : là-bas, la carte n'a la place que d'une ligne et c'est la
+      suite qu'elle annonce ; ici les deux tiennent, et répéter « prochaine
+      torréfaction » deux fois de suite ferait bégayer la fiche. */}
+  <p class="label rupture__badge">{t.common.soldOut}</p>
+  <h3 class="rupture__titre" id={`${champId}-titre`}>{r.titre}</h3>
+  <p class="rupture__texte">{r.texte}</p>
+
+  {
+    enLigne ? (
+      <form
+        class="rupture__form"
+        data-attente-form
+        data-url={LISTE_ATTENTE.url}
+        data-produit={product.slug}
+        data-langue={lang}
+        data-message-ok={r.confirmation}
+        data-message-ko={r.erreur}
+      >
+        <label class="visually-hidden" for={champId}>
+          {r.champLabel}
+        </label>
+        <input
+          class="rupture__champ"
+          id={champId}
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          placeholder={r.placeholder}
+        />
+        <button class="btn rupture__envoi" type="submit">
+          {r.cta}
+        </button>
+        {/* La réponse est annoncée aux lecteurs d'écran sans déplacer le focus. */}
+        <p class="rupture__reponse small" data-attente-reponse role="status" aria-live="polite" hidden />
+      </form>
+    ) : (
+      <a class="btn rupture__envoi rupture__envoi--seul" href={lienMail}>
+        {r.cta}
+      </a>
+    )
+  }
+</section>
+
+<style>
+  /* Le bloc occupe la place qu'occupait l'encart d'achat : un filet au-dessus,
+     le même rythme vertical, pour que la fiche ne se déforme pas selon que le
+     café est disponible ou non. */
+  .rupture {
+    display: grid;
+    gap: 0.6rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .rupture__badge {
+    color: var(--accent-deep);
+  }
+
+  .rupture__titre {
+    font-size: var(--fs-h3);
+    font-family: var(--font-titre);
+    font-weight: var(--w-semi);
+    letter-spacing: -0.014em;
+  }
+
+  .rupture__texte {
+    max-width: 42ch;
+    color: var(--ink-70);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+  }
+
+  .rupture__form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+  }
+
+  .rupture__champ {
+    min-width: 0;
+    height: 46px;
+    padding: 0 0.9rem;
+    border: 1px solid var(--line);
+    background: none;
+    color: var(--ink);
+    font-size: var(--fs-small);
+    transition: border-color 0.35s var(--ease);
+  }
+
+  .rupture__champ:focus {
+    outline: none;
+    border-color: var(--ink);
+  }
+
+  .rupture__champ:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .rupture__envoi {
+    height: 46px;
+    white-space: nowrap;
+  }
+
+  /* Seul, le lien occupe toute la largeur : c'est exactement la place que
+     tenait « Ajouter au panier », et la fiche garde son aplomb. Accompagné
+     d'un champ, il se range à sa droite et reprend la largeur de son texte. */
+  .rupture__envoi--seul {
+    margin-top: 0.4rem;
+  }
+
+  .rupture__reponse {
+    grid-column: 1 / -1;
+    color: var(--ink-70);
+  }
+
+  .rupture__reponse[data-erreur] {
+    color: var(--accent-deep);
+  }
+
+  /* Sur un écran étroit, le bouton passe sous le champ plutôt que de le
+     comprimer : une adresse électronique a besoin de sa largeur. */
+  @media (max-width: 380px) {
+    .rupture__form {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Envoi de l'adresse au service d'enregistrement.
+   *
+   * Ce script ne sert que lorsque le service est configuré : sans lui, la fiche
+   * n'affiche pas de formulaire et rien ici ne s'exécute.
+   */
+  const brancher = () => {
+    document.querySelectorAll<HTMLFormElement>('[data-attente-form]').forEach((form) => {
+      if (form.dataset.lie) return;
+      form.dataset.lie = '1';
+
+      const reponse = form.querySelector<HTMLElement>('[data-attente-reponse]');
+      const bouton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+      const dire = (texte: string, erreur: boolean) => {
+        if (!reponse) return;
+        reponse.textContent = texte;
+        reponse.toggleAttribute('data-erreur', erreur);
+        reponse.hidden = false;
+      };
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const champ = form.querySelector<HTMLInputElement>('input[name="email"]');
+        if (!champ || !champ.checkValidity()) return;
+
+        if (bouton) bouton.disabled = true;
+        try {
+          const res = await fetch(form.dataset.url!, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: champ.value,
+              produit: form.dataset.produit,
+              langue: form.dataset.langue,
+            }),
+          });
+          if (!res.ok) throw new Error(String(res.status));
+          /* L'adresse est enregistrée : le champ disparaît, il n'y a plus rien
+             à saisir. Seule la confirmation reste. */
+          champ.hidden = true;
+          if (bouton) bouton.hidden = true;
+          dire(form.dataset.messageOk ?? '', false);
+        } catch {
+          dire(form.dataset.messageKo ?? '', true);
+          if (bouton) bouton.disabled = false;
+        }
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', brancher);
+  brancher();
+</script>

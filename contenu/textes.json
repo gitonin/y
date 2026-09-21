@@ -119,7 +119,18 @@
         "relatedTitle": "Vous aimerez aussi",
         "shipping": "Expédié sous 48 h — livraison offerte dès 50 €",
         "freshness": "Torréfié à la commande, chaque semaine",
-        "brewTitle": "Conseils de préparation"
+        "brewTitle": "Conseils de préparation",
+        "rupture": {
+          "badge": "Prochaine torréfaction",
+          "titre": "Prochaine torréfaction",
+          "texte": "Nous torréfions par petites quantités, chaque semaine : ce lot est parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.",
+          "cta": "Être prévenu",
+          "champLabel": "Votre adresse e-mail",
+          "placeholder": "vous@exemple.fr",
+          "confirmation": "C’est noté. Vous serez prévenu dès la prochaine sortie.",
+          "erreur": "L’envoi n’a pas abouti. Réessayez dans un instant.",
+          "sujet": "Prévenez-moi"
+        }
       },
       "origine": {
         "seoTitle": "Origine et savoir-faire des cafés Yunma du Yunnan",
@@ -549,7 +560,18 @@
         "relatedTitle": "You may also like",
         "shipping": "Ships within 48 h — free delivery from €50",
         "freshness": "Roasted to order, every week",
-        "brewTitle": "Brewing guide"
+        "brewTitle": "Brewing guide",
+        "rupture": {
+          "badge": "Next roast",
+          "titre": "Next roast",
+          "texte": "We roast in small batches, every week: this lot has gone. Leave your address and we’ll let you know as soon as the next one is out.",
+          "cta": "Notify me",
+          "champLabel": "Your email address",
+          "placeholder": "you@example.com",
+          "confirmation": "Noted. We’ll let you know as soon as the next roast is out.",
+          "erreur": "That didn’t go through. Please try again in a moment.",
+          "sujet": "Notify me"
+        }
       },
       "origine": {
         "seoTitle": "Origin and craft of Yunma’s Yunnan coffees",
@@ -979,7 +1001,18 @@
         "relatedTitle": "您可能也喜欢",
         "shipping": "48 小时内发出 — 满 50 欧元免运费",
         "freshness": "每周按订单新鲜烘焙",
-        "brewTitle": "冲煮建议"
+        "brewTitle": "冲煮建议",
+        "rupture": {
+          "badge": "下批烘焙",
+          "titre": "下批烘焙",
+          "texte": "我们每周只烘焙少量咖啡：本批次已经售完。留下您的邮箱，下一批出炉时即刻通知您。",
+          "cta": "通知我",
+          "champLabel": "您的电子邮箱",
+          "placeholder": "you@example.com",
+          "confirmation": "已记录。下一批出炉时我们会通知您。",
+          "erreur": "提交未成功，请稍后再试。",
+          "sujet": "通知我"
+        }
       },
       "origine": {
         "seoTitle": "云马云南咖啡的产地与工艺",

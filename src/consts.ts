@@ -30,3 +30,18 @@ export const SHOPIFY = {
   token: import.meta.env.PUBLIC_SHOPIFY_STOREFRONT_TOKEN || '',
   accountUrl: import.meta.env.PUBLIC_SHOPIFY_ACCOUNT_URL || '',
 };
+
+/**
+ * Liste d'attente — l'adresse du service qui enregistre les demandes de
+ * notification quand un café est épuisé.
+ *
+ * Tant qu'elle est vide, la fiche n'affiche pas de champ de saisie mais un
+ * lien qui ouvre un courriel pré-rempli : un formulaire qui avale les adresses
+ * sans les enregistrer nulle part serait pire que pas de formulaire du tout.
+ * Le jour où le service existe (un petit script sur l'hébergement), renseigner
+ * PUBLIC_LISTE_ATTENTE_URL suffit à faire apparaître le champ — le dessin et
+ * les textes sont déjà en place.
+ */
+export const LISTE_ATTENTE = {
+  url: import.meta.env.PUBLIC_LISTE_ATTENTE_URL || '',
+};

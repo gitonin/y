@@ -3,6 +3,7 @@ import type { Lang } from '../i18n/utils';
 import { useTranslations, formatPrice } from '../i18n/utils';
 import type { Product } from '../data/products';
 import { defaultVariant } from '../data/products';
+import Rupture from './Rupture.astro';
 
 interface Props {
   product: Product;
@@ -17,6 +18,11 @@ const first = defaultVariant(product);
 const firstIndex = product.variants.indexOf(first);
 const qtyId = `qty-${product.slug}`;
 const multi = product.variants.length > 1;
+
+/* Un café est épuisé quand aucune de ses variantes n'est disponible. Tant
+   qu'il en reste une, la fiche garde son encart d'achat : c'est le sélecteur
+   de format qui barre celles qui manquent. */
+const epuise = product.variants.every((v) => !v.available);
 ---
 
 <div class="buy" data-buybox data-product={product.slug}>
@@ -49,44 +55,62 @@ const multi = product.variants.length > 1;
     )
   }
 
-  <div class="buy__qty">
-    <span class="label" id={`${qtyId}-label`}>{t.common.quantity}</span>
-    <div class="stepper">
-      <button type="button" data-qty-dec aria-label={t.common.decrease}>−</button>
-      <input
-        id={qtyId}
-        type="number"
-        min="1"
-        max="20"
-        value="1"
-        inputmode="numeric"
-        aria-labelledby={`${qtyId}-label`}
-        data-qty-input
-      />
-      <button type="button" data-qty-inc aria-label={t.common.increase}>+</button>
-    </div>
-  </div>
+  {
+    epuise ? (
+      <Rupture product={product} lang={lang} />
+    ) : (
+      <>
+        <div class="buy__qty">
+          <span class="label" id={`${qtyId}-label`}>
+            {t.common.quantity}
+          </span>
+          <div class="stepper">
+            <button type="button" data-qty-dec aria-label={t.common.decrease}>
+              −
+            </button>
+            <input
+              id={qtyId}
+              type="number"
+              min="1"
+              max="20"
+              value="1"
+              inputmode="numeric"
+              aria-labelledby={`${qtyId}-label`}
+              data-qty-input
+            />
+            <button type="button" data-qty-inc aria-label={t.common.increase}>
+              +
+            </button>
+          </div>
+        </div>
 
-  <button
-    class="btn buy__add"
-    type="button"
-    data-add-to-cart
-    data-variant={first.shopifyVariantId}
-    data-variant-index={firstIndex}
-    data-sku={product.sku}
-    data-handle={product.shopifyHandle}
-    data-title={product.name[lang]}
-    data-variant-title={first.label[lang]}
-    data-price={first.price}
-    data-qty-target={`#${qtyId}`}
-    disabled={!first.available}
-  >
-    {first.available ? t.common.addToCart : t.common.soldOut}
-  </button>
+        <button
+          class="btn buy__add"
+          type="button"
+          data-add-to-cart
+          data-variant={first.shopifyVariantId}
+          data-variant-index={firstIndex}
+          data-sku={product.sku}
+          data-handle={product.shopifyHandle}
+          data-title={product.name[lang]}
+          data-variant-title={first.label[lang]}
+          data-price={first.price}
+          data-qty-target={`#${qtyId}`}
+          disabled={!first.available}
+        >
+          {first.available ? t.common.addToCart : t.common.soldOut}
+        </button>
+      </>
+    )
+  }
 
+  {/* « Torréfié à la commande » reste : c'est précisément ce qui explique
+      l'attente. « Expédié sous 48 h » disparaît, parce qu'un café épuisé ne
+      part pas sous 48 h et qu'une promesse fausse coûte plus qu'elle ne
+      rassure. */}
   <ul class="buy__reassure small muted">
     <li>{t.product.freshness}</li>
-    <li>{t.product.shipping}</li>
+    {!epuise && <li>{t.product.shipping}</li>}
   </ul>
 </div>
 

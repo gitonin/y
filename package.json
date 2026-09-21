@@ -19,7 +19,8 @@
     "test:mise-en-page": "node tests/mise-en-page.mjs",
     "test:blocs": "node tests/blocs-de-texte.mjs",
     "test:theme": "node tests/theme-shopify.mjs",
-    "test": "npm run test:boutique && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
+    "test:rupture": "node tests/rupture.mjs",
+    "test": "npm run test:boutique && npm run test:rupture && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
