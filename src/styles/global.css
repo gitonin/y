@@ -651,6 +651,17 @@ a.media-link:hover .media > img {
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- Pose instantanée, le temps d'un échange de page ----------
+   Posée par `Base.astro` pendant l'échange et retirée à l'image suivante :
+   les blocs déjà à l'écran prennent leur place finale sans la parcourir.
+   La bannière en est exclue — son dézoom d'arrivée, lui, doit rejouer. */
+html.sans-transition [data-reveal],
+html.sans-transition .reveal-lines .line > span,
+html.sans-transition .media:not([data-banniere]) > img,
+html.sans-transition .media:not([data-banniere]) > svg {
+  transition: none !important;
+}
+
 /* ---------- Repli sans JavaScript ---------- */
 html:not(.js) [data-reveal],
 html:not(.js) .reveal-lines .line > span,

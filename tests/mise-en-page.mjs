@@ -378,6 +378,7 @@ titre('Le mouvement survit à la navigation sans rechargement');
     check(`après un clic vers ${page}, la classe js est toujours là`, await pg.evaluate(() => document.documentElement.classList.contains('js')), true);
   }
 
+
   /* Et la bannière rejoue son entrée à chaque retour, plutôt que de se poser
      d'avance : c'est ce que la classe manquante empêchait. */
   const echelle = () =>
@@ -390,6 +391,75 @@ titre('Le mouvement survit à la navigation sans rechargement');
   check(`la bannière repart agrandie au retour (${auRetour})`, auRetour > 1.02, true);
   await pg.waitForTimeout(3400);
   check('et se pose bien à sa taille', await echelle(), 1);
+  await pg.close();
+}
+
+titre('Une seule apparition par arrivée, jamais deux');
+{
+  const pg = await (await navigateur.newContext({ viewport: { width: 1280, height: 900 } })).newPage();
+
+  /* Au premier chargement, le bloc du haut s'ouvre : c'est l'effet voulu.
+     On se branche avant tout script de la page pour saisir le début. */
+  await pg.addInitScript(() => {
+    window.__images = [];
+    const boucle = () => {
+      const el = document.querySelector('main [data-reveal]');
+      if (el) window.__images.push(+(+getComputedStyle(el).opacity).toFixed(2));
+      if (performance.now() < 1600) requestAnimationFrame(boucle);
+    };
+    requestAnimationFrame(boucle);
+  });
+  await pg.goto(`${B}/fr/cafes/`, { waitUntil: 'networkidle' });
+  await pg.waitForTimeout(1800);
+  const images = await pg.evaluate(() => window.__images ?? []);
+  check('au premier chargement, le bloc du haut s’ouvre', images.some((o) => o > 0 && o < 1), true);
+
+  /* Arrivé par un lien, en revanche, il est déjà posé : la transition de page
+     porte l'ensemble, et rejouer l'apparition par-dessus faisait la saute. */
+  await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+  await pg.waitForTimeout(1200);
+  await pg.evaluate(() => {
+    const a = [...document.querySelectorAll('a[href]')].find(
+      (x) => new URL(x.href, location.href).pathname === '/fr/cafes/' && x.offsetParent,
+    );
+    a?.click();
+  });
+  await pg.waitForTimeout(90);
+  const arrivee = await pg.evaluate(() => {
+    const el = document.querySelector('main [data-reveal]');
+    const s = getComputedStyle(el);
+    return { op: +(+s.opacity).toFixed(2), y: s.transform === 'none' ? 0 : +new DOMMatrixReadOnly(s.transform).f.toFixed(1) };
+  });
+  check(`arrivé par un lien, le bloc du haut est déjà opaque (${arrivee.op})`, arrivee.op, 1);
+  check(`et déjà à sa place (${arrivee.y} px)`, arrivee.y, 0);
+
+  /* Mais plus bas, rien n'est posé d'avance : le défilement ouvre toujours. */
+  const horsEcran = await pg.evaluate(() => {
+    const el = [...document.querySelectorAll('main [data-reveal]')].find(
+      (e) => e.getBoundingClientRect().top > window.innerHeight * 1.5,
+    );
+    if (!el) return null;
+    el.dataset.temoin = '1';
+    return el.classList.contains('is-visible');
+  });
+  check('un bloc hors écran n’est pas posé d’avance', horsEcran, false);
+  /* On relève toutes les images plutôt qu'une seule : la mise en place est
+     échelonnée d'un bloc à l'autre, et viser un instant précis reviendrait à
+     mesurer un retard d'ouverture plutôt que l'ouverture elle-même. */
+  await pg.evaluate(() => {
+    window.__ouverture = [];
+    document.querySelector('[data-temoin]').scrollIntoView({ behavior: 'instant', block: 'center' });
+    const depart = performance.now();
+    const boucle = () => {
+      window.__ouverture.push(+(+getComputedStyle(document.querySelector('[data-temoin]')).opacity).toFixed(2));
+      if (performance.now() - depart < 1500) requestAnimationFrame(boucle);
+    };
+    requestAnimationFrame(boucle);
+  });
+  await pg.waitForTimeout(1700);
+  const ouverture = await pg.evaluate(() => window.__ouverture ?? []);
+  check('et il s’ouvre bien au défilement, sans sauter à l’opaque', ouverture.some((o) => o > 0 && o < 1), true);
+  check('jusqu’à être pleinement lisible', await pg.evaluate(() => +(+getComputedStyle(document.querySelector('[data-temoin]')).opacity).toFixed(2)), 1);
   await pg.close();
 }
 

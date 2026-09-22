@@ -61,11 +61,12 @@ const t = useTranslations(lang);
         attributs du `<html>` de la page appelée — qui ne porte pas la classe,
         puisqu'elle est posée à l'exécution. Elle disparaissait donc au premier
         clic, et le repli s'appliquait au reste de la visite : plus aucun
-        mouvement nulle part. On la repose après chaque échange de page. */}
+        mouvement nulle part. On la pose sur le document entrant, avant
+        l'échange, plutôt qu'après : elle est là dès la première image. */}
     <script is:inline>
       document.documentElement.classList.add('js');
-      document.addEventListener('astro:after-swap', () => {
-        document.documentElement.classList.add('js');
+      document.addEventListener('astro:before-swap', (evenement) => {
+        evenement.newDocument.documentElement.classList.add('js');
       });
     </script>
 
@@ -174,6 +175,36 @@ const t = useTranslations(lang);
         });
       };
 
+      /* Les blocs déjà à l'écran n'ont pas à rejouer leur apparition quand on
+         arrive par un lien : la transition de page porte déjà l'ensemble.
+         Sans cela, deux mouvements se superposaient — la page entière montait
+         et s'éclaircissait, puis chaque bloc montait et s'éclaircissait à son
+         tour. C'est la saute que l'on voyait, une animation jouée deux fois.
+
+         On les marque pendant l'échange : le nouveau document est en place,
+         mesurable, mais pas encore peint. Un style qui n'a jamais été calculé
+         ne se transitionne pas — les blocs s'affichent donc d'emblée à leur
+         place, sans saut. Ce qui reste plus bas s'ouvre au défilement, comme
+         avant ; et au premier chargement, sans échange, rien ne change. */
+      const poserLeHaut = () => {
+        const racine = document.documentElement;
+        racine.classList.add('sans-transition');
+        const marge = window.innerHeight;
+        document
+          .querySelectorAll<HTMLElement>('[data-reveal], .reveal-lines, .media:not([data-banniere])')
+          .forEach((el) => {
+            const { top, bottom } = el.getBoundingClientRect();
+            if (top < marge && bottom > 0) el.classList.add('is-visible');
+          });
+        /* Deux images : la première applique la pose, la seconde rend leurs
+           transitions aux blocs — sans quoi la suivante, au défilement, ne
+           s'animerait plus. */
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => racine.classList.remove('sans-transition')),
+        );
+      };
+
+      document.addEventListener('astro:after-swap', poserLeHaut);
       document.addEventListener('astro:page-load', initReveal);
     </script>
   </body>
