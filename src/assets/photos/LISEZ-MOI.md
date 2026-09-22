@@ -21,7 +21,8 @@ alternatif, lui, vit dans `src/data/photos.ts` — dites-moi s'il doit changer.
 | `recolte-cueilleurs.jpg` | Cueilleurs à la récolte, à flanc de montagne | Accueil (bloc « À l'origine »), Origine |
 | `cerises-branche.jpg` | Branche chargée de cerises rouges et jaunes | Origine (« De décembre à mars »), fiche Catimor |
 | `sechage-lits.jpg` | Séchage sur lits surélevés en bambou | Origine (avant le savoir-faire), fiche Lot 02 |
-| `tabouret-terrasse.jpg` | Nature morte, terrasse face aux montagnes | Clôture d'Origine et de la page Cafés, Pro, article drip bag |
+| `tabouret-terrasse.jpg` | Nature morte, terrasse face aux montagnes | Clôture d'Origine et de la page Cafés, Pro |
+| `sachet-filtre-infusion.jpg` | Un sachet filtre posé sur une tasse, bouilloire à col de cygne | Article « Réussir sa tasse en sachet filtre » — en-tête et vignette |
 
 ## Fermes
 

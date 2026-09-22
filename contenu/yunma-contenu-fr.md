@@ -1517,8 +1517,8 @@ Yunma
 **Mots-clés, séparés par des virgules** `[article.pourquoi-le-cafe-du-yunnan.motsCles]`
 Yunnan, Terroir, Comprendre
 
-**Photo d’en-tête — au choix : recolte-cueilleurs, cretes-brumeuses, cerises-branche, sechage-lits, tabouret-terrasse** `[article.pourquoi-le-cafe-du-yunnan.photo]`
-cretes-brumeuses
+**Photo d’en-tête — au choix : recolte-cueilleurs, cretes-brumeuses, cerises-branche, sechage-lits, tabouret-terrasse, producteur-yun-lan-estate, sachet-filtre-infusion** `[article.pourquoi-le-cafe-du-yunnan.photo]`
+producteur-yun-lan-estate
 
 
 ### Texte de l’article
@@ -1594,8 +1594,8 @@ Yunma
 **Mots-clés, séparés par des virgules** `[article.reussir-sa-tasse-en-drip-bag.motsCles]`
 Méthode, Extraction, Sachet filtre
 
-**Photo d’en-tête — au choix : recolte-cueilleurs, cretes-brumeuses, cerises-branche, sechage-lits, tabouret-terrasse** `[article.reussir-sa-tasse-en-drip-bag.photo]`
-tabouret-terrasse
+**Photo d’en-tête — au choix : recolte-cueilleurs, cretes-brumeuses, cerises-branche, sechage-lits, tabouret-terrasse, producteur-yun-lan-estate, sachet-filtre-infusion** `[article.reussir-sa-tasse-en-drip-bag.photo]`
+sachet-filtre-infusion
 
 
 ### Texte de l’article

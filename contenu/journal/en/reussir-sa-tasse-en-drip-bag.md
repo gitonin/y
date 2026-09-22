@@ -4,7 +4,7 @@ description: 'The complete drip bag method: temperature, ratio, three pours, com
 date: 2026-09-20
 author: Yunma
 tags: ['Method', 'Brewing', 'Drip bag']
-photo: tabouret-terrasse
+photo: sachet-filtre-infusion
 photoMilieu: cerises-branche
 ---
 

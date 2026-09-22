@@ -4,7 +4,7 @@ description: "Le mode d'emploi complet du sachet filtre : température, ratio, t
 date: 2026-09-20
 author: Yunma
 tags: ['Méthode', 'Extraction', 'Sachet filtre']
-photo: tabouret-terrasse
+photo: sachet-filtre-infusion
 photoMilieu: cerises-branche
 ---
 

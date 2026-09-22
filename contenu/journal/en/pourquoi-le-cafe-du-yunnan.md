@@ -4,7 +4,7 @@ description: 'Altitude, day-night temperature swing, varieties and a new generat
 date: 2026-09-15
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Understanding']
-photo: cretes-brumeuses
+photo: producteur-yun-lan-estate
 photoMilieu: producteur-gaosheng
 ---
 

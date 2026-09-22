@@ -4,7 +4,7 @@ description: "Altitude, amplitude thermique, variétés et nouvelle génération
 date: 2026-09-15
 author: Yunma
 tags: ['Yunnan', 'Terroir', 'Comprendre']
-photo: cretes-brumeuses
+photo: producteur-yun-lan-estate
 photoMilieu: producteur-gaosheng
 ---
 

@@ -4,7 +4,7 @@ description: 挂耳咖啡完整冲煮指南：水温、粉水比、三段注水�
 date: 2026-09-20
 author: Yunma
 tags: ['方法', '萃取', '挂耳']
-photo: tabouret-terrasse
+photo: sachet-filtre-infusion
 photoMilieu: cerises-branche
 ---
 

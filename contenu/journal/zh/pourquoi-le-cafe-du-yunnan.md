@@ -4,7 +4,7 @@ description: 海拔、昼夜温差、品种与新一代咖农：中国云南精�
 date: 2026-09-15
 author: Yunma
 tags: ['云南', '风土', '知识']
-photo: cretes-brumeuses
+photo: producteur-yun-lan-estate
 photoMilieu: producteur-gaosheng
 ---
 

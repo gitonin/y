@@ -17,6 +17,7 @@ import fermiersCafe from '../assets/photos/fermiers-cafe.jpg';
 import mainPlante from '../assets/photos/main-plante.jpg';
 import panneauPlantation from '../assets/photos/panneau-plantation.jpg';
 import fondateursMerDeNuages from '../assets/photos/fondateurs-mer-de-nuages.jpg';
+import sachetFiltreInfusion from '../assets/photos/sachet-filtre-infusion.jpg';
 
 export type Photo = {
   src: ImageMetadata;
@@ -136,6 +137,17 @@ export const photos = {
       zh: '采摘工在西双版纳云澜庄园的咖啡树行间劳作',
     },
     position: '50% 55%',
+  },
+  /* Le geste, pas le terroir : cette photographie sert l'article de méthode,
+     là où les autres racontent la provenance. */
+  'sachet-filtre-infusion': {
+    src: sachetFiltreInfusion,
+    alt: {
+      fr: 'Un sachet filtre Yunma posé sur une tasse blanche, à côté d’une bouilloire à col de cygne, dans une cuisine sombre éclairée par la fenêtre',
+      en: 'A Yunma filter sachet resting on a white mug beside a gooseneck kettle, in a dark kitchen lit by the window',
+      zh: '云马挂耳咖啡架在白色马克杯上，旁边是细口手冲壶，昏暗的厨房里只有窗光',
+    },
+    position: '50% 60%',
   },
   'producteur-gaosheng': {
     src: producteurGaosheng,
