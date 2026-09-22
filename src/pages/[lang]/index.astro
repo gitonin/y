@@ -76,7 +76,9 @@ const jsonld = [
     </div>
     <div class="hero__inner wrap">
       <SplitTitle text={t.home.heroTitle} as="h1" size="xl" class="hero__title" />
-      {/* Le titre dans l'autre langue de la marque, sur une ligne. */}
+      {/* Le titre dans l'autre langue de la marque. Il suit les retours à la
+          ligne du contenu — le français de la version chinoise en demande un,
+          là où six idéogrammes tiennent d'un seul tenant. */}
       <p class="hero__alt" lang={lang === 'zh' ? 'fr' : 'zh'}>{t.home.heroTitleAlt}</p>
       <a class="hero__cta link" href={route(lang, 'cafes')}>
         {t.home.heroCta}<span class="arrow" aria-hidden="true">→</span>
@@ -204,6 +206,26 @@ const jsonld = [
     background: var(--paper);
   }
 
+  /* Une installation à l'arrivée : la photographie entre à peine agrandie et
+     se pose à sa taille. Elle part de 1,04 — au-delà, le mouvement se remarque
+     au lieu de s'oublier — sur une courbe qui ralentit jusqu'au bout, et sur
+     trois secondes : assez lent pour qu'on ne sache pas trop ce qui a bougé.
+     Rien d'autre ne suit : c'est le décor qui se pose, pas la page qui bouge.
+     Le cadrage reste intact du début à la fin, l'image ne faisant que
+     déborder davantage de son cadre au départ. */
+  .hero__media :global(img) {
+    animation: installation 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes installation {
+    from {
+      transform: scale(1.04);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
   /* La photographie se donne telle quelle : aucun voile clair par-dessus. Seul
      subsiste le dégradé sombre du bas, qui donne de la profondeur et porte
      l'invitation à défiler. */
@@ -240,6 +262,7 @@ const jsonld = [
      règle vaut dans les deux sens — c'est le français qui rapetisse sur la
      version chinoise. */
   .hero__alt {
+    white-space: pre-line;
     margin-top: 0.15em;
     font-size: clamp(1.8125rem, 1.1625rem + 3.1vw, 4.0625rem);
     font-weight: var(--w-light);

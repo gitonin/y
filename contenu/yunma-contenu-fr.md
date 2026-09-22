@@ -1052,7 +1052,8 @@ Questions fréquentes sur les cafés Yunma : délais de livraison, fraîcheur et
 Aide
 
 **Titre** `[faq.title]`
-Questions fréquentes
+Questions
+fréquentes
 
 **Introduction** `[faq.intro]`
 Tout ce que l’on nous demande le plus souvent. Sinon, écrivez-nous.

@@ -174,12 +174,14 @@ const jsonld = [
     </div>
   </section>
 
-  <figure class="media grand-visuel" data-reveal>
-    <Photo name="fondateurs-mer-de-nuages" lang={lang} sizes="100vw" />
-  </figure>
-
   <!-- ============ NOTRE HISTOIRE ============ -->
-  <section id="histoire" class="section section--souffle anchor-target">
+  {/* Le portrait ouvre la section plutôt que de la précéder : c'est lui que
+      l'ancre « Notre histoire » désigne, pour qu'on voie Jixuan et Antoine
+      avant de lire leur récit. */}
+  <section id="histoire" class="section section--souffle anchor-target hsection">
+    <figure class="media grand-visuel" data-reveal>
+      <Photo name="fondateurs-mer-de-nuages" lang={lang} sizes="100vw" />
+    </figure>
     <div class="wrap">
       <span class="label" data-reveal>{t.apropos.label}</span>
       <SplitTitle text={t.apropos.title} as="h2" size="lg" class="sec-title hsection-title" />
@@ -320,6 +322,20 @@ const jsonld = [
      la pleine respiration n'ajouterait qu'une bande de fond vide. */
   .grand-visuel + .section {
     padding-top: var(--espace-apres-visuel);
+  }
+
+  /* « Notre histoire » porte son visuel à l'intérieur : la même règle s'y
+     applique, mais d'un cran plus bas. La section ne garde aucune respiration
+     au-dessus — la photographie la fait, comme lorsqu'elle la précédait — et
+     c'est le texte qui prend ses distances d'avec elle. L'espacement de la
+     page est donc inchangé ; seul l'endroit où l'ancre dépose le lecteur a
+     remonté, d'une hauteur de photographie. */
+  .hsection {
+    padding-top: 0;
+  }
+
+  .hsection > .wrap {
+    margin-top: var(--espace-apres-visuel);
   }
 
 
