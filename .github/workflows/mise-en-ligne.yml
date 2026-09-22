@@ -1,0 +1,104 @@
+# Fabrique le dossier à déposer sur yunma.fr, chez Infomaniak.
+#
+# À lancer depuis l'onglet « Actions » du dépôt :
+#   Actions > Mise en ligne yunma.fr > Run workflow
+#
+# Quelques minutes plus tard, une archive « yunma.fr » apparaît en bas de la
+# page du lancement. On la télécharge, on la décompresse, et on dépose tout
+# son contenu dans :
+#
+#   /home/clients/<identifiant>/sites/yunma.fr/
+#
+# Le contenu, pas le dossier : vous devez obtenir « …/yunma.fr/index.html »
+# et non « …/yunma.fr/yunma.fr/index.html ».
+#
+# ⚠ Le fichier `.htaccess` commence par un point, et beaucoup de clients FTP
+# cachent ces fichiers par défaut. Sans lui, ni page 404 ni redirection https.
+# Pensez à activer l'affichage des fichiers cachés avant de déposer.
+#
+# Rien n'est mis en ligne automatiquement : ce workflow ne touche à aucun
+# serveur, il prépare seulement le dossier. Le dépôt reste votre geste.
+name: Mise en ligne yunma.fr
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  BRANCHE: claude/yunma-site-v4
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCHE }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Vérifier les types
+        run: npm run check
+
+      # Pas de BASE_PATH : le site vit à la racine du domaine, et tous ses
+      # liens sortent en « /fr/… » plutôt qu'en « /un-sous-dossier/fr/… ».
+      - name: Construire pour yunma.fr
+        env:
+          SITE_URL: https://yunma.fr
+          PUBLIC_SHOPIFY_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_DOMAIN }}
+          PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
+          PUBLIC_SHOPIFY_ACCOUNT_URL: ${{ secrets.PUBLIC_SHOPIFY_ACCOUNT_URL }}
+        run: npm run build
+
+      # Un dossier livré sans son .htaccess, ou dont les liens porteraient
+      # encore un sous-dossier, serait découvert une fois en ligne. On regarde
+      # avant, et on arrête tout plutôt que de livrer un dossier bancal.
+      - name: Contrôler le dossier avant de le livrer
+        run: |
+          echo "— Fichiers attendus"
+          for f in index.html .htaccess 404.html robots.txt sitemap-index.xml fr/index.html en/index.html zh/index.html; do
+            if [ ! -f "dist/$f" ]; then
+              echo "  MANQUE : $f"; exit 1
+            fi
+            echo "  ok  $f"
+          done
+
+          echo "— Aucun lien ne doit porter de sous-dossier de déploiement"
+          if grep -rlq 'href="/y/' dist/; then
+            echo "  des liens pointent encore vers /y/ — BASE_PATH a fui dans la construction"; exit 1
+          fi
+          echo "  ok  les liens sortent bien à la racine"
+
+          echo "— L'accueil mène vers la langue par défaut"
+          grep -q 'url=/fr/' dist/index.html || { echo "  la redirection de la racine a disparu"; exit 1; }
+          echo "  ok  / redirige vers /fr/"
+
+          echo "— Les adresses canoniques portent le bon domaine"
+          grep -q 'rel="canonical" href="https://yunma.fr/fr/cafes/"' dist/fr/cafes/index.html \
+            || { echo "  adresse canonique inattendue"; exit 1; }
+          echo "  ok  canoniques sur https://yunma.fr"
+
+          echo "— La boutique est bien reliée"
+          grep -q '"domain":"[^"]\+"' dist/fr/cafes/index.html \
+            || { echo "  le domaine Shopify est vide : le secret manque"; exit 1; }
+          echo "  ok  Shopify renseigné"
+
+          echo
+          echo "$(find dist -type f | wc -l) fichiers, $(du -sh dist | cut -f1)"
+
+      # `include-hidden-files` est indispensable : sans lui, le .htaccess
+      # serait silencieusement laissé de côté.
+      - name: Préparer l'archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: yunma.fr
+          path: dist/
+          include-hidden-files: true
+          retention-days: 14
