@@ -37,7 +37,7 @@ moteur.registerFilter('format_code', (v) => String(v ?? ''));
 /* `layout none` court-circuite le gabarit ; c'est déjà le comportement ici. */
 moteur.registerTag('layout', { parse() {}, render: () => '' });
 
-const R = 'https://gitonin.github.io/y/v4';
+const R = 'https://yunma.fr';
 const settings = { adresse_site: R };
 const ligne = (handle) => ({ product: { handle } });
 

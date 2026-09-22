@@ -46,11 +46,11 @@ Une seule valeur, dans les réglages du thème :
 
 | Réglage | Valeur |
 |---|---|
-| Adresse du site | `https://gitonin.github.io/y/v4` |
+| Adresse du site | `https://yunma.fr` |
 
-Sans barre oblique finale. Le jour du vrai domaine, remplacer par
-`https://yunma.fr` — c'est le seul changement à faire, et il ne demande pas de
-réinstaller le thème.
+Sans barre oblique finale. L'archive porte déjà cette valeur : à l'import, il
+n'y a rien à saisir, seulement à vérifier. Si le site changeait un jour
+d'adresse, ce réglage est le seul à reprendre — sans réinstaller le thème.
 
 ## Ce qui est renvoyé, et où
 
