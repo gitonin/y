@@ -43,6 +43,7 @@ const config = {
     notice: t.cart.notice,
     error: t.common.error,
     shopSoon: t.common.shopSoon,
+    stockLimite: t.common.stockLimite,
     remove: t.nav.close,
   },
 };
@@ -332,6 +333,9 @@ const config = {
        cette version n'en a pas : elle retombe alors sur la marque. */
     handle?: string;
     url?: string;
+    /* L'identifiant de variante, pour comparer ce que Shopify a retenu à ce
+       qui a été demandé. Absent des lignes de démonstration. */
+    variantId?: string;
   };
 
   type Config = {
@@ -440,6 +444,7 @@ const config = {
       amount: Number(node.merchandise?.price?.amount ?? 0),
       currency: node.merchandise?.price?.currencyCode ?? cfg?.currency ?? 'EUR',
       handle: node.merchandise?.product?.handle ?? '',
+      variantId: node.merchandise?.id ?? '',
     }));
     return true;
   };
@@ -456,7 +461,16 @@ const config = {
     }
   }
 
-  async function addLive(variantId: string, quantity: number) {
+  /* Shopify rogne en silence une demande qui dépasse le stock : il renvoie un
+     panier valide, avec moins d'articles que demandé, et pas la moindre
+     erreur. On compare donc ce qui est réellement entré au panier à ce qui a
+     été demandé — sans quoi le client en commande cinq, en reçoit deux, et
+     n'en sait rien. `addLive` renvoie la quantité effectivement ajoutée. */
+  const auPanier = (variantId: string) =>
+    lines.filter((l) => l.variantId === variantId).reduce((n, l) => n + l.quantity, 0);
+
+  async function addLive(variantId: string, quantity: number): Promise<number> {
+    const avant = auPanier(variantId);
     const id = localStorage.getItem(STORAGE_KEY);
     if (!id) {
       const data = await gql<{ cartCreate: any }>(
@@ -467,7 +481,7 @@ const config = {
       if (!cart) throw new Error(data.cartCreate?.userErrors?.[0]?.message ?? 'cartCreate failed');
       localStorage.setItem(STORAGE_KEY, cart.id);
       mapCart(cart);
-      return;
+      return auPanier(variantId) - avant;
     }
     const data = await gql<{ cartLinesAdd: any }>(
       `mutation($id: ID!, $lines: [CartLineInput!]!){ cartLinesAdd(cartId:$id, lines:$lines){ cart { ${CART_FIELDS} } userErrors { message } } }`,
@@ -479,6 +493,7 @@ const config = {
       throw new Error('cartLinesAdd failed');
     }
     mapCart(cart);
+    return auPanier(variantId) - avant;
   }
 
   async function updateLive(lineId: string, quantity: number) {
@@ -592,7 +607,13 @@ const config = {
     btn.setAttribute('disabled', 'true');
     try {
       if (isLive() && variantId) {
-        await addLive(variantId, quantity);
+        const ajoute = await addLive(variantId, quantity);
+        if (ajoute < quantity) {
+          const total = lines
+            .filter((l) => l.variantId === variantId)
+            .reduce((n, l) => n + l.quantity, 0);
+          toast((cfg?.strings.stockLimite ?? '').replace('{n}', String(total)));
+        }
       } else {
         loadDemo();
         /* Une ligne par variante : deux formats du même produit ne doivent pas
