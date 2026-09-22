@@ -29,8 +29,10 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "docx": "^9.7.1",
+    "esbuild": "^0.28.2",
     "liquidjs": "^10.29.0",
     "playwright": "^1.63.0",
+    "sharp": "^0.35.4",
     "typescript": "^6.0.3"
   }
 }

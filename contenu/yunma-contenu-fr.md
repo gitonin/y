@@ -1,6 +1,6 @@
 # Yunma — tout le contenu du site (français)
 
-_Document généré le 21/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
+_Document généré le 22/09/2026 à partir du site. Modifiez les textes sous les codes entre crochets, sans toucher aux codes eux-mêmes._
 
 
 ## Comment utiliser ce document
