@@ -1373,10 +1373,6 @@ Conditions générales de vente
 **Mention « Dernière mise à jour »** `[juridique.miseAJour]`
 Dernière mise à jour
 
-**Avertissement en haut de page** `[juridique.avertissement]`
-Ce document est un modèle à compléter avec vos informations légales définitives.
-
-
 ## Petits libellés d’interface
 
 > Ces mots courts apparaissent dans le menu, les boutons et le panier. Ils changent rarement — ne les modifiez que si vous en avez vraiment besoin.

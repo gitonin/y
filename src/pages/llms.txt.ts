@@ -32,7 +32,9 @@ export const GET: APIRoute = async ({ site }) => {
     `- Activité : sélection, importation et torréfaction de cafés de spécialité du Yunnan`,
     `- Origine des cafés : Yunnan, Chine (Baoshan, Pu'er, Xishuangbanna), altitude 1 300–1 800 m`,
     `- Adresse : ${SITE.address.street}, ${SITE.address.postalCode} ${SITE.address.city}, France`,
-    `- Contact : ${SITE.email} — professionnels : ${SITE.proEmail} — WhatsApp : ${SITE.whatsapp}`,
+    /* Pas de WhatsApp ici : l'adresse `wa.me` porte le numéro en clair, et ce
+       fichier est public. Les courriels suffisent à joindre la marque. */
+    `- Contact : ${SITE.email} — professionnels : ${SITE.proEmail}`,
     `- Livraison : France 2–3 jours ouvrés, Union européenne 3–6 jours ouvrés, offerte dès ${SITE.freeShippingFrom} € en France métropolitaine`,
     `- Langues : ${languages.map((l) => dictionaries[l].meta.label).join(', ')}`,
     '',

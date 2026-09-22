@@ -18,8 +18,6 @@ const sections = mentions[lang];
   <PageHero lang={lang} label={t.footer.legal} title={t.legal.mentionsTitle} size="md" />
 
   <div class="wrap wrap--narrow legal">
-    <p class="small muted legal__note">{t.legal.placeholder}</p>
-
     <Poincon tight />
     {
       sections.map((section) => (
@@ -37,12 +35,6 @@ const sections = mentions[lang];
 <style>
   .legal {
     padding-bottom: var(--section);
-  }
-
-  .legal__note {
-    padding: 1rem 1.25rem;
-    background: var(--paper-5);
-    margin-bottom: clamp(2rem, 4vw, 3rem);
   }
 
   .legal__section {

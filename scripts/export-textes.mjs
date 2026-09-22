@@ -373,7 +373,6 @@ section('Libellés communs aux deux pages');
 field('juridique.titreMentions', t.legal.mentionsTitle, 'Titre de la page « Mentions légales »');
 field('juridique.titreCgv', t.legal.cgvTitle, 'Titre de la page « Conditions générales »');
 field('juridique.miseAJour', t.legal.updated, 'Mention « Dernière mise à jour »');
-field('juridique.avertissement', t.legal.placeholder, 'Avertissement en haut de page');
 
 /* ------- libellés d'interface ------- */
 chapter('Petits libellés d’interface');
