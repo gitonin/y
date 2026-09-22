@@ -38,7 +38,7 @@
       "text": {
         "fr": "La Ferme de Gaosheng Manor, fondée en 1956, est souvent présentée comme la première plantation de café de Chine, dédiée à la production d’Arabica de qualité. La ferme cultive principalement du Catimor (et un peu de Typica /« Blue Mountain ») entre 1500 et 1850 m d’altitude, dans la vallée sèche et chaude de la rivière Nu, à proximité de la frontière avec le Myanmar.",
         "en": "Gaosheng Manor, founded in 1956, is often described as the first coffee plantation in China dedicated to quality Arabica. The farm grows mainly Catimor (and a little Typica, the local “Blue Mountain”) between 1,500 and 1,850 metres, in the hot, dry valley of the Nu river, near the Myanmar border.",
-        "zh": "高神庄园（Gaosheng Manor）创立于 1956 年，常被视为中国第一座专注优质阿拉比卡的咖啡种植园。农场主要种植卡蒂姆（也有少量铁皮卡，即当地的「蓝山」），海拔 1500 至 1850 米，位于靠近缅甸边境、干热的怒江河谷。"
+        "zh": "高晟庄园（Gaosheng Manor）创立于 1956 年，常被视为中国第一座专注优质阿拉比卡的咖啡种植园。农场主要种植卡蒂姆（也有少量铁皮卡，即当地的「蓝山」），海拔 1500 至 1850 米，位于靠近缅甸边境、干热的怒江河谷。"
       },
       "photo": "ferme-gaosheng"
     }
@@ -393,7 +393,7 @@
       "name": {
         "fr": "Gaosheng — Catimor",
         "en": "Gaosheng — Catimor",
-        "zh": "高神 — 卡蒂姆"
+        "zh": "高晟 — 卡蒂姆"
       },
       "subtitle": {
         "fr": "Café de Baoshan, Yunnan",
@@ -408,7 +408,7 @@
       "description": {
         "fr": "Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction à Baoshan, en Chine (seule torréfaction Yunma qui n’est pas réalisée à Paris). Le Catimor de Gaosheng donne une tasse équilibrée, légèrement épicée : le café que l’on sert à tout le monde sans avoir besoin de l’expliquer.",
         "en": "Five 10 g filter sachets, ground and packed under protective atmosphere on roasting day in Baoshan, China — the only Yunma roast not done in Paris. The Catimor from Gaosheng gives a balanced, lightly spiced cup: the coffee you can serve to anyone without explaining it.",
-        "zh": "五片 10 克滤袋，于中国保山烘焙当天研磨并充氮封装——这是云马唯一不在巴黎完成的烘焙。高神的卡蒂姆冲出均衡、带一点香料气息的一杯：端给任何人都不必多作解释的咖啡。"
+        "zh": "五片 10 克滤袋，于中国保山烘焙当天研磨并充氮封装——这是云马唯一不在巴黎完成的烘焙。高晟的卡蒂姆冲出均衡、带一点香料气息的一杯：端给任何人都不必多作解释的咖啡。"
       },
       "story": {
         "fr": "Pensés pour le bureau, les voyages ou les matins pressés — sans renoncer à la tasse. Posez le sachet sur votre mug, versez en trois fois, retirez : trois minutes, et c’est prêt.",
@@ -419,7 +419,7 @@
         "origin": {
           "fr": "Yunnan, Chine — Gaosheng, Baoshan",
           "en": "Yunnan, China — Gaosheng, Baoshan",
-          "zh": "中国云南 — 保山 高神"
+          "zh": "中国云南 — 保山 高晟"
         },
         "altitude": {
           "fr": "1300 – 1850 m",
@@ -516,7 +516,7 @@
       "name": {
         "fr": "Gaosheng — Bourbon jaune",
         "en": "Gaosheng — Yellow Bourbon",
-        "zh": "高神 — 黄波旁"
+        "zh": "高晟 — 黄波旁"
       },
       "subtitle": {
         "fr": "Café de Baoshan, Yunnan",
@@ -531,7 +531,7 @@
       "description": {
         "fr": "Cinq sachets filtres de 10 g, moulus et conditionnés sous atmosphère protectrice le jour de la torréfaction à Baoshan, en Chine (seule torréfaction Yunma qui n’est pas réalisée à Paris). Le Bourbon jaune est bien plus rare que le Catimor, il vient de plus petites parcelles que notre Catimor de Gaosheng, mais avec la même ferme et à la même altitude : la tasse gagne en finesse, et propose des notes de rhum boisé, légèrement cacaotées.",
         "en": "Five 10 g filter sachets, ground and packed under protective atmosphere on roasting day in Baoshan, China — the only Yunma roast not done in Paris. Yellow Bourbon is far rarer than Catimor and comes from smaller plots than our Gaosheng Catimor, but from the same farm and the same altitude: the cup gains in finesse, on notes of woody rum and a touch of cocoa.",
-        "zh": "五片 10 克滤袋，于中国保山烘焙当天研磨并充氮封装——这是云马唯一不在巴黎完成的烘焙。黄波旁比卡蒂姆稀少得多，来自比高神卡蒂姆更小的地块，但同属一座农场、同样的海拔：杯中因此更显细腻，带朗姆的木质调与一点可可。"
+        "zh": "五片 10 克滤袋，于中国保山烘焙当天研磨并充氮封装——这是云马唯一不在巴黎完成的烘焙。黄波旁比卡蒂姆稀少得多，来自比高晟卡蒂姆更小的地块，但同属一座农场、同样的海拔：杯中因此更显细腻，带朗姆的木质调与一点可可。"
       },
       "story": {
         "fr": "Même terre, même altitude, même traitement, même torréfaction que notre Catimor : seule la variété change. C’est la comparaison la plus simple que l’on puisse proposer, et la plus instructive en les goûtant à la suite.",
@@ -542,7 +542,7 @@
         "origin": {
           "fr": "Yunnan, Chine — Gaosheng, Baoshan",
           "en": "Yunnan, China — Gaosheng, Baoshan",
-          "zh": "中国云南 — 保山 高神"
+          "zh": "中国云南 — 保山 高晟"
         },
         "altitude": {
           "fr": "1300 – 1850 m",
@@ -649,7 +649,7 @@
       "description": {
         "fr": "Le meilleur moyen de comprendre nos cafés du Yunnan : deux honey de Torch Estate — anaérobie double et traditionnel — le lavé de Yun Lan Estate en Pacamara, et deux boîtes de 5 sachets filtres de la ferme de Gaosheng pour emporter un peu de Yunnan partout avec vous.",
         "en": "The best way to understand our Yunnan coffees: two Torch Estate honeys — double anaerobic and traditional — the washed Pacamara from Yun Lan Estate, and two boxes of five Gaosheng drip bags to take a little Yunnan everywhere with you.",
-        "zh": "认识我们云南咖啡最好的方式：火炬庄园的两支蜜处理（双重厌氧与传统）、云澜庄园的水洗帕卡马拉，以及两盒各五片的高神挂耳，把一点云南带在身边。"
+        "zh": "认识我们云南咖啡最好的方式：火炬庄园的两支蜜处理（双重厌氧与传统）、云澜庄园的水洗帕卡马拉，以及两盒各五片的高晟挂耳，把一点云南带在身边。"
       },
       "story": {
         "fr": "Trois fermes, trois terroirs, trois variétés. Dégustez-les ensemble : leurs différences se lisent clairement — ce que change une fermentation, ce que change une variété.",
