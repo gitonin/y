@@ -11,6 +11,14 @@
  *   npm i -D playwright        (une seule fois)
  *   node tests/mise-en-page.mjs
  */
+let sharp;
+try {
+  ({ default: sharp } = await import('sharp'));
+} catch {
+  console.error('sharp est nécessaire pour ce test :  npm i -D sharp');
+  process.exit(1);
+}
+
 let chromium;
 try {
   ({ chromium } = await import('playwright'));
@@ -461,6 +469,80 @@ titre('Une seule apparition par arrivée, jamais deux');
   check('et il s’ouvre bien au défilement, sans sauter à l’opaque', ouverture.some((o) => o > 0 && o < 1), true);
   check('jusqu’à être pleinement lisible', await pg.evaluate(() => +(+getComputedStyle(document.querySelector('[data-temoin]')).opacity).toFixed(2)), 1);
   await pg.close();
+}
+
+titre('Les titres animés ne rognent ni accents ni jambages');
+{
+  /* L'interligne des grands titres (1,04) fait une boîte plus courte que les
+     lettres. Le masque qui les fait monter doit donc déborder un peu, sinon il
+     coupe l'aigu d'un « É » ou le bas d'un « g ».
+
+     On ne peut pas le voir en regardant les bords de la boîte : le masque
+     élargi laisse une ligne empiéter sur la boîte de sa voisine, et cette
+     encre-là passerait pour une coupe. On compare donc chaque ligne à
+     elle-même, masque ôté — la seule mesure qui ne se laisse pas tromper. */
+  const pg = await (await navigateur.newContext({ viewport: { width: 1280, height: 1000 }, reducedMotion: 'reduce' })).newPage();
+  const differe = async (a, b) => {
+    const [x, y] = await Promise.all([a, b].map((buf) => sharp(buf).greyscale().raw().toBuffer()));
+    let n = 0;
+    for (let i = 0; i < x.length; i++) if (Math.abs(x[i] - y[i]) > 40) n++;
+    return n;
+  };
+
+  let examinees = 0;
+  const rognees = [];
+  for (const u of ['/fr/', '/fr/origine/', '/fr/pro/', '/fr/contact/', '/en/origine/', '/en/cafes/']) {
+    await pg.goto(`${B}${u}`, { waitUntil: 'networkidle' });
+    await pg.waitForTimeout(900);
+    const n = await pg.locator('.reveal-lines .line').count();
+    for (let i = 0; i < n; i++) {
+      await pg.evaluate((k) => {
+        const lignes = [...document.querySelectorAll('.reveal-lines .line')];
+        lignes[k].scrollIntoView({ behavior: 'instant', block: 'center' });
+        lignes.forEach((l, j) => { l.style.visibility = j === k ? 'visible' : 'hidden'; });
+      }, i);
+      await pg.waitForTimeout(220);
+      const info = await pg.evaluate((k) => {
+        const l = [...document.querySelectorAll('.reveal-lines .line')][k];
+        const r = l.getBoundingClientRect();
+        if (r.width < 2 || r.height < 2 || r.top < 0 || r.bottom > innerHeight) return null;
+        return { t: l.textContent.trim().slice(0, 28), x: Math.max(0, Math.floor(r.left) - 4),
+                 y: Math.max(0, Math.floor(r.top) - 30), w: Math.ceil(r.width) + 8, h: Math.ceil(r.height) + 60 };
+      }, i);
+      if (!info) continue;
+      examinees++;
+      const zone = { x: info.x, y: info.y, width: Math.min(info.w, 1280 - info.x), height: Math.min(info.h, 1000 - info.y) };
+      const avec = await pg.screenshot({ clip: zone });
+      await pg.evaluate((k) => {
+        const l = [...document.querySelectorAll('.reveal-lines .line')][k];
+        l.style.clipPath = 'none'; l.style.overflow = 'visible';
+      }, i);
+      const sans = await pg.screenshot({ clip: zone });
+      await pg.evaluate((k) => {
+        const l = [...document.querySelectorAll('.reveal-lines .line')][k];
+        l.style.clipPath = ''; l.style.overflow = '';
+      }, i);
+      if ((await differe(avec, sans)) > 8) rognees.push(`${u} « ${info.t} »`);
+    }
+    await pg.evaluate(() => document.querySelectorAll('.reveal-lines .line').forEach((l) => (l.style.visibility = '')));
+  }
+  check(`un nombre utile de lignes a bien été examiné (${examinees})`, examinees >= 25, true);
+  check(`aucune ligne rognée${rognees.length ? ' — ' + rognees.join(' · ') : ''}`, rognees.length, 0);
+
+  /* Et le masque cache toujours la ligne avant son entrée : l'élargir sans
+     décaler le départ d'autant l'aurait laissée dépasser. */
+  const pg2 = await (await navigateur.newContext({ viewport: { width: 1280, height: 1000 } })).newPage();
+  await pg2.goto(`${B}/fr/origine/`, { waitUntil: 'domcontentloaded' });
+  const cache = await pg2.evaluate(() => {
+    const bloc = [...document.querySelectorAll('.reveal-lines')].find((x) => !x.classList.contains('is-visible'));
+    if (!bloc) return null;
+    const ligne = bloc.querySelector('.line');
+    const debord = parseFloat(getComputedStyle(ligne).fontSize) * 0.22;
+    return ligne.firstElementChild.getBoundingClientRect().top >= ligne.getBoundingClientRect().bottom + debord - 0.5;
+  });
+  check('avant son entrée, la ligne reste hors du masque élargi', cache, true);
+  await pg.close();
+  await pg2.close();
 }
 
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);

@@ -489,12 +489,24 @@ h3 {
 /* Titres révélés ligne par ligne */
 .reveal-lines .line {
   display: block;
-  overflow: hidden;
+  /* Le masque déborde un peu la boîte de ligne. Avec un interligne de 1,04,
+     celle-ci est plus courte que les lettres : un `overflow: hidden` rognait
+     l'aigu des capitales accentuées et la hampe des jambages — « Écrivez-nous »
+     perdait son accent, « et le geste. » le bas de son g.
+
+     `clip-path` fait ce qu'un `overflow` ne sait pas faire — s'étendre au-delà
+     de la boîte — et, contrairement à un padding compensé par une marge
+     négative, il ne déplace rien : il n'entre pas dans le calcul de la mise en
+     page, et les marges des lignes voisines ne se fusionnent pas. */
+  --debord-masque: 0.22em;
+  clip-path: inset(calc(var(--debord-masque) * -1) 0);
 }
 
 .reveal-lines .line > span {
   display: block;
-  transform: translateY(105%);
+  /* Le départ tient compte du débord : sans lui, la ligne dépasserait sous le
+     masque élargi au lieu d'en être cachée avant son entrée. */
+  transform: translateY(calc(105% + var(--debord-masque)));
   transition: transform 1s var(--ease-out-expo);
   transition-delay: calc(var(--i, 0) * 90ms);
 }
