@@ -71,7 +71,7 @@ const jsonld = [
 >
   <!-- ============ HERO ============ -->
   <section class="hero" data-accueil>
-    <div class="hero__media media is-visible">
+    <div class="hero__media media is-visible" data-banniere>
       <Photo name="cerises-branche-02" lang={lang} priority sizes="100vw" decorative />
     </div>
     <div class="hero__inner wrap">
@@ -206,24 +206,37 @@ const jsonld = [
     background: var(--paper);
   }
 
-  /* Une installation à l'arrivée : la photographie entre à peine agrandie et
-     se pose à sa taille. Elle part de 1,04 — au-delà, le mouvement se remarque
-     au lieu de s'oublier — sur une courbe qui ralentit jusqu'au bout, et sur
-     trois secondes : assez lent pour qu'on ne sache pas trop ce qui a bougé.
+  /* Une installation à l'arrivée : la photographie entre agrandie et se pose
+     à sa taille. C'est le mouvement que le site donne déjà à tous ses médias
+     — de 1,06 à 1 dès qu'ils paraissent — mais plus ample et beaucoup plus
+     lent, parce qu'ici il installe la page entière : 1,08 sur trois secondes,
+     sur une courbe qui ralentit jusqu'au bout.
+
+     Reprendre ce mécanisme plutôt que d'en superposer un second n'est pas un
+     détail : une animation CSS et cette règle de transformation se disputaient
+     l'élément, et la photographie se retrouvait posée sans mouvement.
+
      Rien d'autre ne suit : c'est le décor qui se pose, pas la page qui bouge.
-     Le cadrage reste intact du début à la fin, l'image ne faisant que
-     déborder davantage de son cadre au départ. */
-  .hero__media :global(img) {
-    animation: installation 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+     Le cadrage reste intact du début à la fin, l'image ne faisant que déborder
+     davantage de son cadre au départ. */
+  .hero__media :global(img),
+  .hero__media :global(picture > img) {
+    transform: scale(1.08);
+    transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  @keyframes installation {
-    from {
-      transform: scale(1.04);
-    }
-    to {
-      transform: scale(1);
-    }
+  .hero__media.is-visible :global(img),
+  .hero__media.is-visible :global(picture > img) {
+    transform: scale(1);
+  }
+
+  /* Le temps d'un battement, quand on remet la photographie à sa taille de
+     départ pour rejouer l'entrée. Sans cela, le retour en arrière s'anime lui
+     aussi — la transition vaut dans les deux sens — et l'on repartirait du
+     milieu de nulle part au lieu de 1,08. */
+  .hero__media[data-sans-transition] :global(img),
+  .hero__media[data-sans-transition] :global(picture > img) {
+    transition: none;
   }
 
   /* La photographie se donne telle quelle : aucun voile clair par-dessus. Seul
@@ -490,3 +503,45 @@ const jsonld = [
   }
 
 </style>
+
+<script>
+  /**
+   * L'installation de la bannière : la photographie entre agrandie et se pose.
+   *
+   * Le HTML porte déjà `is-visible`, donc sans JavaScript la photographie
+   * s'affiche à sa taille, posée — jamais agrandie pour toujours. Ce script ne
+   * fait que retirer la classe puis la remettre, ce qui rejoue la transition
+   * depuis son premier instant. Il le fait à chaque arrivée sur l'accueil, y
+   * compris la première : le site navigue sans recharger la page, et sans cela
+   * la photographie revenait posée d'avance quand on retournait à l'accueil.
+   */
+  const installerBanniere = () => {
+    /* Qui a demandé moins de mouvement n'en reçoit pas davantage au retour. */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const banniere = document.querySelector<HTMLElement>('[data-banniere]');
+    if (!banniere) return;
+
+    /* On coupe la transition avant de reculer : sans cela le retour à 1,08
+       s'animerait lui aussi, et la remise de la classe repartirait du milieu
+       du chemin plutôt que du début. */
+    /* Deux trames d'attente, et non zéro : au retour sur l'accueil, la page
+       vient d'être échangée et la transition de vue du navigateur n'a pas
+       fini de rendre la main. Agir tout de suite ne donnait rien — mesuré,
+       l'échelle ne bougeait pas d'un millième. Une fois la première image
+       peinte, l'élément a un état de départ, et la transition part. */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        banniere.setAttribute('data-sans-transition', '');
+        banniere.classList.remove('is-visible');
+        /* Cette lecture fige l'état reculé : sans elle, le navigateur regroupe
+           tout en un seul recalcul et rien ne repart. */
+        void banniere.offsetWidth;
+        banniere.removeAttribute('data-sans-transition');
+        banniere.classList.add('is-visible');
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', installerBanniere);
+</script>

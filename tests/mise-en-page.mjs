@@ -351,6 +351,48 @@ titre('La signature défile en bas de chaque page');
   await calme.close();
 }
 
+/* ------------------------- 6. le mouvement survit à la navigation */
+/* Toute l'animation du site dépend d'une classe `js` posée sur <html> : sans
+   elle, la feuille de style fige les images de média, les apparitions au
+   défilement et les titres ligne à ligne — c'est le repli prévu quand les
+   scripts manquent. Or le site navigue sans recharger, et Astro reprend alors
+   les attributs du <html> de la page appelée, qui ne la porte pas. Elle
+   disparaissait au premier clic, et le site devenait immobile pour le reste de
+   la visite. Rien ne le signalait : la page restait juste, simplement figée. */
+titre('Le mouvement survit à la navigation sans rechargement');
+{
+  const pg = await (await navigateur.newContext({ viewport: { width: 1280, height: 900 } })).newPage();
+  await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
+  await pg.waitForTimeout(300);
+  check('au chargement, <html> porte la classe js', await pg.evaluate(() => document.documentElement.classList.contains('js')), true);
+
+  /* Trois pages d'affilée, en cliquant : c'est le parcours d'un vrai visiteur. */
+  for (const [lien, page] of [['/fr/cafes/', 'cafés'], ['/fr/origine/', 'origine'], ['/fr/', 'accueil']]) {
+    await pg.evaluate((cible) => {
+      const a = [...document.querySelectorAll('a[href]')].find(
+        (x) => new URL(x.href, location.href).pathname === cible && x.offsetParent,
+      );
+      a?.click();
+    }, lien);
+    await pg.waitForTimeout(1200);
+    check(`après un clic vers ${page}, la classe js est toujours là`, await pg.evaluate(() => document.documentElement.classList.contains('js')), true);
+  }
+
+  /* Et la bannière rejoue son entrée à chaque retour, plutôt que de se poser
+     d'avance : c'est ce que la classe manquante empêchait. */
+  const echelle = () =>
+    pg.evaluate(() => {
+      const img = document.querySelector('.hero__media img');
+      return img ? +new DOMMatrixReadOnly(getComputedStyle(img).transform).a.toFixed(2) : 0;
+    });
+  await pg.waitForTimeout(150);
+  const auRetour = await echelle();
+  check(`la bannière repart agrandie au retour (${auRetour})`, auRetour > 1.02, true);
+  await pg.waitForTimeout(3400);
+  check('et se pose bien à sa taille', await echelle(), 1);
+  await pg.close();
+}
+
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);
 if (echecs.length) echecs.forEach((e) => console.log('  ·', e));
 await navigateur.close();

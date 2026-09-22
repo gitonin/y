@@ -52,8 +52,21 @@ const t = useTranslations(lang);
     <meta name="theme-color" content="#efebe2" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="generator" content={Astro.generator} />
+    {/* La classe `js` commande tout le repli sans JavaScript : sans elle, la
+        feuille de style fige les images de média, les apparitions au
+        défilement et les titres ligne à ligne — c'est voulu, pour que la page
+        reste lisible quand les scripts manquent.
+
+        Mais le site navigue sans recharger, et Astro reprend alors les
+        attributs du `<html>` de la page appelée — qui ne porte pas la classe,
+        puisqu'elle est posée à l'exécution. Elle disparaissait donc au premier
+        clic, et le repli s'appliquait au reste de la visite : plus aucun
+        mouvement nulle part. On la repose après chaque échange de page. */}
     <script is:inline>
       document.documentElement.classList.add('js');
+      document.addEventListener('astro:after-swap', () => {
+        document.documentElement.classList.add('js');
+      });
     </script>
 
     <link rel="icon" href={asset("brand/favicon-96.png")} type="image/png" sizes="96x96" />
