@@ -7,8 +7,14 @@ export const SITE = {
   proEmail: 'hello@yunma.fr',
   pressEmail: 'hello@yunma.fr',
   /* Le contact direct passe par WhatsApp : c'est lui qui remplace le numéro,
-     sur le site comme dans les données envoyées aux moteurs. */
-  whatsapp: 'https://wa.me/yunma.coffee',
+     sur le site comme dans les données envoyées aux moteurs. Le numéro n'est
+     jamais écrit en toutes lettres — seul le mot « WhatsApp » est cliquable.
+
+     `wa.me` n'accepte qu'un numéro au format international, sans « + » ni
+     zéros de tête : 0033 6 42 05 04 58 s'écrit donc 33642050458. Un nom de
+     compte à la place du numéro ne fonctionne pas, quoi qu'en laisse penser
+     l'adresse — c'était le cas ici, et le lien ne menait nulle part. */
+  whatsapp: 'https://wa.me/33642050458',
   address: {
     street: '1 rue Ordener',
     postalCode: '75018',
