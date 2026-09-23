@@ -60,6 +60,12 @@ jobs:
       # Un dossier livré sans son .htaccess, ou dont les liens porteraient
       # encore un sous-dossier, serait découvert une fois en ligne. On regarde
       # avant, et on arrête tout plutôt que de livrer un dossier bancal.
+      # Le contrôle de référencement lit le dossier construit — ce que Google
+      # verra, non ce que le code voulait dire. Il échoue si une page perd sa
+      # canonique, sort du plan du site, ou pointe vers une adresse morte.
+      - name: Vérifier le référencement
+        run: npm run verifier-referencement
+
       - name: Contrôler le dossier avant de le livrer
         run: |
           echo "— Fichiers attendus"
