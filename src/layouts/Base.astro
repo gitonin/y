@@ -7,7 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Cart from '../components/Cart.astro';
 import Seo from '../components/Seo.astro';
-import Gyroscope from '../components/Gyroscope.astro';
+import Motion from '../components/Motion.astro';
 import type { Maillon } from '../components/FilAriane.astro';
 
 interface Props {
@@ -101,7 +101,7 @@ const t = useTranslations(lang);
 
     <Footer lang={lang} fil={fil} />
     <Cart lang={lang} />
-    <Gyroscope lang={lang} />
+    <Motion />
 
     <style is:global>
       .main {

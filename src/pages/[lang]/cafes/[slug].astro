@@ -164,7 +164,7 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
           fiche défile à droite, puis repart avec elle une fois le texte épuisé.
           Sur mobile, il ouvre simplement la page. */}
       <div class="pdp__visual">
-        <div class="media pdp__media">
+        <div class="media pdp__media" transition:name={`packshot-${product.slug}`}>
           <Packshot product={product} lang={lang} size="lg" />
         </div>
       </div>

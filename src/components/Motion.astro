@@ -1,0 +1,485 @@
+---
+/**
+ * Atelier de mouvement — la couche d'effets de la version d'essai.
+ *
+ * Tout ce qui est ici est décoratif : posé par-dessus un site qui fonctionne
+ * déjà sans. Rien n'y change la mise en page, aucun effet n'est nécessaire
+ * pour lire une page ou acheter un café, et la classe `motion` qui les
+ * commande n'est posée que si l'appareil ne demande pas moins d'animations.
+ *
+ * Ce qu'on y trouve :
+ *   · une jauge de lecture en haut de l'écran ;
+ *   · un grain photographique, très léger, sur toute la page ;
+ *   · le cisaillement à la vitesse du défilement — les visuels se penchent
+ *     un peu quand on va vite, se redressent quand on ralentit ;
+ *   · un curseur-halo sur ordinateur, qui grossit au survol des liens ;
+ *   · l'aimantation des boutons vers le pointeur ;
+ *   · les chiffres qui se comptent en entrant à l'écran ;
+ *   · une vignette qui s'envole vers le panier quand on ajoute un café ;
+ *   · une brève vibration au toucher, là où l'appareil la permet.
+ */
+---
+
+<div class="mo-jauge" data-mo-jauge aria-hidden="true"><i></i></div>
+<div class="mo-grain" aria-hidden="true"></div>
+<div class="mo-curseur" data-mo-curseur aria-hidden="true"></div>
+<div class="mo-rideau" data-mo-rideau aria-hidden="true"><span></span></div>
+
+<style is:global>
+  /* ---------- Jauge de lecture ---------- */
+  .mo-jauge {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 2px;
+    z-index: 80;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+  }
+
+  html.motion .mo-jauge {
+    opacity: 1;
+  }
+
+  .mo-jauge > i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: var(--accent, #b4552c);
+    transform: scaleX(var(--mo-progres, 0));
+    transform-origin: 0 50%;
+  }
+
+  /* Là où le navigateur sait animer au défilement, la jauge n'a plus besoin
+     de JavaScript : elle suit le document de bout en bout, sans une ligne. */
+  @supports (animation-timeline: scroll()) {
+    html.motion .mo-jauge > i {
+      transform: scaleX(0);
+      animation: mo-jauge linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+
+  @keyframes mo-jauge {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ---------- Grain ---------- */
+  .mo-grain {
+    position: fixed;
+    inset: -120px;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    transition: opacity 0.9s var(--ease);
+  }
+
+  html.motion .mo-grain {
+    opacity: 0.16;
+    animation: mo-grain 0.7s steps(1) infinite;
+  }
+
+  /* Le grain d'une photographie argentique bouge d'une image à l'autre. Fixe,
+     il ressemble à une salissure de l'écran ; c'est son frémissement qui le
+     fait lire comme une matière. */
+  @keyframes mo-grain {
+    0% { translate: 0 0; }
+    25% { translate: -14px 8px; }
+    50% { translate: 9px -12px; }
+    75% { translate: -6px -7px; }
+  }
+
+  /* ---------- Curseur-halo ---------- */
+  .mo-curseur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 26px;
+    height: 26px;
+    margin: -13px 0 0 -13px;
+    border-radius: 50%;
+    background: var(--paper, #efebe2);
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: 90;
+    opacity: 0;
+    translate: var(--mo-cx, -100px) var(--mo-cy, -100px);
+    scale: var(--mo-cs, 1);
+    transition: opacity 0.3s var(--ease), scale 0.35s var(--ease-out-expo);
+  }
+
+  html.motion.motion--fin .mo-curseur {
+    opacity: 1;
+  }
+
+  /* ---------- Cisaillement à la vitesse du défilement ---------- */
+  html.motion .media {
+    transform: skewY(var(--mo-skew, 0deg));
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ---------- Ressort au toucher ---------- */
+  html.motion .btn,
+  html.motion .pcard__link,
+  html.motion .hd__cart,
+  html.motion button:not(.mo-nu) {
+    transition:
+      scale 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+
+  html.motion .btn:active,
+  html.motion .pcard__link:active,
+  html.motion .hd__cart:active,
+  html.motion button:not(.mo-nu):active {
+    scale: 0.965;
+  }
+
+  /* ---------- Aimantation ---------- */
+  html.motion [data-mo-aimant] {
+    translate: var(--mo-ax, 0) var(--mo-ay, 0);
+    transition: translate 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ---------- Rideau d'entrée ----------
+     Une fois par visite, pas à chaque page : répété à chaque clic, il
+     deviendrait une porte à pousser plutôt qu'un lever de rideau. */
+  .mo-rideau {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--ink, #212121);
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    clip-path: inset(0 0 0 0);
+  }
+
+  .mo-rideau[hidden] {
+    display: none;
+  }
+
+  .mo-rideau > span {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent, #b4552c);
+  }
+
+  html.motion .mo-rideau {
+    animation: mo-lever 1.15s cubic-bezier(0.76, 0, 0.24, 1) 0.25s both;
+  }
+
+  html.motion .mo-rideau > span {
+    animation: mo-poincon 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes mo-lever {
+    to {
+      clip-path: inset(0 0 100% 0);
+    }
+  }
+
+  @keyframes mo-poincon {
+    from { scale: 0.2; opacity: 0; }
+    60%  { scale: 1; opacity: 1; }
+    to   { scale: 0.2; opacity: 0; }
+  }
+
+  /* ---------- Vignettes en volume ----------
+     Le pointeur incline la carte, et la photographie avance devant elle. Sur
+     tactile il n'y a pas de survol : la règle ne s'applique qu'aux pointeurs
+     précis, et rien ne se fige sous un doigt. */
+  @media (pointer: fine) {
+    html.motion .pcard {
+      perspective: 900px;
+    }
+
+    html.motion .pcard__link {
+      transform: rotateX(var(--mo-rx, 0deg)) rotateY(var(--mo-ry, 0deg));
+      transform-style: preserve-3d;
+      transition:
+        transform 0.5s var(--ease-out-expo),
+        translate 0.45s var(--ease-out-expo);
+    }
+  }
+
+  /* ---------- Poinçon qui tourne au défilement ---------- */
+  @supports (animation-timeline: view()) {
+    html.motion .poincon {
+      animation: mo-tourne linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    @keyframes mo-tourne {
+      from { rotate: -75deg; }
+      to   { rotate: 75deg; }
+    }
+  }
+
+  /* ---------- Vignette qui s'envole vers le panier ---------- */
+  .mo-vol {
+    position: fixed;
+    z-index: 95;
+    border-radius: 4px;
+    object-fit: cover;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mo-jauge,
+    .mo-grain,
+    .mo-curseur,
+    .mo-rideau {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const RACINE = document.documentElement;
+  const doux = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Jauge de lecture (repli pour les navigateurs sans
+       animation au défilement : la règle CSS prend le dessus quand elle
+       existe, ce calcul ne sert alors à rien mais ne coûte rien non plus) ---- */
+  let jaugeDemandee = false;
+  const majJauge = () => {
+    jaugeDemandee = false;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    RACINE.style.setProperty('--mo-progres', h > 0 ? String(Math.min(1, window.scrollY / h)) : '0');
+  };
+
+  /* ---------- Cisaillement à la vitesse ---------- */
+  let dernierY = 0;
+  let skew = 0;
+  let cibleSkew = 0;
+
+  /* ---------- Curseur ---------- */
+  let cx = -100;
+  let cy = -100;
+  let vx = -100;
+  let vy = -100;
+
+  let boucle = 0;
+  const peindre = () => {
+    /* Le cisaillement revient vers zéro de lui-même : sans ce rappel, une
+       page arrêtée net resterait penchée. */
+    skew += (cibleSkew - skew) * 0.12;
+    cibleSkew *= 0.82;
+    RACINE.style.setProperty('--mo-skew', `${skew.toFixed(3)}deg`);
+
+    vx += (cx - vx) * 0.18;
+    vy += (cy - vy) * 0.18;
+    RACINE.style.setProperty('--mo-cx', `${vx.toFixed(1)}px`);
+    RACINE.style.setProperty('--mo-cy', `${vy.toFixed(1)}px`);
+
+    boucle = requestAnimationFrame(peindre);
+  };
+
+  const surDefilement = () => {
+    const y = window.scrollY;
+    const v = y - dernierY;
+    dernierY = y;
+    /* Deux degrés au plus : au-delà, le site tangue au lieu de respirer. */
+    cibleSkew = Math.max(-2, Math.min(2, v * 0.035));
+    if (!jaugeDemandee) {
+      jaugeDemandee = true;
+      requestAnimationFrame(majJauge);
+    }
+  };
+
+  /* ---------- Chiffres qui se comptent ---------- */
+  const compter = (el: HTMLElement) => {
+    /* Une seule fois par repère, définitivement. Relancé pendant qu'il compte,
+       le décompte lisait sa propre valeur en cours de route et la prenait pour
+       cible : « 1 300 » se figeait à « 1 299 ». */
+    if (el.dataset.moCompte) return;
+    el.dataset.moCompte = '1';
+    const texte = el.textContent ?? '';
+    /* Un repère peut s'écrire « 1 300 – 1 800 m » : on n'anime que le premier
+       nombre et on laisse le reste intact, plutôt que de le réécrire. */
+    const m = texte.match(/[\d  \s]*\d/);
+    if (!m) return;
+    const brut = m[0];
+    const cible = Number(brut.replace(/[^\d]/g, ''));
+    if (!Number.isFinite(cible) || cible === 0) return;
+    const reste = texte.slice(m.index! + brut.length);
+    const avant = texte.slice(0, m.index);
+    const groupe = (n: number) => n.toLocaleString('fr-FR').replace(/ |,/g, ' ');
+    const duree = 900;
+    const depart = performance.now();
+    const pas = (t: number) => {
+      const p = Math.min(1, (t - depart) / duree);
+      const adouci = 1 - Math.pow(1 - p, 3);
+      el.textContent = avant + groupe(Math.round(cible * adouci)) + reste;
+      if (p < 1) requestAnimationFrame(pas);
+    };
+    requestAnimationFrame(pas);
+  };
+
+  /* ---------- Vol vers le panier ---------- */
+  const voler = (source: HTMLElement) => {
+    const img = document.querySelector<HTMLImageElement>('.pdp__media img, .pcard__media img');
+    const panier = document.querySelector<HTMLElement>('[data-cart-toggle]');
+    if (!img || !panier) return;
+    const a = img.getBoundingClientRect();
+    const b = panier.getBoundingClientRect();
+    const clone = img.cloneNode(true) as HTMLImageElement;
+    clone.className = 'mo-vol';
+    Object.assign(clone.style, { left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px` });
+    document.body.appendChild(clone);
+    const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+    const dy = b.top + b.height / 2 - (a.top + a.height / 2);
+    clone
+      .animate(
+        [
+          { transform: 'translate(0,0) scale(1)', opacity: 0.95, borderRadius: '4px' },
+          { transform: `translate(${dx * 0.55}px, ${dy * 0.35}px) scale(0.5)`, opacity: 0.85, offset: 0.55 },
+          { transform: `translate(${dx}px, ${dy}px) scale(0.06)`, opacity: 0, borderRadius: '50%' },
+        ],
+        { duration: 760, easing: 'cubic-bezier(0.5, 0, 0.2, 1)' },
+      )
+      .addEventListener('finish', () => clone.remove());
+    panier.animate([{ scale: 1 }, { scale: 1.22 }, { scale: 1 }], { duration: 480, delay: 620, easing: 'ease-out' });
+  };
+
+  /* ---------- Installation ---------- */
+  let installe = false;
+
+  const observateurChiffres = new IntersectionObserver(
+    (entrees) => {
+      entrees.forEach((e) => {
+        if (!e.isIntersecting) return;
+        compter(e.target as HTMLElement);
+        observateurChiffres.unobserve(e.target);
+      });
+    },
+    { threshold: 0.6 },
+  );
+
+  /* Le rideau ne se lève qu'une fois par visite. Chaque page en porte un dans
+     son balisage, et le site navigue sans recharger : sans ce traitement à
+     chaque échange, il reparaîtrait à tous les clics.
+
+     On le retire aussi lorsque le mouvement est refusé — sans animation pour
+     le lever, il resterait un écran noir sur toute la page. Et il s'en va du
+     document plutôt que de se cacher : même transparent, il garderait une
+     surface de la taille de l'écran par-dessus tout le reste. */
+  const traiterRideau = () => {
+    const rideau = document.querySelector<HTMLElement>('[data-mo-rideau]');
+    if (!rideau) return;
+    let dejaVu = true;
+    try {
+      dejaVu = !!sessionStorage.getItem('yunma:rideau');
+      sessionStorage.setItem('yunma:rideau', '1');
+    } catch {
+      /* navigation privée : on s'abstient plutôt que de le rejouer sans fin */
+    }
+    if (dejaVu || doux()) rideau.remove();
+    else setTimeout(() => rideau.remove(), 1700);
+  };
+
+  const parPage = () => {
+    traiterRideau();
+    if (!RACINE.classList.contains('motion')) return;
+    document
+      .querySelectorAll<HTMLElement>('.figures__value:not([data-mo-compte])')
+      .forEach((el) => observateurChiffres.observe(el));
+    document.querySelectorAll<HTMLElement>('.btn, [data-add-to-cart]').forEach((el) => el.setAttribute('data-mo-aimant', ''));
+    dernierY = window.scrollY;
+    majJauge();
+  };
+
+  const installer = () => {
+    /* `astro:page-load` se déclenche aussi au tout premier chargement : un
+       appel direct en plus poserait le drapeau avant que le rideau n'ait eu
+       le temps de se lever, et le ferait disparaître aussitôt. */
+    document.addEventListener('astro:page-load', parPage);
+    if (installe || doux()) return;
+    installe = true;
+    const classes = ['motion'];
+    if (window.matchMedia('(pointer: fine)').matches) classes.push('motion--fin');
+    RACINE.classList.add(...classes);
+
+    /* Le site navigue sans recharger, et Astro reprend alors les attributs du
+       `<html>` de la page appelée — qui ne porte pas ces classes, posées à
+       l'exécution. Sans cela, tous les effets mouraient au premier clic. On
+       les repose sur le document entrant, avant l'échange. */
+    document.addEventListener('astro:before-swap', (evenement) => {
+      (evenement as unknown as { newDocument: Document }).newDocument.documentElement.classList.add(...classes);
+    });
+
+    window.addEventListener('scroll', surDefilement, { passive: true });
+    boucle = requestAnimationFrame(peindre);
+
+    /* Curseur et aimantation ne concernent que les pointeurs précis : sur
+       tactile, il n'y a pas de survol, et un halo qui suivrait le doigt
+       masquerait ce qu'on touche. */
+    if (window.matchMedia('(pointer: fine)').matches) {
+      window.addEventListener(
+        'pointermove',
+        (e) => {
+          cx = e.clientX;
+          cy = e.clientY;
+          const survole = (e.target as Element)?.closest?.('a, button');
+          RACINE.style.setProperty('--mo-cs', survole ? '2.6' : '1');
+
+          const aimant = (e.target as Element)?.closest?.<HTMLElement>('[data-mo-aimant]');
+          document.querySelectorAll<HTMLElement>('[data-mo-aimant]').forEach((el) => {
+            if (el !== aimant) {
+              el.style.setProperty('--mo-ax', '0px');
+              el.style.setProperty('--mo-ay', '0px');
+            }
+          });
+          if (aimant) {
+            const r = aimant.getBoundingClientRect();
+            aimant.style.setProperty('--mo-ax', `${((e.clientX - (r.left + r.width / 2)) * 0.22).toFixed(1)}px`);
+            aimant.style.setProperty('--mo-ay', `${((e.clientY - (r.top + r.height / 2)) * 0.3).toFixed(1)}px`);
+          }
+        },
+        { passive: true },
+      );
+    }
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener(
+        'pointermove',
+        (e) => {
+          const carte = (e.target as Element)?.closest?.<HTMLElement>('.pcard__link');
+          document.querySelectorAll<HTMLElement>('.pcard__link').forEach((el) => {
+            if (el === carte) return;
+            el.style.removeProperty('--mo-rx');
+            el.style.removeProperty('--mo-ry');
+          });
+          if (!carte) return;
+          const r = carte.getBoundingClientRect();
+          carte.style.setProperty('--mo-ry', `${(((e.clientX - r.left) / r.width - 0.5) * 9).toFixed(2)}deg`);
+          carte.style.setProperty('--mo-rx', `${((0.5 - (e.clientY - r.top) / r.height) * 9).toFixed(2)}deg`);
+        },
+        { passive: true },
+      );
+    }
+
+    /* Une vibration brève à l'ajout au panier : c'est le seul geste du site
+       qui engage vraiment, et le seul qui mérite d'être senti. Android la
+       rend, iOS l'ignore en silence — aucun des deux n'a besoin d'être
+       détecté. */
+    document.addEventListener('click', (e) => {
+      const ajout = (e.target as Element)?.closest?.<HTMLElement>('[data-add-to-cart]');
+      if (!ajout) return;
+      navigator.vibrate?.(12);
+      voler(ajout);
+    });
+  };
+
+  installer();
+</script>

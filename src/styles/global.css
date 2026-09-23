@@ -515,44 +515,6 @@ h3 {
   transform: translateY(0);
 }
 
-/* ---------- Essai : les visuels prennent du volume ----------
-   Deux mouvements de vitesses différentes : le cadre s'incline en perspective,
-   la photographie glisse à l'intérieur. C'est leur décalage qui fait le
-   relief, pas la déformation elle-même.
-
-   Tout est sous `html.volume`, posée par le script seulement quand une source
-   de mouvement existe : sans capteur, sans souris, ou si l'on a demandé moins
-   d'animations, le site reste exactement celui d'avant. */
-html.volume .media {
-  transform: perspective(900px) rotateX(var(--volume-rx, 0deg)) rotateY(var(--volume-ry, 0deg));
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-/* La glisse se compte en pourcentage de l'image, et la marge qui la rend
-   possible vient d'un léger agrandissement : en pixels fixes, un petit cadre
-   de la grille mobile aurait découvert son bord là où un grand n'aurait rien
-   laissé voir.
-
-   `scale` et `translate` sont des propriétés à part entière, distinctes de
-   `transform` : elles s'ajoutent au dézoom d'apparition sans le contrarier.
-
-   On vise toute image du cadre, à quelque profondeur qu'elle soit : les
-   packshots logent la leur dans un étage intermédiaire, qu'un sélecteur
-   d'enfant direct manquait. */
-html.volume .media img,
-html.volume .media svg {
-  scale: 1.06;
-  translate: var(--volume-tx, 0) var(--volume-ty, 0);
-}
-
-/* La bannière d'accueil mène son propre dézoom, sur trois secondes. On ne lui
-   ajoute que la glisse : l'incliner en plus donnerait deux gestes qui se
-   contrarient à l'arrivée sur le site. */
-html.volume .hero__media {
-  transform: none;
-}
-
 /* ---------- Médias ---------- */
 .media {
   position: relative;
@@ -710,6 +672,90 @@ html.sans-transition .reveal-lines .line > span,
 html.sans-transition .media:not([data-banniere]) > img,
 html.sans-transition .media:not([data-banniere]) > svg {
   transition: none !important;
+}
+
+/* ---------- Atelier de mouvement (version d'essai) ----------
+   Ce bloc n'existe que sur la branche d'essai. Il s'ajoute au site sans rien
+   lui retirer : chaque règle est sous `html.motion`, que le script ne pose
+   qu'en l'absence de demande de sobriété. */
+
+/* La photographie dérive dans son cadre au fil du défilement. Écrit avec la
+   chronologie native du navigateur : pas une ligne de JavaScript, pas un
+   écouteur, et le navigateur l'anime hors du fil principal. Là où elle
+   n'existe pas encore, il ne se passe simplement rien. */
+@supports (animation-timeline: view()) {
+  html.motion .media > img,
+  html.motion .media > picture > img {
+    animation: mo-derive linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  @keyframes mo-derive {
+    from {
+      translate: 0 -3.5%;
+    }
+    to {
+      translate: 0 3.5%;
+    }
+  }
+
+  /* Les blocs de texte arrivent un peu flous et se posent net : l'œil lit le
+     mouvement comme une mise au point, non comme un glissement. */
+  html.motion [data-reveal] {
+    animation: mo-nettete linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+
+  @keyframes mo-nettete {
+    from {
+      filter: blur(7px);
+    }
+    to {
+      filter: blur(0);
+    }
+  }
+}
+
+/* Les lignes de titre montent en se dévoilant, avec un léger flou qui se
+   dissipe — le mouvement paraît alors venir de la profondeur du papier. */
+html.motion .reveal-lines .line > span {
+  filter: blur(8px);
+  transition:
+    transform 1s var(--ease-out-expo),
+    filter 0.75s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+html.motion .reveal-lines.is-visible .line > span {
+  filter: blur(0);
+}
+
+/* Les vignettes du catalogue se soulèvent au survol, et leur photographie
+   avance un peu plus vite que leur cadre. */
+html.motion .pcard__link {
+  transition: translate 0.45s var(--ease-out-expo);
+}
+
+html.motion .pcard__link:hover {
+  translate: 0 -6px;
+}
+
+html.motion .pcard__media :global(img) {
+  transition: scale 0.7s var(--ease-out-expo);
+}
+
+html.motion .pcard__link:hover .pcard__media :global(img) {
+  scale: 1.05;
+}
+
+/* La transformation d'une image d'une page à l'autre : la vignette du
+   catalogue devient la photographie de la fiche, au lieu de disparaître pour
+   qu'une autre reparaisse. Les deux portent le même nom de transition. */
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ---------- Repli sans JavaScript ---------- */
