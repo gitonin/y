@@ -2,7 +2,7 @@
 #
 # Deux versions seulement sont en ligne :
 #   https://<utilisateur>.github.io/<dépôt>/v4/   -> version 4, la référence
-#   https://<utilisateur>.github.io/<dépôt>/v2/   -> version 2, pour comparer
+#   https://<utilisateur>.github.io/<dépôt>/v2/   -> essai en cours, à juger
 #
 # La racine n'est plus un site : c'est un simple sommaire qui mène aux deux.
 # Les versions 1, 3 et 5 ont été retirées — la v4 est celle que l'on garde.
@@ -33,14 +33,17 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  V2_BRANCH: claude/yunma-site-v2
+  # L'emplacement /v2/ sert désormais d'atelier : il porte la branche d'essai
+  # du moment, et non plus l'ancienne version 2 — dont la branche reste
+  # intacte sur le dépôt, prête à revenir ici si besoin.
+  V2_BRANCH: claude/yunma-gyro
   V4_BRANCH: claude/yunma-site-v4
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Récupérer la version 2
+      - name: Récupérer la branche d'essai
         uses: actions/checkout@v4
         with:
           ref: ${{ env.V2_BRANCH }}
@@ -69,10 +72,10 @@ jobs:
           base="${base%/}"
           echo "v2=${base}/v2/" >> "$GITHUB_OUTPUT"
           echo "v4=${base}/v4/" >> "$GITHUB_OUTPUT"
-          echo "version 2 -> ${base}/v2/"
+          echo "essai -> ${base}/v2/"
           echo "version 4 -> ${base}/v4/"
 
-      - name: Construire la version 2
+      - name: Construire l'essai
         working-directory: v2
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
@@ -137,15 +140,15 @@ jobs:
             </head>
             <body>
               <h1>Yunma — aperçus</h1>
-              <p>Deux versions du site sont en ligne. La version 4 est celle que nous faisons évoluer.</p>
+              <p>La version 4 est le site de référence. L’essai reprend le même site, avec un effet en cours d’évaluation.</p>
               <ul>
                 <li><a href="v4/"><strong>Version 4</strong><span>la version de référence</span></a></li>
-                <li><a href="v2/"><strong>Version 2</strong><span>conservée pour comparer</span></a></li>
+                <li><a href="v2/"><strong>Essai — relief au gyroscope</strong><span>à ouvrir sur mobile</span></a></li>
               </ul>
             </body>
           </html>
           HTML
-          echo "Publié : /v2/, /v4/ et un sommaire à la racine"
+          echo "Publié : /v2/ (essai), /v4/ et un sommaire à la racine"
           ls site site/v2 site/v4 | head -40
 
       # Filet de sécurité : si une version pointait vers un mauvais dossier,
@@ -163,7 +166,7 @@ jobs:
             fi
             echo "$nom : liens vers $expected — conforme"
           }
-          check site/v2/fr/index.html '${{ steps.paths.outputs.v2 }}' 'version 2'
+          check site/v2/fr/index.html '${{ steps.paths.outputs.v2 }}' 'essai'
           check site/v4/fr/index.html '${{ steps.paths.outputs.v4 }}' 'version 4'
           # Le sommaire doit mener quelque part : ses deux liens sont vérifiés.
           for cible in v2 v4; do
