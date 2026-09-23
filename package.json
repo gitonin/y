@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "verifier-contenu": "node outils/verifier-contenu.mjs",
+    "verifier-referencement": "node tests/referencement.mjs",
     "ids-shopify": "node outils/ids-shopify.mjs",
     "theme-zip": "sh outils/theme-zip.sh",
     "export-contenu": "node scripts/export-contenu.mjs",

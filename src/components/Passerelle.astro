@@ -33,8 +33,12 @@ const secours = destinations.fr;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titre} — Yunma</title>
+    {/* Pas de canonique. Associée à `noindex`, elle envoie deux signaux
+        contraires : la canonique dit « le contenu de cette page vit là-bas »,
+        le noindex dit « ne l'indexe pas » — et le refus peut se reporter sur
+        la page désignée, ici les vraies fiches café. `follow` suffit : les
+        moteurs suivent le renvoi et indexent la destination. */}
     <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href={canonical} />
     <link rel="icon" href={asset('brand/favicon-96.png')} type="image/png" sizes="96x96" />
     <meta http-equiv="refresh" content={`0; url=${secours}`} />
     <script is:inline define:vars={{ destinations, secours }}>

@@ -64,8 +64,14 @@ export function stripLang(pathname: string): string {
 
 /** Alternates hreflang par défaut : même chemin, autre langue. */
 export function defaultAlternates(pathname: string): Record<Lang, string> {
-  // La page 404 n'existe pas par langue : on renvoie vers les accueils.
-  const rest = stripLang(pathname) === '404' ? '' : stripLang(pathname);
+  /* Quelques pages vivent hors de la structure par langue : la 404, la planche
+     des composants. Leur chemin n'ayant pas de version traduite, en fabriquer
+     une donnerait « /en/composants/ », qui n'existe pas — on renvoie donc vers
+     les trois accueils. Une page ajoutée demain hors de cette structure sera
+     traitée de même, sans qu'on ait à y penser. */
+  const sansLangue = !/^\/(fr|en|zh)(\/|$)/.test(pathname);
+  const nu = stripLang(pathname);
+  const rest = nu === '404' || sansLangue ? '' : nu;
   return {
     fr: url('fr', rest),
     en: url('en', rest),

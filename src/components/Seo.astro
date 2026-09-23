@@ -75,7 +75,12 @@ const graph = {
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
-<link rel="canonical" href={canonical} />
+{/* La canonique n'a de sens que sur une page ouverte à l'indexation.
+    Posée sur une page écartée, elle envoie deux signaux contraires — « le
+    contenu vit là-bas » d'un côté, « ne l'indexe pas » de l'autre — et le
+    refus peut se reporter sur la page désignée. C'est la règle, non
+    l'exception : elle vaut pour la 404 comme pour les aperçus. */}
+{!(noindex || apercu) && <link rel="canonical" href={canonical} />}
 
 {
   languages.map((code) => (

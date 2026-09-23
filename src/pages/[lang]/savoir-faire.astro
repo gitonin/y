@@ -5,14 +5,13 @@
  */
 import type { GetStaticPaths } from 'astro';
 import { langPaths } from '../../i18n/paths';
-import { useTranslations, route, absolute, asset, type Lang } from '../../i18n/utils';
+import { useTranslations, route, asset, type Lang } from '../../i18n/utils';
 
 export const getStaticPaths: GetStaticPaths = () => langPaths();
 
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 const cible = `${route(lang, 'origine')}#savoir-faire`;
-const canonique = absolute(Astro.site, `${lang}/origine/`);
 ---
 
 <!doctype html>
@@ -21,8 +20,11 @@ const canonique = absolute(Astro.site, `${lang}/origine/`);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{t.origine.seoTitle}</title>
+    {/* Pas de canonique : associée à `noindex`, elle ferait porter le refus
+        d'indexation sur la page désignée — ici « Origine », qu'on veut
+        justement voir indexée. `follow` suffit à mener les moteurs jusqu'à
+        elle. */}
     <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href={canonique} />
     <meta http-equiv="refresh" content={`0; url=${cible}`} />
     <link rel="icon" href={asset('brand/favicon-96.png')} type="image/png" sizes="96x96" />
     <style>
