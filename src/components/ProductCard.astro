@@ -22,7 +22,11 @@ const epuise = product.variants.every((v) => !v.available);
 <article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
   <a class="pcard__link media-link" href={productUrl(lang, product.slug)}>
     <div class="media pcard__media">
-      <Packshot product={product} lang={lang} size={compact ? 'sm' : 'md'} decorative />
+      {/* Le texte alternatif du packshot sert : c'est par lui qu'une
+          photographie de sachet remonte dans la recherche d'images, et le
+          nom du café figure juste en dessous sans faire doublon — il n'est
+          pas lu deux fois, l'un décrit l'image, l'autre titre la vignette. */}
+      <Packshot product={product} lang={lang} size={compact ? 'sm' : 'md'} />
     </div>
     <div class="pcard__body">
       <h3 class="pcard__name">{product.name[lang]}</h3>
