@@ -17,8 +17,12 @@ const canonical = absolute(Astro.site, 'fr/');
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Yunma — Cafés de spécialité du Yunnan</title>
+    {/* Pas de canonique ici. Associée à `noindex`, elle envoyait deux signaux
+        contraires : la canonique dit « le contenu de cette page vit là-bas »,
+        le noindex dit « ne l'indexe pas » — et Google peut alors reporter le
+        refus sur la page désignée, c'est-à-dire sur la vraie page d'accueil.
+        `follow` suffit : les moteurs suivent le renvoi et indexent /fr/. */}
     <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href={canonical} />
     {
       languages.map((code) => (
         <link

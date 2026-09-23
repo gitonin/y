@@ -33,6 +33,34 @@ ErrorDocument 404 /404.html
   RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 </IfModule>
 
+# ----------------------------------------------------------------------------
+# Racine : renvoi vers la langue du visiteur
+# ----------------------------------------------------------------------------
+# Mieux vaut renvoyer depuis le serveur que servir une page qui se contente de
+# rebondir : un renvoi HTTP ne laisse aucune page à indexer, donc aucun signal
+# contradictoire à démêler pour les moteurs. La page de rebond reste en place
+# derrière, au cas où mod_rewrite manquerait.
+#
+# 302 et non 301 : la destination dépend du visiteur. Figée dans les caches,
+# elle enverrait tout le monde vers la langue du premier arrivé.
+<IfModule mod_rewrite.c>
+  RewriteCond %{HTTP:Accept-Language} ^zh [NC]
+  RewriteRule ^(index\.html)?$ /zh/ [R=302,L]
+
+  RewriteCond %{HTTP:Accept-Language} ^en [NC]
+  RewriteRule ^(index\.html)?$ /en/ [R=302,L]
+
+  RewriteRule ^(index\.html)?$ /fr/ [R=302,L]
+</IfModule>
+
+# Les caches doivent distinguer les langues, sans quoi le premier passage
+# servirait sa destination à tous les suivants.
+<IfModule mod_headers.c>
+  <FilesMatch "^index\.html$">
+    Header set Vary "Accept-Language"
+  </FilesMatch>
+</IfModule>
+
 # Une adresse sans barre finale reçoit sa barre : le site est construit en
 # dossiers (`/fr/cafes/` → `/fr/cafes/index.html`), et c'est mod_dir qui s'en
 # charge. On le réaffirme, le réglage pouvant être désactivé sur certains hôtes.
