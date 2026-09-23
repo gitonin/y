@@ -515,6 +515,44 @@ h3 {
   transform: translateY(0);
 }
 
+/* ---------- Essai : les visuels prennent du volume ----------
+   Deux mouvements de vitesses différentes : le cadre s'incline en perspective,
+   la photographie glisse à l'intérieur. C'est leur décalage qui fait le
+   relief, pas la déformation elle-même.
+
+   Tout est sous `html.volume`, posée par le script seulement quand une source
+   de mouvement existe : sans capteur, sans souris, ou si l'on a demandé moins
+   d'animations, le site reste exactement celui d'avant. */
+html.volume .media {
+  transform: perspective(900px) rotateX(var(--volume-rx, 0deg)) rotateY(var(--volume-ry, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* La glisse se compte en pourcentage de l'image, et la marge qui la rend
+   possible vient d'un léger agrandissement : en pixels fixes, un petit cadre
+   de la grille mobile aurait découvert son bord là où un grand n'aurait rien
+   laissé voir.
+
+   `scale` et `translate` sont des propriétés à part entière, distinctes de
+   `transform` : elles s'ajoutent au dézoom d'apparition sans le contrarier.
+
+   On vise toute image du cadre, à quelque profondeur qu'elle soit : les
+   packshots logent la leur dans un étage intermédiaire, qu'un sélecteur
+   d'enfant direct manquait. */
+html.volume .media img,
+html.volume .media svg {
+  scale: 1.06;
+  translate: var(--volume-tx, 0) var(--volume-ty, 0);
+}
+
+/* La bannière d'accueil mène son propre dézoom, sur trois secondes. On ne lui
+   ajoute que la glisse : l'incliner en plus donnerait deux gestes qui se
+   contrarient à l'arrivée sur le site. */
+html.volume .hero__media {
+  transform: none;
+}
+
 /* ---------- Médias ---------- */
 .media {
   position: relative;

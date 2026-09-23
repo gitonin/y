@@ -1,0 +1,213 @@
+---
+/**
+ * Essai : les visuels prennent du volume quand on bouge le téléphone.
+ *
+ * Chaque cadre s'incline légèrement en perspective, et la photographie glisse
+ * à l'intérieur — deux mouvements de vitesses différentes, qui donnent à l'œil
+ * une impression de profondeur. Le procédé est celui d'un stéréogramme : ce
+ * n'est pas la déformation qui fait le relief, c'est le décalage entre le
+ * cadre et son contenu.
+ *
+ * Trois sources, selon ce que l'appareil sait faire :
+ *   · le gyroscope, sur mobile — le vrai sujet de cet essai ;
+ *   · la souris, sur ordinateur — pour juger de l'effet sans téléphone ;
+ *   · rien du tout, si l'on a demandé moins d'animations.
+ *
+ * iOS ne livre l'orientation qu'après un accord explicite, et seulement si la
+ * demande part d'un geste : d'où le bouton, qui n'apparaît que là où il sert.
+ */
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const libelle = { fr: 'Activer le relief', en: 'Enable depth', zh: '开启立体效果' }[lang];
+const aide = {
+  fr: 'Bougez votre téléphone pour voir les visuels prendre du volume.',
+  en: 'Move your phone to see the visuals gain depth.',
+  zh: '移动手机，感受画面的立体感。',
+}[lang];
+---
+
+<button type="button" class="gyro" data-gyro hidden aria-describedby="gyro-aide">
+  <span class="gyro__point" aria-hidden="true"></span>
+  {libelle}
+</button>
+<p id="gyro-aide" class="visually-hidden">{aide}</p>
+
+<style>
+  .gyro {
+    position: fixed;
+    left: 50%;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.22);
+    cursor: pointer;
+  }
+
+  .gyro[hidden] {
+    display: none;
+  }
+
+  .gyro__point {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent, #b4552c);
+  }
+</style>
+
+<script>
+  /* Réglages — volontairement discrets : au-delà, l'effet cesse d'être une
+     impression de volume pour devenir un tangage. */
+  const INCLINAISON_MAX = 7; // degrés de rotation du cadre
+  const GLISSE_MAX = 2; // décalage de la photographie, en % de sa propre taille
+  const AMORTI = 0.12; // 0 = figé, 1 = instantané ; lisse la main qui tremble
+
+  type Point = { x: number; y: number };
+
+  let cible: Point = { x: 0, y: 0 };
+  let courant: Point = { x: 0, y: 0 };
+  let boucle = 0;
+  let origine: { beta: number; gamma: number } | null = null;
+  let branche = false;
+
+  const borne = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+
+  const peindre = () => {
+    courant = {
+      x: courant.x + (cible.x - courant.x) * AMORTI,
+      y: courant.y + (cible.y - courant.y) * AMORTI,
+    };
+    const r = document.documentElement.style;
+    r.setProperty('--volume-rx', `${(-courant.y * INCLINAISON_MAX).toFixed(2)}deg`);
+    r.setProperty('--volume-ry', `${(courant.x * INCLINAISON_MAX).toFixed(2)}deg`);
+    r.setProperty('--volume-tx', `${(-courant.x * GLISSE_MAX).toFixed(2)}%`);
+    r.setProperty('--volume-ty', `${(-courant.y * GLISSE_MAX).toFixed(2)}%`);
+    boucle = requestAnimationFrame(peindre);
+  };
+
+  const demarrer = () => {
+    if (boucle) return;
+    document.documentElement.classList.add('volume');
+    boucle = requestAnimationFrame(peindre);
+  };
+
+  /* Le gyroscope. `gamma` est le roulis gauche-droite, `beta` le tangage
+     avant-arrière. On retient la toute première mesure comme position neutre :
+     un téléphone se tient incliné vers soi, et prendre zéro pour origine
+     laisserait les visuels penchés en permanence. */
+  const surInclinaison = (e: DeviceOrientationEvent) => {
+    if (e.gamma === null || e.beta === null) return;
+    if (!origine) origine = { beta: e.beta, gamma: e.gamma };
+    cible = {
+      x: borne((e.gamma - origine.gamma) / 30, -1, 1),
+      y: borne((e.beta - origine.beta) / 30, -1, 1),
+    };
+  };
+
+  const surSouris = (e: PointerEvent) => {
+    cible = {
+      x: borne((e.clientX / window.innerWidth) * 2 - 1, -1, 1),
+      y: borne((e.clientY / window.innerHeight) * 2 - 1, -1, 1),
+    };
+  };
+
+  async function brancherGyroscope(): Promise<boolean> {
+    const D = window.DeviceOrientationEvent as
+      | (typeof DeviceOrientationEvent & { requestPermission?: () => Promise<string> })
+      | undefined;
+    if (!D) return false;
+    if (typeof D.requestPermission === 'function') {
+      try {
+        if ((await D.requestPermission()) !== 'granted') return false;
+      } catch {
+        return false;
+      }
+    }
+    /* Un capteur annoncé mais muet existe : on ne l'attend pas indéfiniment. */
+    return new Promise<boolean>((resolve) => {
+      let recu = false;
+      const sonde = (e: DeviceOrientationEvent) => {
+        if (e.gamma === null) return;
+        recu = true;
+        window.removeEventListener('deviceorientation', sonde);
+        window.addEventListener('deviceorientation', surInclinaison);
+        resolve(true);
+      };
+      window.addEventListener('deviceorientation', sonde);
+      setTimeout(() => {
+        if (recu) return;
+        window.removeEventListener('deviceorientation', sonde);
+        resolve(false);
+      }, 800);
+    });
+  }
+
+  const installer = async () => {
+    if (branche) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const bouton = document.querySelector<HTMLButtonElement>('[data-gyro]');
+    const tactile = window.matchMedia('(pointer: coarse)').matches;
+
+    if (!tactile) {
+      /* Sur ordinateur, la souris tient lieu de gyroscope : l'effet se juge
+         sans téléphone, et rien ne s'affiche à l'écran. */
+      window.addEventListener('pointermove', surSouris, { passive: true });
+      branche = true;
+      demarrer();
+      return;
+    }
+
+    const D = window.DeviceOrientationEvent as
+      | (typeof DeviceOrientationEvent & { requestPermission?: () => Promise<string> })
+      | undefined;
+
+    /* Android livre l'orientation sans rien demander : on branche directement
+       et le bouton ne paraît jamais. iOS exige un geste — le bouton s'affiche
+       alors, et disparaît une fois l'accord donné. */
+    if (D && typeof D.requestPermission !== 'function') {
+      if (await brancherGyroscope()) {
+        branche = true;
+        demarrer();
+      }
+      return;
+    }
+
+    if (!bouton || !D) return;
+    bouton.hidden = false;
+    bouton.addEventListener(
+      'click',
+      async () => {
+        if (await brancherGyroscope()) {
+          branche = true;
+          bouton.hidden = true;
+          demarrer();
+        } else {
+          bouton.textContent = { fr: 'Capteur indisponible', en: 'Sensor unavailable', zh: '无法使用传感器' }[
+            document.documentElement.lang.startsWith('zh') ? 'zh' : document.documentElement.lang.startsWith('en') ? 'en' : 'fr'
+          ];
+          setTimeout(() => (bouton.hidden = true), 2200);
+        }
+      },
+      { once: false },
+    );
+  };
+
+  document.addEventListener('astro:page-load', installer);
+</script>
