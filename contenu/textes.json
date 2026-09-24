@@ -288,6 +288,7 @@
         "label": "Espace pro",
         "title": "Nos offres B2B\npour les professionnels",
         "intro": "Des cafés de spécialité pour les professionnels, votre entreprise, vos clients.",
+        "ankorstore": "Commander sur Ankorstore",
         "cta": "Nous contacter",
         "commitmentsTitle": "Nos engagements",
         "commitments": [
@@ -712,6 +713,7 @@
         "label": "Trade",
         "title": "Our B2B offers\nfor professionals",
         "intro": "Specialty coffee for professionals, for your business and your customers.",
+        "ankorstore": "Order on Ankorstore",
         "cta": "Contact us",
         "commitmentsTitle": "Our commitments",
         "commitments": [
@@ -1136,6 +1138,7 @@
         "label": "商用",
         "title": "面向专业客户\n的 B2B 方案",
         "intro": "为专业客户、您的企业与您的客人准备的精品咖啡。",
+        "ankorstore": "在 Ankorstore 下单",
         "cta": "联系我们",
         "commitmentsTitle": "我们的承诺",
         "commitments": [

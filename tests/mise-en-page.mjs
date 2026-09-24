@@ -426,13 +426,18 @@ titre('Une seule apparition par arrivée, jamais deux');
      porte l'ensemble, et rejouer l'apparition par-dessus faisait la saute. */
   await pg.goto(`${B}/fr/`, { waitUntil: 'networkidle' });
   await pg.waitForTimeout(1200);
+  /* On attend l'échange lui-même, non un délai choisi d'avance : sa durée
+     varie avec la charge de la machine et le nombre d'images que la
+     transition doit relever. Un nombre de millisecondes finit toujours par
+     mentir — celui-ci échouait une fois sur deux. */
   await pg.evaluate(() => {
+    window.__echange = new Promise((r) => document.addEventListener('astro:after-swap', r, { once: true }));
     const a = [...document.querySelectorAll('a[href]')].find(
       (x) => new URL(x.href, location.href).pathname === '/fr/cafes/' && x.offsetParent,
     );
     a?.click();
   });
-  await pg.waitForTimeout(90);
+  await pg.evaluate(() => window.__echange);
   const arrivee = await pg.evaluate(() => {
     const el = document.querySelector('main [data-reveal]');
     const s = getComputedStyle(el);

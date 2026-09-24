@@ -27,6 +27,9 @@ export const SITE = {
   social: {
     instagram: 'https://www.instagram.com/yunma.coffee/',
   },
+  /* Place de marché où les professionnels commandent en gros. Elle tient le
+     catalogue, les prix et la facturation : le site n'a qu'à y mener. */
+  ankorstore: 'https://fr.ankorstore.com/r/yunma-ipWz',
   currency: 'EUR',
   freeShippingFrom: 50,
 };

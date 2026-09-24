@@ -65,6 +65,13 @@ const jsonld = [
         <span class="label" data-reveal>{t.pro.label}</span>
         <SplitTitle text={t.pro.title} as="h1" size="xl" class="sec-title phead__title" />
         <p class="lead muted phead__intro" data-reveal>{t.pro.intro}</p>
+        {/* Commander passe avant écrire : un professionnel qui connaît déjà la
+            marque veut sa commande, pas un échange de courriels. Le lien ouvre
+            la place de marché dans un autre onglet — on ne fait pas quitter le
+            site à quelqu'un qui n'a pas fini de le lire. */}
+        <a class="link" href={SITE.ankorstore} target="_blank" rel="noopener" data-reveal>
+          {t.pro.ankorstore}<span class="arrow" aria-hidden="true">→</span>
+        </a>
         <a class="link" href="#contact-pro" data-reveal>
           {t.pro.cta}<span class="arrow" aria-hidden="true">→</span>
         </a>
