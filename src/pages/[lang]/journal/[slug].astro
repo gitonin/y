@@ -42,25 +42,55 @@ const imageArticle = new URL(
   base
 ).href;
 
-/* Le corps est coupé en deux à l'intertitre le plus proche du milieu, et une
-   photographie se glisse dans la coupure : l'article n'est plus un seul bloc
-   de texte. Sans `photoMilieu`, ou sans intertitre, le corps reste d'un tenant. */
-const couper = (markdown: string): [string, string] | null => {
+/* Le corps se coupe aux intertitres, et une photographie se glisse dans chaque
+   coupure : l'article n'est plus un seul bloc de texte.
+
+   Les coupures visent des parts égales — pour deux photographies, aux tiers ;
+   pour trois, aux quarts — et l'on retient à chaque fois l'intertitre le plus
+   proche de la cible. Deux photographies ne peuvent pas tomber au même
+   endroit : une coupure déjà prise laisse la place à l'intertitre libre le
+   plus proche.
+
+   Moins d'intertitres que de photographies demandées, et les dernières sont
+   ignorées : mieux vaut un article un peu plus dense qu'une image collée à la
+   précédente. Sans intertitre du tout, le corps reste d'un tenant. */
+const couper = (markdown: string, combien: number): string[] => {
   const reperes = [...markdown.matchAll(/^## /gm)].map((m) => m.index ?? 0).filter((i) => i > 0);
-  if (reperes.length === 0) return null;
-  const milieu = markdown.length / 2;
-  const coupe = reperes.reduce((a, b) => (Math.abs(b - milieu) < Math.abs(a - milieu) ? b : a));
-  return [markdown.slice(0, coupe), markdown.slice(coupe)];
+  if (reperes.length === 0 || combien === 0) return [markdown];
+
+  const parts = Math.min(combien, reperes.length);
+  const pris = new Set<number>();
+  const coupes: number[] = [];
+  for (let i = 1; i <= parts; i++) {
+    const cible = (markdown.length * i) / (parts + 1);
+    const libres = reperes.filter((r) => !pris.has(r));
+    if (libres.length === 0) break;
+    const coupe = libres.reduce((a, b) => (Math.abs(b - cible) < Math.abs(a - cible) ? b : a));
+    pris.add(coupe);
+    coupes.push(coupe);
+  }
+
+  coupes.sort((a, b) => a - b);
+  const morceaux: string[] = [];
+  let debut = 0;
+  for (const c of coupes) {
+    morceaux.push(markdown.slice(debut, c));
+    debut = c;
+  }
+  morceaux.push(markdown.slice(debut));
+  return morceaux;
 };
 
-const moities = post.data.photoMilieu && post.body ? couper(post.body) : null;
-let avant = '';
-let apres = '';
-if (moities) {
+const illustrations = post.data.photoMilieu;
+const morceaux = post.body && illustrations.length > 0 ? couper(post.body, illustrations.length) : [];
+const rendus: string[] = [];
+if (morceaux.length > 1) {
   const processeur = await createSatteriMarkdownProcessor({});
-  avant = (await processeur.render(moities[0])).code;
-  apres = (await processeur.render(moities[1])).code;
+  for (const m of morceaux) rendus.push((await processeur.render(m)).code);
 }
+/* Une photographie par coupure, ni plus ni moins : celles qui n'ont pas de
+   place restent au placard plutôt que de s'entasser à la fin. */
+const posees = rendus.length > 1 ? illustrations.slice(0, rendus.length - 1) : [];
 
 const words = post.body?.split(/\s+/).length ?? 0;
 const readingTime = Math.max(2, Math.round(words / (lang === 'zh' ? 300 : 200)));
@@ -119,20 +149,22 @@ const jsonld = [
     </figure>
 
     {
-      moities && post.data.photoMilieu ? (
-        <>
-          <div class="wrap wrap--narrow post__body" set:html={avant} />
-          <figure class="wrap post__milieu">
-            <div class="media media--wide">
-              <Photo
-                name={post.data.photoMilieu}
-                lang={lang}
-                sizes="(min-width: 1560px) 1560px, 100vw"
-              />
-            </div>
-          </figure>
-          <div class="wrap wrap--narrow post__body post__body--suite" set:html={apres} />
-        </>
+      rendus.length > 1 ? (
+        rendus.map((morceau, i) => (
+          <>
+            <div
+              class:list={['wrap', 'wrap--narrow', 'post__body', i > 0 && 'post__body--suite']}
+              set:html={morceau}
+            />
+            {posees[i] && (
+              <figure class="wrap post__milieu">
+                <div class="media media--wide">
+                  <Photo name={posees[i]} lang={lang} sizes="(min-width: 1560px) 1560px, 100vw" />
+                </div>
+              </figure>
+            )}
+          </>
+        ))
       ) : (
         <div class="wrap wrap--narrow post__body">
           <Content />

@@ -21,8 +21,18 @@ const journal = defineCollection({
     photo: z
       .enum(photoNames)
       .default('cretes-brumeuses'),
-    /** Photographie glissée au milieu de l'article, pour rythmer la lecture. */
-    photoMilieu: z.enum(photoNames).optional(),
+    /**
+     * Photographies glissées dans le corps de l'article, pour rythmer la
+     * lecture. Une seule, ou plusieurs : elles se répartissent alors d'elles-
+     * mêmes aux intertitres, aussi régulièrement que le texte le permet.
+     *
+     *   photoMilieu: recolte-cueilleurs
+     *   photoMilieu: [recolte-cueilleurs, sechage-lits, cerises-branche]
+     */
+    photoMilieu: z
+      .union([z.enum(photoNames), z.array(z.enum(photoNames))])
+      .optional()
+      .transform((v) => (v === undefined ? [] : Array.isArray(v) ? v : [v])),
     draft: z.boolean().default(false),
   }),
 });

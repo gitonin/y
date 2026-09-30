@@ -18,6 +18,15 @@ import mainPlante from '../assets/photos/main-plante.jpg';
 import panneauPlantation from '../assets/photos/panneau-plantation.jpg';
 import fondateursMerDeNuages from '../assets/photos/fondateurs-mer-de-nuages.jpg';
 import sachetFiltreInfusion from '../assets/photos/sachet-filtre-infusion.jpg';
+import histoireYunnan01 from '../assets/photos/histoire-du-cafe-du-yunnan-01.jpg';
+import histoireYunnan02 from '../assets/photos/histoire-du-cafe-du-yunnan-02.jpg';
+import histoireYunnan03 from '../assets/photos/histoire-du-cafe-du-yunnan-03.jpg';
+import terroirs01 from '../assets/photos/trois-terroirs-du-cafe-du-yunnan-01.jpg';
+import terroirs02 from '../assets/photos/trois-terroirs-du-cafe-du-yunnan-02.jpg';
+import terroirs03 from '../assets/photos/trois-terroirs-du-cafe-du-yunnan-03.jpg';
+import varietes01 from '../assets/photos/catimor-bourbon-jaune-pacamara-01.jpg';
+import varietes02 from '../assets/photos/catimor-bourbon-jaune-pacamara-02.jpg';
+import varietes03 from '../assets/photos/catimor-bourbon-jaune-pacamara-03.jpg';
 
 export type Photo = {
   src: ImageMetadata;
@@ -148,6 +157,92 @@ export const photos = {
       zh: '云马挂耳咖啡架在白色马克杯上，旁边是细口手冲壶，昏暗的厨房里只有窗光',
     },
     position: '50% 60%',
+  },
+  /* ---------- Journal ----------
+     Une photographie par emplacement d'article : l'en-tête en -01, puis les
+     coupures dans l'ordre. Les visuels posés ici sont provisoires — déposer un
+     fichier sous le même nom dans `src/assets/photos/` suffit à le remplacer,
+     sans toucher à une ligne de code. */
+  'histoire-du-cafe-du-yunnan-01': {
+    src: histoireYunnan01,
+    alt: {
+      fr: 'Vallées et crêtes du Yunnan dans la brume, au-dessus des parcelles de caféiers',
+      en: 'Misty valleys and ridges of Yunnan above plots of coffee trees',
+      zh: '云雾中的云南山谷与山脊，下方是咖啡地块',
+    },
+    position: '50% 55%',
+  },
+  'histoire-du-cafe-du-yunnan-02': {
+    src: histoireYunnan02,
+    alt: {
+      fr: 'Panneau à l’entrée d’une plantation de café du Yunnan',
+      en: 'Sign at the entrance to a Yunnan coffee plantation',
+      zh: '云南一处咖啡种植园入口的牌子',
+    },
+    position: '50% 50%',
+  },
+  'histoire-du-cafe-du-yunnan-03': {
+    src: histoireYunnan03,
+    alt: {
+      fr: 'Producteurs de café du Yunnan au travail dans les rangs de caféiers',
+      en: 'Yunnan coffee farmers at work between the rows of coffee trees',
+      zh: '云南咖农在咖啡树行间劳作',
+    },
+    position: '50% 50%',
+  },
+  'trois-terroirs-du-cafe-du-yunnan-01': {
+    src: terroirs01,
+    alt: {
+      fr: 'Vue d’une vallée caféière du Yunnan : la ferme au premier plan, les parcelles et les montagnes au fond',
+      en: 'View of a Yunnan coffee valley: the farm in the foreground, plots and mountains beyond',
+      zh: '云南咖啡山谷全景：前景是农场，远处是地块与群山',
+    },
+    position: '62% 70%',
+  },
+  'trois-terroirs-du-cafe-du-yunnan-02': {
+    src: terroirs02,
+    alt: {
+      fr: 'La ferme de Gaosheng, à Baoshan, dans les hauteurs de l’ouest du Yunnan',
+      en: 'Gaosheng farm in Baoshan, in the highlands of western Yunnan',
+      zh: '云南西部高地保山的高晟庄园',
+    },
+    position: '50% 50%',
+  },
+  'trois-terroirs-du-cafe-du-yunnan-03': {
+    src: terroirs03,
+    alt: {
+      fr: 'La ferme Torch Estate, à Pu’er, cœur de la production caféière chinoise',
+      en: 'Torch Estate farm in Pu’er, the heart of Chinese coffee production',
+      zh: '普洱火炬庄园，中国咖啡生产的核心地带',
+    },
+    position: '50% 50%',
+  },
+  'catimor-bourbon-jaune-pacamara-01': {
+    src: varietes01,
+    alt: {
+      fr: 'Branche chargée de cerises de café rouges et jaunes à maturité',
+      en: 'Branch laden with ripe red and yellow coffee cherries',
+      zh: '缀满成熟红黄咖啡果的枝条',
+    },
+    position: '50% 50%',
+  },
+  'catimor-bourbon-jaune-pacamara-02': {
+    src: varietes02,
+    alt: {
+      fr: 'Un jeune plant de caféier tenu dans une main, avant la mise en terre',
+      en: 'A young coffee seedling held in a hand, before planting',
+      zh: '手中捧着的咖啡幼苗，准备移栽',
+    },
+    position: '50% 50%',
+  },
+  'catimor-bourbon-jaune-pacamara-03': {
+    src: varietes03,
+    alt: {
+      fr: 'Cerises de café à différents stades de maturité sur la branche',
+      en: 'Coffee cherries at different stages of ripeness on the branch',
+      zh: '枝头处于不同成熟阶段的咖啡果',
+    },
+    position: '50% 50%',
   },
   'producteur-gaosheng': {
     src: producteurGaosheng,
