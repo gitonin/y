@@ -56,10 +56,15 @@ export const route = (lang: Lang, key: RouteKey) => url(lang, routes[key]);
 export const productUrl = (lang: Lang, slug: string) => url(lang, `${routes.cafes}/${slug}`);
 export const postUrl = (lang: Lang, slug: string) => url(lang, `${routes.journal}/${slug}`);
 
+/** Retire le seul préfixe de déploiement : /y/fr/cafes/ -> /fr/cafes/ */
+const sansBase = (pathname: string): string =>
+  pathname.startsWith(BASE) ? `/${pathname.slice(BASE.length)}` : pathname;
+
 /** Retire le préfixe de déploiement et de langue : /y/fr/cafes/ -> cafes */
 export function stripLang(pathname: string): string {
-  const withoutBase = pathname.startsWith(BASE) ? `/${pathname.slice(BASE.length)}` : pathname;
-  return withoutBase.replace(/^\/(fr|en|zh)(\/|$)/, '').replace(/^\/+|\/+$/g, '');
+  return sansBase(pathname)
+    .replace(/^\/(fr|en|zh)(\/|$)/, '')
+    .replace(/^\/+|\/+$/g, '');
 }
 
 /** Alternates hreflang par défaut : même chemin, autre langue. */
@@ -69,7 +74,11 @@ export function defaultAlternates(pathname: string): Record<Lang, string> {
      une donnerait « /en/composants/ », qui n'existe pas — on renvoie donc vers
      les trois accueils. Une page ajoutée demain hors de cette structure sera
      traitée de même, sans qu'on ait à y penser. */
-  const sansLangue = !/^\/(fr|en|zh)(\/|$)/.test(pathname);
+  /* Le test porte sur le chemin débarrassé du sous-dossier de déploiement :
+     sur l'aperçu, « /y/v4/fr/cafes/ » commence par « /y/ », et chercher la
+     langue en tête du chemin brut ferait passer toutes les pages pour des
+     pages hors structure — le changement de langue renverrait à l'accueil. */
+  const sansLangue = !/^\/(fr|en|zh)(\/|$)/.test(sansBase(pathname));
   const nu = stripLang(pathname);
   const rest = nu === '404' || sansLangue ? '' : nu;
   return {

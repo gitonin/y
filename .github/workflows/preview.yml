@@ -39,3 +39,16 @@ jobs:
         env:
           SITE_URL: https://yunma.fr
         run: npm run build
+
+      # Le site est aussi publié sous un sous-dossier (l'aperçu vit sous /y/v4/).
+      # Certains défauts ne se voient que là : un code qui cherche la langue en
+      # tête du chemin ne la trouve plus, et changer de langue ramène à
+      # l'accueil. On construit donc une seconde fois, avec un préfixe, et l'on
+      # vérifie qu'un changement de langue garde la page où l'on est.
+      - name: Vérifier le changement de langue sous un sous-dossier
+        env:
+          SITE_URL: https://yunma.fr
+          BASE_PATH: /y/v4/
+        run: |
+          npm run build
+          npm run verifier-langues
