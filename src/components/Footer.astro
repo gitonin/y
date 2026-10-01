@@ -48,7 +48,17 @@ const rowA = [
           <li><a href={route(lang, 'faq')}>{t.nav.faq}</a></li>
           <li><a href={route(lang, 'contact')}>{t.nav.contact}</a></li>
           <li>
-            <a href={SHOPIFY.accountUrl || route(lang, 'contact')} rel={SHOPIFY.accountUrl ? 'nofollow' : undefined}>
+            {/* L'espace client vit chez Shopify, sur un autre domaine. Y aller
+                dans la même fenêtre éteint la page le temps du chargement, et
+                ce clignotement saute aux yeux quand le menu se referme au même
+                instant. On ouvre donc un autre onglet — la page reste intacte
+                derrière. Sans adresse Shopify renseignée, le lien mène à notre
+                page Contact : on est chez nous, il reste dans la fenêtre. */}
+            <a
+              href={SHOPIFY.accountUrl || route(lang, 'contact')}
+              target={SHOPIFY.accountUrl ? '_blank' : undefined}
+              rel={SHOPIFY.accountUrl ? 'nofollow noopener' : undefined}
+            >
               {t.nav.account}
             </a>
           </li>
