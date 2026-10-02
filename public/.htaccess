@@ -111,7 +111,7 @@ ErrorDocument 404 /404.html
 
   # Le plan du site et les fichiers de tête changent d'adresse jamais, de
   # contenu souvent : une journée suffit.
-  <FilesMatch "^(sitemap.*\.xml|robots\.txt|llms\.txt|site\.webmanifest)$">
+  <FilesMatch "^(sitemap.*\.xml|flux-google\.xml|robots\.txt|llms\.txt|site\.webmanifest)$">
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 
