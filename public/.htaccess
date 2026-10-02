@@ -134,6 +134,14 @@ ErrorDocument 404 /404.html
   AddCharset UTF-8                   .html .css .js .json .xml .txt
 </IfModule>
 
+# Merchant Center lit l'en-tête avant le contenu : un flux parfaitement formé
+# mais annoncé en text/plain est refusé pour « format non pris en charge ».
+# Selon la configuration de l'hébergeur, un .xml peut partir ainsi. On annonce
+# donc ce fichier-là explicitement, sans toucher aux autres .xml du site.
+<Files "flux-google.xml">
+  ForceType "application/xml; charset=utf-8"
+</Files>
+
 # ----------------------------------------------------------------------------
 # Discrétion
 # ----------------------------------------------------------------------------
