@@ -23,9 +23,21 @@ const multi = product.variants.length > 1;
    qu'il en reste une, la fiche garde son encart d'achat : c'est le sélecteur
    de format qui barre celles qui manquent. */
 const epuise = product.variants.every((v) => !v.available);
+
+/* Les deux états sont rendus, et c'est le drapeau du contenu qui dit lequel
+   paraît à l'ouverture. Le stock réel est ensuite lu chez Shopify et peut
+   renverser ce choix sans rien reconstruire : sans les deux dessins déjà
+   présents, il faudrait les fabriquer en JavaScript, loin d'ici. */
+const idsVariantes = product.variants.map((v) => v.shopifyVariantId).join(',');
 ---
 
-<div class="buy" data-buybox data-product={product.slug}>
+<div
+  class="buy"
+  data-buybox
+  data-product={product.slug}
+  data-stock-cible
+  data-variantes={idsVariantes}
+>
   <p class="buy__price mono-num" data-price-display hidden={hidePrice}>{formatPrice(first.price, lang)}</p>
 
   {
@@ -55,11 +67,11 @@ const epuise = product.variants.every((v) => !v.available);
     )
   }
 
-  {
-    epuise ? (
-      <Rupture product={product} lang={lang} />
-    ) : (
-      <>
+  <div data-buy-rupture hidden={!epuise}>
+    <Rupture product={product} lang={lang} />
+  </div>
+
+  <div class="buy__achat" data-buy-achat hidden={epuise}>
         <div class="buy__qty">
           <span class="label" id={`${qtyId}-label`}>
             {t.common.quantity}
@@ -100,9 +112,7 @@ const epuise = product.variants.every((v) => !v.available);
         >
           {first.available ? t.common.addToCart : t.common.soldOut}
         </button>
-      </>
-    )
-  }
+  </div>
 
   {/* « Torréfié à la commande » reste : c'est précisément ce qui explique
       l'attente. « Expédié sous 48 h » disparaît, parce qu'un café épuisé ne
@@ -110,12 +120,19 @@ const epuise = product.variants.every((v) => !v.available);
       rassure. */}
   <ul class="buy__reassure small muted">
     <li>{t.product.freshness}</li>
-    {!epuise && <li>{t.product.shipping}</li>}
+    <li data-buy-expedition hidden={epuise}>{t.product.shipping}</li>
   </ul>
 </div>
 
 <style>
   .buy {
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  /* Le bloc d'achat est devenu un conteneur : il reprend à son compte
+     l'espacement que la grille donnait à ses enfants. */
+  .buy__achat {
     display: grid;
     gap: 1.15rem;
   }

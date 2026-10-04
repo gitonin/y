@@ -59,6 +59,15 @@ const titre = (t) => console.log(`\n— ${t}`);
  * HTML même quand l'élément correspondant n'est pas rendu. Les vérifications
  * ci-dessous cherchent l'élément — balise comprise — et non la chaîne.
  */
+/* Les deux états d'un encart d'achat vivent désormais côte à côte dans la
+   page : c'est l'attribut `hidden` qui dit lequel paraît, et le stock lu chez
+   Shopify peut le renverser après l'affichage. Les vérifications portent donc
+   sur « montré » plutôt que sur « présent ». */
+const montre = (html, re) => {
+  const m = html.match(re);
+  return m ? !/\shidden(?=[\s=>])/.test(m[0]) : false;
+};
+
 const lire = (dist, ...parties) => {
   const p = join(RACINE, dist, ...parties, 'index.html');
   if (!existsSync(p)) throw new Error(`page absente : ${p}`);
@@ -112,9 +121,9 @@ try {
     const catalogue = lire('dist', lang, 'cafes');
     const t = textes[lang].product.rupture;
 
-    check(`${lang} — aucun bloc de rupture sur la fiche`, /<section[^>]*data-rupture/.test(fiche), false);
-    check(`${lang} — aucune mention au catalogue`, /<p[^>]*pcard__rupture/.test(catalogue), false);
-    check(`${lang} — le badge n’apparaît nulle part`, contient(catalogue, t.badge), false);
+    check(`${lang} — le bloc de rupture est masqué`, montre(fiche, /<div[^>]*data-buy-rupture[^>]*>/), false);
+    check(`${lang} — l’encart d’achat est montré`, montre(fiche, /<div[^>]*data-buy-achat[^>]*>/));
+    check(`${lang} — la mention du catalogue est masquée`, montre(catalogue, /<p[^>]*data-card-rupture[^>]*>/), false);
     check(`${lang} — le bouton d’achat est bien là`, /<button[^>]*data-add-to-cart/.test(fiche));
     check(`${lang} — la promesse d’expédition est intacte`, contient(fiche, textes[lang].product.shipping));
   }
@@ -129,13 +138,20 @@ try {
     const fiche = lire('dist-rupture', lang, 'cafes', EPUISE);
     const t = textes[lang].product.rupture;
 
-    check(`${lang} — le bloc de rupture est présent`, /<section[^>]*data-rupture/.test(fiche));
+    check(`${lang} — le bloc de rupture est montré`, montre(fiche, /<div[^>]*data-buy-rupture[^>]*>/));
+    check(`${lang} — l’encart d’achat est masqué`, montre(fiche, /<div[^>]*data-buy-achat[^>]*>/), false);
     check(`${lang} — le titre est traduit`, contient(fiche, t.titre));
     check(`${lang} — l’explication est traduite`, contient(fiche, t.texte));
     check(`${lang} — l’appel à l’action est traduit`, contient(fiche, t.cta));
-    check(`${lang} — plus de bouton d’achat`, /<button[^>]*data-add-to-cart/.test(fiche), false);
-    check(`${lang} — plus de sélecteur de quantité`, /<input[^>]*data-qty-input/.test(fiche), false);
-    check(`${lang} — la promesse d’expédition a disparu`, contient(fiche, textes[lang].product.shipping), false);
+    /* Le bouton et le sélecteur restent dans la page, à l'intérieur de l'encart
+       d'achat masqué — c'est ce qui permet au stock lu chez Shopify de les
+       rendre sans reconstruire. Ce qui compte est qu'ils ne soient pas
+       montrés, et le contrôle au navigateur (`npm run test:stock`) le vérifie
+       pour de bon, pixel compris. */
+    const achatMasque = montre(fiche, /<div[^>]*data-buy-achat[^>]*>/) === false;
+    check(`${lang} — le bouton d’achat n’est pas montré`, achatMasque && /<button[^>]*data-add-to-cart/.test(fiche));
+    check(`${lang} — le sélecteur de quantité n’est pas montré`, achatMasque && /<input[^>]*data-qty-input/.test(fiche));
+    check(`${lang} — la promesse d’expédition n’est pas montrée`, montre(fiche, /<li[^>]*data-buy-expedition[^>]*>/), false);
     check(`${lang} — « torréfié à la commande » reste`, contient(fiche, textes[lang].product.freshness));
   }
 
@@ -160,7 +176,7 @@ try {
   for (const lang of LANGUES) {
     const temoin = lire('dist-rupture', lang, 'cafes', TEMOIN);
     check(`${lang} — le témoin garde son bouton d’achat`, /<button[^>]*data-add-to-cart/.test(temoin));
-    check(`${lang} — le témoin n’a pas de bloc de rupture`, /<section[^>]*data-rupture/.test(temoin), false);
+    check(`${lang} — le témoin n’affiche pas de bloc de rupture`, montre(temoin, /<div[^>]*data-buy-rupture[^>]*>/), false);
   }
 
   titre('Le catalogue porte la mention');
@@ -168,7 +184,8 @@ try {
   for (const lang of LANGUES) {
     const catalogue = lire('dist-rupture', lang, 'cafes');
     const t = textes[lang].product.rupture;
-    check(`${lang} — une seule mention au catalogue`, (catalogue.match(/<p[^>]*pcard__rupture/g) ?? []).length, 1);
+    const mentions = (catalogue.match(/<p[^>]*data-card-rupture[^>]*>/g) ?? []).filter((m) => !/\shidden(?=[\s=>])/.test(m));
+    check(`${lang} — une seule mention montrée au catalogue`, mentions.length, 1);
     check(`${lang} — le badge est traduit`, contient(catalogue, t.badge));
   }
 

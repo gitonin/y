@@ -94,6 +94,12 @@ for (const largeur of [390, 1280]) {
       const texte = (el) => (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 28);
       for (const label of document.querySelectorAll('.label')) {
         if (label.closest(HORS_PORTEE)) continue;
+        /* Un empilement que personne ne voit n'a pas d'espacement à vérifier :
+           masqué, il mesure zéro partout et ferait échouer la page pour un
+           écart qui n'existe pas à l'écran. C'est le cas du bloc de rupture,
+           rendu dans toutes les fiches et montré seulement quand Shopify
+           annonce la fin du stock. */
+        if (!label.offsetParent && getComputedStyle(label).position !== 'fixed') continue;
         const titre = label.nextElementSibling;
         if (!titre) continue;
         const a = label.getBoundingClientRect();

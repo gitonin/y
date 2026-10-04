@@ -92,10 +92,6 @@ const config = {
     z-index: 120;
   }
 
-  .cart[hidden] {
-    display: none;
-  }
-
   .cart__scrim {
     position: absolute;
     inset: 0;
@@ -705,11 +701,89 @@ const config = {
     });
   };
 
+  /* ------------------------------------------------------------------ *
+   * Le stock réel
+   *
+   * Le site est construit une fois, Shopify vend en continu : le drapeau de
+   * disponibilité écrit dans le contenu vieillit dès qu'une vente passe. On
+   * demande donc à Shopify, à l'affichage, ce qu'il reste vraiment.
+   *
+   * En cas d'échec — réseau coupé, jeton refusé, Shopify indisponible — on ne
+   * touche à rien. Le dessin reste celui du contenu, et c'est la caisse qui
+   * refusera une commande impossible : mieux vaut une fiche optimiste qu'une
+   * boutique entière barrée par une coupure de trois secondes.
+   * ------------------------------------------------------------------ */
+  async function majStock() {
+    const cibles = [...document.querySelectorAll<HTMLElement>('[data-stock-cible][data-variantes]')];
+    if (cibles.length === 0) return;
+
+    const ids = [...new Set(cibles.flatMap((el) => (el.dataset.variantes ?? '').split(',').filter(Boolean)))];
+    if (ids.length === 0) return;
+
+    let dispo: Record<string, boolean>;
+    try {
+      const data = await gql<{ nodes: ({ id: string; availableForSale: boolean } | null)[] }>(
+        `query($ids: [ID!]!){
+           nodes(ids: $ids){ ... on ProductVariant { id availableForSale } }
+         }`,
+        { ids },
+      );
+      dispo = Object.fromEntries(
+        (data.nodes ?? []).filter(Boolean).map((n) => [n!.id, n!.availableForSale]),
+      );
+    } catch {
+      return;
+    }
+
+    /* Une variante que Shopify ne connaît pas est laissée telle qu'elle est
+       déclarée : une réponse incomplète ne doit pas éteindre le catalogue. */
+    const encore = (id: string) => dispo[id] ?? true;
+
+    for (const el of cibles) {
+      const ids = (el.dataset.variantes ?? '').split(',').filter(Boolean);
+      const epuise = ids.length > 0 && ids.every((id) => !encore(id));
+
+      const badge = el.querySelector<HTMLElement>('[data-card-rupture]');
+      if (badge) badge.hidden = !epuise;
+
+      const achat = el.querySelector<HTMLElement>('[data-buy-achat]');
+      const rupture = el.querySelector<HTMLElement>('[data-buy-rupture]');
+      const expedition = el.querySelector<HTMLElement>('[data-buy-expedition]');
+      if (achat) achat.hidden = epuise;
+      if (rupture) rupture.hidden = !epuise;
+      if (expedition) expedition.hidden = epuise;
+
+      /* Format par format : on barre ceux qui manquent, et si celui qui est
+         coché vient de disparaître on bascule sur un format encore vendu —
+         sinon le bouton d'achat resterait braqué sur du vide. */
+      const options = [...el.querySelectorAll<HTMLInputElement>('[data-variant-option]')];
+      for (const o of options) o.disabled = !encore(o.value);
+      const coche = options.find((o) => o.checked);
+      if (coche?.disabled) {
+        const replie = options.find((o) => !o.disabled);
+        if (replie) {
+          replie.checked = true;
+          replie.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      const bouton = el.querySelector<HTMLButtonElement>('[data-add-to-cart]');
+      if (bouton && !epuise) {
+        const actif = options.find((o) => o.checked);
+        const id = actif?.value ?? bouton.dataset.variant ?? '';
+        bouton.disabled = !encore(id);
+      }
+    }
+  }
+
   const init = async () => {
     cfg = readConfig();
     if (!cfg) return;
     bindGlobals();
     if (isLive()) {
+      /* Le stock ne retarde pas l'affichage du panier : les deux partent
+         ensemble, et l'un n'attend pas l'autre. */
+      void majStock();
       await fetchCart();
     } else {
       loadDemo();

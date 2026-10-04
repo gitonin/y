@@ -17,9 +17,22 @@ const t = useTranslations(lang);
 /* La grille dit la vérité : un café dont plus aucun format n'est disponible
    porte sa mention dès la vitrine, plutôt que de la réserver à la fiche. */
 const epuise = product.variants.every((v) => !v.available);
+
+/* La carte porte les identifiants de ses variantes : c'est par eux que le
+   stock réel, lu chez Shopify après l'affichage, saura si cette mention doit
+   paraître. Elle est rendue dans tous les cas, masquée tant qu'il reste du
+   café — la fabriquer en JavaScript ferait vivre le même texte à deux
+   endroits. */
+const idsVariantes = product.variants.map((v) => v.shopifyVariantId).join(',');
 ---
 
-<article class:list={['pcard', compact && 'pcard--compact']} data-reveal style={`--reveal-delay:${(index % 3) * 90}ms`}>
+<article
+  class:list={['pcard', compact && 'pcard--compact']}
+  data-reveal
+  data-stock-cible
+  data-variantes={idsVariantes}
+  style={`--reveal-delay:${(index % 3) * 90}ms`}
+>
   <a class="pcard__link media-link" href={productUrl(lang, product.slug)}>
     <div class="media pcard__media">
       {/* Le texte alternatif du packshot sert : c'est par lui qu'une
@@ -33,7 +46,9 @@ const epuise = product.variants.every((v) => !v.available);
       <p class="pcard__sub muted small">{product.subtitle[lang]}</p>
       {!compact && <p class="pcard__notes small">{product.short[lang]}</p>}
       <Prix product={product} lang={lang} class="pcard__price" />
-      {epuise && <p class="label pcard__rupture">{t.product.rupture.badge}</p>}
+      <p class="label pcard__rupture" data-card-rupture hidden={!epuise}>
+        {t.product.rupture.badge}
+      </p>
     </div>
   </a>
 </article>

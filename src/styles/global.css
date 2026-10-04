@@ -260,6 +260,15 @@ h3 {
   line-height: 1.16;
 }
 
+/* `hidden` doit l'emporter sur toute classe qui pose un `display`.
+   La règle du navigateur a la priorité la plus faible qui soit : une seule
+   classe la renverse, et l'élément censé être masqué reste à l'écran. Le piège
+   s'était déjà refermé quatre fois, chaque fois rattrapé sur place. Il est
+   comblé ici. */
+[hidden] {
+  display: none !important;
+}
+
 .label {
   font-size: var(--fs-label);
   letter-spacing: var(--tracking-label);
