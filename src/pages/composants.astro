@@ -33,6 +33,15 @@ const lang = 'fr' as const;
 const exemple = products[0];
 const dripBags = products.find((p) => p.slug === 'drip-bags-catimor') ?? products[3];
 
+/* Le même café, épuisé — pour montrer l'autre état sans toucher au stock réel.
+   Les identifiants Shopify sont retirés : sans eux la lecture du stock passe
+   son chemin, et la démonstration reste épuisée même si le café, lui, est en
+   rayon. */
+const epuiseDemo = {
+  ...dripBags,
+  variants: dripBags.variants.map((v) => ({ ...v, shopifyVariantId: '', available: false })),
+};
+
 /* --- Relevé des sources -------------------------------------------------- */
 
 /** Tous les fichiers .astro du site, contenu compris. */
@@ -179,13 +188,13 @@ const familles: { titre: string; id: string; propos: string; fiches: Fiche[] }[]
       {
         nom: 'ProductCard',
         dossier: 'components',
-        role: 'Carte du catalogue : visuel, nom, notes, prix — précédé d’un « à partir de » quand les formats n’ont pas le même prix.',
+        role: 'Carte du catalogue : visuel, nom, notes, prix — précédé d’un « à partir de » quand les formats n’ont pas le même prix. Porte la mention « épuisé » quand Shopify n’a plus de stock.',
         reglages: ['product', 'lang', 'index', 'compact'],
       },
       {
         nom: 'BuyBox',
         dossier: 'components',
-        role: 'Encart d’achat : choix du format, quantité, ajout au panier. Le prix suit le format choisi, sur la page comme dans le panier.',
+        role: 'Encart d’achat : choix du format, quantité, ajout au panier. Le prix suit le format choisi, sur la page comme dans le panier. Cède la place au bloc de rupture quand Shopify annonce la fin du stock.',
         reglages: ['product', 'lang', 'hidePrice'],
       },
     ],
@@ -403,16 +412,28 @@ const iconesDemo: IconName[] = ['leaf', 'mountains', 'cherries', 'droplet', 'dry
                   )}
 
                   {fiche.nom === 'ProductCard' && (
-                    <div class="pl-trio">
-                      <ProductCard product={exemple} lang={lang} />
-                      <ProductCard product={dripBags} lang={lang} />
-                      <ProductCard product={products[2]} lang={lang} compact />
-                    </div>
+                    <>
+                      <div class="pl-trio">
+                        <ProductCard product={exemple} lang={lang} />
+                        <ProductCard product={dripBags} lang={lang} />
+                        <ProductCard product={products[2]} lang={lang} compact />
+                      </div>
+                      <p class="pl-etat">Épuisé</p>
+                      <div class="pl-trio">
+                        <ProductCard product={epuiseDemo} lang={lang} />
+                      </div>
+                    </>
                   )}
                   {fiche.nom === 'BuyBox' && (
-                    <div class="pl-encadre pl-encadre--etroit">
-                      <BuyBox product={dripBags} lang={lang} />
-                    </div>
+                    <>
+                      <div class="pl-encadre pl-encadre--etroit">
+                        <BuyBox product={dripBags} lang={lang} />
+                      </div>
+                      <p class="pl-etat">Épuisé</p>
+                      <div class="pl-encadre pl-encadre--etroit">
+                        <BuyBox product={epuiseDemo} lang={lang} />
+                      </div>
+                    </>
                   )}
 
                   {fiche.nom === 'ProBand' && <ProBand lang={lang} id="demo-pro" />}
@@ -595,6 +616,19 @@ const iconesDemo: IconName[] = ['leaf', 'mountains', 'cherries', 'droplet', 'dry
       grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: start;
     }
+  }
+
+  /* Sépare les deux états d'un même composant, pour qu'on lise « voici
+     l'autre cas » plutôt que « voici un quatrième exemple ». */
+  .pl-etat {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--ink-50);
   }
 
   .pl-trio {

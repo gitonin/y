@@ -27,15 +27,19 @@ const epuise = product.variants.every((v) => !v.available);
 /* Les deux états sont rendus, et c'est le drapeau du contenu qui dit lequel
    paraît à l'ouverture. Le stock réel est ensuite lu chez Shopify et peut
    renverser ce choix sans rien reconstruire : sans les deux dessins déjà
-   présents, il faudrait les fabriquer en JavaScript, loin d'ici. */
-const idsVariantes = product.variants.map((v) => v.shopifyVariantId).join(',');
+   présents, il faudrait les fabriquer en JavaScript, loin d'ici.
+
+   Sans identifiant Shopify, aucune synchronisation : l'encart reste celui que
+   le contenu décrit. C'est ce qui permet à la planche des composants de
+   montrer l'état épuisé sans mentir sur le stock d'un vrai café. */
+const idsVariantes = product.variants.map((v) => v.shopifyVariantId).filter(Boolean).join(',') || undefined;
 ---
 
 <div
   class="buy"
   data-buybox
   data-product={product.slug}
-  data-stock-cible
+  data-stock-cible={idsVariantes && ''}
   data-variantes={idsVariantes}
 >
   <p class="buy__price mono-num" data-price-display hidden={hidePrice}>{formatPrice(first.price, lang)}</p>

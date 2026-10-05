@@ -114,7 +114,7 @@
         "rupture": {
           "badge": "Prochaine torréfaction",
           "titre": "Prochaine torréfaction",
-          "texte": "Nous torréfions par petites quantités, régulièrement : ce lot est déjà parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.",
+          "texte": "Nous torréfions par petites quantités, régulièrement : ce lot est déjà parti. Laissez votre adresse, vous serez prévenu dès la sortie du prochain.",
           "cta": "Être prévenu",
           "champLabel": "Votre adresse e-mail",
           "placeholder": "vous@exemple.fr",

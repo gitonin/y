@@ -23,13 +23,13 @@ const epuise = product.variants.every((v) => !v.available);
    paraître. Elle est rendue dans tous les cas, masquée tant qu'il reste du
    café — la fabriquer en JavaScript ferait vivre le même texte à deux
    endroits. */
-const idsVariantes = product.variants.map((v) => v.shopifyVariantId).join(',');
+const idsVariantes = product.variants.map((v) => v.shopifyVariantId).filter(Boolean).join(',') || undefined;
 ---
 
 <article
   class:list={['pcard', compact && 'pcard--compact']}
   data-reveal
-  data-stock-cible
+  data-stock-cible={idsVariantes && ''}
   data-variantes={idsVariantes}
   style={`--reveal-delay:${(index % 3) * 90}ms`}
 >
