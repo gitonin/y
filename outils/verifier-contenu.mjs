@@ -99,8 +99,18 @@ if (textes) {
     sections.forEach((s, i) => {
       if (typeof s.title !== 'string') erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1} — il manque le titre.`);
       else if (!s.title && i > 0) erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1} — seul le préambule peut être sans titre.`);
-      if (!Array.isArray(s.body) || s.body.length === 0)
+      if (!Array.isArray(s.body) || s.body.length === 0) {
         erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1} — il manque le texte (« body »).`);
+        return;
+      }
+      /* Un bloc est un paragraphe, ou un encadré de lignes — le formulaire
+         type de rétractation, par exemple. */
+      s.body.forEach((b, j) => {
+        const ok = typeof b === 'string'
+          ? b.trim().length > 0
+          : Array.isArray(b?.encadre) && b.encadre.length > 0 && b.encadre.every((l) => typeof l === 'string' && l.trim());
+        if (!ok) erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1}, bloc ${j + 1} — ni paragraphe ni encadré valide.`);
+      });
     });
   };
 

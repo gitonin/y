@@ -91,8 +91,21 @@ const rowA = [
       <p>© {year} {SITE.name} — {t.footer.rights}</p>
       <ul class="ft__legal">
         <li><a href={route(lang, 'mentions')}>{t.footer.mentions}</a></li>
-        <li><a href={route(lang, 'cgv')}>{t.footer.cgv}</a></li>
-        <li><a href={route(lang, 'cgu')}>{t.footer.cgu}</a></li>
+        {/* Les sigles tiennent sur une ligne, là où les intitulés complets
+            repliaient le pied de page sur quatre rangs. `<abbr>` est le bon
+            outil : le nom complet reste accessible au survol, et le lien garde
+            « CGV » pour nom — c'est ce que prononce un lecteur d'écran, et ce
+            que dira quelqu'un qui pilote son navigateur à la voix. */}
+        <li>
+          <a href={route(lang, 'cgv')}>
+            <abbr title={t.footer.cgvLong}>{t.footer.cgv}</abbr>
+          </a>
+        </li>
+        <li>
+          <a href={route(lang, 'cgu')}>
+            <abbr title={t.footer.cguLong}>{t.footer.cgu}</abbr>
+          </a>
+        </li>
         {/* La rétractation est un droit du client : sa place est avec les
             autres textes qui le concernent, non reléguée sur une ligne à
             part. C'est un bouton et non un lien — il n'ouvre pas une page
@@ -229,6 +242,13 @@ const rowA = [
     align-items: center;
     gap: 0.45rem;
     color: var(--ink-50);
+  }
+
+  /* Un sigle ne doit pas être souligné de pointillés par le navigateur :
+     il se lit comme le reste de la ligne. */
+  .ft__legal abbr {
+    text-decoration: none;
+    cursor: inherit;
   }
 
   .ft__legal {

@@ -36,9 +36,17 @@ const t = useTranslations(lang);
       sections.map((section) => (
         <section class="legal__section" data-reveal>
           {section.title && <h2>{section.title}</h2>}
-          {section.body.map((paragraph) => (
-            <p class="muted">{paragraph}</p>
-          ))}
+          {section.body.map((bloc) =>
+            typeof bloc === 'string' ? (
+              <p class="muted">{bloc}</p>
+            ) : (
+              <div class="legal__encadre">
+                {bloc.encadre.map((ligne) => (
+                  <p>{ligne}</p>
+                ))}
+              </div>
+            ),
+          )}
         </section>
       ))
     }
@@ -66,6 +74,26 @@ const t = useTranslations(lang);
     font-weight: var(--w-semi);
     letter-spacing: -0.014em;
     margin-bottom: 0.9rem;
+  }
+
+  /* Le formulaire type se recopie : il se détache du texte qui l'entoure, et
+     ses lignes restent séparées plutôt que de couler en paragraphes. */
+  .legal__encadre {
+    margin-block: 1.25rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid var(--line);
+    background: var(--paper-5);
+  }
+
+  .legal__encadre p {
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .legal__encadre p:last-child {
+    margin-bottom: 0;
+    color: var(--ink-50);
+    font-size: var(--fs-small);
   }
 
   .legal__section p {

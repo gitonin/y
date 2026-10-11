@@ -1,7 +1,15 @@
 import type { Lang } from '../i18n/utils';
 import textes from '../../contenu/textes.json';
 
-export type LegalSection = { title: string; body: string[] };
+/**
+ * Un bloc de texte légal : un paragraphe, ou un encadré.
+ *
+ * L'encadré sert aux formulaires types — celui de rétractation, que la loi
+ * demande de mettre à disposition. Ce sont des lignes à recopier, non une
+ * prose à lire : les enchaîner en paragraphes les rendrait illisibles.
+ */
+export type LegalBloc = string | { encadre: string[] };
+export type LegalSection = { title: string; body: LegalBloc[] };
 export type LegalDoc = Record<Lang, LegalSection[]>;
 
 /**
