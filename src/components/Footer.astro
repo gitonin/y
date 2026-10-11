@@ -87,16 +87,16 @@ const rowA = [
   <SignatureBand lang={lang} />
 
   <div class="wrap">
-    {/* Le formulaire de rétractation ferme la marche, juste avant la ligne de
-        copyright : à sa place légale, trouvable, sans prendre le pas sur le
-        reste du pied de page. */}
-    <Retractation lang={lang} />
-
     <div class="ft__base small">
       <p>© {year} {SITE.name} — {t.footer.rights}</p>
       <ul class="ft__legal">
         <li><a href={route(lang, 'mentions')}>{t.footer.mentions}</a></li>
         <li><a href={route(lang, 'cgv')}>{t.footer.cgv}</a></li>
+        {/* La rétractation est un droit du client : sa place est avec les
+            autres textes qui le concernent, non reléguée sur une ligne à
+            part. C'est un bouton et non un lien — il n'ouvre pas une page
+            mais une fenêtre — et rien ne doit l'en distinguer ici. */}
+        <li><Retractation lang={lang} /></li>
         <li class="ft__secure">
           <Icon name="lock" size={13} />
           <span class="muted">{t.footer.payment}</span>

@@ -95,13 +95,20 @@ const main = async () => {
       check(`${lang} — le lien est visible`, await lien.isVisible());
       check(`${lang} — son libellé est traduit`, (await lien.textContent()).trim(), r.lien);
 
-      /* Il doit précéder la ligne de copyright, pas la suivre. */
-      const avant = await page.evaluate(() => {
-        const l = document.querySelector('[data-retract-ouvrir]');
-        const c = [...document.querySelectorAll('.ft__base p')].find((p) => p.textContent.includes('©'));
-        return !!l && !!c && (l.compareDocumentPosition(c) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+      /* Sa place est parmi les mentions légales, après les conditions
+         générales : c'est là qu'un client va chercher ses droits. */
+      const rang = await page.evaluate(() => {
+        const legal = document.querySelector('.ft__legal');
+        if (!legal) return null;
+        const items = [...legal.children];
+        return {
+          dedans: !!legal.querySelector('[data-retract-ouvrir]'),
+          place: items.findIndex((i) => i.querySelector('[data-retract-ouvrir]')),
+          apresCgv: items.findIndex((i) => i.querySelector('a[href*="conditions"], a[href*="cgv"], a[href*="terms"], a[href*="tiaokuan"]')),
+        };
       });
-      check(`${lang} — il précède la ligne de copyright`, avant);
+      check(`${lang} — il est parmi les mentions légales`, rang?.dedans);
+      check(`${lang} — il vient après les conditions générales`, rang !== null && rang.apresCgv >= 0 && rang.place > rang.apresCgv);
       await page.close();
     }
 

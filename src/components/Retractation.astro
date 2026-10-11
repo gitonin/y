@@ -33,9 +33,10 @@ const r = t.footer.retractation;
 const enLigne = !!RETRACTATION.url;
 ---
 
-<p class="ft__retract">
-  <button type="button" class="ft__retract-lien" data-retract-ouvrir>{r.lien}</button>
-</p>
+{/* Le déclencheur prend place parmi les autres mentions légales du pied de
+    page : il en adopte la couleur et le corps, et rien ne le signale comme
+    une pièce rapportée. */}
+<button type="button" class="ft__retract-lien" data-retract-ouvrir>{r.lien}</button>
 
 <dialog class="retract" data-retract aria-labelledby="retract-titre">
   <form
@@ -96,22 +97,12 @@ const enLigne = !!RETRACTATION.url;
 </dialog>
 
 <style>
-  /* Le lien ferme la marche du pied de page : il doit être trouvable sans
-     attirer l'œil avant le reste. */
-  .ft__retract {
-    margin-bottom: 0.9rem;
-  }
-
+  /* Les mentions légales voisines n'ont ni soulignement ni survol : le
+     déclencheur se contente d'hériter, pour qu'on ne devine pas qu'il s'agit
+     d'un bouton plutôt que d'un lien. */
   .ft__retract-lien {
-    font-size: var(--fs-small);
-    color: var(--ink-50);
-    border-bottom: 1px solid transparent;
-    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
-  }
-
-  .ft__retract-lien:hover {
-    color: var(--ink);
-    border-bottom-color: var(--accent);
+    font: inherit;
+    color: inherit;
   }
 
   .retract {
