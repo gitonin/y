@@ -24,7 +24,8 @@
         "contact": "Contact",
         "account": "Mon compte",
         "cart": "Panier",
-        "language": "Langue"
+        "language": "Langue",
+        "jeu": "Le jeu"
       },
       "common": {
         "brand": "Yunma",
@@ -450,6 +451,51 @@
       "a11y": {
         "logo": "Yunma — retour à l’accueil",
         "openCart": "Ouvrir le panier"
+      },
+      "jeu": {
+        "titre": "Le jeu du cheval des nuages",
+        "seo": "Un quiz sur le café du Yunnan, à deux ou quatre joueurs, sur vos téléphones.",
+        "intro": "Dix questions sur le café et le Yunnan. Deux à quatre joueurs, chacun sur son téléphone, tous dans la même partie.",
+        "creer": "Créer une partie",
+        "ouRejoindre": "ou rejoindre avec un code",
+        "codePlaceholder": "CODE",
+        "entrer": "Entrer",
+        "nomLabel": "Votre prénom",
+        "nomPlaceholder": "Prénom",
+        "rejoindre": "Rejoindre la partie",
+        "salonTitre": "Salon",
+        "codeDeLaPartie": "Code de la partie",
+        "scannez": "Scannez pour rejoindre",
+        "copier": "Copier le lien",
+        "copie": "Lien copié",
+        "lancer": "Lancer la partie",
+        "attenteHote": "En attente de l’hôte…",
+        "attenteJoueurs": "Il faut au moins un joueur.",
+        "joueurs": "Joueurs",
+        "vous": "vous",
+        "questionSur": "Question {n} sur {total}",
+        "attenteReponses": "{n} sur {total} ont répondu",
+        "votreReponse": "Votre réponse",
+        "aucuneReponse": "Vous n’avez pas répondu",
+        "juste": "Juste",
+        "faux": "Faux",
+        "points": "points",
+        "suivante": "Question suivante",
+        "voirResultat": "Voir le résultat",
+        "classement": "Classement",
+        "finTitre": "Partie terminée",
+        "rejouer": "Rejouer",
+        "retourBoutique": "Découvrir nos cafés",
+        "niveaux": [
+          "Curieux du Yunnan",
+          "Explorateur des nuages",
+          "Connaisseur Yunma",
+          "Maître du cheval des nuages"
+        ],
+        "erreurIntrouvable": "Aucune partie à ce code.",
+        "erreurComplete": "La partie est complète.",
+        "erreurCommencee": "La partie a déjà commencé.",
+        "erreurReseau": "Connexion perdue. Nouvel essai…"
       }
     },
     "en": {
@@ -476,7 +522,8 @@
         "contact": "Contact",
         "account": "My account",
         "cart": "Cart",
-        "language": "Language"
+        "language": "Language",
+        "jeu": "The game"
       },
       "common": {
         "brand": "Yunma",
@@ -902,6 +949,51 @@
       "a11y": {
         "logo": "Yunma — back to home",
         "openCart": "Open cart"
+      },
+      "jeu": {
+        "titre": "The Cloud Horse game",
+        "seo": "A quiz about Yunnan coffee, for two to four players, on your phones.",
+        "intro": "Ten questions on coffee and Yunnan. Two to four players, each on their own phone, all in the same game.",
+        "creer": "Create a game",
+        "ouRejoindre": "or join with a code",
+        "codePlaceholder": "CODE",
+        "entrer": "Enter",
+        "nomLabel": "Your first name",
+        "nomPlaceholder": "First name",
+        "rejoindre": "Join the game",
+        "salonTitre": "Lobby",
+        "codeDeLaPartie": "Game code",
+        "scannez": "Scan to join",
+        "copier": "Copy the link",
+        "copie": "Link copied",
+        "lancer": "Start the game",
+        "attenteHote": "Waiting for the host…",
+        "attenteJoueurs": "At least one player is needed.",
+        "joueurs": "Players",
+        "vous": "you",
+        "questionSur": "Question {n} of {total}",
+        "attenteReponses": "{n} of {total} have answered",
+        "votreReponse": "Your answer",
+        "aucuneReponse": "You did not answer",
+        "juste": "Correct",
+        "faux": "Wrong",
+        "points": "points",
+        "suivante": "Next question",
+        "voirResultat": "See the result",
+        "classement": "Standings",
+        "finTitre": "Game over",
+        "rejouer": "Play again",
+        "retourBoutique": "Discover our coffees",
+        "niveaux": [
+          "Curious about Yunnan",
+          "Cloud explorer",
+          "Yunma connoisseur",
+          "Master of the Cloud Horse"
+        ],
+        "erreurIntrouvable": "No game with that code.",
+        "erreurComplete": "The game is full.",
+        "erreurCommencee": "The game has already started.",
+        "erreurReseau": "Connection lost. Trying again…"
       }
     },
     "zh": {
@@ -928,7 +1020,8 @@
         "contact": "联系我们",
         "account": "我的账户",
         "cart": "购物车",
-        "language": "语言"
+        "language": "语言",
+        "jeu": "游戏"
       },
       "common": {
         "brand": "Yunma 云马",
@@ -1354,6 +1447,51 @@
       "a11y": {
         "logo": "Yunma 云马 — 返回首页",
         "openCart": "打开购物车"
+      },
+      "jeu": {
+        "titre": "云马知识竞赛",
+        "seo": "关于云南咖啡的问答游戏，二至四人，各用自己的手机。",
+        "intro": "十道关于咖啡与云南的问题。二至四位玩家，各用自己的手机，同处一局。",
+        "creer": "创建对局",
+        "ouRejoindre": "或输入房间码加入",
+        "codePlaceholder": "房间码",
+        "entrer": "进入",
+        "nomLabel": "你的名字",
+        "nomPlaceholder": "名字",
+        "rejoindre": "加入对局",
+        "salonTitre": "等待室",
+        "codeDeLaPartie": "房间码",
+        "scannez": "扫码加入",
+        "copier": "复制链接",
+        "copie": "链接已复制",
+        "lancer": "开始对局",
+        "attenteHote": "等待房主开始…",
+        "attenteJoueurs": "至少需要一位玩家。",
+        "joueurs": "玩家",
+        "vous": "你",
+        "questionSur": "第 {n} 题，共 {total} 题",
+        "attenteReponses": "{total} 人中已有 {n} 人作答",
+        "votreReponse": "你的答案",
+        "aucuneReponse": "你没有作答",
+        "juste": "正确",
+        "faux": "错误",
+        "points": "分",
+        "suivante": "下一题",
+        "voirResultat": "查看结果",
+        "classement": "排名",
+        "finTitre": "对局结束",
+        "rejouer": "再来一局",
+        "retourBoutique": "看看我们的咖啡",
+        "niveaux": [
+          "云南初探",
+          "云中漫游者",
+          "云马行家",
+          "云马之主"
+        ],
+        "erreurIntrouvable": "没有找到该房间码。",
+        "erreurComplete": "房间已满。",
+        "erreurCommencee": "对局已经开始。",
+        "erreurReseau": "连接中断，正在重试…"
       }
     }
   },

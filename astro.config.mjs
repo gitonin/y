@@ -42,7 +42,10 @@ export default defineConfig({
           !chemin.includes('404') &&
           !chemin.includes('composants/') &&
           !chemin.includes('savoir-faire/') &&
-          !chemin.includes('a-propos/')
+          !chemin.includes('a-propos/') &&
+          /* Le jeu ne s'adresse pas aux moteurs : il ne fonctionne qu'avec
+             son serveur, et une partie n'a rien à indexer. */
+          !chemin.includes('jeu/')
         );
       },
     }),
