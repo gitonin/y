@@ -6,3 +6,7 @@ dist/
 .DS_Store
 npm-debug.log*
 __pycache__/
+
+# La base des parties du jeu, créée à la volée sur le serveur.
+public/jeu/*.sqlite*
+dist-*/

@@ -1,0 +1,216 @@
+{
+  "_lisezmoi": [
+    "Les questions du jeu, en français, anglais et chinois.",
+    "",
+    "« bonne » est l'indice de la bonne réponse dans « reponses », compté à",
+    "partir de zéro. L'ordre écrit ici n'est pas celui que voient les joueurs :",
+    "chaque partie mélange les réponses, une fois pour tous, afin que personne",
+    "ne puisse retenir « c'est toujours la troisième ».",
+    "",
+    "Ajouter une question ne demande aucune modification du code : le jeu tire",
+    "dix questions au hasard dans ce fichier. Tant qu'il n'en contient que dix,",
+    "toutes sont posées."
+  ],
+  "questions": [
+    {
+      "id": "nom-yunma",
+      "enonce": {
+        "fr": "Que signifie « Yunma » (云马) ?",
+        "en": "What does “Yunma” (云马) mean?",
+        "zh": "「云马」是什么意思？"
+      },
+      "reponses": [
+        { "fr": "Thé des nuages", "en": "Cloud tea", "zh": "云中之茶" },
+        { "fr": "Cheval des nuages", "en": "Cloud horse", "zh": "云中之马" },
+        { "fr": "Montagne du café", "en": "Coffee mountain", "zh": "咖啡之山" },
+        { "fr": "Rivière de Chine", "en": "Chinese river", "zh": "中国之河" }
+      ],
+      "bonne": 1,
+      "explication": {
+        "fr": "« Yun » signifie nuage et « ma » cheval. Le nom évoque le pont entre le Yunnan et la France.",
+        "en": "“Yun” means cloud and “ma” horse. The name evokes the bridge between Yunnan and France.",
+        "zh": "「云」是云，「马」是马。这个名字寓意云南与法国之间的桥梁。"
+      }
+    },
+    {
+      "id": "province",
+      "enonce": {
+        "fr": "Dans quelle province chinoise Yunma s’approvisionne-t-elle ?",
+        "en": "Which Chinese province does Yunma source from?",
+        "zh": "云马的咖啡来自中国哪个省份？"
+      },
+      "reponses": [
+        { "fr": "Guangdong", "en": "Guangdong", "zh": "广东" },
+        { "fr": "Fujian", "en": "Fujian", "zh": "福建" },
+        { "fr": "Yunnan", "en": "Yunnan", "zh": "云南" },
+        { "fr": "Hainan", "en": "Hainan", "zh": "海南" }
+      ],
+      "bonne": 2,
+      "explication": {
+        "fr": "Le Yunnan, province du sud-ouest de la Chine, est au cœur de l’identité de Yunma.",
+        "en": "Yunnan, in south-western China, is at the heart of Yunma’s identity.",
+        "zh": "云南位于中国西南，是云马身份的核心。"
+      }
+    },
+    {
+      "id": "torrefaction",
+      "enonce": {
+        "fr": "Où Yunma torréfie-t-elle ses cafés ?",
+        "en": "Where does Yunma roast its coffee?",
+        "zh": "云马在哪里烘焙咖啡？"
+      },
+      "reponses": [
+        { "fr": "À Paris", "en": "In Paris", "zh": "巴黎" },
+        { "fr": "À Shanghai", "en": "In Shanghai", "zh": "上海" },
+        { "fr": "À Kunming", "en": "In Kunming", "zh": "昆明" },
+        { "fr": "À Lyon", "en": "In Lyon", "zh": "里昂" }
+      ],
+      "bonne": 0,
+      "explication": {
+        "fr": "Les cafés sont torréfiés artisanalement à Paris, en petites séries.",
+        "en": "The coffees are roasted by hand in Paris, in small batches.",
+        "zh": "咖啡在巴黎以小批量手工烘焙。"
+      }
+    },
+    {
+      "id": "espece",
+      "enonce": {
+        "fr": "Quelle est la principale espèce de café cultivée dans le Yunnan ?",
+        "en": "Which coffee species is mainly grown in Yunnan?",
+        "zh": "云南主要种植哪一种咖啡？"
+      },
+      "reponses": [
+        { "fr": "Robusta", "en": "Robusta", "zh": "罗布斯塔" },
+        { "fr": "Arabica", "en": "Arabica", "zh": "阿拉比卡" },
+        { "fr": "Liberica", "en": "Liberica", "zh": "利比里卡" },
+        { "fr": "Excelsa", "en": "Excelsa", "zh": "埃塞尔萨" }
+      ],
+      "bonne": 1,
+      "explication": {
+        "fr": "Le Yunnan est surtout connu pour son arabica, cultivé en altitude.",
+        "en": "Yunnan is known above all for its arabica, grown at altitude.",
+        "zh": "云南以高海拔种植的阿拉比卡闻名。"
+      }
+    },
+    {
+      "id": "variete",
+      "enonce": {
+        "fr": "Quelle variété est historiquement la plus répandue dans le Yunnan ?",
+        "en": "Which variety has historically been the most widespread in Yunnan?",
+        "zh": "云南历史上种植最广的品种是哪个？"
+      },
+      "reponses": [
+        { "fr": "Geisha", "en": "Geisha", "zh": "瑰夏" },
+        { "fr": "Pacamara", "en": "Pacamara", "zh": "帕卡马拉" },
+        { "fr": "Catimor", "en": "Catimor", "zh": "卡蒂姆" },
+        { "fr": "Maragogype", "en": "Maragogype", "zh": "象豆" }
+      ],
+      "bonne": 2,
+      "explication": {
+        "fr": "Robuste et productif, le Catimor domine — même si d’autres variétés se développent.",
+        "en": "Hardy and productive, Catimor dominates — though other varieties are gaining ground.",
+        "zh": "卡蒂姆强健高产，长期占主导，但其他品种正在兴起。"
+      }
+    },
+    {
+      "id": "altitude",
+      "enonce": {
+        "fr": "À quelle altitude poussent les cafés du Yunnan ?",
+        "en": "At what altitude does Yunnan coffee grow?",
+        "zh": "云南咖啡生长在什么海拔？"
+      },
+      "reponses": [
+        { "fr": "300 à 800 m", "en": "300 to 800 m", "zh": "300 至 800 米" },
+        { "fr": "1 100 à 1 900 m", "en": "1,100 to 1,900 m", "zh": "1 100 至 1 900 米" },
+        { "fr": "2 200 à 2 800 m", "en": "2,200 to 2,800 m", "zh": "2 200 至 2 800 米" },
+        { "fr": "Au-delà de 3 000 m", "en": "Above 3,000 m", "zh": "3 000 米以上" }
+      ],
+      "bonne": 1,
+      "explication": {
+        "fr": "Les parcelles se situent entre 1 100 et 1 900 mètres. Les nôtres montent jusqu’à 1 850 m.",
+        "en": "Plots lie between 1,100 and 1,900 metres. Ours reach 1,850 m.",
+        "zh": "地块海拔在 1 100 至 1 900 米之间。我们的高至 1 850 米。"
+      }
+    },
+    {
+      "id": "the",
+      "enonce": {
+        "fr": "Quelle autre culture a fait la réputation du Yunnan pendant des siècles ?",
+        "en": "Which other crop made Yunnan’s name over the centuries?",
+        "zh": "数百年来，云南还以哪一种作物闻名？"
+      },
+      "reponses": [
+        { "fr": "Le cacao", "en": "Cocoa", "zh": "可可" },
+        { "fr": "Le thé", "en": "Tea", "zh": "茶" },
+        { "fr": "La vanille", "en": "Vanilla", "zh": "香草" },
+        { "fr": "Le riz basmati", "en": "Basmati rice", "zh": "巴斯马蒂米" }
+      ],
+      "bonne": 1,
+      "explication": {
+        "fr": "Le Yunnan était réputé pour ses terroirs de thé bien avant de devenir une région caféière.",
+        "en": "Yunnan was renowned for its tea terroirs long before it became a coffee region.",
+        "zh": "在成为咖啡产区之前，云南早已以茶闻名。"
+      }
+    },
+    {
+      "id": "recolte",
+      "enonce": {
+        "fr": "Quand a lieu la récolte du café au Yunnan ?",
+        "en": "When is coffee harvested in Yunnan?",
+        "zh": "云南的咖啡什么时候采收？"
+      },
+      "reponses": [
+        { "fr": "De juin à août", "en": "June to August", "zh": "六月至八月" },
+        { "fr": "De septembre à novembre", "en": "September to November", "zh": "九月至十一月" },
+        { "fr": "De décembre à mars", "en": "December to March", "zh": "十二月至三月" },
+        { "fr": "Toute l’année", "en": "All year round", "zh": "全年" }
+      ],
+      "bonne": 2,
+      "explication": {
+        "fr": "La récolte se déroule en hiver et au début du printemps.",
+        "en": "The harvest runs through winter and into early spring.",
+        "zh": "采收期在冬季与早春。"
+      }
+    },
+    {
+      "id": "procede",
+      "enonce": {
+        "fr": "Quel procédé représente la majorité du café produit en Chine ?",
+        "en": "Which process accounts for most coffee produced in China?",
+        "zh": "中国出产的咖啡以哪种处理法为主？"
+      },
+      "reponses": [
+        { "fr": "Nature, séché au soleil", "en": "Natural, sun-dried", "zh": "日晒" },
+        { "fr": "Honey", "en": "Honey", "zh": "蜜处理" },
+        { "fr": "Lavé", "en": "Washed", "zh": "水洗" },
+        { "fr": "Anaérobie", "en": "Anaerobic", "zh": "厌氧发酵" }
+      ],
+      "bonne": 2,
+      "explication": {
+        "fr": "Environ 90 % de la production chinoise est entièrement lavée, et vendue en parche.",
+        "en": "About 90% of Chinese production is fully washed, and sold in parchment.",
+        "zh": "约 90% 的中国咖啡为全水洗，并以带壳豆出售。"
+      }
+    },
+    {
+      "id": "1892",
+      "enonce": {
+        "fr": "En quelle année le café est-il arrivé au Yunnan ?",
+        "en": "In what year did coffee reach Yunnan?",
+        "zh": "咖啡是哪一年传入云南的？"
+      },
+      "reponses": [
+        { "fr": "1892", "en": "1892", "zh": "1892 年" },
+        { "fr": "1935", "en": "1935", "zh": "1935 年" },
+        { "fr": "1978", "en": "1978", "zh": "1978 年" },
+        { "fr": "2001", "en": "2001", "zh": "2001 年" }
+      ],
+      "bonne": 0,
+      "explication": {
+        "fr": "En 1892, des missionnaires français apportent les premiers plants à Zhukula, près de Dali.",
+        "en": "In 1892, French missionaries brought the first plants to Zhukula, near Dali.",
+        "zh": "1892 年，法国传教士把第一批咖啡苗带到大理附近的朱苦拉。"
+      }
+    }
+  ]
+}
