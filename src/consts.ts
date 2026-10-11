@@ -56,3 +56,17 @@ export const SHOPIFY = {
 export const LISTE_ATTENTE = {
   url: import.meta.env.PUBLIC_LISTE_ATTENTE_URL || '',
 };
+
+/**
+ * Rétractation — l'adresse du service qui enregistre les demandes.
+ *
+ * Même principe que la liste d'attente, et même repli : tant qu'elle est vide,
+ * le formulaire ouvre un courriel déjà rédigé dans le logiciel de messagerie
+ * du client. Ce repli n'est pas un pis-aller — une demande de rétractation
+ * doit arriver à coup sûr, et un courriel part vraiment, là où un formulaire
+ * sans service derrière avalerait la demande en silence. Le client garde en
+ * prime une trace datée de son envoi, ce qui le protège autant que nous.
+ */
+export const RETRACTATION = {
+  url: import.meta.env.PUBLIC_RETRACTATION_URL || '',
+};

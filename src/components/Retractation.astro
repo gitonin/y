@@ -1,0 +1,279 @@
+---
+/**
+ * Le formulaire de rétractation, dans une fenêtre modale.
+ *
+ * Le droit de rétractation donne quatorze jours au client pour revenir sur son
+ * achat, sans avoir à se justifier. La loi demande qu'un formulaire type soit
+ * mis à sa disposition — c'est celui-ci, dépouillé de ce qui ne nous concerne
+ * pas (nous vendons en ligne, il n'y a ni adresse postale à saisir ni
+ * signature manuscrite à produire).
+ *
+ * Deux formes, comme pour la liste d'attente :
+ *
+ *   — service renseigné : la demande part sans quitter la page ;
+ *   — service absent    : le logiciel de messagerie s'ouvre, tout est écrit.
+ *
+ * La seconde est celle d'aujourd'hui, et c'est la plus sûre des deux : une
+ * rétractation doit arriver, et le client garde une trace datée de son envoi.
+ *
+ * La fenêtre est un `<dialog>` : le navigateur retient le focus à l'intérieur,
+ * ferme sur Échap et pose le voile lui-même. Rien de tout cela n'est à
+ * réécrire.
+ */
+import type { Lang } from '../i18n/utils';
+import { useTranslations, route } from '../i18n/utils';
+import { SITE, RETRACTATION } from '../consts';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = t.footer.retractation;
+const enLigne = !!RETRACTATION.url;
+---
+
+<p class="ft__retract">
+  <button type="button" class="ft__retract-lien" data-retract-ouvrir>{r.lien}</button>
+</p>
+
+<dialog class="retract" data-retract aria-labelledby="retract-titre">
+  <form
+    class="retract__corps"
+    method="dialog"
+    data-retract-form
+    data-url={RETRACTATION.url || undefined}
+    data-email={SITE.email}
+    data-objet={r.objet}
+    data-modele={r.corps}
+    data-ok={r.confirmation}
+    data-ko={r.erreur}
+    data-courriel={r.ouvrirCourriel}
+  >
+    <div class="retract__tete">
+      <h2 class="retract__titre" id="retract-titre">{r.titre}</h2>
+      <button type="button" class="retract__fermer" data-retract-fermer aria-label={r.fermer}>
+        <svg viewBox="0 0 22 22" width="18" height="18" aria-hidden="true">
+          <path d="M5 5 17 17M17 5 5 17" stroke="currentColor" stroke-width="1.4" fill="none" />
+        </svg>
+      </button>
+    </div>
+
+    <p class="retract__intro small">{r.intro}</p>
+
+    <label class="retract__champ">
+      <span class="label">{r.numero}</span>
+      <input name="numero" type="text" required autocomplete="off" inputmode="text" />
+      <span class="retract__aide small muted">{r.numeroAide}</span>
+    </label>
+
+    <label class="retract__champ">
+      <span class="label">{r.nom}</span>
+      <input name="nom" type="text" required autocomplete="name" />
+    </label>
+
+    <label class="retract__champ">
+      <span class="label">{r.email}</span>
+      <input name="email" type="email" required autocomplete="email" />
+    </label>
+
+    {!enLigne && <p class="retract__aide small muted">{r.ouvrirCourriel}</p>}
+
+    {/* Le courriel part par un vrai lien, et non par une adresse posée sur
+        `location` : un lien se vérifie, se copie, et le navigateur sait quoi
+        en faire même quand la page tourne dans un cadre restreint. */}
+    <a class="visually-hidden" data-retract-mail href="#" tabindex="-1" aria-hidden="true"></a>
+
+    <button class="btn retract__envoi" type="submit">{r.envoyer}</button>
+
+    {/* La réponse est annoncée aux lecteurs d'écran sans déplacer le focus. */}
+    <p class="retract__reponse small" data-retract-reponse role="status" aria-live="polite" hidden></p>
+
+    <p class="retract__cgv small muted">
+      <a href={route(lang, 'cgv')}>{r.cgv}</a>
+    </p>
+  </form>
+</dialog>
+
+<style>
+  /* Le lien ferme la marche du pied de page : il doit être trouvable sans
+     attirer l'œil avant le reste. */
+  .ft__retract {
+    margin-bottom: 0.9rem;
+  }
+
+  .ft__retract-lien {
+    font-size: var(--fs-small);
+    color: var(--ink-50);
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  }
+
+  .ft__retract-lien:hover {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
+  .retract {
+    width: min(30rem, calc(100vw - 2rem));
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .retract::backdrop {
+    background: rgba(33, 33, 33, 0.45);
+  }
+
+  .retract__corps {
+    display: grid;
+    gap: 0.9rem;
+    padding: clamp(1.25rem, 4vw, 1.75rem);
+  }
+
+  .retract__tete {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .retract__titre {
+    font-size: var(--fs-h3);
+    font-family: var(--font-titre);
+    font-weight: var(--w-semi);
+    letter-spacing: -0.014em;
+  }
+
+  .retract__fermer {
+    color: var(--ink-50);
+    transition: color 0.3s var(--ease);
+  }
+
+  .retract__fermer:hover {
+    color: var(--ink);
+  }
+
+  .retract__intro {
+    color: var(--ink-70);
+    line-height: 1.6;
+  }
+
+  .retract__champ {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .retract__champ input {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--fs-body);
+  }
+
+  .retract__champ input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .retract__envoi {
+    margin-top: 0.2rem;
+    width: 100%;
+  }
+
+  .retract__reponse {
+    color: var(--accent-deep);
+  }
+
+  .retract__cgv a {
+    border-bottom: 1px solid var(--line);
+  }
+</style>
+
+<script>
+  /* Le `<dialog>` fait le gros du travail : focus retenu, Échap, voile. Il ne
+     reste qu'à l'ouvrir, le fermer, et porter la demande quelque part. */
+  const init = () => {
+    const boite = document.querySelector<HTMLDialogElement>('[data-retract]');
+    const form = document.querySelector<HTMLFormElement>('[data-retract-form]');
+    if (!boite || !form || form.dataset.lie === '1') return;
+    form.dataset.lie = '1';
+
+    document.querySelectorAll<HTMLElement>('[data-retract-ouvrir]').forEach((b) =>
+      b.addEventListener('click', () => boite.showModal()),
+    );
+    boite
+      .querySelector<HTMLElement>('[data-retract-fermer]')
+      ?.addEventListener('click', () => boite.close());
+
+    /* Un clic sur le voile ferme : l'élément visé est alors le dialogue
+       lui-même, jamais son contenu. */
+    boite.addEventListener('click', (e) => {
+      if (e.target === boite) boite.close();
+    });
+
+    const reponse = form.querySelector<HTMLElement>('[data-retract-reponse]');
+    const dire = (texte: string) => {
+      if (!reponse) return;
+      reponse.textContent = texte;
+      reponse.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      /* `method="dialog"` fermerait la fenêtre avant qu'on ait rien envoyé. */
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const data = new FormData(form);
+      const champ = (n: string) => String(data.get(n) ?? '').trim();
+      const valeurs = {
+        numero: champ('numero'),
+        nom: champ('nom'),
+        email: champ('email'),
+        date: new Date().toLocaleDateString(document.documentElement.lang || 'fr'),
+      };
+      const remplir = (modele: string) =>
+        modele.replace(/\{(numero|nom|email|date)\}/g, (_, k: keyof typeof valeurs) => valeurs[k]);
+
+      const url = form.dataset.url;
+      if (url) {
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(valeurs),
+          });
+          if (!res.ok) throw new Error(String(res.status));
+          form.reset();
+          dire(form.dataset.ok ?? '');
+        } catch {
+          dire((form.dataset.ko ?? '').replace('{email}', form.dataset.email ?? ''));
+        }
+        return;
+      }
+
+      /* Sans service, le courriel. On ouvre la messagerie du client avec la
+         demande déjà écrite : il ne lui reste qu'à l'envoyer, et il garde une
+         trace datée de sa démarche. */
+      const sujet = encodeURIComponent(remplir(form.dataset.objet ?? ''));
+      const corps = encodeURIComponent(remplir(form.dataset.modele ?? ''));
+      const lien = form.querySelector<HTMLAnchorElement>('[data-retract-mail]');
+      if (!lien) return;
+      lien.href = `mailto:${form.dataset.email}?subject=${sujet}&body=${corps}`;
+      lien.click();
+
+      /* On ne dit pas « demande enregistrée » : rien n'est enregistré tant que
+         le client n'a pas appuyé sur envoyer dans sa messagerie. On lui dit ce
+         qu'il lui reste à faire. */
+      dire(form.dataset.courriel ?? '');
+    });
+  };
+
+  document.addEventListener('astro:page-load', init);
+</script>

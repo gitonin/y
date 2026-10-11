@@ -4,6 +4,7 @@ import { useTranslations, route, url, defaultAlternates, languages, dictionaries
 import { SITE, SHOPIFY } from '../consts';
 import Icon from './Icon.astro';
 import SignatureBand from './SignatureBand.astro';
+import Retractation from './Retractation.astro';
 import FilAriane, { type Maillon } from './FilAriane.astro';
 
 interface Props {
@@ -86,6 +87,11 @@ const rowA = [
   <SignatureBand lang={lang} />
 
   <div class="wrap">
+    {/* Le formulaire de rétractation ferme la marche, juste avant la ligne de
+        copyright : à sa place légale, trouvable, sans prendre le pas sur le
+        reste du pied de page. */}
+    <Retractation lang={lang} />
+
     <div class="ft__base small">
       <p>© {year} {SITE.name} — {t.footer.rights}</p>
       <ul class="ft__legal">
