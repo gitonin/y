@@ -76,6 +76,18 @@ const config = {
       </div>
       <p class="cart__notice small muted">{t.cart.notice}</p>
       <p class="cart__demo small" data-cart-demo hidden>{t.common.shopSoon}</p>
+
+      {/* Les CGV demandent une acceptation expresse avant le paiement, et le
+          disent elles-mêmes : « en cochant la case prévue à cet effet ». Elle
+          est ici, au-dessus du bouton, et non dans une page intermédiaire —
+          c'est le dernier geste avant de quitter le site. */}
+      <label class="cart__cgv small">
+        <input type="checkbox" data-cart-cgv />
+        <span>
+          {t.cart.cgvAvant}<a href={route(lang, 'cgv')}>{t.cart.cgvLien}</a>.
+        </span>
+      </label>
+
       <a class="btn" href="#" data-cart-checkout>{t.cart.checkout}</a>
       <button class="cart__continue small" type="button" data-cart-close>{t.cart.continue}</button>
       <a class="cart__help small muted" href={route(lang, 'faq')}>{t.nav.faq}</a>
@@ -181,6 +193,30 @@ const config = {
 
   .cart__demo {
     color: var(--accent);
+  }
+
+  /* La case et son texte s'alignent sur la première ligne, et le texte garde
+     sa largeur même quand il se replie sur deux lignes. */
+  .cart__cgv {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.6rem;
+    align-items: start;
+    color: var(--ink-70);
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  .cart__cgv input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.15rem;
+    accent-color: var(--accent-deep);
+    cursor: pointer;
+  }
+
+  .cart__cgv a {
+    border-bottom: 1px solid var(--accent);
   }
 
   .cart__continue,
@@ -566,12 +602,22 @@ const config = {
     totalEl.textContent = count ? money(total, lines[0]?.currency ?? 'EUR') : '—';
 
     if (checkout) {
-      const usable = isLive() && !!checkoutUrl && count > 0;
+      const cgv = document.querySelector<HTMLInputElement>('[data-cart-cgv]');
+      const usable = isLive() && !!checkoutUrl && count > 0 && !!cgv?.checked;
       checkout.setAttribute('href', usable ? checkoutUrl : '#');
       checkout.toggleAttribute('data-disabled', !usable);
       checkout.style.opacity = usable ? '1' : '0.4';
       checkout.style.pointerEvents = usable ? 'auto' : 'none';
     }
+  };
+
+  /* Cocher la case rend le bouton cliquable sur-le-champ : sans cela il
+     faudrait toucher au panier pour que l'affichage se mette à jour. */
+  const suivreCgv = () => {
+    const cgv = document.querySelector<HTMLInputElement>('[data-cart-cgv]');
+    if (!cgv || cgv.dataset.lie === '1') return;
+    cgv.dataset.lie = '1';
+    cgv.addEventListener('change', render);
   };
 
   const openCart = () => {
@@ -780,6 +826,7 @@ const config = {
     cfg = readConfig();
     if (!cfg) return;
     bindGlobals();
+    suivreCgv();
     if (isLive()) {
       /* Le stock ne retarde pas l'affichage du panier : les deux partent
          ensemble, et l'un n'attend pas l'autre. */

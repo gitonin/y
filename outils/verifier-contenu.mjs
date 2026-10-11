@@ -92,17 +92,38 @@ if (textes) {
       }
     }
   }
-  for (const doc of ['mentionsLegales', 'conditionsGenerales']) {
+  /* Les sections d'un document légal : un titre, et du texte sous le titre.
+     Le préambule fait exception — il ouvre la page sous le grand titre, et
+     n'a donc pas de titre à lui. */
+  const verifierSections = (doc, sections, ou) => {
+    sections.forEach((s, i) => {
+      if (typeof s.title !== 'string') erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1} — il manque le titre.`);
+      else if (!s.title && i > 0) erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1} — seul le préambule peut être sans titre.`);
+      if (!Array.isArray(s.body) || s.body.length === 0)
+        erreur(`contenu/textes.json : ${doc}${ou}, section ${i + 1} — il manque le texte (« body »).`);
+    });
+  };
+
+  /* Les mentions légales sont traduites : quelques lignes d'identité, qu'un
+     client étranger doit pouvoir lire. */
+  for (const doc of ['mentionsLegales']) {
     if (!textes[doc]) { erreur(`contenu/textes.json : le bloc « ${doc} » est absent.`); continue; }
     for (const l of LANGUES) {
       const sections = textes[doc][l];
       if (!Array.isArray(sections)) { erreur(`contenu/textes.json : « ${doc} » n'a pas de version ${l}.`); continue; }
-      sections.forEach((s, i) => {
-        if (!s.title) erreur(`contenu/textes.json : ${doc} (${l}), section ${i + 1} — il manque le titre.`);
-        if (!Array.isArray(s.body) || s.body.length === 0)
-          erreur(`contenu/textes.json : ${doc} (${l}), section ${i + 1} — il manque le texte (« body »).`);
-      });
+      verifierSections(doc, sections, ` (${l})`);
     }
+  }
+
+  /* Les conditions générales, elles, n'existent qu'en français et sont servies
+     telles quelles dans les trois langues : une seule liste, sans langue. */
+  for (const doc of ['conditionsGenerales', 'conditionsUtilisation']) {
+    const sections = textes[doc];
+    if (!Array.isArray(sections)) {
+      erreur(`contenu/textes.json : « ${doc} » doit être une liste de sections, en français seul.`);
+      continue;
+    }
+    verifierSections(doc, sections, '');
   }
 }
 

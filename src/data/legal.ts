@@ -5,12 +5,18 @@ export type LegalSection = { title: string; body: string[] };
 export type LegalDoc = Record<Lang, LegalSection[]>;
 
 /**
- * Mentions légales et conditions générales — le texte vit dans
- * `contenu/textes.json`, sous « mentionsLegales » et « conditionsGenerales ».
+ * Textes légaux — ils vivent dans `contenu/textes.json`.
  *
- * Ce sont les textes définitifs de la marque, et non plus des modèles : les pages ne
- * portent donc plus d'avertissement. Toute modification passe par le document
- * de contenu, comme le reste du site.
+ * Les mentions légales sont traduites : ce sont quelques lignes d'identité,
+ * et un client étranger doit pouvoir lire qui vend.
+ *
+ * Les conditions générales de vente et d'utilisation, elles, n'existent qu'en
+ * français et sont servies telles quelles dans les trois langues. C'est un
+ * choix assumé : un contrat traduit fait naître deux versions possiblement
+ * divergentes, et il faudrait alors désigner celle qui fait foi. La page les
+ * marque `lang="fr"` pour que lecteurs d'écran et moteurs sachent à quoi s'en
+ * tenir.
  */
 export const mentions: LegalDoc = textes.mentionsLegales;
-export const cgv: LegalDoc = textes.conditionsGenerales;
+export const cgv: LegalSection[] = textes.conditionsGenerales;
+export const cgu: LegalSection[] = textes.conditionsUtilisation;

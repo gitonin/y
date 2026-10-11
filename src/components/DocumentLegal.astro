@@ -1,0 +1,79 @@
+---
+/**
+ * Un document légal rédigé en français seul, servi dans les trois langues.
+ *
+ * Les conditions générales de vente et d'utilisation ne sont pas traduites.
+ * Un contrat traduit fait naître deux versions possiblement divergentes, et
+ * il faudrait alors désigner celle qui fait foi ; on préfère un seul texte.
+ *
+ * Le corps porte donc `lang="fr"` quelle que soit la page : sans lui, un
+ * lecteur d'écran chinois prononcerait du français avec une voix mandarine,
+ * et les moteurs prendraient la page anglaise pour de l'anglais mal écrit.
+ * Une ligne dans la langue du lecteur l'avertit avant qu'il ne commence.
+ *
+ * Le préambule n'a pas de titre : il ouvre la page sous le grand titre.
+ */
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import type { LegalSection } from '../data/legal';
+import Poincon from './Poincon.astro';
+
+interface Props {
+  sections: LegalSection[];
+  lang: Lang;
+}
+const { sections, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="wrap wrap--narrow legal">
+  <Poincon tight />
+
+  {lang !== 'fr' && <p class="legal__avis small muted">{t.legal.enFrancais}</p>}
+
+  <div lang="fr">
+    {
+      sections.map((section) => (
+        <section class="legal__section" data-reveal>
+          {section.title && <h2>{section.title}</h2>}
+          {section.body.map((paragraph) => (
+            <p class="muted">{paragraph}</p>
+          ))}
+        </section>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .legal {
+    padding-bottom: var(--section);
+  }
+
+  .legal__avis {
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legal__section {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .legal__section h2 {
+    font-size: var(--fs-h3);
+    font-family: var(--font-titre);
+    font-weight: var(--w-semi);
+    letter-spacing: -0.014em;
+    margin-bottom: 0.9rem;
+  }
+
+  .legal__section p {
+    margin-bottom: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .legal__section p:last-child {
+    margin-bottom: 0;
+  }
+</style>

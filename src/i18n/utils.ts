@@ -42,6 +42,7 @@ export const routes = {
   contact: 'contact',
   mentions: 'mentions-legales',
   cgv: 'conditions-generales',
+  cgu: 'conditions-utilisation',
 } as const;
 
 export type RouteKey = keyof typeof routes;

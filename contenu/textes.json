@@ -400,7 +400,10 @@
         "mentionsSeo": "Mentions légales du site Yunma : éditeur, hébergement, propriété intellectuelle et données personnelles.",
         "cgvTitle": "Conditions générales de vente",
         "cgvSeo": "Conditions générales de vente Yunma : commandes, prix, paiement, livraison, rétractation et garanties.",
-        "updated": "Dernière mise à jour"
+        "updated": "Dernière mise à jour",
+        "cguTitle": "Conditions d’utilisation du site",
+        "cguSeo": "Conditions d’utilisation du site yunma.fr : accès, propriété intellectuelle, responsabilité.",
+        "enFrancais": "Ce document est rédigé en français, langue du contrat."
       },
       "footer": {
         "tagline": "Cafés de spécialité du Yunnan, torréfiés à Paris.",
@@ -428,7 +431,8 @@
           "objet": "Rétractation — commande {numero}",
           "corps": "Je vous notifie par la présente ma rétractation du contrat portant sur la commande ci-dessous.\n\nNuméro de commande : {numero}\nNom du consommateur : {nom}\nAdresse électronique : {email}\nDate de la demande : {date}\n",
           "cgv": "Conditions et délais détaillés dans nos conditions générales."
-        }
+        },
+        "cgu": "Conditions d’utilisation"
       },
       "cart": {
         "title": "Panier",
@@ -436,7 +440,10 @@
         "total": "Total",
         "checkout": "Passer commande",
         "continue": "Continuer mes achats",
-        "notice": "Taxes incluses. Frais de livraison calculés au paiement."
+        "notice": "Taxes incluses. Frais de livraison calculés au paiement.",
+        "cgvAvant": "J’ai pris connaissance et j’accepte les ",
+        "cgvLien": "conditions générales de vente",
+        "cgvRappel": "Acceptez les conditions générales de vente pour continuer."
       },
       "a11y": {
         "logo": "Yunma — retour à l’accueil",
@@ -843,7 +850,10 @@
         "mentionsSeo": "Legal notice for the Yunma website: publisher, hosting, intellectual property and personal data.",
         "cgvTitle": "Terms and conditions of sale",
         "cgvSeo": "Yunma terms and conditions of sale: orders, prices, payment, delivery, withdrawal and warranties.",
-        "updated": "Last updated"
+        "updated": "Last updated",
+        "cguTitle": "Terms of use",
+        "cguSeo": "Terms of use for yunma.fr: access, intellectual property, liability. Text in French.",
+        "enFrancais": "This document exists only in French, the language of the contract."
       },
       "footer": {
         "tagline": "Specialty coffee from Yunnan, roasted in Paris.",
@@ -871,7 +881,8 @@
           "objet": "Withdrawal — order {numero}",
           "corps": "I hereby give notice of my withdrawal from the contract for the order below.\n\nOrder number: {numero}\nConsumer name: {nom}\nEmail address: {email}\nDate of request: {date}\n",
           "cgv": "Full terms and deadlines are set out in our terms and conditions."
-        }
+        },
+        "cgu": "Terms of use"
       },
       "cart": {
         "title": "Cart",
@@ -879,7 +890,10 @@
         "total": "Total",
         "checkout": "Checkout",
         "continue": "Continue shopping",
-        "notice": "Taxes included. Shipping calculated at checkout."
+        "notice": "Taxes included. Shipping calculated at checkout.",
+        "cgvAvant": "I have read and accept the ",
+        "cgvLien": "terms and conditions of sale",
+        "cgvRappel": "Please accept the terms and conditions of sale to continue."
       },
       "a11y": {
         "logo": "Yunma — back to home",
@@ -1286,7 +1300,10 @@
         "mentionsSeo": "云马网站法律声明：出版方、托管、知识产权与个人数据。",
         "cgvTitle": "销售条款",
         "cgvSeo": "云马销售条款：订单、价格、支付、配送、撤回权与保证。",
-        "updated": "最近更新"
+        "updated": "最近更新",
+        "cguTitle": "网站使用条款",
+        "cguSeo": "yunma.fr 网站使用条款：访问、知识产权、责任。正文为法语。",
+        "enFrancais": "本文件仅有法语版本，法语为合同语言。"
       },
       "footer": {
         "tagline": "云南精品咖啡，于巴黎烘焙。",
@@ -1314,7 +1331,8 @@
           "objet": "撤回订单 — {numero}",
           "corps": "本人特此通知，撤回下列订单的合同。\n\n订单编号：{numero}\n消费者姓名：{nom}\n电子邮箱：{email}\n申请日期：{date}\n",
           "cgv": "详细条件与期限见我们的通用销售条款。"
-        }
+        },
+        "cgu": "网站使用条款"
       },
       "cart": {
         "title": "购物车",
@@ -1322,7 +1340,10 @@
         "total": "合计",
         "checkout": "去结算",
         "continue": "继续购物",
-        "notice": "价格含税，运费在结算时计算。"
+        "notice": "价格含税，运费在结算时计算。",
+        "cgvAvant": "我已阅读并接受",
+        "cgvLien": "销售条款",
+        "cgvRappel": "请接受销售条款后继续。"
       },
       "a11y": {
         "logo": "Yunma 云马 — 返回首页",
@@ -1449,150 +1470,317 @@
       }
     ]
   },
-  "conditionsGenerales": {
-    "fr": [
-      {
-        "title": "Objet et champ d’application",
-        "body": [
-          "Les présentes conditions générales régissent les ventes de cafés et accessoires réalisées par Yunma auprès des consommateurs, via la boutique en ligne. Toute commande implique leur acceptation sans réserve."
-        ]
-      },
-      {
-        "title": "Produits",
-        "body": [
-          "Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
-          "Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable."
-        ]
-      },
-      {
-        "title": "Prix et paiement",
-        "body": [
-          "Les prix sont indiqués en euros, toutes taxes comprises, hors frais de livraison. Les frais de port sont calculés au moment du paiement.",
-          "Le paiement s’effectue en ligne via Shopify Payments (cartes bancaires, Apple Pay, Google Pay, PayPal, Shop Pay). La commande est validée après autorisation du paiement."
-        ]
-      },
-      {
-        "title": "Livraison",
-        "body": [
-          "Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
-          "La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis."
-        ]
-      },
-      {
-        "title": "Droit de rétractation",
-        "body": [
-          "Conformément aux articles L221-18 et suivants du Code de la consommation, vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation sur un produit non ouvert, en écrivant à hello@yunma.fr.",
-          "Les denrées alimentaires descellées après la livraison ne peuvent être reprises pour des raisons d’hygiène (article L221-28)."
-        ]
-      },
-      {
-        "title": "Garanties et réclamations",
-        "body": [
-          "Les garanties légales de conformité et des vices cachés s’appliquent. En cas de colis endommagé ou de produit non conforme, écrivez à hello@yunma.fr sous 14 jours avec une photographie."
-        ]
-      },
-      {
-        "title": "Droit applicable et litiges",
-        "body": [
-          "Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. La plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr."
-        ]
-      }
-    ],
-    "en": [
-      {
-        "title": "Objet et champ d’application",
-        "body": [
-          "Les présentes conditions générales régissent les ventes de cafés et accessoires réalisées par Yunma auprès des consommateurs, via la boutique en ligne. Toute commande implique leur acceptation sans réserve."
-        ]
-      },
-      {
-        "title": "Produits",
-        "body": [
-          "Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
-          "Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable."
-        ]
-      },
-      {
-        "title": "Prix et paiement",
-        "body": [
-          "Les prix sont indiqués en euros, toutes taxes comprises, hors frais de livraison. Les frais de port sont calculés au moment du paiement.",
-          "Le paiement s’effectue en ligne via Shopify Payments (cartes bancaires, Apple Pay, Google Pay, PayPal, Shop Pay). La commande est validée après autorisation du paiement."
-        ]
-      },
-      {
-        "title": "Livraison",
-        "body": [
-          "Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
-          "La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis."
-        ]
-      },
-      {
-        "title": "Droit de rétractation",
-        "body": [
-          "Conformément aux articles L221-18 et suivants du Code de la consommation, vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation sur un produit non ouvert, en écrivant à hello@yunma.fr.",
-          "Les denrées alimentaires descellées après la livraison ne peuvent être reprises pour des raisons d’hygiène (article L221-28)."
-        ]
-      },
-      {
-        "title": "Garanties et réclamations",
-        "body": [
-          "Les garanties légales de conformité et des vices cachés s’appliquent. En cas de colis endommagé ou de produit non conforme, écrivez à hello@yunma.fr sous 14 jours avec une photographie."
-        ]
-      },
-      {
-        "title": "Droit applicable et litiges",
-        "body": [
-          "Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. La plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr."
-        ]
-      }
-    ],
-    "zh": [
-      {
-        "title": "Objet et champ d’application",
-        "body": [
-          "Les présentes conditions générales régissent les ventes de cafés et accessoires réalisées par Yunma auprès des consommateurs, via la boutique en ligne. Toute commande implique leur acceptation sans réserve."
-        ]
-      },
-      {
-        "title": "Produits",
-        "body": [
-          "Les cafés sont vendus en grains, en sachets de 200 g, ou en sachets filtres. Les photographies et illustrations sont les plus fidèles possible mais ne constituent pas un engagement contractuel sur l’aspect exact du produit.",
-          "Les lots étant issus de récoltes saisonnières, une référence peut être remplacée par un lot équivalent, avec information préalable."
-        ]
-      },
-      {
-        "title": "Prix et paiement",
-        "body": [
-          "Les prix sont indiqués en euros, toutes taxes comprises, hors frais de livraison. Les frais de port sont calculés au moment du paiement.",
-          "Le paiement s’effectue en ligne via Shopify Payments (cartes bancaires, Apple Pay, Google Pay, PayPal, Shop Pay). La commande est validée après autorisation du paiement."
-        ]
-      },
-      {
-        "title": "Livraison",
-        "body": [
-          "Les commandes sont préparées sous 48 heures ouvrées suite à la commande, avec des cafés issus de la torréfaction la plus proche. Délais indicatifs : 2 à 3 jours ouvrés en France, 3 à 6 jours ouvrés dans l’Union européenne.",
-          "La livraison est offerte à partir de 50 € d’achat en France métropolitaine. Les risques sont transférés à la remise du colis."
-        ]
-      },
-      {
-        "title": "Droit de rétractation",
-        "body": [
-          "Conformément aux articles L221-18 et suivants du Code de la consommation, vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation sur un produit non ouvert, en écrivant à hello@yunma.fr.",
-          "Les denrées alimentaires descellées après la livraison ne peuvent être reprises pour des raisons d’hygiène (article L221-28)."
-        ]
-      },
-      {
-        "title": "Garanties et réclamations",
-        "body": [
-          "Les garanties légales de conformité et des vices cachés s’appliquent. En cas de colis endommagé ou de produit non conforme, écrivez à hello@yunma.fr sous 14 jours avec une photographie."
-        ]
-      },
-      {
-        "title": "Droit applicable et litiges",
-        "body": [
-          "Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. La plateforme européenne de règlement en ligne des litiges est accessible sur ec.europa.eu/consumers/odr."
-        ]
-      }
-    ]
-  }
+  "conditionsGenerales": [
+    {
+      "title": "",
+      "body": [
+        "Dernière mise à jour le 10 octobre 2026",
+        "Si votre commande est antérieure à cette date, vous pouvez accéder aux CGV en vigueur à la date de votre commande en contactant le Vendeur.",
+        "Les présentes conditions générales de vente et les relations contractuelles entre le Vendeur et l'Acheteur sont soumises à la loi française. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire."
+      ]
+    },
+    {
+      "title": "Mentions légales",
+      "body": [
+        "URL du Site : yunma.fr",
+        "Contact : hello@yunma.fr I +33 (0)756 977 582",
+        "Directeur de la Publication : Jixuan Wu",
+        "Editeur : Yunma (Jixuan Wu) — SIREN 903718120",
+        "Siège social : 1 rue Ordener 75018 Paris, France.",
+        "TVA intracommunautaire : FR07903718120 (TVA non applicable, art. 293 B du CGI)",
+        "Hébergement par la société : Infomaniak SA, chemin de la Crétaux 3, 1227 Carouge, Suisse"
+      ]
+    },
+    {
+      "title": "Objet",
+      "body": [
+        "Nous vous souhaitons la bienvenue sur le site yunma.fr.",
+        "Nous vous invitons à lire attentivement les présentes conditions générales de vente (les « CGV ») ainsi que les Conditions d’Utilisation du Site qui régissent Votre navigation ainsi que nos relations si Vous commandez des produits et/ou des services associés sur le Site (les « Produits »).",
+        "Dans le cadre des présentes CGV, il est convenu que « Vous » ou l’« Acheteur » désigne la personne naviguant sur le Site et/ou commandant des Produits sur le Site ; « Nous » ou le « Vendeur » désigne l’entrepreneur identifié dans les mentions légales ci-dessus ; l’Acheteur et le Vendeur seront collectivement dénommés les « Parties » et individuellement dénommés la « Partie ».",
+        "Toute commande d'un Produit sur le Site suppose la consultation et l'acceptation expresse des CGV en cochant la case prévue à cet effet lors du processus de commande.",
+        "Les présentes CGV s’appliquent à l’exclusion de toutes autres conditions, et notamment celles applicables pour les ventes en magasin ou au moyen d’autres circuits de distribution ou de commercialisation.",
+        "Il est rappelé que la validation de la commande, telle que précisée dans les présentes CGV, constitue un contrat électronique entre les Parties qui vaut preuve entre les Parties de l'intégralité de la commande et de l'exigibilité des sommes dues en exécution de ladite commande."
+      ]
+    },
+    {
+      "title": "1. Conditions d’achat",
+      "body": [
+        "Les Produits que Nous proposons sur le Site sont réservés aux personnes (i) majeures (ou mineures de plus de 16 ans titulaires d’une autorisation de leur représentant légal leur permettant d’effectuer une commande sur le Site) et (ii) disposant de la pleine capacité juridique pour passer des commandes sur le Site. Nous nous réservons le droit à tout moment de Vous demander un justificatif d’identité attestant de votre âge et/ou l’autorisation du représentant légal précitée. Nous nous réservons le droit de ne pas répondre à une commande et/ou d’exclure de notre base de données clients/prospects un Acheteur qui n’aurait pas répondu à la demande ci-dessus ou qui ne remplit pas les exigences prévues à la présente clause."
+      ]
+    },
+    {
+      "title": "2. Produits — Prix",
+      "body": [
+        "a. Produits",
+        "Les Produits proposés à la vente sur le Site sont ceux qui figurent sur le Site au jour de la consultation du Site par l'Acheteur.",
+        "L’Acheteur est informé que les photographies et les textes illustrant les Produits sont susceptibles d’évoluer.",
+        "b. Indisponibilité d’un Produit",
+        "En cas d'indisponibilité d'un Produit, Vous êtes informé de cette indisponibilité au moment de la sélection du Produit. Un message s’affiche et indique que le Produit souhaité est momentanément indisponible.",
+        "A titre exceptionnel, l’information sur l’indisponibilité du Produit ne pourra être communiquée qu’après validation de la commande par l’Acheteur, confirmation par le Vendeur et avant la livraison, par courrier électronique.",
+        "Dans l’hypothèse d’une indisponibilité après validation de la commande par l’Acheteur et confirmation par le Vendeur, l’Acheteur est alors informé de l’annulation totale de sa commande.",
+        "Dans le cas où le paiement de l’Acheteur aurait été encaissé immédiatement lors de sa commande, le Vendeur s'engage à rembourser l’Acheteur des sommes versées par celui-ci selon le mode de paiement utilisé par l’Acheteur.",
+        "c. Prix",
+        "Les prix sont indiqués en euros (€) et sont valables en France métropolitaine. Ils tiennent compte d'éventuelles réductions ainsi que, le cas échéant, de la T.V.A., applicables au jour de la commande. Tout changement du taux applicable de TVA sera répercuté sur le prix des Produits.",
+        "Les prix indiqués ne tiennent pas compte des frais de traitement et de livraison qui seront indiqués avant la validation de la commande et facturés en sus. Par ailleurs, en cas de paiement sur le Site dans une devise autre que l’euro, tous frais bancaires éventuels seront à la charge de l’Acheteur.",
+        "Il est précisé que les éventuelles promotions accordées sous forme de bons de réduction ne sont valables que pour une seule commande par foyer et sur une période de validité donnée et ne sont pas cumulables avec d’autres offres de réductions.",
+        "Le Vendeur se réserve le droit de modifier ses prix à tout moment mais les Produits sont facturés sur la base des tarifs affichés en vigueur au moment de la validation de la commande par l’Acheteur sous réserve de sa confirmation par le Vendeur."
+      ]
+    },
+    {
+      "title": "3. Commande",
+      "body": [
+        "a. Modalités de la commande",
+        "Pour saisir une commande, l’Acheteur doit dans un premier temps se connecter au Site.",
+        "L’Acheteur a ensuite la possibilité de prendre connaissance des différents Produits proposés à la vente au jour de la consultation du Site et de choisir ses Produits en naviguant dans les différentes catégories de Produits.",
+        "Au cours de la navigation sur le Site, l’Acheteur souhaitant effectuer une commande peut le faire en cliquant simplement sur le bouton destiné à ajouter le Produit au panier d’achat.",
+        "Dès cette opération effectuée, l’Acheteur voit s'afficher le nombre de Produits se trouvant dans son panier. Nous attirons l’attention de l’Acheteur sur le fait que le contenu du panier peut être soumis à un délai d’expiration.",
+        "L’Acheteur peut alors poursuivre sa visite ou cliquer sur son panier d’achat pour voir s'afficher à l'écran le contenu de son panier, reprenant tous les éléments de la commande et notamment les caractéristiques essentielles des Produits, le montant global de la commande, les coordonnées de facturation et de livraison, les délais, frais et éventuelles restrictions de livraison.",
+        "L’Acheteur peut revenir sur cette commande, la compléter, la modifier, l'annuler tant qu'il ne l’a pas validée définitivement. Si l’Acheteur souhaite choisir d'autres Produit(s), il peut poursuivre sa navigation sur le Site, le(s) Produit(s) qu'il vient de sélectionner étant conservé(s) dans son panier d’achat.",
+        "Une fois la sélection des Produits terminée, l’Acheteur peut les commander en validant la commande via le bouton prévu à cet effet. Dès lors, une nouvelle page s'ouvre invitant l’Acheteur soit à :",
+        "renseigner son identifiant (adresse de courrier électronique) et son mot de passe si l’Acheteur est déjà inscrit sur le Site,",
+        "remplir avec exactitude un formulaire de collecte de données à caractère personnel en renseignant les champs obligatoires, notamment : Nom, Prénom, adresse de courrier électronique, adresse postale de facturation, et adresse postale de livraison (adresse à laquelle peut être effectuée la livraison).",
+        "L’Acheteur s’engage à compléter de bonne foi le formulaire mis à sa disposition. L’Acheteur reconnait que les données qu’il communique au Vendeur et qui sont stockées dans les systèmes d’information du Vendeur et/ou ses sous-traitants sont exactes et valent preuve de son identité. I",
+        "Après avoir vérifié le contenu de sa commande, l’Acheteur est invité :",
+        "soit à cliquer sur le bouton permettant d’accéder au paiement de sa commande, dans les conditions décrites aux présentes CGV ;",
+        "soit à cliquer sur le bouton lui permettant de modifier son panier et/ou les informations relatives à ses coordonnées personnelles.",
+        "En cliquant sur le bouton donnant accès au paiement de la commande, l’Acheteur doit obligatoirement, dans un premier temps, prendre connaissance des présentes CGV, puis, dans un second temps, confirmer son accord sur l’ensemble des CGV en mettant en œuvre une action de confirmation d’acceptation des présentes CGV requise sur le Site (par exemple en cochant une case).",
+        "Dès lors que l’Acheteur confirme son acceptation des CGV, une page Internet consacrée au paiement de la commande s'ouvre. Toute commande est une commande avec obligation de paiement, ce qui signifie que la passation d’une commande implique un règlement de l’Acheteur.",
+        "L’Acheteur doit alors procéder au paiement de sa commande dans les conditions décrites aux présentes CGV.",
+        "Il est précisé qu'en choisissant un règlement par carte bancaire, tel que prévu à l'Article 4 ci-après, l’Acheteur sera alors basculé automatiquement sur le serveur monétique du prestataire de paiement. Le serveur du prestataire de paiement fait l'objet d'une sécurisation par cryptage S.S.L. (Secure Socket Layer) de manière à protéger toutes les données liées aux moyens de paiement. A aucun moment les données bancaires de l’Acheteur ne transitent sur le système informatique du Vendeur. Sa responsabilité est donc dégagée.",
+        "b. Confirmation de la commande",
+        "Une fois la commande validée par l’Acheteur et son paiement effectué selon les modalités prévues ci-dessous, un récapitulatif imprimable et enregistrable de la commande de l’Acheteur s'affiche et mentionne notamment les références de la commande.",
+        "Un courrier électronique de confirmation de commande est envoyé dans les meilleurs délais par le Vendeur à l’adresse de courrier électronique fourni par l’Acheteur. Ce courrier comporte notamment les informations suivantes :",
+        "l’identité du Vendeur ainsi que ses coordonnées,",
+        "la référence de la commande enregistrée au moment de la passation de la commande,",
+        "le récapitulatif de la commande et les caractéristiques essentielles des Produits,",
+        "les délais, frais et éventuelles restrictions de livraison,",
+        "le montant total de la commande, toutes taxes comprises,",
+        "les droits et garanties légales dont dispose l’Acheteur,",
+        "la confirmation du paiement,",
+        "un lien vers les présentes Conditions Générales de Vente de nature à pouvoir s’y reporter ultérieurement,",
+        "un lien de contact permettant à l’Acheteur d’exercer son droit de rétractation.",
+        "Le Vendeur conserve la propriété du/des Produit(s) et/ou Service(s) commandé(s) jusqu'au complet encaissement du prix et de ses accessoires en ce inclus les frais de port par le Vendeur. En cas d’incident de paiement, l’Acheteur s’engage à restituer au Vendeur, à ses frais, le(s) Produit(s) reçu(s) et ce, dès la première demande.",
+        "En vue de protéger le Vendeur des pratiques abusives opérées par des fraudeurs, et dans l'hypothèse où le Vendeur ou le prestataire de paiement en ligne suspecte le caractère frauduleux d'une commande, le Vendeur et le prestataire de paiement en ligne se réservent le droit de demander à l’Acheteur (préalablement au traitement de la commande) des pièces supplémentaires (notamment un justificatif d'identité de l’Acheteur) en vue de vérifier le caractère non frauduleux de celle-ci.",
+        "En l'absence de réponse de la part de l’Acheteur dans les 7 jours suivant l'envoi de la demande par le Vendeur ou le prestataire de paiement en ligne, la commande sera annulée et aucun paiement ne sera encaissé par le Vendeur. Dans l’hypothèse où le paiement de la commande aurait déjà été encaissé, le Vendeur procèdera au remboursement de celle-ci, selon le mode de paiement utilisé par l’Acheteur.",
+        "c. Preuve de la commande",
+        "Il est prévu par convention expresse entre le Vendeur et l’Acheteur que les courriers électroniques font foi entre les Parties de même que les systèmes d'enregistrement automatiques utilisés sur le Site, notamment quant à la nature et à la date de la commande. L’Acheteur peut accéder, le cas échéant conformément aux règles du droit commun, au contrat électronique conclu entre l’Acheteur et le Vendeur. Il s'adresse pour ce faire au Service Client auquel il fournira toutes les informations nécessaires, notamment le numéro de commande et ses coordonnées.",
+        "Pour accéder à la confirmation du contrat électronique conclu entre l’Acheteur et le Vendeur, l’Acheteur dispose également de la faculté de se reporter au courrier électronique de confirmation de commande mentionné à l’article 3 b) qu’il lui appartient de conserver."
+      ]
+    },
+    {
+      "title": "4. Paiement",
+      "body": [
+        "Le montant dû par l'Acheteur est le montant indiqué sur la validation de commande telle qu’affichée sur la page internet dédiée à cet effet et transmise ensuite par courrier électronique de confirmation par le Vendeur à l'Acheteur.",
+        "L'Acheteur a le choix lors de la validation de sa commande et telle que précisée ci-avant entre différents modes de paiement.",
+        "Le paiement peut s'effectuer au moment de la commande, par internet, par carte bancaire (CB, Visa, Amex, Mastercard, Maestro) par compte Paypal, Apple Pay, ou tout autre mode de paiement indiqué au moment de la passation de la commande.",
+        "La commande n’est confirmée par le Vendeur qu'après (i) acceptation des CGV par l’Acheteur, (ii) vérification et confirmation de la validité du paiement et (iii) envoi à l’Acheteur de la confirmation de sa commande.",
+        "En tout état de cause, le Vendeur se réserve le droit de refuser toute commande ou toute livraison notamment en cas de (i) dépassement des plafonds indiqués en article 1 « Conditions d’Achat » des présentes, (ii) litige existant avec l'Acheteur, (iii) non-paiement total ou partiel d'une commande précédente par l'Acheteur, (iv) refus d'autorisation de paiement par carte bancaire des organismes bancaires, (v) non-paiement ou paiement partiel, et (vi) de toute autre situation non conforme aux présentes CGV."
+      ]
+    },
+    {
+      "title": "5. Livraison et réception",
+      "body": [
+        "a. Modalités de livraison",
+        "Une fois la commande préparée elle est expédiée à l'adresse postale renseignée par l’Acheteur à l'occasion de sa commande, ou mise à la disposition de l’Acheteur à l’adresse de retrait indiquée au moment de la passation de commande.",
+        "Les Produits sont livrés par les services postaux ou par un prestataire spécialisé (selon le cas et/ou les options de livraison sélectionnées) (ci-après le « Transporteur »). En cas d'absence de l’Acheteur, ce dernier est invité à contacter le Transporteur afin de connaitre les modalités d’une nouvelle livraison.",
+        "b. Délais",
+        "Les commandes sont traitées dans un délai maximum de 7 jours ouvrés.",
+        "Il est rappelé qu’une commande n’est acheminée qu’une fois qu’elle aura été traitée.",
+        "A compter du traitement de la commande, les Produits correspondants sont acheminés et livrés par le Transporteur dans les délais indiqués avant la validation de la commande par l’Acheteur, et dans le courrier électronique de confirmation de commande. En cas de retrait, les produits sont mis à disposition dans un délai d’un jour ouvré et l’Acheteur est invité à contacter le Vendeur pour convenir d’un rendez-vous pour le retrait.",
+        "Faute de livraison ou de mise à disposition à l'expiration de ces délais, l’Acheteur a la possibilité d'annuler sa commande dans les conditions prévues à l'article « Retard de Livraison » ci-après.",
+        "c. Retard de livraison",
+        "En cas de retard de livraison (dépassement du délai de livraison indiqué), l’Acheteur doit, dans les meilleurs délais, signaler ce retard au Vendeur par courrier électronique et ce, afin que le Vendeur puisse faire effectuer une enquête auprès du Transporteur.",
+        "En cas de retard de livraison de plus de trente (30) jours à compter de la date de confirmation de la commande, non dû à un cas de force majeure, l’Acheteur a la possibilité de (i) demander la livraison dans un délai supplémentaire raisonnable, auquel cas l'Acheteur est en droit d'annuler sa commande si la livraison n'a pas lieu dans ce délai supplémentaire, ou (ii) annuler sa commande immédiatement en contactant le Vendeur.",
+        "Si l’Acheteur exerce ce droit de dénonciation dans les conditions du présent article 5.c, le prix de la commande ne sera pas encaissé par le Vendeur. Dans l’hypothèse où le paiement de la commande aurait déjà été encaissé, le Vendeur effectue un remboursement de la totalité des sommes versées par l’Acheteur (frais de livraison inclus), selon le mode de paiement utilisé et ce, à l'exclusion de toute autre indemnisation.",
+        "d. Réception",
+        "Chaque livraison est réputée effectuée dès la mise à disposition du ou des Produit(s) par le Transporteur ou le Vendeur auprès de l’Acheteur, ou d’un tiers indiqué par l’Acheteur. Il appartient à l’Acheteur de vérifier immédiatement au moment de la réception du ou des Produit(s) la conformité et l'intégrité du ou des Produit(s) expédié(s).",
+        "En cas d’anomalie au moment de la livraison (notamment livraison en retard, produit manquant ou endommagé), l’Acheteur a la possibilité de refuser la livraison, auquel cas les Produit(s) sont récupérés et retournés par le Transporteur."
+      ]
+    },
+    {
+      "title": "6. Garanties légales",
+      "body": [
+        "a. Description des garanties légales",
+        "Garantie légale de conformité",
+        "Conformément aux articles L. 217-3 et suivants du Code de la consommation, le Vendeur est tenu de livrer un Produit conforme à la commande réalisée par l’Acheteur et doit répondre des défauts de conformité existant au moment de la délivrance dudit Produit, apparaissant dans un délai de deux (2) ans à compter de celle-ci.",
+        "Le Vendeur répond également, durant les mêmes délais, des défauts de conformité résultant de l'emballage.",
+        "Ce délai de garantie s'applique sans préjudice des articles 2224 et suivants du Code civil. Le point de départ de la prescription de l'action de l’Acheteur est le jour de la connaissance par ce dernier du défaut de conformité.",
+        "Au titre de la garantie légale de conformité, le Produit doit notamment, pour être conforme au contrat :",
+        "1° Correspondre à la description, au type, à la quantité et à la qualité ou toute autre caractéristique prévue au contrat ;",
+        "2° Être propre à tout usage spécial recherché par l’Acheteur, porté à la connaissance du Vendeur au plus tard au moment de la conclusion du contrat et que ce dernier a accepté ;",
+        "3° Être délivré avec tous les accessoires devant être fournis conformément au contrat.",
+        "En plus des critères de conformité au contrat, le Produit est conforme s'il répond aux critères suivants :",
+        "1° Il est propre à l'usage habituellement attendu d'un bien de même type, compte tenu, s'il y a lieu, de toute disposition du droit de l'Union européenne et du droit national ainsi que de toutes les normes techniques ou, en l'absence de telles normes techniques, des codes de conduite spécifiques applicables au secteur concerné ;",
+        "2° Le cas échéant, il possède les qualités que le Vendeur a présentées à l’Acheteur sous forme d'échantillon ou de modèle, avant la conclusion du contrat ;",
+        "3° Le cas échéant, il est délivré avec tous les accessoires, y compris l'emballage, que l’Acheteur peut légitimement attendre ;",
+        "4° Il correspond à la quantité, à la qualité et aux autres caractéristiques, y compris notamment en termes de durabilité et de sécurité, que l’Acheteur peut légitimement attendre pour des biens de même type, eu égard à la nature du Produit ainsi qu'aux déclarations publiques faites par le Vendeur, par toute personne en amont dans la chaîne de transactions, ou par une personne agissant pour leur compte, y compris dans la publicité ou sur l'étiquetage.",
+        "Toutefois, le Vendeur n'est pas tenu par toutes les déclarations publiques mentionnées à l'alinéa qui précède s'il démontre :",
+        "1° Qu'il ne les connaissait pas et n'était légitimement pas en mesure de les connaître ;",
+        "2° Qu'au moment de la conclusion du contrat, les déclarations publiques avaient été rectifiées dans des conditions comparables aux déclarations initiales ; ou",
+        "3° Que les déclarations publiques n'ont pas pu avoir d'influence sur la décision d'achat.",
+        "L’Acheteur ne peut contester la conformité en invoquant un défaut concernant une ou plusieurs caractéristiques particulières du Produit, dont il a été spécifiquement informé qu'elles s'écartaient des critères de conformité énoncés précédemment, écart auquel il a expressément et séparément consenti lors de la conclusion du contrat.",
+        "Sauf disposition expresse contraire visant des produits précis, le Vendeur ne consent aucune garantie commerciale au sens de l’article L. 217-21 du Code de la consommation.",
+        "Garantie légale des vices cachés",
+        "De même, conformément à l’article 1641 du Code civil, le Vendeur est tenu de la garantie à raison des défauts cachés de la chose vendue qui la rendent impropre à l'usage auquel on la destine, ou qui diminuent tellement cet usage que l'Acheteur ne l'aurait pas acquise, ou n'en aurait donné qu'un moindre prix, s'il les avait connus.",
+        "L'action résultant des vices rédhibitoires doit être intentée par l’Acheteur dans un délai de deux (2) ans à compter de la découverte du vice.",
+        "b. Procédure à suivre",
+        "Si les Produits livrés sont non-conformes aux Produits commandés par l’Acheteur ou s’ils présentent des vices-cachés, ce dernier doit envoyer un courrier électronique au Vendeur pour lui notifier la non-conformité ou les vices-cachés de son(ses) Produit(s).",
+        "Le Vendeur accuse réception de la demande de l’Acheteur et lui confirme la procédure à suivre. A réception des instructions du Vendeur, l’Acheteur renvoie les Produits non-conformes ou affectés d’un vice-caché au Vendeur à l’adresse suivante : YUNMA - 1 rue Ordener - 75018 Paris.",
+        "Le(s) Produit(s) doit/doivent être impérativement (i) renvoyé(s), aux frais du Vendeur, complet(s), non utilisé(s) (sauf en cas de vice caché), dans son (leur) conditionnement d’origine intact et (ii) dans la mesure du possible accompagné(s) de son (leur) emballage d'origine ainsi que du bon de retour et d’une photocopie de la facture.",
+        "Par ailleurs, le Vendeur n'accepte pas les colis adressés en port dû. Tout risque lié au retour du ou des Produit(s) est à la charge du Vendeur.",
+        "A réception du ou des Produit(s) jugés non-conforme(s) par l’Acheteur ou affectés d’un vice caché selon l’Acheteur, le Vendeur réalise un contrôle du ou des Produit(s) pour constater la conformité ou non desdits Produits. De même, le Vendeur peut procéder sur le(s) Produit(s) retourné(s) par l’Acheteur à un test qualité pour vérifier que le(s) Produit(s) retourné(s) sont bien de(s) Produit(s) d’origine.",
+        "c. Contenu des garanties légales de conformité et des vices cachés",
+        "Si le caractère non-conforme du ou des Produits est confirmé ou que le vice-caché est avéré : l’Acheteur peut choisir entre la réparation et le remplacement du ou des Produit(s), sous réserve des conditions de coûts prévues par l’article L. 217-12 du Code de la consommation. A noter que l’Acheteur (i) bénéficie d’un délai de deux (2) ans à compter de la délivrance du Produit pour agir et (ii) est dispensé de rapporter la preuve de l’existence du défaut de conformité du Produit durant les vingt-quatre (24) mois suivant la délivrance du Produit :",
+        "Dans le cadre de la mise en œuvre de la garantie contre les vices cachés de la chose au sens de l’article 1641 du Code civil, l’Acheteur peut choisir entre la résolution de la vente ou une réduction du prix de vente conformément à l’article 1644 du Code civil."
+      ]
+    },
+    {
+      "title": "7. Droit de rétractation",
+      "body": [
+        "a. La notification au Vendeur de la décision de rétractation",
+        "L’Acheteur dispose d'un droit de rétractation qu’il peut exercer dans un délai de quatorze (14) jours francs, sans avoir à motiver sa décision, ni à payer de pénalités. Ce délai de rétractation expire quatorze (14) jours francs après le jour où l’Acheteur, ou un tiers qu’il aura désigné autre que le Transporteur, prend physiquement possession des Produits.",
+        "Si l’Acheteur a commandé plusieurs Produits lors d'une seule commande, ou que la livraison des Produits a été effectuée en plusieurs parties, le délai de rétractation ne commence pas avant que l’Acheteur, ou un tiers désigné par lui autre que le Transporteur, ne prenne physiquement possession du dernier Produit ou de la dernière partie de la livraison.",
+        "Pour exercer son droit de rétractation, l’Acheteur doit faire parvenir sa décision de rétractation au Vendeur par toute déclaration dénuée d’ambiguïté avant l’expiration du délai de rétractation, notamment :",
+        "par téléphone au numéro suivant : +33 (0)756 977 582​​ ;",
+        "Par email : hello@yunma.fr ;",
+        "par courrier postal à l’adresse suivante : YUNMA - 1 rue Ordener - 75018 Paris.",
+        "En remplissant le « Formulaire de rétractation » disponible dans le footer du Site",
+        "Pour exercer votre droit de rétractation, vous pouvez utiliser le modèle de formulaire de rétractation fourni ci-dessous, bien que son utilisation ne soit pas obligatoire, ou faire toute autre déclaration claire indiquant votre décision de vous rétracter.",
+        "Formulaire de rétractation",
+        "Pour que le délai de rétractation soit respecté, il suffit que l’Acheteur transmette sa communication relative à l’exercice du droit de rétractation avant l’expiration du délai de rétractation.",
+        "b. Le renvoi des Produits objet de la rétractation",
+        "Suivant la communication de l’Acheteur de sa décision de se rétracter, l’Acheteur doit renvoyer au Vendeur le(s) Produit(s) complet(s), non utilisé(s) (sauf pour des manipulations nécessaires pour établir la nature, les caractéristiques et le bon fonctionnement des Produits), et, dans la mesure du possible, dans son(leur) conditionnement d’origine intact et accompagné(s) de son (leur) emballage d’origine, sans retard excessif et au plus tard dans un délai de quatorze (14) jours suivant la communication par l’Acheteur de sa décision de se rétracter, à YUNMA - 1 rue Ordener - 75018 Paris.",
+        "Il est précisé qu’en cas d’exercice par l’Acheteur de son droit de rétractation pour un Produit, faisant partie, lors de l’achat, d’une offre précisant que ledit Produit serait accompagné d’autres produits remis gratuitement à l’Acheteur, ce dernier devra procéder au renvoi desdits produits livrés à titre gratuit en même temps que le Produit pour lequel l’Acheteur a exercé son droit de rétractation.",
+        "Pour connaître les conditions d'éligibilité et la politique de retour complète, veuillez lire ci-dessous.​",
+        "Vous pouvez changer d'avis et vous rétracter pour toute commande achetée en ligne chez Nous à tout moment à partir de la date à laquelle Nous vous envoyons un e-mail pour confirmer que la commande a été expédiée et ce, jusqu'à quatorze (14) jours francs après la réception du produit.",
+        "Ceci ne s'applique pas dans certains cas détaillés à l’article L. 221-28 du Code de la consommation. Notamment, le droit de rétractation ne s’applique pas aux produits qui :",
+        "ne peuvent être retournés pour des raisons de protection de la santé ou d'hygiène ;",
+        "sont descellés après la livraison (notamment, et sans que cette liste ne puisse être considérée comme exclusive, les produits cosmétiques dont l’opercule aurait été enlevé ou par exemple, un parfum si l'emballage scellé a été ouvert), en vertu de l’article L. 221-28, 5° du code de la consommation ;",
+        "ne peuvent être retournés ou sont susceptibles de se détériorer ou d'expirer rapidement.",
+        "Cela n'affecte pas vos droits statutaires décrits à l’article 6 découlant des garanties légales de conformité et des vices cachés concernant les marchandises défectueuses ou non conformes à leur description.",
+        "Les frais de retour du ou des Produit(s) demeurent à la charge de l’Acheteur.",
+        "c. Le remboursement des Produits objet de la rétractation",
+        "Le Vendeur s'engage à rembourser l’Acheteur de la totalité des sommes versées, en ce compris les frais de livraison (à l'exception des frais de livraison supplémentaires découlant du fait que l’Acheteur a choisi, le cas échéant, un mode de livraison autre que le mode moins coûteux de livraison standard proposé par le Vendeur).",
+        "Sauf accord exprès de l’Acheteur pour un autre moyen de remboursement, le remboursement du/des Produit(s) s'effectue selon le mode de paiement originale utilisé par l’Acheteur, sans retard excessif étant précisé que conformément aux dispositions de l’article L. 221-24 du Code de la consommation, le remboursement sera différé jusqu’à la récupération du Produit par le Vendeur ou jusqu'à ce que l’Acheteur ait fourni une preuve de l'expédition du Produit et ce, par tout moyen permettant de justifier de la réalité du renvoi du produit, la date retenue étant celle du premier de ces faits. Ce remboursement n’occasionnera aucun frais pour l’Acheteur.",
+        "Pour toute information complémentaire sur l'étendue, le contenu et les instructions quant à l'exercice du droit de rétractation de l’Acheteur, ce dernier peut contacter le Vendeur."
+      ]
+    },
+    {
+      "title": "8. Litige",
+      "body": [
+        "Pour tout problème relatif à une commande, merci de prendre contact avec le Vendeur, auquel tout litige de consommation doit être confié préalablement :",
+        "Par email : hello@yunma.fr ;",
+        "Par téléphone au numéro suivant : +33 (0)756 977 582",
+        "par courrier postal à l’adresse suivante : YUNMA - 1 rue Ordener - 75018 Paris.",
+        "Les présentes CGV et les relations contractuelles entre l’Acheteur et le Vendeur sont soumises à la loi française. En cas de litige entre l’Acheteur et le Vendeur, et à défaut de résolution du litige à l’amiable, ce dernier sera porté devant les juridictions françaises compétentes."
+      ]
+    },
+    {
+      "title": "9. Données à caractère personnel",
+      "body": [
+        "Le renseignement des informations nominatives (données à caractère personnel), signalées par un astérisque, et collectées dans le cadre de la vente à distance est obligatoire, ces informations étant nécessaires pour le traitement et la livraison des commandes ainsi que pour l'établissement des factures. Ces informations sont strictement confidentielles et ne sont utilisées que par le Vendeur, ou ses sous-traitants soumis aux mêmes obligations, que pour le traitement des commandes réalisées.",
+        "Il est rappelé que l’Acheteur dispose notamment d'un droit d'accès, de modification, de rectification et de suppression des données à caractère personnel le concernant.",
+        "Pour plus d’informations sur le traitement de vos données à caractère personnel, Nous Vous invitons à contacter le Vendeur."
+      ]
+    },
+    {
+      "title": "10. Stipulations diverses",
+      "body": [
+        "a. Force majeure",
+        "Aucune Partie n’est responsable de la non-exécution totale ou partielle de ses obligations au titre des présentes CGV si cette non-exécution est provoquée par un événement constitutif de force majeure.",
+        "Sont considérés comme cas de force majeure les événements remplissant les critères fixés par la jurisprudence de la Cour de cassation et la législation.",
+        "La Partie invoquant un événement constitutif de force majeure devra en aviser l'autre Partie dans les 5 jours ouvrables suivant la survenance de cet événement. Les Parties conviennent qu'elles doivent se concerter dans les meilleurs délais afin de déterminer ensemble les modalités d'exécution de la commande pendant la durée du cas de force majeure. Au-delà d'un délai de trente (30) jours d'interruption pour cause de force majeure, le Vendeur peut ne pas honorer la commande, à charge pour elle de rembourser l’Acheteur le cas échéant.",
+        "b. Non-validité partielle",
+        "Si une ou plusieurs stipulations des présentes CGV sont tenues pour non-valides ou déclarées comme telles en application d'une loi, d'un règlement ou à la suite d'une décision définitive d'une juridiction compétente, les autres stipulations gardent toute leur force et leur portée.",
+        "c. Intégralité des CGV",
+        "Les présentes CGV et la confirmation de commande transmis à l'Acheteur forment un ensemble contractuel et constituent l'intégralité des relations contractuelles intervenues entre les Parties.",
+        "d. Modification des CGV",
+        "Il est précisé que l’Acheteur peut sauvegarder ou imprimer les présentes CGV, à condition toutefois de ne pas les modifier.",
+        "Le Vendeur peut à tout moment mettre à jour les présentes CGV. Toute modification des CGV n'affectera pas les commandes déjà confirmées et payées avant la date d'entrée en vigueur des nouvelles CGV. Les CGV applicables à chaque commande sont celles en vigueur à la date de confirmation de ladite commande.",
+        "Les CGV en vigueur peuvent être consultées à tout moment sous la rubrique « Conditions Générales de Vente » accessible via toutes les pages du Site."
+      ]
+    }
+  ],
+  "conditionsUtilisation": [
+    {
+      "title": "",
+      "body": [
+        "yunma.fr",
+        "Dernière mise à jour : 11 octobre 2026",
+        "Nous Vous souhaitons la bienvenue sur ce site dédié à Yunma (ci-après le « Site »).  Nous Vous invitons à lire attentivement les présentes conditions d’utilisation qui régissent la navigation sur ce Site (ci-après les « Conditions d’Utilisation »).",
+        "Pour toute demande relative à votre utilisation du Site, Vous pouvez Nous contacter à l’adresse suivante : hello@yunma.fr"
+      ]
+    },
+    {
+      "title": "Mentions légales",
+      "body": [
+        "URL du Site : yunma.fr",
+        "Contact : hello@yunma.fr I +33 (0)756 977 582",
+        "Directeur de la Publication : Jixuan Wu",
+        "Editeur : Yunma (Jixuan Wu) — SIREN 903718120",
+        "Siège social : 1 rue Ordener 75018 Paris, France.",
+        "TVA intracommunautaire : FR07903718120 (TVA non applicable, art. 293 B du CGI)",
+        "Hébergement par la société : Infomaniak SA, chemin de la Crétaux 3, 1227 Carouge, Suisse"
+      ]
+    },
+    {
+      "title": "1. Accès au Site",
+      "body": [
+        "Pour accéder et utiliser ce Site, vous devez être âgé(e) de 16 ans ou plus (l’ « Utilisateur » ou « Vous »).",
+        "Si Vous êtes mineur, l’autorisation préalable de vos parents est nécessaire.",
+        "Vous pouvez accéder librement et gratuitement au Site, sans inscription ni création de compte préalable.",
+        "L’accès au Site et/ou à certaines de ses Rubriques peut nécessiter l’utilisation de codes d'accès personnels. Dans ce cas, il Vous appartient de prendre les mesures propres à assurer le secret de ces codes. Vous pouvez bien entendu les modifier à tout moment. Toutefois, le nombre de tentatives d'accès au Site et/ou à certaines de ses Rubriques peut être limité afin de prévenir un usage frauduleux desdits codes. Nous Vous invitons à Nous informer de toute utilisation frauduleuse dont Vous pourriez éventuellement avoir connaissance. Par ailleurs, en cas de non-respect des règles décrites dans les présentes Conditions d’Utilisation, Nous nous réservons le droit de suspendre votre accès.",
+        "Les frais d’accès et d’utilisation du réseau de télécommunication restent néanmoins à votre charge."
+      ]
+    },
+    {
+      "title": "2. Propriété intellectuelle",
+      "body": [
+        "Le développement de ce Site a impliqué des investissements importants. Le Site et chacun des éléments qui le composent (tels que marques, images, textes, vidéos, etc.) sont protégés au titre de la propriété intellectuelle. Toute utilisation, reproduction ou représentation du Site (en tout ou partie), sur quelque support que ce soit, à d’autres fins, et notamment commerciales, est interdite.",
+        "Nous pouvons être amenés à mettre à votre disposition sur ce Site des contenus que Vous êtes autorisés à télécharger (ci-après le(s) « Contenu(s) Téléchargeable(s) »). Nous Vous concédons, pour vos seuls besoins personnels et privés, à titre gracieux et pour la durée légale de protection des droits de propriété intellectuelle telle que définie par les législations françaises et étrangères et les conventions internationales, un droit non exclusif et non transférable d’utilisation du Contenu Téléchargeable. Toute reproduction, représentation, modification ou distribution du Contenu Téléchargeable est interdite. En téléchargeant ou en utilisant ces Contenus Téléchargeables, Vous Vous engagez à les utiliser conformément aux présentes Conditions d’Utilisation.",
+        "Vous reconnaissez et acceptez que ce Site ne puisse être utilisé que pour un usage purement privé et conforme à sa destination. Vous n’êtes pas autorisés à utiliser ce Site d’une manière qui porterait atteinte à l’honneur, à la réputation ou encore aux droits d’un tiers tel que décrit ci-dessous."
+      ]
+    },
+    {
+      "title": "3. Liens hypertextes",
+      "body": [
+        "Les liens hypertextes mis en place sur ce Site peuvent Vous conduire sur des sites Internet édités par des tiers dont Nous ne maîtrisons pas le contenu. En conséquence, et dans la mesure où les liens hypertextes ont été inclus sur ce Site uniquement afin de faciliter votre navigation sur Internet, la consultation de sites de tiers relèvera de votre choix et de votre responsabilité exclusive."
+      ]
+    },
+    {
+      "title": "4. Modification du Site et des Conditions d’Utilisation",
+      "body": [
+        "Nous pouvons être amenés à modifier les contenus et informations inclus dans ce Site ainsi que les présentes Conditions d’Utilisation, notamment afin de respecter toute nouvelle législation et/ou réglementation applicable et/ou afin d’améliorer le Site.  Toute modification sera portée à votre connaissance sur le Site avant sa prise d’effet dans le cadre des présentes Conditions d’Utilisation. Sauf si la modification implique votre acceptation expresse, le fait que Vous continuiez à utiliser le Site implique que Vous acceptez les nouvelles Conditions d’Utilisation."
+      ]
+    },
+    {
+      "title": "5. Avertissement",
+      "body": [
+        "Nous nous efforçons de maintenir le Site accessible à tout moment. En revanche, Nous ne pouvons garantir la disponibilité et l’accessibilité permanente du Site. En effet, Nous pouvons nous trouver dans l’obligation de suspendre momentanément l'accès partiel ou total au Site notamment pour des raisons techniques de maintenance.",
+        "Il est précisé également que le réseau Internet et les systèmes informatiques et de télécommunications ne sont pas exempts d’erreurs et que des interruptions et pannes peuvent survenir. Nous ne pouvons fournir aucune garantie à cet égard et ne saurait dès lors être responsable pour tous dommages inhérents auxdites utilisations du réseau Internet et des systèmes informatiques et de télécommunications, notamment sans que cette liste ne soit limitative :",
+        "la mauvaise transmission et/ou réception de toute donnée et/ou information sur Internet ;",
+        "une intrusion extérieure ou la présence de virus informatique ;",
+        "la défaillance de tout matériel de réception ou des lignes de communication ; et",
+        "tout autre dysfonctionnement du réseau Internet empêchant le bon fonctionnement du Site.",
+        "Notre responsabilité ne pourra être engagée en cas de manquement de votre part aux présentes Conditions d’Utilisation ou en cas de force majeure."
+      ]
+    },
+    {
+      "title": "6. Droit applicable et litiges",
+      "body": [
+        "Pour tout litige relatif à l’utilisation du Site , merci de nous contacter :",
+        "Par email : hello@yunma.fr ;",
+        "Par téléphone au numéro suivant : +33 (0)756 977 582",
+        "par courrier postal à l’adresse suivante : YUNMA - 1 rue Ordener - 75018 Paris.",
+        "Les présentes Conditions d’Utilisation sont soumises à la loi française. A défaut de résolution du litige à l’amiable, le litige sera porté devant les juridictions françaises compétentes."
+      ]
+    },
+    {
+      "title": "7. Accessibilité",
+      "body": [
+        "Nous nous efforçons à rendre le Site accessible conformément à la réglementation en vigueur en matière d’accessibilité.",
+        "En cas de difficulté d’accès aux informations présentes sur le Site, nous vous invitons à nous contacter par mail : hello@yunma.fr"
+      ]
+    }
+  ]
 }

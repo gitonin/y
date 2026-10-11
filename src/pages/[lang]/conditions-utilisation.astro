@@ -1,0 +1,19 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import DocumentLegal from '../../components/DocumentLegal.astro';
+import { langPaths } from '../../i18n/paths';
+import { useTranslations, type Lang } from '../../i18n/utils';
+import { cgu } from '../../data/legal';
+
+export const getStaticPaths: GetStaticPaths = () => langPaths();
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+---
+
+<Base lang={lang} title={t.legal.cguTitle} description={t.legal.cguSeo}>
+  <PageHero lang={lang} label={t.footer.legal} title={t.legal.cguTitle} size="md" />
+  <DocumentLegal sections={cgu} lang={lang} />
+</Base>
