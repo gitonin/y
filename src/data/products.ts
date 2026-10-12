@@ -96,17 +96,6 @@ export const fromPrice = (p: Product) => Math.min(...p.variants.map((v) => v.pri
 export const toPrice = (p: Product) => Math.max(...p.variants.map((v) => v.price));
 /** Vrai quand les variantes n'ont pas toutes le même prix : le catalogue affiche « à partir de ». */
 export const hasPriceRange = (p: Product) => fromPrice(p) !== toPrice(p);
-/**
- * Prix à l'unité de mesure, en euros par kilogramme.
- *
- * Un produit préemballé vendu au poids doit l'afficher à côté de son prix de
- * vente : c'est ce qui permet de comparer un sachet de 200 g à une boîte de
- * cinq sachets filtres. Sans poids déclaré, pas de prix au kilo — on ne
- * l'invente pas.
- */
-export const pricePerKilo = (v: Variant): number | null =>
-  v.weightGrams > 0 ? (v.price * 1000) / v.weightGrams : null;
-
 /** Variante proposée par défaut : la première encore disponible. */
 export const defaultVariant = (p: Product) => p.variants.find((v) => v.available) ?? p.variants[0];
 /** Position de cette variante dans la liste — sert de clé stable, indépendante de la langue. */

@@ -9,10 +9,10 @@ import Photo from '../../../components/Photo.astro';
 import Icon from '../../../components/Icon.astro';
 import type { IconName } from '../../../components/Icon.astro';
 import { getImage } from 'astro:assets';
-import { languages, useTranslations, route, absolute, formatPrice, type Lang } from '../../../i18n/utils';
+import { languages, useTranslations, route, absolute, type Lang } from '../../../i18n/utils';
 import { getPackshot } from '../../../data/packshots';
 import type { Product } from '../../../data/products';
-import { products, getProduct, fromPrice, toPrice, defaultVariant, pricePerKilo } from '../../../data/products';
+import { products, getProduct, fromPrice, toPrice } from '../../../data/products';
 import { SITE } from '../../../consts';
 
 export const getStaticPaths: GetStaticPaths = () =>
@@ -24,9 +24,6 @@ const product = Astro.props.product as Product;
 const t = useTranslations(lang);
 const base = Astro.site ?? new URL('https://yunma.fr');
 const related = product.related.map((slug) => getProduct(slug)).filter(Boolean);
-/* Le prix au kilo du format proposé à l'ouverture ; le script le réécrit si le
-   visiteur en choisit un autre. */
-const auKilo = pricePerKilo(defaultVariant(product));
 
 /* Une ligne de fiche technique vide disparaît, plutôt que d'afficher son
    intitulé suivi de rien. C'est le cas des assortiments, qui n'ont ni altitude
@@ -176,14 +173,6 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
         <h1 class="pdp__title">{product.name[lang]}</h1>
         <p class="pdp__sub muted">{product.subtitle[lang]}</p>
         <Prix product={product} lang={lang} vivant class="pdp__price" />
-        {/* Le prix à l'unité de mesure, sous le prix de vente : c'est ce qui
-            permet de comparer un sachet de 200 g à une boîte de cinq sachets
-            filtres. Il suit le format choisi, comme le prix lui-même. */}
-        {auKilo !== null && (
-          <p class="pdp__kilo small muted mono-num" data-kilo-display data-product={product.slug}>
-            {formatPrice(auKilo, lang)}/kg
-          </p>
-        )}
         <p class="pdp__short">{product.short[lang]}</p>
 
         <BuyBox product={product} lang={lang} hidePrice />
@@ -366,11 +355,6 @@ const seoDescription = resume(`${product.short[lang]} ${product.description[lang
   .pdp__sub {
     margin-top: 0.35rem;
     font-size: var(--fs-small);
-  }
-
-  .pdp__kilo {
-    margin-top: 0.3rem;
-    color: var(--ink-50);
   }
 
   .pdp__price {

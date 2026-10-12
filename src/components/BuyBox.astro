@@ -2,7 +2,7 @@
 import type { Lang } from '../i18n/utils';
 import { useTranslations, formatPrice } from '../i18n/utils';
 import type { Product } from '../data/products';
-import { defaultVariant, pricePerKilo } from '../data/products';
+import { defaultVariant } from '../data/products';
 import Rupture from './Rupture.astro';
 
 interface Props {
@@ -61,7 +61,6 @@ const idsVariantes = product.variants.map((v) => v.shopifyVariantId).filter(Bool
                 data-price={v.price}
                 data-label={v.label[lang]}
                 data-mesure={v.mesure?.[lang] ?? ''}
-                data-kilo={pricePerKilo(v) ?? ''}
                 disabled={!v.available}
               />
               <span>{v.label[lang]}</span>
@@ -322,16 +321,6 @@ const idsVariantes = product.variants.map((v) => v.shopifyVariantId).filter(Bool
     mesures.forEach((el) => {
       el.textContent = mesure;
     });
-
-    /* Le prix au kilo suit le format choisi, lui aussi : changer de contenance
-       change la base de comparaison. */
-    const kilo = radio.dataset.kilo;
-    document
-      .querySelectorAll<HTMLElement>(`[data-kilo-display][data-product="${slug}"]`)
-      .forEach((el) => {
-        el.hidden = !kilo;
-        if (kilo) el.textContent = `${currency(Number(kilo))}/kg`;
-      });
   };
 
   /**
