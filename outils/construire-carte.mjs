@@ -220,7 +220,6 @@ function porte(titre) {
     <meta name="robots" content="noindex, nofollow" />
     <title>${echapper(titre)} — Yunma</title>
     <link rel="icon" href="favicon-96.png" type="image/png" sizes="96x96" />
-    <link rel="stylesheet" href="carte.css" />
     <script>
       (function () {
         var chemin = location.pathname;
@@ -234,13 +233,44 @@ function porte(titre) {
         location.replace(dossier + langue + '/' + location.search + location.hash);
       })();
     </script>
+    <style>
+      /* La porte ne dure que le temps d'un renvoi : ses quelques règles sont
+         ici plutôt que dans une feuille à part. Une feuille externe était
+         demandée par le navigateur avant même que le script ne s'exécute —
+         son préchargeur n'attend pas — et sur une adresse sans barre finale
+         elle tombait à côté : un 404 à chaque entrée. */
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #efebe2;
+        color: #212121;
+        font-family: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', sans-serif;
+        text-align: center;
+      }
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.014em;
+      }
+      a {
+        color: #994d22;
+        text-decoration: none;
+        border-bottom: 1px solid currentColor;
+        padding-bottom: 2px;
+      }
+      p {
+        margin: 1rem 0;
+      }
+    </style>
   </head>
   <body>
-    <main class="wrap" style="padding-block: 4rem">
+    <main>
       <h1>${echapper(titre)}</h1>
-      <p><a class="link" href="fr/">Français<span class="arrow" aria-hidden="true">→</span></a></p>
-      <p><a class="link" href="en/">English<span class="arrow" aria-hidden="true">→</span></a></p>
-      <p><a class="link" href="zh/">中文<span class="arrow" aria-hidden="true">→</span></a></p>
+      <p><a href="fr/">Français<span class="arrow" aria-hidden="true">→</span></a></p>
+      <p><a href="en/">English<span class="arrow" aria-hidden="true">→</span></a></p>
+      <p><a href="zh/">中文<span class="arrow" aria-hidden="true">→</span></a></p>
     </main>
   </body>
 </html>
