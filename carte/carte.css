@@ -238,6 +238,14 @@
   justify-self: end;
 }
 
+/* Le bouton de survol : c'est la seule commande de la page, elle doit se
+   trouver sans chercher — mais ne pas disputer la place au relief. */
+.carte__survol {
+  pointer-events: auto;
+  justify-self: end;
+  margin-bottom: 0.25rem;
+}
+
 /* ---------- Replis ---------- */
 
 .carte__panne {
@@ -279,7 +287,8 @@
     gap: 0.2rem;
   }
 
-  .carte__retour {
+  .carte__retour,
+  .carte__survol {
     justify-self: center;
   }
 

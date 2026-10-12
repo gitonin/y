@@ -63,6 +63,27 @@ async function fichiers(base, prefixe = '') {
 
 const attendre = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * Attend qu'un serveur réponde, au lieu de compter sur un délai fixe.
+ *
+ * Sept cents millisecondes suffisaient à PHP sur une machine au repos, et pas
+ * sur une machine qui vient d'enchaîner une construction : le test échouait
+ * sur un refus de connexion, sans que le jeu y soit pour rien. On interroge
+ * donc jusqu'à obtenir une réponse, quelle qu'elle soit.
+ */
+async function attendreServeur(url, msMax = 15000) {
+  const fin = Date.now() + msMax;
+  while (Date.now() < fin) {
+    try {
+      await fetch(url);
+      return true;
+    } catch {
+      await attendre(120);
+    }
+  }
+  throw new Error(`le serveur n'a pas répondu en ${msMax} ms : ${url}`);
+}
+
 const main = async () => {
   /* Le dossier est fabriqué, jamais suivi : on le refait avant de le juger. */
   execFileSync('node', ['outils/construire-jeu.mjs'], { cwd: RACINE, stdio: 'pipe' });
@@ -169,8 +190,8 @@ const main = async () => {
   const nav = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
 
   try {
-    await attendre(700);
     const base = `http://127.0.0.1:${PORT}`;
+    await attendreServeur(`${base}/api.php?a=rien`);
 
     /* L'hôte crée la partie et donne son prénom. */
     const hote = await (await nav.newContext({ locale: 'fr-FR' })).newPage();
@@ -329,7 +350,7 @@ const main = async () => {
     mkdirSync(join(JEU, 'parties.sqlite'));
     const casse = spawn('php', ['-S', `127.0.0.1:${PORT + 1}`, '-t', JEU], { cwd: JEU, stdio: 'pipe' });
     try {
-      await attendre(700);
+      await attendreServeur(`http://127.0.0.1:${PORT + 1}/api.php?a=rien`);
       const rep = await fetch(`http://127.0.0.1:${PORT + 1}/api.php?a=creer`, { method: 'POST', body: '{}' });
       check('le serveur refuse proprement', rep.status, 500);
       check('et le dit en JSON', rep.headers.get('content-type')?.startsWith('application/json'));

@@ -72,21 +72,67 @@ function oklch(hex) {
   return { L, C: Math.hypot(A, B), h: ((Math.atan2(B, A) * 180) / Math.PI + 360) % 360 };
 }
 
-/** Part de la capture qui n'est pas le papier du fond, et part colorée. */
-async function mesurer(tampon) {
+/**
+ * Écart-type des luminances : combien l'image a de contenu.
+ *
+ * C'est la mesure qui dit si la caméra est entrée dans la montagne. Dedans,
+ * tout l'écran est d'un seul ton et l'écart tombe à presque rien — sans la
+ * moindre erreur de console, puisque le rendu, lui, se porte bien.
+ */
+async function relief(tampon) {
+  const { data, info } = await sharp(tampon).greyscale().raw().toBuffer({ resolveWithObject: true });
+  let somme = 0;
+  for (let i = 0; i < data.length; i++) somme += data[i];
+  const moyenne = somme / data.length;
+  let carres = 0;
+  for (let i = 0; i < data.length; i++) carres += (data[i] - moyenne) ** 2;
+  return Math.sqrt(carres / data.length);
+}
+
+/** Part des pixels qui diffèrent entre deux captures. */
+async function bouge(a, b) {
+  const [x, y] = await Promise.all([
+    sharp(a).greyscale().resize(160, 100, { fit: 'fill' }).raw().toBuffer(),
+    sharp(b).greyscale().resize(160, 100, { fit: 'fill' }).raw().toBuffer(),
+  ]);
+  let n = 0;
+  for (let i = 0; i < x.length; i++) if (Math.abs(x[i] - y[i]) > 8) n++;
+  return (n / x.length) * 100;
+}
+
+/**
+ * Part de la capture occupée par le relief, et part colorée — hors habillage.
+ *
+ * `interdits` écarte le titre, la légende, le pied et la fiche. La question
+ * posée est « le relief reste-t-il monochrome », pas « la page est-elle en
+ * noir et blanc » : le bouton de survol est un aplat à la couleur de la
+ * marque, et il a le droit de l'être. Sans cette exclusion, il pesait à lui
+ * seul 4,8 % de l'écran d'un téléphone et faisait tomber le contrôle.
+ */
+async function mesurer(tampon, interdits = [], echelle = 2) {
   const { data, info } = await sharp(tampon).raw().toBuffer({ resolveWithObject: true });
-  let dessin = 0, colore = 0;
-  for (let i = 0; i < data.length; i += info.channels) {
-    const [r, v, b] = [data[i], data[i + 1], data[i + 2]];
-    /* Seuil bas : le relief est presque de la couleur du papier — c'est le
-       dessin voulu. À 45, comme du temps du relief brun, la moitié de la
-       surface ne comptait plus. */
-    if (Math.abs(r - PAPIER[0]) + Math.abs(v - PAPIER[1]) + Math.abs(b - PAPIER[2]) > 16) dessin++;
-    /* Un pixel « coloré » est un pixel dont les trois composantes s'écartent
-       nettement : du gris chaud n'en est pas, l'orange de la marque en est. */
-    if (Math.max(r, v, b) - Math.min(r, v, b) > 52) colore++;
+  const zones = interdits.map((z) => ({
+    x0: z.x * echelle, y0: z.y * echelle,
+    x1: (z.x + z.width) * echelle, y1: (z.y + z.height) * echelle,
+  }));
+  let dessin = 0, colore = 0, regardes = 0;
+  for (let y = 0; y < info.height; y++) {
+    if (zones.some((z) => y >= z.y0 && y <= z.y1 && z.x0 <= 0 && z.x1 >= info.width)) continue;
+    for (let x = 0; x < info.width; x++) {
+      if (zones.some((z) => x >= z.x0 && x <= z.x1 && y >= z.y0 && y <= z.y1)) continue;
+      const i = (y * info.width + x) * info.channels;
+      const [r, v, b] = [data[i], data[i + 1], data[i + 2]];
+      regardes++;
+      /* Seuil bas : le relief est presque de la couleur du papier — c'est le
+         dessin voulu. À 45, comme du temps du relief brun, la moitié de la
+         surface ne comptait plus. */
+      if (Math.abs(r - PAPIER[0]) + Math.abs(v - PAPIER[1]) + Math.abs(b - PAPIER[2]) > 16) dessin++;
+      /* Un pixel « coloré » est un pixel dont les trois composantes s'écartent
+         nettement : du gris chaud n'en est pas, l'orange de la marque en est. */
+      if (Math.max(r, v, b) - Math.min(r, v, b) > 52) colore++;
+    }
   }
-  const total = info.width * info.height;
+  const total = Math.max(1, regardes);
   return { dessin: (dessin / total) * 100, colore: (colore / total) * 100 };
 }
 
@@ -267,7 +313,11 @@ const main = async () => {
       check(`le relief est construit (${triangles.toLocaleString('fr-FR')} triangles)`, triangles > 50000);
 
       const tampon = await page.screenshot();
-      const { dessin, colore } = await mesurer(tampon);
+      const interdits = await page.evaluate(() =>
+        [...document.querySelectorAll('.carte__legende, .carte__pied, .carte__tete, .carte__fiche')]
+          .map((e) => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; }),
+      );
+      const { dessin, colore } = await mesurer(tampon, interdits);
       /* Un cadrage qui laisse l'écran vide ne déclenche aucune erreur : c'est
          pourquoi on le mesure. */
       check(`le relief occupe l'écran (${dessin.toFixed(0)} % ≥ ${vue.mini} %)`, dessin >= vue.mini);
@@ -278,10 +328,6 @@ const main = async () => {
       check(`la carte reste monochrome (${colore.toFixed(1)} % coloré ≤ 2 %)`, colore <= 2);
 
       titre(`Les fermes, en ${vue.nom}`);
-      const interdits = await page.evaluate(() =>
-        [...document.querySelectorAll('.carte__legende, .carte__pied, .carte__tete, .carte__fiche')]
-          .map((e) => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; }),
-      );
       const repère = await repereAccent(tampon, 2, interdits);
       /* L'orange de la marque ne sert qu'à désigner : il n'est nulle part
          ailleurs sur le relief, donc un repère se voit partout. Dans une
@@ -328,6 +374,40 @@ const main = async () => {
       check(`l'équidistance est annoncée (« ${equidTexte} »)`, new RegExp(`\\b${equid}\\b`).test(equidTexte));
       check('la bande du café est annotée', await page.locator('[data-ceinture]').isVisible());
       check('et les fermes aussi', await page.locator('[data-fermes]').isVisible());
+
+      /* ---------------------------------------------------------------- *
+       * Le survol
+       * ---------------------------------------------------------------- */
+      titre(`Le survol, en ${vue.nom}`);
+      const bouton = page.locator('[data-survol]');
+      const repos = (await bouton.textContent())?.trim() ?? '';
+      check('un bouton de survol, au repos', await bouton.getAttribute('aria-pressed'), 'false');
+      await bouton.click();
+      await page.waitForTimeout(250);
+      check('il s’enclenche', await bouton.getAttribute('aria-pressed'), 'true');
+      check('et son intitulé change', (await bouton.textContent())?.trim() !== repos);
+
+      await page.waitForTimeout(2200);
+      const vol1 = await page.screenshot();
+      await page.waitForTimeout(3200);
+      const vol2 = await page.screenshot();
+
+      const deplacement = await bouge(vol1, vol2);
+      check(`la caméra se déplace (${deplacement.toFixed(0)} % de l'image change)`, deplacement > 12);
+      /* Un vol qui traverse la montagne ne lève aucune erreur : l'écran
+         devient simplement uni. On mesure donc le contenu de l'image. */
+      for (const [k, t] of [[1, vol1], [2, vol2]]) {
+        const ecart = await relief(t);
+        check(`la caméra reste dehors (contenu ${ecart.toFixed(0)} ≥ 8) — vue ${k}`, ecart >= 8);
+      }
+
+      /* Toucher le relief doit rendre la main, sans quoi on ne peut plus
+         reprendre la carte une fois le vol lancé. */
+      await page.mouse.click(Math.round(vue.width * 0.5), Math.round(vue.height * 0.45));
+      await page.waitForTimeout(300);
+      check('un geste sur la carte l’arrête', await bouton.getAttribute('aria-pressed'), 'false');
+      check('et l’intitulé revient', (await bouton.textContent())?.trim(), repos);
+
       await ctx.close();
     }
   } finally {

@@ -26,6 +26,7 @@ On corrige, on redépose ce seul dossier.
 | la zone et la finesse du relevé | `outils/relever-relief.mjs`, puis on le relance |
 | les teintes, la mise en page | `carte/carte.css` |
 | l'équidistance, la scène, les repères | `carte/carte.ts` |
+| le trajet et la lenteur du survol | `carte/carte.ts`, `GARDE` et `TOUR` |
 
     npm run relever-relief     # seulement si la zone ou les paliers changent
     npm run construire-carte   # fabrique public/carte/
@@ -64,6 +65,18 @@ d'autre. Essayé sur les bornes de la bande du café : les deux altitudes sont
 franchies partout, et l'orange s'est répandu sur tout le relief au lieu de
 montrer quoi que ce soit. Une couleur qui désigne ne peut pas aussi mesurer.
 Le test mesure la part colorée de l'image : au-delà de 2 %, il échoue.
+
+**Le survol passe par les trois fermes.** Le bouton lance une caméra qui suit
+une boucle tracée sur les trois fermes, au ras du relief. Ce n'est pas un
+mouvement décoratif : le trajet est celui du café, et c'est en rasant les
+crêtes qu'on comprend ce qu'une vue de dessus ne montre pas, que ces fermes
+sont dans la montagne.
+
+Deux réglages gouvernent tout, dans `carte.ts` : `GARDE`, la hauteur au-dessus
+du relief, et `TOUR`, la durée d'une boucle. La hauteur ne suit pas le sol sous
+la caméra mais le plus haut d'un dixième du trajet devant elle — réglée plus
+court, la caméra épousait chaque bosse et se retrouvait au niveau des crêtes
+voisines : on rasait une pente sans jamais voir le paysage.
 
 **Les courbes sont tracées par le nuanceur, pas par de la géométrie.** Là où
 l'altitude franchit un multiple de l'équidistance, le pixel s'assombrit. Elles

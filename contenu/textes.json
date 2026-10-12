@@ -509,7 +509,9 @@
         "source": "Relief : tuiles d’altitude terrarium, AWS Open Data, d’après le SRTM (NASA). Altitudes exagérées.",
         "panne": "Cette carte demande la 3D, que ce navigateur ne propose pas.",
         "equidistance": "Courbes tous les {n} m",
-        "fermes": "Nos trois fermes"
+        "fermes": "Nos trois fermes",
+        "survoler": "Survoler",
+        "arreter": "Arrêter le survol"
       }
     },
     "en": {
@@ -1021,7 +1023,9 @@
         "source": "Relief: terrarium elevation tiles, AWS Open Data, derived from SRTM (NASA). Heights exaggerated.",
         "panne": "This map needs 3D, which this browser does not offer.",
         "equidistance": "Contours every {n} m",
-        "fermes": "Our three farms"
+        "fermes": "Our three farms",
+        "survoler": "Fly over",
+        "arreter": "Stop the flight"
       }
     },
     "zh": {
@@ -1533,7 +1537,9 @@
         "source": "地形数据：terrarium 高程瓦片，AWS Open Data，源自 SRTM（NASA）。高度经过夸张处理。",
         "panne": "此地图需要 3D 支持，当前浏览器不支持。",
         "equidistance": "等高距 {n} 米",
-        "fermes": "我们的三座庄园"
+        "fermes": "我们的三座庄园",
+        "survoler": "低空飞越",
+        "arreter": "停止飞越"
       }
     }
   },

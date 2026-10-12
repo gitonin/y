@@ -20,6 +20,7 @@
  */
 import {
   BufferAttribute,
+  CatmullRomCurve3,
   BufferGeometry,
   Color,
   DoubleSide,
@@ -67,7 +68,7 @@ const TRAIT = '#212121';
 const ACCENT = '#b95f2c';
 
 /** Équidistance des courbes, en mètres, et la courbe maîtresse tous les N. */
-const EQUIDISTANCE = 150;
+const EQUIDISTANCE = 250;
 const MAITRESSE = 4;
 /** La bande où pousse le café, en mètres. */
 const CEINTURE: [number, number] = [1000, 1900];
@@ -199,15 +200,24 @@ export function lancerCarte(): void {
       uEquidistance: { value: EQUIDISTANCE },
       uMaitresse: { value: MAITRESSE },
       uCeinture: { value: new Vector2(CEINTURE[0], CEINTURE[1]) },
+      uPapier: { value: new Color(PAPIER) },
+      /* La brume : le relief lointain se fond dans le papier. Sans elle, le
+         survol est plat — tout est à la même netteté, et l'œil ne sait plus
+         ce qui est loin. Elle sert aussi la vue d'ensemble, dont le fond
+         s'allège. */
+      uBrume: { value: new Vector2(45, 230) },
     },
     vertexShader: /* glsl */ `
       attribute float altitude;
       varying float vAlt;
       varying vec3 vN;
+      varying float vDistance;
       void main() {
         vAlt = altitude;
         vN = normalize(normalMatrix * normal);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vec4 vue = modelViewMatrix * vec4(position, 1.0);
+        vDistance = -vue.z;
+        gl_Position = projectionMatrix * vue;
       }
     `,
     fragmentShader: /* glsl */ `
@@ -220,8 +230,11 @@ export function lancerCarte(): void {
       uniform float uEquidistance;
       uniform float uMaitresse;
       uniform vec2 uCeinture;
+      uniform vec3 uPapier;
+      uniform vec2 uBrume;
       varying float vAlt;
       varying vec3 vN;
+      varying float vDistance;
 
       /* Une courbe de niveau est un trait là où l'altitude franchit un
          multiple de l'équidistance. En divisant la distance à ce multiple par
@@ -244,10 +257,12 @@ export function lancerCarte(): void {
         float jour = max(dot(normalize(vN), normalize(uLumiere)), 0.0);
         vec3 fond = mix(uOmbre, uSurface, 0.30 + 0.70 * jour);
 
+        /* Traits fins et clairs : la carte se lit au relief, les courbes ne
+           font que le chiffrer. Épaisses, elles grisaient toute la surface. */
         float f = vAlt / uEquidistance;
-        float fine = courbe(f, 1.0);
-        float forte = courbe(f / uMaitresse, 1.15);
-        float encre = max(fine * 0.34, forte * 0.62);
+        float fine = courbe(f, 0.8);
+        float forte = courbe(f / uMaitresse, 0.95);
+        float encre = max(fine * 0.20, forte * 0.38);
         vec3 couleur = mix(fond, uTrait, encre);
 
         /* La bande où pousse le café est bornée par deux courbes appuyées.
@@ -258,8 +273,11 @@ export function lancerCarte(): void {
            désigner. Il ne reste donc à la couleur de la marque qu'un seul
            emploi, les trois fermes — et les bornes sont les traits les plus
            noirs de la carte. */
-        float bornes = max(trait(vAlt, uCeinture.x, 1.5), trait(vAlt, uCeinture.y, 1.5));
-        couleur = mix(couleur, uTrait, bornes * 0.85);
+        float bornes = max(trait(vAlt, uCeinture.x, 1.1), trait(vAlt, uCeinture.y, 1.1));
+        couleur = mix(couleur, uTrait, bornes * 0.55);
+
+        float loin = smoothstep(uBrume.x, uBrume.y, vDistance);
+        couleur = mix(couleur, uPapier, loin * 0.78);
 
         gl_FragColor = vec4(couleur, 1.0);
       }
@@ -296,7 +314,7 @@ export function lancerCarte(): void {
     geoJupe,
     /* Les flancs restent nus : des courbes de niveau sur une paroi verticale
        ne voudraient rien dire. */
-    new MeshBasicMaterial({ color: new Color(OMBRE), side: DoubleSide }),
+    new MeshBasicMaterial({ color: new Color(OMBRE), side: DoubleSide, fog: false }),
   );
   scene.add(flanc);
 
@@ -476,6 +494,118 @@ export function lancerCarte(): void {
   poser('[data-fermes]', T.fermes ?? '');
 
   /* ---------------------------------------------------------------- *
+   * Le survol
+   * ---------------------------------------------------------------- *
+   * Une caméra qui descend au ras du relief et suit une boucle passant par
+   * les trois fermes. Ce n'est pas un mouvement décoratif : le trajet est
+   * celui du café, et c'est en rasant les crêtes qu'on comprend ce qu'une
+   * vue de dessus ne montre pas — que ces fermes sont dans la montagne.
+   */
+
+  /** Altitude du terrain en un point quelconque, entre les mailles. */
+  const hauteurEn = (x: number, z: number) => {
+    const fi = ((x + L / 2) / L) * (M - 1);
+    const fj = ((z + P / 2) / P) * (M - 1);
+    const i = Math.max(0, Math.min(M - 2, Math.floor(fi)));
+    const j = Math.max(0, Math.min(M - 2, Math.floor(fj)));
+    const ti = Math.min(1, Math.max(0, fi - i));
+    const tj = Math.min(1, Math.max(0, fj - j));
+    const h00 = hauteurDe(metres(i, j));
+    const h10 = hauteurDe(metres(i + 1, j));
+    const h01 = hauteurDe(metres(i, j + 1));
+    const h11 = hauteurDe(metres(i + 1, j + 1));
+    return (h00 * (1 - ti) + h10 * ti) * (1 - tj) + (h01 * (1 - ti) + h11 * ti) * tj;
+  };
+
+  /* Le trajet : les trois fermes, rangées autour de leur centre, et entre
+     chacune un point poussé vers l'extérieur — sans lui, la boucle serait un
+     triangle à angles vifs, et la caméra pivoterait sèchement aux sommets. */
+  const points = relief.fermes.map((f) => new Vector3(xDe(f.i), 0, zDe(f.j)));
+  const centre = points
+    .reduce((a, p) => a.add(p), new Vector3())
+    .multiplyScalar(1 / Math.max(1, points.length));
+  points.sort(
+    (a, b) =>
+      Math.atan2(a.z - centre.z, a.x - centre.x) - Math.atan2(b.z - centre.z, b.x - centre.x),
+  );
+  const jalons: Vector3[] = [];
+  for (let k = 0; k < points.length; k++) {
+    const a = points[k];
+    const b = points[(k + 1) % points.length];
+    jalons.push(a.clone());
+    const milieu = a.clone().add(b).multiplyScalar(0.5);
+    jalons.push(milieu.add(milieu.clone().sub(centre).multiplyScalar(0.38)));
+  }
+  const trajet = new CatmullRomCurve3(jalons, true, 'catmullrom', 0.5);
+
+  /** Garde au-dessus du relief, en unités de la carte. */
+  const GARDE = 5.5;
+  /** Un tour complet, en secondes. Lent : on voyage, on ne survole pas. */
+  const TOUR = 150;
+
+  /* La hauteur ne suit pas le sol sous la caméra mais le plus haut des
+     prochains points du trajet : sans cette anticipation, la caméra entre
+     dans la crête qu'elle est en train d'aborder. */
+  const hauteurVol = (t: number) => {
+    let h = -Infinity;
+    /* Fenêtre large : on prend le plus haut d'un dixième du trajet devant
+       soi. Étroite, la caméra épousait chaque bosse et se retrouvait au
+       niveau des crêtes voisines — on rasait une pente sans jamais voir le
+       paysage. Large, elle passe au-dessus du massif qu'elle aborde et le
+       regard porte. */
+    for (let k = 0; k <= 12; k++) {
+      const p = trajet.getPointAt((t + k * 0.008) % 1);
+      h = Math.max(h, hauteurEn(p.x, p.z));
+    }
+    return h + GARDE;
+  };
+
+  let enVol = false;
+  let avancee = 0;
+  const regard = new Vector3();
+  const bouton = racine.querySelector<HTMLButtonElement>('[data-survol]');
+
+  const majBouton = () => {
+    if (!bouton) return;
+    bouton.textContent = enVol ? T.arreter ?? '' : T.survoler ?? '';
+    bouton.setAttribute('aria-pressed', String(enVol));
+  };
+
+  const demarrerVol = () => {
+    if (enVol) return;
+    enVol = true;
+    controles.enabled = false;
+    /* On reprend le trajet au point le plus proche de là où l'on regarde :
+       le vol commence sous nos yeux, pas à l'autre bout de la carte. */
+    let meilleure = Infinity;
+    for (let k = 0; k < 200; k++) {
+      const t = k / 200;
+      const p = trajet.getPointAt(t);
+      const d = p.distanceToSquared(controles.target);
+      if (d < meilleure) { meilleure = d; avancee = t; }
+    }
+    regard.copy(trajet.getPointAt((avancee + 0.035) % 1));
+    majBouton();
+  };
+
+  const arreterVol = () => {
+    if (!enVol) return;
+    enVol = false;
+    /* On rend la main à la souris en gardant ce que l'on regardait, sinon la
+       carte saute. */
+    controles.target.copy(regard);
+    controles.enabled = true;
+    controles.update();
+    majBouton();
+  };
+
+  bouton?.addEventListener('click', () => (enVol ? arreterVol() : demarrerVol()));
+  for (const ev of ['pointerdown', 'wheel'] as const) {
+    toile.addEventListener(ev, () => arreterVol(), { passive: true });
+  }
+  majBouton();
+
+  /* ---------------------------------------------------------------- *
    * La boucle
    * ---------------------------------------------------------------- */
   let cadre = { w: 0, h: 0 };
@@ -506,14 +636,38 @@ export function lancerCarte(): void {
     toile.addEventListener(ev, stop, { once: true, passive: true });
   }
 
+  let dernier = performance.now();
   const boucle = () => {
-    if (tourne) {
-      const a = 0.0011;
-      const { x, z } = camera.position;
-      camera.position.x = x * Math.cos(a) - z * Math.sin(a);
-      camera.position.z = x * Math.sin(a) + z * Math.cos(a);
+    const maintenant = performance.now();
+    /* Le temps écoulé, borné : revenir sur un onglet laissé de côté ferait
+       sinon bondir la caméra de plusieurs minutes de trajet. */
+    const dt = Math.min(0.05, (maintenant - dernier) / 1000);
+    dernier = maintenant;
+
+    if (enVol) {
+      avancee = (avancee + dt / TOUR) % 1;
+      const p = trajet.getPointAt(avancee);
+      const cible = new Vector3(p.x, hauteurVol(avancee), p.z);
+      /* Tout est amorti : la caméra rejoint sa cible au lieu de s'y poser, et
+         le relief défile sans à-coups même là où le sol remonte vite. */
+      camera.position.lerp(cible, 1 - Math.exp(-dt * 1.6));
+      /* On regarde loin devant : de près, la caméra fixait la pente qu'elle
+         longeait et l'on ne voyait plus le paysage. */
+      const devant = trajet.getPointAt((avancee + 0.05) % 1);
+      regard.lerp(
+        new Vector3(devant.x, hauteurEn(devant.x, devant.z) + GARDE * 0.3, devant.z),
+        1 - Math.exp(-dt * 1.2),
+      );
+      camera.lookAt(regard);
+    } else {
+      if (tourne) {
+        const a = dt * 0.07;
+        const { x, z } = camera.position;
+        camera.position.x = x * Math.cos(a) - z * Math.sin(a);
+        camera.position.z = x * Math.sin(a) + z * Math.cos(a);
+      }
+      controles.update();
     }
-    controles.update();
     rendu.render(scene, camera);
     requestAnimationFrame(boucle);
   };
