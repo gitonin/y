@@ -13,7 +13,8 @@
     "theme-zip": "sh outils/theme-zip.sh",
     "export-contenu": "node scripts/export-contenu.mjs",
     "importer-contenu": "node scripts/importer-contenu.mjs",
-    "prebuild": "node outils/verifier-contenu.mjs",
+    "construire-jeu": "node outils/construire-jeu.mjs",
+    "prebuild": "node outils/verifier-contenu.mjs && node outils/construire-jeu.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
@@ -25,7 +26,8 @@
     "test:stock": "node tests/stock.mjs",
     "test:retractation": "node tests/retractation.mjs",
     "test:cgv": "node tests/cgv.mjs",
-    "test": "npm run test:boutique && npm run test:rupture && npm run test:stock && npm run test:retractation && npm run test:cgv && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
+    "test:jeu": "node tests/jeu.mjs",
+    "test": "npm run test:boutique && npm run test:rupture && npm run test:stock && npm run test:retractation && npm run test:cgv && npm run test:jeu && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

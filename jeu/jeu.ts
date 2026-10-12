@@ -8,6 +8,10 @@
  * Le temps de réponse est mesuré entre l'affichage de la question et l'appui,
  * sur ce téléphone, et envoyé tel quel. Mesuré à l'arrivée au serveur, il
  * départagerait les joueurs selon leur opérateur.
+ *
+ * Le serveur est `jeu/api.php`, voisin de cette page, interrogé une fois par
+ * seconde. Rien ici ne fonctionne sans lui — ce qui exclut l'aperçu GitHub
+ * Pages, qui ne sert que des fichiers et n'exécute pas de PHP.
  */
 
 type Textes = Record<string, string> & { niveaux: string[] };
@@ -35,7 +39,7 @@ interface Etat {
 const TEINTES = ['var(--accent)', 'var(--accent-clair)', 'var(--olive)', 'var(--olive-soft)'];
 const PERIODE_MS = 1000;
 
-export function lancerJeu(): void {
+function lancerJeu(): void {
   const racine = document.querySelector<HTMLElement>('[data-jeu]');
   if (!racine || racine.dataset.lance === '1') return;
   racine.dataset.lance = '1';
@@ -43,7 +47,7 @@ export function lancerJeu(): void {
   const brut = document.querySelector<HTMLElement>('[data-jeu-textes]')?.textContent;
   if (!brut) return;
   const T: Textes = JSON.parse(brut);
-  const API = racine.dataset.api ?? '/jeu/api.php';
+  const API = racine.dataset.api ?? '../api.php';
   const LANGUE = racine.dataset.langue ?? 'fr';
 
   const $ = <E extends HTMLElement = HTMLElement>(s: string) => racine.querySelector<E>(s);
@@ -364,6 +368,9 @@ export function lancerJeu(): void {
   /* Un lien d'invitation porte le code : on saute l'accueil. */
   const invite = new URLSearchParams(window.location.search).get('p');
   if (invite) entrerDansLaPartie(invite.toUpperCase());
-
-  document.addEventListener('astro:before-swap', () => window.clearInterval(minuteur), { once: true });
 }
+
+/* Le jeu est une page à lui seul : rien ne l'appelle, il se lance. Le modèle
+   charge ce fichier en module, donc après l'analyse du document — l'écran est
+   là, et attendre un évènement de plus ne servirait à rien. */
+lancerJeu();

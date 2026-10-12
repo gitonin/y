@@ -132,12 +132,24 @@ function faire_le_menage(): void {
  * Questions
  * ------------------------------------------------------------------ */
 
+/*
+ * Les questions sont livrées en PHP, et non en JSON, pour une seule raison :
+ * elles portent les bonnes réponses. Un fichier `.json` posé à côté de ce
+ * script est servi tel quel par le serveur — il suffisait d'en demander
+ * l'adresse pour lire les quarante-deux réponses au milieu d'une partie.
+ * Un `.php` est exécuté, jamais montré, sur n'importe quel hébergement, et
+ * sans dépendre d'une règle de `.htaccess` qui peut être ignorée.
+ *
+ * Le fichier est fabriqué par `outils/construire-jeu.mjs` depuis
+ * `contenu/jeu.json`, qui reste la seule chose à modifier pour changer une
+ * question.
+ */
 function questions(): array {
     static $q = null;
     if ($q === null) {
-        $brut = @file_get_contents(__DIR__ . '/questions.json');
-        if ($brut === false) refuser('questions introuvables', 500);
-        $q = json_decode($brut, true)['questions'] ?? [];
+        $fichier = __DIR__ . '/questions.php';
+        if (!is_file($fichier)) refuser('questions introuvables', 500);
+        $q = (require $fichier)['questions'] ?? [];
     }
     return $q;
 }

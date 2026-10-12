@@ -35,7 +35,16 @@ src/
 ├─ layouts/Base.astro        <head>, SEO, transitions de page
 └─ pages/[lang]/             Toutes les pages, générées dans les 3 langues
 
-outils/verifier-contenu.mjs  Relit contenu/ avant chaque publication
+jeu/                         LE JEU — à part du site, se redépose seul
+├─ LISEZ-MOI.md              Mode d'emploi du jeu
+├─ modele.html               Les six écrans d'une partie
+├─ jeu.css / jeu.ts          Ses styles et sa logique
+├─ api.php                   Son serveur : les parties, les scores
+└─ .htaccess                 Protège la base et les bonnes réponses
+
+outils/
+├─ verifier-contenu.mjs      Relit contenu/ avant chaque publication
+└─ construire-jeu.mjs        Fabrique public/jeu/, autonome, depuis jeu/
 ```
 
 ### Pages générées (× 3 langues)
@@ -53,6 +62,14 @@ outils/verifier-contenu.mjs  Relit contenu/ avant chaque publication
 | Mentions légales / CGV | `/fr/mentions-legales/`, `/fr/conditions-generales/` |
 
 `/` détecte la langue du navigateur et redirige (repli : français).
+
+### Le jeu, à part
+
+`/jeu/` n'est pas une page du site : aucun menu n'y mène, il ne figure pas au
+plan du site, et on y entre par un lien que l'on partage. Tout ce dont il a
+besoin tient dans ce seul dossier, dont aucun fichier ne porte d'empreinte :
+on le corrige et on le redépose seul, sans toucher au reste.
+Voir `jeu/LISEZ-MOI.md`.
 
 ---
 
@@ -287,6 +304,12 @@ Vercel, Cloudflare Pages, o2switch, etc.
   pas servi à la racine du domaine, `BASE_PATH=/sous-dossier`.
 - `public/_redirects` redirige `/` vers `/fr/` sur Netlify et Cloudflare Pages.
   Sur un autre hébergeur, la redirection est assurée côté client par `/index.html`.
+
+Le dossier `/jeu/` part avec `dist/`, mais il réclame **du PHP** : sur un
+hébergement de fichiers seuls (GitHub Pages, Netlify, Cloudflare Pages) ses
+pages s'ouvrent et aucune partie ne démarre. Il tourne sur Infomaniak, qui
+exécute PHP. Et comme rien dans ce dossier ne porte d'empreinte, on le
+redépose seul quand le jeu change — sans reconstruire le site.
 
 ---
 

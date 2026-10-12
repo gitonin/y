@@ -1,0 +1,299 @@
+/* =========================================================
+   LE JEU DU CHEVAL DES NUAGES — styles propres au jeu
+   =========================================================
+
+   Cette feuille ne porte que le jeu. Elle est concaténée après
+   `src/styles/global.css` par `outils/construire-jeu.mjs` : la charte
+   du site reste la seule source des couleurs, des graisses et des
+   boutons, et le jeu la suit sans la recopier.
+
+   Hors d'Astro, aucune portée n'est posée automatiquement — d'où des
+   sélecteurs tous préfixés par `.jeu`, y compris ceux des éléments que
+   le script fabrique.
+   ========================================================= */
+
+.jeu {
+  max-width: 34rem;
+  padding-top: clamp(1.5rem, 5vw, 3rem);
+  padding-bottom: var(--section);
+}
+
+.jeu__ecran {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: start;
+}
+
+.jeu__ecran[hidden] {
+  display: none;
+}
+
+.jeu__titre {
+  font-size: var(--fs-h2);
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.jeu__intro {
+  max-width: 30ch;
+}
+
+.jeu__principal,
+.jeu__code,
+.jeu__nom {
+  width: 100%;
+}
+
+.jeu__ou {
+  margin-top: 0.75rem;
+  color: var(--ink-50);
+}
+
+.jeu__code {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+}
+
+.jeu__nom {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.jeu input[type='text'] {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+}
+
+.jeu__code input {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.jeu input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Le code se lit à voix haute d'un bout à l'autre de la pièce. */
+.jeu__grand-code {
+  font-size: clamp(3rem, 18vw, 5rem);
+  line-height: 1;
+  letter-spacing: 0.12em;
+  font-weight: var(--w-semi);
+}
+
+.jeu__code-rappel {
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-50);
+}
+
+.jeu__qr {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+  padding: 0.9rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+}
+
+.jeu__qr svg {
+  width: 10.5rem;
+  height: 10.5rem;
+  display: block;
+}
+
+.jeu__sous-titre {
+  margin-top: 0.75rem;
+  color: var(--ink-50);
+}
+
+.jeu__joueurs,
+.jeu__podium {
+  width: 100%;
+  display: grid;
+  gap: 0.4rem;
+}
+
+/* Les lignes de joueurs et les boutons de réponse sont fabriqués par le
+   script. Ils n'existent donc pas dans le modèle, et leurs règles vivent
+   ici comme les autres — une feuille ordinaire atteint ce que le script
+   ajoute, ce qu'un bloc `<style>` d'Astro ne faisait pas. */
+.jeu .jeu__joueur {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--line);
+  background: var(--paper-5);
+}
+
+/* Quatre joueurs, quatre teintes de la charte — il n'en existe pas une
+   cinquième, et c'est aussi pourquoi la partie s'arrête à quatre. */
+.jeu .jeu__pastille {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background: var(--teinte);
+}
+
+.jeu .jeu__joueur--vous {
+  border-color: var(--ink-30);
+}
+
+.jeu .jeu__vous {
+  color: var(--ink-50);
+  font-size: var(--fs-small);
+}
+
+.jeu .jeu__score {
+  font-variant-numeric: tabular-nums;
+}
+
+.jeu__tete {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+/* Le chronomètre tend sans crier : des chiffres qui se vident, et un filet
+   qui se rétracte. Pas de rouge — la charte n'en a pas. */
+.jeu__chrono {
+  font-size: 1.5rem;
+  font-weight: var(--w-semi);
+}
+
+.jeu__jauge {
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+}
+
+.jeu__jauge span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 0.95s linear;
+}
+
+.jeu__enonce {
+  font-size: var(--fs-h3);
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  letter-spacing: -0.014em;
+  line-height: 1.25;
+}
+
+.jeu__enonce--petit {
+  font-size: 1.0625rem;
+  color: var(--ink-70);
+}
+
+.jeu__reponses {
+  width: 100%;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.jeu .jeu__reponse {
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  line-height: 1.4;
+  transition: border-color 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+
+.jeu .jeu__reponse:hover:not(:disabled) {
+  border-color: var(--ink-30);
+}
+
+.jeu .jeu__reponse[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--paper-5);
+}
+
+.jeu .jeu__reponse:disabled {
+  cursor: default;
+}
+
+.jeu .jeu__reponse--choisie {
+  border-color: var(--accent);
+}
+
+/* Juste et faux sans vert ni rouge : l'un s'affirme, l'autre s'éteint. */
+.jeu__bonne {
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  font-size: 1.125rem;
+  color: var(--accent-deep);
+}
+
+.jeu__explication {
+  line-height: 1.6;
+}
+
+[data-verdict] {
+  color: var(--accent-deep);
+}
+
+[data-verdict].est-faux {
+  color: var(--ink-30);
+}
+
+.jeu__attente-rep {
+  min-height: 1.2em;
+}
+
+.jeu__niveau {
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  font-size: var(--fs-h3);
+  color: var(--accent-deep);
+}
+
+.jeu .jeu__podium .jeu__joueur:first-child {
+  border-color: var(--accent);
+}
+
+.jeu__erreur {
+  margin-top: 1.5rem;
+  color: var(--accent-deep);
+}
+
+/* Le poinçon de la marque. Son composant Astro vit dans le site, qui n'est
+   plus chargé ici : ses trois règles sont reprises telles quelles. */
+.poincon {
+  display: grid;
+  place-items: center;
+  margin-block: clamp(1.75rem, 4vw, 3rem);
+}
+
+.poincon img {
+  width: clamp(22px, 3.4vw, 30px);
+  height: auto;
+}
+
+/* Hors du site, plus d'en-tête ni de pied de page : le jeu occupe la fenêtre
+   entière, et se centre lui-même sur les grands écrans. */
+.jeu {
+  margin-inline: auto;
+}

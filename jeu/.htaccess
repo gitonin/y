@@ -1,0 +1,44 @@
+# ----------------------------------------------------------------------------
+# Le dossier du jeu
+# ----------------------------------------------------------------------------
+# Ce dossier se redépose seul, sans toucher au reste du site : ses règles
+# vivent donc ici, et non dans le .htaccess de la racine.
+
+# La base des parties ne se sert pas : elle se lit depuis PHP, jamais par le web.
+<FilesMatch "\.(sqlite|sqlite-wal|sqlite-shm|db)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Les questions non plus : elles portent les bonnes réponses. Elles sont
+# livrées en PHP, donc exécutées et jamais montrées — cette règle n'est qu'une
+# seconde serrure, au cas où un ancien questions.json traînerait encore.
+<FilesMatch "^questions\.(json|php)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  # Une partie change à chaque seconde : rien à garder du serveur.
+  <FilesMatch "\.php$">
+    Header set Cache-Control "no-store"
+  </FilesMatch>
+
+  # La feuille et le script gardent leur nom d'une version à l'autre — ils ne
+  # portent pas d'empreinte, puisque ce dossier se corrige à la main. Il faut
+  # donc les revalider à chaque visite, sans quoi une correction du jeu
+  # mettrait des jours à paraître sur les téléphones qui y ont déjà joué.
+  <FilesMatch "\.(css|js|html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>

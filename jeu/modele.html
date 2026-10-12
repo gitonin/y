@@ -1,0 +1,137 @@
+<!doctype html>
+<!--
+  Modèle d'une page du jeu, une par langue.
+
+  `outils/construire-jeu.mjs` remplace chaque {{clé}} par le texte de la
+  langue (contenu/textes.json, section « jeu ») et dépose le résultat dans
+  public/jeu/<langue>/index.html. Les textes restent donc à un seul endroit,
+  modifiables sans toucher au code.
+
+  Tous les chemins sont relatifs : le dossier « jeu » fonctionne à la racine
+  du domaine comme dans un sous-dossier, et se redépose seul.
+-->
+<html lang="{{htmlLang}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#efebe2" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>{{titre}} — Yunma</title>
+    <meta name="description" content="{{seo}}" />
+    <!-- Le jeu ne s'adresse pas aux moteurs : il ne vit qu'avec son serveur,
+         et une partie n'a rien à indexer. Aucun lien du site n'y mène. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="../favicon-96.png" type="image/png" sizes="96x96" />
+    <link rel="stylesheet" href="../jeu.css" />
+  </head>
+
+  <body>
+    <main class="wrap jeu" data-jeu data-api="../api.php" data-langue="{{langue}}">
+      <!-- ----------------------------------------------------- accueil -->
+      <section class="jeu__ecran" data-ecran="accueil">
+        <div class="poincon" aria-hidden="true">
+          <img src="../poincon.svg" alt="" width="285" height="285" />
+        </div>
+        <h1 class="jeu__titre">{{titre}}</h1>
+        <p class="jeu__intro lead">{{intro}}</p>
+
+        <button class="btn jeu__principal" type="button" data-creer>{{creer}}</button>
+
+        <p class="label jeu__ou">{{ouRejoindre}}</p>
+        <form class="jeu__code" data-form-code>
+          <input
+            name="code"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            autocapitalize="characters"
+            maxlength="4"
+            placeholder="{{codePlaceholder}}"
+            aria-label="{{codeDeLaPartie}}"
+          />
+          <button class="btn btn--ligne" type="submit">{{entrer}}</button>
+        </form>
+      </section>
+
+      <!-- -------------------------------------------------------- nom -->
+      <section class="jeu__ecran" data-ecran="nom" hidden>
+        <div class="poincon" aria-hidden="true">
+          <img src="../poincon.svg" alt="" width="285" height="285" />
+        </div>
+        <h1 class="jeu__titre">{{salonTitre}}</h1>
+        <p class="jeu__code-rappel mono-num" data-code-rappel></p>
+        <form class="jeu__nom" data-form-nom>
+          <label class="label" for="jeu-nom">{{nomLabel}}</label>
+          <input id="jeu-nom" name="nom" type="text" maxlength="16" autocomplete="given-name" placeholder="{{nomPlaceholder}}" required />
+          <button class="btn" type="submit">{{rejoindre}}</button>
+        </form>
+      </section>
+
+      <!-- ------------------------------------------------------ salon -->
+      <section class="jeu__ecran" data-ecran="salon" hidden>
+        <div class="poincon" aria-hidden="true">
+          <img src="../poincon.svg" alt="" width="285" height="285" />
+        </div>
+        <p class="label">{{codeDeLaPartie}}</p>
+        <p class="jeu__grand-code mono-num" data-code></p>
+
+        <div class="jeu__qr" data-qr hidden>
+          <div data-qr-image></div>
+          <p class="small muted">{{scannez}}</p>
+        </div>
+
+        <button class="btn btn--ligne jeu__copier" type="button" data-copier hidden>{{copier}}</button>
+
+        <p class="label jeu__sous-titre">{{joueurs}}</p>
+        <ul class="jeu__joueurs" data-joueurs></ul>
+
+        <button class="btn jeu__principal" type="button" data-lancer hidden>{{lancer}}</button>
+        <p class="small muted" data-attente>{{attenteHote}}</p>
+      </section>
+
+      <!-- --------------------------------------------------- question -->
+      <section class="jeu__ecran" data-ecran="question" hidden>
+        <header class="jeu__tete">
+          <p class="label" data-compteur></p>
+          <p class="jeu__chrono mono-num" data-chrono></p>
+        </header>
+        <div class="jeu__jauge"><span data-jauge></span></div>
+
+        <h2 class="jeu__enonce" data-enonce></h2>
+        <div class="jeu__reponses" data-reponses></div>
+        <p class="small muted jeu__attente-rep" data-attente-reponses></p>
+      </section>
+
+      <!-- ------------------------------------------------- révélation -->
+      <section class="jeu__ecran" data-ecran="revelation" hidden>
+        <p class="label" data-verdict></p>
+        <h2 class="jeu__enonce jeu__enonce--petit" data-enonce-rev></h2>
+        <p class="jeu__bonne" data-bonne></p>
+        <p class="jeu__explication muted" data-explication></p>
+
+        <p class="label jeu__sous-titre">{{classement}}</p>
+        <ul class="jeu__joueurs" data-classement></ul>
+
+        <button class="btn jeu__principal" type="button" data-suivante hidden></button>
+        <p class="small muted" data-attente-hote>{{attenteHote}}</p>
+      </section>
+
+      <!-- -------------------------------------------------------- fin -->
+      <section class="jeu__ecran" data-ecran="fin" hidden>
+        <div class="poincon" aria-hidden="true">
+          <img src="../poincon.svg" alt="" width="285" height="285" />
+        </div>
+        <h1 class="jeu__titre">{{finTitre}}</h1>
+        <p class="jeu__niveau" data-niveau></p>
+        <ul class="jeu__podium" data-podium></ul>
+        <button class="btn jeu__principal" type="button" data-rejouer>{{rejouer}}</button>
+        <a class="link" href="../../{{langue}}/cafes/">{{retourBoutique}}<span class="arrow" aria-hidden="true">→</span></a>
+      </section>
+
+      <p class="jeu__erreur small" data-erreur hidden></p>
+    </main>
+
+    <script type="application/json" data-jeu-textes>{{textesJson}}</script>
+    <script src="../jeu.js" type="module"></script>
+  </body>
+</html>
