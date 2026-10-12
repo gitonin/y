@@ -57,19 +57,33 @@ function remplir(modele, valeurs) {
    cassé : le reste est du texte. */
 const enJson = (v) => JSON.stringify(v).replace(/<\//g, '<\\/');
 
-/* La rampe d'altitude est définie dans carte.css et reprise dans carte.ts.
-   Deux endroits, donc deux occasions de divergence : on vérifie. */
-function verifierRampe(css, ts) {
-  const deCss = [...css.matchAll(/--relief-\d:\s*(#[0-9a-f]{6})/gi)].map((m) => m[1].toLowerCase());
-  const bloc = ts.match(/const RAMPE = \[([^\]]*)\]/);
-  if (!bloc) throw new Error('carte.ts : RAMPE introuvable');
-  const deTs = [...bloc[1].matchAll(/#[0-9a-f]{6}/gi)].map((m) => m[0].toLowerCase());
-  if (deCss.join() !== deTs.join()) {
-    throw new Error(
-      `la rampe diffère entre carte.css et carte.ts :\n  css : ${deCss.join(', ')}\n  ts  : ${deTs.join(', ')}`,
-    );
+/* Ce dont la page a besoin pour dessiner. Un champ manquant ne se voit pas :
+   il sort en « undefined », l'arithmétique donne NaN, et l'on obtient un
+   relief vide sans la moindre erreur. On le dit ici, une bonne fois. */
+function verifierRelief(r) {
+  for (const cle of ['zone', 'mailles', 'pas', 'altitudeMin', 'altitudeMax', 'niveaux', 'fermes']) {
+    if (r[cle] === undefined) throw new Error(`carte/relief.json : « ${cle} » manque — relancer outils/relever-relief.mjs`);
   }
-  return deCss;
+  for (const cle of ['mailles', 'pas', 'altitudeMin', 'altitudeMax']) {
+    if (!Number.isFinite(r[cle])) throw new Error(`carte/relief.json : « ${cle} » n'est pas un nombre`);
+  }
+  if (r.altitudeMax <= r.altitudeMin) throw new Error('carte/relief.json : altitudes incohérentes');
+}
+
+/* Les teintes du relief vivent dans carte.css (pour la légende) et dans
+   carte.ts (pour le nuanceur). Deux endroits, donc deux occasions de
+   divergence : on vérifie. */
+function verifierTeintes(css, ts) {
+  const nom = { surface: 'SURFACE', ombre: 'OMBRE', trait: 'TRAIT' };
+  const teintes = {};
+  for (const [cle, constante] of Object.entries(nom)) {
+    const deCss = css.match(new RegExp(`--relief-${cle}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1]?.toLowerCase();
+    const deTs = ts.match(new RegExp(`const ${constante} = '(#[0-9a-f]{6})'`, 'i'))?.[1]?.toLowerCase();
+    if (!deCss || !deTs) throw new Error(`teinte « ${cle} » introuvable (css ${deCss}, ts ${deTs})`);
+    if (deCss !== deTs) throw new Error(`la teinte « ${cle} » diffère : css ${deCss}, ts ${deTs}`);
+    teintes[cle] = deCss;
+  }
+  return teintes;
 }
 
 async function construire() {
@@ -83,7 +97,7 @@ async function construire() {
   const propre = await lire(SOURCE, 'carte.css');
   const source = await lire(SOURCE, 'carte.ts');
 
-  const rampe = verifierRampe(propre, source);
+  const teintes = verifierTeintes(propre, source);
 
   /* Chaque ferme relevée doit exister dans le contenu, sinon la carte
      désignerait un point sans rien à en dire. */
@@ -118,28 +132,18 @@ async function construire() {
       };
     }
 
-    /* Le pas des paliers vient du relevé, jamais du texte : il a déjà changé
-       une fois, et la phrase annonçait encore l'ancienne valeur. */
-    const textes1 = Object.fromEntries(
-      Object.entries(c).map(([k, v]) => [
-        k,
-        typeof v === 'string' ? v.replace(/\{palier\}/g, String(relief.palier)) : v,
-      ]),
-    );
+    const textes1 = { ...c };
     const valeurs = { langue, htmlLang: site.meta.htmlLang };
     for (const [cle, valeur] of Object.entries(textes1)) {
       if (typeof valeur === 'string') valeurs[cle] = echapper(valeur);
     }
-    valeurs.reliefJson = enJson({
-      zone: relief.zone,
-      mailles: relief.mailles,
-      palier: relief.palier,
-      paliersMax: relief.paliersMax,
-      altitudeMin: relief.altitudeMin,
-      altitudeMax: relief.altitudeMax,
-      niveaux: relief.niveaux,
-      fermes: relief.fermes,
-    });
+    /* Le relevé passe en entier, moins sa notice : une liste de champs tenue
+       à la main s'oublie. Elle s'était déjà oubliée une fois — le format du
+       relevé a changé, la liste non, et la page recevait une altitude
+       indéfinie, donc un relief tout entier en NaN. */
+    const { _lisezmoi, source: _source, ...pourLaPage } = relief;
+    verifierRelief(pourLaPage);
+    valeurs.reliefJson = enJson(pourLaPage);
     valeurs.fermesJson = enJson(fiches);
     valeurs.textesJson = enJson(textes1);
 
@@ -181,7 +185,7 @@ async function construire() {
   await copyFile(dans('public', 'brand', 'favicon-96.png'), path.join(CIBLE, 'favicon-96.png'));
   await copyFile(path.join(SOURCE, '.htaccess'), path.join(CIBLE, '.htaccess'));
 
-  return { relief, rampe, paquet };
+  return { relief, teintes, paquet };
 }
 
 /*
@@ -277,11 +281,11 @@ function porte(titre) {
 `;
 }
 
-const { relief, rampe, paquet } = await construire();
+const { relief, teintes, paquet } = await construire();
 const ko = (n) => `${Math.round(n / 1024)} Ko`;
 const sortie = Object.entries(paquet.metafile.outputs).find(([f]) => f.endsWith('carte.js'));
 console.log(
   `  carte ${LANGUES.length} langues, relief ${relief.mailles}×${relief.mailles} ` +
-    `(${relief.altitudeMin}–${relief.altitudeMax} m, ${relief.paliersMax + 1} paliers), ` +
-    `rampe ${rampe.length} paliers, script ${ko(sortie?.[1].bytes ?? 0)}`,
+    `(${Math.round(relief.altitudeMin)}–${Math.round(relief.altitudeMax)} m, pas ${relief.pas.toFixed(1)} m), ` +
+    `${Object.keys(teintes).length} teintes, script ${ko(sortie?.[1].bytes ?? 0)}`,
 );

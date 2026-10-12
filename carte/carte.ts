@@ -2,36 +2,34 @@
  * La carte du relief de la ceinture caféière, côté navigateur.
  *
  * Le relief n'est pas envoyé en trois dimensions : la page reçoit une grille
- * de 192 × 192 entiers — un palier d'altitude par maille, un octet chacun,
- * 17 Ko compressés — et fabrique la géométrie ici. Envoyer un maillage déjà
- * triangulé coûterait cent fois plus pour le même résultat.
+ * de 192 × 192 octets — une altitude par maille, 17 Ko compressés — et
+ * fabrique la surface ici. Envoyer un maillage déjà triangulé coûterait cent
+ * fois plus pour le même résultat.
  *
- * La forme en terrasses n'est pas un effet : c'est le dessin demandé, des
- * couches empilées par tranche de 150 m. Elle est aussi la plus simple à
- * fabriquer — un dessus horizontal par maille, et un mur vertical partout où
- * la maille voisine est plus basse. Aucun tracé de courbe de niveau, aucune
- * triangulation de polygone à trous.
+ * Le dessin est celui d'une maquette de topographe : une surface presque
+ * blanche, et des courbes de niveau. Les courbes ne sont pas de la géométrie —
+ * ce serait des dizaines de milliers de segments à calculer et à tenir à jour.
+ * Elles sont tracées par le nuanceur, à partir de l'altitude de chaque point :
+ * là où l'altitude franchit un multiple de l'équidistance, le pixel s'assombrit.
+ * Elles restent donc d'une finesse constante quel que soit le zoom, et changer
+ * l'équidistance ne coûte rien.
  *
- * L'altitude se lit sur une seule teinte qui s'assombrit (voir carte.css). Le
- * relief des terrasses vient de la lumière, pas d'une couleur par palier : les
- * dessus prennent le jour, les murs restent dans l'ombre. La couleur dit donc
- * l'altitude et rien d'autre, ce qui est la seule façon de la lire dans
- * l'ordre.
+ * La couleur ne dit rien de l'altitude : ce sont les courbes et l'ombre qui la
+ * disent. L'orange de la marque est libre pour une seule chose, désigner — les
+ * trois fermes, et la bande où pousse le café.
  */
 import {
-  AmbientLight,
-  BackSide,
   BufferAttribute,
   BufferGeometry,
   Color,
-  DirectionalLight,
+  DoubleSide,
   Group,
   Mesh,
   MeshBasicMaterial,
-  MeshLambertMaterial,
   PerspectiveCamera,
   Raycaster,
   Scene,
+  ShaderMaterial,
   SphereGeometry,
   CylinderGeometry,
   Vector2,
@@ -43,8 +41,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 interface Relief {
   zone: { ouest: number; est: number; sud: number; nord: number };
   mailles: number;
-  palier: number;
-  paliersMax: number;
+  pas: number;
   altitudeMin: number;
   altitudeMax: number;
   niveaux: string;
@@ -61,24 +58,25 @@ interface Ferme {
 
 type Textes = Record<string, string>;
 
-/* La rampe d'altitude, reprise de carte.css : une seule teinte, clarté
-   décroissante, validée. Les deux listes doivent rester identiques. */
-const RAMPE = ['#c2a191', '#ca7549', '#b15824', '#953e00', '#752800', '#402719'];
+/* Les teintes, reprises de carte.css. Les deux listes doivent rester
+   identiques — la construction échoue sinon. */
+const PAPIER = '#efebe2';
+const SURFACE = '#fbfaf7';
+const OMBRE = '#cfc9bd';
+const TRAIT = '#212121';
+const ACCENT = '#b95f2c';
 
-/* Le plus grand côté de la carte vaut cent unités ; tout le reste en découle. */
-const COTE = 100;
-/* Hauteur du plus haut palier, en unités. Le relief réel serait invisible à
-   cette échelle — 3 000 m sur 480 km de large, c'est une feuille de papier.
-   L'exagération est assumée, et la légende donne les mètres.
-   Le réglage se juge sur un rapport : la hauteur d'une marche contre la
-   largeur d'une maille. Au-delà de un, la carte se hérisse d'aiguilles ; vers
-   0,7, elle s'étage en terrasses, ce qui est le dessin voulu. */
-const HAUTEUR = 5.5;
-/* Le socle : la carte est un objet posé, pas une nappe flottante. */
-const SOCLE = -1.1;
-/* La ceinture caféière, en mètres. Annotée sur la légende, jamais colorée à
-   part : ce serait rompre la rampe. */
+/** Équidistance des courbes, en mètres, et la courbe maîtresse tous les N. */
+const EQUIDISTANCE = 150;
+const MAITRESSE = 4;
+/** La bande où pousse le café, en mètres. */
 const CEINTURE: [number, number] = [1000, 1900];
+
+const COTE = 100;
+/* Le relief réel serait invisible : 2 800 m sur 480 km de large, c'est une
+   feuille de papier. L'exagération est assumée, et la page le dit. */
+const HAUTEUR = 11;
+const SOCLE = -2.6;
 
 const lire = <T,>(selecteur: string): T | null => {
   const el = document.querySelector<HTMLElement>(selecteur);
@@ -114,7 +112,7 @@ export function lancerCarte(): void {
   /* ---------------------------------------------------------------- *
    * Les proportions réelles du terrain
    * ---------------------------------------------------------------- */
-  const { zone, mailles: M, palier, paliersMax } = relief;
+  const { zone, mailles: M, pas, altitudeMin, altitudeMax } = relief;
   const latMoyenne = ((zone.sud + zone.nord) / 2) * (Math.PI / 180);
   /* Un degré de longitude se raccourcit avec la latitude : sans ce cosinus la
      carte serait étirée d'un bon dixième en largeur. */
@@ -123,157 +121,206 @@ export function lancerCarte(): void {
   const echelle = COTE / Math.max(largeurKm, profondeurKm);
   const L = largeurKm * echelle;
   const P = profondeurKm * echelle;
-  const cw = L / M;
-  const cp = P / M;
-  const hauteurDe = (niveau: number) => (niveau / paliersMax) * HAUTEUR;
 
-  const niveaux = Uint8Array.from(atob(relief.niveaux), (c) => c.charCodeAt(0));
-  const niveau = (i: number, j: number) => niveaux[j * M + i];
-
-  /* ---------------------------------------------------------------- *
-   * La couleur d'un palier
-   * ---------------------------------------------------------------- */
-  const teintes = RAMPE.map((h) => new Color(h));
-  /* La teinte se prend sur l'altitude réelle rapportée aux altitudes de la
-     zone, et non sur le rang du palier dans un barème qui part de zéro. Sans
-     cela, un terrain qui va de 500 à 3 300 m n'occupe que le milieu de la
-     rampe : tout sort de la même couleur, et la carte cesse de se lire.
-     C'est aussi ce que montre la légende, qui est graduée en mètres. */
-  const etendue = Math.max(1, relief.altitudeMax - relief.altitudeMin);
-  const couleurDe = (niveauMaille: number) => {
-    const t = Math.min(1, Math.max(0, (niveauMaille * palier - relief.altitudeMin) / etendue));
-    const x = t * (teintes.length - 1);
-    const k = Math.min(teintes.length - 2, Math.floor(x));
-    return teintes[k].clone().lerp(teintes[k + 1], x - k);
-  };
-  const palette = Array.from({ length: paliersMax + 1 }, (_, n) => couleurDe(n));
+  const octets = Uint8Array.from(atob(relief.niveaux), (c) => c.charCodeAt(0));
+  const metres = (i: number, j: number) => altitudeMin + octets[j * M + i] * pas;
+  const etendue = Math.max(1, altitudeMax - altitudeMin);
+  const hauteurDe = (m: number) => ((m - altitudeMin) / etendue) * HAUTEUR;
 
   /* ---------------------------------------------------------------- *
-   * La géométrie : un dessus par maille, un mur à chaque dénivelé
+   * La surface : une nappe régulière, lissée
    * ---------------------------------------------------------------- */
-  /* On compte avant d'allouer : 192 × 192 mailles donnent de l'ordre de
-     150 000 triangles, et laisser grandir des tableaux ordinaires coûterait
-     plus cher que ce deuxième passage. */
-  let quads = 0;
+  const sommets = M * M;
+  const positions = new Float32Array(sommets * 3);
+  const normales = new Float32Array(sommets * 3);
+  const altitudes = new Float32Array(sommets);
+
+  const xDe = (i: number) => -L / 2 + (i / (M - 1)) * L;
+  const zDe = (j: number) => -P / 2 + (j / (M - 1)) * P;
+  const dx = L / (M - 1);
+  const dz = P / (M - 1);
+
   for (let j = 0; j < M; j++) {
     for (let i = 0; i < M; i++) {
-      quads++; // le dessus
-      const n = niveau(i, j);
-      if (i + 1 >= M || niveau(i + 1, j) < n) quads++;
-      if (i - 1 < 0 || niveau(i - 1, j) < n) quads++;
-      if (j + 1 >= M || niveau(i, j + 1) < n) quads++;
-      if (j - 1 < 0 || niveau(i, j - 1) < n) quads++;
+      const k = j * M + i;
+      const m = metres(i, j);
+      positions[k * 3] = xDe(i);
+      positions[k * 3 + 1] = hauteurDe(m);
+      positions[k * 3 + 2] = zDe(j);
+      altitudes[k] = m;
     }
   }
 
-  const sommets = quads * 6;
-  const positions = new Float32Array(sommets * 3);
-  /* Les normales sont toutes sur un axe : des entiers signés suffisent, et
-     l'attribut pèse le quart d'un Float32. Idem pour les couleurs. */
-  const normales = new Int8Array(sommets * 3);
-  const couleurs = new Uint8Array(sommets * 3);
-  let p = 0;
-
-  const poser = (
-    a: Vector3, b: Vector3, c: Vector3, d: Vector3,
-    nx: number, ny: number, nz: number,
-    teinte: Color,
-  ) => {
-    const r = Math.round(teinte.r * 255), g = Math.round(teinte.g * 255), bl = Math.round(teinte.b * 255);
-    for (const v of [a, b, c, a, c, d]) {
-      positions[p * 3] = v.x; positions[p * 3 + 1] = v.y; positions[p * 3 + 2] = v.z;
-      normales[p * 3] = nx * 127; normales[p * 3 + 1] = ny * 127; normales[p * 3 + 2] = nz * 127;
-      couleurs[p * 3] = r; couleurs[p * 3 + 1] = g; couleurs[p * 3 + 2] = bl;
-      p++;
-    }
-  };
-
-  const V = (x: number, y: number, z: number) => new Vector3(x, y, z);
-
+  /* Les normales se déduisent des voisins : pour une nappe, c'est exact et
+     bien plus rapide que de les recalculer face par face. */
   for (let j = 0; j < M; j++) {
-    const z0 = -P / 2 + j * cp;
-    const z1 = z0 + cp;
     for (let i = 0; i < M; i++) {
-      const x0 = -L / 2 + i * cw;
-      const x1 = x0 + cw;
-      const n = niveau(i, j);
-      const y = hauteurDe(n);
-      const teinte = palette[n];
+      const k = j * M + i;
+      const hG = hauteurDe(metres(Math.max(0, i - 1), j));
+      const hD = hauteurDe(metres(Math.min(M - 1, i + 1), j));
+      const hN = hauteurDe(metres(i, Math.max(0, j - 1)));
+      const hS = hauteurDe(metres(i, Math.min(M - 1, j + 1)));
+      const nx = (hG - hD) / (2 * dx);
+      const nz = (hN - hS) / (2 * dz);
+      const n = Math.hypot(nx, 1, nz);
+      normales[k * 3] = nx / n;
+      normales[k * 3 + 1] = 1 / n;
+      normales[k * 3 + 2] = nz / n;
+    }
+  }
 
-      /* Le dessus, horizontal : c'est lui qui prend la lumière, donc lui qui
-         porte la lecture de l'altitude. */
-      poser(V(x0, y, z1), V(x1, y, z1), V(x1, y, z0), V(x0, y, z0), 0, 1, 0, teinte);
-
-      /* Les quatre murs. Au bord de la carte, le mur descend jusqu'au socle :
-         un relief qu'on voit par-dessous n'est pas un objet. */
-      const voisin = (vi: number, vj: number) =>
-        vi < 0 || vj < 0 || vi >= M || vj >= M ? null : niveau(vi, vj);
-
-      const vE = voisin(i + 1, j);
-      if (vE === null || vE < n) {
-        const yb = vE === null ? SOCLE : hauteurDe(vE);
-        poser(V(x1, yb, z1), V(x1, yb, z0), V(x1, y, z0), V(x1, y, z1), 1, 0, 0, teinte);
-      }
-      const vO = voisin(i - 1, j);
-      if (vO === null || vO < n) {
-        const yb = vO === null ? SOCLE : hauteurDe(vO);
-        poser(V(x0, yb, z0), V(x0, yb, z1), V(x0, y, z1), V(x0, y, z0), -1, 0, 0, teinte);
-      }
-      const vS = voisin(i, j + 1);
-      if (vS === null || vS < n) {
-        const yb = vS === null ? SOCLE : hauteurDe(vS);
-        poser(V(x0, yb, z1), V(x1, yb, z1), V(x1, y, z1), V(x0, y, z1), 0, 0, 1, teinte);
-      }
-      const vN = voisin(i, j - 1);
-      if (vN === null || vN < n) {
-        const yb = vN === null ? SOCLE : hauteurDe(vN);
-        poser(V(x1, yb, z0), V(x0, yb, z0), V(x0, y, z0), V(x1, y, z0), 0, 0, -1, teinte);
-      }
+  const indices = new Uint32Array((M - 1) * (M - 1) * 6);
+  let t = 0;
+  for (let j = 0; j < M - 1; j++) {
+    for (let i = 0; i < M - 1; i++) {
+      const a = j * M + i, b = a + 1, c = a + M, d = c + 1;
+      indices[t++] = a; indices[t++] = c; indices[t++] = b;
+      indices[t++] = b; indices[t++] = c; indices[t++] = d;
     }
   }
 
   const geo = new BufferGeometry();
   geo.setAttribute('position', new BufferAttribute(positions, 3));
-  geo.setAttribute('normal', new BufferAttribute(normales, 3, true));
-  geo.setAttribute('color', new BufferAttribute(couleurs, 3, true));
+  geo.setAttribute('normal', new BufferAttribute(normales, 3));
+  geo.setAttribute('altitude', new BufferAttribute(altitudes, 1));
+  geo.setIndex(new BufferAttribute(indices, 1));
   geo.computeBoundingSphere();
 
   /* ---------------------------------------------------------------- *
-   * La scène
+   * Le nuanceur : l'ombre dit la pente, les courbes disent l'altitude
    * ---------------------------------------------------------------- */
+  const matiere = new ShaderMaterial({
+    uniforms: {
+      uSurface: { value: new Color(SURFACE) },
+      uOmbre: { value: new Color(OMBRE) },
+      uTrait: { value: new Color(TRAIT) },
+      uAccent: { value: new Color(ACCENT) },
+      uLumiere: { value: new Vector3(-0.42, 0.86, 0.3).normalize() },
+      uEquidistance: { value: EQUIDISTANCE },
+      uMaitresse: { value: MAITRESSE },
+      uCeinture: { value: new Vector2(CEINTURE[0], CEINTURE[1]) },
+    },
+    vertexShader: /* glsl */ `
+      attribute float altitude;
+      varying float vAlt;
+      varying vec3 vN;
+      void main() {
+        vAlt = altitude;
+        vN = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      precision highp float;
+      uniform vec3 uSurface;
+      uniform vec3 uOmbre;
+      uniform vec3 uTrait;
+      uniform vec3 uAccent;
+      uniform vec3 uLumiere;
+      uniform float uEquidistance;
+      uniform float uMaitresse;
+      uniform vec2 uCeinture;
+      varying float vAlt;
+      varying vec3 vN;
+
+      /* Une courbe de niveau est un trait là où l'altitude franchit un
+         multiple de l'équidistance. En divisant la distance à ce multiple par
+         sa dérivée à l'écran (fwidth), on obtient une épaisseur constante en
+         pixels : la courbe reste fine de loin comme de près, et ne scintille
+         pas. C'est ce qu'un trait fait de géométrie ne sait pas faire. */
+      float courbe(float f, float epaisseur) {
+        float distance = 0.5 - abs(fract(f) - 0.5);
+        float largeur = fwidth(f) * epaisseur;
+        return 1.0 - smoothstep(0.0, max(largeur, 1e-5), distance);
+      }
+
+      /* Un trait à une altitude donnée, de la même épaisseur constante. */
+      float trait(float altitude, float cible, float epaisseur) {
+        float largeur = fwidth(altitude) * epaisseur;
+        return 1.0 - smoothstep(0.0, max(largeur, 1e-5), abs(altitude - cible));
+      }
+
+      void main() {
+        float jour = max(dot(normalize(vN), normalize(uLumiere)), 0.0);
+        vec3 fond = mix(uOmbre, uSurface, 0.30 + 0.70 * jour);
+
+        float f = vAlt / uEquidistance;
+        float fine = courbe(f, 1.0);
+        float forte = courbe(f / uMaitresse, 1.15);
+        float encre = max(fine * 0.34, forte * 0.62);
+        vec3 couleur = mix(fond, uTrait, encre);
+
+        /* La bande où pousse le café est bornée par deux courbes appuyées.
+           Essayé d'abord en aplat : entre 1 000 et 1 900 m, c'est la moitié du
+           terrain, et teinter la moitié d'une carte n'annote rien, cela la
+           colore. Essayé ensuite en orange : les deux altitudes sont franchies
+           partout, et l'orange se répandait sur tout le relief au lieu de
+           désigner. Il ne reste donc à la couleur de la marque qu'un seul
+           emploi, les trois fermes — et les bornes sont les traits les plus
+           noirs de la carte. */
+        float bornes = max(trait(vAlt, uCeinture.x, 1.5), trait(vAlt, uCeinture.y, 1.5));
+        couleur = mix(couleur, uTrait, bornes * 0.85);
+
+        gl_FragColor = vec4(couleur, 1.0);
+      }
+    `,
+  });
+
   const scene = new Scene();
-  const terrain = new Mesh(geo, new MeshLambertMaterial({ vertexColors: true }));
+  const terrain = new Mesh(geo, matiere);
   scene.add(terrain);
 
-  /* Le jour vient du sud-ouest et de haut : les dessus s'éclairent, les murs
-     restent dans l'ombre, et chaque terrasse se détache de la suivante. */
-  const jour = new DirectionalLight(0xfff6ea, 2.1);
-  jour.position.set(-0.45, 1, 0.55);
-  scene.add(jour);
-  scene.add(new AmbientLight(0xefebe2, 1.25));
+  /* ---------------------------------------------------------------- *
+   * Le socle : la carte est un objet posé, pas une nappe flottante
+   * ---------------------------------------------------------------- */
+  const jupe: number[] = [];
+  const bord = (i: number, j: number) => [xDe(i), hauteurDe(metres(i, j)), zDe(j)] as const;
+  const mur = (a: readonly number[], b: readonly number[], inverse: boolean) => {
+    const p1 = [a[0], a[1], a[2]], p2 = [b[0], b[1], b[2]];
+    const b1 = [a[0], SOCLE, a[2]], b2 = [b[0], SOCLE, b[2]];
+    const suite = inverse ? [b1, b2, p2, b1, p2, p1] : [b2, b1, p1, b2, p1, p2];
+    for (const v of suite) jupe.push(v[0], v[1], v[2]);
+  };
+  for (let i = 0; i < M - 1; i++) {
+    mur(bord(i, 0), bord(i + 1, 0), true);
+    mur(bord(i, M - 1), bord(i + 1, M - 1), false);
+  }
+  for (let j = 0; j < M - 1; j++) {
+    mur(bord(0, j), bord(0, j + 1), false);
+    mur(bord(M - 1, j), bord(M - 1, j + 1), true);
+  }
+  const geoJupe = new BufferGeometry();
+  geoJupe.setAttribute('position', new BufferAttribute(new Float32Array(jupe), 3));
+  geoJupe.computeVertexNormals();
+  const flanc = new Mesh(
+    geoJupe,
+    /* Les flancs restent nus : des courbes de niveau sur une paroi verticale
+       ne voudraient rien dire. */
+    new MeshBasicMaterial({ color: new Color(OMBRE), side: DoubleSide }),
+  );
+  scene.add(flanc);
 
-  const camera = new PerspectiveCamera(40, 1, 0.5, 2000);
-
-  /* Le recul n'est pas réglé au jugé : on projette les huit coins du terrain
-     et l'on recule jusqu'à ce qu'ils tiennent dans le cadre.
-     Les approximations essayées avant — la diagonale, puis la diagonale
-     corrigée du rapport de la fenêtre — débordaient en paysage ou laissaient
-     la moitié de l'écran vide en portrait, parce qu'une plaque vue de biais
-     occupe bien moins que sa diagonale. Trois tours suffisent à converger. */
-  const CIBLE = new Vector3(0, HAUTEUR * 0.35, 0);
+  /* ---------------------------------------------------------------- *
+   * La caméra
+   * ---------------------------------------------------------------- */
+  const camera = new PerspectiveCamera(38, 1, 0.5, 2000);
+  const CIBLE = new Vector3(0, HAUTEUR * 0.3, 0);
   const coins: Vector3[] = [];
   for (const x of [-L / 2, L / 2])
     for (const y of [SOCLE, HAUTEUR])
       for (const z of [-P / 2, P / 2]) coins.push(new Vector3(x, y, z));
 
-  const AZIMUT = Math.PI * 0.26;
-  const ELEVATION = 0.82;
   const direction = new Vector3(
-    Math.sin(AZIMUT) * Math.cos(ELEVATION),
-    Math.sin(ELEVATION),
-    Math.cos(AZIMUT) * Math.cos(ELEVATION),
+    Math.sin(Math.PI * 0.24) * Math.cos(0.72),
+    Math.sin(0.72),
+    Math.cos(Math.PI * 0.24) * Math.cos(0.72),
   ).normalize();
 
+  /* Le recul n'est pas réglé au jugé : on projette les huit coins du terrain
+     et l'on recule jusqu'à ce qu'ils tiennent. Au-delà de 1, les angles du
+     socle sortent du cadre — et c'est voulu : vue de biais, la plaque se
+     présente en losange, et la caler entièrement laissait l'écran aux trois
+     quarts vide. */
   const cadrer = () => {
     let d = Math.hypot(L, P);
     for (let tour = 0; tour < 3; tour++) {
@@ -286,12 +333,6 @@ export function lancerCarte(): void {
         const v = c.clone().project(camera);
         debord = Math.max(debord, Math.abs(v.x), Math.abs(v.y));
       }
-      /* Au-delà de 1, les coins de la plaque sortent du cadre — et c'est
-         voulu. Vue de biais, elle se présente en losange : la caler
-         entièrement dans la fenêtre laissait les quatre coins de l'écran
-         vides et le relief au tiers de la place, mesuré à 22 % des pixels.
-         Ce qui déborde ici, ce sont les angles du socle, la seule part qui
-         n'apprend rien. */
       d *= debord / 1.16;
     }
     return d;
@@ -302,72 +343,50 @@ export function lancerCarte(): void {
   controles.enableDamping = true;
   controles.dampingFactor = 0.075;
   controles.target.copy(CIBLE);
-  controles.minDistance = COTE * 0.28;
+  controles.minDistance = COTE * 0.25;
   controles.maxDistance = recul * 2.4;
   /* On ne passe pas sous le relief, et on ne le regarde pas pile du dessus :
-     à la verticale, les terrasses disparaissent et la carte redevient plate. */
-  controles.minPolarAngle = 0.22;
-  controles.maxPolarAngle = 1.36;
+     à la verticale, l'ombre disparaît et la carte redevient plate. */
+  controles.minPolarAngle = 0.2;
+  controles.maxPolarAngle = 1.38;
   controles.enablePan = false;
   controles.update();
 
   /* ---------------------------------------------------------------- *
    * Les fermes
    * ---------------------------------------------------------------- */
-  /* Les repères ne peuvent pas porter l'orange de la marque : c'est la teinte
-     de la rampe d'altitude, et une bille orange posée sur un relief orange
-     disparaît — deux des trois fermes étaient invisibles. Une couleur qui
-     désigne ne doit pas être une couleur qui mesure. Le blanc de la charte,
-     absent de la rampe, est resté libre pour cet usage. */
-  const billeCouleur = new Color('#fbfaf7');
-  const encre = new Color('#212121');
   const repères = new Group();
   scene.add(repères);
-
-  const matBille = new MeshBasicMaterial({ color: billeCouleur });
-  /* Le liseré : une sphère à peine plus grande dont on ne dessine que les
-     faces arrière. Dessinée normalement, elle recouvrait entièrement la bille
-     — les repères devenaient trois points noirs. En n'en gardant que
-     l'intérieur, il n'en reste qu'un cerne, et la bille blanche ressort sur
-     une terrasse claire comme sur une sombre. */
-  const matCercle = new MeshBasicMaterial({ color: encre, side: BackSide });
-  const matTige = new MeshBasicMaterial({ color: encre });
-  const geoBille = new SphereGeometry(1.25, 22, 16);
-  const geoCible = new SphereGeometry(3.2, 8, 6);
+  const matAccent = new MeshBasicMaterial({ color: new Color(ACCENT) });
+  const matTige = new MeshBasicMaterial({ color: new Color(TRAIT) });
   const matInvisible = new MeshBasicMaterial({ visible: false });
+  const geoBille = new SphereGeometry(1.05, 24, 18);
+  const geoCible = new SphereGeometry(3.4, 8, 6);
 
   const posés = relief.fermes
     .filter((f) => fermes[f.cle])
     .map((f) => {
-      const x = -L / 2 + (f.i + 0.5) * cw;
-      const z = -P / 2 + (f.j + 0.5) * cp;
-      const yTerrain = hauteurDe(niveau(f.i, f.j));
-      /* La tige sort nettement du relief : posée dessus, la bille se confond
-         avec une terrasse dès qu'on incline la carte. */
-      const h = HAUTEUR * 0.62;
+      const x = xDe(f.i);
+      const z = zDe(f.j);
+      const y = hauteurDe(metres(f.i, f.j));
+      const h = HAUTEUR * 0.3;
 
-      const tige = new Mesh(new CylinderGeometry(0.14, 0.14, h, 8), matTige);
-      tige.position.set(x, yTerrain + h / 2, z);
+      const tige = new Mesh(new CylinderGeometry(0.07, 0.07, h, 8), matTige);
+      tige.position.set(x, y + h / 2, z);
       repères.add(tige);
 
-      const bille = new Mesh(geoBille, matBille);
-      bille.position.set(x, yTerrain + h, z);
+      /* L'orange de la marque ne sert qu'à désigner : il n'est nulle part
+         ailleurs sur le relief, donc une bille se voit partout. */
+      const bille = new Mesh(geoBille, matAccent);
+      bille.position.set(x, y + h, z);
       repères.add(bille);
 
-      const liseré = new Mesh(new SphereGeometry(1.45, 22, 16), matCercle);
-      liseré.position.copy(bille.position);
-      liseré.renderOrder = -1;
-      repères.add(liseré);
-
-      /* Une bille de moins d'un millimètre à l'écran ne s'attrape pas au
-         doigt : la cible du pointage est bien plus large qu'elle, et
-         invisible. */
       const cible = new Mesh(geoCible, matInvisible);
       cible.position.copy(bille.position);
       cible.userData.ferme = f;
       repères.add(cible);
 
-      return { f, cible, bille };
+      return { f, bille };
     });
 
   /* ---------------------------------------------------------------- *
@@ -375,6 +394,11 @@ export function lancerCarte(): void {
    * ---------------------------------------------------------------- */
   const fiche = racine.querySelector<HTMLElement>('[data-fiche]');
   const champ = (s: string) => racine.querySelector<HTMLElement>(s);
+
+  const cacherFiche = () => {
+    if (fiche) fiche.hidden = true;
+    for (const { bille } of posés) bille.scale.setScalar(1);
+  };
 
   const montrerFiche = (cle: string, altitudeRelevee: number) => {
     const d = fermes[cle];
@@ -400,18 +424,9 @@ export function lancerCarte(): void {
       liste.appendChild(note);
     }
     fiche.hidden = false;
-    /* La ferme choisie grossit un peu : sans ce retour, on ne sait pas laquelle
-       des trois billes a répondu au doigt. */
-    for (const { f, bille } of posés) {
-      const g = f.cle === cle ? 1.45 : 1;
-      bille.scale.setScalar(g);
-    }
+    for (const { f, bille } of posés) bille.scale.setScalar(f.cle === cle ? 1.4 : 1);
   };
 
-  const cacherFiche = () => {
-    if (fiche) fiche.hidden = true;
-    for (const { bille } of posés) bille.scale.setScalar(1);
-  };
   champ('[data-fermer]')?.addEventListener('click', cacherFiche);
 
   /* ---------------------------------------------------------------- *
@@ -438,8 +453,7 @@ export function lancerCarte(): void {
     souris.x = ((e.clientX - r.left) / r.width) * 2 - 1;
     souris.y = -((e.clientY - r.top) / r.height) * 2 + 1;
     rayon.setFromCamera(souris, camera);
-    const touché = rayon.intersectObjects(repères.children, false)
-      .find((h) => h.object.userData.ferme);
+    const touché = rayon.intersectObjects(repères.children, false).find((h) => h.object.userData.ferme);
     if (touché) {
       const f = touché.object.userData.ferme as Relief['fermes'][number];
       montrerFiche(f.cle, f.altitudeRelevee);
@@ -451,32 +465,15 @@ export function lancerCarte(): void {
   /* ---------------------------------------------------------------- *
    * La légende
    * ---------------------------------------------------------------- */
-  const crans = racine.querySelector<HTMLElement>('[data-crans]');
-  if (crans) {
-    const { altitudeMin: bas, altitudeMax: haut } = relief;
-    const part = (m: number) => ((m - bas) / (haut - bas)) * 100;
-    crans.textContent = '';
-    for (let m = 500; m <= haut; m += 500) {
-      if (part(m) < 2 || part(m) > 98) continue;
-      const el = document.createElement('span');
-      el.className = 'carte__cran';
-      el.style.bottom = `${part(m)}%`;
-      el.textContent = `${m.toLocaleString('fr-FR')} m`;
-      crans.appendChild(el);
-    }
-    const [cb, ch] = CEINTURE;
-    const barre = document.createElement('span');
-    barre.className = 'carte__ceinture';
-    barre.style.bottom = `${part(cb)}%`;
-    barre.style.height = `${part(ch) - part(cb)}%`;
-    crans.appendChild(barre);
-    const texte = document.createElement('span');
-    texte.className = 'carte__ceinture-texte';
-    texte.style.bottom = `${(part(cb) + part(ch)) / 2}%`;
-    texte.style.left = '5.4rem';
-    texte.textContent = T.ceinture ?? '';
-    crans.appendChild(texte);
-  }
+  const poser = (s: string, texte: string) => {
+    const el = racine.querySelector<HTMLElement>(s);
+    if (el) el.textContent = texte;
+  };
+  poser('[data-equidistance]', (T.equidistance ?? '').replace('{n}', String(EQUIDISTANCE)));
+  poser('[data-ceinture]', (T.ceinture ?? '')
+    .replace('{bas}', CEINTURE[0].toLocaleString('fr-FR'))
+    .replace('{haut}', CEINTURE[1].toLocaleString('fr-FR')));
+  poser('[data-fermes]', T.fermes ?? '');
 
   /* ---------------------------------------------------------------- *
    * La boucle
@@ -488,9 +485,9 @@ export function lancerCarte(): void {
     camera.aspect = w / Math.max(1, h);
     camera.updateProjectionMatrix();
     /* Passer du paysage au portrait change l'axe qui contraint : on refait le
-       cadrage, mais seulement si l'orientation a changé — sinon le clavier
-       d'un téléphone, qui redimensionne la fenêtre, remettrait la carte dans
-       sa position d'ouverture au milieu d'un geste. */
+       cadrage, mais seulement alors — sinon le clavier d'un téléphone, qui
+       redimensionne la fenêtre, remettrait la carte dans sa position
+       d'ouverture au milieu d'un geste. */
     const avant = cadre.w >= cadre.h;
     const apres = w >= h;
     if (cadre.w === 0 || avant !== apres) {
@@ -502,8 +499,6 @@ export function lancerCarte(): void {
   redimensionner();
   window.addEventListener('resize', redimensionner);
 
-  /* Une lente rotation d'ouverture : elle dit que la carte se manipule, et
-     s'arrête au premier geste. Pas de mouvement si l'on en a demandé moins. */
   const sobre = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let tourne = !sobre;
   const stop = () => { tourne = false; };
@@ -513,7 +508,7 @@ export function lancerCarte(): void {
 
   const boucle = () => {
     if (tourne) {
-      const a = 0.0012;
+      const a = 0.0011;
       const { x, z } = camera.position;
       camera.position.x = x * Math.cos(a) - z * Math.sin(a);
       camera.position.z = x * Math.sin(a) + z * Math.cos(a);
@@ -525,7 +520,8 @@ export function lancerCarte(): void {
   boucle();
 
   racine.dataset.prete = '1';
-  racine.dataset.triangles = String(quads * 2);
+  racine.dataset.triangles = String((M - 1) * (M - 1) * 2 + jupe.length / 9);
+  racine.dataset.papier = PAPIER;
 }
 
 lancerCarte();

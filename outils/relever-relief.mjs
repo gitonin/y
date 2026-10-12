@@ -31,10 +31,13 @@ const ZONE = { ouest: 98.3, est: 101.9, sud: 21.4, nord: 25.7 };
    que les vallées se lisent, assez grossier pour tenir en quelques Ko et pour
    qu'un téléphone de 2020 construise la géométrie sans y penser. */
 const MAILLES = 192;
-/* Hauteur d'un palier, en mètres. C'est l'épaisseur d'une couche du gâteau.
-   250 m plutôt que 150 : à 150, le relevé se hérissait d'une forêt de petites
-   marches isolées — un champ d'aiguilles, pas des couches d'altitude. */
-const PALIER = 250;
+/* L'altitude est enregistrée en continu, sur un octet par maille : la valeur
+   va de 0 à 255 entre le point le plus bas et le plus haut de la zone, soit un
+   pas d'environ 11 m. C'est assez fin pour une surface lisse, et cela tient
+   dans la même place qu'une grille de paliers.
+   L'équidistance des courbes n'est donc plus décidée ici : elle est dessinée à
+   l'affichage, et se change sans refaire le relevé. */
+const NIVEAUX = 255;
 /* Lissage du relevé avant de le découper en paliers.
    C'est ce qui fait la différence entre une carte en couches et du bruit. Un
    modèle en carton découpé suit des courbes de niveau franches ; le relief
@@ -178,29 +181,16 @@ function lisser(grille, taille, rayon) {
 for (let k = 0; k < LISSAGE_PASSES; k++) lisser(altitudes, MAILLES, LISSAGE_RAYON);
 
 /* ------------------------------------------------------------------ *
- * Les paliers
+ * La mise à l'échelle
  * ------------------------------------------------------------------ */
 let mini = Infinity, maxi = -Infinity;
 for (const a of altitudes) { if (a < mini) mini = a; if (a > maxi) maxi = a; }
-/* Les paliers partent de zéro, pas du minimum : « 1500 m » doit vouloir dire
-   1500 m, pas « le dixième palier au-dessus du fond de la vallée ». */
-const paliersMax = Math.ceil(maxi / PALIER);
+const pas = (maxi - mini) / NIVEAUX;
 const niveaux = new Uint8Array(MAILLES * MAILLES);
 for (let k = 0; k < altitudes.length; k++) {
-  niveaux[k] = Math.min(paliersMax, Math.max(0, Math.round(altitudes[k] / PALIER)));
+  niveaux[k] = Math.round((altitudes[k] - mini) / pas);
 }
-console.log(`altitudes ${Math.round(mini)} – ${Math.round(maxi)} m après lissage, ${paliersMax + 1} paliers de ${PALIER} m`);
-
-/* Combien de mailles diffèrent de leur voisine ? C'est la mesure du grain :
-   au-delà d'une sur deux, la carte se hérisse au lieu de s'étager. */
-let ruptures = 0, bords = 0;
-for (let j = 0; j < MAILLES; j++) {
-  for (let i = 0; i + 1 < MAILLES; i++) {
-    bords++;
-    if (niveaux[j * MAILLES + i] !== niveaux[j * MAILLES + i + 1]) ruptures++;
-  }
-}
-console.log(`${((ruptures / bords) * 100).toFixed(1)} % de ruptures entre mailles voisines`);
+console.log(`altitudes ${Math.round(mini)} – ${Math.round(maxi)} m après lissage, pas de ${pas.toFixed(1)} m`);
 
 /* ------------------------------------------------------------------ *
  * Les fermes, posées sur le relief
@@ -246,17 +236,17 @@ await writeFile(
     {
       _lisezmoi: [
         'Relief de la ceinture caféière du Yunnan, relevé par outils/relever-relief.mjs.',
-        'Ne pas modifier à la main : relancer l’outil pour changer la zone ou les paliers.',
+        'Ne pas modifier à la main : relancer l’outil pour changer la zone ou la finesse.',
         'Source : tuiles d’altitude terrarium, AWS Open Data (dérivées du SRTM).',
         '« niveaux » : un octet par maille, en base64, lu par rangées du nord au sud.',
-        'L’altitude d’une maille vaut niveau × palier, en mètres.',
+        'L’altitude d’une maille vaut altitudeMin + niveau × pas, en mètres.',
+        'L’équidistance des courbes est décidée à l’affichage, pas ici.',
       ],
       zone: ZONE,
       mailles: MAILLES,
-      palier: PALIER,
-      paliersMax,
-      altitudeMin: Math.round(mini),
-      altitudeMax: Math.round(maxi),
+      pas,
+      altitudeMin: mini,
+      altitudeMax: maxi,
       niveaux: Buffer.from(niveaux).toString('base64'),
       fermes,
       source: 'Tuiles d’altitude terrarium — AWS Open Data, dérivées du SRTM (NASA) et de l’ASTER GDEM',

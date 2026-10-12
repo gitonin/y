@@ -14,8 +14,9 @@
  * On mesure donc la capture, et pas seulement le code :
  *
  *   1. le dossier est clos, et le site l'ignore ;
- *   2. la rampe d'altitude est la même dans la feuille et dans le script, et
- *      elle reste une rampe — une seule teinte, clarté décroissante ;
+ *   2. les teintes du relief sont les mêmes dans la feuille et dans le
+ *      script, et la carte reste monochrome : aucune couleur ne code
+ *      l'altitude, ce sont les courbes et l'ombre qui la disent ;
  *   3. la carte s'affiche, sans erreur de console ;
  *   4. le relief occupe vraiment l'écran, en paysage comme en portrait ;
  *   5. les trois fermes se voient, et le toucher ouvre leur fiche.
@@ -71,45 +72,75 @@ function oklch(hex) {
   return { L, C: Math.hypot(A, B), h: ((Math.atan2(B, A) * 180) / Math.PI + 360) % 360 };
 }
 
-/** Part de la capture qui n'est pas le papier du fond. */
-async function emprise(tampon) {
+/** Part de la capture qui n'est pas le papier du fond, et part colorée. */
+async function mesurer(tampon) {
   const { data, info } = await sharp(tampon).raw().toBuffer({ resolveWithObject: true });
-  let n = 0;
+  let dessin = 0, colore = 0;
   for (let i = 0; i < data.length; i += info.channels) {
-    const d = Math.abs(data[i] - PAPIER[0]) + Math.abs(data[i + 1] - PAPIER[1]) + Math.abs(data[i + 2] - PAPIER[2]);
-    if (d > 45) n++;
+    const [r, v, b] = [data[i], data[i + 1], data[i + 2]];
+    /* Seuil bas : le relief est presque de la couleur du papier — c'est le
+       dessin voulu. À 45, comme du temps du relief brun, la moitié de la
+       surface ne comptait plus. */
+    if (Math.abs(r - PAPIER[0]) + Math.abs(v - PAPIER[1]) + Math.abs(b - PAPIER[2]) > 16) dessin++;
+    /* Un pixel « coloré » est un pixel dont les trois composantes s'écartent
+       nettement : du gris chaud n'en est pas, l'orange de la marque en est. */
+    if (Math.max(r, v, b) - Math.min(r, v, b) > 52) colore++;
   }
-  return (n / (info.width * info.height)) * 100;
+  const total = info.width * info.height;
+  return { dessin: (dessin / total) * 100, colore: (colore / total) * 100 };
 }
 
-/** Centre du plus gros amas de pixels presque blancs : un repère de ferme. */
-async function reperePresqueBlanc(tampon, echelle) {
+/**
+ * Centre du plus gros amas ORANGE ET ROND : un repère de ferme.
+ *
+ * La rondeur n'est pas une coquetterie. L'orange de la marque sert aussi au
+ * lien du pied de page, dont les lettres font bien plus de pixels qu'une
+ * bille : sans ce filtre, le test cliquait sur « Découvrir nos cafés ». Un
+ * amas large et plat n'est pas un repère ; un amas qui remplit son cadre et
+ * dont le cadre est carré, oui.
+ *
+ * `interdits` écarte les zones d'habillage. La pastille de la légende est
+ * elle aussi ronde et orange : en portrait, où les repères sont plus petits
+ * qu'elle, le test cliquait dessus et attendait une fiche qui ne venait pas.
+ */
+async function repereAccent(tampon, echelle, interdits = []) {
   const { data, info } = await sharp(tampon).raw().toBuffer({ resolveWithObject: true });
   const vus = new Uint8Array(info.width * info.height);
-  const blanc = (x, y) => {
+  /* L'accent #b95f2c : nettement rouge, peu bleu. */
+  const accent = (x, y) => {
     const i = (y * info.width + x) * info.channels;
-    return data[i] > 236 && data[i + 1] > 232 && data[i + 2] > 226;
+    const [r, v, b] = [data[i], data[i + 1], data[i + 2]];
+    return r > 120 && r < 215 && r - v > 55 && r - b > 85;
   };
   let meilleur = null;
   for (let y = 0; y < info.height; y++) {
     for (let x = 0; x < info.width; x++) {
-      if (vus[y * info.width + x] || !blanc(x, y)) continue;
-      /* Parcours en largeur, sans récursion : un amas peut faire mille pixels. */
+      if (vus[y * info.width + x] || !accent(x, y)) continue;
       const file = [[x, y]];
       vus[y * info.width + x] = 1;
-      let sx = 0, sy = 0, n = 0;
+      let sx = 0, sy = 0, n = 0, x0 = x, x1 = x, y0 = y, y1 = y;
       while (file.length) {
         const [a, b] = file.pop();
         sx += a; sy += b; n++;
-        for (const [da, db] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+        if (a < x0) x0 = a; if (a > x1) x1 = a;
+        if (b < y0) y0 = b; if (b > y1) y1 = b;
+        for (const [da, db] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
           const u = a + da, v = b + db;
           if (u < 0 || v < 0 || u >= info.width || v >= info.height) continue;
-          if (vus[v * info.width + u] || !blanc(u, v)) continue;
+          if (vus[v * info.width + u] || !accent(u, v)) continue;
           vus[v * info.width + u] = 1;
           file.push([u, v]);
         }
       }
-      if (!meilleur || n > meilleur.n) meilleur = { n, x: sx / n / echelle, y: sy / n / echelle };
+      const larg = x1 - x0 + 1, haut = y1 - y0 + 1;
+      const forme = Math.min(larg, haut) / Math.max(larg, haut);
+      const remplissage = n / (larg * haut);
+      if (n < 40 || forme < 0.7 || remplissage < 0.55) continue;
+      const cx = sx / n / echelle, cy = sy / n / echelle;
+      if (interdits.some((z) => cx >= z.x && cx <= z.x + z.width && cy >= z.y && cy <= z.y + z.height)) continue;
+      if (!meilleur || n > meilleur.n) {
+        meilleur = { n, forme, remplissage, x: cx, y: cy };
+      }
     }
   }
   return meilleur;
@@ -147,23 +178,33 @@ const main = async () => {
   /* ================================================================ *
    * 2. La rampe d'altitude
    * ================================================================ */
-  titre('La rampe reste une rampe');
-  const deCss = [...css.matchAll(/--relief-\d:\s*(#[0-9a-f]{6})/gi)].map((m) => m[1].toLowerCase());
-  check('six paliers dans la feuille', deCss.length, 6);
-  const source = await lire(RACINE, 'carte', 'carte.ts');
-  const deTs = [...(source.match(/const RAMPE = \[([^\]]*)\]/)?.[1] ?? '').matchAll(/#[0-9a-f]{6}/gi)].map((m) => m[0].toLowerCase());
-  check('la feuille et le script disent la même', deCss.join(), deTs.join());
-
-  const lch = deCss.map(oklch);
-  let monotone = true, ecartMin = 1, teinteMax = 0;
-  for (let k = 1; k < lch.length; k++) {
-    if (lch[k].L >= lch[k - 1].L) monotone = false;
-    ecartMin = Math.min(ecartMin, lch[k - 1].L - lch[k].L);
+  titre('Les teintes du relief');
+  const teintes = {};
+  for (const cle of ['surface', 'ombre', 'trait']) {
+    teintes[cle] = css.match(new RegExp(`--relief-${cle}:\\s*(#[0-9a-f]{6})`, 'i'))?.[1]?.toLowerCase();
+    check(`${cle} est déclarée dans la feuille`, !!teintes[cle]);
   }
-  for (const c of lch) teinteMax = Math.max(teinteMax, Math.abs(c.h - lch[2].h));
-  check('la clarté décroît sans exception', monotone);
-  check(`les paliers se distinguent (ΔL min ${ecartMin.toFixed(3)} ≥ 0,06)`, ecartMin >= 0.06);
-  check(`une seule teinte (écart ${teinteMax.toFixed(0)}° ≤ 20°)`, teinteMax <= 20);
+  const source = await lire(RACINE, 'carte', 'carte.ts');
+  for (const [cle, constante] of [['surface', 'SURFACE'], ['ombre', 'OMBRE'], ['trait', 'TRAIT']]) {
+    const deTs = source.match(new RegExp(`const ${constante} = '(#[0-9a-f]{6})'`, 'i'))?.[1]?.toLowerCase();
+    check(`${cle} : la feuille et le script disent la même`, deTs, teintes[cle]);
+  }
+  /* Le relief est une maquette de topographe : du papier, des traits. Si la
+     surface ou l'ombre prenait de la couleur, on retomberait dans le relief
+     brun des premières versions, que le dessin ne veut pas. */
+  for (const cle of ['surface', 'ombre']) {
+    const { C, L } = oklch(teintes[cle]);
+    check(`${cle} reste quasi neutre (C ${C.toFixed(3)} ≤ 0,035)`, C <= 0.035);
+    check(`${cle} reste claire (L ${L.toFixed(2)} ≥ 0,80)`, L >= 0.80);
+  }
+  /* L'équidistance et les bornes de la bande vivent dans le script : on
+     vérifie qu'elles s'affichent dans la légende, et non en dur dans un
+     texte qui dériverait. */
+  const equid = Number(source.match(/const EQUIDISTANCE = (\d+)/)?.[1]);
+  check('une équidistance est fixée', Number.isFinite(equid) && equid > 0);
+  for (const l of LANGUES) {
+    check(`${l} — la légende annonce l'équidistance`, pages[l].includes('data-equidistance'));
+  }
 
   /* ================================================================ *
    * 3. Le site ignore la carte
@@ -226,15 +267,26 @@ const main = async () => {
       check(`le relief est construit (${triangles.toLocaleString('fr-FR')} triangles)`, triangles > 50000);
 
       const tampon = await page.screenshot();
-      const part = await emprise(tampon);
+      const { dessin, colore } = await mesurer(tampon);
       /* Un cadrage qui laisse l'écran vide ne déclenche aucune erreur : c'est
          pourquoi on le mesure. */
-      check(`le relief occupe l'écran (${part.toFixed(0)} % ≥ ${vue.mini} %)`, part >= vue.mini);
+      check(`le relief occupe l'écran (${dessin.toFixed(0)} % ≥ ${vue.mini} %)`, dessin >= vue.mini);
+      /* La carte est une maquette de papier : les seules taches colorées sont
+         les trois repères et le lien de pied de page. Les premières versions
+         teintaient tout le relief, et c'est précisément ce qu'on ne veut
+         plus — une mesure l'attrape, un contrôle de code ne l'aurait pas. */
+      check(`la carte reste monochrome (${colore.toFixed(1)} % coloré ≤ 2 %)`, colore <= 2);
 
       titre(`Les fermes, en ${vue.nom}`);
-      const repère = await reperePresqueBlanc(tampon, 2);
-      /* Les repères sont blancs ; la rampe d'altitude ne l'est jamais. S'ils
-         reprenaient sa teinte, ils disparaîtraient — c'est arrivé. */
+      const interdits = await page.evaluate(() =>
+        [...document.querySelectorAll('.carte__legende, .carte__pied, .carte__tete, .carte__fiche')]
+          .map((e) => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; }),
+      );
+      const repère = await repereAccent(tampon, 2, interdits);
+      /* L'orange de la marque ne sert qu'à désigner : il n'est nulle part
+         ailleurs sur le relief, donc un repère se voit partout. Dans une
+         version antérieure il reprenait la teinte du relief, et deux fermes
+         sur trois étaient invisibles. */
       check('un repère se détache du relief', repère !== null && repère.n > 60);
       if (repère) {
         await page.mouse.click(Math.round(repère.x), Math.round(repère.y));
@@ -271,8 +323,11 @@ const main = async () => {
       }
 
       titre(`La légende, en ${vue.nom}`);
-      check('des graduations en mètres', (await page.locator('.carte__cran').count()) >= 4);
-      check('la ceinture caféière est annotée', await page.locator('.carte__ceinture-texte').isVisible());
+      check('trois clés de lecture', await page.locator('.carte__cle').count(), 3);
+      const equidTexte = (await page.locator('[data-equidistance]').textContent())?.trim() ?? '';
+      check(`l'équidistance est annoncée (« ${equidTexte} »)`, new RegExp(`\\b${equid}\\b`).test(equidTexte));
+      check('la bande du café est annotée', await page.locator('[data-ceinture]').isVisible());
+      check('et les fermes aussi', await page.locator('[data-fermes]').isVisible());
       await ctx.close();
     }
   } finally {

@@ -1,7 +1,7 @@
 # La carte du relief
 
-Le relief de la ceinture caféière du Yunnan en trois dimensions, par tranches
-d'altitude, avec les trois fermes dont viennent nos cafés.
+Le relief de la ceinture caféière du Yunnan en trois dimensions, en courbes de
+niveau, avec les trois fermes dont viennent nos cafés.
 
 Comme le jeu, la carte **ne fait pas partie du site** : aucun menu n'y mène,
 elle ne figure pas au plan du site, et on y entre par un lien que l'on partage.
@@ -23,9 +23,9 @@ On corrige, on redépose ce seul dossier.
 | --- | --- |
 | les textes (titre, légende, mentions) | `contenu/textes.json`, section `carte` |
 | les fiches des fermes | `contenu/produits.json` — la carte les y lit |
-| la zone, la finesse, les paliers | `outils/relever-relief.mjs`, puis on le relance |
-| la rampe d'altitude, la mise en page | `carte/carte.css` |
-| la scène, la caméra, les repères | `carte/carte.ts` |
+| la zone et la finesse du relevé | `outils/relever-relief.mjs`, puis on le relance |
+| les teintes, la mise en page | `carte/carte.css` |
+| l'équidistance, la scène, les repères | `carte/carte.ts` |
 
     npm run relever-relief     # seulement si la zone ou les paliers changent
     npm run construire-carte   # fabrique public/carte/
@@ -37,29 +37,39 @@ Puis on dépose `public/carte/` dans `/carte/` sur le serveur.
 
 La page ne reçoit **pas** un relief en trois dimensions. Elle reçoit une grille
 de 192 × 192 entiers — un palier d'altitude par maille, un octet chacun, 17 Ko
-une fois compressés — et fabrique les 113 000 triangles elle-même, en quelques
+une fois compressés — et fabrique les 74 000 triangles elle-même, en quelques
 dizaines de millisecondes. Un maillage déjà triangulé coûterait cent fois plus
 pour le même résultat.
 
 Le relevé vit dans `carte/relief.json`, qui **est versionné** : c'est une
-mesure, pas une sortie de construction. `outils/relever-relief.mjs` est le seul
-outil du projet qui ait besoin du réseau, et on ne le relance que pour changer
-la zone ou les paliers. Il garde les tuiles dans `.cache/`, non versionné.
+mesure, pas une sortie de construction. Il garde l'altitude en continu, un
+octet par maille, soit un pas d'environ 11 m — l'équidistance des courbes n'y
+est pas inscrite, elle est décidée à l'affichage et se change sans refaire le
+relevé. `outils/relever-relief.mjs` est le seul outil du projet qui ait besoin
+du réseau ; il garde les tuiles dans `.cache/`, non versionné.
 
 ## Trois choses à ne pas défaire
 
-**La rampe d'altitude est une rampe.** Une seule teinte — l'orange de la charte
-— dont la clarté décroît, six paliers écartés d'au moins 0,06 en clarté, et le
-plus clair se détache du papier à 2:1. Une altitude est une grandeur : elle se
-lit dans l'ordre, ce qu'un dégradé à plusieurs teintes interdit. La ceinture
-caféière est signalée par une annotation sur la légende, **jamais** par une
-couleur à part. Les six valeurs sont écrites dans `carte.css` et reprises dans
-`carte.ts` ; la construction échoue si les deux divergent.
+**Aucune couleur ne code l'altitude.** Le dessin est celui d'une maquette de
+topographe : du papier, une surface presque blanche, des courbes de niveau à
+l'encre. Ce sont les courbes et l'ombre qui disent la hauteur. Deux versions
+antérieures l'ont dit en couleur — un relief brun en terrasses, puis une bande
+orange sur la moitié de la carte — et toutes deux ont été abandonnées. Les
+trois teintes du relief sont écrites dans `carte.css` et reprises dans
+`carte.ts` ; la construction échoue si elles divergent, et le test vérifie
+qu'elles restent claires et quasi neutres.
 
-**Les repères ne prennent pas la couleur de la rampe.** Ils sont blancs, cerclés
-d'encre. En orange — la couleur de la marque — deux des trois fermes étaient
-invisibles sur un relief orange. Une couleur qui désigne ne peut pas être une
-couleur qui mesure.
+**L'orange de la marque ne sert qu'à désigner.** Les trois fermes, et rien
+d'autre. Essayé sur les bornes de la bande du café : les deux altitudes sont
+franchies partout, et l'orange s'est répandu sur tout le relief au lieu de
+montrer quoi que ce soit. Une couleur qui désigne ne peut pas aussi mesurer.
+Le test mesure la part colorée de l'image : au-delà de 2 %, il échoue.
+
+**Les courbes sont tracées par le nuanceur, pas par de la géométrie.** Là où
+l'altitude franchit un multiple de l'équidistance, le pixel s'assombrit. Elles
+gardent donc une finesse constante de loin comme de près, et changer
+l'équidistance ne coûte rien — alors que des dizaines de milliers de segments
+seraient à recalculer.
 
 **La position des fermes est approchée, et la page le dit.** Le site donne la
 préfecture et l'altitude, jamais les coordonnées des parcelles. Le relevé place

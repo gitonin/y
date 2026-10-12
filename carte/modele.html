@@ -30,12 +30,22 @@
         <p class="carte__sous">{{intro}}</p>
       </header>
 
-      <!-- La légende : une rampe continue, six crans nommés, et la ceinture
-           caféière en annotation par-dessus. Les positions sont calculées au
-           chargement, d'après les altitudes réellement relevées. -->
+      <!-- La légende tient en deux lignes : aucune couleur ne code l'altitude,
+           il n'y a donc pas d'échelle à expliquer. L'équidistance se montre
+           par trois traits, et l'orange dit ce qu'il désigne. -->
       <div class="carte__legende" data-legende>
-        <div class="carte__rampe"></div>
-        <div class="carte__crans" data-crans></div>
+        <p class="carte__cle">
+          <span class="carte__traits" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span data-equidistance></span>
+        </p>
+        <p class="carte__cle">
+          <span class="carte__traits carte__traits--forte" aria-hidden="true"><i></i></span>
+          <span data-ceinture></span>
+        </p>
+        <p class="carte__cle">
+          <span class="carte__pastille" aria-hidden="true"></span>
+          <span data-fermes></span>
+        </p>
       </div>
 
       <article class="carte__fiche" data-fiche hidden>
