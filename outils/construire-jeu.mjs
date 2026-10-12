@@ -96,7 +96,9 @@ async function construire() {
   }
 
   /* ---------- la porte d'entrée ---------- */
-  await writeFile(path.join(CIBLE, 'index.html'), porte());
+  const entree = porte();
+  verifierScripts(entree, 'index.html');
+  await writeFile(path.join(CIBLE, 'index.html'), entree);
 
   /* ---------- la feuille de style ---------- */
   const charte = await lire(dans('src', 'styles', 'global.css'));
@@ -144,6 +146,35 @@ async function construire() {
   return textes;
 }
 
+/*
+ * Le script de la porte est écrit dans un gabarit, et un gabarit mange les
+ * barres inverses : `/\\bzh\\b/` doit s'y écrire en double, sans quoi il
+ * sort en `/zh/` — et `/\\/$/` sort en `//$/`, qui ouvre un commentaire.
+ * Les deux passent inaperçus à la lecture et cassent le renvoi de langue.
+ *
+ * On relit donc ce qu'on vient d'écrire, et on refuse de livrer un script
+ * qui ne s'analyse pas. `new Function` ne l'exécute pas : il le compile, ce
+ * qui suffit à faire remonter l'erreur de syntaxe.
+ */
+function verifierScripts(html, nom) {
+  const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="application\/json")[^>]*>([\s\S]*?)<\/script>/g)];
+  if (!scripts.length) throw new Error(`${nom} : aucun script à vérifier, le gabarit a changé`);
+  for (const [, code] of scripts) {
+    try {
+      new Function(code);
+    } catch (e) {
+      throw new Error(`${nom} : script invalide — ${e.message}`);
+    }
+    /* Une barre inverse avalée ne fait pas d'erreur de syntaxe : elle change
+       le sens. On vérifie donc aussi que les gardes sont bien là. */
+    for (const attendu of ['/\\/$/', '/\\.html?$/i', '\\bzh\\b', '\\ben\\b']) {
+      if (!code.includes(attendu)) {
+        throw new Error(`${nom} : « ${attendu} » absent du script — barre inverse mangée par le gabarit`);
+      }
+    }
+  }
+}
+
 /* Écrit une valeur JSON en PHP littéral, à la façon de `var_export`. Les
    chaînes passent par des guillemets simples, où seuls la barre oblique
    inverse et le guillemet simple ont un sens : rien d'un énoncé ne peut
@@ -185,11 +216,23 @@ function porte() {
     <script>
       /* La langue du téléphone décide, le français reprend la main. Le code
          d'invitation (?p=ABCD) suit : un lien partagé doit mener dans la
-         partie, pas seulement devant le jeu. */
+         partie, pas seulement devant le jeu.
+
+         Le renvoi est calculé sur le dossier courant, jamais écrit en
+         relatif. « zh/ » tout court se résout contre le dossier parent dès
+         que l'adresse perd sa barre finale : depuis « /jeu », il désignerait
+         « /zh/ » — l'accueil du site en chinois, pas le jeu. On remet donc la
+         barre avant toute chose, puis on nomme le dossier en entier. */
       (function () {
+        var chemin = location.pathname;
+        if (!/\\/$/.test(chemin) && !/\\.html?$/i.test(chemin)) {
+          location.replace(chemin + '/' + location.search + location.hash);
+          return;
+        }
+        var dossier = chemin.replace(/[^/]*$/, '');
         var parlees = (navigator.languages || [navigator.language || 'fr']).join(',').toLowerCase();
         var langue = /\\bzh\\b|zh-/.test(parlees) ? 'zh' : /\\ben\\b|en-/.test(parlees) ? 'en' : 'fr';
-        location.replace(langue + '/' + location.search + location.hash);
+        location.replace(dossier + langue + '/' + location.search + location.hash);
       })();
     </script>
   </head>

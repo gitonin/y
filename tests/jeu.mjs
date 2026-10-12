@@ -22,9 +22,10 @@
  * Le troisième temps est le seul qui prouve quelque chose d'utile : un
  * dossier qui a l'air autonome et qui ne tourne pas ne vaut rien.
  */
+import { createServer } from 'node:http';
 import { execFileSync, spawn } from 'node:child_process';
 import { readFile, readdir } from 'node:fs/promises';
-import { existsSync, rmSync, mkdirSync } from 'node:fs';
+import { existsSync, rmSync, mkdirSync, statSync, readFileSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -239,6 +240,78 @@ const main = async () => {
       return { code: r.status, texte: (await r.text()).slice(0, 200) };
     });
     check('questions.php ne rend pas les réponses', direct.texte.includes('bonne'), false);
+
+    /* ------------------------------------------------------------------ *
+     * La porte d'entrée mène au jeu, et à rien d'autre
+     * ------------------------------------------------------------------ *
+     * C'est l'adresse que l'on partage : yunma.fr/jeu/. Elle doit conduire
+     * au jeu dans la langue du téléphone — et surtout pas ailleurs.
+     *
+     * Le piège est le renvoi écrit en relatif. « zh/ » tout court se résout
+     * contre le dossier parent dès que l'adresse perd sa barre finale :
+     * depuis « /jeu », il désigne « /zh/ » — l'accueil du site en chinois.
+     * Le visiteur venu pour le jeu tombait sur la boutique, et celui qui
+     * cherchait la boutique en chinois croyait tomber sur le jeu.
+     *
+     * On sert donc le dossier derrière un serveur qui NE remet PAS la barre
+     * finale, ce que fait Apache mais pas tout le monde, et l'on regarde où
+     * atterrit chaque langue. */
+    titre('La porte d’entrée mène au jeu');
+    /* On sert le site CONSTRUIT, pas le seul dossier du jeu : c'est ce qui
+       rend le contrôle utile. Si le renvoi se résout contre le dossier
+       parent, « /zh/ » existe pour de vrai sous cette racine — c'est
+       l'accueil du site en chinois, et le test le verra. */
+    const brut = createServer((req, rep) => {
+      const chemin = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+      /* Volontairement hostile : pas de 301 vers le chemin avec barre. */
+      const essais = [join(dist, chemin), join(dist, chemin, 'index.html')];
+      for (const f of essais) {
+        if (existsSync(f) && statSync(f).isFile()) {
+          rep.writeHead(200, { 'Content-Type': f.endsWith('.html') ? 'text/html' : 'text/plain' });
+          rep.end(readFileSync(f));
+          return;
+        }
+      }
+      rep.writeHead(404).end('rien');
+    });
+    await new Promise((r) => brut.listen(PORT + 2, '127.0.0.1', r));
+
+    try {
+      for (const [locale, attendu] of [
+        ['zh-CN', '/jeu/zh/'],
+        ['en-GB', '/jeu/en/'],
+        ['fr-FR', '/jeu/fr/'],
+        ['de-DE', '/jeu/fr/'],
+      ]) {
+        const ctx = await nav.newContext({ locale });
+        for (const depart of ['/jeu/', '/jeu', '/jeu/index.html']) {
+          const page = await ctx.newPage();
+          await page.goto(`http://127.0.0.1:${PORT + 2}${depart}`);
+          await page.waitForLoadState('domcontentloaded');
+          await page.waitForFunction(
+            (cible) => location.pathname === cible,
+            attendu,
+            { timeout: 5000 },
+          ).catch(() => {});
+          check(`${locale} depuis ${depart}`, new URL(page.url()).pathname, attendu);
+          await page.close();
+        }
+        await ctx.close();
+      }
+
+      /* Le code d'invitation doit survivre au renvoi, sans quoi un lien
+         partagé mène devant le jeu et non dedans. */
+      const ctx = await nav.newContext({ locale: 'zh-CN' });
+      const page = await ctx.newPage();
+      await page.goto(`http://127.0.0.1:${PORT + 2}/jeu/?p=ABCD`);
+      await page.waitForFunction(() => location.pathname.endsWith('/zh/'), null, { timeout: 5000 }).catch(() => {});
+      const u = new URL(page.url());
+      check('le code d’invitation suit', u.pathname + u.search, '/jeu/zh/?p=ABCD');
+      await page.close();
+      await ctx.close();
+    } finally {
+      brut.close();
+    }
 
     /* Une panne du serveur doit rester du JSON. Le téléphone n'attend que
        cela : une page d'erreur de PHP le laisserait sur « Connexion perdue »
