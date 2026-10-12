@@ -1,0 +1,18 @@
+# ----------------------------------------------------------------------------
+# Le dossier de la carte
+# ----------------------------------------------------------------------------
+# Ce dossier se redépose seul, sans toucher au reste du site : ses règles
+# vivent donc ici, et non dans le .htaccess de la racine.
+#
+# Rien à protéger : la carte est entièrement statique, sans serveur ni base.
+# Il n'y a qu'une chose à régler, et elle compte.
+
+<IfModule mod_headers.c>
+  # La feuille et le script gardent leur nom d'une version à l'autre — ils ne
+  # portent pas d'empreinte, puisque ce dossier se corrige à la main. Il faut
+  # donc les revalider à chaque visite, sans quoi une correction de la carte
+  # mettrait des jours à paraître sur les appareils qui l'ont déjà ouverte.
+  <FilesMatch "\.(css|js|html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>

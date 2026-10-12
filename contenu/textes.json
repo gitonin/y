@@ -496,6 +496,18 @@
         "erreurComplete": "La partie est complète.",
         "erreurCommencee": "La partie a déjà commencé.",
         "erreurReseau": "Connexion perdue. Nouvel essai…"
+      },
+      "carte": {
+        "titre": "Le relief du café",
+        "seo": "Le relief de la ceinture caféière du Yunnan en trois dimensions, et les trois fermes dont viennent nos cafés.",
+        "intro": "Les montagnes du sud-ouest du Yunnan, par tranches de {palier} mètres. Touchez une ferme pour savoir ce qui y pousse.",
+        "aide": "Faites tourner d’un doigt, pincez pour approcher.",
+        "retour": "Découvrir nos cafés",
+        "fermer": "Fermer",
+        "ceinture": "Le café",
+        "approche": "Position approchée : la préfecture et l’altitude annoncée. Relief relevé à {alt} m.",
+        "source": "Relief : tuiles d’altitude terrarium, AWS Open Data, d’après le SRTM (NASA). Altitudes exagérées.",
+        "panne": "Cette carte demande la 3D, que ce navigateur ne propose pas."
       }
     },
     "en": {
@@ -994,6 +1006,18 @@
         "erreurComplete": "The game is full.",
         "erreurCommencee": "The game has already started.",
         "erreurReseau": "Connection lost. Trying again…"
+      },
+      "carte": {
+        "titre": "The shape of the coffee",
+        "seo": "The relief of Yunnan's coffee belt in three dimensions, and the three farms our coffees come from.",
+        "intro": "The mountains of south-west Yunnan, in {palier}-metre bands. Tap a farm to see what grows there.",
+        "aide": "Drag with one finger, pinch to zoom.",
+        "retour": "Discover our coffees",
+        "fermer": "Close",
+        "ceinture": "Coffee",
+        "approche": "Approximate position: the prefecture and the stated altitude. Relief measured at {alt} m.",
+        "source": "Relief: terrarium elevation tiles, AWS Open Data, derived from SRTM (NASA). Heights exaggerated.",
+        "panne": "This map needs 3D, which this browser does not offer."
       }
     },
     "zh": {
@@ -1492,6 +1516,18 @@
         "erreurComplete": "房间已满。",
         "erreurCommencee": "对局已经开始。",
         "erreurReseau": "连接中断，正在重试…"
+      },
+      "carte": {
+        "titre": "咖啡的地形",
+        "seo": "云南咖啡带的三维地形，以及我们咖啡的三座庄园。",
+        "intro": "滇西南的群山，以 {palier} 米为一层。点按庄园，看看那里种出什么。",
+        "aide": "单指拖动旋转，双指缩放。",
+        "retour": "了解我们的咖啡",
+        "fermer": "关闭",
+        "ceinture": "咖啡带",
+        "approche": "位置为近似值：依据所属州市与标注海拔。此处实测 {alt} 米。",
+        "source": "地形数据：terrarium 高程瓦片，AWS Open Data，源自 SRTM（NASA）。高度经过夸张处理。",
+        "panne": "此地图需要 3D 支持，当前浏览器不支持。"
       }
     }
   },

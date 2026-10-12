@@ -27,9 +27,10 @@ const echecs = [];
 /* Toutes les pages rangées sous une langue : les passerelles Shopify, la 404 et
    la planche des composants n'ont pas de version traduite.
 
-   Le jeu non plus, et pour une autre raison : il n'appartient pas au site. Il
-   a bien ses trois langues, mais sous /jeu/<langue>/, sans en-tête ni menu —
-   donc sans sélecteur de langue à vérifier. Voir tests/jeu.mjs. */
+   Le jeu et la carte non plus, et pour une autre raison : ils n'appartiennent
+   pas au site. Ils ont bien leurs trois langues, mais sous /jeu/<langue>/ et
+   /carte/<langue>/, sans en-tête ni menu — donc sans sélecteur de langue à
+   vérifier. Voir tests/jeu.mjs et tests/carte.mjs. */
 const pages = [];
 (function parcourir(d) {
   for (const e of readdirSync(d)) {
@@ -37,7 +38,7 @@ const pages = [];
     if (statSync(p).isDirectory()) parcourir(p);
     else if (e === 'index.html') {
       const rel = p.slice(DIST.length).replace(/\\/g, '/').replace(/index\.html$/, '');
-      if (rel.includes('/jeu/')) continue;
+      if (rel.includes('/jeu/') || rel.includes('/carte/')) continue;
       const m = rel.match(/^(.*\/)(fr|en|zh)\/(.*)$/);
       if (m) pages.push({ rel, base: m[1], lang: m[2], reste: m[3], html: readFileSync(p, 'utf8') });
     }

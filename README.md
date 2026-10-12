@@ -42,9 +42,18 @@ jeu/                         LE JEU — à part du site, se redépose seul
 ├─ api.php                   Son serveur : les parties, les scores
 └─ .htaccess                 Protège la base et les bonnes réponses
 
+carte/                       LA CARTE 3D — à part du site, se redépose seule
+├─ LISEZ-MOI.md              Mode d'emploi de la carte
+├─ modele.html               La page, une par langue
+├─ carte.css / carte.ts      Rampe d'altitude, scène Three.js
+├─ relief.json               Le relevé du terrain (versionné : c'est une mesure)
+└─ .htaccess                 Interdit de garder en cache une version corrigée
+
 outils/
 ├─ verifier-contenu.mjs      Relit contenu/ avant chaque publication
-└─ construire-jeu.mjs        Fabrique public/jeu/, autonome, depuis jeu/
+├─ construire-jeu.mjs        Fabrique public/jeu/, autonome, depuis jeu/
+├─ construire-carte.mjs      Fabrique public/carte/, autonome, depuis carte/
+└─ relever-relief.mjs        Relève le relief du Yunnan (réseau ; à la demande)
 ```
 
 ### Pages générées (× 3 langues)
@@ -63,13 +72,16 @@ outils/
 
 `/` détecte la langue du navigateur et redirige (repli : français).
 
-### Le jeu, à part
+### Le jeu et la carte, à part
 
-`/jeu/` n'est pas une page du site : aucun menu n'y mène, il ne figure pas au
-plan du site, et on y entre par un lien que l'on partage. Tout ce dont il a
-besoin tient dans ce seul dossier, dont aucun fichier ne porte d'empreinte :
-on le corrige et on le redépose seul, sans toucher au reste.
-Voir `jeu/LISEZ-MOI.md`.
+`/jeu/` et `/carte/` ne sont pas des pages du site : aucun menu n'y mène, elles
+ne figurent pas au plan du site, et on y entre par un lien que l'on partage.
+Tout ce dont elles ont besoin tient dans leur seul dossier, dont aucun fichier
+ne porte d'empreinte : on les corrige et on les redépose seules, sans toucher
+au reste. Voir `jeu/LISEZ-MOI.md` et `carte/LISEZ-MOI.md`.
+
+Une différence : le jeu réclame du PHP, la carte non — elle est entièrement
+statique, et fonctionne donc aussi sur l'aperçu GitHub Pages.
 
 ---
 

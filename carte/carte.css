@@ -1,0 +1,342 @@
+/* =========================================================
+   LA CARTE DU YUNNAN — styles propres à la carte
+   =========================================================
+
+   Concaténée après `src/styles/global.css` par
+   `outils/construire-carte.mjs` : la charte du site reste la seule
+   source des couleurs, des graisses et des boutons.
+
+   La rampe d'altitude, elle, est définie ici — et elle n'est pas
+   choisie à l'œil. Une seule teinte (celle de l'accent de la charte,
+   47,5° en OKLCH), clarté décroissante, écarts d'au moins 0,06, et le
+   palier le plus clair se détache du papier à 2:1. Vérifié par le
+   validateur de palettes, quatre contrôles sur quatre.
+
+       #c2a191  les fonds de vallée
+       #ca7549
+       #b15824  la ceinture caféière
+       #953e00
+       #752800
+       #402719  les sommets
+
+   Pas d'arc-en-ciel, pas de vert pour les hauteurs : une altitude est
+   une grandeur, et une grandeur se lit sur une seule teinte qui
+   s'assombrit. La ceinture caféière est signalée par une annotation
+   sur la légende, jamais par une couleur à part — sans quoi la rampe
+   cesserait de se lire dans l'ordre.
+   ========================================================= */
+
+:root {
+  --relief-1: #c2a191;
+  --relief-2: #ca7549;
+  --relief-3: #b15824;
+  --relief-4: #953e00;
+  --relief-5: #752800;
+  --relief-6: #402719;
+}
+
+.carte {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.carte__toile {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none; /* le pincement pilote la carte, pas la page */
+}
+
+/* ---------- En-tête ---------- */
+
+/* Les calques se superposent dans un ordre décidé, et non dans celui du
+   document : le pied de page, écrit après la fiche, se peignait par-dessus
+   son texte sur un écran étroit, où les deux occupent le bas. */
+.carte__tete,
+.carte__legende,
+.carte__pied {
+  z-index: 2;
+}
+
+.carte__fiche {
+  z-index: 3;
+}
+
+.carte__panne {
+  z-index: 4;
+}
+
+.carte__tete {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(1rem, 4vw, 2rem);
+  display: grid;
+  gap: 0.3rem;
+  pointer-events: none;
+}
+
+.carte__titre {
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  font-size: var(--fs-h3);
+  letter-spacing: -0.014em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.carte__sous {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--ink-70);
+  font-size: var(--fs-small);
+}
+
+/* ---------- Légende ---------- */
+
+.carte__legende {
+  position: absolute;
+  left: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0 0.5rem;
+  align-items: stretch;
+  pointer-events: none;
+}
+
+/* La rampe est continue : le relief interpole entre les six paliers, et la
+   légende montre la même chose plutôt qu'une suite de pastilles qui
+   suggérerait six catégories. */
+.carte__rampe {
+  width: 0.55rem;
+  border: 1px solid var(--line);
+  background: linear-gradient(
+    to top,
+    var(--relief-1) 0%,
+    var(--relief-2) 20%,
+    var(--relief-3) 40%,
+    var(--relief-4) 60%,
+    var(--relief-5) 80%,
+    var(--relief-6) 100%
+  );
+}
+
+.carte__crans {
+  position: relative;
+  /* La place à gauche est celle du crochet de la ceinture caféière : les
+     graduations commencent après lui, sans quoi les deux se superposent. */
+  padding-left: 1rem;
+  min-height: 12rem;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-50);
+}
+
+.carte__cran {
+  position: absolute;
+  left: 1rem;
+  transform: translateY(50%);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* La ceinture caféière est une annotation, pas une couleur de la rampe. */
+.carte__ceinture {
+  position: absolute;
+  left: 0.1rem;
+  width: 0.45rem;
+  border: 1px solid var(--ink);
+  border-right: 0;
+  pointer-events: none;
+}
+
+.carte__ceinture-texte {
+  position: absolute;
+  left: 0;
+  transform: translateY(50%);
+  white-space: nowrap;
+  color: var(--ink);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/* ---------- Fiche d'une ferme ---------- */
+
+.carte__fiche {
+  position: absolute;
+  right: clamp(1rem, 4vw, 2rem);
+  top: clamp(5.5rem, 14vw, 7rem);
+  width: min(23rem, calc(100vw - 2 * clamp(1rem, 4vw, 2rem)));
+  padding: 1.1rem 1.2rem 1.2rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 0.55rem;
+}
+
+.carte__fiche[hidden] {
+  display: none;
+}
+
+.carte__fiche-nom {
+  margin: 0;
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+}
+
+.carte__fiche-lieu {
+  margin: 0;
+  color: var(--ink-50);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.carte__fiche-alt {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-titre);
+  font-weight: var(--w-semi);
+  color: var(--accent-deep);
+}
+
+.carte__fiche-texte {
+  margin: 0;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: var(--ink-70);
+}
+
+.carte__fiche-cafes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 0.6rem;
+}
+
+.carte__fiche-cafes li {
+  font-size: var(--fs-small);
+}
+
+.carte__fermer {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: var(--ink-50);
+  cursor: pointer;
+}
+
+.carte__fermer svg {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+/* ---------- Pied : source et mode d'emploi ---------- */
+
+.carte__pied {
+  position: absolute;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  max-width: 19rem;
+  text-align: right;
+  display: grid;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+
+.carte__aide,
+.carte__source {
+  margin: 0;
+  font-size: var(--fs-label);
+  letter-spacing: 0.04em;
+  color: var(--ink-50);
+  line-height: 1.5;
+}
+
+.carte__source {
+  color: var(--ink-30);
+}
+
+.carte__retour {
+  pointer-events: auto;
+  justify-self: end;
+}
+
+/* ---------- Replis ---------- */
+
+.carte__panne {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  text-align: center;
+}
+
+.carte__panne[hidden] {
+  display: none;
+}
+
+/* Sur un écran étroit, tout se range en colonne : le texte en haut, la
+   légende et la source en bas, la fiche par-dessus quand on la demande. La
+   légende posée en haut recouvrait l'introduction. */
+@media (max-width: 42rem) {
+  .carte__fiche {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .carte__legende {
+    /* Au-dessus du pied, qui occupe toute la largeur du bas. */
+    bottom: 4.6rem;
+  }
+
+  .carte__crans {
+    min-height: 9rem;
+  }
+
+  .carte__pied {
+    left: clamp(1rem, 4vw, 2rem);
+    max-width: none;
+    text-align: center;
+    gap: 0.2rem;
+  }
+
+  .carte__retour {
+    justify-self: center;
+  }
+
+  .carte__aide {
+    display: none; /* le doigt trouve tout seul ; la place manque */
+  }
+
+  .carte__tete {
+    /* Le titre et son chapeau ne doivent pas descendre sur le relief. */
+    max-width: 24rem;
+  }
+}

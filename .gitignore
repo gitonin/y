@@ -10,4 +10,11 @@ __pycache__/
 # Le dossier du jeu est fabriqué de bout en bout par outils/construire-jeu.mjs,
 # à chaque construction. Ses sources sont dans jeu/, à la racine.
 public/jeu/
+
+# Idem pour la carte, fabriquée par outils/construire-carte.mjs depuis carte/.
+# carte/relief.json, lui, est versionné : c'est un relevé, pas une sortie.
+public/carte/
 dist-*/
+
+# Tuiles d'altitude mises de côté par outils/relever-relief.mjs.
+.cache/
