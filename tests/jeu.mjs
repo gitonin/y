@@ -24,7 +24,7 @@
  */
 import { execFileSync, spawn } from 'node:child_process';
 import { readFile, readdir } from 'node:fs/promises';
-import { existsSync, rmSync } from 'node:fs';
+import { existsSync, rmSync, mkdirSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -239,6 +239,34 @@ const main = async () => {
       return { code: r.status, texte: (await r.text()).slice(0, 200) };
     });
     check('questions.php ne rend pas les réponses', direct.texte.includes('bonne'), false);
+
+    /* Une panne du serveur doit rester du JSON. Le téléphone n'attend que
+       cela : une page d'erreur de PHP le laisserait sur « Connexion perdue »
+       sans fin, et sans que personne sache pourquoi. On casse donc la base
+       pour de bon — un dossier à la place du fichier — et l'on regarde ce
+       qui sort. */
+    titre('Une panne reste du JSON');
+    serveur.kill();
+    await attendre(300);
+    /* La partie qu'on vient de jouer a laissé sa base : on la remplace par un
+       dossier du même nom, que SQLite ne saura pas ouvrir. */
+    for (const suffixe of ['', '-wal', '-shm']) {
+      rmSync(join(JEU, `parties.sqlite${suffixe}`), { recursive: true, force: true });
+    }
+    mkdirSync(join(JEU, 'parties.sqlite'));
+    const casse = spawn('php', ['-S', `127.0.0.1:${PORT + 1}`, '-t', JEU], { cwd: JEU, stdio: 'pipe' });
+    try {
+      await attendre(700);
+      const rep = await fetch(`http://127.0.0.1:${PORT + 1}/api.php?a=creer`, { method: 'POST', body: '{}' });
+      check('le serveur refuse proprement', rep.status, 500);
+      check('et le dit en JSON', rep.headers.get('content-type')?.startsWith('application/json'));
+      const corps = await rep.json();
+      check('avec une phrase pour le joueur', typeof corps.erreur === 'string' && corps.erreur.length > 10);
+      check('et sans détail technique', /SQLSTATE|PDO|Fatal|Stack trace/.test(JSON.stringify(corps)), false);
+    } finally {
+      casse.kill();
+      rmSync(join(JEU, 'parties.sqlite'), { recursive: true, force: true });
+    }
   } finally {
     await nav.close();
     serveur.kill();

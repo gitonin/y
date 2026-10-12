@@ -61,6 +61,17 @@ script — qui gardent leur nom d'une version à l'autre. Sans lui, une
 correction du jeu mettrait des jours à paraître sur les téléphones qui y ont
 déjà joué. Il commence par un point : beaucoup de clients FTP le cachent.
 
+## Si le jeu ne démarre pas
+
+Une panne du serveur reste du JSON : le joueur voit une phrase, et la raison
+technique part dans le journal d'erreurs PHP de l'hébergement, préfixée
+`jeu yunma :`. C'est là qu'il faut regarder.
+
+La cause la plus probable au premier dépôt est que le dossier `/jeu/` n'est
+pas inscriptible : `api.php` y crée son fichier `parties.sqlite` au premier
+lancement. Le jeu le dit alors en clair. Donner les droits d'écriture au
+dossier suffit.
+
 ## Ce qui est fabriqué, ce qui est écrit
 
 Les sources sont ici, dans `jeu/`. `public/jeu/` est fabriqué de bout en bout

@@ -58,6 +58,22 @@ function refuser(string $raison, int $code = 400): never {
     rendre(['erreur' => $raison], $code);
 }
 
+/*
+ * Une panne doit rester du JSON.
+ *
+ * Le téléphone attend du JSON et rien d'autre : il lit `erreur` et l'affiche.
+ * Une exception non rattrapée lui renverrait la page d'erreur de PHP, qu'il ne
+ * sait pas lire — et le joueur resterait devant « Connexion perdue » sans fin,
+ * sans que personne sache pourquoi.
+ *
+ * Le joueur reçoit donc une phrase, et la raison technique part dans le
+ * journal d'erreurs de l'hébergement : c'est là qu'on la cherche.
+ */
+set_exception_handler(function (Throwable $e): void {
+    error_log('jeu yunma : ' . $e->getMessage());
+    rendre(['erreur' => 'Le jeu est momentanément indisponible.'], 500);
+});
+
 /* ------------------------------------------------------------------ *
  * Base
  * ------------------------------------------------------------------ */
@@ -75,6 +91,14 @@ function base(): PDO {
         );
         $auto = 'INTEGER PRIMARY KEY AUTO_INCREMENT';
     } else {
+        /* Le premier lancement crée le fichier des parties. S'il ne peut pas,
+           c'est presque toujours la même chose : le dossier déposé n'est pas
+           inscriptible. On le dit, plutôt que de laisser PDO échouer sur une
+           phrase que personne ne rattache aux droits d'un dossier. */
+        if (!is_file(FICHIER_SQLITE) && !is_writable(__DIR__)) {
+            error_log('jeu yunma : le dossier ' . __DIR__ . ' n\'est pas inscriptible');
+            refuser('Le dossier du jeu n\'est pas inscriptible sur le serveur.', 500);
+        }
         $pdo = new PDO('sqlite:' . FICHIER_SQLITE, null, null, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         /* WAL : un joueur qui lit ne bloque pas un joueur qui écrit. Sans lui,
            quatre téléphones qui interrogent chaque seconde se gêneraient. */
