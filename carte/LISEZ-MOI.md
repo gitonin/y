@@ -39,7 +39,7 @@ Puis on dépose `public/carte/` dans `/carte/` sur le serveur.
 
 La page ne reçoit **pas** un relief en trois dimensions. Elle reçoit une grille
 de 260 × 260 entiers — une altitude par maille, un octet chacun, une vingtaine
-de kilooctets compressés — et fabrique les 200 000 triangles elle-même, en quelques
+de kilooctets compressés — et fabrique les 143 000 triangles elle-même, en quelques
 dizaines de millisecondes. Un maillage déjà triangulé coûterait cent fois plus
 pour le même résultat.
 
@@ -50,19 +50,39 @@ est pas inscrite, elle est décidée à l'affichage et se change sans refaire le
 relevé. `outils/relever-relief.mjs` est le seul outil du projet qui ait besoin
 du réseau ; il garde les tuiles dans `.cache/`, non versionné.
 
-## Cinq choses à ne pas défaire
+## Six choses à ne pas défaire
+
+**Les strates sont découpées sur la courbe, pas sur la grille.** Chaque strate
+est la région située au-dessus d'une altitude. On en trace le contour réel par
+marching squares — avec interpolation sur les arêtes, ce qui donne une courbe
+lisse plutôt qu'un escalier — puis on l'extrude vers le bas avec un chanfrein,
+qui arrondit la lèvre.
+
+Une version antérieure empilait un bloc par maille : les contours suivaient
+alors la grille en escalier et les arêtes étaient vives. Des cubes, pas des
+strates. Elle était aussi dix fois plus lourde : 208 000 triangles contre
+143 000 pour un dessin bien meilleur, parce qu'un contour est une courbe, pas
+une surface.
+
+Deux pièges s'y cachent, tous deux rencontrés :
+
+Le champ doit être **bordé d'une couronne très basse**, sinon les contours
+sortent du cadre, les anneaux ne se referment pas et la strate se brise en
+morceaux.
+
+Un anneau est un contour ou un trou **selon son imbrication**, jamais selon
+son sens de parcours. Avec « intérieur à gauche » et un axe z vers le bas, un
+grand contour a une aire négative : s'y fier faisait prendre toutes les
+grandes strates pour des trous, et il n'en restait que des îlots. On compte
+donc les anneaux qui en enveloppent un autre — pair, c'est un contour ;
+impair, c'est un trou.
 
 **C'est l'ombre qui dit le relief, rien d'autre.** Pas de couleur d'altitude,
-pas de courbe de niveau tracée. Le terrain est découpé en marches de 150 m, et
-chaque marche porte son ombre sur la suivante. Trois versions antérieures ont
-essayé autre chose — un relief brun en terrasses, une bande orange sur la
-moitié de la carte, des courbes de niveau au nuanceur — et toutes ont été
-abandonnées. Les trois teintes du papier sont écrites dans `carte.css` et
-reprises dans `carte.ts` ; la construction échoue si elles divergent.
-
-Le réglage se juge à un rapport : la hauteur d'une marche contre la largeur
-d'une maille. Trop fines, les marches ne font plus des couches mais une grêle,
-et leurs ombres couvrent la maquette de moucheture.
+pas de courbe de niveau tracée. Deux versions antérieures l'ont dit en
+couleur — un relief brun en terrasses, une bande orange sur la moitié de la
+carte — et une troisième traçait les courbes au nuanceur. Toutes abandonnées.
+Les trois teintes du papier sont écrites dans `carte.css` et reprises dans
+`carte.ts` ; la construction échoue si elles divergent.
 
 **La carte d'ombres est dessinée avec les faces arrière** (`shadowSide =
 BackSide`). Avec les faces avant, chaque marche s'ombrait elle-même et toute la
