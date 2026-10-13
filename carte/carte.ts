@@ -2,21 +2,23 @@
  * La carte du relief de la ceinture caféière, côté navigateur.
  *
  * Le relief n'est pas envoyé en trois dimensions : la page reçoit une grille
- * de 200 × 200 octets — une altitude par maille, une vingtaine de kilooctets
- * compressés — et fabrique la maquette ici.
+ * de 380 × 380 octets — une altitude par maille, quatre-vingts kilooctets
+ * compressés — et fabrique la montagne ici.
  *
- * Le dessin est celui d'une maquette découpée dans du papier épais : des
- * couches de 100 m empilées, blanches, et c'est l'ombre portée d'une couche
- * sur la suivante qui donne le relief. Aucun trait, aucune couleur — ni
- * courbe de niveau dessinée, ni teinte d'altitude. Une version antérieure
- * traçait les courbes dans le nuanceur ; elles grisaient la surface et ne
- * disaient pas le volume. L'ombre le dit.
+ * Le dessin est celui d'une maquette de papier épais : une surface blanche et
+ * continue, où c'est l'ombre d'une crête sur le versant voisin qui donne le
+ * volume. Aucun trait. Une version antérieure dessinait les courbes de
+ * niveau : elles grisaient la surface sans dire le relief. Une autre empilait
+ * des strates découpées, et la montagne y perdait ses arêtes et ses ravins.
+ * Le relevé est maintenant rendu tel quel, à la maille près.
+ *
+ * Deux choses seulement s'ajoutent au relief : la bande du café — un voile à
+ * peine plus chaud, posé entre les deux cotes où le caféier pousse — et
+ * l'orange de la marque, qui ne désigne que les trois fermes.
  *
  * Les bords se fondent dans le papier. Sans cela, la maquette montre son
  * épaisseur et redevient un objet posé sur une page ; fondue, elle n'a plus
  * de fin et le regard porte au-delà.
- *
- * L'orange de la marque ne sert qu'à désigner les trois fermes.
  */
 import {
   AmbientLight,
@@ -71,6 +73,11 @@ const ACCENT = '#b95f2c';
 
 /** La bande où pousse le café, en mètres. */
 const CEINTURE: [number, number] = [1000, 1900];
+/* Le voile de la bande du café : un multiplicateur appliqué à la surface
+   éclairée. Assez pour qu'on voie où le caféier pousse, assez peu pour que la
+   carte reste monochrome — la pastille de la légende reprend la couleur que
+   cela donne, et la construction vérifie que les deux ne divergent pas. */
+const CAFE: [number, number, number] = [0.88, 0.845, 0.78];
 
 const COTE = 100;
 /* Le relief réel serait invisible : 3 500 m sur 600 km de large, c'est une
@@ -220,6 +227,13 @@ export function lancerCarte(): void {
   const uBrume = { value: new Vector2(95, 430) };
   const uBord = { value: new Vector2(0.86, 1.0) };
   const uPapier = { value: new Color(PAPIER) };
+  /* La bande du café, dans les unités du modèle. */
+  const uCeinture = { value: new Vector2(unites(CEINTURE[0]), unites(CEINTURE[1])) };
+  /* Un facteur, pas une couleur : on assombrit et réchauffe à peine ce que
+     la lumière a déjà donné, au lieu de poser une teinte par-dessus. Passer
+     par un Color le ferait convertir d'espace colorimétrique, ce qui n'a pas
+     de sens pour un multiplicateur. */
+  const uCafe = { value: new Vector3(CAFE[0], CAFE[1], CAFE[2]) };
 
   /* Un remplacement qui ne trouve pas sa cible ne dit rien et ne fait rien :
      le nuanceur part sans la greffe, et la maquette montre son épaisseur sans
@@ -242,6 +256,8 @@ export function lancerCarte(): void {
       shader.uniforms.uBrume = uBrume;
       shader.uniforms.uBord = uBord;
       shader.uniforms.uPapier = uPapier;
+      shader.uniforms.uCeinture = uCeinture;
+      shader.uniforms.uCafe = uCafe;
       shader.uniforms.uDemi = { value: new Vector2(L / 2, P / 2) };
       shader.vertexShader = remplacer(
         remplacer(shader.vertexShader, '#include <common>', '#include <common>\nvarying vec3 vMonde;\nvarying float vProf;'),
@@ -252,7 +268,7 @@ export function lancerCarte(): void {
         remplacer(
           shader.fragmentShader,
           '#include <common>',
-          '#include <common>\nvarying vec3 vMonde;\nvarying float vProf;\nuniform vec2 uBrume;\nuniform vec2 uBord;\nuniform vec2 uDemi;\nuniform vec3 uPapier;',
+          '#include <common>\nvarying vec3 vMonde;\nvarying float vProf;\nuniform vec2 uBrume;\nuniform vec2 uBord;\nuniform vec2 uDemi;\nuniform vec3 uPapier;\nuniform vec2 uCeinture;\nuniform vec3 uCafe;',
         ),
         '#include <colorspace_fragment>',
           `/* Le lointain, puis les bords. Les deux ramènent au papier : le
@@ -264,6 +280,15 @@ export function lancerCarte(): void {
               papier, comme toute couleur de Three, est tenue en linéaire : le
               mélange des deux donnait une dalle pâle au lieu d'une
               disparition, et l'épaisseur de la maquette restait visible. */
+           /* D'abord la bande du café, qui appartient au relief et doit
+              donc s'effacer avec lui ; le fondu vient après. Les bords de la
+              bande sont flous : une cote est une convention, pas une ligne
+              que l'on verrait sur un versant. */
+           float flou = (uCeinture.y - uCeinture.x) * 0.22;
+           float dedans = smoothstep(uCeinture.x - flou, uCeinture.x + flou, vMonde.y)
+                        * (1.0 - smoothstep(uCeinture.y - flou, uCeinture.y + flou, vMonde.y));
+           gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * uCafe, dedans);
+
            float loin = smoothstep(uBrume.x, uBrume.y, vProf);
            vec2 q = abs(vMonde.xz) / uDemi;
            float bord = smoothstep(uBord.x, uBord.y, max(q.x, q.y));

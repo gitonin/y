@@ -109,6 +109,28 @@ async function bouge(a, b) {
  * marque, et il a le droit de l'être. Sans cette exclusion, il pesait à lui
  * seul 4,8 % de l'écran d'un téléphone et faisait tomber le contrôle.
  */
+/**
+ * La chaleur du bas de l'image, en écart moyen du rouge au bleu.
+ *
+ * La bande du café est le seul voile posé sur le relief, et la légende la
+ * promet. Rien n'avertit si la greffe du nuanceur cesse de l'appliquer : la
+ * montagne reste blanche, la légende continue de l'annoncer. En vol, le bas
+ * de l'écran est entièrement couvert de versants ; on y mesure la chaleur.
+ * Sans le voile elle tourne autour de 8, avec elle dépasse 17.
+ */
+async function chaleur(tampon, depuis = 0.72) {
+  const { data, info } = await sharp(tampon).raw().toBuffer({ resolveWithObject: true });
+  let somme = 0, n = 0;
+  for (let y = Math.floor(info.height * depuis); y < info.height; y++) {
+    for (let x = 0; x < info.width; x++) {
+      const i = (y * info.width + x) * info.channels;
+      somme += data[i] - data[i + 2];
+      n++;
+    }
+  }
+  return somme / Math.max(1, n);
+}
+
 async function mesurer(tampon, interdits = [], echelle = 2) {
   const { data, info } = await sharp(tampon).raw().toBuffer({ resolveWithObject: true });
   const zones = interdits.map((z) => ({
@@ -409,6 +431,9 @@ const main = async () => {
       for (const [k, t] of [[1, vol1], [2, vol2]]) {
         const ecart = await relief(t);
         check(`la caméra reste dehors (contenu ${ecart.toFixed(0)} ≥ 8) — vue ${k}`, ecart >= 8);
+        /* La légende promet la bande du café : elle doit se voir. */
+        const chaud = await chaleur(t);
+        check(`la bande du café teinte les versants (${chaud.toFixed(0)} ≥ 13) — vue ${k}`, chaud >= 13);
       }
 
       /* Toucher le relief doit rendre la main, sans quoi on ne peut plus

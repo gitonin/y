@@ -7,17 +7,21 @@
    source des graisses, des tailles et des boutons.
 
    Le parti est celui d'une maquette de topographe : du papier, une
-   surface presque blanche, des courbes de niveau à l'encre. Aucune
-   couleur ne code l'altitude — ce sont les courbes et l'ombre qui la
-   disent. L'orange de la marque ne sert donc qu'à désigner : les trois
-   fermes, et la bande où pousse le café. Une seule couleur, un seul
-   emploi.
+   surface presque blanche, aucun trait. C'est l'ombre qui dit l'altitude,
+   pas une échelle de couleurs. Le seul voile posé sur le relief est celui
+   de la bande du café, et l'orange de la marque ne sert qu'à désigner les
+   trois fermes. Une seule couleur, un seul emploi.
    ========================================================= */
 
 :root {
   --relief-surface: #fbfaf7;
   --relief-ombre: #cfc9bd;
   --relief-trait: #212121;
+  /* Ce que donne la surface une fois le voile de la bande du café appliqué :
+     la pastille de la légende montre la carte, pas une couleur inventée.
+     `outils/construire-carte.mjs` refait le calcul et s'arrête si les deux
+     divergent. */
+  --relief-cafe: #ede8dd;
 }
 
 .carte {
@@ -67,8 +71,8 @@
 }
 
 /* ---------- Légende ---------- */
-/* Il n'y a pas d'échelle de couleurs à expliquer : deux lignes suffisent,
-   l'équidistance des courbes et ce que signale l'orange. */
+/* Il n'y a pas d'échelle de couleurs à expliquer : trois lignes suffisent,
+   la maille du relevé, la bande du café et ce que signale l'orange. */
 
 .carte__legende {
   position: absolute;
@@ -92,33 +96,42 @@
   color: var(--ink-50);
 }
 
-/* Trois traits de longueur croissante : la finesse du relevé se montre
-   plutôt qu'elle ne se décrit. */
-.carte__traits {
-  display: grid;
-  gap: 2px;
-  justify-items: end;
+/* La maille du relevé : une grille, puisque c'est ce que la carte est — une
+   altitude par case et aucune courbe de niveau. Les trois traits d'avant
+   promettaient des courbes que le relief ne porte plus. */
+.carte__maille {
+  width: 1rem;
+  height: 1rem;
+  justify-self: center;
+  border: 1px solid var(--ink-30);
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent calc(50% - 0.5px),
+      var(--ink-30) calc(50% - 0.5px) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(
+      to right,
+      transparent calc(50% - 0.5px),
+      var(--ink-30) calc(50% - 0.5px) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    );
 }
 
-.carte__traits i {
-  display: block;
-  height: 1.5px;
-  background: var(--ink-30);
-}
-
-.carte__traits i:nth-child(1) { width: 40%; }
-.carte__traits i:nth-child(2) { width: 70%; }
-.carte__traits i:nth-child(3) { width: 100%; }
-
-/* La bande du café : une marche seule, à l'encre pleine. */
-.carte__traits--forte {
-  justify-items: stretch;
-}
-
-.carte__traits--forte i {
-  background: var(--ink);
-  height: 2px;
-  width: 100%;
+/* La bande du café : un morceau de versant, le voile en son milieu. La
+   légende montre donc exactement ce que l'on cherche sur la montagne. */
+.carte__bande {
+  width: 1rem;
+  height: 1rem;
+  justify-self: center;
+  border: 1px solid var(--ink-30);
+  background: linear-gradient(
+    to bottom,
+    var(--relief-surface) 0 22%,
+    var(--relief-cafe) 22% 78%,
+    var(--relief-surface) 78% 100%
+  );
 }
 
 .carte__pastille {

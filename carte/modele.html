@@ -30,16 +30,17 @@
         <p class="carte__sous" data-intro>{{intro}}</p>
       </header>
 
-      <!-- La légende tient en deux lignes : aucune couleur ne code l'altitude,
-           il n'y a donc pas d'échelle à expliquer. L'équidistance se montre
-           par trois traits, et l'orange dit ce qu'il désigne. -->
+      <!-- La légende tient en trois lignes : aucune couleur ne code
+           l'altitude, il n'y a donc pas d'échelle à expliquer. Chaque pastille
+           montre ce qu'elle nomme — la maille du relevé, le voile de la bande
+           du café — et l'orange dit ce qu'il désigne. -->
       <div class="carte__legende" data-legende>
         <p class="carte__cle">
-          <span class="carte__traits" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="carte__maille" aria-hidden="true"></span>
           <span data-equidistance></span>
         </p>
         <p class="carte__cle">
-          <span class="carte__traits carte__traits--forte" aria-hidden="true"><i></i></span>
+          <span class="carte__bande" aria-hidden="true"></span>
           <span data-ceinture></span>
         </p>
         <p class="carte__cle">

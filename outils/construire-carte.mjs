@@ -83,7 +83,33 @@ function verifierTeintes(css, ts) {
     if (deCss !== deTs) throw new Error(`la teinte « ${cle} » diffère : css ${deCss}, ts ${deTs}`);
     teintes[cle] = deCss;
   }
+  verifierCafe(css, ts, teintes.surface);
   return teintes;
+}
+
+/* La bande du café n'est pas une couleur mais un facteur appliqué à la
+   surface éclairée. La légende, elle, doit en montrer le résultat : on refait
+   ici le calcul du nuanceur — surface vers le linéaire, multiplication,
+   retour en sRGB — et l'on s'arrête si la pastille ment. */
+function verifierCafe(css, ts, surface) {
+  const deCss = css.match(/--relief-cafe:\s*(#[0-9a-f]{6})/i)?.[1]?.toLowerCase();
+  const facteurs = ts
+    .match(/const CAFE: \[number, number, number\] = \[([^\]]+)\]/)?.[1]
+    ?.split(',')
+    .map((n) => Number(n.trim()));
+  if (!deCss || facteurs?.length !== 3 || facteurs.some((f) => !Number.isFinite(f))) {
+    throw new Error(`voile du café introuvable (css ${deCss}, ts ${facteurs})`);
+  }
+  const lineaire = (c) => (c > 0.04045 ? ((c + 0.055) / 1.055) ** 2.4 : c / 12.92);
+  const srgb = (x) => (x > 0.0031308 ? 1.055 * x ** (1 / 2.4) - 0.055 : 12.92 * x);
+  const canal = (i) => Math.round(255 * srgb(lineaire(parseInt(surface.slice(1 + i * 2, 3 + i * 2), 16) / 255) * facteurs[i]));
+  const attendu = [0, 1, 2].map(canal);
+  const obtenu = [0, 1, 2].map((i) => parseInt(deCss.slice(1 + i * 2, 3 + i * 2), 16));
+  const ecart = Math.max(...attendu.map((a, i) => Math.abs(a - obtenu[i])));
+  if (ecart > 2) {
+    const hex = '#' + attendu.map((c) => c.toString(16).padStart(2, '0')).join('');
+    throw new Error(`--relief-cafe vaut ${deCss}, le nuanceur donne ${hex}`);
+  }
 }
 
 async function construire() {
