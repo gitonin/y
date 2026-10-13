@@ -243,13 +243,13 @@ const main = async () => {
     check(`${cle} reste quasi neutre (C ${C.toFixed(3)} ≤ 0,035)`, C <= 0.035);
     check(`${cle} reste claire (L ${L.toFixed(2)} ≥ 0,80)`, L >= 0.80);
   }
-  /* L'équidistance et les bornes de la bande vivent dans le script : on
-     vérifie qu'elles s'affichent dans la légende, et non en dur dans un
-     texte qui dériverait. */
-  const equid = Number(source.match(/const EQUIDISTANCE = (\d+)/)?.[1]);
-  check('une équidistance est fixée', Number.isFinite(equid) && equid > 0);
+  /* La hauteur de marche vit dans le script : on vérifie qu'elle s'affiche
+     dans la légende et dans le chapeau, et non en dur dans un texte qui
+     dériverait — ce qui est arrivé une fois. */
+  const equid = Number(source.match(/const MARCHE = (\d+)/)?.[1]);
+  check('une hauteur de marche est fixée', Number.isFinite(equid) && equid > 0);
   for (const l of LANGUES) {
-    check(`${l} — la légende annonce l'équidistance`, pages[l].includes('data-equidistance'));
+    check(`${l} — la légende annonce la marche`, pages[l].includes('data-equidistance'));
   }
 
   /* ================================================================ *
@@ -305,7 +305,11 @@ const main = async () => {
       page.on('pageerror', (e) => erreurs.push(e.message));
       await page.goto(`http://127.0.0.1:${PORT}/carte/fr/`, { waitUntil: 'load' });
       await page.waitForFunction(() => document.querySelector('[data-carte]')?.dataset.prete === '1', null, { timeout: 30000 });
-      await page.waitForTimeout(1800);
+      /* On attend que l'ouverture soit jouée : pendant, la caméra bouge encore
+         et un geste la termine d'un coup — mesurer ou viser à cet instant
+         n'aurait aucun sens. */
+      await page.waitForFunction(() => document.querySelector('[data-carte]')?.dataset.ouverte === '1', null, { timeout: 60000 });
+      await page.waitForTimeout(900);
 
       check('aucune erreur de console', erreurs.join(' | '), '');
       check('la 3D a démarré', await page.locator('[data-panne]').isHidden());
@@ -371,7 +375,9 @@ const main = async () => {
       titre(`La légende, en ${vue.nom}`);
       check('trois clés de lecture', await page.locator('.carte__cle').count(), 3);
       const equidTexte = (await page.locator('[data-equidistance]').textContent())?.trim() ?? '';
-      check(`l'équidistance est annoncée (« ${equidTexte} »)`, new RegExp(`\\b${equid}\\b`).test(equidTexte));
+      check(`la marche est annoncée (« ${equidTexte} »)`, new RegExp(`\\b${equid}\\b`).test(equidTexte));
+      const introTexte = (await page.locator('[data-intro]').textContent())?.trim() ?? '';
+      check('le chapeau annonce la même', new RegExp(`\\b${equid}\\b`).test(introTexte));
       check('la bande du café est annotée', await page.locator('[data-ceinture]').isVisible());
       check('et les fermes aussi', await page.locator('[data-fermes]').isVisible());
 

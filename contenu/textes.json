@@ -500,7 +500,7 @@
       "carte": {
         "titre": "Le relief du café",
         "seo": "Le relief de la ceinture caféière du Yunnan en trois dimensions, et les trois fermes dont viennent nos cafés.",
-        "intro": "Les montagnes du sud-ouest du Yunnan en courbes de niveau. Touchez une ferme pour savoir ce qui y pousse.",
+        "intro": "Les montagnes du sud-ouest du Yunnan, découpées en marches de {n} m. Touchez une ferme pour savoir ce qui y pousse.",
         "aide": "Faites tourner d’un doigt, pincez pour approcher.",
         "retour": "Découvrir nos cafés",
         "fermer": "Fermer",
@@ -508,7 +508,7 @@
         "approche": "Position approchée : la préfecture et l’altitude annoncée. Relief relevé à {alt} m.",
         "source": "Relief : tuiles d’altitude terrarium, AWS Open Data, d’après le SRTM (NASA). Altitudes exagérées.",
         "panne": "Cette carte demande la 3D, que ce navigateur ne propose pas.",
-        "equidistance": "Courbes tous les {n} m",
+        "equidistance": "Marches de {n} m",
         "fermes": "Nos trois fermes",
         "survoler": "Survoler",
         "arreter": "Arrêter le survol"
@@ -1014,7 +1014,7 @@
       "carte": {
         "titre": "The shape of the coffee",
         "seo": "The relief of Yunnan's coffee belt in three dimensions, and the three farms our coffees come from.",
-        "intro": "The mountains of south-west Yunnan in contour lines. Tap a farm to see what grows there.",
+        "intro": "The mountains of south-west Yunnan, cut into {n} m steps. Tap a farm to see what grows there.",
         "aide": "Drag with one finger, pinch to zoom.",
         "retour": "Discover our coffees",
         "fermer": "Close",
@@ -1022,7 +1022,7 @@
         "approche": "Approximate position: the prefecture and the stated altitude. Relief measured at {alt} m.",
         "source": "Relief: terrarium elevation tiles, AWS Open Data, derived from SRTM (NASA). Heights exaggerated.",
         "panne": "This map needs 3D, which this browser does not offer.",
-        "equidistance": "Contours every {n} m",
+        "equidistance": "{n} m steps",
         "fermes": "Our three farms",
         "survoler": "Fly over",
         "arreter": "Stop the flight"
@@ -1528,7 +1528,7 @@
       "carte": {
         "titre": "咖啡的地形",
         "seo": "云南咖啡带的三维地形，以及我们咖啡的三座庄园。",
-        "intro": "滇西南群山的等高线图。点按庄园，看看那里种出什么。",
+        "intro": "滇西南的群山，切成 {n} 米一层。点按庄园，看看那里种出什么。",
         "aide": "单指拖动旋转，双指缩放。",
         "retour": "了解我们的咖啡",
         "fermer": "关闭",
@@ -1536,7 +1536,7 @@
         "approche": "位置为近似值：依据所属州市与标注海拔。此处实测 {alt} 米。",
         "source": "地形数据：terrarium 高程瓦片，AWS Open Data，源自 SRTM（NASA）。高度经过夸张处理。",
         "panne": "此地图需要 3D 支持，当前浏览器不支持。",
-        "equidistance": "等高距 {n} 米",
+        "equidistance": "每层 {n} 米",
         "fermes": "我们的三座庄园",
         "survoler": "低空飞越",
         "arreter": "停止飞越"

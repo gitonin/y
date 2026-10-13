@@ -1,7 +1,7 @@
 # La carte du relief
 
-Le relief de la ceinture caféière du Yunnan en trois dimensions, en courbes de
-niveau, avec les trois fermes dont viennent nos cafés.
+Le relief de la ceinture caféière du Yunnan en trois dimensions : une maquette
+découpée dans du papier épais, et les trois fermes dont viennent nos cafés.
 
 Comme le jeu, la carte **ne fait pas partie du site** : aucun menu n'y mène,
 elle ne figure pas au plan du site, et on y entre par un lien que l'on partage.
@@ -25,7 +25,8 @@ On corrige, on redépose ce seul dossier.
 | les fiches des fermes | `contenu/produits.json` — la carte les y lit |
 | la zone et la finesse du relevé | `outils/relever-relief.mjs`, puis on le relance |
 | les teintes, la mise en page | `carte/carte.css` |
-| l'équidistance, la scène, les repères | `carte/carte.ts` |
+| la hauteur des marches, la scène, les repères | `carte/carte.ts`, `MARCHE` |
+| la durée de l'ouverture | `carte/carte.ts`, `OUVERTURE` |
 | le trajet et la lenteur du survol | `carte/carte.ts`, `GARDE` et `TOUR` |
 
     npm run relever-relief     # seulement si la zone ou les paliers changent
@@ -37,8 +38,8 @@ Puis on dépose `public/carte/` dans `/carte/` sur le serveur.
 ## Ce qui est envoyé, et ce qui est calculé
 
 La page ne reçoit **pas** un relief en trois dimensions. Elle reçoit une grille
-de 192 × 192 entiers — un palier d'altitude par maille, un octet chacun, 17 Ko
-une fois compressés — et fabrique les 74 000 triangles elle-même, en quelques
+de 260 × 260 entiers — une altitude par maille, un octet chacun, une vingtaine
+de kilooctets compressés — et fabrique les 200 000 triangles elle-même, en quelques
 dizaines de millisecondes. Un maillage déjà triangulé coûterait cent fois plus
 pour le même résultat.
 
@@ -49,40 +50,62 @@ est pas inscrite, elle est décidée à l'affichage et se change sans refaire le
 relevé. `outils/relever-relief.mjs` est le seul outil du projet qui ait besoin
 du réseau ; il garde les tuiles dans `.cache/`, non versionné.
 
-## Trois choses à ne pas défaire
+## Cinq choses à ne pas défaire
 
-**Aucune couleur ne code l'altitude.** Le dessin est celui d'une maquette de
-topographe : du papier, une surface presque blanche, des courbes de niveau à
-l'encre. Ce sont les courbes et l'ombre qui disent la hauteur. Deux versions
-antérieures l'ont dit en couleur — un relief brun en terrasses, puis une bande
-orange sur la moitié de la carte — et toutes deux ont été abandonnées. Les
-trois teintes du relief sont écrites dans `carte.css` et reprises dans
-`carte.ts` ; la construction échoue si elles divergent, et le test vérifie
-qu'elles restent claires et quasi neutres.
+**C'est l'ombre qui dit le relief, rien d'autre.** Pas de couleur d'altitude,
+pas de courbe de niveau tracée. Le terrain est découpé en marches de 150 m, et
+chaque marche porte son ombre sur la suivante. Trois versions antérieures ont
+essayé autre chose — un relief brun en terrasses, une bande orange sur la
+moitié de la carte, des courbes de niveau au nuanceur — et toutes ont été
+abandonnées. Les trois teintes du papier sont écrites dans `carte.css` et
+reprises dans `carte.ts` ; la construction échoue si elles divergent.
+
+Le réglage se juge à un rapport : la hauteur d'une marche contre la largeur
+d'une maille. Trop fines, les marches ne font plus des couches mais une grêle,
+et leurs ombres couvrent la maquette de moucheture.
+
+**La carte d'ombres est dessinée avec les faces arrière** (`shadowSide =
+BackSide`). Avec les faces avant, chaque marche s'ombrait elle-même et toute la
+maquette se couvrait de hachures diagonales — l'acné d'ombre classique, que des
+réglages de biais ne font que déplacer.
 
 **L'orange de la marque ne sert qu'à désigner.** Les trois fermes, et rien
 d'autre. Essayé sur les bornes de la bande du café : les deux altitudes sont
-franchies partout, et l'orange s'est répandu sur tout le relief au lieu de
-montrer quoi que ce soit. Une couleur qui désigne ne peut pas aussi mesurer.
-Le test mesure la part colorée de l'image : au-delà de 2 %, il échoue.
+franchies partout, et l'orange s'est répandu sur tout le relief. Une couleur
+qui désigne ne peut pas aussi mesurer. Le test mesure la part colorée de
+l'image : au-delà de 2 %, il échoue.
 
-**Le survol passe par les trois fermes.** Le bouton lance une caméra qui suit
-une boucle tracée sur les trois fermes, au ras du relief. Ce n'est pas un
-mouvement décoratif : le trajet est celui du café, et c'est en rasant les
-crêtes qu'on comprend ce qu'une vue de dessus ne montre pas, que ces fermes
-sont dans la montagne.
+**Les bords se fondent, et le mélange se fait AVANT la conversion
+colorimétrique.** Sans le fondu, la maquette montre sa tranche et redevient un
+objet posé sur une page. Et si l'on mélange après `colorspace_fragment`, la
+couleur rendue est déjà en sRGB alors que la teinte du papier, comme toute
+couleur de Three, est tenue en linéaire : le bord devenait une dalle pâle au
+lieu de disparaître. La greffe porte aussi une `customProgramCacheKey` — sans
+elle, les billes, qui sont du même type de matière, pouvaient compiler les
+premières et le relief héritait de leur programme, sans le fondu.
 
-Deux réglages gouvernent tout, dans `carte.ts` : `GARDE`, la hauteur au-dessus
-du relief, et `TOUR`, la durée d'une boucle. La hauteur ne suit pas le sol sous
-la caméra mais le plus haut d'un dixième du trajet devant elle — réglée plus
-court, la caméra épousait chaque bosse et se retrouvait au niveau des crêtes
-voisines : on rasait une pente sans jamais voir le paysage.
+**Les billes gardent une taille constante à l'écran.** Leur rayon suit la
+distance à la caméra. Fixé dans le monde, il ne pouvait convenir aux deux
+échelles de la page : un point invisible vu de haut, ou une boule plus haute
+que l'altitude de vol une fois dans la vallée.
 
-**Les courbes sont tracées par le nuanceur, pas par de la géométrie.** Là où
-l'altitude franchit un multiple de l'équidistance, le pixel s'assombrit. Elles
-gardent donc une finesse constante de loin comme de près, et changer
-l'équidistance ne coûte rien — alors que des dizaines de milliers de segments
-seraient à recalculer.
+## L'ouverture et le survol
+
+**L'ouverture déplie la carte.** On commence à l'aplomb, soleil au zénith :
+rien ne porte d'ombre, et la maquette n'est qu'un dessin. Puis la caméra
+descend, le soleil s'incline, et le volume apparaît. Un geste l'interrompt — et
+ce geste-là ne désigne rien, puisque la caméra vient de sauter à sa place
+définitive et que viser sur l'image d'avant n'aurait aucun sens.
+
+**Le survol passe par les trois fermes**, au creux des vallées. Le trajet ne va
+pas droit de l'une à l'autre : à chaque point il glisse vers le plus bas des
+environs. Sans cette descente, la boucle coupait à travers les crêtes et le vol
+passait son temps au-dessus, sans jamais s'y enfoncer. Ce n'est pas un mouvement
+décoratif : le trajet est celui du café, et c'est de la vallée qu'on comprend ce
+qu'une vue de dessus ne montre pas, que ces fermes sont dans la montagne.
+
+Deux réglages gouvernent le vol, dans `carte.ts` : `GARDE`, la hauteur au-dessus
+du sol, et `TOUR`, la durée d'une boucle.
 
 **La position des fermes est approchée, et la page le dit.** Le site donne la
 préfecture et l'altitude, jamais les coordonnées des parcelles. Le relevé place

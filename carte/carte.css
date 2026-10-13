@@ -92,28 +92,33 @@
   color: var(--ink-50);
 }
 
-/* Trois traits : l'équidistance se montre, elle ne se décrit pas. */
+/* Trois marches empilées, vues de profil : la hauteur d'une couche se montre
+   plutôt qu'elle ne se décrit. */
 .carte__traits {
   display: grid;
-  gap: 3px;
+  gap: 2px;
+  justify-items: end;
 }
 
 .carte__traits i {
   display: block;
-  height: 1px;
+  height: 2px;
   background: var(--ink-30);
 }
 
-.carte__traits i:first-child {
-  background: var(--ink);
-  height: 1.5px;
+.carte__traits i:nth-child(1) { width: 45%; }
+.carte__traits i:nth-child(2) { width: 72%; }
+.carte__traits i:nth-child(3) { width: 100%; }
+
+/* La bande du café : une marche seule, à l'encre pleine. */
+.carte__traits--forte {
+  justify-items: stretch;
 }
 
-/* Les bornes de la bande du café sont les traits les plus noirs de la carte :
-   la légende montre le même. */
 .carte__traits--forte i {
   background: var(--ink);
   height: 2px;
+  width: 100%;
 }
 
 .carte__pastille {

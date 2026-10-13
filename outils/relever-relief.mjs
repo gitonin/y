@@ -25,12 +25,15 @@ import sharp from 'sharp';
 
 const racine = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-/* La zone : les trois fermes Yunma, et ce qui les relie. */
-const ZONE = { ouest: 98.3, est: 101.9, sud: 21.4, nord: 25.7 };
+/* La zone : les trois fermes Yunma, et tout le pays caféier autour —
+   Dehong et Lincang compris. Plus large qu'il ne faut strictement, pour que
+   la carte s'étale et que ses bords se perdent dans le papier plutôt que de
+   s'arrêter net. */
+const ZONE = { ouest: 97.8, est: 102.6, sud: 21.0, nord: 26.2 };
 /* Finesse du relevé. 192 × 192 donne environ 2 km par maille : assez fin pour
    que les vallées se lisent, assez grossier pour tenir en quelques Ko et pour
    qu'un téléphone de 2020 construise la géométrie sans y penser. */
-const MAILLES = 192;
+const MAILLES = 260;
 /* L'altitude est enregistrée en continu, sur un octet par maille : la valeur
    va de 0 à 255 entre le point le plus bas et le plus haut de la zone, soit un
    pas d'environ 11 m. C'est assez fin pour une surface lisse, et cela tient
@@ -45,7 +48,7 @@ const NIVEAUX = 255;
    la découpe rend alors une grêle de marches d'une seule maille. On passe
    donc une moyenne glissante — trois fois, sur deux mailles de rayon — avant
    de découper : les plateaux deviennent larges, et leurs bords nets. */
-const LISSAGE_RAYON = 1;
+const LISSAGE_RAYON = 2;
 const LISSAGE_PASSES = 2;
 /* Zoom des tuiles source : ~280 m par pixel à cette latitude, donc plus fin
    que la maille — on moyenne plusieurs pixels par maille plutôt que d'en
