@@ -45,7 +45,7 @@ jeu/                         LE JEU — à part du site, se redépose seul
 carte/                       LA CARTE 3D — à part du site, se redépose seule
 ├─ LISEZ-MOI.md              Mode d'emploi de la carte
 ├─ modele.html               La page, une par langue
-├─ carte.css / carte.ts      Maquette en marches, ombres, scène Three.js
+├─ carte.css / carte.ts      Relief, ombres, survol, scène Three.js
 ├─ relief.json               Le relevé du terrain (versionné : c'est une mesure)
 └─ .htaccess                 Interdit de garder en cache une version corrigée
 

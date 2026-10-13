@@ -20,21 +20,18 @@
  */
 import {
   AmbientLight,
-  BackSide,
+  BufferAttribute,
   BufferGeometry,
   CatmullRomCurve3,
   Color,
   DirectionalLight,
-  ExtrudeGeometry,
   HemisphereLight,
   Mesh,
   MeshLambertMaterial,
   PCFSoftShadowMap,
-  Path,
   PerspectiveCamera,
   Raycaster,
   Scene,
-  Shape,
   SphereGeometry,
   Vector2,
   Vector3,
@@ -42,7 +39,6 @@ import {
   Group,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 interface Relief {
   zone: { ouest: number; est: number; sud: number; nord: number };
@@ -51,6 +47,7 @@ interface Relief {
   altitudeMin: number;
   altitudeMax: number;
   niveaux: string;
+  codage?: string;
   fermes: { cle: string; i: number; j: number; altitudeRelevee: number; altitudeAnnoncee: [number, number] }[];
 }
 
@@ -72,18 +69,16 @@ const OMBRE = '#cfc9bd';
 const TRAIT = '#212121';
 const ACCENT = '#b95f2c';
 
-/** Hauteur d'une marche, en mètres. C'est l'épaisseur d'une feuille.
-    Le réglage se juge au rapport entre la hauteur d'une marche et la largeur
-    d'une maille : trop fines, les marches ne font plus des couches mais une
-    grêle, et leurs ombres couvrent la maquette de moucheture. */
-const MARCHE = 150;
 /** La bande où pousse le café, en mètres. */
 const CEINTURE: [number, number] = [1000, 1900];
 
 const COTE = 100;
-/* Le relief réel serait invisible : 3 000 m sur 600 km de large, c'est une
-   feuille de papier. L'exagération est assumée, et la page le dit. */
-const HAUTEUR = 15;
+/* Le relief réel serait invisible : 3 500 m sur 600 km de large, c'est une
+   feuille de papier. L'exagération est assumée, et la page le dit. Mais trop
+   forte, elle hérisse chaque crête en aiguille au lieu de faire une montagne :
+   le relevé étant désormais fin, il en faut nettement moins qu'au temps des
+   strates. */
+const HAUTEUR = 9.5;
 
 const lire = <T,>(selecteur: string): T | null => {
   const el = document.querySelector<HTMLElement>(selecteur);
@@ -139,220 +134,84 @@ export function lancerCarte(): void {
   const P = profondeurKm * echelle;
 
   const octets = Uint8Array.from(atob(relief.niveaux), (c) => c.charCodeAt(0));
+  if (relief.codage === 'moyenne') {
+    /* Le relevé est codé par différence avec la moyenne du voisin de gauche et
+       de celui du dessus — le prédicteur de PNG. On le défait sur place, dans
+       l'ordre de lecture, chaque maille s'appuyant sur deux déjà rétablies. */
+    for (let j = 0; j < M; j++) {
+      for (let i = 0; i < M; i++) {
+        const k = j * M + i;
+        const gauche = i ? octets[k - 1] : 0;
+        const dessus = j ? octets[k - M] : 0;
+        octets[k] = (octets[k] + ((gauche + dessus) >> 1)) & 255;
+      }
+    }
+  }
   const metres = (i: number, j: number) => altitudeMin + octets[j * M + i] * pas;
   const etendue = Math.max(1, altitudeMax - altitudeMin);
   const unites = (m: number) => ((m - altitudeMin) / etendue) * HAUTEUR;
 
-  /* Le découpage : chaque maille est ramenée à sa marche. C'est ici, et nulle
-     part ailleurs, que la maquette devient un empilement de feuilles. */
-  const marches = Math.max(1, Math.round(etendue / MARCHE));
-  const niveauDe = (i: number, j: number) =>
-    Math.round(((metres(i, j) - altitudeMin) / etendue) * marches);
-  const hauteurDe = (niveau: number) => (niveau / marches) * HAUTEUR;
-
+  /* ---------------------------------------------------------------- *
+   * La géométrie : la montagne, telle qu'elle est
+   * ---------------------------------------------------------------- *
+   * Une nappe régulière déplacée par l'altitude. Rien de découpé, rien
+   * d'arrondi : le relief est rendu tel que le relevé le donne, à la maille
+   * près. Les normales sont déduites des voisins — pour une nappe, c'est
+   * exact, et bien plus rapide que de les recalculer face par face.
+   *
+   * Les versions découpées en strates, qu'elles fussent cubiques ou
+   * arrondies, perdaient précisément ce qu'une montagne a d'intéressant :
+   * ses arêtes, ses ravins, l'inégalité de ses versants.
+   */
   const xDe = (i: number) => -L / 2 + (i / (M - 1)) * L;
   const zDe = (j: number) => -P / 2 + (j / (M - 1)) * P;
-  const cw = L / (M - 1);
-  const cp = P / (M - 1);
+  const dx = L / (M - 1);
+  const dz = P / (M - 1);
 
-  /* ---------------------------------------------------------------- *
-   * La géométrie : une strate par niveau, découpée sur sa courbe
-   * ---------------------------------------------------------------- *
-   * Chaque strate est la région située au-dessus d'une altitude donnée. On
-   * en trace le contour réel — par marching squares, avec interpolation sur
-   * les arêtes — puis on l'extrude vers le bas avec un chanfrein.
-   *
-   * La version précédente empilait un bloc par maille : les contours
-   * suivaient alors la grille en escalier et les arêtes étaient vives. Des
-   * cubes, pas des strates. Ici le contour épouse la courbe de niveau, et le
-   * chanfrein arrondit la lèvre de chaque couche.
-   */
+  const sommets = M * M;
+  const positions = new Float32Array(sommets * 3);
+  const normales = new Float32Array(sommets * 3);
 
-  /* Le champ est bordé d'une couronne très basse : toute région au-dessus
-     d'un seuil se referme alors à l'intérieur de la grille, et aucun contour
-     ne part à l'aventure hors du cadre. Sans elle, les anneaux restaient
-     ouverts au bord et la strate se brisait en morceaux. */
-  const BORDURE = altitudeMin - etendue;
-  const hauteurMaille = (i: number, j: number) =>
-    i < 0 || j < 0 || i >= M || j >= M ? BORDURE : metres(i, j);
-
-  const noeudX = (i: number) => -L / 2 + (i / (M - 1)) * L;
-  const noeudZ = (j: number) => -P / 2 + (j / (M - 1)) * P;
-
-  /* Table de marching squares. Pour chaque cas — les quatre coins au-dessus
-     du seuil, en bits — le segment part d'une arête et arrive à une autre,
-     orienté de sorte que l'intérieur reste toujours à gauche. C'est de cette
-     orientation constante que dépend tout le reste : le sens des anneaux, et
-     donc la distinction entre un contour et un trou. */
-  const N = 0, E = 1, S = 2, O = 3;
-  const TABLE: number[][][] = [
-    [], [[O, N]], [[N, E]], [[O, E]],
-    [[E, S]], [[O, N], [E, S]], [[N, S]], [[O, S]],
-    [[S, O]], [[S, N]], [[N, E], [S, O]], [[S, E]],
-    [[E, O]], [[E, N]], [[N, O]], [],
-  ];
-
-  /** Les segments de la courbe d'altitude `seuil`, orientés. */
-  function segmentsDe(seuil: number): [number, number, number, number][] {
-    const sorties: [number, number, number, number][] = [];
-    const entre = (a: number, b: number) => {
-      const d = b - a;
-      return Math.abs(d) < 1e-9 ? 0.5 : Math.min(1, Math.max(0, (seuil - a) / d));
-    };
-    for (let j = -1; j < M; j++) {
-      for (let i = -1; i < M; i++) {
-        const h00 = hauteurMaille(i, j);
-        const h10 = hauteurMaille(i + 1, j);
-        const h11 = hauteurMaille(i + 1, j + 1);
-        const h01 = hauteurMaille(i, j + 1);
-        const cas = (h00 >= seuil ? 1 : 0) | (h10 >= seuil ? 2 : 0) | (h11 >= seuil ? 4 : 0) | (h01 >= seuil ? 8 : 0);
-        const traits = TABLE[cas];
-        if (!traits.length) continue;
-
-        const x0 = noeudX(i), x1 = noeudX(i + 1);
-        const z0 = noeudZ(j), z1 = noeudZ(j + 1);
-        const point = (arete: number): [number, number] => {
-          if (arete === N) return [x0 + (x1 - x0) * entre(h00, h10), z0];
-          if (arete === E) return [x1, z0 + (z1 - z0) * entre(h10, h11)];
-          if (arete === S) return [x0 + (x1 - x0) * entre(h01, h11), z1];
-          return [x0, z0 + (z1 - z0) * entre(h00, h01)];
-        };
-        for (const [de, vers] of traits) {
-          const a = point(de), b = point(vers);
-          sorties.push([a[0], a[1], b[0], b[1]]);
-        }
-      }
-    }
-    return sorties;
-  }
-
-  /** Recolle les segments bout à bout en anneaux fermés. */
-  function anneauxDe(segments: [number, number, number, number][]): [number, number][][] {
-    const cle = (x: number, z: number) => `${Math.round(x * 4096)},${Math.round(z * 4096)}`;
-    const depuis = new Map<string, number[]>();
-    segments.forEach((sg, k) => {
-      const c = cle(sg[0], sg[1]);
-      const liste = depuis.get(c);
-      if (liste) liste.push(k);
-      else depuis.set(c, [k]);
-    });
-    const pris = new Uint8Array(segments.length);
-    const anneaux: [number, number][][] = [];
-
-    for (let depart = 0; depart < segments.length; depart++) {
-      if (pris[depart]) continue;
-      const anneau: [number, number][] = [];
-      let k = depart;
-      while (k !== -1 && !pris[k]) {
-        pris[k] = 1;
-        anneau.push([segments[k][0], segments[k][1]]);
-        const suite = depuis.get(cle(segments[k][2], segments[k][3]));
-        k = suite?.find((c) => !pris[c]) ?? -1;
-      }
-      if (anneau.length >= 4) anneaux.push(anneau);
-    }
-    return anneaux;
-  }
-
-  /** Aire signée : positive si l'anneau tourne dans le sens direct. */
-  const aire = (a: [number, number][]) => {
-    let s = 0;
-    for (let k = 0; k < a.length; k++) {
-      const [x1, z1] = a[k];
-      const [x2, z2] = a[(k + 1) % a.length];
-      s += x1 * z2 - x2 * z1;
-    }
-    return s / 2;
-  };
-
-  /** Allège un anneau en retirant les points qui ne le dévient presque pas. */
-  function alleger(a: [number, number][], tolerance: number): [number, number][] {
-    if (a.length < 10) return a;
-    const sortie: [number, number][] = [a[0]];
-    for (let k = 1; k < a.length - 1; k++) {
-      const [px, pz] = sortie[sortie.length - 1];
-      const [cx, cz] = a[k];
-      const [nx, nz] = a[k + 1];
-      const dx = nx - px, dz = nz - pz;
-      const longueur = Math.hypot(dx, dz) || 1e-6;
-      const ecart = Math.abs((cx - px) * dz - (cz - pz) * dx) / longueur;
-      if (ecart > tolerance) sortie.push(a[k]);
-    }
-    sortie.push(a[a.length - 1]);
-    return sortie.length >= 4 ? sortie : a;
-  }
-
-  const dedans = (p: [number, number], anneau: [number, number][]) => {
-    let oui = false;
-    for (let k = 0, l = anneau.length - 1; k < anneau.length; l = k++) {
-      const [xk, zk] = anneau[k];
-      const [xl, zl] = anneau[l];
-      if (zk > p[1] !== zl > p[1] && p[0] < ((xl - xk) * (p[1] - zk)) / (zl - zk) + xk) oui = !oui;
-    }
-    return oui;
-  };
-
-  /* Chaque strate est extrudée vers le bas, avec un chanfrein : c'est lui qui
-     adoucit la lèvre et donne la feuille de papier plutôt que le cube. */
-  const EPAISSEUR = HAUTEUR / marches;
-  const CHANFREIN = Math.min(EPAISSEUR * 0.42, (L / M) * 1.6);
-  const morceaux: BufferGeometry[] = [];
-  let anneauxTotal = 0;
-
-  for (let k = 1; k <= marches; k++) {
-    const seuil = altitudeMin + (k / marches) * etendue;
-    const bruts = anneauxDe(segmentsDe(seuil));
-    if (!bruts.length) continue;
-    const propres = bruts
-      .map((a) => alleger(a, (L / M) * 0.22))
-      .filter((a) => a.length >= 4 && Math.abs(aire(a)) > (L / M) * (P / M) * 0.8);
-    if (!propres.length) continue;
-    anneauxTotal += propres.length;
-
-    /* Contour ou trou ? On ne se fie pas au sens de parcours : avec
-       « intérieur à gauche » et un axe z vers le bas, un grand contour a une
-       aire NÉGATIVE, et s'y fier faisait prendre toutes les grandes strates
-       pour des trous — il n'en restait que des îlots. On compte plutôt les
-       anneaux qui enveloppent celui-ci : un nombre pair en fait un contour,
-       un nombre impair un trou. Cela ne dépend d'aucune convention. */
-    const enveloppes = propres.map((a) => propres.filter((b) => b !== a && dedans(a[0], b)).length);
-    const sens = (a: [number, number][], direct: boolean) =>
-      aire(a) > 0 === direct ? a : [...a].reverse();
-    const contours = propres.filter((_, k) => enveloppes[k] % 2 === 0).map((a) => sens(a, true));
-    const trous = propres.filter((_, k) => enveloppes[k] % 2 === 1).map((a) => sens(a, false));
-
-    for (const contour of contours) {
-      const forme = new Shape(contour.map(([x, z]) => new Vector2(x, z)));
-      /* Un trou appartient au plus petit contour qui l'entoure. */
-      for (const trou of trous) {
-        let hote: [number, number][] | null = null;
-        for (const c of contours) {
-          if (!dedans(trou[0], c)) continue;
-          if (!hote || Math.abs(aire(c)) < Math.abs(aire(hote))) hote = c;
-        }
-        if (hote === contour) forme.holes.push(new Path(trou.map(([x, z]) => new Vector2(x, z))));
-      }
-
-      const g = new ExtrudeGeometry(forme, {
-        depth: EPAISSEUR * 1.25,
-        bevelEnabled: true,
-        bevelThickness: CHANFREIN * 0.5,
-        bevelSize: CHANFREIN,
-        bevelSegments: 3,
-        curveSegments: 1,
-        steps: 1,
-      });
-      /* ExtrudeGeometry travaille en XY et pousse vers +Z : on couche la
-         strate à plat, puis on la monte à son altitude. */
-      g.rotateX(Math.PI / 2);
-      g.translate(0, hauteurDe(k), 0);
-      morceaux.push(g);
+  for (let j = 0; j < M; j++) {
+    for (let i = 0; i < M; i++) {
+      const k = j * M + i;
+      positions[k * 3] = xDe(i);
+      positions[k * 3 + 1] = unites(metres(i, j));
+      positions[k * 3 + 2] = zDe(j);
     }
   }
 
-  const geo = morceaux.length ? mergeGeometries(morceaux, false) : new BufferGeometry();
-  for (const g of morceaux) g.dispose();
-  geo.computeVertexNormals();
+  for (let j = 0; j < M; j++) {
+    for (let i = 0; i < M; i++) {
+      const k = j * M + i;
+      const h = (a: number, b: number) => unites(metres(a, b));
+      const hG = h(Math.max(0, i - 1), j);
+      const hD = h(Math.min(M - 1, i + 1), j);
+      const hN = h(i, Math.max(0, j - 1));
+      const hS = h(i, Math.min(M - 1, j + 1));
+      const nx = (hG - hD) / (2 * dx);
+      const nz = (hN - hS) / (2 * dz);
+      const n = Math.hypot(nx, 1, nz);
+      normales[k * 3] = nx / n;
+      normales[k * 3 + 1] = 1 / n;
+      normales[k * 3 + 2] = nz / n;
+    }
+  }
+
+  const indices = new Uint32Array((M - 1) * (M - 1) * 6);
+  let t = 0;
+  for (let j = 0; j < M - 1; j++) {
+    for (let i = 0; i < M - 1; i++) {
+      const a = j * M + i, b = a + 1, c = a + M, d = c + 1;
+      indices[t++] = a; indices[t++] = c; indices[t++] = b;
+      indices[t++] = b; indices[t++] = c; indices[t++] = d;
+    }
+  }
+
+  const geo = new BufferGeometry();
+  geo.setAttribute('position', new BufferAttribute(positions, 3));
+  geo.setAttribute('normal', new BufferAttribute(normales, 3));
+  geo.setIndex(new BufferAttribute(indices, 1));
   geo.computeBoundingSphere();
 
   /* ---------------------------------------------------------------- *
@@ -416,7 +275,6 @@ export function lancerCarte(): void {
   };
 
   const matPapier = new MeshLambertMaterial({ color: new Color(SURFACE) });
-  matPapier.shadowSide = BackSide;
   greffer(matPapier);
 
   const scene = new Scene();
@@ -442,13 +300,13 @@ export function lancerCarte(): void {
   o.left = -COTE * 0.95; o.right = COTE * 0.95;
   o.top = COTE * 0.95; o.bottom = -COTE * 0.95;
   o.near = 1; o.far = COTE * 3;
-  /* La carte d'ombres est dessinée avec les faces ARRIÈRE du relief.
-     Avec les faces avant, chaque marche s'ombrait elle-même et toute la
-     maquette se couvrait de hachures diagonales — l'acné d'ombre classique,
-     que des réglages de biais ne font que déplacer. Les faces arrière, elles,
-     sont derrière la surface éclairée : il n'y a plus rien à confondre. */
-  soleil.shadow.bias = -0.0004;
-  soleil.shadow.normalBias = 0.02;
+  /* Le décalage le long de la normale écarte la surface d'elle-même dans la
+     carte d'ombres : sans lui, un versant presque parallèle au soleil se
+     couvre de rayures. Une nappe continue s'en accommode bien, là où le
+     relief découpé en marches, lui, demandait de dessiner les faces
+     arrière. */
+  soleil.shadow.bias = -0.0003;
+  soleil.shadow.normalBias = 0.12;
   scene.add(soleil);
   scene.add(soleil.target);
 
@@ -553,7 +411,7 @@ export function lancerCarte(): void {
          enfoncée quelle que soit sa taille, comme une perle pressée dans le
          papier. Tenue en l'air par une tige, elle flottait au-dessus du
          paysage au lieu d'y être. */
-      const y = hauteurDe(niveauDe(f.i, f.j));
+      const y = unites(metres(f.i, f.j));
 
       const bille = new Mesh(geoBille, matBille);
       bille.position.set(x, y, z);
@@ -660,7 +518,7 @@ export function lancerCarte(): void {
       const angle = (a / 16) * Math.PI * 2;
       for (const r of [rayon * 0.5, rayon]) {
         const c = new Vector3(q.x + Math.cos(angle) * r, 0, q.z + Math.sin(angle) * r);
-        if (Math.abs(c.x) > L / 2 - cw || Math.abs(c.z) > P / 2 - cp) continue;
+        if (Math.abs(c.x) > L / 2 - dx || Math.abs(c.z) > P / 2 - dz) continue;
         const h = hauteurEn(c.x, c.z);
         if (h < bas) { bas = h; meilleur = c; }
       }
@@ -776,10 +634,14 @@ export function lancerCarte(): void {
     const el = racine.querySelector<HTMLElement>(s);
     if (el) el.textContent = texte;
   };
-  poserTexte('[data-equidistance]', (T.equidistance ?? '').replace('{n}', String(MARCHE)));
-  /* La hauteur de marche est écrite une fois, ici : le texte ne peut pas
-     annoncer une valeur que le dessin ne tient plus. */
-  poserTexte('[data-intro]', (T.intro ?? '').replace('{n}', String(MARCHE)));
+  poserTexte('[data-intro]', T.intro ?? '');
+  /* La finesse du relevé vient de la grille, pas d'un texte : elle a déjà
+     changé trois fois, et la phrase annonçait encore l'ancienne valeur. */
+  const pasKm = ((zone.nord - zone.sud) * 110.57) / (M - 1);
+  poserTexte(
+    '[data-equidistance]',
+    (T.equidistance ?? '').replace('1,5', pasKm.toFixed(1).replace('.', ',')).replace('1.5', pasKm.toFixed(1)),
+  );
   poserTexte('[data-ceinture]', (T.ceinture ?? '')
     .replace('{bas}', CEINTURE[0].toLocaleString('fr-FR'))
     .replace('{haut}', CEINTURE[1].toLocaleString('fr-FR')));
@@ -891,9 +753,7 @@ export function lancerCarte(): void {
   boucle();
 
   racine.dataset.prete = '1';
-  racine.dataset.triangles = String((geo.getAttribute('position')?.count ?? 0) / 3);
-  racine.dataset.anneaux = String(anneauxTotal);
-  racine.dataset.marches = String(marches);
+  racine.dataset.triangles = String((M - 1) * (M - 1) * 2);
 }
 
 lancerCarte();

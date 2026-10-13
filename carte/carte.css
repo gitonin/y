@@ -92,7 +92,7 @@
   color: var(--ink-50);
 }
 
-/* Trois marches empilées, vues de profil : la hauteur d'une couche se montre
+/* Trois traits de longueur croissante : la finesse du relevé se montre
    plutôt qu'elle ne se décrit. */
 .carte__traits {
   display: grid;
@@ -102,12 +102,12 @@
 
 .carte__traits i {
   display: block;
-  height: 2px;
+  height: 1.5px;
   background: var(--ink-30);
 }
 
-.carte__traits i:nth-child(1) { width: 45%; }
-.carte__traits i:nth-child(2) { width: 72%; }
+.carte__traits i:nth-child(1) { width: 40%; }
+.carte__traits i:nth-child(2) { width: 70%; }
 .carte__traits i:nth-child(3) { width: 100%; }
 
 /* La bande du café : une marche seule, à l'encre pleine. */

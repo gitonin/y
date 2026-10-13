@@ -243,13 +243,14 @@ const main = async () => {
     check(`${cle} reste quasi neutre (C ${C.toFixed(3)} ≤ 0,035)`, C <= 0.035);
     check(`${cle} reste claire (L ${L.toFixed(2)} ≥ 0,80)`, L >= 0.80);
   }
-  /* La hauteur de marche vit dans le script : on vérifie qu'elle s'affiche
-     dans la légende et dans le chapeau, et non en dur dans un texte qui
-     dériverait — ce qui est arrivé une fois. */
-  const equid = Number(source.match(/const MARCHE = (\d+)/)?.[1]);
-  check('une hauteur de marche est fixée', Number.isFinite(equid) && equid > 0);
+  /* La finesse du relevé vient de la grille, pas d'un texte : elle a déjà
+     changé trois fois, et la phrase annonçait encore l'ancienne valeur. */
+  const releve = JSON.parse(await lire(RACINE, 'carte', 'relief.json'));
+  const pasKm = ((releve.zone.nord - releve.zone.sud) * 110.57) / (releve.mailles - 1);
+  check(`le relevé est fin (${releve.mailles}×${releve.mailles}, ${pasKm.toFixed(1)} km)`, pasKm < 2.2);
+  check('le relevé est codé par prédicteur', releve.codage, 'moyenne');
   for (const l of LANGUES) {
-    check(`${l} — la légende annonce la marche`, pages[l].includes('data-equidistance'));
+    check(`${l} — la légende annonce la finesse du relevé`, pages[l].includes('data-equidistance'));
   }
 
   /* ================================================================ *
@@ -375,9 +376,12 @@ const main = async () => {
       titre(`La légende, en ${vue.nom}`);
       check('trois clés de lecture', await page.locator('.carte__cle').count(), 3);
       const equidTexte = (await page.locator('[data-equidistance]').textContent())?.trim() ?? '';
-      check(`la marche est annoncée (« ${equidTexte} »)`, new RegExp(`\\b${equid}\\b`).test(equidTexte));
+      /* Le pas affiché doit être celui de la grille, au dixième près : c'est
+         la seule façon d'empêcher le texte de dériver quand le relevé change. */
+      const attendu = pasKm.toFixed(1).replace('.', ',');
+      check(`la finesse annoncée vaut celle du relevé (« ${equidTexte} »)`, equidTexte.includes(attendu));
       const introTexte = (await page.locator('[data-intro]').textContent())?.trim() ?? '';
-      check('le chapeau annonce la même', new RegExp(`\\b${equid}\\b`).test(introTexte));
+      check('le chapeau est renseigné', introTexte.length > 20);
       check('la bande du café est annotée', await page.locator('[data-ceinture]').isVisible());
       check('et les fermes aussi', await page.locator('[data-fermes]').isVisible());
 

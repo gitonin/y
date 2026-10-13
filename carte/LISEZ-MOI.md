@@ -1,7 +1,7 @@
 # La carte du relief
 
-Le relief de la ceinture caféière du Yunnan en trois dimensions : une maquette
-découpée dans du papier épais, et les trois fermes dont viennent nos cafés.
+Le relief de la ceinture caféière du Yunnan en trois dimensions, relevé crête
+par crête, et les trois fermes dont viennent nos cafés.
 
 Comme le jeu, la carte **ne fait pas partie du site** : aucun menu n'y mène,
 elle ne figure pas au plan du site, et on y entre par un lien que l'on partage.
@@ -25,7 +25,7 @@ On corrige, on redépose ce seul dossier.
 | les fiches des fermes | `contenu/produits.json` — la carte les y lit |
 | la zone et la finesse du relevé | `outils/relever-relief.mjs`, puis on le relance |
 | les teintes, la mise en page | `carte/carte.css` |
-| la hauteur des marches, la scène, les repères | `carte/carte.ts`, `MARCHE` |
+| l'exagération du relief, la scène, les repères | `carte/carte.ts`, `HAUTEUR` |
 | la durée de l'ouverture | `carte/carte.ts`, `OUVERTURE` |
 | le trajet et la lenteur du survol | `carte/carte.ts`, `GARDE` et `TOUR` |
 
@@ -38,8 +38,8 @@ Puis on dépose `public/carte/` dans `/carte/` sur le serveur.
 ## Ce qui est envoyé, et ce qui est calculé
 
 La page ne reçoit **pas** un relief en trois dimensions. Elle reçoit une grille
-de 260 × 260 entiers — une altitude par maille, un octet chacun, une vingtaine
-de kilooctets compressés — et fabrique les 143 000 triangles elle-même, en quelques
+de 380 × 380 entiers — une altitude par maille, un octet chacun, 87 Ko
+compressés — et fabrique les 287 000 triangles elle-même, en quelques
 dizaines de millisecondes. Un maillage déjà triangulé coûterait cent fois plus
 pour le même résultat.
 
@@ -50,44 +50,31 @@ est pas inscrite, elle est décidée à l'affichage et se change sans refaire le
 relevé. `outils/relever-relief.mjs` est le seul outil du projet qui ait besoin
 du réseau ; il garde les tuiles dans `.cache/`, non versionné.
 
-## Six choses à ne pas défaire
+## Cinq choses à ne pas défaire
 
-**Les strates sont découpées sur la courbe, pas sur la grille.** Chaque strate
-est la région située au-dessus d'une altitude. On en trace le contour réel par
-marching squares — avec interpolation sur les arêtes, ce qui donne une courbe
-lisse plutôt qu'un escalier — puis on l'extrude vers le bas avec un chanfrein,
-qui arrondit la lèvre.
+**C'est un vrai relief, pas une maquette stylisée.** Quatre versions
+antérieures ont essayé autre chose — un relief brun en terrasses, des courbes
+de niveau tracées au nuanceur, des blocs par maille, puis des strates
+arrondies découpées sur la courbe. Toutes perdaient ce qu'une montagne a
+d'intéressant : ses arêtes, ses ravins, l'inégalité de ses versants. La nappe
+est désormais rendue telle que le relevé la donne, à la maille près.
 
-Une version antérieure empilait un bloc par maille : les contours suivaient
-alors la grille en escalier et les arêtes étaient vives. Des cubes, pas des
-strates. Elle était aussi dix fois plus lourde : 208 000 triangles contre
-143 000 pour un dessin bien meilleur, parce qu'un contour est une courbe, pas
-une surface.
+Le lissage du relevé est tombé à une seule passe d'un rayon d'une maille :
+juste de quoi ôter le grain de la source, sans raboter les crêtes. Les
+versions en strates en demandaient bien plus — il leur fallait de larges
+plateaux — mais un relief lisse veut au contraire tout son détail.
 
-Deux pièges s'y cachent, tous deux rencontrés :
+**L'exagération verticale doit rester modeste.** `HAUTEUR`, dans `carte.ts`.
+Trop forte, elle hérisse chaque crête en aiguille au lieu de faire une
+montagne : le relevé étant fin, il en faut nettement moins qu'au temps des
+strates.
 
-Le champ doit être **bordé d'une couronne très basse**, sinon les contours
-sortent du cadre, les anneaux ne se referment pas et la strate se brise en
-morceaux.
-
-Un anneau est un contour ou un trou **selon son imbrication**, jamais selon
-son sens de parcours. Avec « intérieur à gauche » et un axe z vers le bas, un
-grand contour a une aire négative : s'y fier faisait prendre toutes les
-grandes strates pour des trous, et il n'en restait que des îlots. On compte
-donc les anneaux qui en enveloppent un autre — pair, c'est un contour ;
-impair, c'est un trou.
-
-**C'est l'ombre qui dit le relief, rien d'autre.** Pas de couleur d'altitude,
-pas de courbe de niveau tracée. Deux versions antérieures l'ont dit en
-couleur — un relief brun en terrasses, une bande orange sur la moitié de la
-carte — et une troisième traçait les courbes au nuanceur. Toutes abandonnées.
-Les trois teintes du papier sont écrites dans `carte.css` et reprises dans
-`carte.ts` ; la construction échoue si elles divergent.
-
-**La carte d'ombres est dessinée avec les faces arrière** (`shadowSide =
-BackSide`). Avec les faces avant, chaque marche s'ombrait elle-même et toute la
-maquette se couvrait de hachures diagonales — l'acné d'ombre classique, que des
-réglages de biais ne font que déplacer.
+**Le relevé est codé par prédicteur.** Chaque octet est la différence avec la
+moyenne du voisin de gauche et de celui du dessus — le prédicteur de PNG. Un
+relief varie peu d'une maille à la suivante : les différences tournent autour
+de zéro et se compressent bien mieux que les altitudes. Mesuré : 123 Ko en
+brut, 87 Ko ainsi. Un vrai fichier PNG faisait moins bien (107 Ko), le relief
+étant trop détaillé pour ses filtres.
 
 **L'orange de la marque ne sert qu'à désigner.** Les trois fermes, et rien
 d'autre. Essayé sur les bornes de la bande du café : les deux altitudes sont

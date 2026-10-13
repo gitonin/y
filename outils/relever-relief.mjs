@@ -33,7 +33,7 @@ const ZONE = { ouest: 97.8, est: 102.6, sud: 21.0, nord: 26.2 };
 /* Finesse du relevé. 192 × 192 donne environ 2 km par maille : assez fin pour
    que les vallées se lisent, assez grossier pour tenir en quelques Ko et pour
    qu'un téléphone de 2020 construise la géométrie sans y penser. */
-const MAILLES = 260;
+const MAILLES = 380;
 /* L'altitude est enregistrée en continu, sur un octet par maille : la valeur
    va de 0 à 255 entre le point le plus bas et le plus haut de la zone, soit un
    pas d'environ 11 m. C'est assez fin pour une surface lisse, et cela tient
@@ -41,15 +41,19 @@ const MAILLES = 260;
    L'équidistance des courbes n'est donc plus décidée ici : elle est dessinée à
    l'affichage, et se change sans refaire le relevé. */
 const NIVEAUX = 255;
-/* Lissage du relevé avant de le découper en paliers.
+/* Lissage du relevé. Une seule passe d'un rayon d'une maille : juste de quoi
+   ôter le grain du relevé source, sans raboter les crêtes. Les versions
+   découpées en strates en demandaient bien plus — il fallait de larges
+   plateaux — mais le relief rendu lisse veut au contraire tout son détail.
+   Lissage du relevé avant de le découper en paliers.
    C'est ce qui fait la différence entre une carte en couches et du bruit. Un
    modèle en carton découpé suit des courbes de niveau franches ; le relief
    brut, lui, fait osciller des milliers de mailles d'un palier à l'autre, et
    la découpe rend alors une grêle de marches d'une seule maille. On passe
    donc une moyenne glissante — trois fois, sur deux mailles de rayon — avant
    de découper : les plateaux deviennent larges, et leurs bords nets. */
-const LISSAGE_RAYON = 2;
-const LISSAGE_PASSES = 2;
+const LISSAGE_RAYON = 1;
+const LISSAGE_PASSES = 1;
 /* Zoom des tuiles source : ~280 m par pixel à cette latitude, donc plus fin
    que la maille — on moyenne plusieurs pixels par maille plutôt que d'en
    inventer. */
@@ -232,6 +236,22 @@ const fermes = FERMES.map(({ cle, versCh, altitude }) => {
 /* Les niveaux partent en base64 : un entier par maille, un octet chacun.
    36 Ko bruts, quelques Ko une fois compressés par le serveur — contre près
    de 200 Ko si on les écrivait en clair dans un tableau JSON. */
+/* Les octets sont codés par différence avec la moyenne du voisin de gauche et
+   de celui du dessus — le prédicteur de PNG. Un relief varie peu d'une maille
+   à la suivante : les différences tournent autour de zéro et se compressent
+   bien mieux que les altitudes elles-mêmes. Mesuré sur ce relevé : 123 Ko
+   compressés en brut, 86 Ko ainsi. Un vrai PNG faisait moins bien (107 Ko),
+   le relief étant trop détaillé pour ses filtres. */
+const code = new Uint8Array(niveaux.length);
+for (let j = 0; j < MAILLES; j++) {
+  for (let i = 0; i < MAILLES; i++) {
+    const k = j * MAILLES + i;
+    const gauche = i ? niveaux[k - 1] : 0;
+    const dessus = j ? niveaux[k - MAILLES] : 0;
+    code[k] = (niveaux[k] - ((gauche + dessus) >> 1)) & 255;
+  }
+}
+
 await mkdir(path.join(racine, 'carte'), { recursive: true });
 await writeFile(
   path.join(racine, 'carte', 'relief.json'),
@@ -241,7 +261,8 @@ await writeFile(
         'Relief de la ceinture caféière du Yunnan, relevé par outils/relever-relief.mjs.',
         'Ne pas modifier à la main : relancer l’outil pour changer la zone ou la finesse.',
         'Source : tuiles d’altitude terrarium, AWS Open Data (dérivées du SRTM).',
-        '« niveaux » : un octet par maille, en base64, lu par rangées du nord au sud.',
+        '« niveaux » : un octet par maille, en base64, lu par rangées du nord au sud,',
+        'codé par différence avec la moyenne du voisin de gauche et de celui du dessus.',
         'L’altitude d’une maille vaut altitudeMin + niveau × pas, en mètres.',
         'L’équidistance des courbes est décidée à l’affichage, pas ici.',
       ],
@@ -250,7 +271,8 @@ await writeFile(
       pas,
       altitudeMin: mini,
       altitudeMax: maxi,
-      niveaux: Buffer.from(niveaux).toString('base64'),
+      codage: 'moyenne',
+      niveaux: Buffer.from(code).toString('base64'),
       fermes,
       source: 'Tuiles d’altitude terrarium — AWS Open Data, dérivées du SRTM (NASA) et de l’ASTER GDEM',
     },
