@@ -40,6 +40,23 @@ alternatif, lui, vit dans `src/data/photos.ts` — dites-moi s'il doit changer.
 | `producteur-yun-lan-estate.jpg` | Cueilleur de Yun Lan Estate | Photographie d'ambiance de la fiche Yun Lan |
 | `producteur-gaosheng.jpg` | Tri des cerises au dépulpeur, Gaosheng | Photographie d'ambiance du Bourbon jaune |
 
+## Articles du journal
+
+Chaque article porte trois photographies, nommées d'après lui : `-01` en
+en-tête et en vignette, `-02` et `-03` glissées dans le corps du texte, où
+elles rythment la lecture.
+
+| Fichier | Sujet | Article |
+| --- | --- | --- |
+| `la-multisensorialite-du-cafe-01.jpg` | La même tasse en deux moitiés, pénombre et plein jour | « Un même café, le jour et la nuit » |
+| `la-multisensorialite-du-cafe-02.jpg` | L'assistance devant l'écran de la présentation | « Un même café, le jour et la nuit » |
+| `la-multisensorialite-du-cafe-03.jpg` | L'atelier de dégustation, bouilloire à la main | « Un même café, le jour et la nuit » |
+
+Les photographies des trois articles précédents — `histoire-du-cafe-du-yunnan-*`,
+`trois-terroirs-du-cafe-du-yunnan-*` et `catimor-bourbon-jaune-pacamara-*` —
+sont encore des images de remplacement, reprises d'autres photographies du
+site. Déposer un fichier au même nom les remplace.
+
 ## Format
 
 - **JPEG qualité 85 à 95**, profil sRGB

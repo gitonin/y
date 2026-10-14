@@ -27,6 +27,9 @@ import terroirs03 from '../assets/photos/trois-terroirs-du-cafe-du-yunnan-03.jpg
 import varietes01 from '../assets/photos/catimor-bourbon-jaune-pacamara-01.jpg';
 import varietes02 from '../assets/photos/catimor-bourbon-jaune-pacamara-02.jpg';
 import varietes03 from '../assets/photos/catimor-bourbon-jaune-pacamara-03.jpg';
+import multisensoriel01 from '../assets/photos/la-multisensorialite-du-cafe-01.jpg';
+import multisensoriel02 from '../assets/photos/la-multisensorialite-du-cafe-02.jpg';
+import multisensoriel03 from '../assets/photos/la-multisensorialite-du-cafe-03.jpg';
 
 export type Photo = {
   src: ImageMetadata;
@@ -288,6 +291,35 @@ export const photos = {
       zh: '咖啡林间立着写有「加工种植区 — Coffee plantation」的木牌',
     },
     position: '50% 60%',
+  },
+  'la-multisensorialite-du-cafe-01': {
+    src: multisensoriel01,
+    /* Montage vertical coupé en deux dans la hauteur : la bande 4/3 doit
+       garder les deux tasses entières, donc le centre de l'image. */
+    alt: {
+      fr: 'Montage en deux moitiés : à gauche une tasse de café à motifs dans la pénombre, à droite une tasse blanche et sa cuillère dans la lumière du jour',
+      en: 'A split image: on the left a patterned coffee mug in the dark, on the right a white mug and its spoon in daylight',
+      zh: '左右拼接的画面：左边是昏暗光线下的花纹咖啡杯，右边是白昼光线中的白色咖啡杯与小勺',
+    },
+    position: '50% 48%',
+  },
+  'la-multisensorialite-du-cafe-02': {
+    src: multisensoriel02,
+    alt: {
+      fr: 'Une assistance assise devant un écran où s’affichent deux formes, l’une arrondie, l’autre pointue, pendant une présentation sur la perception du café',
+      en: 'An audience seated in front of a screen showing two shapes, one rounded and one spiky, during a talk on how coffee is perceived',
+      zh: '听众坐在屏幕前，屏幕上显示一圆一尖两个图形，这是一场关于咖啡感知的讲座',
+    },
+    position: '50% 50%',
+  },
+  'la-multisensorialite-du-cafe-03': {
+    src: multisensoriel03,
+    alt: {
+      fr: 'Atelier de dégustation : autour de deux tables hautes, des participants observent pendant qu’un animateur verse l’eau d’une bouilloire sur des bols de dégustation',
+      en: 'A tasting workshop: around two high tables, participants look on while a host pours water from a kettle over cupping bowls',
+      zh: '品鉴工作坊：参与者围在两张高桌旁，主持人正用手冲壶向杯测碗中注水',
+    },
+    position: '50% 58%',
   },
 } satisfies Record<string, Photo>;
 
