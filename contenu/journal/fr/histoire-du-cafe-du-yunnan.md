@@ -92,6 +92,7 @@ C'est cette combinaison entre héritage et expérimentation qui rend le café du
 
 - [Pu'er, Baoshan, Dehong : trois terroirs du café du Yunnan](/fr/journal/trois-terroirs-du-cafe-du-yunnan/)
 - [Catimor, Bourbon jaune, Pacamara : trois variétés du Yunnan](/fr/journal/catimor-bourbon-jaune-pacamara/)
+- [Un même café, le jour et la nuit : la multisensorialité](/fr/journal/la-multisensorialite-du-cafe/)
 - [Nos cafés du Yunnan](/fr/cafes/)
 
 ### Sources

@@ -94,7 +94,7 @@ There is no right answer. The point is not to find the “truth” of the coffee
 
 Because in the end, that may be the finest definition of taste: a conversation between the world and us.
 
-## Going further
+## Read more
 
 - [How to brew a great drip bag](/en/journal/reussir-sa-tasse-en-drip-bag/)
 - [Catimor, Yellow Bourbon, Pacamara: three Yunnan varieties](/en/journal/catimor-bourbon-jaune-pacamara/)

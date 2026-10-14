@@ -92,6 +92,7 @@ It is this combination of heritage and experiment that makes Yunnan coffee so co
 
 - [Pu'er, Baoshan, Dehong: three terroirs of Yunnan coffee](/en/journal/trois-terroirs-du-cafe-du-yunnan/)
 - [Catimor, Yellow Bourbon, Pacamara: three Yunnan varieties](/en/journal/catimor-bourbon-jaune-pacamara/)
+- [The same coffee, day and night: coffee is multisensory](/en/journal/la-multisensorialite-du-cafe/)
 - [Our Yunnan coffees](/en/cafes/)
 
 ### Sources

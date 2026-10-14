@@ -117,6 +117,7 @@ That is what makes this origin so compelling: it is not settled. It is still bei
 
 - [Yunnan coffee: a story that began in 1892](/en/journal/histoire-du-cafe-du-yunnan/)
 - [Catimor, Yellow Bourbon, Pacamara: three Yunnan varieties](/en/journal/catimor-bourbon-jaune-pacamara/)
+- [The same coffee, day and night: coffee is multisensory](/en/journal/la-multisensorialite-du-cafe/)
 - [Our Yunnan coffees](/en/cafes/)
 
 ### Sources

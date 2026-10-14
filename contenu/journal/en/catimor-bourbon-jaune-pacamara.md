@@ -144,6 +144,7 @@ That diversity is what makes each harvest interesting: behind one territory can 
 
 - [Yunnan coffee: a story that began in 1892](/en/journal/histoire-du-cafe-du-yunnan/)
 - [Pu'er, Baoshan, Dehong: three terroirs of Yunnan coffee](/en/journal/trois-terroirs-du-cafe-du-yunnan/)
+- [The same coffee, day and night: coffee is multisensory](/en/journal/la-multisensorialite-du-cafe/)
 - [Our Yunnan coffees](/en/cafes/)
 
 ### Sources

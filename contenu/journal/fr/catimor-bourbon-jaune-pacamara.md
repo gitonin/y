@@ -144,6 +144,7 @@ C'est cette diversité qui rend chaque récolte intéressante : derrière un mê
 
 - [Le café du Yunnan : une histoire commencée en 1892](/fr/journal/histoire-du-cafe-du-yunnan/)
 - [Pu'er, Baoshan, Dehong : trois terroirs du café du Yunnan](/fr/journal/trois-terroirs-du-cafe-du-yunnan/)
+- [Un même café, le jour et la nuit : la multisensorialité](/fr/journal/la-multisensorialite-du-cafe/)
 - [Nos cafés du Yunnan](/fr/cafes/)
 
 ### Sources

@@ -144,6 +144,7 @@ photoMilieu: [catimor-bourbon-jaune-pacamara-02, catimor-bourbon-jaune-pacamara-
 
 - [云南咖啡：始于 1892 年的故事](/zh/journal/histoire-du-cafe-du-yunnan/)
 - [普洱、保山、德宏：云南咖啡的三大风土](/zh/journal/trois-terroirs-du-cafe-du-yunnan/)
+- [同一杯咖啡，白天与黑夜：咖啡的多感官体验](/zh/journal/la-multisensorialite-du-cafe/)
 - [我们的云南咖啡](/zh/cafes/)
 
 ### 参考资料

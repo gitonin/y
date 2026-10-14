@@ -92,6 +92,7 @@ photoMilieu: [histoire-du-cafe-du-yunnan-02, histoire-du-cafe-du-yunnan-03]
 
 - [普洱、保山、德宏：云南咖啡的三大风土](/zh/journal/trois-terroirs-du-cafe-du-yunnan/)
 - [卡蒂姆、黄波旁、帕卡马拉：云南的三个品种](/zh/journal/catimor-bourbon-jaune-pacamara/)
+- [同一杯咖啡，白天与黑夜：咖啡的多感官体验](/zh/journal/la-multisensorialite-du-cafe/)
 - [我们的云南咖啡](/zh/cafes/)
 
 ### 参考资料

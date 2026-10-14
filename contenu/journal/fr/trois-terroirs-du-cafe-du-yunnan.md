@@ -117,6 +117,7 @@ C'est ce qui rend cette origine passionnante : elle n'est pas figée. Elle se d�
 
 - [Le café du Yunnan : une histoire commencée en 1892](/fr/journal/histoire-du-cafe-du-yunnan/)
 - [Catimor, Bourbon jaune, Pacamara : trois variétés du Yunnan](/fr/journal/catimor-bourbon-jaune-pacamara/)
+- [Un même café, le jour et la nuit : la multisensorialité](/fr/journal/la-multisensorialite-du-cafe/)
 - [Nos cafés du Yunnan](/fr/cafes/)
 
 ### Sources
