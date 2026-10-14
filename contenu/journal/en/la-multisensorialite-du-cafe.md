@@ -96,6 +96,12 @@ Because in the end, that may be the finest definition of taste: a conversation b
 
 ## Going further
 
+- [How to brew a great drip bag](/en/journal/reussir-sa-tasse-en-drip-bag/)
+- [Catimor, Yellow Bourbon, Pacamara: three Yunnan varieties](/en/journal/catimor-bourbon-jaune-pacamara/)
+- [Our Yunnan coffees](/en/cafes/)
+
+### The work and places mentioned
+
 - [Noa Berger — Coffee in Translation](https://bergernoa.substack.com/) (Substack): her writing on the history, culture and circulations of coffee.
 - [Noa Berger, “Coffee and Music: Crisis and Creation” — Standart](https://standartmag.com/blogs/library/coffee-and-music-crisis-and-creation): an article on the ties between coffee and music.
 - [Le Mark de Café](https://www.lemarkdecafe.com/): workshops, training and events around coffee in Paris.

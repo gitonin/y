@@ -96,6 +96,12 @@ photoMilieu: [la-multisensorialite-du-cafe-02, la-multisensorialite-du-cafe-03]
 
 ## 延伸阅读
 
+- [如何冲好一杯挂耳咖啡](/zh/journal/reussir-sa-tasse-en-drip-bag/)
+- [卡蒂姆、黄波旁、帕卡马拉：云南的三个品种](/zh/journal/catimor-bourbon-jaune-pacamara/)
+- [我们的云南咖啡](/zh/cafes/)
+
+### 文中提到的研究与地点
+
 - [Noa Berger — Coffee in Translation](https://bergernoa.substack.com/)（Substack）：她关于咖啡的历史、文化与流转的书写。
 - [Noa Berger，《Coffee and Music: Crisis and Creation》— Standart](https://standartmag.com/blogs/library/coffee-and-music-crisis-and-creation)：一篇关于咖啡与音乐关系的文章。
 - [Le Mark de Café](https://www.lemarkdecafe.com/)：巴黎的咖啡工作坊、培训与活动。

@@ -96,6 +96,12 @@ Parce qu’au fond, c’est peut-être ça, la plus belle définition du goût :
 
 ## Pour aller plus loin
 
+- [Réussir sa tasse en sachet filtre](/fr/journal/reussir-sa-tasse-en-drip-bag/)
+- [Catimor, Bourbon jaune, Pacamara : trois variétés du Yunnan](/fr/journal/catimor-bourbon-jaune-pacamara/)
+- [Nos cafés du Yunnan](/fr/cafes/)
+
+### Les travaux et les lieux cités
+
 - [Noa Berger — Coffee in Translation](https://bergernoa.substack.com/) (Substack) : ses écrits sur l’histoire, la culture et les circulations du café.
 - [Noa Berger, « Coffee and Music: Crisis and Creation » — Standart](https://standartmag.com/blogs/library/coffee-and-music-crisis-and-creation) : un article sur les relations entre café et musique.
 - [Le Mark de Café](https://www.lemarkdecafe.com/) : ateliers, formations et événements autour du café à Paris.
