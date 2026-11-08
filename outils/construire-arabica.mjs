@@ -37,16 +37,27 @@ const CIBLE = dans('public', 'arabica');
  * explicite, faute de quoi on ne saurait pas laquelle comparer à laquelle.
  */
 const TEINTES = {
-  '--bg': '--paper',
-  '--paper': '--white',
-  '--ink': '--ink',
+  '--fond': '--paper',
+  '--pap': '--white',
+  '--encre': '--ink',
   '--verm': '--accent',
   '--olive': '--olive',
 };
 
+/**
+ * Une teinte de l'atlas, en hexadécimal.
+ *
+ * Trois d'entre elles sont écrites en triplets — `--encre:33,33,33` — parce
+ * que le jour et la nuit ne changent qu'eux, et que tout le reste de la
+ * feuille en découle. On les ramène en hexadécimal pour les comparer à
+ * celles du site.
+ */
 function teinte(css, nom) {
-  const m = css.match(new RegExp(`${nom}\\s*:\\s*(#[0-9a-fA-F]{6})\\s*[;}]`));
-  return m?.[1]?.toLowerCase();
+  const hex = css.match(new RegExp(`${nom}\\s*:\\s*(#[0-9a-fA-F]{6})\\s*[;}]`));
+  if (hex) return hex[1].toLowerCase();
+  const trio = css.match(new RegExp(`${nom}\\s*:\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*[;}]`));
+  if (!trio) return undefined;
+  return '#' + trio.slice(1, 4).map((v) => Number(v).toString(16).padStart(2, '0')).join('');
 }
 
 function verifierCharte(atlas, global) {

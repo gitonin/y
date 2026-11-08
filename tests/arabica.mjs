@@ -115,7 +115,10 @@ async function ouvrir(vue, hash = '') {
   const bruit = [];
   p.on('pageerror', (e) => bruit.push(e.message));
   p.on('console', (m) => { if (m.type() === 'error') bruit.push(m.text()); });
-  await p.goto(`http://127.0.0.1:${PORT}/${hash}`, { waitUntil: 'load' });
+  /* L'heure est figée en plein jour : c'est là que la palette doit être
+     exactement celle du site. Sans cela, un contrôle de teinte lancé à
+     trois heures du matin mesurerait la palette de nuit. */
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=13${hash}`, { waitUntil: 'load' });
   await p.waitForTimeout(2500);
   return { ctx, p, bruit };
 }
@@ -141,8 +144,10 @@ for (const vue of VUES) {
     const b = document.querySelector('.menubtn');
     const s = getComputedStyle(b);
     return {
-      papier: r.getPropertyValue('--bg').trim(),
-      encre: r.getPropertyValue('--ink').trim(),
+      /* Le jour et la nuit ne changent que trois triplets ; c'est eux
+         qu'on compare, et à l'heure de plein jour. */
+      papier: r.getPropertyValue('--fond').trim(),
+      encre: r.getPropertyValue('--encre').trim(),
       accent: r.getPropertyValue('--verm').trim(),
       police: r.getPropertyValue('--font').trim(),
       rayon: s.borderTopLeftRadius,
@@ -151,8 +156,8 @@ for (const vue of VUES) {
     };
   });
   const hex = (v) => v.toLowerCase();
-  check(`le papier est celui du site (${styles.papier})`, hex(styles.papier), '#efebe2');
-  check(`l’encre est celle du site (${styles.encre})`, hex(styles.encre), '#212121');
+  check(`le papier est celui du site (${styles.papier})`, styles.papier.replace(/\s/g, ''), '239,235,226');
+  check(`l’encre est celle du site (${styles.encre})`, styles.encre.replace(/\s/g, ''), '33,33,33');
   check(`l’accent est celui de la marque (${styles.accent})`, hex(styles.accent), '#b95f2c');
   check('la pile de polices commence par Inter', styles.police.startsWith('"Inter"'));
 
@@ -236,6 +241,74 @@ for (const vue of VUES) {
     const croises = chevauchements(await boites(p));
     check(`${nom} — ${croises.length ? croises.join(', ') : 'aucun recouvrement'}`, croises.length, 0);
   }
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le jour et la nuit
+ * ------------------------------------------------------------------ *
+ * Le ciel fait le tour de l'horloge, et l'encre bascule avec lui. Deux
+ * choses peuvent se casser sans bruit : la palette de plein jour peut
+ * cesser d'être celle du site, et l'interface peut se retrouver en gris
+ * sur gris au moment où l'encre s'échange. On mesure donc le contraste à
+ * chaque heure de la journée.
+ */
+titre('Le jour et la nuit');
+{
+  const ctx = await nav.newContext({ viewport: { width: 1000, height: 700 }, locale: 'fr-FR', timezoneId: 'Europe/Paris' });
+  const p = await ctx.newPage();
+  const bruit = [];
+  p.on('pageerror', (e) => bruit.push(e.message));
+  p.on('console', (m) => { if (m.type() === 'error') bruit.push(m.text()); });
+
+  /* L'arrivée se fait à l'heure du visiteur, pas à une heure choisie. */
+  await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+  await p.waitForTimeout(900);
+  const depart = await p.evaluate(() => ({ atlas: CIEL.heure(), vraie: new Date().getHours() + new Date().getMinutes() / 60 }));
+  const ecart = Math.abs(depart.atlas - depart.vraie);
+  check(`on arrive à l’heure qu’il est chez soi (${depart.atlas.toFixed(1)} h contre ${depart.vraie.toFixed(1)} h)`, ecart < 0.2 || ecart > 23.8);
+
+  /* Et le temps avance : une journée en dix minutes. */
+  const avant = await p.evaluate(() => CIEL.heure());
+  await p.waitForTimeout(3000);
+  const apres = await p.evaluate(() => CIEL.heure());
+  const avance = ((apres - avant) + 24) % 24;
+  check(`le temps avance (${(avance * 60).toFixed(0)} minutes d’atlas en 3 secondes)`, avance > 0.08 && avance < 0.25);
+
+  const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const lum = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
+  const contraste = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const palette = async (h) => {
+    await p.goto(`http://127.0.0.1:${PORT}/?heure=${h}`, { waitUntil: 'load' });
+    await p.waitForTimeout(2600);
+    return p.evaluate(() => {
+      const cs = getComputedStyle(document.documentElement);
+      const t = (n) => cs.getPropertyValue(n).trim().split(',').map(Number);
+      return { encre: t('--encre'), pap: t('--pap'), fond: t('--fond'), nuit: SUN.nuit, el: SUN.el };
+    });
+  };
+
+  const midi = await palette(13);
+  check(`en plein jour, le fond est le papier du site (${midi.fond.join(',')})`, midi.fond.join(','), '239,235,226');
+  check(`et l’encre celle du site (${midi.encre.join(',')})`, midi.encre.join(','), '33,33,33');
+  check('le soleil est haut à treize heures', midi.el > 0.9);
+  check('et il ne fait pas nuit', midi.nuit < 0.02);
+
+  const minuit = await palette(0);
+  check(`à minuit le fond est presque noir (clarté ${(lum(minuit.fond) * 100).toFixed(0)} %)`, lum(minuit.fond) < 0.03);
+  check('l’encre a basculé dans les clairs', lum(minuit.encre) > 0.5);
+  check('le soleil est sous l’horizon', minuit.el < 0);
+  check('et il fait nuit pleine', minuit.nuit > 0.95);
+
+  /* Le texte doit rester lisible sur son cartouche à toute heure. */
+  let pire = 99, pireH = null;
+  for (const h of [0, 3, 5.5, 6, 6.5, 8, 11, 13, 16, 18, 18.6, 19, 19.5, 20.5, 22]) {
+    const c = await palette(h);
+    const k = contraste(c.encre, c.pap);
+    if (k < pire) { pire = k; pireH = h; }
+  }
+  check(`le texte reste lisible sur son cartouche à toute heure (au pire ${pire.toFixed(1)} à ${pireH} h)`, pire >= 7);
+  check(`aucune erreur sur toute la journée (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 
