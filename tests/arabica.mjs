@@ -197,7 +197,89 @@ titre('Les liens profonds');
 }
 
 /* ------------------------------------------------------------------ *
- * Le téléphone : c'est là que deux pièces se recouvraient
+ * Rien ne se recouvre — au repos, cartouche ouvert, récit lancé
+ * ------------------------------------------------------------------ *
+ * Les trois fautes trouvées en vrai étaient toutes de ce genre, et deux
+ * d'entre elles ne se voyaient qu'une fois un cartouche ouvert : le dock
+ * change de hauteur selon ce qu'il porte, et ce qui flotte au-dessus ne le
+ * savait pas. On mesure donc les boîtes dans les trois états.
+ */
+const PIECES = ['.peek', '.story', '.playbtn', '.yrbox', '.tl', '.hint', '.brand', '.menubtn', '.sndbtn'];
+async function boites(p) {
+  return p.evaluate((sel) => sel.map((s) => {
+    const e = document.querySelector(s); if (!e) return null;
+    const r = e.getBoundingClientRect(), v = getComputedStyle(e);
+    const vu = v.display !== 'none' && v.visibility !== 'hidden' && parseFloat(v.opacity) > 0.05 && r.width > 0 && r.height > 0;
+    return vu ? { s, x: r.x, y: r.y, w: r.width, h: r.height } : null;
+  }).filter(Boolean), PIECES);
+}
+function chevauchements(bs) {
+  const out = [];
+  for (let i = 0; i < bs.length; i++) for (let j = i + 1; j < bs.length; j++) {
+    const a = bs[i], b = bs[j];
+    if (a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h) out.push(`${a.s} / ${b.s}`);
+  }
+  return out;
+}
+
+for (const vue of VUES) {
+  titre(`Rien ne se recouvre, en ${vue.nom}`);
+  const { ctx, p } = await ouvrir(vue);
+  const cas = [
+    ['au repos', async () => {}],
+    ['un cartouche ouvert', async () => { await p.evaluate(() => select(M['hdt'] ?? Object.values(M)[10])); }],
+    ['le récit lancé', async () => { await p.evaluate(() => { deselect(); }); await p.locator('.playbtn').click(); }],
+  ];
+  for (const [nom, poser] of cas) {
+    await poser();
+    await p.waitForTimeout(700);
+    const croises = chevauchements(await boites(p));
+    check(`${nom} — ${croises.length ? croises.join(', ') : 'aucun recouvrement'}`, croises.length, 0);
+  }
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le son : démarre-t-il, et revient-il après une interruption ?
+ * ------------------------------------------------------------------ *
+ * « Parfois je n'entendais plus » : un contexte audio suspendu par le
+ * système ne se rallume pas tout seul, et rien ne le signale. On suspend
+ * donc le contexte comme le ferait un téléphone, et l'on vérifie qu'il
+ * repart sans qu'on ait à toucher l'écran.
+ */
+titre('Le son');
+{
+  const ctx = await nav.newContext({ viewport: { width: 1280, height: 800 }, locale: 'fr-FR' });
+  /* Le contexte audio de l'atlas n'est pas exposé — et deux contextes d'une
+     même page ont des états séparés, donc en créer un second ne dit rien.
+     On attrape donc celui de l'atlas à sa naissance. */
+  await ctx.addInitScript(() => {
+    const C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return;
+    const W = function (...a) { const c = new C(...a); if (!window.__ac) window.__ac = c; return c; };
+    W.prototype = C.prototype;
+    window.AudioContext = W; window.webkitAudioContext = W;
+  });
+  const p = await ctx.newPage();
+  await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+  await p.waitForTimeout(1200);
+  check('le son n’est pas coupé au départ', await p.evaluate(() => !document.body.classList.contains('muted')));
+  await p.mouse.click(640, 400);                       /* le geste qui autorise le son */
+  await p.waitForTimeout(1200);
+  const etat = () => p.evaluate(() => (window.__ac ? window.__ac.state : 'sans contexte'));
+  check(`le contexte audio tourne dès le premier geste (${await etat()})`, await etat(), 'running');
+  /* On le suspend comme le ferait un téléphone qui reçoit un appel. */
+  await p.evaluate(() => window.__ac.suspend());
+  await p.waitForTimeout(400);
+  check(`suspendu, il est bien suspendu (${await etat()})`, await etat(), 'suspended');
+  /* Et il doit repartir seul : la ronde interne passe toutes les cinq secondes. */
+  await p.waitForTimeout(6500);
+  check(`il repart seul, sans un geste (${await etat()})`, await etat(), 'running');
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * (ancien contrôle, conservé : le détail des pièces en portrait)
  * ------------------------------------------------------------------ */
 titre('Rien ne se recouvre, en portrait');
 {
