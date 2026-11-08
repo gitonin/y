@@ -279,6 +279,61 @@ titre('Le son');
 }
 
 /* ------------------------------------------------------------------ *
+ * Le survol des terroirs
+ * ------------------------------------------------------------------ *
+ * Les sept terroirs sont posés sur le relevé réel du Yunnan. Une erreur de
+ * projection ne lève rien : les repères partent simplement hors de l'écran,
+ * ou se posent tous au même endroit. On mesure donc où ils tombent.
+ */
+titre('Le survol des terroirs');
+{
+  const { ctx, p, bruit } = await ouvrir(VUES[0], '#survol');
+  await p.waitForTimeout(3500);
+  check('le cartouche du terroir est ouvert', await p.locator('#terr').isVisible());
+  check('la frise du temps s’efface', await p.locator('.dock').isHidden());
+  const titre1 = (await p.locator('#ttitle').textContent())?.trim() ?? '';
+  check(`on arrive sur « ${titre1} »`, titre1.startsWith('Pu'));
+  /* Le terroir visé doit tomber au centre : c'est lui que l'on vient voir. */
+  const vise = await p.evaluate(() => {
+    const [x, y] = proj(...GL3.sol(REGIONS[TERR.i].lon, REGIONS[TERR.i].lat));
+    return { dx: Math.abs(x - innerWidth / 2) / innerWidth, dy: Math.abs(y - innerHeight / 2) / innerHeight };
+  });
+  check(`le terroir est au centre (${(vise.dx * 100).toFixed(0)} % / ${(vise.dy * 100).toFixed(0)} % de l’écran)`,
+    vise.dx < 0.12 && vise.dy < 0.2);
+  /* Les sept doivent être distincts : s'ils se superposent, la projection
+     géographique est fausse. */
+  const ecarts = await p.evaluate(() => {
+    const ps = REGIONS.map((r) => proj(...GL3.sol(r.lon, r.lat)));
+    let mini = Infinity;
+    for (let i = 0; i < ps.length; i++) for (let j = i + 1; j < ps.length; j++)
+      mini = Math.min(mini, Math.hypot(ps[i][0] - ps[j][0], ps[i][1] - ps[j][1]));
+    return Math.round(mini);
+  });
+  check(`les sept terroirs sont distincts (${ecarts} px entre les deux plus proches)`, ecarts > 30);
+  /* Et leur disposition doit être celle de la carte : Baoshan au nord-ouest
+     de Xishuangbanna, qui est à l'extrême sud. */
+  const geo = await p.evaluate(() => {
+    const g = (id) => { const r = REGIONS.find((x) => x.id === id); const s = GL3.sol(r.lon, r.lat); return { x: s[0], z: s[2] }; };
+    return { baoshan: g('baoshan'), xsbn: g('xsbn'), dehong: g('dehong') };
+  });
+  check('Baoshan est au nord de Xishuangbanna', geo.baoshan.z < geo.xsbn.z);
+  check('Dehong est à l’ouest de Baoshan', geo.dehong.x < geo.baoshan.x);
+
+  await p.locator('#tnext').click();
+  await p.waitForTimeout(2500);
+  const titre2 = (await p.locator('#ttitle').textContent())?.trim() ?? '';
+  check(`le suivant mène à « ${titre2} »`, titre2 !== titre1 && titre2.startsWith('Baoshan'));
+  const croises = chevauchements(await boites(p));
+  check(`rien ne se recouvre pendant le survol — ${croises.length ? croises.join(', ') : 'aucun recouvrement'}`, croises.length, 0);
+
+  await p.locator('#tquit').click();
+  await p.waitForTimeout(900);
+  check('on en sort', await p.locator('#terr').isHidden());
+  check(`aucune erreur pendant le survol (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
  * (ancien contrôle, conservé : le détail des pièces en portrait)
  * ------------------------------------------------------------------ */
 titre('Rien ne se recouvre, en portrait');
