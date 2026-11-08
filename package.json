@@ -15,8 +15,9 @@
     "importer-contenu": "node scripts/importer-contenu.mjs",
     "construire-jeu": "node outils/construire-jeu.mjs",
     "construire-carte": "node outils/construire-carte.mjs",
+    "construire-arabica": "node outils/construire-arabica.mjs",
     "relever-relief": "node outils/relever-relief.mjs",
-    "prebuild": "node outils/verifier-contenu.mjs && node outils/construire-jeu.mjs && node outils/construire-carte.mjs",
+    "prebuild": "node outils/verifier-contenu.mjs && node outils/construire-jeu.mjs && node outils/construire-carte.mjs && node outils/construire-arabica.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
@@ -30,7 +31,8 @@
     "test:cgv": "node tests/cgv.mjs",
     "test:jeu": "node tests/jeu.mjs",
     "test:carte": "node tests/carte.mjs",
-    "test": "npm run test:boutique && npm run test:rupture && npm run test:stock && npm run test:retractation && npm run test:cgv && npm run test:jeu && npm run test:carte && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
+    "test:arabica": "node tests/arabica.mjs",
+    "test": "npm run test:boutique && npm run test:rupture && npm run test:stock && npm run test:retractation && npm run test:cgv && npm run test:jeu && npm run test:carte && npm run test:arabica && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

@@ -16,5 +16,9 @@ public/jeu/
 public/carte/
 dist-*/
 
+# Idem pour l'atlas des variétés, recopié par outils/construire-arabica.mjs
+# depuis arabica/.
+public/arabica/
+
 # Tuiles d'altitude mises de côté par outils/relever-relief.mjs.
 .cache/

@@ -1,0 +1,18 @@
+# ----------------------------------------------------------------------------
+# Le dossier de l'atlas
+# ----------------------------------------------------------------------------
+# Ce dossier se redépose seul, sans toucher au reste du site : ses règles
+# vivent donc ici, et non dans le .htaccess de la racine.
+#
+# L'atlas tient en un seul fichier, sans serveur ni base. Il n'y a qu'une
+# chose à régler, et elle compte.
+
+<IfModule mod_headers.c>
+  # La page garde son nom d'une version à l'autre — elle ne porte pas
+  # d'empreinte, puisque ce dossier se corrige à la main. Il faut donc la
+  # revalider à chaque visite, sans quoi une correction mettrait des jours à
+  # paraître sur les appareils qui l'ont déjà ouverte.
+  <FilesMatch "\.(html|css|js)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
