@@ -152,3 +152,4 @@ C'est cette diversité qui rend chaque récolte intéressante : derrière un mê
 1. [Arabica varieties — World Coffee Research](https://varieties.worldcoffeeresearch.org/arabica/varieties)
 2. [Pacamara — World Coffee Research](https://varieties.worldcoffeeresearch.org/varieties/pacamara)
 3. [The Coffee Roaster's Complete Guide to Coffee Varieties and Cultivars — Daily Coffee News](https://dailycoffeenews.com/2019/02/07/the-coffee-roasters-complete-guide-to-coffee-varieties-and-cultivars/)
+4. [La qualité croissante du café chinois — Perfect Daily Grind (2020)](https://perfectdailygrind.com/2020/09/the-increasing-quality-of-chinese-grown-coffee/)
