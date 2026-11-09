@@ -25,7 +25,7 @@ import path from 'node:path';
 const racine = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dans = (...p) => path.join(racine, ...p);
 
-const SORTIE = 256;      /* la maille de rendu est à 250 : 256 suffit */
+const SORTIE = 380;      /* le relevé entier : la maille de rendu le vaut */
 const PASSES = 2;        /* passes de lissage gaussien */
 
 /** Le relevé, décodé : une altitude en mètres par maille. */
@@ -92,8 +92,20 @@ for (const v of reduit) { if (v < min) min = v; if (v > max) max = v; }
 const octets = new Uint8Array(SORTIE * SORTIE);
 for (let k = 0; k < octets.length; k++) octets[k] = Math.round(((reduit[k] - min) / (max - min)) * 255);
 
+/* Le même tour que pour la carte du relief : on ne garde que l'écart à la
+   moyenne du voisin de gauche et de celui du dessus. Un relief est lisse,
+   donc ces écarts sont petits, et le base64 fond d'un bon tiers. */
+const code = new Uint8Array(octets.length);
+for (let j = 0; j < SORTIE; j++) {
+  for (let i = 0; i < SORTIE; i++) {
+    const k = j * SORTIE + i;
+    const gauche = i ? octets[k - 1] : 0;
+    const dessus = j ? octets[k - SORTIE] : 0;
+    code[k] = (octets[k] - ((gauche + dessus) >> 1)) & 255;
+  }
+}
 const ligne = `const RELIEF={m:${SORTIE},o:${relief.zone.ouest},e:${relief.zone.est},s:${relief.zone.sud},n:${relief.zone.nord},`
-  + `min:${min.toFixed(1)},max:${max.toFixed(1)},d:'${Buffer.from(octets).toString('base64')}'};`;
+  + `min:${min.toFixed(1)},max:${max.toFixed(1)},c:'moyenne',d:'${Buffer.from(code).toString('base64')}'};`;
 
 const page = dans('arabica', 'index.html');
 let html = await readFile(page, 'utf8');
@@ -111,4 +123,6 @@ if (marque.test(html)) {
     + ligne + '\n' + ancre);
 }
 await writeFile(page, html);
-console.log(`  relief ${SORTIE}×${SORTIE}, ${min.toFixed(0)}–${max.toFixed(0)} m, ${Math.round(ligne.length / 1024)} Ko de base64`);
+const { gzipSync } = await import('node:zlib');
+console.log(`  relief ${SORTIE}×${SORTIE}, ${min.toFixed(0)}–${max.toFixed(0)} m, `
+  + `${Math.round(ligne.length / 1024)} Ko de base64, ${Math.round(gzipSync(Buffer.from(ligne)).length / 1024)} Ko compressés`);

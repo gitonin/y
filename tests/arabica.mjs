@@ -170,6 +170,14 @@ for (const vue of VUES) {
   const pilules = await p.evaluate(() => [...document.querySelectorAll('button')]
     .filter((b) => b.offsetParent && parseFloat(getComputedStyle(b).borderTopLeftRadius) > 8).length);
   check(`aucun bouton en pilule (${pilules})`, pilules, 0);
+  /* Un glissement sur la scène sélectionnait le texte de l'interface, et
+     l'on se retrouvait avec un voile de sélection par-dessus l'atlas. */
+  const selection = await p.evaluate(() => ({
+    page: getComputedStyle(document.documentElement).userSelect,
+    texte: getComputedStyle(document.querySelector('.pin')).userSelect,
+  }));
+  check(`rien ne se sélectionne sur la scène (${selection.page})`, selection.page, 'none');
+  check(`mais le texte des pages se copie (${selection.texte})`, selection.texte, 'text');
 
   await ctx.close();
 }
@@ -361,7 +369,9 @@ titre('Le son');
 titre('Le survol des terroirs');
 {
   const { ctx, p, bruit } = await ouvrir(VUES[0], '#survol');
-  await p.waitForTimeout(3500);
+  /* Le vol est long — d'un bout à l'autre du Yunnan — et le rendu logiciel
+     de l'intégration est lent : on lui laisse le temps d'arriver. */
+  await p.waitForTimeout(6000);
   check('le cartouche du terroir est ouvert', await p.locator('#terr').isVisible());
   check('la frise du temps s’efface', await p.locator('.dock').isHidden());
   const titre1 = (await p.locator('#ttitle').textContent())?.trim() ?? '';
