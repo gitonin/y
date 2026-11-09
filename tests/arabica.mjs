@@ -24,6 +24,7 @@ import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { join, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import sharp from 'sharp';
 
 const RACINE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ATLAS = join(RACINE, 'public', 'arabica');
@@ -680,6 +681,49 @@ titre('Un bouton sans mot garde un nom');
     const a3 = await muets();
     const tous = [...new Set([...a1, ...a2, ...a3])];
     check(`en ${langue}, aucun bouton muet${tous.length ? ' — ' + tous.join(', ') : ''}`, tous.length, 0);
+    await ctx.close();
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Le verre dépoli reste lisible
+ * ------------------------------------------------------------------ *
+ * L'épreuve de contraste plus haut compare deux jetons de couleur, --encre
+ * et --pap. Elle ne voit donc rien du paysage : depuis que les cartouches
+ * sont translucides, ce n'est plus ce qui est à l'écran. On relève ici les
+ * pixels réellement rendus, dans une bande du cartouche où il n'y a pas de
+ * texte, et on prend le pire d'entre eux.
+ */
+titre('Le verre dépoli reste lisible');
+{
+  const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const lum = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
+  for (const h of [13, 19, 22]) {
+    const ctx = await nav.newContext({ viewport: { width: 800, height: 500 }, deviceScaleFactor: 1 });
+    const p = await ctx.newPage();
+    await p.goto(`http://127.0.0.1:${PORT}/?heure=${h}#survol`, { waitUntil: 'load' });
+    await p.waitForTimeout(5200);
+    const z = await p.evaluate(() => {
+      const r = document.getElementById('terr').getBoundingClientRect();
+      const t = document.getElementById('tkick').getBoundingClientRect();
+      return { x: Math.round(r.x + 2), y: Math.round(r.y + 2), w: Math.round(r.width - 4),
+               h: Math.max(4, Math.round(t.y - r.y - 6)), col: getComputedStyle(document.getElementById('ttext')).color };
+    });
+    const brut = await sharp(await p.screenshot({ clip: { x: z.x, y: z.y, width: z.w, height: z.h } }))
+      .removeAlpha().raw().toBuffer();
+    const encre = z.col.match(/\d+/g).map(Number);
+    const L1 = lum(encre);
+    let pire = Infinity, clair = 0, sombre = 255;
+    for (let i = 0; i < brut.length; i += 3) {
+      const L2 = lum([brut[i], brut[i + 1], brut[i + 2]]);
+      const k = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+      if (k < pire) pire = k;
+      const g = (brut[i] + brut[i + 1] + brut[i + 2]) / 3;
+      if (g > clair) clair = g; if (g < sombre) sombre = g;
+    }
+    check(`à ${h} h, le texte tient sur le verre (${pire.toFixed(1)}:1 au pire pixel)`, pire >= 7);
+    /* Et le verre doit rester du verre : un aplat ne laisserait rien passer. */
+    check(`à ${h} h, le paysage transparaît (${Math.round(clair - sombre)} niveaux)`, clair - sombre >= 8);
     await ctx.close();
   }
 }

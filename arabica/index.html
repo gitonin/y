@@ -22,6 +22,10 @@
   /* Le bas de l'écran reprend le ciel, mais rabattu vers le papier du
      moment : sans cela le dock devient une bande rose au crépuscule. */
   --voile:243,240,233;
+  /* Vermillon et olive ne basculent pas avec le jour et la nuit : le
+     texte qu'on pose dessus ne doit pas basculer non plus, sinon il
+     devient sombre sur sombre à la tombée du soir. */
+  --sur-couleur:#fbfaf7;
   --font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
 }
@@ -150,10 +154,28 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
    Les cartouches et les boutons posés sur la scène laissent voir le
    paysage au travers, flouté. La teinte suit le papier du moment, donc
    le jour comme la nuit s'y retrouvent sans réglage séparé. */
-.verre,.peek,.story,.icb:not(.dark),.x,.sndbtn,.btn:not(.dark){background:rgba(var(--pap),.62);backdrop-filter:blur(22px) saturate(1.25);-webkit-backdrop-filter:blur(22px) saturate(1.25)}
+/* Le verre dépoli. Mesure faite sur les pixels rendus, cartouche du survol,
+   à 6 h, 13 h, 19 h et 22 h :
+
+     opacité   contraste du texte   paysage visible au travers
+       0,95         13,4:1                 3 niveaux  (un aplat)
+       0,62          7,9:1                19 niveaux
+       0,52          6,6:1                26 niveaux
+       0,44          5,7:1                31 niveaux
+       0,28          3,9:1                34 niveaux  (illisible)
+
+   0,62 est le dernier palier qui tient le AAA (7:1). En dessous on gagne du
+   paysage et on perd la lecture au soleil. L'arête claire en haut n'est pas
+   un ornement : sans elle, un fond à 62 % se lit comme un aplat un peu sale
+   plutôt que comme une plaque de verre. */
+.verre,.peek,.story,.icb:not(.dark),.x,.sndbtn,.btn:not(.dark){background:rgba(var(--pap),.62);backdrop-filter:blur(22px) saturate(1.25);-webkit-backdrop-filter:blur(22px) saturate(1.25);box-shadow:inset 0 1px 0 rgba(var(--pap),.85)}
 /* Dans les pages, le fond est déjà du papier plein : le verre n'y a rien à
    flouter et ne ferait qu'ajouter une couche de rendu. */
-.pin .btn,.pin .icb,.pnav .back,.menu .btn,.menu .icb,.menu .x{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.pin .btn:not(.dark),.pin .icb:not(.dark),.pnav .back,.menu .btn:not(.dark),.menu .icb:not(.dark),.menu .x{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
+/* Un bouton plein garde son fond, partout : sans lui il ne reste qu'un
+   filet vide, et son texte — clair par construction — disparaît sur le
+   papier de la page. C'est ce qui est arrivé à « Survoler les terroirs ». */
+.btn.dark,.icb.dark{background:var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none}
 .pin .ymcard .btn{background:transparent}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   /* Sans flou, la transparence rendrait le texte illisible : on referme. */
@@ -260,7 +282,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 .vrow:hover{padding-left:8px;color:var(--verm)}
 .vrow em{font-style:normal;color:var(--mute);font-weight:300}
 .vrow small{color:var(--mute);font-size:12px;text-align:right}
-.yb{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:var(--verm);padding:2px 6px;border-radius:2px;vertical-align:2px;margin-left:4px}
+.yb{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sur-couleur);background:var(--verm);padding:2px 6px;border-radius:2px;vertical-align:2px;margin-left:4px}
 .tlist{margin:10px 0 24px;border-top:1px solid var(--line)}
 .ti{display:grid;grid-template-columns:76px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
 .ti .ey{font-size:28px;font-weight:300;letter-spacing:-.03em;color:var(--verm);line-height:1}
@@ -279,7 +301,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 .lot .rk{font-size:11px;color:var(--mute)}
 .lot .nm{line-height:1.3}
 .lot .nm small{display:block;color:var(--mute);font-size:12px}
-.lot .vc{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:2px;margin-right:6px;color:var(--paper)}
+.lot .vc{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:2px;margin-right:6px;color:var(--sur-couleur)}
 .alt{position:relative;height:16px}
 .alt::before{content:"";position:absolute;left:0;right:0;top:7px;height:1px;background:var(--line)}
 .alt i{position:absolute;top:4px;height:7px;border-radius:4px;min-width:7px}
@@ -298,7 +320,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 .bref .meta dt{white-space:nowrap}
 .bref .vlist .lk{display:inline;padding:0}
 .filters button{font-size:13px;padding:6px 12px;border-radius:2px;border:1px solid var(--line);color:var(--mute)}
-.filters button.on{color:var(--paper);background:var(--olive);border-color:var(--olive)}
+.filters button.on{color:var(--sur-couleur);background:var(--olive);border-color:var(--olive)}
 .ymcard{margin-top:26px;border-radius:2px;padding:20px;background:var(--ink);color:var(--bg);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
 .ymcard h3{font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.05;margin:0 0 6px}
 .ymcard p{font-size:13px!important;color:rgba(var(--fond),.72)!important;margin:0!important}
@@ -1871,9 +1893,13 @@ void main(){vec3 n=normalize(vN);vec3 L=normalize(uL);float nl=dot(n,L);float di
  vec3 sky=uTop*1.02,gnd=mix(uFog,vec3(.9,.855,.79),.55);
  vec3 col=vC*(mix(gnd,sky,hemi)*.6+uLC*(dif*.52+wrap*wrap*.12));
  col=min(col,vec3(1.));
- float f=1.-exp(-pow(vD/68.,2.)*1.25);
- float hf=exp(-(vW.y+6.15)/3.0)*.34*(1.-exp(-vD/13.));
- float m=clamp(f+hf*(1.-f),0.,.955);
+ /* Le lointain pâlit vers la couleur du ciel : c'est l'air, et c'est ce
+    qui donne sa profondeur à la vallée. Une seconde nappe collait au sol —
+    elle pesait sur les versants bas et les grisait, et comme elle dépendait
+    à la fois de la hauteur et de la distance, elle balayait la montagne
+    quand on tournait la caméra. C'est le « brouillard grisouille » ; elle
+    est retirée, il ne reste que la distance. */
+ float m=clamp(1.-exp(-pow(vD/68.,2.)*1.25),0.,.955);
  gl_FragColor=vec4(mix(col,uFog,m),1.);}`);
     P_MIST=prog(CAM+`attribute vec3 aP;varying vec3 vW;varying float vD;void main(){float d;gl_Position=projW(aP,d);vW=aP*(.001/2.1);vD=d*(.001/2.1);}`,
       HEAD+NOISE+`varying vec3 vW;varying float vD;uniform vec3 uFog;uniform vec3 uTop;uniform float uNuit;uniform float uTime;uniform float uA;uniform float uK;
