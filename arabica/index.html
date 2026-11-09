@@ -108,7 +108,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .icb.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .icb.dark:hover{background:var(--verm);border-color:var(--verm-txt)}
 .btn svg{width:13px;height:13px}
-.peek{position:fixed;z-index:7;left:50%;bottom:calc(var(--sb) + var(--dockh,124px) + 10px);transform:translate(-50%,14px);opacity:0;pointer-events:none;width:min(460px,calc(100% - 28px));border:1px solid var(--line);border-radius:2px;box-shadow:0 20px 50px -24px rgba(var(--encre),.35);display:flex;align-items:center;gap:10px;padding:8px 8px 8px 22px;transition:opacity .35s,transform .35s}
+.peek{position:fixed;z-index:7;left:50%;bottom:calc(var(--dockh,96px) + 6px);transform:translate(-50%,14px);opacity:0;pointer-events:none;width:min(460px,calc(100% - 28px));border:1px solid var(--line);border-radius:2px;box-shadow:0 20px 50px -24px rgba(var(--encre),.35);display:flex;align-items:center;gap:10px;padding:8px 8px 8px 22px;transition:opacity .35s,transform .35s}
 .peek.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .pk-tx{flex:1;min-width:0}
 .peek h3{font-size:17px;font-weight:400;letter-spacing:-.02em;margin:3px 0 0;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -118,7 +118,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 @media (max-width:460px){.pkfiche span{display:none}.pkfiche{padding:0 12px}}
 
 /* ---------- histoire ---------- */
-.story{position:fixed;z-index:7;left:50%;bottom:calc(var(--sb) + var(--dockh,122px) + 10px);width:min(520px,calc(100% - 28px));border:1px solid var(--line);border-radius:2px;box-shadow:0 24px 60px -26px rgba(var(--encre),.38);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .45s,transform .45s;overflow:hidden}
+.story{position:fixed;z-index:7;left:50%;bottom:calc(var(--dockh,96px) + 6px);width:min(520px,calc(100% - 28px));border:1px solid var(--line);border-radius:2px;box-shadow:0 24px 60px -26px rgba(var(--encre),.38);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .45s,transform .45s;overflow:hidden}
 .story.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 /* Fermé, le cartouche reste en place mais invisible : sans cela ses boutons
    restent annoncés par les lecteurs d'écran et atteignables à la tabulation. */
@@ -197,6 +197,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 /* Pendant le survol, la frise du temps n'a rien à dire : on la retire, et le
    cartouche du terroir prend sa place. */
 .terring .dock,.terring .hint,.terring .peek{display:none}
+/* Plus de socle pendant le survol : --dockh retombe à zéro, et le cartouche
+   se pose au ras du bord, marge de sécurité comprise. */
+.terring .terr{bottom:calc(var(--sb) + 10px)}
 .terr{display:none}
 .terring .terr{display:block}
 .terr h3 small{font-weight:400}
@@ -1221,6 +1224,7 @@ const AUD=(()=>{
     sparkBus=ac.createGain();sparkBus.gain.value=.9;sparkBus.connect(dl);sparkBus.connect(rev);sparkBus.connect(master);
     return true}
   function padChord(premier){
+    if(ac.state!=='running'){timers.push(setTimeout(()=>padChord(premier),400));return}
     const now=ac.currentTime,notes=CH[chordI++%CH.length],dur=22;dernierAccord=Date.now();
     const mont=premier?1.6:9;
     voices.forEach(v=>{v.g.gain.cancelScheduledValues(now);v.g.gain.setValueAtTime(v.g.gain.value,now);v.g.gain.linearRampToValueAtTime(0,now+10);v.o.forEach(o=>o.stop(now+10.2))});voices=[];
@@ -1247,13 +1251,54 @@ const AUD=(()=>{
   function sparkle(){if(document.hidden||!on){timers.push(setTimeout(sparkle,4000));return}
     const n=1+(Math.random()<.35?1:0);for(let i=0;i<n;i++)setTimeout(()=>pluck(SP[Math.floor(Math.random()*SP.length)],.032,null,4.6),i*520);
     timers.push(setTimeout(sparkle,5200+Math.random()*6400))}
-  function start(){if(started||!on)return;if(!ac&&!init())return;started=true;ac.resume&&ac.resume();
+  /* Le navigateur a-t-il vu un geste ? Là où il le dit, on peut ouvrir le
+     son sans attendre ; ailleurs, on attend. */
+  function permis(){try{if(navigator.userActivation)return navigator.userActivation.hasBeenActive===true}catch(e){}
+    return false}
+  function debloquer(){
+    /* Une impulsion d'un échantillon, inaudible : elle sert uniquement à
+       dire au système audio que le son vient d'un geste. */
+    try{const b=ac.createBuffer(1,1,ac.sampleRate),src=ac.createBufferSource();
+      src.buffer=b;src.connect(ac.destination);src.start(0);}catch(e){}}
+  function start(geste){
+    if(started||!on)return;
+    if(!geste&&!permis())return;      /* pas de contexte sans geste */
+    if(!ac&&!init())return;
+    started=true;debloquer();ac.resume&&ac.resume();
     master.gain.cancelScheduledValues(ac.currentTime);master.gain.setValueAtTime(0,ac.currentTime);master.gain.linearRampToValueAtTime(.55,ac.currentTime+1.8);
     padChord(true);timers.push(setTimeout(sparkle,2600))}
   function setOn(v){on=v;try{localStorage.setItem('yunma-sound',v?'on':'off')}catch(e){}
     if(!v){if(ac){master.gain.cancelScheduledValues(ac.currentTime);master.gain.setTargetAtTime(0,ac.currentTime,.4);setTimeout(()=>{if(!on&&ac)ac.suspend()},1600)}}
     else{if(!ac||!started){started=false;start()}else{ac.resume();master.gain.cancelScheduledValues(ac.currentTime);master.gain.setTargetAtTime(.55,ac.currentTime,1.2)}}
     document.body.classList.toggle('muted',!v)}
+  /* Les notes des boutons se prennent dans l'accord qui joue : elles ne
+     peuvent donc pas sonner faux, quel que soit le moment. Chaque voix
+     garde son propre curseur et avance d'un degré à chaque usage, dans sa
+     fenêtre de registre — deux appuis de suite ne donnent jamais la même
+     note, et la suite dessine une petite mélodie sur la nappe. */
+  const CURS={};
+  /* L'accord en cours, étalé sur trois octaves. */
+  function degres(){const c=CH[(chordI+CH.length-1)%CH.length];
+    return [...c,...c.map(n=>n+12),...c.map(n=>n+24)]}
+  /* Pour chaque voix : degré de départ, sens de marche, étendue. Toutes
+     vivent dans les deux octaves hautes de l'accord : plus bas, la nappe
+     les recouvre — mesuré, trois d'entre elles n'y dépassaient que de
+     quatre à six décibels, contre quatorze une octave au-dessus. */
+  const VOIE={next:[9,1,5],prev:[13,-1,5],menu:[10,1,4],close:[12,-1,4],open:[10,1,4],
+              lang:[12,1,3],bascule:[11,1,4],node:[9,1,5],step:[10,1,5],hover:[13,1,2]};
+  /* avancer=false reprend le degré courant sans bouger le curseur : la
+     seconde note d'un geste se prend ainsi dans le même accord, à un ou
+     deux degrés de la première — jamais un intervalle plaqué qui
+     tomberait hors de l'harmonie. */
+  function degre(voix,ecart,avancer){
+    const [d,sens,et]=VOIE[voix]||[10,1,4];
+    const g=degres();
+    if(avancer!==false)CURS[voix]=(CURS[voix]??-1)+1;
+    const k=((CURS[voix]??0)%et+et)%et;
+    const i=Math.max(0,Math.min(g.length-1,d+sens*k+(ecart||0)));
+    return g[i];
+  }
+  const note=(voix,ecart)=>degre(voix,ecart,true);
   /* effets ponctuels */
   let lastHover=0;
   /* Un contexte audio ne reste pas forcément ouvert : l'onglet passe au
@@ -1268,20 +1313,27 @@ const AUD=(()=>{
   function fxs(kind){if(!on||!ac||!started)return;if(ac.state!=='running'){reveiller();return}const now=ac.currentTime;
     /* Ces notes étaient dans le registre de la nappe, qui les masquait : on
        ne les entendait pas. Une octave au-dessus, et un peu plus ouvertes. */
-    if(kind==='next'||kind==='prev'){
-      const c=CH[(chordI+2)%CH.length],a=kind==='next'?c[1]+24:c[3]+24,b=kind==='next'?c[3]+24:c[1]+24;
+    /* suivant monte, précédent descend : le geste s'entend. */
+    if(kind==='next'||kind==='prev'){const a=note(kind),b=degre(kind,kind==='next'?2:-2,false);
       duck(1);pluck(a,.15,sparkBus,2.4);setTimeout(()=>pluck(b,.115,sparkBus,3),120);return}
-    if(kind==='menu'){const c=CH[chordI%CH.length];duck(1);pluck(c[0]+24,.16,sparkBus,3.2);setTimeout(()=>pluck(c[2]+24,.12,sparkBus,3.6),150);return}
-    if(kind==='lang'){const c=CH[(chordI+1)%CH.length];duck(.8);pluck(c[4]+24,.14,sparkBus,2.6);return}
-    if(kind==='bascule'){duck(1);pluck(SP[4]+12,.17,sparkBus,1.6);setTimeout(()=>pluck(SP[1]+12,.12,sparkBus,2.2),105);return}
+    /* ouvrir le menu : une quinte qui s'ouvre. */
+    if(kind==='menu'){const a=note('menu');duck(1);pluck(a,.16,sparkBus,3.2);setTimeout(()=>pluck(degre('menu',2,false),.12,sparkBus,3.6),150);return}
+    /* la langue : une seule note, haute et claire. */
+    if(kind==='lang'){duck(.8);pluck(note('lang'),.14,sparkBus,2.6);return}
+    /* un interrupteur : deux notes brèves, la seconde plus basse. */
+    if(kind==='bascule'){const a=note('bascule');duck(1);pluck(a,.17,sparkBus,1.6);setTimeout(()=>pluck(degre('bascule',-2,false),.12,sparkBus,2.2),105);return}
     if(kind==='tap'){/* tic boisé très court */const o=ac.createOscillator(),g=ac.createGain(),bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2400;bp.Q.value=3;
       o.type='triangle';o.frequency.setValueAtTime(1500,now);o.frequency.exponentialRampToValueAtTime(700,now+.04);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.22,now+.003);g.gain.exponentialRampToValueAtTime(.0001,now+.06);
       o.connect(bp);bp.connect(g);g.connect(dry);g.connect(fx.rev);o.start(now);o.stop(now+.08)}
-    else if(kind==='hover'){if(performance.now()-lastHover<90)return;lastHover=performance.now();pluck(93,.03,sparkBus,.9)}
-    else if(kind==='open'){duck(1);pluck(74,.14,sparkBus,2.4);setTimeout(()=>pluck(81,.105,sparkBus,2.8),110)}
-    else if(kind==='close'){duck(.85);pluck(78,.115,sparkBus,1.8);setTimeout(()=>pluck(74,.09,sparkBus,2.2),100)}
-    else if(kind==='node'){duck(.9);pluck(SP[Math.floor(Math.random()*4)]-12,.13,sparkBus,3)}
-    else if(kind==='step'){const c=CH[(chordI+3)%CH.length];duck(.7);pluck(c[2]+12,.115,sparkBus,3.4);setTimeout(()=>pluck(c[4]+12,.09,sparkBus,3.6),160)}
+    else if(kind==='hover'){if(performance.now()-lastHover<90)return;lastHover=performance.now();pluck(note('hover'),.03,sparkBus,.9)}
+    /* ouvrir : une tierce qui monte. */
+    else if(kind==='open'){const a=note('open');duck(1);pluck(a,.14,sparkBus,2.4);setTimeout(()=>pluck(degre('open',2,false),.105,sparkBus,2.8),110)}
+    /* fermer : la même tierce, à l'envers — elle retombe. */
+    else if(kind==='close'){const a=note('close');duck(.85);pluck(a,.135,sparkBus,1.8);setTimeout(()=>pluck(degre('close',-2,false),.105,sparkBus,2.2),100)}
+    /* une variété : une note de l'accord, la suivante à chaque fois. */
+    else if(kind==='node'){duck(.9);pluck(note('node'),.13,sparkBus,3)}
+    /* une étape du récit : deux notes qui montent doucement. */
+    else if(kind==='step'){const a=note('step');duck(.8);pluck(a,.135,sparkBus,3.4);setTimeout(()=>pluck(degre('step',2,false),.105,sparkBus,3.6),160)}
     else if(kind==='tick'){if(performance.now()-lastHover<60)return;lastHover=performance.now();const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=2200;g.gain.setValueAtTime(.05,now);g.gain.exponentialRampToValueAtTime(.0001,now+.025);o.connect(g);g.connect(dry);o.start(now);o.stop(now+.03)}}
   document.addEventListener('visibilitychange',()=>{if(!ac||!started)return;if(document.hidden)ac.suspend();else if(on)reveiller()});
   addEventListener('pageshow',reveiller);addEventListener('focus',reveiller);
@@ -2353,7 +2405,23 @@ const peekEl=document.getElementById('peek');
    elle se trompe, deux boutons se touchent sans que rien ne le signale. On
    mesure donc le dock, et la feuille s'en sert. */
 const dockEl=document.getElementById('dock');
-const mesurerDock=()=>document.documentElement.style.setProperty('--dockh',Math.round(dockEl.getBoundingClientRect().height)+'px');
+const mesurerDock=()=>{
+  const r=dockEl.getBoundingClientRect();
+  /* Socle masqué — pendant le survol : sa boîte est nulle, et mesurer le
+     vide donnerait la hauteur de l'écran entier. */
+  if(!dockEl.getClientRects().length||getComputedStyle(dockEl).display==='none'){
+    document.documentElement.style.setProperty('--dockh','0px');return}
+  /* La ligne la plus haute du socle qui porte quelque chose. */
+  let haut=r.bottom;
+  for(const el of dockEl.children){
+    if(!el.getClientRects().length)continue;
+    const cs=getComputedStyle(el);
+    if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)<.02)continue;
+    haut=Math.min(haut,el.getBoundingClientRect().top);
+  }
+  const h=Math.max(0,Math.round(innerHeight-haut));
+  document.documentElement.style.setProperty('--dockh',h+'px');
+};
 if(window.ResizeObserver)new ResizeObserver(mesurerDock).observe(dockEl);
 addEventListener('resize',mesurerDock);addEventListener('orientationchange',()=>setTimeout(mesurerDock,120));mesurerDock();
 /* Cartouche ouvert : sur téléphone le bouton du récit s'efface. Il tenait une
@@ -2659,12 +2727,17 @@ function ctaPulse(){document.getElementById('dock').classList.add('cta-on')}
 /* son : démarre au premier geste (règle des navigateurs) */
 document.body.classList.toggle('muted',!AUD.on);
 ['pointerdown','pointerup','touchstart','touchend','keydown','wheel','click'].forEach(ev=>
-  document.addEventListener(ev,()=>{AUD.start();AUD.reveil()},{passive:true}));
+  document.addEventListener(ev,()=>{AUD.start(true);AUD.reveil()},{passive:true}));
 /* Et sans attendre un geste : là où le navigateur l'accepte, la nappe est
    déjà là quand la page apparaît. Ailleurs, le contexte reste en sommeil et
    le premier geste le réveille — on ne peut pas faire mieux, c'est la règle
    des navigateurs. */
-AUD.start();setTimeout(()=>{AUD.start();AUD.reveil()},200);
+/* Là où le navigateur a déjà vu un geste sur cette page — un lien rouvert,
+   un retour en arrière, un ordinateur de bureau —, la nappe est là dès
+   l'arrivée. Sur un téléphone, le premier contact l'ouvre : aucune page ne
+   peut faire mieux, c'est la règle des navigateurs et non un réglage. */
+AUD.start();setTimeout(()=>{AUD.start();AUD.reveil()},120);
+addEventListener('pageshow',()=>AUD.start());
 document.getElementById('sndBtn').addEventListener('click',e=>{e.stopPropagation();AUD.setOn(!AUD.on);AUD.fx('tap')});
 /* Une voix par geste. Le même tic pour tous les boutons faisait un bruit
    de clavier ; chacun a maintenant sa note, et toutes passent par la
