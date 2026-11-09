@@ -722,8 +722,23 @@ titre('Le verre dépoli reste lisible');
       if (g > clair) clair = g; if (g < sombre) sombre = g;
     }
     check(`à ${h} h, le texte tient sur le verre (${pire.toFixed(1)}:1 au pire pixel)`, pire >= 7);
-    /* Et le verre doit rester du verre : un aplat ne laisserait rien passer. */
-    check(`à ${h} h, le paysage transparaît (${Math.round(clair - sombre)} niveaux)`, clair - sombre >= 8);
+    /* Et le verre doit rester du verre. On ne peut pas le prouver en
+       cherchant du relief dans le fond : par une nuit claire, le ciel
+       derrière le cartouche est uniforme, et un aplat opaque donnerait le
+       même relevé qu'une plaque parfaitement transparente. On le prouve en
+       bouchant le verre : si la couleur du cartouche change, c'est que le
+       paysage y entrait. */
+    await p.evaluate(() => {
+      const st = document.createElement('style'); st.id = 'bouche';
+      st.textContent = '.peek,.story{background:rgb(var(--pap))!important;backdrop-filter:none!important}';
+      document.head.appendChild(st);
+    });
+    await p.waitForTimeout(350);
+    const bouche = await sharp(await p.screenshot({ clip: { x: z.x, y: z.y, width: z.w, height: z.h } }))
+      .removeAlpha().raw().toBuffer();
+    let ecart = 0;
+    for (let i = 0; i < brut.length; i++) ecart = Math.max(ecart, Math.abs(brut[i] - bouche[i]));
+    check(`à ${h} h, le paysage entre dans le verre (${ecart} niveaux d’écart une fois bouché)`, ecart >= 5);
     await ctx.close();
   }
 }

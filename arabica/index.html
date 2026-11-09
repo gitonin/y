@@ -149,11 +149,12 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
    l'attend et où rien ne le gêne. */
 .epure .dock{background:none;pointer-events:none}
 .epure .tl,.epure .playbtn,.epure .era{opacity:0;pointer-events:none;transition:opacity .5s}
-.epure .yrbox{order:9;margin-left:auto;text-align:right;opacity:.82;min-width:0}
+/* Il reste là où il était : un repère qui se déplace n'est plus un repère. */
+.epure .yrbox{opacity:.82}
 .epure .dock>*{pointer-events:none}
 .epure .yr{font-size:30px}
 /* Sinon le millésime et le bouton se posent au même endroit. */
-.epure .epureBtn{left:22px;right:auto}
+/* Et le bouton des commandes se range à droite, où rien ne l'attend. */
 
 /* ===== Le verre dépoli ============================================== *
    Les cartouches et les boutons posés sur la scène laissent voir le
@@ -189,6 +190,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .epureBtn{position:fixed;z-index:8;right:22px;bottom:calc(var(--sb) + 22px);width:auto;opacity:.5;transition:opacity .3s}
 .epureBtn:hover{opacity:1}
 .storying .peek{display:none}
+/* Lire une fiche et faire glisser le temps sont deux gestes différents :
+   la frise s'efface pendant la lecture, et le cartouche descend d'autant. */
+.peeking .tl,.storying .tl{opacity:0;pointer-events:none;transition:opacity .3s}
 .storying .playbtn{display:none}
 /* Pendant le survol, la frise du temps n'a rien à dire : on la retire, et le
    cartouche du terroir prend sa place. */
@@ -353,9 +357,11 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
   .brand .lg-full{height:56px}
   .menubtn{height:40px;padding:0 16px 0 14px}
   .dock{flex-wrap:wrap;gap:8px 12px;padding:26px 16px calc(var(--sb) + 12px)}
-  .yrbox{flex:1;min-width:0;order:1}
-  .playbtn{order:2;margin:0 0 2px;height:36px;padding:0 13px 0 11px}
-  .tl{flex-basis:100%;order:3}
+  .yrbox{flex:1;min-width:0;order:2}
+  .playbtn{order:3;margin:0 0 2px;height:36px;padding:0 13px 0 11px}
+  /* La frise passe au-dessus : sinon elle se range sous le millésime et le
+     remonte de cinquante-huit pixels dès qu'elle s'affiche. */
+  .tl{flex-basis:100%;order:1}
   .yr{font-size:30px}.yr small{font-size:13px}
   .ticks span{font-size:9px}.ticks span.m{display:none}
   .peek{padding:6px 6px 6px 18px}
@@ -366,7 +372,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
   #sopen{padding:0 11px;font-size:12px}
   .icb{width:32px;height:32px}
   .sctl{gap:3px}
-  .storying .tl{display:none}
+  .peeking .tl,.storying .tl{display:none}
   .pin h1{font-size:36px}.pin h1 em{display:block;margin:6px 0 0;font-size:20px}
   .lead{font-size:16px}
   .lot{grid-template-columns:20px 1fr 70px 42px;gap:8px}
@@ -2031,11 +2037,23 @@ function drawSphereBack(){
   sunUpdate(S.t);
   if(GL3.ok)GL3.render(S.t);else drawBackdropLand();
   /* vignette chaude + voile de lumière (par-dessus le décor, sous l’arbre) */
-  let g=ctx.createRadialGradient(W/2,H*.46,Math.min(W,H)*.42,W/2,H*.46,Math.max(W,H)*.9);g.addColorStop(0,'rgba(70,50,30,0)');g.addColorStop(1,'rgba(70,50,30,.12)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  {const lx=Math.max(-.15,Math.min(1.15,SUN.sx))*W,ly=Math.max(-.12,Math.min(.5,SUN.sy))*H,a=.1+.2*SUN.vis;
-   g=ctx.createRadialGradient(lx,ly,0,lx,ly,Math.max(W,H)*.8);g.addColorStop(0,`rgba(255,252,242,${a.toFixed(3)})`);g.addColorStop(1,'rgba(255,252,242,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-   /* ombre douce du côté opposé au soleil */
-   const ox=W-lx,oy=H*.9;g=ctx.createRadialGradient(ox,oy,0,ox,oy,Math.max(W,H)*.75);g.addColorStop(0,'rgba(80,60,40,.06)');g.addColorStop(1,'rgba(80,60,40,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+  /* La vignette était brune : chaude sur le papier du jour, elle brunissait
+     les bords d'une nuit bleue. Elle se refroidit avec l'heure. */
+  {const n=SUN.nuit||0,vg=[70+(-50)*n,50+(-40)*n,30+(10)*n].map(Math.round);
+   let g=ctx.createRadialGradient(W/2,H*.46,Math.min(W,H)*.42,W/2,H*.46,Math.max(W,H)*.9);
+   g.addColorStop(0,`rgba(${vg[0]},${vg[1]},${vg[2]},0)`);g.addColorStop(1,`rgba(${vg[0]},${vg[1]},${vg[2]},${(.12+.06*n).toFixed(3)})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+  let g;
+  /* Le voile de lumière valait « .1 + .2 × visibilité du soleil » : il restait
+     donc à 10 % en pleine nuit, en dégradé radial centré sur la position du
+     soleil rabattue à l'écran — une large tache grise posée au milieu des
+     montagnes, juste là où se lit l'arbre. Un voile de lumière sans soleil
+     n'a pas lieu d'être : il suit maintenant le soleil, et s'éteint avec lui. */
+  {const jour=SUN.vis*(1-(SUN.nuit||0)),a=.30*jour;
+   if(a>.004){const lx=Math.max(-.15,Math.min(1.15,SUN.sx))*W,ly=Math.max(-.12,Math.min(.5,SUN.sy))*H;
+    g=ctx.createRadialGradient(lx,ly,0,lx,ly,Math.max(W,H)*.8);g.addColorStop(0,`rgba(255,252,242,${a.toFixed(3)})`);g.addColorStop(1,'rgba(255,252,242,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    /* ombre douce du côté opposé au soleil — elle n'existe que s'il éclaire */
+    const ox=W-lx,oy=H*.9;g=ctx.createRadialGradient(ox,oy,0,ox,oy,Math.max(W,H)*.75);
+    g.addColorStop(0,`rgba(80,60,40,${(.07*jour).toFixed(3)})`);g.addColorStop(1,'rgba(80,60,40,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}}
   /* particules en suspension (profondeur) */
   const n0=NEAR0();
   for(const [dx,dy,dz,sz0,warm] of DUST){const p=proj(dx,dy,dz);if(p[3]<60||p[0]<-5||p[0]>W+5||p[1]<-5||p[1]>H+5)continue;const sz=Math.max(.6,Math.min(4,sz0*p[2]/n0));ctx.globalAlpha=Math.min(.32,.1+.12*p[2]/n0);ctx.fillStyle=warm?VERM:'#3a342c';ctx.beginPath();ctx.arc(p[0],p[1],sz/2,0,7);ctx.fill()}
