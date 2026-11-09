@@ -13,17 +13,17 @@ l'anglais.
 douze, mais le code n'en affiche qu'une : *Paysage du Yunnan*, en tête de la
 page « Le Yunnan » et en tête de la page « Terroirs ». Les onze autres sont
 fabriquées et jamais montrées. Deux tables les désignent — `ILL`, qui
-associe une planche à chacune des 47 variétés, et `EV_ILL`, qui en associe
+associe une planche à chacune des 65 variétés, et `EV_ILL`, qui en associe
 une à chaque étape de la chronologie — mais ni l'une ni l'autre n'est lue au
 moment du rendu. C'est à décider : soit on les branche, et les onze planches
 servent enfin, soit on les retire, et l'atlas perd environ 250 lignes.
 
 **Les planches botaniques, elles, sont partout et sont les plus réussies.**
-Chaque fiche de variété en porte une — 47 fiches, 47 planches. Elles ne sont
+Chaque fiche de variété en porte une — 65 fiches, 65 planches. Elles ne sont
 pas dessinées à la main : le code les compose à partir des caractères de la
 variété (couleur des fruits, port, largeur de feuille, taches de rouille,
 entre-nœuds). On ne peut donc pas les remplacer par des images toutes
-faites sans en produire 47, et sans perdre ce qui fait leur intérêt :
+faites sans en produire 65, et sans perdre ce qui fait leur intérêt :
 elles disent quelque chose de vrai sur chaque variété. **Mon avis : les
 garder.** Si elles doivent évoluer, c'est en retouchant le dessin
 paramétré, pas en les remplaçant.
@@ -369,7 +369,7 @@ pied-mère.
 ## Et les planches botaniques des fiches ?
 
 Elles ne figurent pas dans cette liste parce qu'elles ne se remplacent pas
-par une image : il y en a 47, une par variété, et chacune est composée à
+par une image : il y en a 65, une par variété, et chacune est composée à
 partir des caractères de sa variété. Le même code produit un Catimor trapu
 aux fruits rouges et un Maragogipe élancé aux grands grains — c'est ce qui
 les rend justes.

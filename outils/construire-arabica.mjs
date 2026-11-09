@@ -100,6 +100,68 @@ function verifierContenu(atlas) {
   for (const langue of ['fr', 'en', 'zh']) {
     if (!new RegExp(`\\b${langue}\\s*:\\s*\\{`).test(atlas)) throw new Error(`langues : le tableau « ${langue} » est introuvable`);
   }
+  verifierTables(atlas);
+}
+
+/* Plusieurs tables de traduction sont alignées par INDICE sur les données
+   françaises : EVENTS_L sur EVENTS, YL_L sur YLINKS, STORY_L sur STORY.
+   Y ajouter une entrée d'un côté sans l'autre ne lève rien à l'exécution —
+   la page affiche « undefined » en anglais et en chinois, et seul un
+   lecteur anglophone s'en aperçoit. On compte donc, à la construction.
+   Et comme la frise s'affiche dans l'ordre du tableau, on vérifie aussi
+   que les événements sont triés par année. */
+function verifierTables(atlas) {
+  const bloc = (debut, fin) => {
+    const i = atlas.indexOf(debut);
+    if (i < 0) throw new Error(`contenu : « ${debut} » a disparu de l'atlas`);
+    const j = atlas.indexOf(fin, i);
+    return atlas.slice(i, j);
+  };
+  const compte = (texte, motif) => (texte.match(motif) ?? []).length;
+
+  /* Compte les éléments de premier niveau d'une liste, qu'ils soient des
+     chaînes (YL_L) ou des sous-listes (EVENTS_L). */
+  const elements = (corps) => {
+    let n = 0, prof = 0, chaine = false, vide = true;
+    for (let k = 0; k < corps.length; k++) {
+      const c = corps[k];
+      if (chaine) { if (c === '\\') k++; else if (c === "'") chaine = false; continue; }
+      if (c === "'") { chaine = true; vide = false; }
+      else if (c === '[') { prof++; vide = false; }
+      else if (c === ']') prof--;
+      else if (c === ',' && !prof) { n++; vide = true; }
+      else if (!/\s/.test(c)) vide = false;
+    }
+    return vide ? n : n + 1;
+  };
+
+  const evenements = bloc('const EVENTS=[', '\n];');
+  const nbEv = compte(evenements, /\{y:-?\d+,t:'/g);
+  const annees = [...evenements.matchAll(/\{y:(-?\d+),t:'/g)].map((m) => Number(m[1]));
+  for (let i = 1; i < annees.length; i++) {
+    if (annees[i] < annees[i - 1]) throw new Error(`EVENTS : ${annees[i]} arrive après ${annees[i - 1]} — la chronologie s'affiche dans l'ordre du tableau`);
+  }
+  const planches = bloc('const EV_ILL=[', '];');
+  const nbPlanches = elements(planches.slice(planches.indexOf('[') + 1, planches.lastIndexOf(']')));
+  if (nbPlanches !== nbEv) throw new Error(`EV_ILL : ${nbPlanches} planches pour ${nbEv} événements — la table est alignée par indice`);
+
+  const liens = bloc('const YLINKS=[', '];');
+  const nbYl = compte(liens, /\['[a-z0-9_]+',\s*-?\d+,/g);
+
+  for (const [nom, attendu, debut] of [['EVENTS_L', nbEv, 'const EVENTS_L={'], ['YL_L', nbYl, 'const YL_L={']]) {
+    const table = bloc(debut, '\n};').replace(debut, '');
+    for (const langue of ['en', 'zh']) {
+      const i = table.indexOf(` ${langue}:[`);
+      if (i < 0) throw new Error(`${nom} : la langue « ${langue} » est introuvable`);
+      let p = table.indexOf('[', i), prof = 0, fin = -1;
+      for (let k = p; k < table.length; k++) {
+        if (table[k] === '[') prof++;
+        else if (table[k] === ']') { prof--; if (!prof) { fin = k; break; } }
+      }
+      const n = elements(table.slice(p + 1, fin));
+      if (n !== attendu) throw new Error(`${nom}.${langue} : ${n} entrées pour ${attendu} attendues — la table est alignée par indice, « undefined » s'afficherait`);
+    }
+  }
 }
 
 async function construire() {

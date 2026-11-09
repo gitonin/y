@@ -63,9 +63,12 @@ a{color:inherit}
 .hint{position:fixed;left:50%;top:calc(var(--st) + 34px);transform:translateX(-50%);z-index:3;font-size:9.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);pointer-events:none;transition:opacity 1s;white-space:nowrap}
 
 /* ---------- dock (bas) ---------- */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:30px 26px calc(var(--sb) + 18px);background:linear-gradient(to top,rgba(var(--voile),.96) 42%,rgba(var(--voile),0));display:flex;align-items:flex-end;gap:24px;pointer-events:none}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:30px 26px calc(var(--sb) + 18px);background:linear-gradient(to top,rgba(var(--voile),.96) 42%,rgba(var(--voile),0));display:flex;align-items:flex-end;gap:20px;pointer-events:none}
 .dock>*{pointer-events:auto}
-.playbtn{display:flex;align-items:center;gap:10px;height:42px;padding:0 18px 0 15px;border-radius:2px;background:var(--ink);color:var(--paper);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;flex:none;box-shadow:0 8px 24px -12px rgba(var(--encre),.5);transition:.2s;margin-bottom:6px}
+/* Le bouton tenait la gauche du dock et poussait le millésime vers le
+   centre. Il passe à droite, calé au bord, et son intitulé se réduit à un
+   mot : la frise gagne la largeur que prenait « Raconter l'histoire ». */
+.playbtn{display:flex;align-items:center;gap:9px;height:40px;padding:0 16px 0 13px;border-radius:2px;background:var(--ink);color:var(--paper);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;flex:none;margin-left:auto;align-self:flex-end;box-shadow:0 8px 24px -12px rgba(var(--encre),.5);transition:.2s;margin-bottom:6px}
 .playbtn:hover{background:var(--verm)}
 .playbtn .pi{display:grid;place-items:center;width:16px;height:16px}.playbtn .pi svg{width:16px;height:16px}
 .cta-on .playbtn{animation:pls 2.4s infinite}
@@ -74,7 +77,7 @@ a{color:inherit}
 .yr{font-size:42px;font-weight:300;letter-spacing:-.03em;line-height:.9;white-space:nowrap}
 .yr small{font-size:16px;color:var(--mute);letter-spacing:0;font-weight:400}
 .era{display:none;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--verm);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tl{flex:1;position:relative;padding-bottom:18px;max-width:760px}
+.tl{flex:1;position:relative;padding-bottom:18px;max-width:700px}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0;cursor:pointer}
 input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(90deg,var(--ink) var(--p,100%),rgba(var(--encre),.15) var(--p,100%))}
 input[type=range]::-moz-range-track{height:2px;background:rgba(var(--encre),.15)}
@@ -114,6 +117,14 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .story.resume #splay{animation:pls 1.8s infinite}
 @keyframes sw{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .sctl{display:flex;align-items:center;gap:5px}
+/* Pendant le récit, on peut tout effacer : le cartouche, la frise, le menu.
+   Il ne reste que le paysage et le logo — et un bouton discret pour revenir.
+   C'est la demande la plus simple à satisfaire et la plus difficile à ne pas
+   rater : si l'on efface aussi le moyen de revenir, on enferme le visiteur. */
+.epure .story,.epure .dock,.epure .hint,.epure .peek,.epure .menubtn,.epure .sndbtn{opacity:0;pointer-events:none;transition:opacity .5s}
+.epure .brand{opacity:1}
+.epureBtn{position:fixed;z-index:8;right:22px;bottom:calc(var(--sb) + 22px);width:auto;opacity:.5;transition:opacity .3s}
+.epureBtn:hover{opacity:1}
 .storying .peek{display:none}
 .storying .playbtn{display:none}
 /* Pendant le survol, la frise du temps n'a rien à dire : on la retire, et le
@@ -161,6 +172,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .pin h1{font-size:48px;font-weight:500;letter-spacing:-.035em;line-height:1;margin:22px 0 10px}
 .pin h1 em{font-style:normal;font-weight:300;color:var(--mute);font-size:28px;margin-left:12px;letter-spacing:-.02em}
 .lead{font-size:17.5px;line-height:1.55;color:#2c2b28;margin:10px 0 18px}
+.tp2{font-size:15.5px;line-height:1.62;color:var(--mute);margin:-8px 0 20px;border-left:2px solid var(--line);padding-left:14px}
 .pin p{font-size:15.5px;line-height:1.6;color:var(--ink)}
 .pl{margin:0;padding:0}
 .pl .plate{width:100%;height:auto;display:block;border-radius:0;background:var(--paper)}
@@ -269,8 +281,8 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
   .brand .lg-full{height:56px}
   .menubtn{height:40px;padding:0 16px 0 14px}
   .dock{flex-wrap:wrap;gap:8px 12px;padding:26px 16px calc(var(--sb) + 12px)}
-  .yrbox{flex:1;min-width:0;order:2}
-  .playbtn{order:1;flex-basis:100%;justify-content:center;margin:0 0 4px;height:40px;padding:0 16px}
+  .yrbox{flex:1;min-width:0;order:1}
+  .playbtn{order:2;margin:0 0 2px;height:36px;padding:0 13px 0 11px}
   .tl{flex-basis:100%;order:3}
   .yr{font-size:30px}.yr small{font-size:13px}
   .ticks span{font-size:9px}.ticks span.m{display:none}
@@ -310,7 +322,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 <section class="story" id="story" aria-live="polite">
   <div class="sbar"><i id="sprog"></i></div>
   <div class="sin"><div class="kicker" id="skick"></div><h3 id="stitle"></h3><p id="stext"></p>
-  <div class="sctl"><button class="icb" id="sprev" aria-label="‹"></button><button class="icb dark" id="splay" aria-label="Pause"></button><button class="icb" id="snext" aria-label="›"></button><span class="sp"></span><button class="btn" id="sopen"></button><button class="icb" id="sclose" aria-label="✕"></button></div></div>
+  <div class="sctl"><button class="icb" id="sprev" aria-label="‹"></button><button class="icb dark" id="splay" aria-label="Pause"></button><button class="icb" id="snext" aria-label="›"></button><span class="sp"></span><button class="btn" id="sopen"></button><button class="icb" id="sepure" aria-label="—"></button><button class="icb" id="sclose" aria-label="✕"></button></div></div>
 </section>
 
 <section class="story terr" id="terr" aria-live="polite">
@@ -318,10 +330,12 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
   <div class="sctl"><button class="icb" id="tprev" aria-label="‹"></button><button class="icb" id="tnext" aria-label="›"></button><span class="sp"></span><button class="btn" id="tcard"></button><button class="btn dark" id="tquit"></button></div></div>
 </section>
 
+<button class="btn epureBtn" id="epureOff" hidden></button>
+
 <footer class="dock" id="dock">
-  <button class="playbtn" id="play" aria-label="Lecture"><span class="pi" id="playIc"></span><span data-i="play">Raconter l’histoire</span></button>
   <div class="yrbox"><div class="yr" id="yr">2026</div><div class="era" id="era"></div></div>
   <div class="tl"><input type="range" id="slider" min="0" max="1000" step="1" value="1000" aria-label="Chronologie"><div class="ticks" id="ticks"></div></div>
+  <button class="playbtn" id="play" aria-label="Lecture"><span class="pi" id="playIc"></span><span data-i="playCourt">Histoire</span></button>
 </footer>
 
 <div class="scrim" id="scrim"></div>
@@ -356,50 +370,53 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
    TRADUCTIONS — FR (référence) · EN · 简体中文
    ===================================================================== */
 const UI={
- fr:{menu:'Menu',hint:'Glisser pour tourner · pincer pour zoomer',play:'Raconter l’histoire',back:'← L’arbre',
+ fr:{menu:'Menu',hint:'Glisser pour tourner · pincer pour zoomer',play:'Raconter l’histoire',playCourt:'Histoire',epure:'Masquer les commandes',epureOff:'Revoir les commandes',back:'← L’arbre',
   nav:[['L’arbre','explorer en 3D'],['Raconter l’histoire','≈ 2 min'],['Les variétés','fiches'],['Le Yunnan','chronologie'],['Terroirs','carte & lots'],['Sources & méthode','']],
   display:'Affichage',swYun:'Surligner le Yunnan',swRot:'Rotation automatique',home:'Recentrer la vue',lineages:'Lignées',lang:'Langue',
   sig:'les cafés du Yunnan<br>atlas génétique',readFiche:'Lire la fiche',inYunnan:'présente au Yunnan',yTimeline:'Chronologie du Yunnan',
   hideText:'Masquer le texte',showText:'Afficher le texte',tapHint:'Toucher pour découvrir →',
   date:'Date',place:'Lieu',lineage:'Lignée',approx:'⚠ Position chronologique approximative',atYunnan:'Au Yunnan',parents:'Parents',kids:'Descendance',seeTree:'Voir dans l’arbre →',sources:'Sources',plate:'Planche',
   vTitle:'Les variétés',vLead:n=>`${n} variétés, espèces et populations, des forêts d’Éthiopie aux variétés encore en essai. Chaque fiche raconte l’origine de la variété, sa parenté et son lien avec le Yunnan.`,search:'Chercher une variété…',prehist:'préhistoire',
-  yTitle:'Le Yunnan',yLead:'Le Yunnan concentre l’essentiel du café chinois. Son histoire génétique tient en deux temps : d’abord Typica et Bourbon, puis la quasi-totalité du verger convertie au Catimor, qui porte des gènes du Robusta via l’Hybride de Timor. La nouvelle vague replante aujourd’hui du Geisha en altitude.',
+  yTitle:'Le Yunnan',yLead:'Le Yunnan fournit 98 % du café chinois. Son histoire génétique tient en trois temps : Typica et Bourbon passent la frontière birmane en 1914 ; à partir de 1988, un programme mené avec la Banque mondiale et le PNUD, puis avec Nestlé, convertit la quasi-totalité du verger au Catimor — une seule lignée, CIFC 7963, qui porte des gènes de Robusta via l’Hybride de Timor ; depuis les années 2010, une nouvelle vague replante du Geisha en altitude et le Yunnan devient le premier exportateur de café de Chine. Le café de spécialité y pesait encore moins de 2 % des volumes en 2018.',
   seeOnTree:'Voir sur l’arbre →',fut:['Yunma — voyage de sélection','Rencontre de producteurs indépendants au Yunnan. Les lots sélectionnés apparaîtront ici et dans les terroirs.'],exploreTerr:'Explorer les terroirs →',flyTerr:'Survoler les terroirs →',tQuit:'Quitter le survol',tCard:'La fiche',tLots:'{n} lots dans le top 15 du Gems of Yunnan 2026',tLot:'1 lot dans le top 15 du Gems of Yunnan 2026',tNoLot:'Aucun lot dans le top 15 du Gems of Yunnan 2026',tBest:'Meilleur lot',tOf:'Terroir {i} sur {n}',tBref:'En bref',tBande:'Altitudes des lots classés',tVar:'Variétés classées',tProc:'Procédés',tPart:'{n} des quinze premiers lots',tPartL:'Dans le classement',yArrivees:'Les variétés arrivées au Yunnan',yArrL:'Arrivée',yAuj:'aujourd’hui',tPart1:'Un des quinze premiers lots',tRien:'Aucun lot dans les quinze premiers en 2026',tCeSurvol:'Survoler ce terroir →',tRegions:'{n} régions classées sur sept',tHaut:'Le plus haut lot classé',tBas:'Le plus bas',
   tTitle:'Terroirs',tLead:'Le café du Yunnan pousse entre 21° et 26° de latitude nord, de part et d’autre du tropique du Cancer, souvent au-dessus de 1 300 m pour les lots de spécialité. La taille des cercles indique le nombre de lots de chaque région dans le top 15 du Gems of Yunnan 2026.',
   all:'Toutes',pts:'pts',noLot:'Aucun lot du top 15 dans cette région',ymK:'Sélection Yunma · 2027',ymH:'Vos producteurs apparaîtront ici',ymH2:'Nos lots',ymP:'Lots sélectionnés lors du voyage de début 2027 auprès de producteurs indépendants : ferme, altitude, variété, process.',tropic:'TROPIQUE DU CANCER',kunming:'Kunming',
   sTitle:'Sources & méthode',sLead:'L’axe vertical de la sphère est le temps, sur une échelle compressée qui va de la naissance de l’Arabica (il y a 350 000 à 610 000 ans) à 2026. Les variétés sont regroupées par lignée autour d’un axe central. À partir de 1892, cet axe devient la chronologie du Yunnan (en rouille).',
   sRead:'Lire l’arbre',sRig:'Rigueur',sRigT:'Les dates et les parentés viennent du catalogue World Coffee Research, de l’étude génomique Nature Genetics 2024 et de sources spécialisées. Les mentions « ≈ », « indicative » ou « non vérifiée » signalent une date incertaine ou contestée : Zhukula (1892, 1902 ou 1904), Java, les clones de Robusta. Erecta et Nganda sont des types de port, pas des variétés. Les illustrations sont des planches schématiques, pas des relevés botaniques.',
-  sTerr:'Terroirs',sTerrT:'Les positions sont approximatives (villes principales). Les lots et les altitudes sont ceux du top 15 du Gems of Yunnan 2026 (Alliance for Coffee Excellence).',sRefs:'Références',
+  sTerr:'Terroirs',sPer:'Périmètre',sPerT:n=>`L’atlas suit les lignées, pas le catalogue complet : ${n} entrées — les espèces, les grandes landraces, les variétés qui ont fait souche, celles qui sont plantées au Yunnan et celles que vend Yunma. Le catalogue de World Coffee Research compte 71 Arabica ; les absentes sont pour l’essentiel des sélections d’Amérique centrale sans lien avec le Yunnan ni avec les lignées présentées ici (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Les noms de région ou de port qui ne désignent pas une variété — Mandheling, Sulawesi Toraja, Santos, Kona, Moka — n’y figurent pas non plus, sauf quand l’usage en a fait une variété, comme Blue Mountain ou Java. Il manque une variété ? Dites-le-nous.`,
+  sTerrT:'Les positions sont approximatives (villes principales). Les lots et les altitudes sont ceux du top 15 du Gems of Yunnan 2026 (Alliance for Coffee Excellence).',sRefs:'Références',
   ago:['<small>il y a</small> ',' <small>ans</small>'],agoP:['il y a ',' ans'],loc:'fr-FR',close:'Fermer',openMenu:'Ouvrir le menu',yb:'Yunnan',tb:'En essai',sound:'Activer ou couper le son',tbNote:'Encore en essai ou au stade de la recherche : pas encore diffusée auprès des producteurs.'},
- en:{menu:'Menu',hint:'Drag to rotate · pinch to zoom',play:'Tell the story',back:'← The tree',
+ en:{menu:'Menu',hint:'Drag to rotate · pinch to zoom',play:'Tell the story',playCourt:'Story',epure:'Hide the controls',epureOff:'Show the controls',back:'← The tree',
   nav:[['The tree','explore in 3D'],['Tell the story','≈ 2 min'],['Varieties','profiles'],['Yunnan','timeline'],['Terroirs','map & lots'],['Sources & method','']],
   display:'Display',swYun:'Highlight Yunnan',swRot:'Auto-rotate',home:'Reset view',lineages:'Lineages',lang:'Language',
   sig:'coffees from Yunnan<br>genetic atlas',readFiche:'Read profile',inYunnan:'grown in Yunnan',yTimeline:'Yunnan timeline',
   hideText:'Hide text',showText:'Show text',tapHint:'Tap to explore →',
   date:'Date',place:'Place',lineage:'Lineage',approx:'⚠ Approximate chronological position',atYunnan:'In Yunnan',parents:'Parents',kids:'Descendants',seeTree:'See in the tree →',sources:'Sources',plate:'Plate',
   vTitle:'Varieties',vLead:n=>`${n} varieties, species and populations, from the forests of Ethiopia to varieties still in trials. Each profile tells the variety’s origin, its lineage and its link with Yunnan.`,search:'Search a variety…',prehist:'prehistory',
-  yTitle:'Yunnan',yLead:'Yunnan grows almost all of China’s coffee. Its genetic history comes in two stages: first Typica and Bourbon, then almost the entire crop converted to Catimor, which carries Robusta genes through the Timor Hybrid. The new wave is now planting Geisha at altitude.',
+  yTitle:'Yunnan',yLead:'Yunnan supplies 98% of China’s coffee. Its genetic history comes in three stages: Typica and Bourbon cross the Burmese border in 1914; from 1988, a programme run with the World Bank and the UNDP, then with Nestlé, converts almost the whole crop to Catimor — a single line, CIFC 7963, carrying Robusta genes through the Timor Hybrid; and since the 2010s a new wave has been replanting Geisha at altitude, while Yunnan becomes China’s leading coffee exporter. Specialty coffee still accounted for less than 2% of volumes in 2018.',
   seeOnTree:'See on the tree →',fut:['Yunma — sourcing trip','Meeting independent producers in Yunnan. The selected lots will appear here and in Terroirs.'],exploreTerr:'Explore the terroirs →',flyTerr:'Fly over the terroirs →',tQuit:'Leave the flyover',tCard:'Details',tLots:'{n} lots in the Gems of Yunnan 2026 top 15',tLot:'1 lot in the Gems of Yunnan 2026 top 15',tNoLot:'No lot in the Gems of Yunnan 2026 top 15',tBest:'Best lot',tOf:'Terroir {i} of {n}',tBref:'At a glance',tBande:'Altitudes of the ranked lots',tVar:'Ranked varieties',tProc:'Processes',tPart:'{n} of the top fifteen lots',tPartL:'In the ranking',yArrivees:'The varieties that reached Yunnan',yArrL:'Arrival',yAuj:'today',tPart1:'One of the top fifteen lots',tRien:'No lot in the top fifteen in 2026',tCeSurvol:'Fly over this terroir →',tRegions:'{n} regions ranked out of seven',tHaut:'Highest ranked lot',tBas:'Lowest',
   tTitle:'Terroirs',tLead:'Yunnan’s coffee grows between 21° and 26° north, on both sides of the Tropic of Cancer, often above 1,300 m for specialty lots. The size of each circle shows how many of the region’s lots made the Gems of Yunnan 2026 top 15.',
   all:'All',pts:'pts',noLot:'No top-15 lot from this region',ymK:'Yunma selection · 2027',ymH:'Our producers will appear here',ymH2:'Our lots',ymP:'Lots selected during the early-2027 trip to independent producers: farm, altitude, variety, process.',tropic:'TROPIC OF CANCER',kunming:'Kunming',
   sTitle:'Sources & method',sLead:'The sphere’s vertical axis is time, on a compressed scale running from the birth of Arabica (350,000 to 610,000 years ago) to 2026. Varieties are grouped by lineage around a central axis. From 1892 onwards, this axis becomes the Yunnan timeline (in rust).',
   sRead:'Reading the tree',sRig:'Accuracy',sRigT:'Dates and lineages come from the World Coffee Research catalogue, the 2024 Nature Genetics genomic study and specialist sources. The marks “≈”, “approximate” or “not verified” flag an uncertain or disputed date: Zhukula (1892, 1902 or 1904), Java, the Robusta clones. Erecta and Nganda are growth habits, not varieties. The illustrations are schematic plates, not botanical surveys.',
-  sTerr:'Terroirs',sTerrT:'Positions are approximate (main towns). Lots and altitudes are those of the Gems of Yunnan 2026 top 15 (Alliance for Coffee Excellence).',sRefs:'References',
+  sTerr:'Terroirs',sPer:'Scope',sPerT:n=>`The atlas follows lineages, not the full catalog: ${n} entries — the species, the major landraces, the varieties that founded lines, those planted in Yunnan, and those Yunma sells. The World Coffee Research catalog lists 71 Arabicas; the ones missing here are mostly Central American selections with no link to Yunnan or to the lines shown (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Region or port names that do not denote a variety — Mandheling, Sulawesi Toraja, Santos, Kona, Mocha — are left out too, except where usage turned them into one, as with Blue Mountain or Java. A variety missing? Tell us.`,
+  sTerrT:'Positions are approximate (main towns). Lots and altitudes are those of the Gems of Yunnan 2026 top 15 (Alliance for Coffee Excellence).',sRefs:'References',
   ago:['',' <small>years ago</small>'],agoP:['',' years ago'],loc:'en-US',close:'Close',openMenu:'Open menu',yb:'Yunnan',tb:'In trials',sound:'Sound on or off',tbNote:'Still in trials or at the research stage: not yet available to farmers.'},
- zh:{menu:'菜单',hint:'拖动旋转 · 双指缩放',play:'讲述历史',back:'← 品种树',
+ zh:{menu:'菜单',hint:'拖动旋转 · 双指缩放',play:'讲述历史',playCourt:'历史',epure:'隐藏控件',epureOff:'显示控件',back:'← 品种树',
   nav:[['品种树','3D 探索'],['讲述历史','约 2 分钟'],['品种','档案'],['云南','年表'],['风土','地图与批次'],['资料与方法','']],
   display:'显示',swYun:'突出云南',swRot:'自动旋转',home:'重置视角',lineages:'谱系',lang:'语言',
   sig:'云南咖啡<br>品种基因图谱',readFiche:'查看档案',inYunnan:'云南有种植',yTimeline:'云南年表',
   hideText:'隐藏文字',showText:'显示文字',tapHint:'点击了解 →',
   date:'年代',place:'地点',lineage:'谱系',approx:'⚠ 年代位置仅为近似',atYunnan:'在云南',parents:'亲本',kids:'后代',seeTree:'在树中查看 →',sources:'资料来源',plate:'图版',
   vTitle:'品种',vLead:n=>`${n} 个品种、物种与种群，从埃塞俄比亚的森林到仍在试验中的品种。每份档案都讲述品种的起源、亲缘关系及其与云南的联系。`,search:'搜索品种…',prehist:'史前',
-  yTitle:'云南',yLead:'云南几乎出产了中国全部的咖啡。它的品种史分为两个阶段：先是铁皮卡和波旁，随后几乎全部改种卡蒂姆——后者通过蒂莫尔杂交种携带罗布斯塔基因。如今，新一代种植者正在高海拔地区种植瑰夏。',
+  yTitle:'云南',yLead:'云南供应了中国 98% 的咖啡。它的品种史分为三个阶段：1914 年，铁皮卡和波旁越过中缅边境；1988 年起，一项与世界银行和联合国开发计划署合作、随后又有雀巢参与的项目，把几乎整个咖啡园改种卡蒂姆——其实只是一个选系，CIFC 7963，通过蒂莫尔杂交种携带着罗布斯塔的基因；2010 年代以来，新一波力量在高海拔重新种下瑰夏，云南也成为中国第一咖啡出口省。而在 2018 年，精品咖啡在中国的产量中仍占不到 2%。',
   seeOnTree:'在树上查看 →',fut:['Yunma——选豆之旅','在云南拜访独立生产者。入选的批次将显示在这里和“风土”页面中。'],exploreTerr:'探索风土 →',flyTerr:'俯瞰风土 →',tQuit:'退出俯瞰',tCard:'详情',tLots:'2026 Gems of Yunnan 前 15 名中有 {n} 支',tLot:'2026 Gems of Yunnan 前 15 名中有 1 支',tNoLot:'2026 Gems of Yunnan 前 15 名中没有',tBest:'最佳批次',tOf:'第 {i} 个风土，共 {n} 个',tBref:'概览',tBande:'入选批次海拔',tVar:'入选品种',tProc:'处理法',tPart:'前十五名中的 {n} 支',tPartL:'排名情况',yArrivees:'传入云南的品种',yArrL:'传入',yAuj:'至今',tPart1:'前十五名中的 1 支',tRien:'2026 年无批次进入前十五',tCeSurvol:'俯瞰这片风土 →',tRegions:'七个产区中有 {n} 个入选',tHaut:'入选批次中海拔最高',tBas:'最低',
   tTitle:'风土',tLead:'云南咖啡生长于北纬 21° 至 26° 之间，横跨北回归线，精品批次多种植于海拔 1300 米以上。圆圈大小表示各产区进入 Gems of Yunnan 2026 前 15 名的批次数量。',
   all:'全部',pts:'分',noLot:'该产区没有进入前 15 名的批次',ymK:'Yunma 精选 · 2027',ymH:'我们的生产者将在此呈现',ymH2:'我们的批次',ymP:'2027 年初走访独立生产者时选定的批次：庄园、海拔、品种、处理法。',tropic:'北回归线',kunming:'昆明',
   sTitle:'资料与方法',sLead:'球体的纵轴代表时间，采用压缩比例，从阿拉比卡诞生（距今 35 万至 61 万年）一直到 2026 年。各品种按谱系围绕中轴分布。自 1892 年起，这条中轴成为云南的年表（锈红色）。',
   sRead:'如何阅读品种树',sRig:'严谨性',sRigT:'年代与亲缘关系来自世界咖啡研究组织（WCR）品种目录、2024 年《自然·遗传学》基因组研究及专业资料。“≈”“仅供参考”“未核实”等标注表示年代不确定或存在争议：朱苦拉（1892、1902 或 1904 年）、爪哇、罗布斯塔无性系。Erecta 与 Nganda 是株型，而非品种。插图为示意图版，并非植物学实测图。',
-  sTerr:'风土',sTerrT:'位置为近似值（以主要城市为准）。批次与海拔数据来自 Gems of Yunnan 2026 前 15 名（Alliance for Coffee Excellence）。',sRefs:'参考文献',
+  sTerr:'风土',sPer:'范围',sPerT:n=>`本图谱追踪的是谱系，而非完整目录：共 ${n} 条——物种、主要地方种、开枝散叶的品种、云南在种的品种，以及 Yunma 在售的品种。世界咖啡研究组织的目录收录了 71 个阿拉比卡品种；这里缺席的多为与云南、与本图谱所列谱系无关的中美洲选系（Lempira、Parainema、Anacafé 14、IHCAFE 90、Tekisic、Pache Colis 等）。不指向具体品种的产区名或港口名——曼特宁、苏拉威西托拉雅、桑托斯、科纳、摩卡——同样不收录，除非它在使用中已变成一个品种，如蓝山或爪哇。觉得少了某个品种？请告诉我们。`,
+  sTerrT:'位置为近似值（以主要城市为准）。批次与海拔数据来自 Gems of Yunnan 2026 前 15 名（Alliance for Coffee Excellence）。',sRefs:'参考文献',
   ago:['<small>距今</small> ',' <small>年</small>'],agoP:['距今 ',' 年'],loc:'zh-CN',close:'关闭',openMenu:'打开菜单',yb:'云南',tb:'试验中',sound:'开启或关闭声音',tbNote:'仍处于试验或研究阶段：尚未向种植者推广。'}
 };
 const GROUPS_L={
@@ -412,13 +429,31 @@ const ERAS_L={
  en:['Prehistory — birth of Arabica','Ethiopia — wild populations','Yemen — first cultivation','Colonial spread','Mutations & selections','Rust, Timor & hybrids','Global introgression · rise of Yunnan','F1, genomics & specialty','Trials, rediscovered species & a new Yunnan'],
  zh:['史前——阿拉比卡诞生','埃塞俄比亚——野生种群','也门——最早的栽培','殖民时代的传播','突变与选育','锈病、蒂莫尔与杂交','全球渐渗 · 云南兴起','F1、基因组学与精品咖啡','田间试验、重新发现的物种与新云南']};
 const YL_L={
- en:['Zhukula (variety disputed)','Ruili, from Burma','Ruili, from Burma','from India','public programme, then Nestlé','≈ 2010s (approximate date)','present today','present today','local selection, Ruili'],
- zh:['朱苦拉（品种存疑）','瑞丽，自缅甸引入','瑞丽，自缅甸引入','自印度引入','政府项目，后与雀巢合作','约 2010 年代（日期仅供参考）','如今仍有种植','如今仍有种植','本地选育，瑞丽']};
+ en:['Zhukula (variety disputed)','Ruili, from Burma','Ruili, from Burma','from India','public programme, then Nestlé','the line rolled out across the province','local selection, Ruili','≈ 2010s (approximate date)','present today','present today','present today — Gaosheng, Baoshan'],
+ zh:['朱苦拉（品种存疑）','瑞丽，自缅甸引入','瑞丽，自缅甸引入','自印度引入','政府项目，后与雀巢合作','推广至全省的选系','本地选育，瑞丽','约 2010 年代（日期仅供参考）','如今仍有种植','如今仍有种植','如今仍有种植 — 保山高晟庄园']};
 const PROC_L={
  en:{'Lavé':'Washed','Honey':'Honey','Naturel « cocoa »':'Natural “cocoa”','Naturel, séchage lent':'Natural, slow-dried','Honey anaérobie basse temp.':'Low-temp anaerobic honey','Naturel':'Natural','Producteur indépendant':'Independent farmer','Coopérative Songfeng':'Songfeng cooperative','Coopérative Hong’an Linkstar':'Hong’an Linkstar cooperative','Mangbang, vallée de Lujiang':'Mangbang, Lujiang valley','Vallée de Lujiang':'Lujiang valley'},
  zh:{'Lavé':'水洗','Honey':'蜜处理','Naturel « cocoa »':'日晒（“cocoa”）','Naturel, séchage lent':'日晒，慢速干燥','Honey anaérobie basse temp.':'低温厌氧蜜处理','Naturel':'日晒','Producteur indépendant':'独立农户','Coopérative Songfeng':'Songfeng 合作社','Coopérative Hong’an Linkstar':'Hong’an Linkstar 合作社','Mangbang, vallée de Lujiang':'潞江坝 Mangbang','Vallée de Lujiang':'潞江坝','Lincang':'临沧','Menghai':'勐海','Menglian':'孟连','Lancang':'澜沧','Nujiang':'怒江','Lushui':'泸水','Baoshan':'保山','Longyang':'隆阳','Linxiang':'临翔','Mangkuan':'芒宽','Xiazhai':'Xiazhai','Geisha':'瑰夏','Geisha 1931':'瑰夏 1931','Catimor':'卡蒂姆'}};
 const NODES_L={
  en:{
+  bmount:{alt:'PNG Gold, Boyo',yl:'introduced to Jamaica in 1728',pl:'Blue Mountains (Jamaica)',d:'Coffee reached Jamaica in 1728, and the Typica line that settled there became Blue Mountain — described as a mutation of Typica with some resistance to coffee berry disease. The name is first of all an appellation: only certified coffee from the parishes of Saint Andrew, Saint Thomas, Portland and Saint Mary may carry it, in mountains rising to 2,256 m under a cool, misty climate. Over 80% of the crop goes to Japan. The same line is grown in Kenya, Hawaii, Haiti, Papua New Guinea (as PNG Gold) and Cameroon (Boyo).'},
+  laurina:{alt:'Bourbon pointu',yl:'≈ 1810',pl:'Bourbon Island (Réunion)',d:'Around 1810, growers on Réunion noticed smaller Bourbon trees with pointed cherries and seeds — hence the nickname “Bourbon pointu”. It was long thought to be a cross with the island’s indigenous coffee; research into its origin concludes it is simply a natural mutation of Bourbon, genetically almost identical. Its name comes from its resemblance to the laurel. It carries about half the caffeine of an ordinary Arabica — which also leaves it more exposed to insects, caffeine being a natural repellent. Christmas-tree shape, about two metres tall, small leaves, fragile cherries. Nearly extinct by the end of the 19th century, it has since returned, and carried the winning 2018 World Brewers Cup routine.'},
+  fmission:{yl:'≈ 1897',pl:'East Africa (French missions)',d:'The name given to the Bourbon planted in East Africa by French missionaries around 1897. It is not a distinct variety, then, but a Bourbon population acclimatised to Kenya, Tanzania and Rwanda. The Kenyan selections come out of it: K7 was drawn directly from it, and SL34 was selected within French Mission — even if World Coffee Research places its genetic signature on the Typica side of the group. The name still circulates on African markets, and it lies behind Arusha in Tanzania and Papua New Guinea.'},
+  boujaune:{n:'Yellow Bourbon',alt:'Bourbon Amarelo',yl:'1930',pl:'Pederneiras, São Paulo (Brazil)',d:'Spotted in 1930 at Pederneiras, São Paulo. Two hypotheses coexist and the question is still debated: a natural cross between the yellow and red Bourbons of Botucatu, or simply a mutation of red Bourbon. Its cherries ripen golden yellow instead of red. It was one of the first varieties recognised for its cup — sweet, delicate-bodied, complex — with a yield well above the older varieties: Brazilian production tripled between 1949 and 1951, before falling back in the face of more productive, more resistant varieties. IAC resumed work on it in 2005. At the 2017 Cup of Excellence Brazil, one lot scored 92.33 and sold for US$126/lb, a hundred times the C price that day.',yun:'Planted in Yunnan alongside Catimor, with Typica and Pacamara, on the plots that chase the cup rather than the yield. It is the variety behind Yunma’s Yellow Bourbon, which comes from Gaosheng Manor in the Lujiang valley (Baoshan).'},
+  k7:{yl:'1936',pl:'Legelet Estate, Muhoroni (Kenya)',d:'A Kenyan selection drawn from French Mission by the farmer R. H. Walker, then refined over five generations by the Scott Agricultural Laboratories and released in 1936. It was chosen on cupping trials alone. Tall tree, medium yield, good potential at altitude, first crop in year three. It now serves as a yield benchmark in the World Coffee Research catalog, alongside Caturra and Bourbon, and it has been widely used in Kenyan and Tanzanian breeding: it appears in the parentage of both Ruiru 11 and Batian.'},
+  pache:{alt:'Pache comum',yl:'1949',pl:'Finca Brito, Santa Cruz Naranjo, Santa Rosa (Guatemala)',d:'A natural mutation of Typica caused by a single dwarfing gene: the tree stays compact, can be planted more densely and yields more. Found in 1949 on the Brito farm at Santa Cruz Naranjo, then fixed by mass selection — a group of good performers is kept, their seed bulked, and the process repeated. First crop in year four. Crossed with Caturra, it gave Pache Colis, with larger fruit and rougher foliage.'},
+  jarc:{n:'74110 · 74112',alt:'Jimma selections',yl:'the “74” series, released from the 1970s',pl:'Jimma Agricultural Research Center (Ethiopia)',d:'Behind the word “heirloom” on Ethiopian lots there are also named, released varieties. The numbers in the 74 series come out of the Jimma Agricultural Research Center (JARC), which selected trees resistant to coffee berry disease in Ethiopia’s forests. With 74158, they are the three most common varieties in Sidama: small to medium bean, a cup balanced in acidity and body. Papers published by JARC still use 74110 as the reference variety when comparing processing methods.'},
+  t5296:{yl:'1970s (≈)',pl:'CIFC (Portugal) → CATIE (Costa Rica)',d:'Timor Hybrid 832/2 × Villa Sarchi: the mother line of the whole Sarchimor family. Dwarf, large bean, medium yield, good cup potential at altitude, intermediate rust resistance, first crop in year three. Its flaw is well known: the line is not uniform, plants are not stable from one generation to the next — which is why World Coffee Research does not recommend it for planting while calling it essential for breeding. It requires high fertilisation, and it is the parent of the F1 hybrids Centroamericano and Mundo Maya.'},
+  t8667:{yl:'F5 progeny received at CATIE in 1978',pl:'CIFC (Portugal) → CATIE (Costa Rica)',d:'Timor Hybrid 832/1 × Caturra, then pedigree selection: this is the most important Catimor line in the history of Central American breeding. It begins with PROMECAFE, the regional consortium founded in 1978 by USAID and IAC Campinas to answer the arrival of leaf rust; that same year CATIE received the F5 progeny from CIFC. Dwarf, bronze leaf tips, high yield, intermediate rust resistance, first crop in year three, well adapted to the warmest zones and to acidic soils. Its cup potential at altitude is rated low: that is the limit of the whole family.'},
+  vcol:{alt:'Colombia',yl:'1982',pl:'Cenicafé (Colombia)',d:'The first variety out of the programme Cenicafé launched in 1968 to obtain rust-resistant trees, starting from Caturra and the Timor Hybrid. Released in 1982, one year before leaf rust reached Colombia for the first time. Cenicafé then went looking for better — more yield, more resistance, bigger beans, a cup closer to Caturra’s, and longevity: after twenty-three years of work, that became Castillo.'},
+  ruiru11:{yl:'1985',pl:'Ruiru research station (Kenya)',d:'In 1968 a coffee berry disease epidemic cost Kenya half its crop. The Ruiru station launched an intensive breeding programme and in 1985 released a composite hybrid: a Catimor as female parent, crossed with a multicross drawn from K7, SL28, N39 and Rume Sudan. Dwarf, very high yield, first crop in year two, good cup potential at altitude — but a reputation for a cup behind K7, SL28 and SL34. It is the plant that let Kenya replant densely and lose less.'},
+  cr95:{yl:'1990s (release date not found)',pl:'ICAFE (Costa Rica)',d:'The same cross as T8667 — Timor Hybrid 832/1 × Caturra — selected generation after generation by the Coffee Institute of Costa Rica. Dwarf, high yield, cup potential at altitude rated low. It shows a habit of the trade: one cross, taken up by two institutes, yields two varieties under two names.'},
+  obata:{n:'Red Obatã',alt:'Obatã Vermelho',yl:'released in Brazil in 2000',pl:'IAC, Campinas (Brazil)',d:'Timor Hybrid 832/2 × Villa Sarchi CIFC 971/10, selected generation after generation by the Instituto Agronômico de Campinas, in São Paulo state. Released in Brazil in 2000, then brought to Costa Rica by ICAFE for commercial release in 2014. Dwarf, high yield, good cup potential at altitude. It is one of the three Sarchimors World Coffee Research crossed with wild Arabicas to create its F1 hybrids.'},
+  iapar59:{yl:'1990s (release date not found)',pl:'IAPAR, Paraná (Brazil)',d:'The same cross as T5296 — Timor Hybrid 832/2 × Villa Sarchi — selected this time by the Agronomic Institute of Paraná. Dwarf, light bronze tips, medium yield, resistant to leaf rust and to some nematodes, first crop in year three; cup potential at altitude rated low. Like Obatã and Marsellesa, it serves as a parent for the World Coffee Research F1 hybrids.'},
+  batian:{yl:'2010',pl:'Coffee Research Station, Ruiru (Kenya)',d:'Released in Kenya in 2010, obtained by single-tree selection in the F5 generations of the male parent of some Ruiru 11 progenies. A composite variety: three pure lines mixed, whose parentage brings together SL28, SL34, Rume Sudan, N39, K7, SL4 and the Timor Hybrid. Tall tree, high yield, first crop in year two, and above all very good cup potential at altitude — rare for a variety resistant to both leaf rust and coffee berry disease.'},
+  chiroso:{alt:'Caturra Chiroso',yl:'spotted at the 2012 Cup of Excellence Colombia',pl:'Urrao, Antioquia (Colombia)',d:'Grown mostly in Urrao, in south-west Antioquia. It was first taken for a mutation of Caturra with elongated beans, hence its first name, “Caturra Chiroso” — chiroso means “slightly stretched” in rural Colombian slang. Genetic tests place it instead with the Ethiopian landraces, outside the Bourbon-Typica group; that work has not yet been scientifically verified, and nobody knows how the variety travelled from Ethiopia to Colombia. Two types of tree coexist in Urrao, one with deep red cherries, the other with more yellow fruit and differently shaped leaves. The same trajectory as Sidra or Pink Bourbon: spotted at a competition, then planted for the cup.'},
+  ceni1:{yl:'≈ 2016 · twenty years of work',pl:'Cenicafé (Colombia)',d:'Caturra × Timor Hybrid 1343, narrowed down from 116 advanced progenies: twenty years of breeding to give Colombian growers a tree shaped like Caturra but resistant to leaf rust — and to coffee berry disease, which has not yet reached Colombia. Castillo-level yield, large bean, specialty-grade scores on the table according to the Colombian federation. It can be planted at up to 10,000 trees per hectare in full sun, 5,000 to 7,000 under shade.'},
+  cifc7963:{n:'Catimor CIFC 7963',yl:'released in Yunnan from the 1980s',pl:'CIFC (Portugal) → Yunnan',d:'One Catimor line among dozens, and yet one of the most planted in Asia. The number is its accession number in the CIFC collection in Portugal, where every line in the family comes from.',yun:'In practice, this is the variety of Yunnan. In 2011 it covered on its own about 90% of the province’s 43,000 ha. The Dehong institute that released it states that the varieties it selected or introduced — CIFC 7963 included — cover more than 80% of the planted area: that is its own communication, not an independent figure. Behind almost all the “Yunnan small bean” sold around the world there is therefore this single line — and the monoculture that goes with it, which the province’s institutes are now trying to loosen.'},
   sidra:{yl:'Ecuador, ≈ 1990s – 2000s (disputed story)',pl:'Pichincha (Ecuador) → Colombia',d:'The usual story makes it a Typica × Bourbon cross bred at a Nestlé research station in Ecuador. Genetic tests published by roasters point instead to an Ethiopian landrace, and World Coffee Research suggests the name may cover several different varieties. A competition favourite.'},
   pink:{yl:'Huila (Colombia), ≈ 2010s',pl:'Huila (Colombia)',d:'Pink cherries, first taken for a spontaneous cross of red and yellow Bourbon. Two genetic analyses (2017, then 2023 by RD2 Vision) concluded it is an Ethiopian landrace with no link to Bourbon. The name stuck.'},
   mmaya:{yl:'≈ 2010s',pl:'CIRAD & ECOM (Nicaragua)',d:'F1 hybrid of Sarchimor T5296 × Ethiopian accession ET01, from the programme run by CIRAD and its partners (CATIE, Icafé, ECOM) between 1990 and 2013. Along with Centroamericano, it out-yielded Latin America’s most planted varieties in published trials. Propagated by cloning.'},
@@ -468,6 +503,24 @@ const NODES_L={
   kr:{yl:'2000s – 2010s',pl:'Uganda (NaCORI)',d:'Varieties resistant to Coffee Wilt Disease. According to World Coffee Research, they can raise farmers’ income by up to 250%.'}
  },
  zh:{
+  bmount:{n:'蓝山',alt:'Blue Mountain',yl:'1728 年传入牙买加',pl:'牙买加蓝山',d:'咖啡于 1728 年传入牙买加，在那里定居下来的铁皮卡系后来成了蓝山——被描述为铁皮卡的一个突变，对咖啡浆果病有一定抗性。这个名字首先是一个产地名称：只有圣安德鲁、圣托马斯、波特兰和圣玛丽四个教区经认证的咖啡才能使用，产区山势高达 2 256 米，气候凉爽多雾。八成以上出口日本。同一系也种植于肯尼亚、夏威夷、海地、巴布亚新几内亚（称 PNG Gold）和喀麦隆（称 Boyo）。'},
+  laurina:{n:'尖身波旁',alt:'Laurina / Bourbon pointu',yl:'约 1810 年',pl:'波旁岛（留尼汪）',d:'约 1810 年，留尼汪的种植者注意到一些更矮小的波旁树，果实和种子都是尖的——因此得名“尖身波旁”。长期以来人们以为它是与岛上原生咖啡的杂交，但关于其起源的研究认定它只是波旁的一个自然突变，基因几乎完全相同。它的名字来自与月桂树的相似。它的咖啡因含量约为普通阿拉比卡的一半——这也让它更容易受虫害，因为咖啡因本是天然的驱虫物质。树形如圣诞树，高约两米，叶片小，果实脆弱。19 世纪末几近灭绝，后来重新回到视野，并支撑了 2018 年世界手冲大赛的夺冠方案。'},
+  fmission:{n:'法国传教团',alt:'French Mission',yl:'约 1897 年',pl:'东非（法国传教团）',d:'这是约 1897 年由法国传教士带到东非种植的波旁的称呼。因此它不是一个独立品种，而是在肯尼亚、坦桑尼亚和卢旺达适应下来的波旁种群。肯尼亚的各个选系都出自它：K7 直接从中选出，SL34 也是在法国传教团群体中选育的——尽管世界咖啡研究组织把它的遗传特征归到该群的铁皮卡一侧。这个名字在非洲市场上仍在流通，坦桑尼亚和巴布亚新几内亚的 Arusha 也源于此。'},
+  boujaune:{n:'黄波旁',alt:'Bourbon Amarelo',yl:'1930 年',pl:'巴西圣保罗州佩德内拉斯',d:'1930 年在圣保罗州佩德内拉斯发现。有两种说法并存，至今仍有争议：博图卡图的黄波旁与红波旁自然杂交，或者只是红波旁的一个突变。它的果实成熟时呈金黄色而非红色。它是最早因杯中表现而获得认可的品种之一——甜润、body 细致、层次丰富——产量也明显高于老品种：巴西的产量在 1949 至 1951 年间增长了两倍，随后在更高产、更抗病的品种面前退场。坎皮纳斯农学院 2005 年重新开展相关研究。在 2017 年巴西卓越杯上，一支黄波旁获得 92.33 分，以每磅 126 美元成交，相当于当日期货价的一百倍。',yun:'在云南与卡蒂姆并种，还有铁皮卡和帕卡马拉，出现在追求杯中品质而非产量的地块。Yunma 的黄波旁就是这个品种，来自保山潞江坝的高晟庄园。'},
+  k7:{n:'K7',yl:'1936 年',pl:'肯尼亚穆霍罗尼 Legelet 庄园',d:'由种植者 R. H. Walker 从法国传教团群体中选出的肯尼亚选系，随后由斯科特农业实验室经五代选育，于 1936 年推出。它完全是依据杯测结果挑选出来的。树形高大，产量中等，高海拔表现良好，第三年初产。它如今在世界咖啡研究组织的目录中与卡杜拉、波旁一起作为产量参照，并在肯尼亚和坦桑尼亚的育种中被大量使用：Ruiru 11 和 Batian 的亲本里都有它。'},
+  pache:{n:'帕切',alt:'Pache comum',yl:'1949 年',pl:'危地马拉圣罗莎 Santa Cruz Naranjo，Brito 农场',d:'铁皮卡的自然突变，源于单个矮化基因：树形紧凑，可以更密植，产量更高。1949 年在 Santa Cruz Naranjo 的 Brito 农场发现，随后以集团选择法固定——留下一批表现优异的个体，混合其种子，再重复这一过程。第四年初产。与卡杜拉杂交后得到 Pache Colis，果实更大，叶面更粗糙。'},
+  jarc:{n:'74110 · 74112',alt:'吉马选系',yl:'“74”系列，自 1970 年代起推广',pl:'埃塞俄比亚吉马农业研究中心',d:'埃塞俄比亚批次标签上的“heirloom”背后，其实也有正式命名和登记的品种。74 系列的编号出自吉马农业研究中心（JARC），该中心在埃塞俄比亚森林中选出抗咖啡浆果病的个体。连同 74158，它们是西达莫最常见的三个品种：豆粒小到中等，杯中酸质与 body 平衡。JARC 发表的研究至今仍以 74110 作为比较处理法的参照品种。'},
+  t5296:{n:'T5296',yl:'约 1970 年代',pl:'葡萄牙 CIFC → 哥斯达黎加 CATIE',d:'帝汶杂交种 832/2 × 薇拉莎奇：整个莎奇姆家族的母系。矮化，豆粒大，产量中等，高海拔杯中潜力良好，对叶锈病中度抗性，第三年初产。它的缺点众所周知：这个选系并不整齐，植株在世代之间不稳定——因此世界咖啡研究组织不建议用于生产种植，却认为它对育种至关重要。它需要高施肥量，也是 F1 杂交种 Centroamericano 和 Mundo Maya 的亲本。'},
+  t8667:{n:'T8667',yl:'1978 年 CATIE 收到 F5 后代',pl:'葡萄牙 CIFC → 哥斯达黎加 CATIE',d:'帝汶杂交种 832/1 × 卡杜拉，再经系谱选择：这是中美洲育种史上最重要的卡蒂姆选系。它的起点是 PROMECAFE——1978 年由美国国际开发署与巴西坎皮纳斯农学院共同成立的区域联盟，用以应对叶锈病的到来；同年 CATIE 从 CIFC 收到 F5 后代。矮化，新叶铜色，产量高，对叶锈病中度抗性，第三年初产，适应最炎热的产区和酸性土壤。它在高海拔的杯中潜力被评为低：这是整个家族的局限。'},
+  vcol:{n:'哥伦比亚品种',alt:'Variedad Colombia',yl:'1982 年',pl:'哥伦比亚 Cenicafé',d:'Cenicafé 于 1968 年启动抗叶锈病育种计划，以卡杜拉和帝汶杂交种为起点，这是该计划的第一个品种。1982 年推出，比叶锈病首次抵达哥伦比亚早一年。此后 Cenicafé 继续寻求更好的结果——更高产量、更强抗性、更大豆粒、接近卡杜拉的杯中表现，以及更长寿命：经过二十三年，这成了卡斯蒂罗。'},
+  ruiru11:{n:'Ruiru 11',yl:'1985 年',pl:'肯尼亚 Ruiru 研究站',d:'1968 年一场咖啡浆果病疫情让肯尼亚损失了一半产量。Ruiru 研究站启动密集育种计划，并于 1985 年推出一个复合杂交品种：以卡蒂姆为母本，与来自 K7、SL28、N39 和苏丹罗米的复合选系杂交。矮化，产量极高，第二年即初产，高海拔杯中潜力良好——但杯中表现被认为不及 K7、SL28 和 SL34。正是这个品种让肯尼亚得以密植并减少损失。'},
+  cr95:{n:'哥斯达黎加 95',alt:'Costa Rica 95',yl:'1990 年代（推广年份未查到）',pl:'哥斯达黎加 ICAFE',d:'与 T8667 相同的杂交组合——帝汶杂交种 832/1 × 卡杜拉——由哥斯达黎加咖啡研究院逐代选育。矮化，产量高，高海拔杯中潜力被评为低。它说明了行业的一个习惯：同一个杂交组合，由两个机构分别选育，就成了两个名字的品种。'},
+  obata:{n:'红欧巴塔',alt:'Obatã Vermelho',yl:'2000 年在巴西推广',pl:'巴西坎皮纳斯农学院（IAC）',d:'帝汶杂交种 832/2 × 薇拉莎奇 CIFC 971/10，由圣保罗州坎皮纳斯农学院逐代选育。2000 年在巴西推出，随后由 ICAFE 引入哥斯达黎加，2014 年商业推广。矮化，产量高，高海拔杯中潜力良好。它是世界咖啡研究组织用来与野生阿拉比卡杂交、创造 F1 杂交种的三个莎奇姆之一。'},
+  iapar59:{n:'IAPAR 59',yl:'1990 年代（推广年份未查到）',pl:'巴西巴拉那农学院（IAPAR）',d:'与 T5296 相同的杂交组合——帝汶杂交种 832/2 × 薇拉莎奇——但这次由巴拉那农学院选育。矮化，新叶浅铜色，产量中等，抗叶锈病并抗部分线虫，第三年初产；高海拔杯中潜力被评为低。与欧巴塔和 Marsellesa 一样，它也是世界咖啡研究组织 F1 杂交种的亲本。'},
+  batian:{n:'Batian',yl:'2010 年',pl:'肯尼亚 Ruiru 咖啡研究站',d:'2010 年在肯尼亚推出，通过在部分 Ruiru 11 后代父本的 F5 世代中进行单株选择而得。这是一个复合品种：三个纯系混合，其亲本汇集了 SL28、SL34、苏丹罗米、N39、K7、SL4 和帝汶杂交种。树形高大，产量高，第二年即初产，尤其是高海拔杯中潜力很好——对一个同时抗叶锈病和咖啡浆果病的品种来说，这相当少见。'},
+  chiroso:{n:'奇罗索',alt:'Caturra Chiroso',yl:'2012 年哥伦比亚卓越杯上被发现',pl:'哥伦比亚安蒂奥基亚省 Urrao',d:'主要种植在安蒂奥基亚省西南部的 Urrao。起初人们以为它是卡杜拉的突变，豆形细长，因此最早叫“Caturra Chiroso”——chiroso 在哥伦比亚乡间口语里意为“略微拉长的”。基因检测却把它归入埃塞俄比亚地方种，也就是在波旁-铁皮卡群之外；这些研究尚未得到科学验证，也没有人知道这个品种是如何从埃塞俄比亚到哥伦比亚的。Urrao 有两种树并存，一种果实深红，另一种偏黄且叶形不同。它的轨迹和 Sidra、粉红波旁一样：先在比赛中被发现，然后为了杯中表现而被种下。'},
+  ceni1:{n:'Cenicafé 1',yl:'约 2016 年 · 二十年工作',pl:'哥伦比亚 Cenicafé',d:'卡杜拉 × 帝汶杂交种 1343，从 116 个高代后代中筛选而来：二十年育种，为哥伦比亚种植者提供一棵外形像卡杜拉却抗叶锈病的树——同时也抗咖啡浆果病，而这种病还没有抵达哥伦比亚。产量与卡斯蒂罗相当，豆粒大，据哥伦比亚咖啡生产者协会称杯测可达精品级。全日照下每公顷可种 10 000 株，遮荫下 5 000 至 7 000 株。'},
+  cifc7963:{n:'卡蒂姆 CIFC 7963',alt:'Catimor CIFC 7963',yl:'自 1980 年代起在云南推广',pl:'葡萄牙 CIFC → 云南',d:'数十个卡蒂姆选系中的一个，却是亚洲种植面积最大的之一。编号来自葡萄牙 CIFC 的种质收集，这个家族的所有选系都出自那里。',yun:'实际上，它就是云南的品种。2011 年，它一己覆盖了全省 43 000 公顷中的约 90%。推广它的德宏研究所称，其选育或引进的品种——包括 CIFC 7963——覆盖了全省八成以上的面积：这是该所自己的说法，而非独立数据。因此，世界上几乎所有在售的“云南小粒咖啡”背后，都是这一个选系——以及随之而来的单一化，而这正是今天云南各研究所试图松开的局面。'},
   sidra:{n:'西德拉',alt:'Sidra',yl:'厄瓜多尔，约 1990–2000 年代（来历存疑）',pl:'厄瓜多尔皮钦查 → 哥伦比亚',d:'通常的说法是：它是雀巢在厄瓜多尔的研究站培育的铁皮卡 × 波旁杂交种。但烘焙商公布的基因检测结果更指向埃塞俄比亚地方种，世界咖啡研究组织（WCR）也认为这个名字下可能是几个不同的品种。比赛中的常客。'},
   pink:{n:'粉波旁',alt:'Pink Bourbon',yl:'哥伦比亚乌伊拉，约 2010 年代',pl:'哥伦比亚乌伊拉',d:'果实呈粉色，起初被认为是红波旁与黄波旁的自然杂交。两次基因检测（2017 年，以及 2023 年由 RD2 Vision 完成）结论一致：它是埃塞俄比亚地方种，与波旁无关。名字却沿用了下来。'},
   mmaya:{n:'玛雅世界',alt:'Mundo Maya · H16',yl:'约 2010 年代',pl:'CIRAD 与 ECOM（尼加拉瓜）',d:'F1 杂交种：莎奇摩 T5296 × 埃塞俄比亚种质 ET01，出自 CIRAD 及其合作伙伴（CATIE、Icafé、ECOM）在 1990–2013 年间的育种项目。在已发表的试验中，它与 Centroamericano 一样，产量超过拉丁美洲种植最广的品种。以无性繁殖方式扩繁。'},
@@ -522,9 +575,13 @@ const EVENTS_L={
   ['Ruili: Typica & Bourbon from Burma','Jingpo border officials introduced Typica and Bourbon from Burma to the village of Nongxianshan (Ruili, Dehong).'],
   ['Baoshan scales up','In the 1950s, the Lujiang valley (Baoshan) became the first structured growing area, with about 4,000 ha of Typica and Bourbon.'],
   ['S288 arrives from India','A first rust-resistant variety is introduced to Yunnan.'],
-  ['The Catimor turning point','After a public programme in the 1980s (S288 and Catimor), Nestlé partnered with the Yunnan government to plant Catimor across the province.'],
+  ['The Catimor turning point','After a public programme in the 1980s (S288 and Catimor), Nestlé partnered with the Yunnan government to plant Catimor across the province. 1988 is the reference year: the Chinese government, the World Bank and the UNDP jointly launched the programme that established modern coffee farming in Yunnan. Today 98% of China’s coffee comes from here.'],
+  ['Hogood, the instant-coffee plant','Hogood Coffee is founded in Dehong and becomes China’s largest instant-coffee maker. It takes advantage of relaxed land-use rules in Yunnan to consolidate plots under contract: it supplies the seedlings, farmers harvest, it buys the beans back. This is the model that made Yunnan a volume supplier before it was a terroir.'],
+  ['The first specialty lots','Specialty production starts around 2009 around a handful of early adopters, among them Hu Xixiang at Mangzhang Farms (Menglian, Pu’er), supported by professionals from abroad. In 2013, Yunnan Coffee Traders becomes the province’s first dedicated specialty exporter.'],
   ['43,000 ha, 90% Catimor','The CIFC 7963 line dominates. The province produced 53,240 t of coffee in 2011.'],
-  ['Starbucks comes to Pu’er','Opening of the Yunnan Farmer Support Center.'],
+  ['Starbucks sets up in Pu’er','The Yunnan Farmer Support Center opens. In 2014, Starbucks bought more than half of the Chinese coffee imported into the United States over the first nine months of the year.'],
+  ['A coffee exchange at Pu’er','The Yunnan Coffee Exchange opens in January 2016. That same year about half the crop is exported, earning US$280 million — almost entirely commercial-grade green beans bound for Europe. In 2018, Chongqing becomes the country’s largest trading hub.'],
+  ['China, portrait country of the SCA expo','The Specialty Coffee Association picks China as the portrait country of its expo, the largest in the world. At the time, specialty coffee still accounts for less than 2% of Chinese volumes. Between 2006 and 2017, domestic consumption grew by an average of 22% a year.'],
   ['> 95% Catimor, and Ethiopian resources','Catimor exceeds 95% of production. The Yunnan Academy of Agricultural Sciences has gathered more than 6,000 genetic resources from Ethiopia to diversify varieties.'],
   ['The Ruili gene bank','The Ministry of Agriculture’s coffee germplasm nursery, run by the Dehong institute in Ruili, passed 800 accessions at the end of 2023; it now holds more than 1,150, China’s largest collection. The local De-Re (德热) series comes from here.'],
   ['146,000 t, 31.6% premium','Yunnan’s output grew 13%. According to the Coffee Association of Yunnan, 31.6% of beans are graded premium and 80% are processed locally.'],
@@ -536,9 +593,13 @@ const EVENTS_L={
   ['瑞丽：铁皮卡与波旁从缅甸传入','景颇族边境官员将铁皮卡和波旁从缅甸引入德宏瑞丽的 Nongxianshan 村。'],
   ['保山走向规模化','1950 年代，保山潞江坝成为第一个成规模的产区，种植约 4000 公顷铁皮卡和波旁。'],
   ['S288 从印度引入','第一个抗叶锈病品种被引入云南。'],
-  ['转向卡蒂姆','继 1980 年代的政府项目（S288 和卡蒂姆）之后，雀巢与云南省政府合作，在全省推广种植卡蒂姆。'],
+  ['卡蒂姆的转折','在 1980 年代的公共项目（S288 和卡蒂姆）之后，雀巢与云南省政府合作，在全省推广卡蒂姆种植。1988 年是关键年份：中国政府、世界银行和联合国开发计划署共同启动了在云南建立现代咖啡产业的项目。如今中国 98% 的咖啡产自这里。'],
+  ['后谷，速溶咖啡厂','后谷咖啡在德宏成立，成为中国最大的速溶咖啡生产商。它利用云南宽松的土地使用政策，通过订单农业整合地块：公司提供咖啡苗，农户采收，再由公司收购生豆。正是这一模式让云南先成为产量供应地，而不是风土产区。'],
+  ['最早的精品批次','精品咖啡的生产大约从 2009 年开始，围绕少数先行者展开，其中包括孟连（普洱）Mangzhang Farms 的胡习香，并得到外国专业人士的协助。2013 年，Yunnan Coffee Traders 成为全省第一家专营精品咖啡的出口商。'],
   ['4.3 万公顷，90% 为卡蒂姆','CIFC 7963 品系占主导。2011 年全省咖啡产量为 53,240 吨。'],
-  ['星巴克落户普洱','云南咖啡种植者支持中心开幕。'],
+  ['星巴克进驻普洱','云南咖啡种植者支持中心成立。2014 年前九个月，美国从中国进口的咖啡有一半以上由星巴克采购。'],
+  ['普洱的咖啡交易中心','云南咖啡交易中心于 2016 年 1 月启用。同年约有一半的收成出口，创汇 2.8 亿美元——几乎全是运往欧洲的商业级生豆。2018 年，重庆成为全国最大的咖啡交易枢纽。'],
+  ['中国成为 SCA 展会主题国','精品咖啡协会选择中国作为其展会（全球规模最大）的主题国。当时，精品咖啡在中国的产量中仍占不到 2%。2006 至 2017 年间，中国国内消费量年均增长 22%。'],
   ['卡蒂姆超过 95%，并引入埃塞俄比亚种质','卡蒂姆占产量的 95% 以上。云南省农业科学院已收集 6000 多份来自埃塞俄比亚的种质资源，用于品种多样化。'],
   ['瑞丽咖啡基因库','由德宏热带农业科学研究所管理的农业农村部瑞丽咖啡种质资源圃，到 2023 年底已收集 800 多份资源，如今超过 1150 份，是中国最大的咖啡种质库。本地“德热”系列品种即出自这里。'],
   ['14.6 万吨，精品率 31.6%','云南咖啡产量增长 13%。据云南省咖啡行业协会，精品率达 31.6%，精深加工率达 80%。'],
@@ -546,20 +607,20 @@ const EVENTS_L={
   ['Gems of Yunnan 试办届','来自七个产区的 144 支咖啡参赛。'],
   ['Gems of Yunnan 2026','169 支咖啡参赛，其中 30 支超过 87 分。瑰夏占据榜单主导，一支卡蒂姆位列第 12（88.53 分）。']]};
 const REGIONS_L={
- en:{puer:['Pu’er','China’s largest growing area: about 60% of national production according to Wikipedia. Home to Starbucks’ Farmer Support Center (2012). At GoY 2026, two lots from Menglian and Lancang grow at 1,780 – 2,000 m.'],
-  baoshan:['Baoshan','Lujiang valley, along the Nu (Salween). The first area to scale up in the 1950s. It placed 7 of the top 15 lots at GoY 2026, including the only Catimor in the top 15.'],
-  lincang:['Lincang','Crossed by the Tropic of Cancer. Won lot no. 1 at GoY 2026 (washed Geisha, 91.78) and no. 3 (Songfeng cooperative).'],
-  dehong:['Dehong','Burmese border. Ruili was the gateway for Typica and Bourbon in 1914. Also high-altitude lots, such as Xiazhai (1,800 m) at GoY 2026. The Ruili institute keeps China’s largest coffee gene bank and bred the De-Re series.'],
-  xsbn:['Xishuangbanna','The far south of the province, around 22°N. A washed Geisha from Menghai took 2nd place at GoY 2026.'],
-  nujiang:['Nujiang','Salween gorges. Varieties with little-documented local names are grown here, such as “Wangjin Yunka” (11th at GoY 2026).'],
-  dali:['Dali · Binchuan','The village of Zhukula, the historic cradle of coffee in Yunnan (1892 or 1904 depending on the source). Around twenty century-old trees still live there.']},
- zh:{puer:['普洱','中国最大的咖啡产区：据维基百科约占全国产量的 60%。星巴克咖啡种植者支持中心（2012）所在地。在 GoY 2026 中，孟连和澜沧的两支咖啡生长于海拔 1780–2000 米。'],
-  baoshan:['保山','怒江沿岸的潞江坝。1950 年代最早实现规模化的产区。在 GoY 2026 前 15 名中占 7 席，其中包括前 15 名中唯一的卡蒂姆。'],
-  lincang:['临沧','北回归线穿境而过。夺得 GoY 2026 第 1 名（水洗瑰夏，91.78 分）和第 3 名（Songfeng 合作社）。'],
-  dehong:['德宏','中缅边境。1914 年，铁皮卡和波旁经瑞丽传入。也有高海拔批次，如 GoY 2026 中的 Xiazhai（1800 米）。瑞丽的研究所拥有中国最大的咖啡种质库，并选育出“德热”系列。'],
-  xsbn:['西双版纳','全省最南端，约北纬 22°。勐海的一支水洗瑰夏获得 GoY 2026 第 2 名。'],
-  nujiang:['怒江','怒江峡谷。这里种植一些记载很少的本地命名品种，如“Wangjin Yunka”（GoY 2026 第 11 名）。'],
-  dali:['大理 · 宾川','朱苦拉村，云南咖啡的历史发源地（据不同资料为 1892 或 1904 年）。村中至今仍有约二十棵百年咖啡树。']}};
+ en:{puer:['Pu’er','China’s largest growing area: about 60% of national production according to Wikipedia. Home to Starbucks’ Farmer Support Center (2012). At GoY 2026, two lots from Menglian and Lancang grow at 1,780 – 2,000 m.','Menglian is one of the province’s three main growing areas, with Baoshan and Dehong. It is there, at Mangzhang Farms, that the first specialty lots began around 2009, and it was at Pu’er that the Yunnan Coffee Exchange opened in January 2016. The area bridges Yunnan’s two faces: the volume that leaves for export, and the handful of farms aiming at the cup.'],
+  baoshan:['Baoshan','Lujiang valley, along the Nu (Salween). The first area to scale up in the 1950s. It placed 7 of the top 15 lots at GoY 2026, including the only Catimor in the top 15.','The Lujiang valley follows the Nu (Salween): a warm valley floor, slopes that climb fast, and China’s oldest organised plantations — around 4,000 ha as early as the 1950s, in Typica and Bourbon. It is one of the province’s three main growing areas, and by far the most consistent in competition: seven of the top fifteen lots at Gems of Yunnan 2026, including the only Catimor near the top. It is also where Yunma’s coffees come from, at Gaosheng Manor.'],
+  lincang:['Lincang','Crossed by the Tropic of Cancer. Won lot no. 1 at GoY 2026 (washed Geisha, 91.78) and no. 3 (Songfeng cooperative).','The Tropic of Cancer runs through the region: at this latitude altitude makes up for the season, and the placed lots grow around 1,600 – 1,900 m. It took both first and third place at Gems of Yunnan 2026, both washed Geishas — proof that the new wave is not playing out only in the south.'],
+  dehong:['Dehong','Burmese border. Ruili was the gateway for Typica and Bourbon in 1914. Also high-altitude lots, such as Xiazhai (1,800 m) at GoY 2026. The Ruili institute keeps China’s largest coffee gene bank and bred the De-Re series.','The historic gateway: it was at Nongxianshan, near Ruili, that Typica and Bourbon crossed the Burmese border in 1914. It is also the region of volume: Hogood Coffee, founded in Dehong in 2007, built the instant-coffee supply chain here on plots consolidated under contract. And it is where diversification comes from, with the Ruili gene bank — more than 1,150 accessions, China’s largest coffee collection — and the local De-Re series. Dehong has adopted a 2025 – 2027 quality plan.'],
+  xsbn:['Xishuangbanna','The far south of the province, around 22°N. A washed Geisha from Menghai took 2nd place at GoY 2026.','The far south of the province, around 22°N: the lowest latitude of coffee-growing Yunnan, so the hottest, where altitude becomes decisive. Menghai placed the second lot at Gems of Yunnan 2026, a washed Geisha at 1,650 m.'],
+  nujiang:['Nujiang','Salween gorges. Varieties with little-documented local names are grown here, such as “Wangjin Yunka” (11th at GoY 2026).','The Salween gorges, at the northern edge of the coffee zone, around 26°N: the climatic limit of Arabica in Yunnan, where the relief creates very tight microclimates. Varieties with little-documented local names are grown here, such as “Wangjin Yunka”, eleventh at Gems of Yunnan 2026 — a reminder that the province’s orchard has not been fully mapped.'],
+  dali:['Dali · Binchuan','The village of Zhukula, the historic cradle of coffee in Yunnan (1892 or 1904 depending on the source). Around twenty century-old trees still live there.','Zhukula, above Binchuan: this is where the French missionary Alfred Liétard planted Yunnan’s first coffee trees, on a date the sources put at 1892, 1902 or 1904. Around twenty century-old trees still live there. The region barely produces any more, but it holds the starting point: all Chinese coffee descends, symbolically, from that church.']},
+ zh:{puer:['普洱','中国最大的咖啡产区：据维基百科约占全国产量的 60%。星巴克咖啡种植者支持中心（2012）所在地。在 GoY 2026 中，孟连和澜沧的两支咖啡生长于海拔 1780–2000 米。','孟连与保山、德宏并列为全省三大产区之一。最早的精品批次正是约 2009 年从孟连的 Mangzhang Farms 开始的，而云南咖啡交易中心也于 2016 年 1 月在普洱启用。这个产区连接着云南的两副面孔：出口的大宗产量，以及少数追求杯中品质的庄园。'],
+  baoshan:['保山','怒江沿岸的潞江坝。1950 年代最早实现规模化的产区。在 GoY 2026 前 15 名中占 7 席，其中包括前 15 名中唯一的卡蒂姆。','潞江坝沿怒江（萨尔温江）展开：谷底炎热，山坡陡升，拥有中国最早成规模的种植园——1950 年代便已有约 4 000 公顷的铁皮卡和波旁。它是全省三大产区之一，也是比赛中最稳定的产区：Gems of Yunnan 2026 前十五名中占七席，包括榜单前列唯一的卡蒂姆。Yunma 的咖啡也来自这里的高晟庄园。'],
+  lincang:['临沧','北回归线穿境而过。夺得 GoY 2026 第 1 名（水洗瑰夏，91.78 分）和第 3 名（Songfeng 合作社）。','北回归线穿过该产区：在这个纬度，海拔弥补了季节，入榜批次种植在约 1 600 – 1 900 米。它在 Gems of Yunnan 2026 中同时拿下第一和第三名，两支都是水洗瑰夏——说明新浪潮并不只发生在南部。'],
+  dehong:['德宏','中缅边境。1914 年，铁皮卡和波旁经瑞丽传入。也有高海拔批次，如 GoY 2026 中的 Xiazhai（1800 米）。瑞丽的研究所拥有中国最大的咖啡种质库，并选育出“德热”系列。','历史上的入口：1914 年，铁皮卡和波旁正是在瑞丽附近的弄贤山越过中缅边境。这里也是产量的产区：2007 年在德宏成立的后谷咖啡，在订单整合的地块上建起了速溶咖啡的产业链。多样化同样从这里出发：瑞丽的种质库收藏逾 1 150 份资源，为中国最大的咖啡种质收集，并培育出本地的“德热”系列。德宏已制定 2025 – 2027 年质量行动计划。'],
+  xsbn:['西双版纳','全省最南端，约北纬 22°。勐海的一支水洗瑰夏获得 GoY 2026 第 2 名。','全省最南端，约北纬 22°：云南咖啡区纬度最低、因而最炎热的地方，海拔在这里成为决定性因素。勐海在 Gems of Yunnan 2026 中获得第二名，是一支海拔 1 650 米的水洗瑰夏。'],
+  nujiang:['怒江','怒江峡谷。这里种植一些记载很少的本地命名品种，如“Wangjin Yunka”（GoY 2026 第 11 名）。','怒江峡谷位于咖啡区北缘，约北纬 26°：这是阿拉比卡在云南的气候极限，地形造就了极为紧凑的小气候。这里种植一些记载很少的本地命名品种，如 Gems of Yunnan 2026 第十一名的“Wangjin Yunka”——提醒我们全省的咖啡版图尚未完全绘出。'],
+  dali:['大理 · 宾川','朱苦拉村，云南咖啡的历史发源地（据不同资料为 1892 或 1904 年）。村中至今仍有约二十棵百年咖啡树。','宾川之上的朱苦拉：法国传教士田德能（Alfred Liétard）在这里种下云南第一批咖啡树，年份在不同资料中为 1892、1902 或 1904 年。村中至今仍有约二十棵百年咖啡树。该地区几乎已不再产出，但它保留着起点：所有中国咖啡在象征意义上都源自那座教堂。']}};
 const STORY_L={
  en:[['Prologue','Two wild species','In Africa’s forests, Robusta (C. canephora) and C. eugenioides have evolved separately for hundreds of thousands of years.'],
   [0,'The birth of Arabica','350,000 to 610,000 years ago, in Ethiopia, the two species crossed naturally. Arabica was born with twice the chromosomes. Robusta is one of its parents.'],
@@ -793,6 +854,24 @@ const UNRIPE='#a7ae67',SEMI='#c9873a';
 /* ---------- caractères par variété (cohérents avec les fiches) ---------- */
 const D={sp:'Coffea arabica',lf:'ara',L:1,wr:.37,wav:.012,tip:'g',fr:['red'],fs:1,fe:1.12,nc:5,inter:1,hab:'tall',pet:5,rust:0,bean:1,flw:1};
 const T={
+ bmount:{tip:'b',fe:1.2,hab:'tall',bean:1.04},
+ laurina:{tip:'g',L:.9,wr:.3,fs:.86,bean:.8,inter:.68,hab:'dwarf',nc:6,rust:2},
+ fmission:{tip:'g',fe:1.04,rust:2,hab:'tall',nc:6},
+ boujaune:{tip:'g',fe:1.04,rust:2,fr:['yel'],hab:'tall',nc:6},
+ k7:{tip:'b',hab:'tall',rust:1,nc:6},
+ pache:{tip:'b',inter:.72,fe:1.18,hab:'dwarf',rust:2},
+ jarc:{tip:'b',fe:1.26,fs:.92,bean:.92,wr:.33,hab:'wild'},
+ t5296:{tip:'g',inter:.72,fs:1.2,bean:1.2,hab:'dwarf'},
+ t8667:{tip:'b',inter:.7,fs:1.12,bean:1.1,hab:'dwarf',nc:6},
+ vcol:{tip:'g',inter:.72,fs:1.08,bean:1.1,hab:'dwarf'},
+ ruiru11:{tip:'g',inter:.68,fs:1.1,bean:1.1,hab:'dwarf',nc:6},
+ cr95:{tip:'g',inter:.7,fs:1.1,bean:1.08,hab:'dwarf',nc:6},
+ obata:{tip:'g',inter:.72,fs:1.14,bean:1.14,hab:'dwarf'},
+ iapar59:{tip:'b',inter:.72,hab:'dwarf'},
+ batian:{tip:'b',fs:1.12,bean:1.14,hab:'tall',nc:6},
+ chiroso:{tip:'b',L:1.06,wr:.3,fe:1.3,fs:1.1,bean:1.16,hab:'tall'},
+ ceni1:{tip:'g',inter:.7,fs:1.16,bean:1.18,hab:'dwarf'},
+ cifc7963:{tip:'g',inter:.68,fs:1.15,bean:1.12,hab:'dwarf',nc:6},
  ara:{tip:'b',flw:2,hab:'wild'},
  eth:{tip:'b',fe:1.28,fr:['red','red','yel'],hab:'wild',wr:.33,fs:.92,bean:.92},
  yem:{tip:'b',fs:.9,bean:.85,hab:'tall'},
@@ -1046,7 +1125,7 @@ const AUD=(()=>{
     const dl=ac.createDelay(2);dl.delayTime.value=.62;const fb=ac.createGain();fb.gain.value=.34;const dlf=ac.createBiquadFilter();dlf.type='lowpass';dlf.frequency.value=2600;
     dl.connect(dlf);dlf.connect(fb);fb.connect(dl);dlf.connect(rev);dlf.connect(master);
     fx={rev,dl};dry=ac.createGain();dry.gain.value=1;dry.connect(master);dry.connect(rev);
-    padBus=ac.createGain();padBus.gain.value=.5;const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1150;lp.Q.value=.4;
+    padBus=ac.createGain();padBus.gain.value=.5;/* valeur de repos : duck() y revient toujours */const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1150;lp.Q.value=.4;
     const lfo=ac.createOscillator(),lfoG=ac.createGain();lfo.frequency.value=.025;lfoG.gain.value=320;lfo.connect(lfoG);lfoG.connect(lp.frequency);lfo.start();
     padBus.connect(lp);lp.connect(master);lp.connect(rev);
     sparkBus=ac.createGain();sparkBus.gain.value=.9;sparkBus.connect(dl);sparkBus.connect(rev);sparkBus.connect(master);
@@ -1063,6 +1142,14 @@ const AUD=(()=>{
     /* basse très douce */
     const b=ac.createOscillator(),bg=ac.createGain();b.type='sine';b.frequency.value=mtof(notes[0]-12);bg.gain.value=0;bg.gain.linearRampToValueAtTime(.05,now+mont);bg.gain.linearRampToValueAtTime(0,now+dur+mont*.7);b.connect(bg);bg.connect(padBus);b.start(now);b.stop(now+dur+6.5);
     timers.push(setTimeout(()=>padChord(),dur*1000))}
+  /* La nappe tient tout le spectre médian : une note courte posée dessus
+     passe inaperçue. On l'efface d'un souffle — 3 dB pendant un dixième de
+     seconde, puis retour en une seconde — pour laisser passer la note. */
+  let duckT=0;
+  function duck(force){if(!padBus)return;const now=ac.currentTime;if(now-duckT<.05)return;duckT=now;
+    const bas=.5*(1-.42*(force||1));
+    padBus.gain.cancelScheduledValues(now);padBus.gain.setTargetAtTime(bas,now,.035);
+    padBus.gain.setTargetAtTime(.5,now+.14,.34)}
   function pluck(m,vol,dest,len){const now=ac.currentTime,o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain();
     o.type='sine';o.frequency.value=mtof(m);o2.type='sine';o2.frequency.value=mtof(m)*2.003;const g2=ac.createGain();g2.gain.value=.18;
     g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(vol,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+(len||2.6));
@@ -1089,20 +1176,22 @@ const AUD=(()=>{
        premiers que le système coupe —, on la relance. */
     if(started&&dernierAccord&&Date.now()-dernierAccord>40000){timers.forEach(clearTimeout);timers=[];padChord(true);timers.push(setTimeout(sparkle,4000))}}
   function fxs(kind){if(!on||!ac||!started)return;if(ac.state!=='running'){reveiller();return}const now=ac.currentTime;
-    if(kind==='next'||kind==='prev'){/* deux notes, qui montent ou descendent */
-      const c=CH[(chordI+2)%CH.length],a=kind==='next'?c[1]+12:c[3]+12,b=kind==='next'?c[3]+12:c[1]+12;
-      pluck(a,.035,sparkBus,2.2);setTimeout(()=>pluck(b,.028,sparkBus,2.8),120);return}
-    if(kind==='menu'){const c=CH[chordI%CH.length];pluck(c[0]+12,.04,sparkBus,3.2);setTimeout(()=>pluck(c[2]+12,.03,sparkBus,3.6),150);return}
-    if(kind==='lang'){const c=CH[(chordI+1)%CH.length];pluck(c[4]+12,.034,sparkBus,2.6);return}
-    if(kind==='bascule'){pluck(SP[2],.03,sparkBus,1.9);return}
+    /* Ces notes étaient dans le registre de la nappe, qui les masquait : on
+       ne les entendait pas. Une octave au-dessus, et un peu plus ouvertes. */
+    if(kind==='next'||kind==='prev'){
+      const c=CH[(chordI+2)%CH.length],a=kind==='next'?c[1]+24:c[3]+24,b=kind==='next'?c[3]+24:c[1]+24;
+      duck(1);pluck(a,.15,sparkBus,2.4);setTimeout(()=>pluck(b,.115,sparkBus,3),120);return}
+    if(kind==='menu'){const c=CH[chordI%CH.length];duck(1);pluck(c[0]+24,.16,sparkBus,3.2);setTimeout(()=>pluck(c[2]+24,.12,sparkBus,3.6),150);return}
+    if(kind==='lang'){const c=CH[(chordI+1)%CH.length];duck(.8);pluck(c[4]+24,.14,sparkBus,2.6);return}
+    if(kind==='bascule'){duck(1);pluck(SP[4]+12,.17,sparkBus,1.6);setTimeout(()=>pluck(SP[1]+12,.12,sparkBus,2.2),105);return}
     if(kind==='tap'){/* tic boisé très court */const o=ac.createOscillator(),g=ac.createGain(),bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2400;bp.Q.value=3;
       o.type='triangle';o.frequency.setValueAtTime(1500,now);o.frequency.exponentialRampToValueAtTime(700,now+.04);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.22,now+.003);g.gain.exponentialRampToValueAtTime(.0001,now+.06);
       o.connect(bp);bp.connect(g);g.connect(dry);g.connect(fx.rev);o.start(now);o.stop(now+.08)}
-    else if(kind==='hover'){if(performance.now()-lastHover<90)return;lastHover=performance.now();pluck(93,.012,sparkBus,.9)}
-    else if(kind==='open'){pluck(74,.05,sparkBus,2.4);setTimeout(()=>pluck(81,.04,sparkBus,2.8),110)}
-    else if(kind==='close'){pluck(78,.035,sparkBus,1.8);setTimeout(()=>pluck(74,.03,sparkBus,2.2),100)}
-    else if(kind==='node'){pluck(SP[Math.floor(Math.random()*4)]-12,.05,sparkBus,3)}
-    else if(kind==='step'){const c=CH[(chordI+3)%CH.length];pluck(c[2]+12,.04,sparkBus,3.4);setTimeout(()=>pluck(c[4]+12,.03,sparkBus,3.6),160)}
+    else if(kind==='hover'){if(performance.now()-lastHover<90)return;lastHover=performance.now();pluck(93,.03,sparkBus,.9)}
+    else if(kind==='open'){duck(1);pluck(74,.14,sparkBus,2.4);setTimeout(()=>pluck(81,.105,sparkBus,2.8),110)}
+    else if(kind==='close'){duck(.85);pluck(78,.115,sparkBus,1.8);setTimeout(()=>pluck(74,.09,sparkBus,2.2),100)}
+    else if(kind==='node'){duck(.9);pluck(SP[Math.floor(Math.random()*4)]-12,.13,sparkBus,3)}
+    else if(kind==='step'){const c=CH[(chordI+3)%CH.length];duck(.7);pluck(c[2]+12,.115,sparkBus,3.4);setTimeout(()=>pluck(c[4]+12,.09,sparkBus,3.6),160)}
     else if(kind==='tick'){if(performance.now()-lastHover<60)return;lastHover=performance.now();const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=2200;g.gain.setValueAtTime(.05,now);g.gain.exponentialRampToValueAtTime(.0001,now+.025);o.connect(g);g.connect(dry);o.start(now);o.stop(now+.03)}}
   document.addEventListener('visibilitychange',()=>{if(!ac||!started)return;if(document.hidden)ac.suspend();else if(on)reveiller()});
   addEventListener('pageshow',reveiller);addEventListener('focus',reveiller);
@@ -1195,6 +1284,24 @@ const SRC={
   huanqiu_dr:['Huanqiu — la banque de gènes de Dehong','https://m.huanqiu.com/article/4QrcXzfouCV'],
   cd25:['China Daily — Yunnan percolating perky profits (2025)','https://www.chinadaily.com.cn/a/202504/10/WS67f72d20a3104d9fd381e887.html'],
   cd26:['China Daily — Yunnan tops the nation in coffee exports (2026)','https://www.chinadaily.com.cn/a/202601/30/WS697c8b14a310d6866eb36ab6.html'],
+  wcr_bou:['World Coffee Research — Bourbon','https://varieties.worldcoffeeresearch.org/varieties/bourbon'],
+  wcr_k7:['World Coffee Research — K7','https://varieties.worldcoffeeresearch.org/varieties/k7'],
+  wcr_pache:['World Coffee Research — Pache','https://varieties.worldcoffeeresearch.org/varieties/pache'],
+  wcr_t5296:['World Coffee Research — T5296 / Sarchimor','https://varieties.worldcoffeeresearch.org/varieties/t5296'],
+  wcr_cr95:['World Coffee Research — Costa Rica 95','https://varieties.worldcoffeeresearch.org/varieties/costa-rica-95'],
+  wcr_obata:['World Coffee Research — Obatã rouge','https://varieties.worldcoffeeresearch.org/varieties/obata-red'],
+  wcr_iapar:['World Coffee Research — IAPAR 59','https://varieties.worldcoffeeresearch.org/varieties/iapar-59'],
+  wcr_ruiru:['World Coffee Research — Ruiru 11','https://varieties.worldcoffeeresearch.org/varieties/ruiru-11'],
+  wcr_batian:['World Coffee Research — Batian','https://varieties.worldcoffeeresearch.org/varieties/batian'],
+  wk_list:['Wikipedia — List of coffee varieties','https://en.wikipedia.org/wiki/List_of_coffee_varieties'],
+  wk_jbm:['Wikipedia — Jamaican Blue Mountain Coffee','https://en.wikipedia.org/wiki/Jamaican_Blue_Mountain_Coffee'],
+  pdg_laurina:['Perfect Daily Grind — What is Laurina coffee ? (2022)','https://perfectdailygrind.com/2022/04/what-is-laurina-coffee/'],
+  pdg_bresil:['Perfect Daily Grind — Catuaí & Yellow Bourbon (2020)','https://perfectdailygrind.com/2020/02/catuai-yellow-bourbon-exploring-brazils-coffee-varieties/'],
+  pdg_chiroso:['Perfect Daily Grind — Chiroso (2024)','https://perfectdailygrind.com/2024/02/chiroso-up-and-coming-competition-coffee/'],
+  pdg_castillo:['Perfect Daily Grind — les mythes autour du Castillo (2017)','https://perfectdailygrind.com/2017/06/coffee-varieties-debunking-the-myths-around-castillo/'],
+  pdg_ceni1:['Perfect Daily Grind — Cenicafé 1 (2017)','https://perfectdailygrind.com/2017/11/what-you-need-to-know-about-colombian-coffee-variety-cenicafe-1/'],
+  pdg_sidama:['Perfect Daily Grind — le café du Sidama (2020)','https://perfectdailygrind.com/2020/06/everything-you-need-to-know-about-coffee-from-sidama-ethiopia/'],
+  pmc_jarc:['Hailu & Atlaw, Heliyon — méthodes de traitement à Jimma (variété 74110)','https://pmc.ncbi.nlm.nih.gov/articles/PMC11088319/'],
   dh_blog:['Pu-erh Coffee — Dehong (2025)','https://pu-erhcoffee.blogspot.com/search/label/Dehong%20coffee']
 };
 
@@ -1261,10 +1368,10 @@ const NODES=[
   yun:'Plus de 95 % de la production du Yunnan. Introduit par un programme public dans les années 1980, il a été généralisé avec Nestlé à partir de 1988. En 2011, la lignée CIFC 7963 couvrait ≈ 90 % des 43 000 ha. Il peut aussi briller : au Gems of Yunnan 2026, un Catimor naturel de Baoshan (Tiantian Manor) se classe 12e avec 88,53 pts.',s:['wcr_t8667','ozone_cat','chinadaily','varzea','woc','ace']},
  {id:'sarch',n:'Sarchimor',g:'intro',y:1965,yl:'à partir des années 1960 (≈)',pl:'CIFC → Amérique latine',th:5,r:302,imp:2,p:[['vsar','croisement'],['hdt','introgression']],
   d:'Villa Sarchi × Hybride de Timor : la famille « sœur » du Catimor, d’où viennent T5296, Marsellesa, Obatã ou Parainema.',s:['coffeehunter','wcr_star']},
- {id:'ctu',n:'Catuaí',g:'bou',y:1972,yl:'croisé en 1949 · diffusé en 1972',pl:'IAC, Campinas (Brésil)',th:282,r:302,imp:2,p:[['mnov','croisement'],['cat','croisement']],
+ {id:'ctu',n:'Catuaí',g:'bou',y:1972,yl:'croisé en 1949 · diffusé en 1972',pl:'IAC, Campinas (Brésil)',th:282,r:302,imp:2,p:[['mnov','croisement'],['cat','croisement','Caturra jaune']],
   d:'Mundo Novo × Caturra jaune. Compact, productif, résistant au vent : l’une des variétés les plus plantées d’Amérique latine.',s:['coffeehunter']},
- {id:'castillo',n:'Castillo',g:'intro',y:2005,yl:'2005',pl:'Cenicafé (Colombie)',th:333,r:345,imp:1,p:[['catimor','selection']],
-  d:'Issue de la lignée Caturra × Hybride de Timor (Variedad Colombia), développée par Cenicafé. Elle a largement remplacé Typica et Bourbon en Colombie.',s:['bh','ozone_cat']},
+ {id:'castillo',n:'Castillo',g:'intro',y:2005,yl:'2005',pl:'Cenicafé (Colombie)',th:333,r:345,imp:1,p:[['vcol','selection']],
+  d:'Cinquième génération de sélection de la Variedad Colombia (Caturra × Hybride de Timor), développée par Cenicafé et diffusée après vingt-trois ans de travaux. Cenicafé en a tiré six formes régionales — El Rosario, Naranjal, Paraguaicito, La Trinidad, Pueblo Bello, Santa Bárbara — pour ne pas replanter tout le pays avec un seul profil génétique. Selon le centre, elle représente 45 % du café colombien. Elle a largement remplacé Typica et Bourbon en Colombie.',s:['bh','ozone_cat']},
  {id:'mars',n:'Marsellesa',g:'intro',y:2005,yl:'années 2000 (≈)',pl:'ECOM / CIRAD (Nicaragua)',th:18,r:338,imp:1,p:[['sarch','selection']],
   d:'Sarchimor de nouvelle génération (HdT 832/2 × Villa Sarchi CIFC 971/10), résistante à la rouille. Parent de Starmaya.',s:['wcr_star']},
  {id:'h1',n:'Centroamericano',alt:'H1',g:'f1',y:2010,yl:'2010',pl:'CIRAD, PROMECAFE, CATIE (Amérique centrale)',th:27,r:385,imp:2,p:[['sarch','croisement','T5296'],['rume','croisement']],
@@ -1302,11 +1409,49 @@ const NODES=[
   d:'Premier programme mondial de sélection de l’Arabica depuis cinquante ans, lancé en 2022 avec neuf pays : Costa Rica, Inde, Indonésie, Kenya, Mexique, Pérou, Rwanda, Ouganda, États-Unis. Les meilleurs parents des essais internationaux servent à de nouveaux croisements (environ 1 000 plants semés début 2023), triés grâce à la génomique. Objectif : une centaine de lignées pures en 2030, et de nouveaux hybrides. Un réseau équivalent est annoncé pour le Robusta.',
   yun:'La Chine ne fait pas partie des neuf pays fondateurs : le Yunnan diversifie ses variétés par ses propres instituts.',s:['wcr_innov','wcr_f1pre','wcr_ar22']},
  {id:'libex',n:'Coffea × libex',alt:'Libex',g:'esp',test:1,y:2026,yl:'nom proposé en 2026',pl:'Ouganda, Inde, Asie du Sud-Est',th:100,r:485,imp:1,p:[['lib','croisement'],['exc','croisement']],
-  d:'Nom proposé en 2026 par l’équipe de Kew pour les hybrides Liberica × Excelsa qui apparaissent d’eux-mêmes là où les deux espèces poussent côte à côte. L’idée : réunir la productivité de l’Excelsa et la tolérance climatique du Liberica. Encore au stade de la recherche.',s:['fc_libex','mongabay']}
+  d:'Nom proposé en 2026 par l’équipe de Kew pour les hybrides Liberica × Excelsa qui apparaissent d’eux-mêmes là où les deux espèces poussent côte à côte. L’idée : réunir la productivité de l’Excelsa et la tolérance climatique du Liberica. Encore au stade de la recherche.',s:['fc_libex','mongabay']},
+ {id:'bmount',n:'Blue Mountain',alt:'PNG Gold, Boyo',g:'typ',y:1728,yl:'introduit en Jamaïque en 1728',pl:'Blue Mountains (Jamaïque)',th:228,r:196,imp:2,p:[['typ','mutation']],
+  d:'Le café arrive en Jamaïque en 1728, et la lignée Typica qui s’y installe est devenue le Blue Mountain — décrit comme une mutation de Typica dotée d’une certaine résistance à l’anthracnose des baies. Le nom est d’abord une appellation : seule la récolte certifiée des paroisses de Saint Andrew, Saint Thomas, Portland et Saint Mary peut le porter, dans des montagnes qui montent à 2 256 m, sous un climat frais et brumeux. Plus de 80 % de la production part au Japon. La même lignée est cultivée au Kenya, à Hawaï, en Haïti, en Papouasie-Nouvelle-Guinée (sous le nom de PNG Gold) et au Cameroun (Boyo).',s:['wk_jbm','wk_list']},
+ {id:'laurina',n:'Laurina',alt:'Bourbon pointu',g:'bou',y:1810,yl:'≈ 1810',pl:'Île Bourbon (La Réunion)',th:250,r:196,imp:2,p:[['bou','mutation']],
+  d:'Vers 1810, les planteurs de La Réunion remarquent des Bourbon plus petits, aux cerises et aux graines pointues : d’où le surnom de « Bourbon pointu ». On l’a longtemps cru né d’un croisement avec les caféiers indigènes de l’île ; les travaux consacrés à son origine concluent à une simple mutation naturelle du Bourbon, génétiquement presque identique. Son nom vient de sa ressemblance avec le laurier. Elle contient environ la moitié de la caféine d’un Arabica ordinaire — ce qui la rend aussi plus vulnérable aux insectes, la caféine servant de répulsif naturel. Port en sapin de Noël, environ deux mètres, petites feuilles, cerises fragiles. Presque éteinte à la fin du XIXe siècle, elle est revenue depuis, et a porté la routine gagnante du World Brewers Cup 2018.',s:['pdg_laurina','wcr_cat']},
+ {id:'fmission',n:'French Mission',g:'bou',y:1897,yl:'≈ 1897',pl:'Afrique de l’Est (missions françaises)',th:322,r:196,imp:2,p:[['bou','introduction']],
+  d:'Nom donné au Bourbon planté en Afrique de l’Est par les missionnaires français vers 1897. Ce n’est donc pas une variété distincte, mais une population de Bourbon acclimatée au Kenya, en Tanzanie et au Rwanda. C’est d’elle que sortent les sélections kényanes : K7 en est tiré directement, et SL34 a été sélectionné dans du French Mission — même si World Coffee Research rattache sa signature génétique au versant Typica du groupe. Le nom circule encore sur les marchés africains, et on le retrouve derrière l’Arusha de Tanzanie et de Papouasie.',s:['wk_list','wcr_k7','wcr_cat']},
+ {id:'boujaune',n:'Bourbon jaune',alt:'Bourbon Amarelo',g:'bou',y:1930,yl:'1930',pl:'Pederneiras, São Paulo (Brésil)',th:276,r:186,imp:3,p:[['bou','mutation']],
+  d:'Repéré en 1930 à Pederneiras (São Paulo). Deux hypothèses coexistent et la question reste débattue : un croisement naturel entre les Bourbon jaune et rouge de Botucatu, ou une simple mutation du Bourbon rouge. Ses cerises mûrissent jaune d’or au lieu de rouge. C’est l’une des premières variétés reconnues pour sa tasse — douce, de corps délicat, complexe — avec un rendement nettement supérieur aux anciennes : sa production triple au Brésil entre 1949 et 1951, avant de reculer devant des variétés plus productives et plus résistantes. L’IAC a repris ses travaux en 2005. Au Cup of Excellence Brésil 2017, un lot a été noté 92,33 et vendu 126 $ la livre, cent fois le cours du jour.',
+  yun:'Planté au Yunnan à côté du Catimor, avec Typica et Pacamara, dans les parcelles qui cherchent la tasse plutôt que le rendement. C’est la variété du Bourbon jaune de Yunma, qui vient de Gaosheng Manor, dans la vallée de Lujiang (Baoshan).',s:['pdg_bresil','wk_list','wcr_bou']},
+ {id:'k7',n:'K7',g:'bou',y:1936,yl:'1936',pl:'Legelet Estate, Muhoroni (Kenya)',th:272,r:270,imp:1,p:[['fmission','selection']],
+  d:'Sélection kényane tirée du French Mission par le planteur R. H. Walker, puis affinée sur cinq générations par les Scott Agricultural Laboratories et diffusée en 1936. Elle a été retenue sur la seule base des dégustations. Grand arbre, rendement moyen, bon potentiel en altitude, première récolte en troisième année. Elle sert aujourd’hui de repère de rendement dans le catalogue de World Coffee Research, aux côtés de Caturra et de Bourbon, et elle a beaucoup servi aux programmes kényans et tanzaniens : on la retrouve dans la parenté de Ruiru 11 et de Batian.',s:['wcr_k7','wk_list']},
+ {id:'pache',n:'Pache',alt:'Pache comum',g:'typ',y:1949,yl:'1949',pl:'Finca Brito, Santa Cruz Naranjo, Santa Rosa (Guatemala)',th:214,r:268,imp:1,p:[['typ','mutation']],
+  d:'Mutation naturelle de Typica due à un seul gène de nanisme : l’arbre reste compact, se plante plus dense et rend davantage. Repérée en 1949 sur la ferme Brito, à Santa Cruz Naranjo, puis fixée par sélection massale — on retient un groupe d’arbres performants, on mélange leurs graines, et on recommence. Première récolte en quatrième année. Croisée avec Caturra, elle a donné le Pache Colis, aux fruits plus gros et au feuillage rugueux.',s:['wcr_pache','wk_list']},
+ {id:'jarc',n:'74110 · 74112',alt:'sélections de Jimma',g:'eth',y:1974,yl:'série « 74 », diffusée à partir des années 1970',pl:'Jimma Agricultural Research Center (Éthiopie)',th:158,r:300,imp:2,p:[['eth','selection']],
+  d:'Derrière le mot « heirloom » des lots éthiopiens, il y a aussi des variétés nommées et homologuées. Les numéros de la série 74 sortent du centre de recherche agricole de Jimma (JARC), qui a sélectionné dans les forêts éthiopiennes des arbres résistants à l’anthracnose des baies. Avec 74158, ce sont les trois variétés les plus courantes du Sidama : grain petit à moyen, tasse équilibrée en acidité et en corps. Les travaux publiés par le JARC utilisent encore 74110 comme variété de référence pour comparer les méthodes de traitement.',s:['pdg_sidama','pmc_jarc']},
+ {id:'t5296',n:'T5296',g:'intro',y:1978,yl:'années 1970 (≈)',pl:'CIFC (Portugal) → CATIE (Costa Rica)',th:358,r:255,imp:2,p:[['sarch','selection']],
+  d:'Hybride de Timor 832/2 × Villa Sarchi : la lignée mère de toute la famille Sarchimor. Naine, gros grain, rendement moyen, bon potentiel en tasse en altitude, résistance intermédiaire à la rouille, première récolte en troisième année. Son défaut est connu : la lignée n’est pas uniforme, les plants ne se reproduisent pas à l’identique d’une génération à l’autre — raison pour laquelle World Coffee Research ne la recommande pas en plantation tout en la jugeant essentielle en sélection. Elle exige une forte fertilisation, et elle est le parent des hybrides F1 Centroamericano et Mundo Maya.',s:['wcr_t5296','wcr_cat']},
+ {id:'t8667',n:'T8667',g:'intro',y:1978,yl:'descendance F5 reçue au CATIE en 1978',pl:'CIFC (Portugal) → CATIE (Costa Rica)',th:352,r:330,imp:2,p:[['catimor','selection']],
+  d:'Hybride de Timor 832/1 × Caturra, puis sélection généalogique : c’est la lignée de Catimor la plus importante de l’histoire de la sélection en Amérique centrale. Elle naît avec PROMECAFE, le consortium régional fondé en 1978 par l’USAID et l’IAC de Campinas pour répondre à l’arrivée de la rouille ; la même année, le CATIE reçoit du CIFC la descendance F5. Port nain, bourgeons bronze, rendement élevé, résistance intermédiaire à la rouille, première récolte en troisième année, bonne adaptation aux zones chaudes et aux sols acides. Son potentiel en tasse en altitude est jugé faible : c’est la limite de toute la famille.',s:['wcr_t8667','wcr_cat']},
+ {id:'vcol',n:'Variedad Colombia',alt:'Colombia',g:'intro',y:1982,yl:'1982',pl:'Cenicafé (Colombie)',th:325,r:315,imp:2,p:[['catimor','selection']],
+  d:'Première variété issue du programme lancé par Cenicafé en 1968 pour obtenir des caféiers résistants à la rouille, en partant de Caturra et de l’Hybride de Timor. Diffusée en 1982, un an avant que la rouille n’atteigne la Colombie pour la première fois. Cenicafé a ensuite cherché mieux — plus de rendement, plus de résistance, de plus gros grains, une tasse proche de celle de Caturra, et de la longévité : après vingt-trois ans de travail, cela a donné le Castillo.',s:['pdg_castillo','bh']},
+ {id:'ruiru11',n:'Ruiru 11',g:'f1',y:1985,yl:'1985',pl:'Station de recherche de Ruiru (Kenya)',th:290,r:335,imp:2,p:[['catimor','croisement','parent femelle'],['k7','croisement','avec SL28, N39, Rume Sudan…']],
+  d:'En 1968, une épidémie d’anthracnose des baies fait perdre la moitié de la récolte kényane. La station de Ruiru lance un programme intensif de sélection et sort en 1985 un hybride composite : un Catimor comme parent femelle, croisé avec un mélange issu de K7, SL28, N39 et Rume Sudan. Naine, rendement très élevé, première récolte dès la deuxième année, bon potentiel en tasse en altitude — mais la réputation d’une tasse en retrait sur K7, SL28 et SL34. C’est le plant qui a permis au Kenya de replanter dense et de perdre moins.',s:['wcr_ruiru','wk_list']},
+ {id:'cr95',n:'Costa Rica 95',g:'intro',y:1991,yl:'années 1990 (date de diffusion non trouvée)',pl:'ICAFE (Costa Rica)',th:341,r:355,imp:1,p:[['catimor','selection']],
+  d:'Même croisement que T8667 — Hybride de Timor 832/1 × Caturra — sélectionné génération après génération par l’Institut du café du Costa Rica. Naine, rendement élevé, potentiel en tasse jugé faible en altitude. Elle montre une habitude de la filière : un même croisement, repris par deux instituts, donne deux variétés qui portent deux noms.',s:['wcr_cr95','wcr_t8667']},
+ {id:'obata',n:'Obatã rouge',alt:'Obatã Vermelho',g:'intro',y:2000,yl:'diffusé au Brésil en 2000',pl:'IAC, Campinas (Brésil)',th:24,r:310,imp:1,p:[['sarch','selection']],
+  d:'Hybride de Timor 832/2 × Villa Sarchi CIFC 971/10, sélectionné génération après génération par l’Institut agronomique de Campinas, dans l’État de São Paulo. Diffusé au Brésil en 2000, puis apporté au Costa Rica par l’ICAFE pour une diffusion commerciale en 2014. Nain, rendement élevé, bon potentiel en tasse en altitude. C’est l’un des trois Sarchimor que World Coffee Research a croisés avec des Arabica sauvages pour créer ses hybrides F1.',s:['wcr_obata','wcr_f1_2017']},
+ {id:'iapar59',n:'IAPAR 59',g:'intro',y:1993,yl:'années 1990 (date de diffusion non trouvée)',pl:'IAPAR, Paraná (Brésil)',th:8,r:368,imp:1,p:[['sarch','selection']],
+  d:'Même croisement que T5296 — Hybride de Timor 832/2 × Villa Sarchi — sélectionné cette fois par l’Institut agronomique du Paraná. Nain, bourgeons bronze clair, rendement moyen, résistant à la rouille et à certains nématodes, première récolte en troisième année ; potentiel en tasse jugé faible en altitude. Comme Obatã et Marsellesa, il sert de parent aux hybrides F1 de World Coffee Research.',s:['wcr_iapar','wcr_f1_2017']},
+ {id:'batian',n:'Batian',g:'intro',y:2010,yl:'2010',pl:'Coffee Research Station, Ruiru (Kenya)',th:307,r:370,imp:1,p:[['ruiru11','selection'],['hdt','introgression']],
+  d:'Diffusé au Kenya en 2010, obtenu par sélection d’arbres isolés dans les générations F5 du parent mâle de certaines descendances de Ruiru 11. Variété composite : trois lignées pures mélangées, dont la parenté réunit SL28, SL34, Rume Sudan, N39, K7, SL4 et l’Hybride de Timor. Grand arbre, rendement élevé, première récolte dès la deuxième année, et surtout un très bon potentiel en tasse en altitude — rare pour une variété résistante à la fois à la rouille et à l’anthracnose des baies.',s:['wcr_batian','wcr_cat']},
+ {id:'chiroso',n:'Chiroso',alt:'Caturra Chiroso',g:'eth',y:2012,yl:'repéré au Cup of Excellence Colombie 2012',pl:'Urrao, Antioquia (Colombie)',th:190,r:300,imp:2,p:[['eth','introduction']],
+  d:'Cultivé surtout à Urrao, dans le sud-ouest d’Antioquia. On l’a d’abord pris pour une mutation de Caturra aux grains allongés, d’où son premier nom de « Caturra Chiroso » — chiroso veut dire « un peu étiré » dans le parler rural colombien. Des tests génétiques le rattachent plutôt aux landraces éthiopiennes, donc en dehors du groupe Bourbon-Typica ; ces travaux n’ont pas encore été validés scientifiquement, et personne ne sait comment la variété est passée d’Éthiopie en Colombie. Deux types d’arbres coexistent à Urrao, l’un à cerises rouge sombre, l’autre à fruits plus jaunes, aux feuilles différentes. Même trajectoire que Sidra ou Pink Bourbon : repéré dans un concours, puis planté pour la tasse.',s:['pdg_chiroso','wk_list']},
+ {id:'ceni1',n:'Cenicafé 1',g:'intro',y:2016,yl:'≈ 2016 · vingt ans de travaux',pl:'Cenicafé (Colombie)',th:318,r:365,imp:1,p:[['catimor','selection']],
+  d:'Caturra × Hybride de Timor 1343, trié parmi 116 descendances avancées : vingt ans de sélection pour donner aux planteurs colombiens un arbre à l’allure de Caturra mais résistant à la rouille — et aussi à l’anthracnose des baies, qui n’est pas encore arrivée en Colombie. Rendement du niveau de Castillo, gros grain, notes de spécialité en dégustation selon la fédération colombienne. Il se plante jusqu’à 10 000 arbres par hectare en plein soleil, 5 000 à 7 000 sous ombrage.',s:['pdg_ceni1']},
+ {id:'cifc7963',n:'Catimor CIFC 7963',alt:'卡蒂姆 7963',g:'intro',y:1988,yl:'diffusé au Yunnan à partir des années 1980',pl:'CIFC (Portugal) → Yunnan',th:334,r:392,imp:3,p:[['catimor','selection']],
+  d:'Une lignée de Catimor parmi des dizaines, et pourtant l’une des plus plantées d’Asie. Le numéro est celui de la collection du CIFC, au Portugal, d’où sortent toutes les lignées de la famille.',
+  yun:'C’est, concrètement, la variété du Yunnan. En 2011, elle couvrait à elle seule environ 90 % des 43 000 ha de la province. L’institut de Dehong, qui l’a diffusée, affirme que les variétés qu’il a sélectionnées ou introduites — CIFC 7963 comprise — couvrent plus de 80 % des surfaces : c’est sa communication, pas un chiffre indépendant. Derrière la quasi-totalité du « petit grain du Yunnan » vendu dans le monde, il y a donc cette seule lignée — et la monoculture qui va avec, que les instituts de la province cherchent aujourd’hui à desserrer.',s:['varzea','napstic_dr','chinadaily','ozone_cat']}
 ];
 
 /* Arrivées au Yunnan : [variété, année, note] — reliées à l’axe central */
-const YLINKS=[['typ',1892,'Zhukula (variété débattue)'],['typ',1914,'Ruili, depuis la Birmanie'],['bou',1914,'Ruili, depuis la Birmanie'],['s288',1963,'depuis l’Inde'],['catimor',1988,'programme public, puis Nestlé'],['gesha',2018,'≈ années 2010 (date indicative)'],['cat',2026,'présente aujourd’hui'],['sl34',2026,'présente aujourd’hui'],['dr132',2010,'sélection locale, Ruili']];
+const YLINKS=[['typ',1892,'Zhukula (variété débattue)'],['typ',1914,'Ruili, depuis la Birmanie'],['bou',1914,'Ruili, depuis la Birmanie'],['s288',1963,'depuis l’Inde'],['catimor',1988,'programme public, puis Nestlé'],['cifc7963',1988,'la lignée généralisée dans la province'],['dr132',2010,'sélection locale, Ruili'],['gesha',2018,'≈ années 2010 (date indicative)'],['cat',2026,'présente aujourd’hui'],['sl34',2026,'présente aujourd’hui'],['boujaune',2026,'présent aujourd’hui — Gaosheng, Baoshan']];
 
 /* Axe Yunnan : événements */
 const EVENTS=[
@@ -1315,9 +1460,13 @@ const EVENTS=[
  {y:1914,t:'Ruili : Typica & Bourbon depuis la Birmanie',d:'Des responsables jingpo de la frontière introduisent Typica et Bourbon depuis la Birmanie au village de Nongxianshan (Ruili, Dehong).',reg:'dehong',s:['varzea']},
  {y:1955,t:'Baoshan passe à l’échelle',d:'Dans les années 1950, la vallée de Lujiang (Baoshan) devient le premier bassin structuré, avec environ 4 000 ha de Typica et de Bourbon.',reg:'baoshan',s:['varzea','yex']},
  {y:1963,t:'S288 arrive d’Inde',d:'Une première variété résistante à la rouille est introduite au Yunnan.',s:['varzea']},
- {y:1988,t:'Le tournant Catimor',d:'Après un programme public des années 1980 (S288 et Catimor), Nestlé s’associe au gouvernement du Yunnan pour planter du Catimor dans toute la province.',reg:'puer',s:['woc']},
+ {y:1988,t:'Le tournant Catimor',d:'Après un programme public des années 1980 (S288 et Catimor), Nestlé s’associe au gouvernement du Yunnan pour planter du Catimor dans toute la province. 1988 est l’année de référence : le gouvernement chinois, la Banque mondiale et le PNUD lancent ensemble le programme qui installe la caféiculture moderne au Yunnan. Aujourd’hui, 98 % du café chinois en vient.',reg:'puer',s:['woc','wiki']},
+ {y:2007,t:'Hogood, l’usine à soluble',d:'Fondation de Hogood Coffee à Dehong, qui devient le premier fabricant chinois de café soluble. L’entreprise profite de règles foncières assouplies au Yunnan pour regrouper les parcelles sous contrat : elle fournit les plants, les paysans récoltent, elle rachète les grains. C’est le modèle qui a fait du Yunnan un fournisseur de volume avant d’être un terroir.',reg:'dehong',s:['wiki']},
+ {y:2009,t:'Les premiers lots de spécialité',d:'La production de spécialité démarre vers 2009 autour de quelques précurseurs, dont Hu Xixiang à Mangzhang Farms (Menglian, Pu’er), accompagnés par des professionnels étrangers. En 2013, Yunnan Coffee Traders devient le premier exportateur dédié au café de spécialité de la province.',reg:'puer',s:['wiki']},
  {y:2011,t:'43 000 ha, 90 % de Catimor',d:'La lignée CIFC 7963 domine. La province produit 53 240 t de café en 2011.',s:['varzea']},
- {y:2012,t:'Starbucks s’installe à Pu’er',d:'Ouverture du Yunnan Farmer Support Center.',reg:'puer',s:['starbucks']},
+ {y:2012,t:'Starbucks s’installe à Pu’er',d:'Ouverture du Yunnan Farmer Support Center. En 2014, Starbucks achète plus de la moitié du café chinois importé aux États-Unis sur les neuf premiers mois de l’année.',reg:'puer',s:['starbucks','wiki']},
+ {y:2016,t:'Une bourse du café à Pu’er',d:'Le Yunnan Coffee Exchange ouvre en janvier 2016. La même année, environ la moitié de la récolte part à l’export et rapporte 280 millions de dollars — presque uniquement du grain vert de qualité commerciale, vers l’Europe. En 2018, Chongqing devient le premier pôle d’échange du pays.',reg:'puer',s:['wiki']},
+ {y:2018,t:'La Chine, pays invité du salon SCA',d:'La Specialty Coffee Association choisit la Chine comme pays portrait de son salon, le plus grand du monde. À l’époque, le café de spécialité représente encore moins de 2 % des volumes chinois. Entre 2006 et 2017, la consommation intérieure a progressé de 22 % par an en moyenne.',s:['wiki']},
  {y:2022,t:'> 95 % de Catimor, et des ressources éthiopiennes',d:'Le Catimor dépasse 95 % de la production. L’Académie des sciences agricoles du Yunnan a rassemblé plus de 6 000 ressources génétiques venues d’Éthiopie pour diversifier les variétés.',s:['chinadaily','cd2']},
  {y:2023,t:'La banque de gènes de Ruili',d:'Le conservatoire de caféiers du ministère de l’Agriculture, tenu par l’institut de Dehong à Ruili, dépasse 800 ressources fin 2023 ; il en compte aujourd’hui plus de 1 150, la plus grande collection de Chine. C’est de là que sort la série locale De-Re (德热).',reg:'dehong',s:['napstic_dr','huanqiu_dr']},
  {y:2024,t:'146 000 t, dont 31,6 % premium',d:'La production du Yunnan progresse de 13 %. Selon l’association du café du Yunnan, 31,6 % des grains sont classés premium et 80 % sont transformés sur place.',s:['cd25']},
@@ -1328,13 +1477,13 @@ const EVENTS=[
 
 /* Terroirs (coordonnées approximatives des villes principales) */
 const REGIONS=[
- {id:'puer',n:'Pu’er',zh:'普洱',lat:22.79,lon:100.97,d:'Premier bassin de Chine : environ 60 % de la production nationale selon Wikipédia. Siège du Farmer Support Center de Starbucks (2012). Au GoY 2026, deux lots de Menglian et Lancang poussent à 1 780 – 2 000 m.',s:['wiki','starbucks','ace']},
- {id:'baoshan',n:'Baoshan',zh:'保山',lat:25.11,lon:99.17,d:'Vallée de Lujiang, le long de la Nu (Salween). Premier bassin à passer à l’échelle dans les années 1950. Elle place 7 des 15 premiers lots du GoY 2026, dont le seul Catimor du top 15.',s:['varzea','ace']},
- {id:'lincang',n:'Lincang',zh:'临沧',lat:23.88,lon:100.09,d:'Région traversée par le tropique du Cancer. Elle remporte le lot n°1 du GoY 2026 (Geisha lavé, 91,78) et le n°3 (coopérative Songfeng).',s:['yex','ace']},
- {id:'dehong',n:'Dehong',zh:'德宏',lat:24.43,lon:98.58,d:'Frontière birmane. Ruili est la porte d’entrée de Typica et de Bourbon en 1914. On y trouve aussi des lots d’altitude, comme Xiazhai (1 800 m) au GoY 2026. L’institut de Ruili y conserve la plus grande banque de gènes de caféiers de Chine et a créé la série De-Re.',s:['varzea','ace','huanqiu_dr']},
- {id:'xsbn',n:'Xishuangbanna',zh:'西双版纳',lat:22.0,lon:100.8,d:'Extrême sud de la province, vers 22°N. Un Geisha lavé de Menghai y obtient la 2e place du GoY 2026.',s:['ace']},
- {id:'nujiang',n:'Nujiang',zh:'怒江',lat:25.85,lon:98.86,d:'Gorges de la Salween. On y cultive des variétés aux noms locaux peu documentées, comme « Wangjin Yunka » (11e au GoY 2026).',s:['ace']},
- {id:'dali',n:'Dali · Binchuan',zh:'宾川',lat:25.83,lon:100.58,d:'Village de Zhukula, le berceau historique du café au Yunnan (1892 ou 1904 selon les sources). Une vingtaine d’arbres centenaires y vivent encore.',s:['zcd','woc']}
+ {id:'puer',n:'Pu’er',zh:'普洱',lat:22.79,lon:100.97,d:'Premier bassin de Chine : environ 60 % de la production nationale selon Wikipédia. Siège du Farmer Support Center de Starbucks (2012). Au GoY 2026, deux lots de Menglian et Lancang poussent à 1 780 – 2 000 m.',d2:'Menglian est l’un des trois grands bassins de la province, avec Baoshan et Dehong. C’est là, à Mangzhang Farms, qu’ont commencé les premiers lots de spécialité vers 2009, et c’est à Pu’er qu’a ouvert le Yunnan Coffee Exchange, en janvier 2016. Le bassin fait le pont entre les deux visages du Yunnan : le volume qui part à l’export, et les quelques fermes qui visent la tasse.',s:['wiki','starbucks','ace']},
+ {id:'baoshan',n:'Baoshan',zh:'保山',lat:25.11,lon:99.17,d:'Vallée de Lujiang, le long de la Nu (Salween). Premier bassin à passer à l’échelle dans les années 1950. Elle place 7 des 15 premiers lots du GoY 2026, dont le seul Catimor du top 15.',d2:'La vallée de Lujiang suit la Nu (Salween) : un fond de vallée chaud, des versants qui montent vite, et les plus anciennes plantations structurées de Chine — environ 4 000 ha dès les années 1950, en Typica et Bourbon. C’est l’un des trois grands bassins de la province, et de loin le plus régulier en compétition : sept des quinze premiers lots du Gems of Yunnan 2026, dont le seul Catimor du haut du classement. C’est aussi d’ici, à Gaosheng Manor, que viennent les cafés de Yunma.',s:['varzea','ace']},
+ {id:'lincang',n:'Lincang',zh:'临沧',lat:23.88,lon:100.09,d:'Région traversée par le tropique du Cancer. Elle remporte le lot n°1 du GoY 2026 (Geisha lavé, 91,78) et le n°3 (coopérative Songfeng).',d2:'Le tropique du Cancer traverse la région : à cette latitude, l’altitude compense la saison, et les lots classés poussent vers 1 600 – 1 900 m. Elle place le premier et le troisième lot du Gems of Yunnan 2026, tous deux en Geisha lavé — la preuve que la nouvelle vague ne se joue pas seulement au sud.',s:['yex','ace']},
+ {id:'dehong',n:'Dehong',zh:'德宏',lat:24.43,lon:98.58,d:'Frontière birmane. Ruili est la porte d’entrée de Typica et de Bourbon en 1914. On y trouve aussi des lots d’altitude, comme Xiazhai (1 800 m) au GoY 2026. L’institut de Ruili y conserve la plus grande banque de gènes de caféiers de Chine et a créé la série De-Re.',d2:'Porte d’entrée historique : c’est à Nongxianshan, près de Ruili, que Typica et Bourbon passent la frontière birmane en 1914. C’est aussi la région du volume : Hogood Coffee, fondé à Dehong en 2007, y a construit la filière du soluble sur des parcelles regroupées sous contrat. Et c’est de là que vient la diversification, avec le conservatoire de Ruili — plus de 1 150 ressources, la plus grande collection de caféiers de Chine — et la série locale De-Re. Dehong s’est donné un plan qualité 2025 – 2027.',s:['varzea','ace','huanqiu_dr']},
+ {id:'xsbn',n:'Xishuangbanna',zh:'西双版纳',lat:22.0,lon:100.8,d:'Extrême sud de la province, vers 22°N. Un Geisha lavé de Menghai y obtient la 2e place du GoY 2026.',d2:'L’extrême sud de la province, vers 22°N : la latitude la plus basse du Yunnan caféier, donc la plus chaude, où l’altitude devient décisive. Menghai y place le deuxième lot du Gems of Yunnan 2026, un Geisha lavé à 1 650 m.',s:['ace']},
+ {id:'nujiang',n:'Nujiang',zh:'怒江',lat:25.85,lon:98.86,d:'Gorges de la Salween. On y cultive des variétés aux noms locaux peu documentées, comme « Wangjin Yunka » (11e au GoY 2026).',d2:'Les gorges de la Salween, au nord de la zone caféière, vers 26°N : la limite climatique de l’Arabica au Yunnan, où le relief crée des microclimats très serrés. On y cultive des variétés aux noms locaux peu documentées, comme « Wangjin Yunka », onzième du Gems of Yunnan 2026 — un rappel que tout le verger de la province n’est pas encore cartographié.',s:['ace']},
+ {id:'dali',n:'Dali · Binchuan',zh:'宾川',lat:25.83,lon:100.58,d:'Village de Zhukula, le berceau historique du café au Yunnan (1892 ou 1904 selon les sources). Une vingtaine d’arbres centenaires y vivent encore.',d2:'Zhukula, au-dessus de Binchuan : c’est ici que le missionnaire français Alfred Liétard plante les premiers caféiers du Yunnan, à une date que les sources placent en 1892, 1902 ou 1904. Une vingtaine d’arbres centenaires y vivent encore. La région ne produit presque plus, mais elle garde le point de départ : tout le café chinois descend, symboliquement, de cette église.',s:['zcd','woc']}
 ];
 /* Gems of Yunnan 2026 — top 15 (ACE) : rang, score, producteur, ferme, région, lieu, process, variété, alt min, alt max */
 const LOTS=[
@@ -1358,8 +1507,10 @@ const LOTS=[
    Format : {nom:'', ferme:'', region:'baoshan', variete:'Catimor', process:'Lavé', alt:1500, note:''} */
 const YUNMA_LOTS=[];
 /* Planche illustrée associée à chaque variété / événement */
-const ILL={eug:'foret',can:'feuille',lib:'feuille',cong:'feuille',ara:'rameau',eth:'foret',yem:'route',ind:'route',typ:'rameau',bou:'cerise',mar:'grains',cat:'port',kent:'rouille',hdt:'croisement',java:'route',sl28:'cerise',sl34:'rameau',s288:'croisement',gesha:'fleur',rume:'foret',mnov:'croisement',s795:'croisement',pacas:'port',vsar:'port',pcm:'grains',catimor:'rouille',sarch:'croisement',ctu:'croisement',castillo:'rouille',mars:'rouille',h1:'plantule',star:'fleur',erecta:'port',nganda:'port',bp534:'plantule',sln:'plantule',cxr:'croisement',kr:'plantule',sidra:'cerise',pink:'cerise',mmaya:'plantule',dr132:'cerise',steno:'feuille',wcrf1:'plantule',exc:'feuille',innov:'plantule',libex:'croisement'};
-const EV_ILL=[['montagnes'],['route',{id:'e1',pl:'Malaisie → Hainan'}],['route',{id:'e2',pl:'Birmanie → Ruili (Dehong)'}],['montagnes'],['croisement','s288'],['rameau'],['montagnes'],['cerise'],['fleur'],['plantule'],['grains'],['route',{id:'e3',pl:'Yunnan → monde'}],['grains'],['grains']];
+const ILL={eug:'foret',can:'feuille',lib:'feuille',cong:'feuille',ara:'rameau',eth:'foret',yem:'route',ind:'route',typ:'rameau',bou:'cerise',mar:'grains',cat:'port',kent:'rouille',hdt:'croisement',java:'route',sl28:'cerise',sl34:'rameau',s288:'croisement',gesha:'fleur',rume:'foret',mnov:'croisement',s795:'croisement',pacas:'port',vsar:'port',pcm:'grains',catimor:'rouille',sarch:'croisement',ctu:'croisement',castillo:'rouille',mars:'rouille',h1:'plantule',star:'fleur',erecta:'port',nganda:'port',bp534:'plantule',sln:'plantule',cxr:'croisement',kr:'plantule',sidra:'cerise',pink:'cerise',mmaya:'plantule',dr132:'cerise',steno:'feuille',wcrf1:'plantule',exc:'feuille',innov:'plantule',libex:'croisement',bmount:'montagnes',laurina:'cerise',fmission:'route',boujaune:'cerise',k7:'rameau',pache:'port',jarc:'foret',t5296:'croisement',t8667:'rouille',vcol:'rouille',ruiru11:'plantule',cr95:'rouille',obata:'croisement',iapar59:'croisement',batian:'rameau',chiroso:'grains',ceni1:'plantule',cifc7963:'rouille'};
+/* Aligné par indice sur EVENTS, qui est trié par année : y insérer une date
+   décale tout ce qui suit. La construction compte les deux tableaux. */
+const EV_ILL=[['montagnes'],['route',{id:'e1',pl:'Malaisie → Hainan'}],['route',{id:'e2',pl:'Birmanie → Ruili (Dehong)'}],['montagnes'],['croisement','s288'],['rameau'],['grains'],['port'],['montagnes'],['cerise'],['route',{id:'e4',pl:'Pu’er → Europe'}],['feuille'],['fleur'],['plantule'],['grains'],['route',{id:'e3',pl:'Yunnan → monde'}],['grains'],['grains']];
 
 /* =====================================================================
    ÉCHELLE DU TEMPS (compressée : préhistoire → aujourd’hui)
@@ -1984,6 +2135,17 @@ function drawTerroirs(){
   }
 }
 
+{/* Le mode épuré : un bouton l'arme depuis le cartouche du récit, un autre
+    le désarme depuis le coin de l'écran. */
+ const ep=document.getElementById('epureOff');
+ const epurer=(v)=>{document.body.classList.toggle('epure',v);ep.hidden=!v;
+   ep.textContent=U('epureOff');AUD.fx(v?'close':'open')};
+ document.getElementById('sepure').innerHTML='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.2 8h11.6M5 5.2 8 2.4l3 2.8M5 10.8 8 13.6l3-2.8"/></svg>';
+ document.getElementById('sepure').onclick=()=>epurer(true);
+ ep.onclick=()=>epurer(false);
+ /* Si le récit se termine pendant qu'on est épuré, on rend la main. */
+ addEventListener('yunma:recit-fini',()=>epurer(false));}
+
 {const el=document.getElementById('terr');
  el.querySelector('#tprev').onclick=()=>{touch();terrAllerA(TERR.i-1)};
  el.querySelector('#tnext').onclick=()=>{touch();terrAllerA(TERR.i+1)};
@@ -2107,7 +2269,7 @@ const PAGES={
  varietes:{k:()=>NAVK(2),r:()=>{
    const nz=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
    const gs=Object.entries(GROUPS).map(([g,G])=>{const ns=NODES.filter(n=>n.g===g).sort((a,b)=>a.y-b.y);if(!ns.length)return'';
-     return `<div class="vgroup" data-grp="${g}"><h3><span class="dot" style="background:${G.c}"></span>${G.l}<small>${ns.length}</small></h3>${ns.map(n=>`<button class="vrow" data-fiche="${n.id}" data-q="${nz(n.n+' '+(n.alt||'')+' '+FR.nodes[n.id].n)}"><span class="dot" style="background:${G.c}"></span><span>${n.n}${n.alt?` <em>${n.alt}</em>`:''}${yunIds.has(n.id)?` <b class="yb">${U('yb')}</b>`:''}${n.test?` <b class="tb">${U('tb')}</b>`:''}</span><small>${n.y<0?U('prehist'):n.yl.replace(/[\(（].*[\)）]/,'').trim()}</small></button>`).join('')}</div>`}).join('');
+     return `<div class="vgroup" data-grp="${g}"><h3><span class="dot" style="background:${G.c}"></span>${G.l}<small>${ns.length}</small></h3>${ns.map(n=>`<button class="vrow" data-fiche="${n.id}" data-q="${nz(n.n+' '+(n.alt||'')+' '+FR.nodes[n.id].n)}"><span class="dot" style="background:${G.c}"></span><span>${n.n}${n.alt?` <em>${n.alt}</em>`:''}${yunIds.has(n.id)?` <b class="yb">${U('yb')}</b>`:''}${n.test?` <b class="tb">${U('tb')}</b>`:''}</span><small>${n.y<0?U('prehist'):n.yl.replace(/[\(（].*[\)）]/,'').replace(/[\s,·]+$/,'').trim()}</small></button>`).join('')}</div>`}).join('');
    return `<h1>${U('vTitle')}</h1><p class="lead">${U('vLead')(NODES.length)}</p>
    <div class="vsearch"><input id="vq" type="search" placeholder="${U('search')}" autocomplete="off"></div>${gs}`},
    after:()=>{const q=document.getElementById('vq');q.addEventListener('input',()=>{const v=q.value.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
@@ -2126,6 +2288,7 @@ const PAGES={
    <p class="lead">${U('sLead')}</p>
    <div class="sec">${U('sRead')}</div><div class="links">${Object.entries(LT).filter(([k])=>k!=='filiation').map(([k,l])=>`<svg viewBox="0 0 34 6"><line x1="0" y1="3" x2="34" y2="3" stroke="${k==='yunnan'?VERM:'#212121'}" stroke-width="${l.w}" stroke-dasharray="${l.dash.join(' ')}"/></svg><span>${l.l}</span>`).join('')}</div>
    <div class="sec">${U('sRig')}</div><p>${U('sRigT')}</p>
+   <div class="sec">${U('sPer')}</div><p>${U('sPerT')(NODES.length)}</p>
    <div class="sec">${U('sTerr')}</div><p>${U('sTerrT')}</p>
    <div class="sec">${U('sRefs')}</div><ol class="refs">${Object.values(SRC).map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join('')}</ol>${SIG}`}
 };
@@ -2211,6 +2374,7 @@ function terrHTML(){
   const vc=v=>/Geisha/.test(v)?GROUPS.eth.c:v==='Catimor'?GROUPS.intro.c:'#8a857a';const xa=a=>((a-1000)/1000*100).toFixed(1);
   return `${fig('montagnes',{id:'t'+(selRegion||'all')},RUST,'big')}<h1>${r?r.n+(LANG==='zh'?'':`<em>${r.zh}</em>`):U('tTitle')}</h1>
   <p class="lead">${r?r.d:U('tLead')}</p>
+  ${r&&r.d2?`<p class="tp2">${r.d2}</p>`:''}
   ${terrSynth(r,lots)}
   ${r?`<button class="btn" data-fly="1" style="margin:4px 0 20px">${U('tCeSurvol')}</button>`:''}
   ${mapSVG()}
@@ -2227,14 +2391,14 @@ function terrHTML(){
    ===================================================================== */
 const FR={nodes:{},events:[],regions:{},story:[],groups:{},lt:{},eras:[],yl:[]};
 NODES.forEach(n=>FR.nodes[n.id]={n:n.n,alt:n.alt,yl:n.yl,pl:n.pl,d:n.d,yun:n.yun});
-EVENTS.forEach((e,i)=>FR.events[i]=[e.t,e.d]);REGIONS.forEach(r=>FR.regions[r.id]=[r.n,r.d]);
+EVENTS.forEach((e,i)=>FR.events[i]=[e.t,e.d]);REGIONS.forEach(r=>FR.regions[r.id]=[r.n,r.d,r.d2]);
 for(const k in GROUPS)FR.groups[k]=GROUPS[k].l;for(const k in LT)FR.lt[k]=LT[k].l;ERAS.forEach((e,i)=>FR.eras[i]=e[1]);YLINKS.forEach((l,i)=>FR.yl[i]=l[2]);
 function setLang(l,init){
   if(!UI[l])l='fr';LANG=l;document.documentElement.lang=l==='zh'?'zh-CN':l;try{localStorage.setItem('yunma-lang',l)}catch(e){}
   if(!FR.story.length)STORY.forEach((s,i)=>FR.story[i]=[s.k,s.t,s.d]);
   NODES.forEach(n=>{const f=FR.nodes[n.id],o=l==='fr'?{}:((NODES_L[l]||{})[n.id]||{});for(const k of['n','alt','yl','pl','d','yun'])n[k]=k in o?o[k]:f[k]});
   EVENTS.forEach((e,i)=>{const o=l!=='fr'&&EVENTS_L[l]?EVENTS_L[l][i]:FR.events[i];e.t=o[0];e.d=o[1]});
-  REGIONS.forEach(r=>{const o=l!=='fr'&&REGIONS_L[l]?REGIONS_L[l][r.id]:FR.regions[r.id];r.n=o[0];r.d=o[1]});
+  REGIONS.forEach(r=>{const o=l!=='fr'&&REGIONS_L[l]?REGIONS_L[l][r.id]:FR.regions[r.id];r.n=o[0];r.d=o[1];r.d2=o[2]});
   STORY.forEach((s,i)=>{const f=FR.story[i],o=l!=='fr'&&STORY_L[l]?STORY_L[l][i]:null;s.k=o&&o[0]?o[0]:(f[0]&&o?undefined:f[0]);if(o&&!o[0])s.k=undefined;s.t=o?o[1]:f[1];s.d=o?o[2]:f[2]});
   for(const k in GROUPS)GROUPS[k].l=l!=='fr'?GROUPS_L[l][k]:FR.groups[k];
   for(const k in LT)LT[k].l=l!=='fr'?LT_L[l][k]:FR.lt[k];
@@ -2340,7 +2504,7 @@ function storyTick(dt){
 function storyHold(){if(!ST.paused)storyPause(true);story.classList.add('resume')}
 function storyPause(p){if(!ST.on)return;if(!p)story.classList.remove('resume');ST.paused=p;setPlayIcon(!p);document.getElementById('splay').innerHTML=p?IC.play:IC.pause;
   if(!p){/* reprise : repartir en douceur de la position actuelle */const st=STORY[ST.i];ST.from=camSnap();ST.to=stepTarget(st);ST.bump=0;ST.u0=y2u(S.year);ST.t=Math.min(ST.t,TRANS*.4)}}
-function storyEnd(done,keepYear){ST.on=false;if(!keepYear){S.year=2026;syncTime()}S.hl=null;S.yfocus=null;S.focus=null;S.selEv=null;story.classList.remove('on');document.body.classList.remove('storying');tgt.oy=0;setPlayIcon(false);
+function storyEnd(done,keepYear){ST.on=false;dispatchEvent(new Event('yunma:recit-fini'));if(!keepYear){S.year=2026;syncTime()}S.hl=null;S.yfocus=null;S.focus=null;S.selEv=null;story.classList.remove('on');document.body.classList.remove('storying');tgt.oy=0;setPlayIcon(false);
   if(done)goHome()}
 function setPlayIcon(on){playIc.innerHTML=on?IC.pause:IC.play;document.getElementById('splay').innerHTML=on?IC.pause:IC.play}
 document.getElementById('sprev').onclick=()=>{storyGo(ST.i-1);if(ST.paused)storyPause(false)};

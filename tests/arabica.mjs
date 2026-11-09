@@ -349,14 +349,99 @@ titre('Le son');
   await p.waitForTimeout(1200);
   const etat = () => p.evaluate(() => (window.__ac ? window.__ac.state : 'sans contexte'));
   check(`le contexte audio tourne dès le premier geste (${await etat()})`, await etat(), 'running');
-  /* On le suspend comme le ferait un téléphone qui reçoit un appel. */
-  await p.evaluate(() => window.__ac.suspend());
-  await p.waitForTimeout(400);
-  check(`suspendu, il est bien suspendu (${await etat()})`, await etat(), 'suspended');
+  /* On le suspend comme le ferait un téléphone qui reçoit un appel. On lit
+     l'état au moment même où la promesse se résout : la ronde de réveil
+     passe toutes les cinq secondes et peut le relancer aussitôt — attendre
+     avant de regarder rendait l'épreuve capricieuse une fois sur douze. */
+  const suspendu = await p.evaluate(async () => { await window.__ac.suspend(); return window.__ac.state; });
+  check(`suspendu, il est bien suspendu (${suspendu})`, suspendu, 'suspended');
   /* Et il doit repartir seul : la ronde interne passe toutes les cinq secondes. */
   await p.waitForTimeout(6500);
   check(`il repart seul, sans un geste (${await etat()})`, await etat(), 'running');
   await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Les notes des boutons s'entendent vraiment
+ * ------------------------------------------------------------------ *
+ * Le reproche était : « je n'entends pas certains sons comme menu ». Les
+ * appels partaient bien — mesure faite, AUD.fx() était appelé. C'est la
+ * nappe qui les couvrait : une note ne dépassait le fond que de 0,8 dB.
+ *
+ * Mesurer cela demande quelques précautions. La nappe n'est pas stable :
+ * son filtre est balayé par un oscillateur lent de quarante secondes, des
+ * scintillements tombent au hasard, et la réverbération dure sept secondes
+ * et demie — autrement dit, la queue d'une note pollue le « silence » qui
+ * suit. Comparer deux fenêtres voisines ne veut donc rien dire.
+ *
+ * On procède par paires : le hasard est semé à l'identique, la page est
+ * neuve à chaque fois, et on mesure toujours la même fenêtre d'horloge
+ * audio — une fois sans note, une fois avec. Le filtre passe-haut à
+ * 1 800 Hz écarte la nappe, qui est passée à 1 150 Hz.
+ */
+titre('Les notes des boutons s’entendent');
+{
+  const semerEtBrancher = () => {
+    /* Même suite de « hasard » à chaque page : les scintillements de la
+       nappe tombent au même instant dans les deux passes. */
+    let g = 123456789;
+    Math.random = () => { g = (g * 1103515245 + 12345) & 0x7fffffff; return g / 0x7fffffff; };
+    const C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+    const W = function (...a) {
+      const c = new C(...a);
+      if (!window.__ac) {
+        window.__ac = c;
+        const brut = AudioNode.prototype.connect;
+        const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1800; hp.Q.value = 0.7;
+        const sp = c.createScriptProcessor(512, 1, 1); window.__pic = 0;
+        /* On regarde chaque échantillon : une note dure dix millisecondes à
+           l'attaque, un relevé à l'image en raterait la moitié. */
+        sp.onaudioprocess = (e) => {
+          const d = e.inputBuffer.getChannelData(0); let m = 0;
+          for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > m) m = v; }
+          if (m > window.__pic) window.__pic = m;
+        };
+        const muet = c.createGain(); muet.gain.value = 0;
+        brut.call(hp, sp); brut.call(sp, muet); brut.call(muet, c.destination);
+        AudioNode.prototype.connect = function (d, ...r) {
+          if (d === c.destination) { try { brut.call(this, hp); } catch (e) {} }
+          return brut.call(this, d, ...r);
+        };
+      }
+      return c;
+    };
+    W.prototype = C.prototype; window.AudioContext = W; window.webkitAudioContext = W;
+  };
+  const passe = async (voix) => {
+    const ctx = await nav.newContext({ viewport: { width: 1280, height: 800 }, locale: 'fr-FR' });
+    await ctx.addInitScript(semerEtBrancher);
+    const p = await ctx.newPage();
+    await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+    await p.waitForTimeout(400);
+    await p.mouse.click(640, 400);                       /* le geste qui autorise le son */
+    /* On se cale sur l'horloge audio, pas sur celle de la page : le rendu
+       logiciel de l'intégration est lent et la ferait dériver. */
+    const attendre = (s) => p.evaluate(async (s) => {
+      const ac = window.__ac; const t = ac.currentTime;
+      while (ac.currentTime - t < s) await new Promise((r) => setTimeout(r, 20));
+    }, s);
+    await attendre(2.2);                                  /* le fondu d'ouverture dure 1,8 s */
+    await p.evaluate((v) => { window.__pic = 0; if (v) AUD.fx(v); }, voix);
+    await attendre(0.7);
+    const pic = await p.evaluate(() => window.__pic);
+    await ctx.close();
+    return pic;
+  };
+  const nappe = await passe(null);
+  check(`la nappe seule reste discrète dans l’aigu (${nappe.toFixed(4)})`, nappe > 0 && nappe < 0.02);
+  /* Les voix que l'on entend dans l'aigu. « node », « tap » et « tick »
+     jouent sous 1 800 Hz : cette mesure ne les voit pas, et ne prétend
+     donc rien à leur sujet. */
+  for (const voix of ['next', 'prev', 'menu', 'lang', 'bascule', 'open', 'close', 'step']) {
+    const avec = await passe(voix);
+    const dB = 20 * Math.log10(avec / nappe);
+    check(`« ${voix} » passe au-dessus de la nappe (+${dB.toFixed(1)} dB)`, dB > 6);
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -424,14 +509,17 @@ titre('Rien ne se recouvre, en portrait');
   const { ctx, p } = await ouvrir(VUES[1]);
   const boites = await p.evaluate(() => {
     const b = (s) => { const e = document.querySelector(s); if (!e) return null; const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; };
-    return { repere: b('.hint'), logo: b('.brand'), menu: b('.menubtn'), annee: b('.yrbox'), lecture: b('.playbtn') };
+    return { repere: b('.hint'), logo: b('.brand'), menu: b('.menubtn'), annee: b('.yrbox'), lecture: b('.playbtn'), socle: b('.dock') };
   });
   const croise = (a, b) => !!a && !!b && a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
   check('le repère de geste ne passe pas sous le logo', croise(boites.repere, boites.logo), false);
   check('ni sous le bouton du menu', croise(boites.repere, boites.menu), false);
   check('le bouton de l’histoire ne recouvre pas le millésime', croise(boites.lecture, boites.annee), false);
-  /* Le bouton principal prend toute la largeur, comme sur le site. */
-  check(`le bouton de l’histoire tient la largeur (${Math.round(boites.lecture.w)} px)`, boites.lecture.w > 300);
+  /* Depuis la refonte du socle : bouton court, calé à droite du millésime. */
+  check(`le bouton de l’histoire reste court (${Math.round(boites.lecture.w)} px)`, boites.lecture.w > 60 && boites.lecture.w < 190);
+  const droite = boites.socle.x + boites.socle.w - (boites.lecture.x + boites.lecture.w);
+  check(`il est calé à droite du socle (${Math.round(droite)} px de marge)`, droite >= -1 && droite < 26);
+  check('il est à droite du millésime', boites.lecture.x >= boites.annee.x + boites.annee.w - 1);
   await ctx.close();
 }
 

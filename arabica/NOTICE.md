@@ -36,24 +36,24 @@ rien ne se recouvre sur un téléphone.
 
 ## Structure de `index.html`
 
-Les numéros de ligne sont approximatifs.
 
 | Lignes | Bloc |
 |---|---|
-| 7–256 | CSS : charte du site (`--bg #efebe2`, `--paper #fbfaf7`, `--ink #212121`, accent `#b95f2c`, olive `#565a41`), Inter puis Helvetica. Boutons droits (2 px) en capitales filetées |
-| 257–310 | HTML : canvas WebGL `#gl` (décor) + canvas 2D `#c` (arbre), en-tête, menu, dock du temps, cartouche histoire, pages |
-| 315–580 | i18n : `UI`, `LT_L`, `NODES_L` (EN/ZH des fiches), `EVENTS_L`, `STORY_L`, `PLT`… Le texte français est la source, dans les données plus bas |
-| 583–735 | `PLATES` : anciennes illustrations monochromes (encore utilisées pour les pages Yunnan et Terroirs) |
-| 736–988 | `BOT` : planches botaniques XIXe générées pour chaque variété. Le tableau `T` contient les caractères de chaque variété : couleur des fruits, forme, feuilles, jeunes pousses, port, rouille… |
-| 989–1059 | `AUD` : sons de clic et nappe ambiante (Web Audio, synthèse) |
-| 1060–1300 | **Données** : `GROUPS`, `LT` (types de liens), `SRC` (sources), `NODES` (47 variétés), `YLINKS` (arrivées au Yunnan), `EVENTS` (chronologie du Yunnan), `REGIONS` (terroirs), `ILL` |
-| 1304–1310 | Échelle du temps `TS`, dimensions de l'arbre `HGT` / `RS`, `ERAS` |
-| 1356–1370 | Caméra : `MIND` / `MAXD`, vue d'accueil `HOME`, sphère de poussière `SPH_R` |
-| 1446–1550 | Soleil animé (`SUN`, `sunUpdate`) + décor WebGL `GL3` (terrain, brume, ciel) |
-| 1585–1700 | `draw()` : rendu de l'arbre (points, fils ondulants, étiquettes) |
-| 1757–1850 | Pages (`PAGES`), fiche (`openFiche`), routage par hash |
-| 1846 | `setLang()` |
-| 1889–1980 | Histoire animée (`STORY`, `storyStart`, `storyGo`…) |
+| 13–305 | CSS : charte du site (`--bg #efebe2`, `--paper #fbfaf7`, `--ink #212121`, accent `#b95f2c`, olive `#565a41`), Inter puis Helvetica. Boutons droits (2 px) en capitales filetées. Toutes les teintes dérivent de trois triplets (`--encre`, `--pap`, `--fond`) que le cycle jour/nuit réécrit |
+| 306–370 | HTML : canvas WebGL `#gl` (décor) + canvas 2D `#c` (arbre), en-tête, menu, socle du temps, cartouche histoire, pages |
+| 372–686 | i18n : `UI`, `LT_L`, `NODES_L` (EN/ZH des fiches), `REGIONS_L`, `EVENTS_L`, `STORY_L`, `PLT`… Le texte français est la source, dans les données plus bas |
+| 687–839 | `PLATES` : illustrations monochromes (pages Yunnan et Terroirs) |
+| 840–1110 | `BOT` : planches botaniques XIXe générées pour chaque variété. Le tableau `T` contient les caractères de chaque variété : couleur des fruits, forme, feuilles, jeunes pousses, port, rouille… |
+| 1111–1211 | `AUD` : nappe ambiante, réverbération, et les notes des boutons (Web Audio, synthèse). `duck()` efface la nappe d'un souffle à chaque note, sans quoi elle les couvre |
+| 1212–1515 | **Données** : `GROUPS`, `LT` (types de liens), `SRC` (sources), `NODES` (65 variétés), `YLINKS` (arrivées au Yunnan), `EVENTS` (chronologie du Yunnan), `REGIONS` (terroirs), `LOTS`, `ILL` |
+| 1516–1573 | Échelle du temps `TS`, dimensions de l'arbre `HGT` / `RS`, `ERAS`, relevé de relief `RELIEF` |
+| 1574–1680 | Caméra : `MIND` / `MAXD`, vue d'accueil `HOME`, sphère de poussière `SPH_R` |
+| 1681–1961 | Cycle jour/nuit (`CIEL`, `MOMENTS`, `sunUpdate`) + décor WebGL `GL3` (terrain réel du Yunnan, brume, ciel) |
+| 1962–2265 | `draw()` : rendu de l'arbre (points, fils ondulants, étiquettes), survol des terroirs (`TERR`) |
+| 2266–2459 | Pages (`PAGES`), fiche (`openFiche`), `setLang()`, routage par hash |
+| 2460–2560 | Histoire animée (`STORY`, `storyStart`, `storyGo`…), mode épuré, voix des boutons (`VOIX`) |
+
+Les numéros de ligne sont indicatifs : ils bougent à chaque ajout de variété.
 
 ## Ajouter ou modifier une variété
 
@@ -73,8 +73,13 @@ Les numéros de ligne sont approximatifs.
    - `nc` : nombre de fruits par grappe ;
    - `inter` : entre-nœuds (moins de 1 pour les variétés naines).
 4. **Arrivée au Yunnan** (facultatif) : `YLINKS` + `YL_L`.
+5. **Sources** : chaque clé citée dans `s:[…]` doit exister dans `SRC`, sinon la ligne
+   est rendue vide et personne ne le voit. La construction ne le vérifie pas.
+6. **Planche illustrée** : ajouter `ILL[id]` pour garder le tableau complet.
 
-Les événements, étapes de l'histoire et terroirs suivent la même logique : français dans les données, EN / ZH dans les tables `_L`, alignés par index. **Ajouter un événement décale les index** : vérifier `EV_ILL` et les `ev:` dans `STORY`.
+Les événements, étapes de l'histoire et terroirs suivent la même logique : français dans les données, EN / ZH dans les tables `_L`, alignés par index. **Ajouter un événement décale les index** : vérifier `EV_ILL` et les `ev:` dans `STORY`,
+et garder `EVENTS` trié par année — la chronologie s'affiche dans l'ordre du tableau.
+`REGIONS_L` porte trois éléments par terroir : nom, texte, second paragraphe (`d2`).
 
 ## Points à savoir
 
