@@ -728,6 +728,90 @@ titre('Le verre dépoli reste lisible');
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Chaque texte tient son contraste, à l'écran
+ * ------------------------------------------------------------------ *
+ * On ne lit pas une feuille de style, on lit un écran. Cette épreuve
+ * photographie chaque état, puis, pour chaque élément qui porte du texte,
+ * relève la couleur dominante de sa boîte — les lettres y sont toujours
+ * minoritaires, c'est donc le fond — et la compare à la couleur du trait.
+ * Elle voit ainsi ce qu'aucune lecture du code ne montre : le verre
+ * translucide, le paysage derrière, la bascule jour/nuit, et le fill d'un
+ * SVG, qui n'est pas son color.
+ */
+titre('Chaque texte tient son contraste, à l’écran');
+{
+  const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const lum = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
+  const releve = () => [...document.querySelectorAll('body *')]
+    .filter((e) => [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()))
+    .filter((e) => e.checkVisibility && e.checkVisibility({ opacityProperty: true, visibilityProperty: true }))
+    .filter((e) => {
+      const r = e.getBoundingClientRect();
+      if (r.width < 4 || r.height < 4) return false;
+      const x = Math.min(innerWidth - 1, Math.max(1, r.x + r.width / 2));
+      const y = Math.min(innerHeight - 1, Math.max(1, r.y + r.height / 2));
+      const haut = document.elementFromPoint(x, y);
+      return !!haut && (haut === e || e.contains(haut) || haut.contains(e));
+    })
+    .map((e) => {
+      const r = e.getBoundingClientRect(); const cs = getComputedStyle(e);
+      if (r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) return null;
+      return {
+        txt: e.textContent.trim().replace(/\s+/g, ' ').slice(0, 26),
+        x: Math.max(0, Math.round(r.x)), y: Math.max(0, Math.round(r.y)),
+        w: Math.round(Math.min(r.width, innerWidth - r.x)), h: Math.round(Math.min(r.height, innerHeight - r.y)),
+        /* Un <text> SVG porte sa couleur dans fill, pas dans color. */
+        col: e.ownerSVGElement && cs.fill && cs.fill !== 'none' ? cs.fill : cs.color,
+        taille: parseFloat(cs.fontSize), gras: parseInt(cs.fontWeight) >= 600,
+      };
+    }).filter(Boolean);
+  const dominante = (brut) => {
+    const m = new Map();
+    for (let i = 0; i < brut.length; i += 3) {
+      const k = (brut[i] >> 3 << 10) | (brut[i + 1] >> 3 << 5) | (brut[i + 2] >> 3);
+      m.set(k, (m.get(k) || 0) + 1);
+    }
+    let mieux = 0, bk = 0;
+    for (const [k, v] of m) if (v > mieux) { mieux = v; bk = k; }
+    return [((bk >> 10) & 31) * 8 + 4, ((bk >> 5) & 31) * 8 + 4, (bk & 31) * 8 + 4];
+  };
+  const etats = {
+    'l’arbre': async () => {},
+    'un aperçu': async (p) => { await p.evaluate(() => select(M.catimor)); await p.waitForTimeout(700); },
+    'le récit': async (p) => { await p.evaluate(() => { storyStart(0); storyGo(5); storyPause(true); }); await p.waitForTimeout(700); },
+    'le survol': async (p) => { await p.evaluate(() => { location.hash = 'survol'; }); await p.waitForTimeout(3400); },
+    'les terroirs': async (p) => { await p.evaluate(() => openPage('terroirs')); await p.waitForTimeout(900); },
+    'une fiche': async (p) => { await p.evaluate(() => openFiche(M.catimor)); await p.waitForTimeout(800); },
+  };
+  for (const h of [13, 19, 22]) {
+    const fautes = [];
+    for (const [nom, prep] of Object.entries(etats)) {
+      const ctx = await nav.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+      const p = await ctx.newPage();
+      await p.goto(`http://127.0.0.1:${PORT}/?heure=${h}`, { waitUntil: 'load' });
+      await p.waitForTimeout(2600);
+      try { await prep(p); } catch (e) {}
+      const els = await p.evaluate(releve);
+      const vue = await p.screenshot();
+      for (const e of els) {
+        let brut;
+        try { brut = await sharp(vue).extract({ left: e.x, top: e.y, width: e.w, height: e.h }).removeAlpha().raw().toBuffer(); } catch (x) { continue; }
+        const fond = dominante(brut);
+        const v = e.col.match(/[\d.]+/g).map(Number);
+        const a = v.length > 3 ? v[3] : 1;
+        const trait = [0, 1, 2].map((i) => v[i] * a + fond[i] * (1 - a));
+        const L1 = lum(trait), L2 = lum(fond);
+        const k = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+        const gros = e.taille >= 24 || (e.taille >= 18.66 && e.gras);
+        if (k < (gros ? 3 : 4.5)) fautes.push(`${nom} « ${e.txt} » ${e.taille}px ${k.toFixed(1)}:1`);
+      }
+      await ctx.close();
+    }
+    check(`à ${h} h, tous les textes tiennent leur seuil${fautes.length ? ' — ' + fautes.slice(0, 3).join(' | ') : ''}`, fautes.length, 0);
+  }
+}
+
 await nav.close();
 serveur.close();
 
