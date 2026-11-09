@@ -45,7 +45,7 @@ a{color:inherit}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
 .kicker{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:7px}
-.btn{height:34px;padding:0 16px;border-radius:2px;border:1px solid var(--line);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.btn{height:34px;padding:0 16px;white-space:nowrap;border-radius:2px;border:1px solid var(--line);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;transition:.2s}
 .btn:hover{border-color:rgba(var(--encre),.45)}
 .btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .btn.dark:hover{background:var(--verm);border-color:var(--verm)}
@@ -116,7 +116,8 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 #sopen{height:34px;padding:0 14px}
 .story.resume #splay{animation:pls 1.8s infinite}
 @keyframes sw{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.sctl{display:flex;align-items:center;gap:5px}
+.sctl{display:flex;align-items:center;gap:5px;flex-wrap:wrap;row-gap:6px}
+.sctl .btn,.sctl .icb{flex:none}
 /* Pendant le récit, on peut tout effacer : le cartouche, la frise, le menu.
    Il ne reste que le paysage et le logo — et un bouton discret pour revenir.
    C'est la demande la plus simple à satisfaire et la plus difficile à ne pas
@@ -370,7 +371,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
    TRADUCTIONS — FR (référence) · EN · 简体中文
    ===================================================================== */
 const UI={
- fr:{menu:'Menu',hint:'Glisser pour tourner · pincer pour zoomer',play:'Raconter l’histoire',playCourt:'Histoire',epure:'Masquer les commandes',epureOff:'Revoir les commandes',back:'← L’arbre',
+ fr:{menu:'Menu',hint:'Glisser pour tourner · pincer pour zoomer',play:'Raconter l’histoire',playCourt:'Histoire',epure:'Masquer les commandes',epureOff:'Les commandes',back:'← L’arbre',
   nav:[['L’arbre','explorer en 3D'],['Raconter l’histoire','≈ 2 min'],['Les variétés','fiches'],['Le Yunnan','chronologie'],['Terroirs','carte & lots'],['Sources & méthode','']],
   display:'Affichage',swYun:'Surligner le Yunnan',swRot:'Rotation automatique',home:'Recentrer la vue',lineages:'Lignées',lang:'Langue',
   sig:'les cafés du Yunnan<br>atlas génétique',readFiche:'Lire la fiche',inYunnan:'présente au Yunnan',yTimeline:'Chronologie du Yunnan',
@@ -378,7 +379,7 @@ const UI={
   date:'Date',place:'Lieu',lineage:'Lignée',approx:'⚠ Position chronologique approximative',atYunnan:'Au Yunnan',parents:'Parents',kids:'Descendance',seeTree:'Voir dans l’arbre →',sources:'Sources',plate:'Planche',
   vTitle:'Les variétés',vLead:n=>`${n} variétés, espèces et populations, des forêts d’Éthiopie aux variétés encore en essai. Chaque fiche raconte l’origine de la variété, sa parenté et son lien avec le Yunnan.`,search:'Chercher une variété…',prehist:'préhistoire',
   yTitle:'Le Yunnan',yLead:'Le Yunnan fournit 98 % du café chinois. Son histoire génétique tient en trois temps : Typica et Bourbon passent la frontière birmane en 1914 ; à partir de 1988, un programme mené avec la Banque mondiale et le PNUD, puis avec Nestlé, convertit la quasi-totalité du verger au Catimor — une seule lignée, CIFC 7963, qui porte des gènes de Robusta via l’Hybride de Timor ; depuis les années 2010, une nouvelle vague replante du Geisha en altitude et le Yunnan devient le premier exportateur de café de Chine. Le café de spécialité y pesait encore moins de 2 % des volumes en 2018.',
-  seeOnTree:'Voir sur l’arbre →',fut:['Yunma — voyage de sélection','Rencontre de producteurs indépendants au Yunnan. Les lots sélectionnés apparaîtront ici et dans les terroirs.'],exploreTerr:'Explorer les terroirs →',flyTerr:'Survoler les terroirs →',tQuit:'Quitter le survol',tCard:'La fiche',tLots:'{n} lots dans le top 15 du Gems of Yunnan 2026',tLot:'1 lot dans le top 15 du Gems of Yunnan 2026',tNoLot:'Aucun lot dans le top 15 du Gems of Yunnan 2026',tBest:'Meilleur lot',tOf:'Terroir {i} sur {n}',tBref:'En bref',tBande:'Altitudes des lots classés',tVar:'Variétés classées',tProc:'Procédés',tPart:'{n} des quinze premiers lots',tPartL:'Dans le classement',yArrivees:'Les variétés arrivées au Yunnan',yArrL:'Arrivée',yAuj:'aujourd’hui',tPart1:'Un des quinze premiers lots',tRien:'Aucun lot dans les quinze premiers en 2026',tCeSurvol:'Survoler ce terroir →',tRegions:'{n} régions classées sur sept',tHaut:'Le plus haut lot classé',tBas:'Le plus bas',
+  seeOnTree:'Voir sur l’arbre →',fut:['Yunma — voyage de sélection','Rencontre de producteurs indépendants au Yunnan. Les lots sélectionnés apparaîtront ici et dans les terroirs.'],exploreTerr:'Explorer les terroirs →',flyTerr:'Survoler les terroirs →',tQuit:'Quitter',tCard:'Fiche',ficheCourt:'Fiche',yTimeCourt:'Le Yunnan',tLots:'{n} lots dans le top 15 du Gems of Yunnan 2026',tLot:'1 lot dans le top 15 du Gems of Yunnan 2026',tNoLot:'Aucun lot dans le top 15 du Gems of Yunnan 2026',tBest:'Meilleur lot',tOf:'Terroir {i} sur {n}',tBref:'En bref',tBande:'Altitudes des lots classés',tVar:'Variétés classées',tProc:'Procédés',tPart:'{n} des quinze premiers lots',tPartL:'Dans le classement',yArrivees:'Les variétés arrivées au Yunnan',yArrL:'Arrivée',yAuj:'aujourd’hui',tPart1:'Un des quinze premiers lots',tRien:'Aucun lot dans les quinze premiers en 2026',tCeSurvol:'Survoler ce terroir →',tRegions:'{n} régions classées sur sept',tHaut:'Le plus haut lot classé',tBas:'Le plus bas',
   tTitle:'Terroirs',tLead:'Le café du Yunnan pousse entre 21° et 26° de latitude nord, de part et d’autre du tropique du Cancer, souvent au-dessus de 1 300 m pour les lots de spécialité. La taille des cercles indique le nombre de lots de chaque région dans le top 15 du Gems of Yunnan 2026.',
   all:'Toutes',pts:'pts',noLot:'Aucun lot du top 15 dans cette région',ymK:'Sélection Yunma · 2027',ymH:'Vos producteurs apparaîtront ici',ymH2:'Nos lots',ymP:'Lots sélectionnés lors du voyage de début 2027 auprès de producteurs indépendants : ferme, altitude, variété, process.',tropic:'TROPIQUE DU CANCER',kunming:'Kunming',
   sTitle:'Sources & méthode',sLead:'L’axe vertical de la sphère est le temps, sur une échelle compressée qui va de la naissance de l’Arabica (il y a 350 000 à 610 000 ans) à 2026. Les variétés sont regroupées par lignée autour d’un axe central. À partir de 1892, cet axe devient la chronologie du Yunnan (en rouille).',
@@ -394,7 +395,7 @@ const UI={
   date:'Date',place:'Place',lineage:'Lineage',approx:'⚠ Approximate chronological position',atYunnan:'In Yunnan',parents:'Parents',kids:'Descendants',seeTree:'See in the tree →',sources:'Sources',plate:'Plate',
   vTitle:'Varieties',vLead:n=>`${n} varieties, species and populations, from the forests of Ethiopia to varieties still in trials. Each profile tells the variety’s origin, its lineage and its link with Yunnan.`,search:'Search a variety…',prehist:'prehistory',
   yTitle:'Yunnan',yLead:'Yunnan supplies 98% of China’s coffee. Its genetic history comes in three stages: Typica and Bourbon cross the Burmese border in 1914; from 1988, a programme run with the World Bank and the UNDP, then with Nestlé, converts almost the whole crop to Catimor — a single line, CIFC 7963, carrying Robusta genes through the Timor Hybrid; and since the 2010s a new wave has been replanting Geisha at altitude, while Yunnan becomes China’s leading coffee exporter. Specialty coffee still accounted for less than 2% of volumes in 2018.',
-  seeOnTree:'See on the tree →',fut:['Yunma — sourcing trip','Meeting independent producers in Yunnan. The selected lots will appear here and in Terroirs.'],exploreTerr:'Explore the terroirs →',flyTerr:'Fly over the terroirs →',tQuit:'Leave the flyover',tCard:'Details',tLots:'{n} lots in the Gems of Yunnan 2026 top 15',tLot:'1 lot in the Gems of Yunnan 2026 top 15',tNoLot:'No lot in the Gems of Yunnan 2026 top 15',tBest:'Best lot',tOf:'Terroir {i} of {n}',tBref:'At a glance',tBande:'Altitudes of the ranked lots',tVar:'Ranked varieties',tProc:'Processes',tPart:'{n} of the top fifteen lots',tPartL:'In the ranking',yArrivees:'The varieties that reached Yunnan',yArrL:'Arrival',yAuj:'today',tPart1:'One of the top fifteen lots',tRien:'No lot in the top fifteen in 2026',tCeSurvol:'Fly over this terroir →',tRegions:'{n} regions ranked out of seven',tHaut:'Highest ranked lot',tBas:'Lowest',
+  seeOnTree:'See on the tree →',fut:['Yunma — sourcing trip','Meeting independent producers in Yunnan. The selected lots will appear here and in Terroirs.'],exploreTerr:'Explore the terroirs →',flyTerr:'Fly over the terroirs →',tQuit:'Exit',tCard:'Details',ficheCourt:'Profile',yTimeCourt:'Yunnan',tLots:'{n} lots in the Gems of Yunnan 2026 top 15',tLot:'1 lot in the Gems of Yunnan 2026 top 15',tNoLot:'No lot in the Gems of Yunnan 2026 top 15',tBest:'Best lot',tOf:'Terroir {i} of {n}',tBref:'At a glance',tBande:'Altitudes of the ranked lots',tVar:'Ranked varieties',tProc:'Processes',tPart:'{n} of the top fifteen lots',tPartL:'In the ranking',yArrivees:'The varieties that reached Yunnan',yArrL:'Arrival',yAuj:'today',tPart1:'One of the top fifteen lots',tRien:'No lot in the top fifteen in 2026',tCeSurvol:'Fly over this terroir →',tRegions:'{n} regions ranked out of seven',tHaut:'Highest ranked lot',tBas:'Lowest',
   tTitle:'Terroirs',tLead:'Yunnan’s coffee grows between 21° and 26° north, on both sides of the Tropic of Cancer, often above 1,300 m for specialty lots. The size of each circle shows how many of the region’s lots made the Gems of Yunnan 2026 top 15.',
   all:'All',pts:'pts',noLot:'No top-15 lot from this region',ymK:'Yunma selection · 2027',ymH:'Our producers will appear here',ymH2:'Our lots',ymP:'Lots selected during the early-2027 trip to independent producers: farm, altitude, variety, process.',tropic:'TROPIC OF CANCER',kunming:'Kunming',
   sTitle:'Sources & method',sLead:'The sphere’s vertical axis is time, on a compressed scale running from the birth of Arabica (350,000 to 610,000 years ago) to 2026. Varieties are grouped by lineage around a central axis. From 1892 onwards, this axis becomes the Yunnan timeline (in rust).',
@@ -410,7 +411,7 @@ const UI={
   date:'年代',place:'地点',lineage:'谱系',approx:'⚠ 年代位置仅为近似',atYunnan:'在云南',parents:'亲本',kids:'后代',seeTree:'在树中查看 →',sources:'资料来源',plate:'图版',
   vTitle:'品种',vLead:n=>`${n} 个品种、物种与种群，从埃塞俄比亚的森林到仍在试验中的品种。每份档案都讲述品种的起源、亲缘关系及其与云南的联系。`,search:'搜索品种…',prehist:'史前',
   yTitle:'云南',yLead:'云南供应了中国 98% 的咖啡。它的品种史分为三个阶段：1914 年，铁皮卡和波旁越过中缅边境；1988 年起，一项与世界银行和联合国开发计划署合作、随后又有雀巢参与的项目，把几乎整个咖啡园改种卡蒂姆——其实只是一个选系，CIFC 7963，通过蒂莫尔杂交种携带着罗布斯塔的基因；2010 年代以来，新一波力量在高海拔重新种下瑰夏，云南也成为中国第一咖啡出口省。而在 2018 年，精品咖啡在中国的产量中仍占不到 2%。',
-  seeOnTree:'在树上查看 →',fut:['Yunma——选豆之旅','在云南拜访独立生产者。入选的批次将显示在这里和“风土”页面中。'],exploreTerr:'探索风土 →',flyTerr:'俯瞰风土 →',tQuit:'退出俯瞰',tCard:'详情',tLots:'2026 Gems of Yunnan 前 15 名中有 {n} 支',tLot:'2026 Gems of Yunnan 前 15 名中有 1 支',tNoLot:'2026 Gems of Yunnan 前 15 名中没有',tBest:'最佳批次',tOf:'第 {i} 个风土，共 {n} 个',tBref:'概览',tBande:'入选批次海拔',tVar:'入选品种',tProc:'处理法',tPart:'前十五名中的 {n} 支',tPartL:'排名情况',yArrivees:'传入云南的品种',yArrL:'传入',yAuj:'至今',tPart1:'前十五名中的 1 支',tRien:'2026 年无批次进入前十五',tCeSurvol:'俯瞰这片风土 →',tRegions:'七个产区中有 {n} 个入选',tHaut:'入选批次中海拔最高',tBas:'最低',
+  seeOnTree:'在树上查看 →',fut:['Yunma——选豆之旅','在云南拜访独立生产者。入选的批次将显示在这里和“风土”页面中。'],exploreTerr:'探索风土 →',flyTerr:'俯瞰风土 →',tQuit:'退出',tCard:'详情',ficheCourt:'档案',yTimeCourt:'云南',tLots:'2026 Gems of Yunnan 前 15 名中有 {n} 支',tLot:'2026 Gems of Yunnan 前 15 名中有 1 支',tNoLot:'2026 Gems of Yunnan 前 15 名中没有',tBest:'最佳批次',tOf:'第 {i} 个风土，共 {n} 个',tBref:'概览',tBande:'入选批次海拔',tVar:'入选品种',tProc:'处理法',tPart:'前十五名中的 {n} 支',tPartL:'排名情况',yArrivees:'传入云南的品种',yArrL:'传入',yAuj:'至今',tPart1:'前十五名中的 1 支',tRien:'2026 年无批次进入前十五',tCeSurvol:'俯瞰这片风土 →',tRegions:'七个产区中有 {n} 个入选',tHaut:'入选批次中海拔最高',tBas:'最低',
   tTitle:'风土',tLead:'云南咖啡生长于北纬 21° 至 26° 之间，横跨北回归线，精品批次多种植于海拔 1300 米以上。圆圈大小表示各产区进入 Gems of Yunnan 2026 前 15 名的批次数量。',
   all:'全部',pts:'分',noLot:'该产区没有进入前 15 名的批次',ymK:'Yunma 精选 · 2027',ymH:'我们的生产者将在此呈现',ymH2:'我们的批次',ymP:'2027 年初走访独立生产者时选定的批次：庄园、海拔、品种、处理法。',tropic:'北回归线',kunming:'昆明',
   sTitle:'资料与方法',sLead:'球体的纵轴代表时间，采用压缩比例，从阿拉比卡诞生（距今 35 万至 61 万年）一直到 2026 年。各品种按谱系围绕中轴分布。自 1892 年起，这条中轴成为云南的年表（锈红色）。',
@@ -2064,8 +2065,18 @@ function terrTexte(r){
   if(!ls.length)return n;
   const b=ls.slice().sort((a,c)=>a[0]-c[0])[0];
   const alts=ls.flatMap(l=>[l[8],l[9]]);
-  const bande=`${Math.min(...alts).toLocaleString(LANG==='fr'?'fr-FR':'en-US')} – ${Math.max(...alts).toLocaleString(LANG==='fr'?'fr-FR':'en-US')} m`;
-  return `${n} · ${bande}<br>${U('tBest')} : n°${b[0]} · ${TL(b[6])} · ${b[7]} — ${b[3]}, ${b[1].toFixed(2)}`;
+  const loc=LANG==='fr'?'fr-FR':'en-US';
+  /* L'espace avant « m » est insécable : sans elle, l'unité tombe seule sur
+     la ligne suivante dès que le cartouche est étroit. */
+  const bande=`${Math.min(...alts).toLocaleString(loc)} – ${Math.max(...alts).toLocaleString(loc)}\u00a0m`;
+  /* La ponctuation n'est pas la même d'une langue à l'autre : le français
+     met une espace avant les deux-points, le chinois a les siens, et « n° »
+     ne se dit pas en anglais. */
+  const sep=LANG==='fr'?' : ':LANG==='zh'?'：':': ';
+  const vir=LANG==='zh'?'，':', ';
+  const rang=LANG==='zh'?`第${b[0]}名`:LANG==='en'?`#${b[0]}`:`n°${b[0]}`;
+  const note=b[1].toLocaleString(loc,{minimumFractionDigits:2,maximumFractionDigits:2});
+  return `${n} · ${bande}<br>${U('tBest')}${sep}${rang} · ${TL(b[6])} · ${b[7]} — ${TL(b[3])}${vir}${note}`;
 }
 function terrAllerA(i,doux){
   const r=REGIONS[TERR.i=(i+REGIONS.length)%REGIONS.length];
@@ -2102,10 +2113,12 @@ function terrStart(i){
   terrAllerA(i??0,false);AUD.fx('open');
   try{if(location.hash!=='#survol')location.hash='survol'}catch(e){}
 }
-function terrStop(fromHash){
+function terrStop(fromHash,muet){
   if(!TERR.on)return;TERR.on=false;document.body.classList.remove('terring');
   const el=document.getElementById('terr');el.classList.remove('on');setTimeout(()=>{if(!TERR.on)el.hidden=true},500);
-  goHome();AUD.fx('close');
+  /* Quand on sort du survol pour aller ailleurs, c'est la destination qui
+     donne la note : deux sons au même instant font une bouillie. */
+  goHome();if(!muet)AUD.fx('close');
   if(!fromHash)try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 }
 /* Les sept repères, posés sur le relief et projetés comme le reste. */
@@ -2189,7 +2202,7 @@ cv.addEventListener('pointerup',endPtr);cv.addEventListener('pointercancel',endP
 cv.addEventListener('pointerleave',()=>{S.hover=null;hideTip()});
 cv.addEventListener('wheel',e=>{e.preventDefault();touch();if(e.shiftKey){tgt.ty=Math.max(-4500,Math.min(4500,tgt.ty-e.deltaY*1.1))}else{tgt.dist=Math.max(MIND,Math.min(MAXD,tgt.dist*Math.exp(e.deltaY*.0012)))}},{passive:false});
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
-  if(e.key==='Escape'){if(menuOpen)closeMenu();else if(pageOpen)closePage();else if(ST.on)storyEnd(false);else deselect()}
+  if(e.key==='Escape'){if(menuOpen)closeMenu();else if(pageOpen)closePage();else if(TERR.on)terrStop();else if(ST.on)storyEnd(false);else deselect()}
   if(pageOpen||menuOpen)return;
   if(e.key===' '){e.preventDefault();ST.on?storyPause(!ST.paused):storyStart(0)}
   if(e.key==='ArrowUp')tgt.ty=Math.min(4500,tgt.ty+180);if(e.key==='ArrowDown')tgt.ty=Math.max(-4500,tgt.ty-180);if(e.key==='ArrowLeft')tgt.yaw+=.25;if(e.key==='ArrowRight')tgt.yaw-=.25;
@@ -2248,14 +2261,14 @@ const menu=document.getElementById('menu'),scrim=document.getElementById('scrim'
 function openMenu(){menuOpen=true;menu.classList.add('on');scrim.classList.add('on');if(ST.on&&!ST.paused)storyPause(true)}
 function closeMenu(){menuOpen=false;menu.classList.remove('on');scrim.classList.remove('on')}
 document.getElementById('menuBtn').onclick=openMenu;scrim.onclick=closeMenu;document.getElementById('menuClose').onclick=closeMenu;
-document.getElementById('brand').onclick=e=>{e.preventDefault();closePage();closeMenu();deselect();goHome()};
+document.getElementById('brand').onclick=e=>{e.preventDefault();terrStop(false,true);closePage();closeMenu();deselect();goHome()};
 document.getElementById('mnav').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const k=b.dataset.go;closeMenu();
-  if(k==='arbre'){closePage();deselect();goHome()}else if(k==='histoire'){closePage();storyStart(0)}else openPage(k)});
+  if(k==='arbre'){terrStop(false,true);closePage();deselect();goHome()}else if(k==='histoire'){closePage();storyStart(0)}else openPage(k)});
 document.getElementById('chips').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(!b)return;const g=b.dataset.g;S.hidden.has(g)?S.hidden.delete(g):S.hidden.add(g);b.classList.toggle('off',S.hidden.has(g))});
 function sw(id,get,set){const el=document.getElementById(id);const up=()=>el.classList.toggle('on',get());el.onclick=()=>{set(!get());up()};up()}
 sw('swYun',()=>S.yun,v=>{S.yun=v;if(v){S.year=2026;syncTime()}});
 sw('swRot',()=>S.rotate,v=>S.rotate=v);
-document.getElementById('btnHome').onclick=()=>{closeMenu();deselect();goHome()};
+document.getElementById('btnHome').onclick=()=>{closeMenu();terrStop(false,true);deselect();goHome()};
 
 /* =====================================================================
    PAGES (sections séparées)
@@ -2293,10 +2306,10 @@ const PAGES={
    <div class="sec">${U('sRefs')}</div><ol class="refs">${Object.values(SRC).map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join('')}</ol>${SIG}`}
 };
 let curPage=null;
-function openPage(k,fromHash){const P=PAGES[k];if(!P)return;closeMenu();if(!fromHash)AUD.fx('open');if(ST.on)storyHold();else deselect();curPage=['p',k];
+function openPage(k,fromHash){const P=PAGES[k];if(!P)return;closeMenu();terrStop(fromHash,true);if(!fromHash)AUD.fx('open');if(ST.on)storyHold();else deselect();curPage=['p',k];
   pkick.textContent=P.k();pin.innerHTML=P.r();P.after&&P.after();page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
   if(!fromHash)try{if(location.hash!=='#'+k)location.hash=k}catch(e){}}
-function openFiche(n,fromHash,keepScroll){closeMenu();if(!keepScroll)AUD.fx('open');if(ST.on)storyHold();const G=GROUPS[n.g];curPage=['f',n.id];
+function openFiche(n,fromHash,keepScroll){closeMenu();terrStop(fromHash,true);if(!keepScroll)AUD.fx('open');if(ST.on)storyHold();const G=GROUPS[n.g];curPage=['f',n.id];
   const par=(n.p||[]).map(([id,t,note])=>relBtn(id,t,note)).join('');const kid=n.kids.map(([id,t,note])=>relBtn(id,t,note)).join('');
   const yl=YLINKS.filter(l=>l[0]===n.id);const approx=/≈|约|indicative|approximate|non vérifiée|non trouvée|not found|未查到|not verified|未核实|divergentes|disagree|不一|参考|débattu|disputed|存疑/.test(n.yl);
   pkick.innerHTML=`<span class="dot" style="background:${G.c}"></span>${G.l}`;
@@ -2409,7 +2422,10 @@ function setLang(l,init){
   syncTime();
   if(pageOpen&&curPage){const sc=page.scrollTop;if(curPage[0]==='f')openFiche(M[curPage[1]],true,true);else{pkick.textContent=PAGES[curPage[1]].k();pin.innerHTML=PAGES[curPage[1]].r();PAGES[curPage[1]].after&&PAGES[curPage[1]].after()}page.scrollTop=sc}
   if(S.sel)select(S.sel,true);else if(S.selEv)selectEvent(S.selEv,true);
-  if(ST.on)renderStoryCard()
+  if(ST.on)renderStoryCard();
+  if(TERR.on){const el=document.getElementById('terr');
+    el.querySelector('#tcard').textContent=U('tCard');el.querySelector('#tquit').textContent=U('tQuit');
+    terrAllerA(TERR.i,true)}
 }
 function applyStatic(){
   document.querySelectorAll('[data-i]').forEach(el=>{const v=U(el.dataset.i);if(typeof v==='string')el.innerHTML=v});
@@ -2471,13 +2487,13 @@ function stepTarget(st){const n=st.id?M[st.id]:null,mob=mobile();
   return{tx:0,tz:0,ty:EVENTS[st.ev].wy,dist:mob?5600:6800,pitch:.2}}
 function camSnap(){return{tx:cam.tx,tz:cam.tz,ty:cam.ty,dist:cam.dist,pitch:cam.pitch}}
 function storyStart(i=0){story.classList.remove('resume');
-  S.intro=false;S.playing=false;deselect();closePage();closeMenu();
+  S.intro=false;S.playing=false;terrStop(false,true);deselect();closePage();closeMenu();
   ST.on=true;ST.paused=false;document.body.classList.add('storying');story.classList.add('on');setStoryText(storyText);document.getElementById('hint').style.opacity=0;
   if(i===0){S.year=-610000;syncTime()}storyGo(i);setPlayIcon(true)}
 function renderStoryCard(){const st=STORY[ST.i],n=st.id?M[st.id]:null;
   document.getElementById('skick').textContent=(ST.i+1)+' / '+STORY.length+' · '+(st.y<0?fmtPlain(st.y):st.y);
   document.getElementById('stitle').textContent=st.t;document.getElementById('stext').textContent=st.d;
-  const so=document.getElementById('sopen');so.style.display=(n||st.ev!=null)?'':'none';so.innerHTML=(n?U('readFiche'):U('yTimeline'))+IC.arrow}
+  const so=document.getElementById('sopen');so.style.display=(n||st.ev!=null)?'':'none';so.innerHTML=(n?U('ficheCourt'):U('yTimeCourt'))+IC.arrow}
 function storyGo(i){AUD.fx('step');
   ST.i=Math.max(0,Math.min(STORY.length-1,i));ST.t=0;const st=STORY[ST.i];ST.u0=y2u(S.year);ST.u1=y2u(st.y);
   ST.from=camSnap();ST.to=stepTarget(st);

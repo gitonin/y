@@ -523,6 +523,126 @@ titre('Rien ne se recouvre, en portrait');
   await ctx.close();
 }
 
+/* ------------------------------------------------------------------ *
+ * On ne reste pas coincé dans le survol
+ * ------------------------------------------------------------------ *
+ * Le survol des terroirs prend l'écran entier et cache la frise. Deux de
+ * ses boutons en sortaient, et la barre d'adresse aussi — mais aucune des
+ * autres sorties : ouvrir le menu puis choisir « Raconter l'histoire »
+ * laissait le survol allumé sous le récit. On essaie donc chaque chemin.
+ */
+titre('On ne reste pas coincé dans le survol');
+{
+  const enSurvol = async (p) => {
+    await p.evaluate(() => { location.hash = 'survol'; });
+    await p.waitForTimeout(3200);
+    return p.evaluate(() => TERR.on && document.body.classList.contains('terring'));
+  };
+  const etat = (p) => p.evaluate(() => ({
+    survol: TERR.on,
+    classe: document.body.classList.contains('terring'),
+    cartouche: !document.getElementById('terr').hidden && document.getElementById('terr').classList.contains('on'),
+  }));
+  const parLeMenu = (dest) => async (p) => { await p.click('.menubtn'); await p.waitForTimeout(400); await p.click(`[data-go="${dest}"]`); };
+  const sorties = [
+    ['le menu mène à l’histoire', parLeMenu('histoire')],
+    ['le menu mène aux variétés', parLeMenu('varietes')],
+    ['le menu ramène à l’arbre', parLeMenu('arbre')],
+    ['le logo ramène à l’arbre', async (p) => p.click('#brand')],
+    ['Échap en sort', async (p) => p.keyboard.press('Escape')],
+  ];
+  for (const [nom, geste] of sorties) {
+    const { ctx, p } = await ouvrir(VUES[1]);
+    const parti = await enSurvol(p);
+    await geste(p);
+    await p.waitForTimeout(900);
+    const e = await etat(p);
+    check(nom, parti && !e.survol && !e.classe && !e.cartouche);
+    await ctx.close();
+  }
+  /* Et le bouton du son, lui, ne doit rien fermer. */
+  {
+    const { ctx, p } = await ouvrir(VUES[1]);
+    await enSurvol(p);
+    await p.click('#sndBtn');
+    await p.waitForTimeout(500);
+    const e = await etat(p);
+    check('le bouton du son ne fait pas sortir du survol', e.survol && e.classe && e.cartouche);
+    await ctx.close();
+  }
+  /* Changer de langue pendant le survol doit réécrire le cartouche. */
+  {
+    const { ctx, p } = await ouvrir(VUES[1]);
+    await enSurvol(p);
+    await p.click('.menubtn'); await p.waitForTimeout(400);
+    await p.click('#langs [data-l="en"]'); await p.waitForTimeout(600);
+    await p.click('#menuClose'); await p.waitForTimeout(400);
+    const q = await p.evaluate(() => ({
+      survol: TERR.on,
+      quit: document.getElementById('tquit').textContent.trim(),
+      kick: document.getElementById('tkick').textContent.trim(),
+    }));
+    check(`le survol tient le changement de langue (« ${q.quit} », « ${q.kick} »)`,
+      q.survol && q.quit === 'Exit' && /terroir/i.test(q.kick) && !/sur /i.test(q.kick));
+    await ctx.close();
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Aucune étiquette de bouton ne passe à la ligne
+ * ------------------------------------------------------------------ *
+ * « Quitter le survol » tombait sur deux lignes dans un bouton haut de
+ * trente-quatre pixels, et se faisait rogner. La hauteur ne le dit pas :
+ * on compte les lignes réellement rendues, en relevant les rectangles du
+ * nœud de texte — un par ligne.
+ */
+titre('Aucune étiquette de bouton ne passe à la ligne');
+{
+  const compter = () => {
+    const lignes = (el) => {
+      let n = 0;
+      for (const t of el.childNodes) {
+        if (t.nodeType !== 3 || !t.textContent.trim()) continue;
+        const r = document.createRange(); r.selectNodeContents(t);
+        const rects = [...r.getClientRects()].filter((x) => x.width > 0 && x.height > 0);
+        n = Math.max(n, new Set(rects.map((x) => Math.round(x.top))).size);
+      }
+      return n || 1;
+    };
+    return [...document.querySelectorAll('.btn,.playbtn,.menubtn,.back,.icb')]
+      .filter((e) => e.getClientRects().length)
+      .map((e) => ({ id: e.id || String(e.className).split(' ')[0], txt: (e.textContent || '').trim().slice(0, 22), n: lignes(e) }))
+      .filter((x) => x.n > 1);
+  };
+  /* Un écran étroit, les trois langues : c'est là que les mots débordent. */
+  for (const langue of ['fr', 'en', 'zh']) {
+    const ctx = await nav.newContext({ viewport: { width: 360, height: 820 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
+    await ctx.addInitScript((l) => { try { localStorage.setItem('yunma-lang', l); } catch (e) {} }, langue);
+    const p = await ctx.newPage();
+    await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+    await p.waitForTimeout(2500);
+
+    await p.evaluate(() => { location.hash = 'survol'; });
+    await p.waitForTimeout(3200);
+    const survol = await p.evaluate(compter);
+    check(`en ${langue}, rien ne se coupe dans le survol${survol.length ? ' — ' + survol.map((x) => `${x.id} « ${x.txt} » ${x.n} lignes`).join(', ') : ''}`, survol.length, 0);
+
+    await p.evaluate(() => terrStop());
+    await p.waitForTimeout(600);
+    await p.click('#play');
+    await p.waitForTimeout(900);
+    const n = await p.evaluate(() => STORY.length);
+    const fautifs = [];
+    for (let i = 0; i < n; i++) {
+      await p.evaluate((i) => { storyGo(i); storyPause(true); }, i);
+      await p.waitForTimeout(140);
+      for (const x of await p.evaluate(compter)) fautifs.push(`${i + 1}:${x.id} « ${x.txt} »`);
+    }
+    check(`en ${langue}, rien ne se coupe sur les ${n} étapes du récit${fautifs.length ? ' — ' + fautifs.slice(0, 3).join(', ') : ''}`, fautifs.length, 0);
+    await ctx.close();
+  }
+}
+
 await nav.close();
 serveur.close();
 
