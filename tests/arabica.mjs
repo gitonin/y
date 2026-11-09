@@ -577,9 +577,11 @@ titre('On ne reste pas coincé dans le survol');
     await p.click('.menubtn'); await p.waitForTimeout(400);
     await p.click('#langs [data-l="en"]'); await p.waitForTimeout(600);
     await p.click('#menuClose'); await p.waitForTimeout(400);
+    /* Les deux boutons du cartouche sont des icônes : c'est leur nom
+       accessible qui porte le mot, et c'est donc lui qui doit changer. */
     const q = await p.evaluate(() => ({
       survol: TERR.on,
-      quit: document.getElementById('tquit').textContent.trim(),
+      quit: document.getElementById('tquit').getAttribute('aria-label'),
       kick: document.getElementById('tkick').textContent.trim(),
     }));
     check(`le survol tient le changement de langue (« ${q.quit} », « ${q.kick} »)`,
@@ -639,6 +641,45 @@ titre('Aucune étiquette de bouton ne passe à la ligne');
       for (const x of await p.evaluate(compter)) fautifs.push(`${i + 1}:${x.id} « ${x.txt} »`);
     }
     check(`en ${langue}, rien ne se coupe sur les ${n} étapes du récit${fautifs.length ? ' — ' + fautifs.slice(0, 3).join(', ') : ''}`, fautifs.length, 0);
+    await ctx.close();
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Un bouton sans mot garde un nom
+ * ------------------------------------------------------------------ *
+ * Remplacer les étiquettes par des icônes règle le débordement, mais un
+ * bouton muet n'est plus annonçable : ni pour un lecteur d'écran, ni au
+ * survol de la souris. Chaque bouton sans texte doit donc porter un nom,
+ * et ce nom doit suivre la langue.
+ */
+titre('Un bouton sans mot garde un nom');
+{
+  for (const langue of ['fr', 'en', 'zh']) {
+    const ctx = await nav.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
+    await ctx.addInitScript((l) => { try { localStorage.setItem('yunma-lang', l); } catch (e) {} }, langue);
+    const p = await ctx.newPage();
+    await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+    await p.waitForTimeout(2500);
+    /* On ouvre tout ce qui porte des icônes : l'aperçu, le récit, le survol. */
+    await p.evaluate(() => select(M.catimor)); await p.waitForTimeout(500);
+    const muets = async () => p.evaluate(() => [...document.querySelectorAll('button')]
+      /* checkVisibility tient compte de l'opacité et de la visibilité : un
+         cartouche fermé reste en page, et ses boutons ne comptent pas. */
+      .filter((e) => (e.checkVisibility ? e.checkVisibility({ opacityProperty: true, visibilityProperty: true, contentVisibilityAuto: true }) : e.offsetWidth > 0))
+      .filter((e) => !(e.textContent || '').trim())
+      .filter((e) => !(e.getAttribute('aria-label') || '').trim())
+      .map((e) => e.id || String(e.className).split(' ')[0] || 'sans nom'));
+    const a1 = await muets();
+    /* Le bouton de lecture se cache quand un aperçu est ouvert : on lance
+       le récit par la fonction, pas par le clic. */
+    await p.evaluate(() => storyStart(0)); await p.waitForTimeout(1200);
+    await p.evaluate(() => { storyGo(2); storyPause(true); }); await p.waitForTimeout(300);
+    const a2 = await muets();
+    await p.evaluate(() => { storyEnd(false); location.hash = 'survol'; }); await p.waitForTimeout(3400);
+    const a3 = await muets();
+    const tous = [...new Set([...a1, ...a2, ...a3])];
+    check(`en ${langue}, aucun bouton muet${tous.length ? ' — ' + tous.join(', ') : ''}`, tous.length, 0);
     await ctx.close();
   }
 }

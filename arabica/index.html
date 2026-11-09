@@ -26,6 +26,9 @@
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box}
+/* Un bouton porte son propre display : sans cette règle, l'attribut hidden
+   ne le cache pas, et l'on se retrouve avec un carré vide à l'écran. */
+[hidden]{display:none!important}
 /* Un glissement sur la scène sélectionnait le texte de l'interface, et l'on
    se retrouvait avec un voile bleu par-dessus l'atlas. Rien n'est à
    sélectionner ici — sauf dans les pages, où l'on veut pouvoir copier un
@@ -49,7 +52,7 @@ a{color:inherit}
 .btn:hover{border-color:rgba(var(--encre),.45)}
 .btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .btn.dark:hover{background:var(--verm);border-color:var(--verm)}
-.x{width:30px;height:30px;border-radius:2px;border:1px solid var(--line);display:grid;place-items:center;color:var(--mute);flex:none;font-size:12px;background:var(--paper)}
+.x{width:30px;height:30px;border-radius:2px;border:1px solid var(--line);display:grid;place-items:center;color:var(--mute);flex:none;font-size:12px}
 .x:hover{color:var(--ink);border-color:rgba(var(--encre),.4)}
 
 /* ---------- en-tête ---------- */
@@ -90,21 +93,28 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .ticks b{position:absolute;bottom:19px;width:4px;height:4px;border-radius:50%;background:var(--verm);transform:translateX(-50%)}
 
 /* ---------- aperçu ---------- */
-.icb{width:34px;height:34px;border-radius:2px;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink);flex:none;background:var(--paper);transition:.2s}
+.icb{width:34px;height:34px;border-radius:2px;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink);flex:none;transition:.2s}
 .icb:hover{border-color:rgba(var(--encre),.45)}
 .icb svg{width:15px;height:15px}
 .icb.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .icb.dark:hover{background:var(--verm);border-color:var(--verm)}
 .btn svg{width:13px;height:13px}
-.peek{position:fixed;z-index:7;left:50%;bottom:calc(var(--sb) + var(--dockh,124px) + 10px);transform:translate(-50%,14px);opacity:0;pointer-events:none;width:min(460px,calc(100% - 28px));background:rgba(var(--pap),.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:2px;box-shadow:0 20px 50px -24px rgba(var(--encre),.35);display:flex;align-items:center;gap:10px;padding:8px 8px 8px 22px;transition:opacity .35s,transform .35s}
+.peek{position:fixed;z-index:7;left:50%;bottom:calc(var(--sb) + var(--dockh,124px) + 10px);transform:translate(-50%,14px);opacity:0;pointer-events:none;width:min(460px,calc(100% - 28px));border:1px solid var(--line);border-radius:2px;box-shadow:0 20px 50px -24px rgba(var(--encre),.35);display:flex;align-items:center;gap:10px;padding:8px 8px 8px 22px;transition:opacity .35s,transform .35s}
 .peek.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .pk-tx{flex:1;min-width:0}
 .peek h3{font-size:17px;font-weight:400;letter-spacing:-.02em;margin:3px 0 0;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .peek .kicker{white-space:nowrap;overflow:hidden}
+.pkfiche{gap:9px}
+.pkfiche svg{width:14px;height:14px;flex:none}
+@media (max-width:460px){.pkfiche span{display:none}.pkfiche{padding:0 12px}}
 
 /* ---------- histoire ---------- */
-.story{position:fixed;z-index:7;left:50%;bottom:calc(var(--sb) + var(--dockh,122px) + 10px);width:min(520px,calc(100% - 28px));background:rgba(var(--pap),.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:2px;box-shadow:0 24px 60px -26px rgba(var(--encre),.38);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .45s,transform .45s;overflow:hidden}
+.story{position:fixed;z-index:7;left:50%;bottom:calc(var(--sb) + var(--dockh,122px) + 10px);width:min(520px,calc(100% - 28px));border:1px solid var(--line);border-radius:2px;box-shadow:0 24px 60px -26px rgba(var(--encre),.38);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .45s,transform .45s;overflow:hidden}
 .story.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+/* Fermé, le cartouche reste en place mais invisible : sans cela ses boutons
+   restent annoncés par les lecteurs d'écran et atteignables à la tabulation. */
+.story:not(.on),.peek:not(.on){visibility:hidden}
+.story.on,.peek.on{visibility:visible}
 .sbar{height:2px;background:rgba(var(--encre),.06)}
 .sbar i{display:block;height:100%;width:0;background:var(--verm)}
 .sin{padding:15px 16px 14px 20px}
@@ -122,8 +132,33 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
    Il ne reste que le paysage et le logo — et un bouton discret pour revenir.
    C'est la demande la plus simple à satisfaire et la plus difficile à ne pas
    rater : si l'on efface aussi le moyen de revenir, on enferme le visiteur. */
-.epure .story,.epure .dock,.epure .hint,.epure .peek,.epure .menubtn,.epure .sndbtn{opacity:0;pointer-events:none;transition:opacity .5s}
-.epure .brand{opacity:1}
+.epure .story,.epure .hint,.epure .peek{opacity:0;pointer-events:none;transition:opacity .5s}
+.epure .brand,.epure .menubtn,.epure .sndbtn{opacity:1}
+/* Le socle ne disparaît pas tout à fait : la frise et le bouton s'effacent,
+   le millésime reste — c'est le seul repère de l'écran, et sans lui on ne
+   sait plus où l'on est dans le temps. Il passe à droite, là où le pouce
+   l'attend et où rien ne le gêne. */
+.epure .dock{background:none;pointer-events:none}
+.epure .tl,.epure .playbtn,.epure .era{opacity:0;pointer-events:none;transition:opacity .5s}
+.epure .yrbox{order:9;margin-left:auto;text-align:right;opacity:.82;min-width:0}
+.epure .dock>*{pointer-events:none}
+.epure .yr{font-size:30px}
+/* Sinon le millésime et le bouton se posent au même endroit. */
+.epure .epureBtn{left:22px;right:auto}
+
+/* ===== Le verre dépoli ============================================== *
+   Les cartouches et les boutons posés sur la scène laissent voir le
+   paysage au travers, flouté. La teinte suit le papier du moment, donc
+   le jour comme la nuit s'y retrouvent sans réglage séparé. */
+.verre,.peek,.story,.icb:not(.dark),.x,.sndbtn,.btn:not(.dark){background:rgba(var(--pap),.62);backdrop-filter:blur(22px) saturate(1.25);-webkit-backdrop-filter:blur(22px) saturate(1.25)}
+/* Dans les pages, le fond est déjà du papier plein : le verre n'y a rien à
+   flouter et ne ferait qu'ajouter une couche de rendu. */
+.pin .btn,.pin .icb,.pnav .back,.menu .btn,.menu .icb,.menu .x{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.pin .ymcard .btn{background:transparent}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  /* Sans flou, la transparence rendrait le texte illisible : on referme. */
+  .verre,.peek,.story,.icb:not(.dark),.x,.sndbtn,.btn:not(.dark){background:rgba(var(--pap),.95)}
+}
 .epureBtn{position:fixed;z-index:8;right:22px;bottom:calc(var(--sb) + 22px);width:auto;opacity:.5;transition:opacity .3s}
 .epureBtn:hover{opacity:1}
 .storying .peek{display:none}
@@ -151,6 +186,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .langs{display:flex;gap:6px;flex-wrap:wrap}.langs button{height:34px;padding:0 14px;border-radius:2px;border:1px solid var(--line);font-size:13px;color:var(--mute)}.langs button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .msec h4{margin:0 0 10px;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 .chips{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px}
+/* Sous 400 px, « Introgressées (Timor, Liberica) » ne tient pas dans une
+   demi-largeur : une colonne, et la liste se lit d'un trait. */
+@media (max-width:400px){.chips{grid-template-columns:1fr}}
 .chip{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:5px 2px;text-align:left;transition:.2s;line-height:1.2}
 .chip.off{opacity:.35}
 .chip.off .dot{background:transparent!important;box-shadow:inset 0 0 0 1px var(--mute)}
@@ -166,7 +204,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .page{position:fixed;inset:0;z-index:15;background:var(--paper);transform:translateY(28px);opacity:0;pointer-events:none;transition:opacity .45s,transform .5s cubic-bezier(.2,.8,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
 .page.on{transform:none;opacity:1;pointer-events:auto}
 .pnav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:14px;padding:calc(var(--st) + 14px) 22px 12px;background:rgba(var(--pap),.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.pnav .back{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;height:36px;padding:0 16px 0 12px;border-radius:2px;border:1px solid var(--line)}
+.pnav .back{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;height:36px;padding:0 16px 0 12px;border-radius:2px;border:1px solid var(--line)}
 .pnav .back:hover{border-color:rgba(var(--encre),.4)}
 .pnav .kicker{margin-left:auto}
 .pin{max-width:720px;margin:0 auto;padding:26px 22px calc(var(--sb) + 70px)}
@@ -181,7 +219,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .pl.big{margin:6px 0 4px}
 .pl .plate.bot{background:#f2ecdf;border-radius:0;box-shadow:0 1px 0 rgba(60,40,20,.06),0 14px 34px -22px rgba(60,40,20,.45)}
 .topr{display:flex;align-items:center;gap:10px}
-.sndbtn{width:42px;height:42px;border-radius:2px;display:grid;place-items:center;background:rgba(var(--pap),.78);border:1px solid rgba(var(--encre),.14);color:var(--ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:.2s}
+.sndbtn{width:42px;height:42px;border-radius:2px;display:grid;place-items:center;border:1px solid rgba(var(--encre),.14);color:var(--ink);transition:.2s}
 .sndbtn:hover{border-color:rgba(var(--encre),.35)}
 .sndbtn i{display:flex;align-items:flex-end;gap:2.5px;height:14px}
 .sndbtn i b{display:block;width:2px;height:100%;background:currentColor;border-radius:1px;transform-origin:bottom;animation:eq 1.6s ease-in-out infinite}
@@ -198,7 +236,7 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 .sec{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin:30px 0 12px;display:flex;align-items:center;gap:10px}
 .sec::after{content:"";flex:1;height:1px;background:var(--line)}
 .rel{display:flex;flex-wrap:wrap;gap:7px}
-.rel button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:2px;padding:7px 13px 7px 11px;font-size:14px;transition:.2s;background:rgba(var(--pap),.4)}
+.rel button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:2px;padding:7px 13px 7px 11px;font-size:14px;transition:.2s;background:rgba(var(--pap),.45)}
 .rel button:hover{border-color:rgba(var(--encre),.4);background:var(--paper)}
 .rel button small{font-size:11px;color:var(--mute)}
 .yun{border-left:2px solid var(--verm);padding:12px 0 12px 16px;margin:22px 0;background:linear-gradient(90deg,rgba(185,95,44,.08),rgba(185,95,44,0))}
@@ -323,15 +361,15 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 <section class="story" id="story" aria-live="polite">
   <div class="sbar"><i id="sprog"></i></div>
   <div class="sin"><div class="kicker" id="skick"></div><h3 id="stitle"></h3><p id="stext"></p>
-  <div class="sctl"><button class="icb" id="sprev" aria-label="‹"></button><button class="icb dark" id="splay" aria-label="Pause"></button><button class="icb" id="snext" aria-label="›"></button><span class="sp"></span><button class="btn" id="sopen"></button><button class="icb" id="sepure" aria-label="—"></button><button class="icb" id="sclose" aria-label="✕"></button></div></div>
+  <div class="sctl"><button class="icb" id="sprev" aria-label="‹"></button><button class="icb dark" id="splay" aria-label="Pause"></button><button class="icb" id="snext" aria-label="›"></button><span class="sp"></span><button class="icb" id="sopen" aria-label="Lire la fiche"></button><button class="icb" id="sepure" aria-label="—"></button><button class="icb" id="sclose" aria-label="✕"></button></div></div>
 </section>
 
 <section class="story terr" id="terr" aria-live="polite">
   <div class="sin"><div class="kicker" id="tkick"></div><h3 id="ttitle"></h3><p id="ttext"></p>
-  <div class="sctl"><button class="icb" id="tprev" aria-label="‹"></button><button class="icb" id="tnext" aria-label="›"></button><span class="sp"></span><button class="btn" id="tcard"></button><button class="btn dark" id="tquit"></button></div></div>
+  <div class="sctl"><button class="icb" id="tprev" aria-label="‹"></button><button class="icb" id="tnext" aria-label="›"></button><span class="sp"></span><button class="icb" id="tcard"></button><button class="icb dark" id="tquit"></button></div></div>
 </section>
 
-<button class="btn epureBtn" id="epureOff" hidden></button>
+<button class="icb epureBtn" id="epureOff" hidden></button>
 
 <footer class="dock" id="dock">
   <div class="yrbox"><div class="yr" id="yr">2026</div><div class="era" id="era"></div></div>
@@ -679,7 +717,11 @@ pause:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="
 prev:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg>',
 next:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5 10.5 8 6 12.5"/></svg>',
 close:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg>',
-arrow:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11 11 5M6.5 5H11v4.5"/></svg>'};
+arrow:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11 11 5M6.5 5H11v4.5"/></svg>',
+/* Deux fiches l'une derrière l'autre : c'est le même signe pour « lire la
+   fiche », où qu'on le rencontre — l'aperçu, le récit, le survol. */
+fiche:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><rect x="2.2" y="4.2" width="8.6" height="9.6" rx="1"/><path d="M5.2 4.2V3.2a1 1 0 0 1 1-1h6.6a1 1 0 0 1 1 1v8.6a1 1 0 0 1-1 1h-2"/><path d="M4.6 7.2h3.8M4.6 9.6h2.6" stroke-linecap="round"/></svg>',
+commandes:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2.5 5h11M2.5 11h11"/><circle cx="6" cy="5" r="1.7"/><circle cx="10.5" cy="11" r="1.7"/></svg>'};
 let LANG='fr';const PT=k=>(PLT[LANG]||PLT.fr)[k];const U=k=>(UI[LANG]||UI.fr)[k];
 
 /* =====================================================================
@@ -1918,10 +1960,12 @@ void main(){float n=fbm(vW.xz*uK+vec2(uTime*.012,uTime*.007));float a=smoothstep
     gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.depthMask(true);
     gl.useProgram(P_TER);attr(P_TER,'aP',bP,3);attr(P_TER,'aN',bN,3);attr(P_TER,'aC',bC,3);camU(P_TER);gl.uniform3f(gl.getUniformLocation(P_TER,'uFog'),...FOG);gl.uniform3f(gl.getUniformLocation(P_TER,'uTop'),...TOP);gl.uniform3f(gl.getUniformLocation(P_TER,'uL'),...SUN.dir);gl.uniform3f(gl.getUniformLocation(P_TER,'uLC'),...SUN.col);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bI);gl.drawElements(gl.TRIANGLES,idx.length,idxLong?gl.UNSIGNED_INT:gl.UNSIGNED_SHORT,0);
-    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);
-    gl.useProgram(P_MIST);camU(P_MIST);gl.uniform3f(gl.getUniformLocation(P_MIST,'uFog'),...FOG);gl.uniform3f(gl.getUniformLocation(P_MIST,'uTop'),...TOP);gl.uniform1f(gl.getUniformLocation(P_MIST,'uNuit'),SUN.nuit||0);gl.uniform1f(gl.getUniformLocation(P_MIST,'uTime'),t);
-    mist.forEach(m=>{attr(P_MIST,'aP',m.b,3);gl.uniform1f(gl.getUniformLocation(P_MIST,'uA'),m.a);gl.uniform1f(gl.getUniformLocation(P_MIST,'uK'),m.k);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)});
-    gl.depthMask(true);gl.disable(gl.BLEND);
+    /* Les trois nappes de brume qui dérivaient au-dessus de la vallée ont
+       été retirées : elles brouillaient la lecture du relief sans rien lui
+       ajouter, et leur bruit animé coûtait une passe de rendu par image à
+       chaque appareil. Ce qui reste — le lointain qui pâlit vers la couleur
+       du ciel — n'est pas de la brume mais de l'air : c'est lui qui donne
+       sa profondeur à la vallée, et il vit dans la trame du terrain. */
   };
   c.addEventListener('webglcontextlost',e=>{e.preventDefault();GL3.ok=false});
   GL3.ok=true;
@@ -2106,13 +2150,17 @@ function terrStart(i){
   closePage();deselect();if(ST.on)storyEnd();
   TERR.on=true;TERR.sols=null;document.body.classList.add('terring');
   const el=document.getElementById('terr');el.hidden=false;
-  el.querySelector('#tcard').textContent=U('tCard');
-  el.querySelector('#tquit').textContent=U('tQuit');
+  majBoutonsTerr();
   el.querySelector('#tprev').innerHTML=IC.prev;el.querySelector('#tnext').innerHTML=IC.next;
   requestAnimationFrame(()=>el.classList.add('on'));
   terrAllerA(i??0,false);AUD.fx('open');
   try{if(location.hash!=='#survol')location.hash='survol'}catch(e){}
 }
+/* Les deux boutons du cartouche : une icône et une étiquette lue par les
+   lecteurs d'écran, jamais un mot qui pourrait déborder. */
+function majBoutonsTerr(){const el=document.getElementById('terr');
+  for(const [id,ic,cle] of [['tcard',IC.fiche,'tCard'],['tquit',IC.close,'tQuit']]){
+    const b=el.querySelector('#'+id);b.innerHTML=ic;b.title=U(cle);b.setAttribute('aria-label',U(cle))}}
 function terrStop(fromHash,muet){
   if(!TERR.on)return;TERR.on=false;document.body.classList.remove('terring');
   const el=document.getElementById('terr');el.classList.remove('on');setTimeout(()=>{if(!TERR.on)el.hidden=true},500);
@@ -2152,7 +2200,7 @@ function drawTerroirs(){
     le désarme depuis le coin de l'écran. */
  const ep=document.getElementById('epureOff');
  const epurer=(v)=>{document.body.classList.toggle('epure',v);ep.hidden=!v;
-   ep.textContent=U('epureOff');AUD.fx(v?'close':'open')};
+   ep.innerHTML=IC.commandes;ep.title=U('epureOff');ep.setAttribute('aria-label',U('epureOff'));AUD.fx(v?'close':'open')};
  document.getElementById('sepure').innerHTML='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.2 8h11.6M5 5.2 8 2.4l3 2.8M5 10.8 8 13.6l3-2.8"/></svg>';
  document.getElementById('sepure').onclick=()=>epurer(true);
  ep.onclick=()=>epurer(false);
@@ -2244,7 +2292,7 @@ function select(n,quiet){
   tgt.ty=n.wy;tgt.tx=n.x;tgt.tz=n.z;tgt.dist=mobile()?1350:1550;tgt.yaw=nearestYaw(Math.PI/2-n.t+(n.r&&!mobile()?.3:0));tgt.pitch=.18;tgt.oy=mobile()?-70:-40;
   renderPeekNode(n)}
 function renderPeekNode(n){const G=GROUPS[n.g];
-  peekEl.innerHTML=`<div class="pk-tx"><div class="kicker"><span class="dot" style="background:${G.c}"></span>${n.y<0?U('prehist'):n.yl.replace(/[\(（].*[\)）]/,'').trim()}</div><h3>${n.n}</h3></div><button class="btn dark" data-fiche="${n.id}">${U('readFiche')}${IC.arrow}</button><button class="icb" data-peekclose aria-label="${U('close')}">${IC.close}</button>`;
+  peekEl.innerHTML=`<div class="pk-tx"><div class="kicker"><span class="dot" style="background:${G.c}"></span>${n.y<0?U('prehist'):n.yl.replace(/[\(（].*[\)）]/,'').trim()}</div><h3>${n.n}</h3></div><button class="btn dark pkfiche" data-fiche="${n.id}" title="${U('readFiche')}">${IC.fiche}<span>${U('readFiche')}</span></button><button class="icb" data-peekclose aria-label="${U('close')}">${IC.close}</button>`;
   peekEl.classList.add('on');peeking(true)}
 function selectEvent(ev,quiet){
   if(!quiet){touch();S.sel=null;S.selEv=ev;S.focus=null;tgt.ty=ev.wy;tgt.tx=0;tgt.tz=0;tgt.dist=mobile()?3400:4000;tgt.oy=mobile()?-70:-40}
@@ -2423,9 +2471,7 @@ function setLang(l,init){
   if(pageOpen&&curPage){const sc=page.scrollTop;if(curPage[0]==='f')openFiche(M[curPage[1]],true,true);else{pkick.textContent=PAGES[curPage[1]].k();pin.innerHTML=PAGES[curPage[1]].r();PAGES[curPage[1]].after&&PAGES[curPage[1]].after()}page.scrollTop=sc}
   if(S.sel)select(S.sel,true);else if(S.selEv)selectEvent(S.selEv,true);
   if(ST.on)renderStoryCard();
-  if(TERR.on){const el=document.getElementById('terr');
-    el.querySelector('#tcard').textContent=U('tCard');el.querySelector('#tquit').textContent=U('tQuit');
-    terrAllerA(TERR.i,true)}
+  if(TERR.on){majBoutonsTerr();terrAllerA(TERR.i,true)}
 }
 function applyStatic(){
   document.querySelectorAll('[data-i]').forEach(el=>{const v=U(el.dataset.i);if(typeof v==='string')el.innerHTML=v});
@@ -2493,7 +2539,8 @@ function storyStart(i=0){story.classList.remove('resume');
 function renderStoryCard(){const st=STORY[ST.i],n=st.id?M[st.id]:null;
   document.getElementById('skick').textContent=(ST.i+1)+' / '+STORY.length+' · '+(st.y<0?fmtPlain(st.y):st.y);
   document.getElementById('stitle').textContent=st.t;document.getElementById('stext').textContent=st.d;
-  const so=document.getElementById('sopen');so.style.display=(n||st.ev!=null)?'':'none';so.innerHTML=(n?U('ficheCourt'):U('yTimeCourt'))+IC.arrow}
+  const so=document.getElementById('sopen');so.style.display=(n||st.ev!=null)?'':'none';
+  so.innerHTML=n?IC.fiche:IC.arrow;const lib=n?U('readFiche'):U('yTimeline');so.title=lib;so.setAttribute('aria-label',lib)}
 function storyGo(i){AUD.fx('step');
   ST.i=Math.max(0,Math.min(STORY.length-1,i));ST.t=0;const st=STORY[ST.i];ST.u0=y2u(S.year);ST.u1=y2u(st.y);
   ST.from=camSnap();ST.to=stepTarget(st);
