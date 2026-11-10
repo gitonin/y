@@ -18,19 +18,18 @@ parti, avec les deux tables qui le désignaient — environ 160 lignes. L'atlas
 reste donc textuel sur ces deux pages, et c'est très bien ainsi tant qu'on
 n'a pas de vrais visuels.
 
-**Les planches botaniques, elles, restent : ce sont les belles.** Chaque
-fiche de variété en porte une — 65 fiches, 65 planches. Elles ne sont pas
-dessinées à la main : le code les compose à partir des caractères de la
-variété (couleur et forme des fruits, port, largeur et ondulation de la
-feuille, taches de rouille, entre-nœuds). On ne peut donc pas les remplacer
-par des images toutes faites sans en produire 65, et sans perdre ce qui fait
-leur intérêt : elles disent quelque chose de vrai sur chaque variété.
+**Les planches botaniques sont parties aussi.** Chaque fiche de variété en
+portait une : soixante-cinq planches composées par le code à partir des
+caractères décrits de la variété — couleur et forme des fruits, port,
+largeur et ondulation de la feuille, taches de rouille, entre-nœuds. Elles
+étaient belles, mais c'est précisément le problème : une gravure affirme.
+Au degré de détail d'une planche botanique, elle prétend montrer la feuille
+de cette variété-là, alors qu'elle n'en dessine qu'une interprétation
+plausible. Pour un atlas qui cite ses sources ligne par ligne, c'était la
+seule chose qui n'en citait aucune.
 
-La quatrième figure de ces planches a changé. C'était le port de l'arbre :
-une silhouette griffonnée et un bonhomme bâton pour l'échelle, un
-gribouillis au milieu d'une gravure. C'est maintenant une feuille détachée,
-dessinée par la même primitive que le rameau, avec son échelle en
-centimètres — elle dit autant de la variété et elle est de la même main.
+L'atlas est donc entièrement textuel. C'est une perte de 250 lignes de
+dessin et de rien du tout en information.
 
 **Ce document reste la commande.** Les sujets ci-dessous décrivent ce qu'il
 faudrait, planche par planche, si de vraies illustrations arrivent un jour.

@@ -506,6 +506,72 @@ titre('Les notes des boutons s’entendent');
  * donc le tour complet, à quatre distances, le tangage forcé au minimum,
  * et l'on vérifie que l'œil reste au-dessus partout.
  */
+/* ------------------------------------------------------------------ *
+ * Les noms de l'arbre
+ * ------------------------------------------------------------------ *
+ * « Il y a des noms qui manquent. » Mesuré : à la vue d'accueil, vingt-
+ * deux noms sur soixante-cinq variétés visibles ; de plus près sur un
+ * téléphone, six sur quarante candidats, la moitié droite de l'arbre
+ * perdant les siens parce que leur cartouche dépassait du bord. Et dans
+ * le récit, deux noms par étape, quelle que soit la longueur de la lignée
+ * mise en avant. L'atlas compte désormais ce qu'il pose (S.nlab) et ce
+ * qui le demandait (S.nlabVoulus) : c'est ce qui rend la chose mesurable
+ * plutôt que subjective.
+ */
+titre('Les noms de l’arbre');
+for (const vue of VUES) {
+  const { ctx, p, bruit } = await ouvrir(vue);
+  const compter = () => p.evaluate(() => ({ poses: S.nlab, voulus: S.nlabVoulus }));
+  const seuil = vue.mobile ? { accueil: 10, pres: 14 } : { accueil: 24, pres: 34 };
+
+  await p.evaluate(() => { S.year = 2026; syncTime(); goHome(); });
+  await p.waitForTimeout(2500);
+  const accueil = await compter();
+  check(`${vue.nom} · l’arbre complet porte ses noms (${accueil.poses} posés sur ${accueil.voulus} demandés)`,
+    accueil.poses >= seuil.accueil);
+  /* Un nom candidat peut être écarté : sa place est prise. C'est le
+     chevauchement qui arbitre, et c'est voulu. Ce qui ne l'est pas, c'est
+     d'en perdre la moitié — ce qui arrivait avant que chaque nom ait deux
+     places possibles, à droite du point puis à gauche. */
+  check(`${vue.nom} · presque aucun ne se perd (${Math.round(accueil.poses / accueil.voulus * 100)} %)`,
+    accueil.poses >= accueil.voulus * 0.7);
+
+  await p.evaluate(() => { tgt.dist = 6000; });
+  await p.waitForTimeout(2500);
+  const pres = await compter();
+  check(`${vue.nom} · de plus près, il y en a davantage (${pres.poses})`, pres.poses >= seuil.pres);
+
+  /* Le récit : la lignée mise en avant doit être nommée en entier. On pose
+     le millésime de l'étape à la main, comme le fait l'animation une fois
+     sa transition finie — sans cela on mesure un arbre à moitié éclos. */
+  await p.evaluate(() => { goHome(); storyStart(); storyPause(true); });
+  await p.waitForTimeout(1200);
+  await p.evaluate(() => { storyGo(11); S.year = STORY[11].y; syncTime(); });
+  await p.waitForTimeout(2200);
+  const recit = await p.evaluate(() => ({ poses: S.nlab, voulus: S.nlabVoulus, focus: S.focus ? S.focus.size : 0 }));
+  check(`${vue.nom} · le récit nomme la lignée mise en avant (${recit.poses} noms pour ${recit.focus} nœuds éclairés)`,
+    recit.focus >= 8 && recit.poses >= Math.ceil(recit.focus * 0.75));
+  check(`${vue.nom} · aucune erreur pendant le comptage (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * L'atlas ne porte plus d'illustration
+ * ------------------------------------------------------------------ */
+titre('L’atlas est textuel');
+{
+  const { ctx, p, bruit } = await ouvrir(VUES[0]);
+  const reste = await p.evaluate(() => {
+    openFiche(M.gesha);
+    return { planches: document.querySelectorAll('.plate, figure').length,
+      modules: ['PLATES', 'BOT', 'figBot'].filter((n) => typeof window[n] !== 'undefined') };
+  });
+  check('aucune planche sur une fiche de variété', reste.planches, 0);
+  check(`aucun générateur d’illustration ne subsiste (${reste.modules.join(', ') || 'aucun'})`, reste.modules.length, 0);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
 titre('La caméra ne passe pas sous les montagnes');
 {
   const { ctx, p, bruit } = await ouvrir(VUES[0]);

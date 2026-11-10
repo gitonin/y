@@ -100,6 +100,13 @@ function verifierContenu(atlas) {
   for (const langue of ['fr', 'en', 'zh']) {
     if (!new RegExp(`\\b${langue}\\s*:\\s*\\{`).test(atlas)) throw new Error(`langues : le tableau « ${langue} » est introuvable`);
   }
+  /* L'atlas est entièrement textuel : une planche dessinée d'après une
+     description affirme plus qu'on ne sait, et c'était la seule chose de
+     la page qui ne citait aucune source. Le jour où une vraie illustration
+     arrivera, elle viendra d'un fichier, pas d'un générateur de SVG. */
+  for (const trace of ['class="plate', 'const PLATES', 'const BOT=', 'figBot']) {
+    if (atlas.includes(trace)) throw new Error(`illustrations : « ${trace} » est revenu dans l'atlas, qui doit rester textuel`);
+  }
   verifierTables(atlas);
 }
 
