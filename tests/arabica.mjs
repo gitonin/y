@@ -277,12 +277,12 @@ titre('Le jour et la nuit');
   const ecart = Math.abs(depart.atlas - depart.vraie);
   check(`on arrive à l’heure qu’il est chez soi (${depart.atlas.toFixed(1)} h contre ${depart.vraie.toFixed(1)} h)`, ecart < 0.2 || ecart > 23.8);
 
-  /* Et le temps avance : une journée en dix minutes. */
+  /* Et le temps avance : une journée en deux heures. */
   const avant = await p.evaluate(() => CIEL.heure());
   await p.waitForTimeout(3000);
   const apres = await p.evaluate(() => CIEL.heure());
   const avance = ((apres - avant) + 24) % 24;
-  check(`le temps avance (${(avance * 60).toFixed(0)} minutes d’atlas en 3 secondes)`, avance > 0.08 && avance < 0.25);
+  check(`le temps avance (${(avance * 60).toFixed(0)} minutes d’atlas en 3 secondes)`, avance > 0.004 && avance < 0.03);
 
   const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
   const lum = (c) => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
@@ -318,6 +318,28 @@ titre('Le jour et la nuit');
   }
   check(`le texte reste lisible sur son cartouche à toute heure (au pire ${pire.toFixed(1)} à ${pireH} h)`, pire >= 7);
   check(`aucune erreur sur toute la journée (${bruit.length})`, bruit.length, 0);
+
+  /* Le ciel se posait depuis le dessin de l'arbre, et le dessin s'arrête
+     dès qu'une page est ouverte : on lisait la chronologie sous un ciel
+     figé, puis en refermant, le jour sautait à la nuit. On ouvre donc la
+     page du Yunnan à six heures et demie et l'on regarde si le fond suit
+     l'heure — et s'il va bien vers le jour, et non vers la nuit. */
+  await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+  await p.waitForTimeout(900);
+  await p.evaluate(() => { CIEL.poser(6.5); openPage('yunnan'); });
+  await p.waitForTimeout(600);
+  const t0 = await p.evaluate(() => ({ h: CIEL.heure(), nuit: SUN.nuit,
+    fond: getComputedStyle(document.documentElement).getPropertyValue('--fond').trim().split(',').map(Number) }));
+  await p.waitForTimeout(20000);
+  const t1 = await p.evaluate(() => ({ h: CIEL.heure(), nuit: SUN.nuit,
+    fond: getComputedStyle(document.documentElement).getPropertyValue('--fond').trim().split(',').map(Number) }));
+  check(`une page ouverte n’arrête pas l’heure (${t0.h.toFixed(2)} h → ${t1.h.toFixed(2)} h)`, t1.h > t0.h);
+  /* Juste après le lever, la courbe du ciel est presque plate — le lissage
+     annule sa pente au début de chaque palier. L'écart est donc minuscule,
+     mais il n'est pas nul : un ciel figé donne exactement zéro. */
+  check(`ni le ciel (nuit ${t0.nuit.toFixed(4)} → ${t1.nuit.toFixed(4)})`, t1.nuit < t0.nuit - 0.0008);
+  check(`à l’aube le fond va vers le jour, pas vers la nuit (clarté ${(lum(t0.fond) * 100).toFixed(1)} % → ${(lum(t1.fond) * 100).toFixed(1)} %)`,
+    lum(t1.fond) > lum(t0.fond) + 0.002);
   await ctx.close();
 }
 
@@ -341,6 +363,11 @@ titre('Le son');
     const W = function (...a) { const c = new C(...a); if (!window.__ac) window.__ac = c; return c; };
     W.prototype = C.prototype;
     window.AudioContext = W; window.webkitAudioContext = W;
+    /* On compte les oscillateurs créés : c'est la seule façon, du dehors,
+       de voir qu'un nouvel accord a bien été posé. */
+    window.__osc = 0;
+    const co = C.prototype.createOscillator;
+    C.prototype.createOscillator = function (...a) { window.__osc++; return co.apply(this, a); };
   });
   const p = await ctx.newPage();
   await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
@@ -359,6 +386,22 @@ titre('Le son');
   /* Et il doit repartir seul : la ronde interne passe toutes les cinq secondes. */
   await p.waitForTimeout(6500);
   check(`il repart seul, sans un geste (${await etat()})`, await etat(), 'running');
+
+  /* « La musique s'est arrêtée toute seule alors que je lisais la
+     chronologie. » La chaîne d'accords vit sur un setTimeout, et le
+     gardien qui la relançait vivait sur un setInterval : quand le système
+     coupe les minuteurs, il les coupe tous, et le gardien meurt avec ce
+     qu'il gardait. On reproduit exactement cela — on tue tous les
+     minuteurs de la page, page ouverte sur la chronologie — et l'on
+     vérifie qu'un nouvel accord se pose quand même, par la boucle
+     d'animation, sans qu'on touche l'écran. */
+  await p.evaluate(() => { openPage('yunnan'); for (let i = 1; i < 60000; i++) { clearTimeout(i); clearInterval(i); } });
+  const oscAvant = await p.evaluate(() => window.__osc);
+  await p.waitForTimeout(34000);
+  const oscApres = await p.evaluate(() => window.__osc);
+  check(`minuteurs tués, la nappe repart d’elle-même (${oscApres - oscAvant} oscillateurs)`, oscApres - oscAvant >= 3);
+  check(`et le contexte tourne toujours (${await etat()})`, await etat(), 'running');
+  await p.evaluate(() => closePage());
   await ctx.close();
 }
 

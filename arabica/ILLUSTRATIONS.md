@@ -1,46 +1,53 @@
 # Les illustrations de l'atlas — inventaire et sujets
 
-Ce document sert à refaire les illustrations. Pour chacune : ce qu'elle
-montre, où elle paraît, et un texte prêt à coller dans un générateur
-d'images — en français puis en anglais, les modèles répondant mieux à
-l'anglais.
+Ce document sert à commander les illustrations. Pour chacune : ce qu'elle
+montrerait, où elle paraîtrait, et un texte prêt à coller dans un
+générateur d'images — en français puis en anglais, les modèles répondant
+mieux à l'anglais.
 
 ---
 
-## Ce qu'il faut savoir avant de commencer
+## Où en est l'atlas
 
-**Une seule planche est visible aujourd'hui.** L'atlas sait en dessiner
-douze, mais le code n'en affiche qu'une : *Paysage du Yunnan*, en tête de la
-page « Le Yunnan » et en tête de la page « Terroirs ». Les onze autres sont
-fabriquées et jamais montrées. Deux tables les désignent — `ILL`, qui
-associe une planche à chacune des 65 variétés, et `EV_ILL`, qui en associe
-une à chaque étape de la chronologie — mais ni l'une ni l'autre n'est lue au
-moment du rendu. C'est à décider : soit on les branche, et les onze planches
-servent enfin, soit on les retire, et l'atlas perd environ 250 lignes.
+**Les planches schématiques ont été retirées.** L'atlas en dessinait douze
+au trait, dont une seule paraissait — *Paysage du Yunnan*, en tête des pages
+« Le Yunnan » et « Terroirs ». Elle n'était pas belle : un soleil cerclé
+traversé de deux barres qui se lisaient comme des rectangles égarés. Les
+onze autres étaient fabriquées et jamais montrées. Le module entier est
+parti, avec les deux tables qui le désignaient — environ 160 lignes. L'atlas
+reste donc textuel sur ces deux pages, et c'est très bien ainsi tant qu'on
+n'a pas de vrais visuels.
 
-**Les planches botaniques, elles, sont partout et sont les plus réussies.**
-Chaque fiche de variété en porte une — 65 fiches, 65 planches. Elles ne sont
-pas dessinées à la main : le code les compose à partir des caractères de la
-variété (couleur des fruits, port, largeur de feuille, taches de rouille,
-entre-nœuds). On ne peut donc pas les remplacer par des images toutes
-faites sans en produire 65, et sans perdre ce qui fait leur intérêt :
-elles disent quelque chose de vrai sur chaque variété. **Mon avis : les
-garder.** Si elles doivent évoluer, c'est en retouchant le dessin
-paramétré, pas en les remplaçant.
+**Les planches botaniques, elles, restent : ce sont les belles.** Chaque
+fiche de variété en porte une — 65 fiches, 65 planches. Elles ne sont pas
+dessinées à la main : le code les compose à partir des caractères de la
+variété (couleur et forme des fruits, port, largeur et ondulation de la
+feuille, taches de rouille, entre-nœuds). On ne peut donc pas les remplacer
+par des images toutes faites sans en produire 65, et sans perdre ce qui fait
+leur intérêt : elles disent quelque chose de vrai sur chaque variété.
 
-**Format attendu pour les remplaçantes.** Les planches actuelles font
-320 × 200 (8:5 paysage), encre sur papier crème, avec un double filet et une
-légende dessinés *dans* l'image.
+La quatrième figure de ces planches a changé. C'était le port de l'arbre :
+une silhouette griffonnée et un bonhomme bâton pour l'échelle, un
+gribouillis au milieu d'une gravure. C'est maintenant une feuille détachée,
+dessinée par la même primitive que le rameau, avec son échelle en
+centimètres — elle dit autant de la variété et elle est de la même main.
 
-> Pour les nouvelles, demandez l'illustration **seule** : pas de cadre, pas
-> de numéro « PL. », pas de légende, pas le moindre texte. Le cadre et la
-> légende seront reposés par le code, dans la police du site — c'est ce qui
-> garde l'ensemble cohérent et traduisible en trois langues.
+**Ce document reste la commande.** Les sujets ci-dessous décrivent ce qu'il
+faudrait, planche par planche, si de vraies illustrations arrivent un jour.
+Le texte de chaque sujet est prêt à coller dans un générateur d'images, en
+français puis en anglais. Rien de tout cela n'est en place : c'est une liste
+de courses, pas un inventaire.
 
-- **Proportion** 8:5 paysage, livrée en 1600 × 1000 au moins
+**Format attendu.** Proportion 8:5 paysage, livrée en 1600 × 1000 au moins.
+
+> Demandez l'illustration **seule** : pas de cadre, pas de numéro « PL. »,
+> pas de légende, pas le moindre texte. Le cadre et la légende seront
+> reposés par le code, dans la police du site — c'est ce qui garde
+> l'ensemble cohérent et traduisible en trois langues.
+
 - **Fond** crème `#efebe2` (le papier du site), uni
 - **Encre** anthracite `#212121`
-- **Accent** terre de Sienne `#b95f2c`, par petites touches seulement
+- **Accent** terre de Sienne `#a84f26`, par petites touches seulement
 - **Vert** olive `#565a41` si une feuille doit être verte
 - Pas d'ombre portée, pas de dégradé appuyé, pas de blanc pur
 - Lisible à 330 px de large : c'est la taille réelle sur un téléphone
@@ -49,13 +56,9 @@ légende dessinés *dans* l'image.
 
 ## 1 · Paysage du Yunnan `montagnes`
 
-**La seule visible**, et deux fois : en tête de « Le Yunnan » et en tête de
-« Terroirs ». C'est donc celle à refaire en premier.
-
-*Aujourd'hui* : des crêtes au trait, un soleil cerclé, deux barres
-horizontales censées figurer des nuages — elles se lisent comme des
-rectangles égarés —, des hachures verticales pour les versants et un
-premier plan de courbes serrées.
+**La plus utile si elle arrive un jour** : elle paraîtrait deux fois, en
+tête de « Le Yunnan » et en tête de « Terroirs », là où il n'y a plus
+d'image. C'est donc celle à commander en premier.
 
 **Sujet** — Les moyennes montagnes du sud-ouest du Yunnan, entre 1 000 et
 2 000 m : des croupes successives qui s'éloignent dans la brume, le fond des
@@ -81,8 +84,8 @@ lointains.
 
 ## 2 · Rameau fructifère `rameau`
 
-*Aujourd'hui* : une branche oblique, feuilles opposées hachurées, grappes de
-cerises. C'est l'une des trois meilleures.
+*L'ancienne, retirée* : une branche oblique, feuilles opposées hachurées, grappes de
+cerises. 
 
 **Sujet** — Un rameau de caféier en fruits : feuilles opposées, brillantes,
 à nervation marquée ; cerises en glomérules serrés à l'aisselle des
@@ -106,7 +109,7 @@ feuilles, à tous les stades de maturité, du vert au rouge sombre.
 
 ## 3 · Coupe de la cerise `cerise`
 
-*Aujourd'hui* : un disque moucheté, deux demi-grains côte à côte, quatre
+*L'ancienne, retirée* : un disque moucheté, deux demi-grains côte à côte, quatre
 étiquettes au bout de lignes de rappel. Le grain ressemble à un comprimé.
 
 **Sujet** — Une cerise de café coupée en deux dans le sens de la largeur,
@@ -132,7 +135,7 @@ s'expliquer sans légende.
 
 ## 4 · Feuille et nervation `feuille`
 
-*Aujourd'hui* : une grande feuille hachurée, et une petite en comparaison.
+*L'ancienne, retirée* : une grande feuille hachurée, et une petite en comparaison.
 Correcte.
 
 **Sujet** — Une feuille de caféier vue de dessus, allongée, à bord
@@ -156,7 +159,7 @@ l'échelle — la grande étant celle d'une autre espèce.
 
 ## 5 · Floraison `fleur`
 
-*Aujourd'hui* : un glomérule sur une branche, et une fleur à cinq pétales
+*L'ancienne, retirée* : un glomérule sur une branche, et une fleur à cinq pétales
 dessinée à plat, très géométrique — elle fait schéma plus que fleur.
 
 **Sujet** — La floraison du caféier : des bouquets blancs serrés le long de
@@ -181,7 +184,7 @@ cinq pétales, étamines apparentes, parfum de jasmin sous-entendu.
 
 ## 6 · Morphologie des grains `grains`
 
-*Aujourd'hui* : quatre ovales mouchetés, légendés face plane, face bombée,
+*L'ancienne, retirée* : quatre ovales mouchetés, légendés face plane, face bombée,
 Maragogipe, caracoli. C'est la plus faible avec le paysage : rien ne
 distingue vraiment les quatre formes.
 
@@ -210,7 +213,7 @@ caracoli rond — un seul grain au lieu de deux.
 
 ## 7 · Port de l'arbre `port`
 
-*Aujourd'hui* : deux arbres schématiques côte à côte, haut et nain, avec une
+*L'ancienne, retirée* : deux arbres schématiques côte à côte, haut et nain, avec une
 échelle de hauteur. Lisible, mais très abstrait.
 
 **Sujet** — Deux caféiers côte à côte, le même âge, à la même échelle : l'un
@@ -235,7 +238,7 @@ entre-nœuds courts, feuillage dense. Une silhouette humaine pour l'échelle.
 
 ## 8 · Croisement `croisement`
 
-*Aujourd'hui* : deux rameaux en haut, une croix entre eux, une flèche, un
+*L'ancienne, retirée* : deux rameaux en haut, une croix entre eux, une flèche, un
 rameau en bas. Clair, mais c'est un organigramme.
 
 **Sujet** — Comment naît une variété : deux parents en haut, leur descendance
@@ -261,7 +264,7 @@ le symbole mathématique. La descendance doit tenir visiblement des deux.
 
 ## 9 · La rouille du caféier `rouille`
 
-*Aujourd'hui* : une feuille tachée, et un cercle de loupe montrant les
+*L'ancienne, retirée* : une feuille tachée, et un cercle de loupe montrant les
 spores. L'une des trois meilleures.
 
 **Sujet** — Une feuille de caféier atteinte de rouille orangée : des taches
@@ -287,7 +290,7 @@ recroqueville ; et, détaché, un fort grossissement des urédospores.
 
 ## 10 · Forêt originelle `foret`
 
-*Aujourd'hui* : des arbres faits d'empilements de cercles, un caféier au
+*L'ancienne, retirée* : des arbres faits d'empilements de cercles, un caféier au
 pied. Naïf.
 
 **Sujet** — La forêt d'altitude du sud-ouest éthiopien, d'où vient
@@ -315,7 +318,7 @@ l'ombre. Le sujet est le sous-bois, pas les grands arbres.
 
 ## 11 · Routes de diffusion `route`
 
-*Aujourd'hui* : une rose des vents, une ligne pointillée entre trois points,
+*L'ancienne, retirée* : une rose des vents, une ligne pointillée entre trois points,
 des vaguelettes. On dirait un pictogramme de carte au trésor.
 
 **Sujet** — Le voyage d'une variété d'un bout du monde à l'autre : un fond
@@ -342,7 +345,7 @@ trajet, pas la géographie.
 
 ## 12 · Multiplication `plantule`
 
-*Aujourd'hui* : deux jeunes pousses, l'une par graine, l'autre par bouture,
+*L'ancienne, retirée* : deux jeunes pousses, l'une par graine, l'autre par bouture,
 et un sol pointillé. Schématique mais honnête.
 
 **Sujet** — Les deux façons de faire un caféier : à gauche une plantule née

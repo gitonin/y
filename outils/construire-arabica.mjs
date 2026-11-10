@@ -141,10 +141,6 @@ function verifierTables(atlas) {
   for (let i = 1; i < annees.length; i++) {
     if (annees[i] < annees[i - 1]) throw new Error(`EVENTS : ${annees[i]} arrive après ${annees[i - 1]} — la chronologie s'affiche dans l'ordre du tableau`);
   }
-  const planches = bloc('const EV_ILL=[', '];');
-  const nbPlanches = elements(planches.slice(planches.indexOf('[') + 1, planches.lastIndexOf(']')));
-  if (nbPlanches !== nbEv) throw new Error(`EV_ILL : ${nbPlanches} planches pour ${nbEv} événements — la table est alignée par indice`);
-
   const liens = bloc('const YLINKS=[', '];');
   const nbYl = compte(liens, /\['[a-z0-9_]+',\s*-?\d+,/g);
 

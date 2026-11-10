@@ -252,10 +252,9 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
    comme celui des planches botaniques. Sans fond propre, ses zones vides
    laissaient voir la page — et la nuit, le numéro et la légende, tracés
    dans l'accent, tombaient à 3,1:1 sur un fond devenu sombre. */
-.pl .plate{width:100%;height:auto;display:block;border-radius:0;background:#fbfaf7;box-shadow:0 1px 0 rgba(60,40,20,.06),0 14px 34px -22px rgba(60,40,20,.4)}
 .pl figcaption{font-size:11px;font-style:italic;color:var(--mute);margin-top:6px}
 .pl.big{margin:6px 0 4px}
-.pl .plate.bot{background:#f2ecdf;border-radius:0;box-shadow:0 1px 0 rgba(60,40,20,.06),0 14px 34px -22px rgba(60,40,20,.45)}
+.pl .plate{width:100%;height:auto;display:block;background:#f2ecdf;border-radius:0;box-shadow:0 1px 0 rgba(60,40,20,.06),0 14px 34px -22px rgba(60,40,20,.45)}
 .topr{display:flex;align-items:center;gap:10px}
 .sndbtn{width:42px;height:42px;border-radius:2px;display:grid;place-items:center;border:1px solid rgba(var(--encre),.14);color:var(--ink);transition:.2s}
 .sndbtn:hover{border-color:rgba(var(--encre),.35)}
@@ -459,13 +458,13 @@ const UI={
   date:'Date',place:'Lieu',lineage:'Lignée',approx:'⚠ Position chronologique approximative',atYunnan:'Au Yunnan',parents:'Parents',kids:'Descendance',seeTree:'Voir dans l’arbre →',sources:'Sources',plate:'Planche',
   vTitle:'Les variétés',vLead:n=>`${n} variétés, espèces et populations, des forêts d’Éthiopie aux variétés encore en essai. Chaque fiche raconte l’origine de la variété, sa parenté et son lien avec le Yunnan.`,search:'Chercher une variété…',prehist:'préhistoire',
   yTitle:'Le Yunnan',yLead:'Le Yunnan fournit 98 % du café chinois. Son histoire génétique tient en trois temps : Typica et Bourbon passent la frontière birmane en 1914 ; à partir de 1988, un programme mené avec la Banque mondiale et le PNUD, puis avec Nestlé, convertit la quasi-totalité du verger au Catimor — une seule lignée, CIFC 7963, qui porte des gènes de Robusta via l’Hybride de Timor ; depuis les années 2010, une nouvelle vague replante du Geisha en altitude et le Yunnan devient le premier exportateur de café de Chine. Le café de spécialité y pesait encore moins de 2 % des volumes en 2018.',
-  seeOnTree:'Voir sur l’arbre →',fut:['Yunma — voyage de sélection','Rencontre de producteurs indépendants au Yunnan. Les lots sélectionnés apparaîtront ici et dans les terroirs.'],exploreTerr:'Explorer les terroirs →',flyTerr:'Survoler les terroirs →',tQuit:'Quitter',tCard:'Fiche',ficheCourt:'Fiche',yTimeCourt:'Le Yunnan',tLots:'{n} lots dans le top 15 du Gems of Yunnan 2026',tLot:'1 lot dans le top 15 du Gems of Yunnan 2026',tNoLot:'Aucun lot dans le top 15 du Gems of Yunnan 2026',tBest:'Meilleur lot',tOf:'Terroir {i} sur {n}',tBref:'En bref',tBande:'Altitudes des lots classés',tVar:'Variétés classées',tProc:'Procédés',tPart:'{n} des quinze premiers lots',tPartL:'Dans le classement',yArrivees:'Les variétés arrivées au Yunnan',yArrL:'Arrivée',yAuj:'aujourd’hui',tPart1:'Un des quinze premiers lots',tRien:'Aucun lot dans les quinze premiers en 2026',tCeSurvol:'Survoler ce terroir →',tRegions:'{n} régions classées sur sept',tHaut:'Le plus haut lot classé',tBas:'Le plus bas',
-  tTitle:'Terroirs',tLead:'Le café du Yunnan pousse entre 21° et 26° de latitude nord, de part et d’autre du tropique du Cancer, souvent au-dessus de 1 300 m pour les lots de spécialité. La taille des cercles indique le nombre de lots de chaque région dans le top 15 du Gems of Yunnan 2026.',
-  all:'Toutes',pts:'pts',noLot:'Aucun lot du top 15 dans cette région',ymK:'Sélection Yunma · 2027',ymH:'Vos producteurs apparaîtront ici',ymH2:'Nos lots',ymP:'Lots sélectionnés lors du voyage de début 2027 auprès de producteurs indépendants : ferme, altitude, variété, process.',tropic:'TROPIQUE DU CANCER',kunming:'Kunming',
-  sTitle:'Sources & méthode',sLead:'L’axe vertical de la sphère est le temps, sur une échelle compressée qui va de la naissance de l’Arabica (il y a 350 000 à 610 000 ans) à 2026. Les variétés sont regroupées par lignée autour d’un axe central. À partir de 1892, cet axe devient la chronologie du Yunnan (en rouille).',
-  sRead:'Lire l’arbre',sRig:'Rigueur',sRigT:'Les dates et les parentés viennent du catalogue World Coffee Research, de l’étude génomique Nature Genetics 2024 et de sources spécialisées. Les mentions « ≈ », « indicative » ou « non vérifiée » signalent une date incertaine ou contestée : Zhukula (1892, 1902 ou 1904), Java, les clones de Robusta. Erecta et Nganda sont des types de port, pas des variétés. Les illustrations sont des planches schématiques, pas des relevés botaniques.',
+  seeOnTree:'Voir sur l’arbre →',fut:['Yunma reprend la route','Début 2027, de nouvelles rencontres avec des producteurs indépendants du Yunnan. Cent treize ans après le passage de la frontière birmane, cette chronologie n’est pas close : elle attend sa ligne suivante.'],exploreTerr:'Explorer les terroirs →',flyTerr:'Survoler les terroirs →',tQuit:'Quitter',tCard:'Fiche',ficheCourt:'Fiche',yTimeCourt:'Le Yunnan',tLots:'{n} lots dans le top 15 du Gems of Yunnan 2026',tLot:'1 lot dans le top 15 du Gems of Yunnan 2026',tNoLot:'Aucun lot dans le top 15 du Gems of Yunnan 2026',tBest:'Meilleur lot',tOf:'Terroir {i} sur {n}',tBref:'En bref',tBande:'Altitudes des lots classés',tVar:'Variétés classées',tProc:'Procédés',tPart:'{n} des quinze premiers lots',tPartL:'Dans le classement',yArrivees:'Les variétés arrivées au Yunnan',yArrL:'Arrivée',yAuj:'aujourd’hui',tPart1:'Un des quinze premiers lots',tRien:'Aucun lot dans les quinze premiers en 2026',tCeSurvol:'Survoler ce terroir →',tRegions:'{n} régions classées sur sept',tHaut:'Le plus haut lot classé',tBas:'Le plus bas',
+  tTitle:'Terroirs',tLead:'Le café du Yunnan pousse entre 21° et 26° de latitude nord, de part et d’autre du tropique du Cancer. C’est une latitude où, ailleurs, il ferait trop chaud ; ici l’altitude corrige la carte — les lots de spécialité partent rarement de moins de 1 300 m, et les nuits fraîches des moyennes montagnes font mûrir la cerise lentement. Sept régions produisent, et elles ne se ressemblent pas : Pu’er et le Xishuangbanna au sud, Baoshan et Dehong à l’ouest contre la frontière birmane, Lincang au centre. La taille des cercles indique le nombre de lots de chaque région dans les quinze premiers du Gems of Yunnan 2026.',
+  all:'Toutes',pts:'pts',noLot:'Aucun lot du top 15 dans cette région',ymK:'Yunma · 2027',ymH:'Reprendre la route des montagnes',ymH2:'Nos lots',ymP:'Début 2027, Yunma repart au Yunnan à la rencontre de nouveaux producteurs. Les sept régions de cette carte en comptent des milliers, et la plupart n’ont jamais présenté un lot à un concours. C’est à celles-là que nous allons, ferme par ferme, pour que l’aventure du café yunnanais continue de s’écrire ici.',tropic:'TROPIQUE DU CANCER',kunming:'Kunming',
+  sTitle:'Sources & méthode',sLead:'L’axe vertical de la sphère est le temps. L’échelle est compressée, et il faut qu’elle le soit : la naissance de l’Arabica remonte à 350 000 ou 610 000 ans, tandis que certaines variétés de cet atlas sont sorties des pépinières l’an dernier. Les premiers millénaires se resserrent donc, et le dernier siècle s’étire. Autour d’un axe central, les variétés sont rangées par lignée, une couleur par famille — des landraces d’Éthiopie aux sélections du Yunnan, en passant par les deux grandes branches sorties du Yémen, Typica et Bourbon, et par les introgressées, qui ont reçu des gènes de Robusta. Les traits qui relient les variétés disent la nature du lien : filiation, mutation, hybridation. À partir de 1892, l’axe central devient la chronologie du Yunnan, tracée en rouille : c’est le moment où les deux histoires, celle de l’espèce et celle de la province, se mettent à marcher ensemble.',
+  sRead:'Lire l’arbre',sRig:'Rigueur',sRigT:'Les dates et les parentés viennent du catalogue World Coffee Research, de l’étude génomique Nature Genetics 2024 et de sources spécialisées. Les mentions « ≈ », « indicative » ou « non vérifiée » signalent une date incertaine ou contestée : Zhukula (1892, 1902 ou 1904), Java, les clones de Robusta. Erecta et Nganda sont des types de port, pas des variétés. Les planches botaniques sont dessinées d’après les caractères décrits de chaque variété — port, longueur et ondulation du limbe, couleur et forme des fruits, taille du grain ; ce sont des reconstitutions, pas des relevés faits sur le terrain.',
   sTerr:'Terroirs',sPer:'Périmètre',sPerT:n=>`L’atlas suit les lignées, pas le catalogue complet : ${n} entrées — les espèces, les grandes landraces, les variétés qui ont fait souche, celles qui sont plantées au Yunnan et celles que vend Yunma. Le catalogue de World Coffee Research compte 71 Arabica ; les absentes sont pour l’essentiel des sélections d’Amérique centrale sans lien avec le Yunnan ni avec les lignées présentées ici (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Les noms de région ou de port qui ne désignent pas une variété — Mandheling, Sulawesi Toraja, Santos, Kona, Moka — n’y figurent pas non plus, sauf quand l’usage en a fait une variété, comme Blue Mountain ou Java. Il manque une variété ? Dites-le-nous.`,
-  sTerrT:'Les positions sont approximatives (villes principales). Les lots et les altitudes sont ceux du top 15 du Gems of Yunnan 2026 (Alliance for Coffee Excellence).',sRefs:'Références',
+  sTerrT:'Les positions sont approximatives : chaque région est posée sur sa ville principale, alors qu’elle couvre en réalité des vallées entières et plusieurs centaines de mètres de dénivelé. Les lots, les altitudes et les notes sont ceux des quinze premiers du Gems of Yunnan 2026, publiés par l’Alliance for Coffee Excellence ; un concours n’est pas un recensement, et bien des fermes n’y concourent pas.',sRefs:'Références',
   ago:['<small>il y a</small> ',' <small>ans</small>'],agoP:['il y a ',' ans'],loc:'fr-FR',close:'Fermer',openMenu:'Ouvrir le menu',yb:'Yunnan',tb:'En essai',sound:'Activer ou couper le son',tbNote:'Encore en essai ou au stade de la recherche : pas encore diffusée auprès des producteurs.'},
  en:{menu:'Menu',hint:'Drag to rotate · pinch to zoom',play:'Tell the story',playCourt:'Story',epure:'Hide the controls',epureOff:'Show the controls',back:'← The tree',
   nav:[['The tree','explore in 3D'],['Tell the story','≈ 2 min'],['Varieties','profiles'],['Yunnan','timeline'],['Terroirs','map & lots'],['Sources & method','']],
@@ -475,13 +474,13 @@ const UI={
   date:'Date',place:'Place',lineage:'Lineage',approx:'⚠ Approximate chronological position',atYunnan:'In Yunnan',parents:'Parents',kids:'Descendants',seeTree:'See in the tree →',sources:'Sources',plate:'Plate',
   vTitle:'Varieties',vLead:n=>`${n} varieties, species and populations, from the forests of Ethiopia to varieties still in trials. Each profile tells the variety’s origin, its lineage and its link with Yunnan.`,search:'Search a variety…',prehist:'prehistory',
   yTitle:'Yunnan',yLead:'Yunnan supplies 98% of China’s coffee. Its genetic history comes in three stages: Typica and Bourbon cross the Burmese border in 1914; from 1988, a programme run with the World Bank and the UNDP, then with Nestlé, converts almost the whole crop to Catimor — a single line, CIFC 7963, carrying Robusta genes through the Timor Hybrid; and since the 2010s a new wave has been replanting Geisha at altitude, while Yunnan becomes China’s leading coffee exporter. Specialty coffee still accounted for less than 2% of volumes in 2018.',
-  seeOnTree:'See on the tree →',fut:['Yunma — sourcing trip','Meeting independent producers in Yunnan. The selected lots will appear here and in Terroirs.'],exploreTerr:'Explore the terroirs →',flyTerr:'Fly over the terroirs →',tQuit:'Exit',tCard:'Details',ficheCourt:'Profile',yTimeCourt:'Yunnan',tLots:'{n} lots in the Gems of Yunnan 2026 top 15',tLot:'1 lot in the Gems of Yunnan 2026 top 15',tNoLot:'No lot in the Gems of Yunnan 2026 top 15',tBest:'Best lot',tOf:'Terroir {i} of {n}',tBref:'At a glance',tBande:'Altitudes of the ranked lots',tVar:'Ranked varieties',tProc:'Processes',tPart:'{n} of the top fifteen lots',tPartL:'In the ranking',yArrivees:'The varieties that reached Yunnan',yArrL:'Arrival',yAuj:'today',tPart1:'One of the top fifteen lots',tRien:'No lot in the top fifteen in 2026',tCeSurvol:'Fly over this terroir →',tRegions:'{n} regions ranked out of seven',tHaut:'Highest ranked lot',tBas:'Lowest',
-  tTitle:'Terroirs',tLead:'Yunnan’s coffee grows between 21° and 26° north, on both sides of the Tropic of Cancer, often above 1,300 m for specialty lots. The size of each circle shows how many of the region’s lots made the Gems of Yunnan 2026 top 15.',
-  all:'All',pts:'pts',noLot:'No top-15 lot from this region',ymK:'Yunma selection · 2027',ymH:'Our producers will appear here',ymH2:'Our lots',ymP:'Lots selected during the early-2027 trip to independent producers: farm, altitude, variety, process.',tropic:'TROPIC OF CANCER',kunming:'Kunming',
-  sTitle:'Sources & method',sLead:'The sphere’s vertical axis is time, on a compressed scale running from the birth of Arabica (350,000 to 610,000 years ago) to 2026. Varieties are grouped by lineage around a central axis. From 1892 onwards, this axis becomes the Yunnan timeline (in rust).',
-  sRead:'Reading the tree',sRig:'Accuracy',sRigT:'Dates and lineages come from the World Coffee Research catalogue, the 2024 Nature Genetics genomic study and specialist sources. The marks “≈”, “approximate” or “not verified” flag an uncertain or disputed date: Zhukula (1892, 1902 or 1904), Java, the Robusta clones. Erecta and Nganda are growth habits, not varieties. The illustrations are schematic plates, not botanical surveys.',
+  seeOnTree:'See on the tree →',fut:['Yunma takes to the road again','Early 2027: new meetings with independent growers in Yunnan. A hundred and thirteen years after that crossing of the Burmese border, this timeline is not closed — it is waiting for its next line.'],exploreTerr:'Explore the terroirs →',flyTerr:'Fly over the terroirs →',tQuit:'Exit',tCard:'Details',ficheCourt:'Profile',yTimeCourt:'Yunnan',tLots:'{n} lots in the Gems of Yunnan 2026 top 15',tLot:'1 lot in the Gems of Yunnan 2026 top 15',tNoLot:'No lot in the Gems of Yunnan 2026 top 15',tBest:'Best lot',tOf:'Terroir {i} of {n}',tBref:'At a glance',tBande:'Altitudes of the ranked lots',tVar:'Ranked varieties',tProc:'Processes',tPart:'{n} of the top fifteen lots',tPartL:'In the ranking',yArrivees:'The varieties that reached Yunnan',yArrL:'Arrival',yAuj:'today',tPart1:'One of the top fifteen lots',tRien:'No lot in the top fifteen in 2026',tCeSurvol:'Fly over this terroir →',tRegions:'{n} regions ranked out of seven',tHaut:'Highest ranked lot',tBas:'Lowest',
+  tTitle:'Terroirs',tLead:'Yunnan’s coffee grows between 21° and 26° north, on both sides of the Tropic of Cancer. At that latitude it would be too hot almost anywhere else; here altitude redraws the map — specialty lots rarely start below 1,300 m, and the cool nights of the mid-mountains ripen the cherry slowly. Seven regions produce, and they are not alike: Pu’er and Xishuangbanna in the south, Baoshan and Dehong in the west against the Burmese border, Lincang in the middle. The size of each circle shows how many of the region’s lots made the Gems of Yunnan 2026 top fifteen.',
+  all:'All',pts:'pts',noLot:'No top-15 lot from this region',ymK:'Yunma · 2027',ymH:'Back on the mountain roads',ymH2:'Our lots',ymP:'In early 2027 Yunma returns to Yunnan to meet new producers. The seven regions on this map hold thousands of them, and most have never entered a lot in a competition. Those are the ones we are going to see, farm by farm, so that the Yunnan coffee adventure goes on being written here.',tropic:'TROPIC OF CANCER',kunming:'Kunming',
+  sTitle:'Sources & method',sLead:'The sphere’s vertical axis is time. The scale is compressed, and it has to be: Arabica was born 350,000 to 610,000 years ago, while some varieties in this atlas left the nursery last year. The early millennia are squeezed together, the last century stretched out. Around a central axis the varieties are ranged by lineage, one colour per family — from the Ethiopian landraces to the Yunnan selections, by way of the two great branches that came out of Yemen, Typica and Bourbon, and of the introgressed varieties, which took on Robusta genes. The lines between varieties say what kind of link it is: descent, mutation, hybridisation. From 1892 the central axis becomes the Yunnan timeline, drawn in rust: the moment when the two stories, the species’ and the province’s, begin to walk together.',
+  sRead:'Reading the tree',sRig:'Accuracy',sRigT:'Dates and lineages come from the World Coffee Research catalogue, the 2024 Nature Genetics genomic study and specialist sources. The marks “≈”, “approximate” or “not verified” flag an uncertain or disputed date: Zhukula (1892, 1902 or 1904), Java, the Robusta clones. Erecta and Nganda are growth habits, not varieties. The botanical plates are drawn from each variety’s described characters — habit, leaf length and waviness, fruit colour and shape, bean size; they are reconstructions, not field surveys.',
   sTerr:'Terroirs',sPer:'Scope',sPerT:n=>`The atlas follows lineages, not the full catalog: ${n} entries — the species, the major landraces, the varieties that founded lines, those planted in Yunnan, and those Yunma sells. The World Coffee Research catalog lists 71 Arabicas; the ones missing here are mostly Central American selections with no link to Yunnan or to the lines shown (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Region or port names that do not denote a variety — Mandheling, Sulawesi Toraja, Santos, Kona, Mocha — are left out too, except where usage turned them into one, as with Blue Mountain or Java. A variety missing? Tell us.`,
-  sTerrT:'Positions are approximate (main towns). Lots and altitudes are those of the Gems of Yunnan 2026 top 15 (Alliance for Coffee Excellence).',sRefs:'References',
+  sTerrT:'Positions are approximate: each region sits on its main town, when in reality it covers whole valleys and several hundred metres of elevation. The lots, altitudes and scores are those of the Gems of Yunnan 2026 top fifteen, published by the Alliance for Coffee Excellence; a competition is not a census, and plenty of farms never enter one.',sRefs:'References',
   ago:['',' <small>years ago</small>'],agoP:['',' years ago'],loc:'en-US',close:'Close',openMenu:'Open menu',yb:'Yunnan',tb:'In trials',sound:'Sound on or off',tbNote:'Still in trials or at the research stage: not yet available to farmers.'},
  zh:{menu:'菜单',hint:'拖动旋转 · 双指缩放',play:'讲述历史',playCourt:'历史',epure:'隐藏控件',epureOff:'显示控件',back:'← 品种树',
   nav:[['品种树','3D 探索'],['讲述历史','约 2 分钟'],['品种','档案'],['云南','年表'],['风土','地图与批次'],['资料与方法','']],
@@ -491,13 +490,13 @@ const UI={
   date:'年代',place:'地点',lineage:'谱系',approx:'⚠ 年代位置仅为近似',atYunnan:'在云南',parents:'亲本',kids:'后代',seeTree:'在树中查看 →',sources:'资料来源',plate:'图版',
   vTitle:'品种',vLead:n=>`${n} 个品种、物种与种群，从埃塞俄比亚的森林到仍在试验中的品种。每份档案都讲述品种的起源、亲缘关系及其与云南的联系。`,search:'搜索品种…',prehist:'史前',
   yTitle:'云南',yLead:'云南供应了中国 98% 的咖啡。它的品种史分为三个阶段：1914 年，铁皮卡和波旁越过中缅边境；1988 年起，一项与世界银行和联合国开发计划署合作、随后又有雀巢参与的项目，把几乎整个咖啡园改种卡蒂姆——其实只是一个选系，CIFC 7963，通过蒂莫尔杂交种携带着罗布斯塔的基因；2010 年代以来，新一波力量在高海拔重新种下瑰夏，云南也成为中国第一咖啡出口省。而在 2018 年，精品咖啡在中国的产量中仍占不到 2%。',
-  seeOnTree:'在树上查看 →',fut:['Yunma——选豆之旅','在云南拜访独立生产者。入选的批次将显示在这里和“风土”页面中。'],exploreTerr:'探索风土 →',flyTerr:'俯瞰风土 →',tQuit:'退出',tCard:'详情',ficheCourt:'档案',yTimeCourt:'云南',tLots:'2026 Gems of Yunnan 前 15 名中有 {n} 支',tLot:'2026 Gems of Yunnan 前 15 名中有 1 支',tNoLot:'2026 Gems of Yunnan 前 15 名中没有',tBest:'最佳批次',tOf:'第 {i} 个风土，共 {n} 个',tBref:'概览',tBande:'入选批次海拔',tVar:'入选品种',tProc:'处理法',tPart:'前十五名中的 {n} 支',tPartL:'排名情况',yArrivees:'传入云南的品种',yArrL:'传入',yAuj:'至今',tPart1:'前十五名中的 1 支',tRien:'2026 年无批次进入前十五',tCeSurvol:'俯瞰这片风土 →',tRegions:'七个产区中有 {n} 个入选',tHaut:'入选批次中海拔最高',tBas:'最低',
-  tTitle:'风土',tLead:'云南咖啡生长于北纬 21° 至 26° 之间，横跨北回归线，精品批次多种植于海拔 1300 米以上。圆圈大小表示各产区进入 Gems of Yunnan 2026 前 15 名的批次数量。',
-  all:'全部',pts:'分',noLot:'该产区没有进入前 15 名的批次',ymK:'Yunma 精选 · 2027',ymH:'我们的生产者将在此呈现',ymH2:'我们的批次',ymP:'2027 年初走访独立生产者时选定的批次：庄园、海拔、品种、处理法。',tropic:'北回归线',kunming:'昆明',
-  sTitle:'资料与方法',sLead:'球体的纵轴代表时间，采用压缩比例，从阿拉比卡诞生（距今 35 万至 61 万年）一直到 2026 年。各品种按谱系围绕中轴分布。自 1892 年起，这条中轴成为云南的年表（锈红色）。',
-  sRead:'如何阅读品种树',sRig:'严谨性',sRigT:'年代与亲缘关系来自世界咖啡研究组织（WCR）品种目录、2024 年《自然·遗传学》基因组研究及专业资料。“≈”“仅供参考”“未核实”等标注表示年代不确定或存在争议：朱苦拉（1892、1902 或 1904 年）、爪哇、罗布斯塔无性系。Erecta 与 Nganda 是株型，而非品种。插图为示意图版，并非植物学实测图。',
+  seeOnTree:'在树上查看 →',fut:['Yunma 再度启程','2027 年初，继续在云南拜访独立生产者。在越过中缅边境一百一十三年之后，这条年表并未终结——它正等着下一行。'],exploreTerr:'探索风土 →',flyTerr:'俯瞰风土 →',tQuit:'退出',tCard:'详情',ficheCourt:'档案',yTimeCourt:'云南',tLots:'2026 Gems of Yunnan 前 15 名中有 {n} 支',tLot:'2026 Gems of Yunnan 前 15 名中有 1 支',tNoLot:'2026 Gems of Yunnan 前 15 名中没有',tBest:'最佳批次',tOf:'第 {i} 个风土，共 {n} 个',tBref:'概览',tBande:'入选批次海拔',tVar:'入选品种',tProc:'处理法',tPart:'前十五名中的 {n} 支',tPartL:'排名情况',yArrivees:'传入云南的品种',yArrL:'传入',yAuj:'至今',tPart1:'前十五名中的 1 支',tRien:'2026 年无批次进入前十五',tCeSurvol:'俯瞰这片风土 →',tRegions:'七个产区中有 {n} 个入选',tHaut:'入选批次中海拔最高',tBas:'最低',
+  tTitle:'风土',tLead:'云南咖啡生长于北纬 21° 至 26° 之间，横跨北回归线。在这个纬度上，别处大多已经太热；而在这里，海拔重新改写了地图——精品批次很少低于 1300 米，中山区凉爽的夜晚让果实缓慢成熟。七个产区都产咖啡，却各不相同：南部的普洱与西双版纳，西部紧邻中缅边境的保山与德宏，中部的临沧。圆圈大小表示各产区进入 Gems of Yunnan 2026 前 15 名的批次数量。',
+  all:'全部',pts:'分',noLot:'该产区没有进入前 15 名的批次',ymK:'Yunma · 2027',ymH:'再次走上山间的路',ymH2:'我们的批次',ymP:'2027 年初，Yunma 将再次回到云南，寻访新的生产者。这张地图上的七个产区里有成千上万位种植者，其中大多数从未把一支批次送去参赛。我们要去的正是他们那里，一座庄园一座庄园地走，让云南咖啡的故事在这里继续写下去。',tropic:'北回归线',kunming:'昆明',
+  sTitle:'资料与方法',sLead:'球体的纵轴代表时间。刻度是压缩的，也必须如此：阿拉比卡诞生于距今 35 万至 61 万年前，而本图谱中的一些品种去年才走出苗圃。于是最初的千年被收拢，最近的一个世纪被拉开。品种按谱系环绕中轴排列，一种颜色对应一个家族——从埃塞俄比亚的地方种到云南的选育品种，中间经由从也门分出的两大枝系铁皮卡与波旁，以及获得了罗布斯塔基因的渐渗品种。品种之间的连线也在说话：亲子、变异、杂交。自 1892 年起，中轴成为云南的年表，以锈红色绘出：从这一刻起，物种的历史与这个省份的历史开始并肩而行。',
+  sRead:'如何阅读品种树',sRig:'严谨性',sRigT:'年代与亲缘关系来自世界咖啡研究组织（WCR）品种目录、2024 年《自然·遗传学》基因组研究及专业资料。“≈”“仅供参考”“未核实”等标注表示年代不确定或存在争议：朱苦拉（1892、1902 或 1904 年）、爪哇、罗布斯塔无性系。Erecta 与 Nganda 是株型，而非品种。植物图版依据各品种已记载的性状绘制——株型、叶片长度与波状缘、果实颜色与形状、种子大小；它们是复原，而非田间实测记录。',
   sTerr:'风土',sPer:'范围',sPerT:n=>`本图谱追踪的是谱系，而非完整目录：共 ${n} 条——物种、主要地方种、开枝散叶的品种、云南在种的品种，以及 Yunma 在售的品种。世界咖啡研究组织的目录收录了 71 个阿拉比卡品种；这里缺席的多为与云南、与本图谱所列谱系无关的中美洲选系（Lempira、Parainema、Anacafé 14、IHCAFE 90、Tekisic、Pache Colis 等）。不指向具体品种的产区名或港口名——曼特宁、苏拉威西托拉雅、桑托斯、科纳、摩卡——同样不收录，除非它在使用中已变成一个品种，如蓝山或爪哇。觉得少了某个品种？请告诉我们。`,
-  sTerrT:'位置为近似值（以主要城市为准）。批次与海拔数据来自 Gems of Yunnan 2026 前 15 名（Alliance for Coffee Excellence）。',sRefs:'参考文献',
+  sTerrT:'位置为近似值：每个产区都标在其主要城市上，而实际上它覆盖整片河谷，海拔落差可达数百米。批次、海拔与分数取自 Gems of Yunnan 2026 前 15 名，由 Alliance for Coffee Excellence 公布；一场赛事并非普查，许多庄园从未参赛。',sRefs:'参考文献',
   ago:['<small>距今</small> ',' <small>年</small>'],agoP:['距今 ',' 年'],loc:'zh-CN',close:'关闭',openMenu:'打开菜单',yb:'云南',tb:'试验中',sound:'开启或关闭声音',tbNote:'仍处于试验或研究阶段：尚未向种植者推广。'}
 };
 const GROUPS_L={
@@ -723,7 +722,7 @@ const STORY_L={
   [0,'Tomorrow’s varieties, in trials','Four World Coffee Research F1 hybrids are being tested on farms until 2030. The Innovea network is already preparing the next generation.'],
   [0,'Yunnan goes global','With record world prices, Yunnan became China’s top coffee exporter: more than 40% of the country’s exports.'],
   [0,'Gems of Yunnan 2026','169 coffees competed. Geisha dominates, but a Catimor from Baoshan reached 88.53 pts: Yunnan proves its potential.'],
-  ['Epilogue','Next: the Yunma selection','In early 2027, Yunma heads to Yunnan to choose its independent producers. The atlas is yours to explore.']],
+  ['Epilogue','The road goes on','In early 2027 Yunma heads back into the mountains of Yunnan to meet new producers. A hundred and thirteen years after Nongxianshan, the same road, for a story still being written. In the meantime, the atlas is yours.']],
  zh:[['序章','两个野生物种','在非洲的森林里，罗布斯塔（C. canephora）与 C. eugenioides 各自演化了数十万年。'],
   [0,'阿拉比卡诞生','距今 35 万至 61 万年前，两个物种在埃塞俄比亚自然杂交，诞生了染色体数目加倍的阿拉比卡。罗布斯塔正是它的亲本之一。'],
   [0,'野生与栽培分道扬镳','约 3.05 万年前，野生种群与未来栽培咖啡的祖先分离。埃塞俄比亚至今仍是最大的基因宝库。'],
@@ -744,15 +743,7 @@ const STORY_L={
   [0,'明日的品种，正在试验','世界咖啡研究组织（WCR）的四个 F1 杂交种正在农户田间试验，直至 2030 年。Innovea 网络已在培育下一代。'],
   [0,'云南咖啡走向世界','在国际价格创纪录的背景下，云南成为全国第一大咖啡出口省，占全国出口的 40% 以上。'],
   [0,'Gems of Yunnan 2026','169 支咖啡参赛。瑰夏占据主导，但一支来自保山的卡蒂姆获得 88.53 分：云南证明了自己的潜力。'],
-  ['尾声','下一步：Yunma 精选','2027 年初，Yunma 将前往云南挑选独立生产者。现在，轮到你来探索这本图谱。']]};
-const PLT={
- fr:{PL:'PL. ',rameau:'Fig. 1 — rameau fructifère',cerises:'cerises',exo:'exocarpe (peau)',meso:'mésocarpe (pulpe)',parche:'parche',grain:'grain (endosperme)',fig1:'Fig. 1 — ',adulte:'feuille adulte',comp:'Fig. 2 — C. arabica (comparaison)',glom:'Fig. 1 — glomérule',fleur:'Fig. 2 — fleur à cinq pétales',mont:'Fig. — moyennes montagnes du Yunnan, 1 000 – 2 000 m',F1:'Fig. 1',F2:'Fig. 2',F3:'Fig. 3',F4:'Fig. 4',plane:'face plane',bomb:'face bombée',marago:'Maragogipe',caracoli:'caracoli',haut:'port haut',nain:'port nain (mutation)',figp:'Fig. — ',desc:'descendance',rouille:'Fig. — feuille atteinte de rouille orangée',uredo:'urédospores, × 400',sousbois:'caféier de sous-bois',foret:'Fig. — forêt d’altitude, sud-ouest éthiopien',route:'Fig. — itinéraire de diffusion',orig:'origine',escale:'escale',arr:'arrivée',plantule:'Fig. 1 — plantule (cotylédons)',bouture:'Fig. 2 — bouture, clone',N:'N',aria:'Planche : '},
- en:{PL:'PL. ',rameau:'Fig. 1 — fruiting branch',cerises:'cherries',exo:'exocarp (skin)',meso:'mesocarp (pulp)',parche:'parchment',grain:'bean (endosperm)',fig1:'Fig. 1 — ',adulte:'mature leaf',comp:'Fig. 2 — C. arabica (for comparison)',glom:'Fig. 1 — flower cluster',fleur:'Fig. 2 — five-petalled flower',mont:'Fig. — Yunnan’s mid-mountains, 1,000 – 2,000 m',F1:'Fig. 1',F2:'Fig. 2',F3:'Fig. 3',F4:'Fig. 4',plane:'flat side',bomb:'rounded side',marago:'Maragogipe',caracoli:'peaberry',haut:'tall habit',nain:'dwarf habit (mutation)',figp:'Fig. — ',desc:'offspring',rouille:'Fig. — leaf infected with coffee leaf rust',uredo:'urediniospores, × 400',sousbois:'understory coffee shrub',foret:'Fig. — highland forest, south-western Ethiopia',route:'Fig. — route of spread',orig:'origin',escale:'stopover',arr:'arrival',plantule:'Fig. 1 — seedling (cotyledons)',bouture:'Fig. 2 — cutting, clone',N:'N',aria:'Plate: '},
- zh:{PL:'图版 ',rameau:'图 1 — 结果枝',cerises:'咖啡果',exo:'外果皮',meso:'中果皮（果肉）',parche:'内果皮（羊皮层）',grain:'种子（胚乳）',fig1:'图 1 — ',adulte:'成熟叶片',comp:'图 2 — 阿拉比卡（对照）',glom:'图 1 — 花簇',fleur:'图 2 — 五瓣花',mont:'图 — 云南中山地带，海拔 1000–2000 米',F1:'图 1',F2:'图 2',F3:'图 3',F4:'图 4',plane:'平面',bomb:'凸面',marago:'象豆',caracoli:'圆豆',haut:'高株型',nain:'矮株型（突变）',figp:'图 — ',desc:'后代',rouille:'图 — 感染叶锈病的叶片',uredo:'夏孢子，× 400',sousbois:'林下咖啡树',foret:'图 — 埃塞俄比亚西南部高地森林',route:'图 — 传播路线',orig:'起点',escale:'中转',arr:'终点',plantule:'图 1 — 幼苗（子叶）',bouture:'图 2 — 扦插苗、无性系',N:'北',aria:'图版：'}};
-const TITLES_L={
- fr:{rameau:'Rameau fructifère',cerise:'Coupe de la cerise',feuille:'Feuille et nervation',fleur:'Floraison',montagnes:'Paysage du Yunnan',grains:'Morphologie des grains',port:'Port de l’arbre',croisement:'Croisement',rouille:'La rouille du caféier',foret:'Forêt originelle',route:'Routes de diffusion',plantule:'Multiplication'},
- en:{rameau:'Fruiting branch',cerise:'Cross-section of the cherry',feuille:'Leaf and venation',fleur:'Flowering',montagnes:'Yunnan landscape',grains:'Bean morphology',port:'Tree habit',croisement:'Cross',rouille:'Coffee leaf rust',foret:'Original forest',route:'Routes of spread',plantule:'Propagation'},
- zh:{rameau:'结果枝',cerise:'咖啡果剖面',feuille:'叶片与叶脉',fleur:'开花',montagnes:'云南风景',grains:'咖啡豆形态',port:'树形',croisement:'杂交',rouille:'咖啡叶锈病',foret:'原始森林',route:'传播路线',plantule:'繁殖'}};
+  ['尾声','路还在继续','2027 年初，Yunma 将重返云南的群山，寻访新的生产者。弄贤山之后一百一十三年，同样的一条路，而这个故事仍未写完。在此之前，这本图谱属于你。']]};
 
 /* Clair ou sombre sur une couleur donnée : on prend celui des deux qui
    contraste le plus, par la luminance relative. */
@@ -772,159 +763,8 @@ arrow:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="
    fiche », où qu'on le rencontre — l'aperçu, le récit, le survol. */
 fiche:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><rect x="2.2" y="4.2" width="8.6" height="9.6" rx="1"/><path d="M5.2 4.2V3.2a1 1 0 0 1 1-1h6.6a1 1 0 0 1 1 1v8.6a1 1 0 0 1-1 1h-2"/><path d="M4.6 7.2h3.8M4.6 9.6h2.6" stroke-linecap="round"/></svg>',
 commandes:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2.5 5h11M2.5 11h11"/><circle cx="6" cy="5" r="1.7"/><circle cx="10.5" cy="11" r="1.7"/></svg>'};
-let LANG='fr';const PT=k=>(PLT[LANG]||PLT.fr)[k];const U=k=>(UI[LANG]||UI.fr)[k];
+let LANG='fr';const U=k=>(UI[LANG]||UI.fr)[k];
 
-/* =====================================================================
-   PLANCHES — illustrations botaniques procédurales, monochromes
-   ===================================================================== */
-const PLATES=(()=>{
-const W=320,H=200;let UID=0;
-function rng(seed){let s=seed>>>0;return()=>{s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-const f=n=>Math.round(n*10)/10;
-const P=pts=>'M'+pts.map(p=>f(p[0])+' '+f(p[1])).join('L');
-function rot(p,a,cx,cy){const c=Math.cos(a),s=Math.sin(a);return[cx+p[0]*c-p[1]*s,cy+p[0]*s+p[1]*c]}
-function smooth(pts){/* Catmull-Rom -> cubic */let d=`M${f(pts[0][0])} ${f(pts[0][1])}`;for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;
-  d+=`C${f(p1[0]+(p2[0]-p0[0])/6)} ${f(p1[1]+(p2[1]-p0[1])/6)} ${f(p2[0]-(p3[0]-p1[0])/6)} ${f(p2[1]-(p3[1]-p1[1])/6)} ${f(p2[0])} ${f(p2[1])}`}return d}
-
-/* ---------- primitives ---------- */
-function leaf(cx,cy,len,wid,ang,R,o={}){
-  const bend=(o.bend??(R()*.6-.3)),n=44,ph=R()*6,id='lf'+(UID++);
-  const wf=t=>wid*Math.pow(Math.sin(Math.PI*Math.pow(t,.78)),.9)*(1-.18*t)*(1+.025*Math.sin(t*28+ph));
-  const mid=t=>bend*Math.sin(Math.PI*t)*len*.09;
-  const top=[],bot=[],rib=[];
-  for(let i=0;i<=n;i++){const t=i/n,x=t*len,m=mid(t),w=wf(t);top.push(rot([x,m-w],ang,cx,cy));bot.push(rot([x,m+w*.94],ang,cx,cy));rib.push(rot([x,m],ang,cx,cy))}
-  const outline=P(top.concat(bot.reverse()))+'Z';
-  let s=`<clipPath id="${id}"><path d="${outline}"/></clipPath>`;
-  s+=`<path d="${outline}" fill="var(--pp)" stroke="var(--ink)" stroke-width="${o.sw||.9}" stroke-linejoin="round"/>`;
-  /* hachures (côté ombre) */
-  if(o.hatch!==false){let h='';for(let t=.06;t<.95;t+=.021){const t2=Math.min(.99,t+.07);const a=rot([t*len,mid(t)+1.2],ang,cx,cy),b=rot([t2*len,mid(t2)+wf(t2)*.95],ang,cx,cy);h+=`M${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}`}
-    s+=`<path d="${h}" clip-path="url(#${id})" stroke="var(--ink)" stroke-width=".35" opacity=".75"/>`}
-  /* nervures */
-  const nv=o.veins||9;let v='';
-  for(let i=1;i<=nv;i++){const t0=.06+i/(nv+1)*.86,t1=Math.min(.98,t0+.13);for(const sg of[-1,1]){const a=rot([t0*len,mid(t0)],ang,cx,cy),c=rot([(t0+.05)*len,mid(t0)+sg*wf(t0)*.45],ang,cx,cy),b=rot([t1*len,mid(t1)+sg*wf(t1)*.86],ang,cx,cy);
-    v+=`M${f(a[0])} ${f(a[1])}Q${f(c[0])} ${f(c[1])} ${f(b[0])} ${f(b[1])}`}}
-  s+=`<path d="${v}" stroke="var(--ink)" stroke-width=".55" fill="none"/>`;
-  const pe=rot([-len*.07,0],ang,cx,cy);
-  s+=`<path d="${P(rib)}M${f(cx)} ${f(cy)}L${f(pe[0])} ${f(pe[1])}" stroke="var(--ink)" stroke-width="1" fill="none"/>`;
-  /* taches de rouille */
-  if(o.spots){for(let k=0;k<o.spots;k++){const t=.2+R()*.6,sg=R()<.5?-1:1,p=rot([t*len,mid(t)+sg*wf(t)*R()*.7],ang,cx,cy),r=1.6+R()*3;s+=stipple(p[0],p[1],r,R,1.4,true)}}
-  return s}
-function stipple(cx,cy,r,R,dens=1,full=false,lx=-.7,ly=-.7){let s='';const n=Math.round(r*r*dens*.9)+3;
-  for(let i=0;i<n*3;i++){const a=R()*Math.PI*2,d=Math.sqrt(R())*r,x=Math.cos(a)*d,y=Math.sin(a)*d;const sh=full?1:Math.max(0,(-(x*lx+y*ly)/r)+.15);if(R()<sh*.7)s+=`<circle cx="${f(cx+x)}" cy="${f(cy+y)}" r=".42"/>`}
-  return `<g fill="var(--ink)">${s}</g>`}
-function cherry(cx,cy,r,R,a=0){
-  let s=`<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(r)}" ry="${f(r*1.08)}" transform="rotate(${f(a)} ${f(cx)} ${f(cy)})" fill="var(--pp)" stroke="var(--ink)" stroke-width=".9"/>`;
-  s+=stipple(cx,cy,r*.92,R,1.1);
-  const tx=cx+Math.sin(a*Math.PI/180)*r*.95,ty=cy-Math.cos(a*Math.PI/180)*r*1.0;
-  s+=`<circle cx="${f(tx)}" cy="${f(ty)}" r="${f(r*.2)}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".6"/><circle cx="${f(tx)}" cy="${f(ty)}" r=".6" fill="var(--ink)"/>`;
-  s+=`<path d="M${f(cx-r*.45)} ${f(cy-r*.35)}q${f(r*.15)} ${f(-r*.25)} ${f(r*.4)} ${f(-r*.3)}" stroke="var(--ink)" stroke-width=".5" fill="none" opacity=".6"/>`;
-  return s}
-function cluster(cx,cy,n,r,R){let s='';const pts=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2+R(),d=r*(.9+R()*.5);pts.push([cx+Math.cos(a)*d,cy+Math.sin(a)*d*.8])}
-  pts.sort((a,b)=>a[1]-b[1]).forEach(p=>{s+=cherry(p[0],p[1],r*(.85+R()*.3),R,R()*40-20)});return s}
-function stem(pts,w=2.2){const d=smooth(pts);return `<path d="${d}" stroke="var(--ink)" stroke-width="${w}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="var(--pp)" stroke-width="${w*.4}" fill="none" stroke-linecap="round"/>`}
-function flower(cx,cy,r,a,R){let s='';for(let i=0;i<5;i++){const t=a+i*72;s+=`<ellipse cx="${f(cx+Math.cos(t*Math.PI/180)*r*.55)}" cy="${f(cy+Math.sin(t*Math.PI/180)*r*.55)}" rx="${f(r*.55)}" ry="${f(r*.18)}" transform="rotate(${f(t)} ${f(cx+Math.cos(t*Math.PI/180)*r*.55)} ${f(cy+Math.sin(t*Math.PI/180)*r*.55)})" fill="var(--pp)" stroke="var(--ink)" stroke-width=".6"/>`}
-  for(let i=0;i<5;i++){const t=(a+36+i*72)*Math.PI/180;const x=cx+Math.cos(t)*r*.5,y=cy+Math.sin(t)*r*.5;s+=`<path d="M${f(cx)} ${f(cy)}L${f(x)} ${f(y)}" stroke="var(--ink)" stroke-width=".4"/><ellipse cx="${f(x)}" cy="${f(y)}" rx="1.3" ry=".6" transform="rotate(${f(t*180/Math.PI)} ${f(x)} ${f(y)})" fill="var(--ink)"/>`}
-  s+=`<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(r*.12)}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".6"/>`;return s}
-function bean(cx,cy,rx,ry,a,R,flat=true){let s=`<g transform="rotate(${a} ${cx} ${cy})"><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".9"/>`;
-  if(flat){s+=`<path d="M${f(cx-rx*.78)} ${f(cy)}C${f(cx-rx*.3)} ${f(cy-ry*.28)} ${f(cx+rx*.3)} ${f(cy+ry*.28)} ${f(cx+rx*.78)} ${f(cy)}" stroke="var(--ink)" stroke-width="1" fill="none"/>`+stipple(cx,cy,Math.min(rx,ry)*.95,R,.8,false,.3,-.9)}
-  else s+=stipple(cx,cy,Math.min(rx,ry)*.95,R,1.1);
-  return s+'</g>'}
-function txt(x,y,t,o={}){return `<text x="${f(x)}" y="${f(y)}" font-size="${o.fs||7}" ${o.it?'font-style="italic"':''} text-anchor="${o.a||'start'}" fill="var(--ink)" letter-spacing="${o.ls||0}">${t}</text>`}
-function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)}L${f(x2)} ${f(y2)}" stroke="var(--ink)" stroke-width=".4"/><circle cx="${f(x1)}" cy="${f(y1)}" r=".9" fill="var(--ink)"/>`}
-function ground(y,x0=10,x1=310,R){let s=`<path d="M${x0} ${y}L${x1} ${y}" stroke="var(--ink)" stroke-width=".8"/>`;let h='';for(let x=x0;x<x1;x+=3+R()*3){h+=`M${f(x)} ${f(y+1.5)}l${f(-2-R()*2)} ${f(3+R()*3)}`}return s+`<path d="${h}" stroke="var(--ink)" stroke-width=".35"/>`}
-function cloudBand(x,y,w,h=6){return `<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${h}" rx="${h/2}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".7"/>`}
-function ridge(R,base,amp,rough){const pts=[];let n=64;const o=[R()*6,R()*6,R()*6];for(let i=0;i<=n;i++){const x=i/n*W;const y=base-amp*(.55*Math.sin(x/W*Math.PI*1.3+o[0])+.3*Math.sin(x/W*Math.PI*3.1+o[1])+rough*.15*Math.sin(x/W*Math.PI*9+o[2])+.2);pts.push([x,y])}return pts}
-function shrub(cx,cy,r,R){let s='';for(let i=0;i<7;i++){const a=R()*Math.PI*2,d=R()*r*.6;s+=`<circle cx="${f(cx+Math.cos(a)*d)}" cy="${f(cy-Math.abs(Math.sin(a))*d*.6)}" r="${f(r*.35+R()*r*.2)}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".45"/>`}return s}
-function tree(cx,gy,h,R){let s='';const tw=h*.05;s+=`<path d="M${f(cx-tw)} ${gy}Q${f(cx-tw*.6)} ${f(gy-h*.4)} ${f(cx-tw*.3)} ${f(gy-h*.62)}M${f(cx+tw)} ${gy}Q${f(cx+tw*.5)} ${f(gy-h*.4)} ${f(cx+tw*.3)} ${f(gy-h*.62)}" stroke="var(--ink)" stroke-width=".8" fill="none"/>`;
-  let hb='';for(let y=gy-2;y>gy-h*.6;y-=2.2)hb+=`M${f(cx+tw*.1)} ${f(y)}l${f(tw*.7)} ${f(-1)}`;s+=`<path d="${hb}" stroke="var(--ink)" stroke-width=".35"/>`;
-  const cy=gy-h*.72,rw=h*.42,rh=h*.3;const blobs=[];for(let i=0;i<9;i++){blobs.push([cx+(R()-.5)*rw*1.4,cy+(R()-.5)*rh*1.1,rh*(.38+R()*.25)])}
-  blobs.sort((a,b)=>a[1]-b[1]).forEach(([x,y,r])=>{s+=`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".6"/>`;let h2='';for(let k=-r;k<r;k+=1.8){const yy=y+k;const half=Math.sqrt(Math.max(0,r*r-k*k));if(k>-r*.2)h2+=`M${f(x+half*.1)} ${f(yy)}L${f(x+half*.92)} ${f(yy)}`}s+=`<path d="${h2}" stroke="var(--ink)" stroke-width=".3" opacity=".8"/>`});
-  return s}
-function compass(cx,cy,r){let s='';for(let i=0;i<8;i++){const a=i*Math.PI/4,L=i%2?r*.55:r,w=r*.13;const tip=[cx+Math.cos(a)*L,cy+Math.sin(a)*L],l=[cx+Math.cos(a-Math.PI/2)*w,cy+Math.sin(a-Math.PI/2)*w],rr=[cx+Math.cos(a+Math.PI/2)*w,cy+Math.sin(a+Math.PI/2)*w];
-  s+=`<path d="M${f(cx)} ${f(cy)}L${f(l[0])} ${f(l[1])}L${f(tip[0])} ${f(tip[1])}Z" fill="var(--ink)"/><path d="M${f(cx)} ${f(cy)}L${f(rr[0])} ${f(rr[1])}L${f(tip[0])} ${f(tip[1])}Z" fill="var(--pp)" stroke="var(--ink)" stroke-width=".5"/>`}
-  s+=`<circle cx="${cx}" cy="${cy}" r="${f(r*1.12)}" fill="none" stroke="var(--ink)" stroke-width=".5"/><circle cx="${cx}" cy="${cy}" r="${f(r*1.2)}" fill="none" stroke="var(--ink)" stroke-width=".3"/>`+txt(cx,cy-r*1.3,PT('N'),{fs:7,a:'middle'});return s}
-function plant(cx,gy,h,dwarf,R){let s='';const top=gy-h;s+=`<path d="M${cx} ${gy}L${cx} ${f(top)}" stroke="var(--ink)" stroke-width="1.6"/>`;
-  const step=dwarf?7:11;let i=0;for(let y=gy-12;y>top+6;y-=step,i++){const k=(gy-y)/h;const bl=(dwarf?26:42)*(1-k*.75);for(const sg of[-1,1]){const ex=cx+sg*bl,ey=y+bl*.28;s+=`<path d="M${cx} ${f(y)}Q${f(cx+sg*bl*.5)} ${f(y-3)} ${f(ex)} ${f(ey)}" stroke="var(--ink)" stroke-width=".7" fill="none"/>`;
-    for(let j=1;j<=3;j++){const t=j/4;const px=cx+sg*bl*t,py=y+(ey-y)*t*t-2*t;s+=`<ellipse cx="${f(px)}" cy="${f(py+2.4)}" rx="${f(3.2-k)}" ry="1.2" transform="rotate(${sg*35} ${f(px)} ${f(py+2.4)})" fill="var(--pp)" stroke="var(--ink)" stroke-width=".45"/>`;if(j===2&&i%2===0)s+=`<circle cx="${f(px)}" cy="${f(py-.5)}" r="1.4" fill="var(--ink)"/>`}}}
-  return s}
-function frame(n){return `<rect x="4" y="4" width="${W-8}" height="${H-8}" fill="none" stroke="var(--ink)" stroke-width=".7"/><rect x="7" y="7" width="${W-14}" height="${H-14}" fill="none" stroke="var(--ink)" stroke-width=".3"/>`+txt(14,17,PT('PL')+n,{fs:6.5,ls:1})}
-
-/* ---------- planches ---------- */
-const DRAW={
- rameau(R,n){let s='';const pts=[[30,182],[95,140],[160,98],[225,66],[292,34]];
-  const nodes=[[70,155],[128,118],[188,84],[248,56]];
-  nodes.forEach(([x,y],i)=>{const L=74-i*11,a=-0.62;s+=leaf(x,y,L,L*.24,a-1.05+R()*.15,R)+leaf(x,y,L*.95,L*.23,a+1.0+R()*.15,R)});
-  s+=stem(pts,2.4);
-  nodes.slice(0,3).forEach(([x,y],i)=>{s+=cluster(x+3,y+4,5-i,6.2-i*.4,R)});
-  s+=leaf(288,36,22,6,-1.3,R,{veins:4})+leaf(288,36,20,5.5,.1,R,{veins:4});
-  s+=lead(238,118,236,150)+txt(220,160,PT('rameau'),{it:1})+lead(73,162,60,182)+txt(62,188,PT('cerises'),{it:1});
-  return s},
- cerise(R,n){let s='';const cx=110,cy=102,r=62;
-  s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--pp)" stroke="var(--ink)" stroke-width="1.1"/><circle cx="${cx}" cy="${cy}" r="${r-3}" fill="none" stroke="var(--ink)" stroke-width=".4"/>`;
-  s+=stipple(cx,cy,r-4,R,.18,true);
-  for(const sg of[-1,1]){const bx=cx+sg*20;s+=`<path d="M${cx+sg*2} ${cy-38}Q${f(bx+sg*30)} ${cy-40} ${f(bx+sg*28)} ${cy}Q${f(bx+sg*30)} ${cy+40} ${cx+sg*2} ${cy+38}Z" fill="var(--pp)" stroke="var(--ink)" stroke-width=".9"/>`;
-   s+=`<path d="M${cx+sg*5} ${cy-33}Q${f(bx+sg*24)} ${cy-34} ${f(bx+sg*22)} ${cy}Q${f(bx+sg*24)} ${cy+34} ${cx+sg*5} ${cy+33}Z" fill="var(--pp)" stroke="var(--ink)" stroke-width=".5"/>`;
-   s+=stipple(bx+sg*6,cy,22,R,.35,false,-sg*.8,-.4);
-   s+=`<path d="M${cx+sg*9} ${cy-20}q${sg*6} 20 0 40" stroke="var(--ink)" stroke-width=".7" fill="none"/>`}
-  s+=lead(cx+44,cy-44,215,40)+txt(218,43,PT('exo'),{it:1})+lead(cx+50,cy+14,215,78)+txt(218,81,PT('meso'),{it:1})+lead(cx+32,cy+22,215,116)+txt(218,119,PT('parche'),{it:1})+lead(cx+16,cy+6,215,154)+txt(218,157,PT('grain'),{it:1});
-  s+=cherry(270,176,7,R,-10)+cherry(284,172,6.4,R,15);
-  return s},
- feuille(R,n){let s=leaf(30,128,232,40,-.32,R,{veins:13,sw:1.1});s+=leaf(196,166,84,15,-.08,R,{veins:8});
-  s+=txt(30,40,PT('fig1')+(n&&n.g==='rob'||n&&n.g==='esp'?n.n:PT('adulte')),{it:1})+txt(150,188,PT('comp'),{it:1});return s},
- fleur(R,n){let s='';s+=leaf(40,150,92,22,-.9,R)+leaf(40,150,86,20,.35,R);s+=stem([[20,186],[40,150],[72,112],[96,84]],2);
-  [[44,140],[56,150],[38,128],[62,132],[50,124]].forEach(([x,y])=>s+=flower(x,y,10,R()*72,R));
-  s+=flower(228,96,58,-18,R);s+=txt(176,176,PT('fleur'),{it:1})+txt(110,140,PT('glom'),{it:1})+lead(66,132,108,137);return s},
- montagnes(R,n){let s='';s+=`<circle cx="236" cy="56" r="26" fill="var(--pp)" stroke="var(--ink)" stroke-width=".8"/>`+cloudBand(196,48,56)+cloudBand(214,62,44);
-  const rs=[[96,34,.4],[118,40,.7],[142,34,1],[170,26,1.3]];
-  rs.forEach(([b,a,ro],i)=>{const pts=ridge(R,b,a,ro);s+=`<path d="${P(pts)}L${W} ${H}L0 ${H}Z" fill="var(--pp)" stroke="var(--ink)" stroke-width="${.5+i*.2}" opacity="${.55+i*.15}"/>`;
-    let h='';for(let k=1;k<pts.length-1;k++){const sl=pts[k+1][1]-pts[k-1][1];if(sl>0||R()<.15){const l=4+i*3+R()*6;h+=`M${f(pts[k][0])} ${f(pts[k][1]+1)}l${f(-.6)} ${f(l)}`}}s+=`<path d="${h}" stroke="var(--ink)" stroke-width=".35" opacity="${.5+i*.15}"/>`;
-    if(i===3){let t='';for(let m=1;m<6;m++){t+=P(pts.map(p=>[p[0],p[1]+m*5+Math.sin(p[0]/18+m)*1.2]))}s+=`<path d="${t}" stroke="var(--ink)" stroke-width=".35" fill="none" opacity=".7"/>`;for(let k=0;k<9;k++){const p=pts[6+k*6];if(p)s+=shrub(p[0],p[1]+34,4.5,R)}}
-    if(i===1)s+=cloudBand(30+R()*30,b-8,70)+cloudBand(150,b-2,46);});
-  s+=`<rect x="10" y="181" width="196" height="12" fill="var(--pp)"/>`+txt(14,190,PT('mont'),{it:1});return s},
- grains(R,n){let s='';s+=bean(60,92,22,30,-10,R,true)+bean(120,92,22,30,10,R,false)+bean(196,92,32,44,-6,R,true)+bean(270,96,19,24,0,R,false);
-  s+=txt(60,146,PT('F1'),{a:'middle',it:1})+txt(60,155,PT('plane'),{a:'middle',fs:6})+txt(120,146,PT('F2'),{a:'middle',it:1})+txt(120,155,PT('bomb'),{a:'middle',fs:6})+txt(196,152,PT('F3'),{a:'middle',it:1})+txt(196,161,PT('marago'),{a:'middle',fs:6})+txt(270,146,PT('F4'),{a:'middle',it:1})+txt(270,155,PT('caracoli'),{a:'middle',fs:6});
-  let r=`<path d="M40 178H140" stroke="var(--ink)" stroke-width=".6"/>`;for(let i=0;i<=10;i++)r+=`<path d="M${40+i*10} 178v${i%5?-2.5:-5}" stroke="var(--ink)" stroke-width=".5"/>`;s+=r+txt(146,180,'1 cm',{fs:6});return s},
- port(R,n){let s=ground(176,14,306,R);s+=plant(90,176,150,false,R)+plant(228,176,86,true,R);
-  s+=txt(90,190,PT('haut'),{a:'middle',it:1})+txt(228,190,PT('nain'),{a:'middle',it:1});
-  let sc=`<path d="M300 176V36" stroke="var(--ink)" stroke-width=".6"/>`;for(let i=0;i<=4;i++)sc+=`<path d="M300 ${176-i*35}h-4" stroke="var(--ink)" stroke-width=".5"/>`;return s+sc+txt(296,32,'≈ 4 m',{a:'end',fs:6})},
- croisement(R,n){let s='';const ps=(n&&n.p||[]).slice(0,2).map(p=>M[p[0]]?M[p[0]].n:'');
-  const sprig=(x,y,sc)=>stem([[x,y+30*sc],[x,y]],1.6)+leaf(x,y+8*sc,40*sc,10*sc,-2.4,R,{veins:5})+leaf(x,y+8*sc,40*sc,10*sc,-.7,R,{veins:5})+cluster(x,y+18*sc,3,5*sc,R);
-  s+=sprig(70,62,1)+sprig(250,62,1);
-  s+=`<path d="M148 50l24 24M172 50l-24 24" stroke="var(--ink)" stroke-width="1.1"/>`;
-  s+=txt(70,22,'♀ '+(ps[0]||''),{a:'middle',it:1})+txt(250,22,'♂ '+(ps[1]||''),{a:'middle',it:1});
-  s+=`<path d="M160 86V112" stroke="var(--ink)" stroke-width=".7"/><path d="M156 108l4 6 4-6" stroke="var(--ink)" stroke-width=".7" fill="none"/>`;
-  s+=sprig(160,156,1.05)+txt(196,182,PT('figp')+(n?n.n:PT('desc')),{it:1});return s},
- rouille(R,n){let s=leaf(26,120,210,42,-.28,R,{veins:12,spots:16,hatch:false});
-  s+=`<circle cx="262" cy="70" r="40" fill="var(--pp)" stroke="var(--ink)" stroke-width="1.2"/><circle cx="262" cy="70" r="43" fill="none" stroke="var(--ink)" stroke-width=".4"/>`;
-  for(let k=0;k<14;k++){const a=R()*Math.PI*2,d=Math.sqrt(R())*30,x=262+Math.cos(a)*d,y=70+Math.sin(a)*d,rot2=R()*180;s+=`<ellipse cx="${f(x)}" cy="${f(y)}" rx="5" ry="3.3" transform="rotate(${f(rot2)} ${f(x)} ${f(y)})" fill="var(--pp)" stroke="var(--ink)" stroke-width=".6"/>`+stipple(x,y,2.6,R,2.2)}
-  s+=`<path d="M226 88L150 112M238 104L150 112" stroke="var(--ink)" stroke-width=".4" stroke-dasharray="2 2"/>`;
-  s+=txt(222,128,'Hemileia vastatrix',{it:1})+txt(222,137,PT('uredo'),{fs:6})+txt(26,190,PT('rouille'),{it:1});return s},
- foret(R,n){let s=ground(170,10,310,R);s+=tree(64,170,112,R)+tree(178,170,92,R)+tree(270,170,104,R);
-  s+=leaf(118,160,30,7,-2.2,R,{veins:4})+leaf(118,160,30,7,-1,R,{veins:4})+cluster(118,164,3,3.5,R);
-  s+=lead(112,156,96,176)+txt(22,180,PT('sousbois'),{it:1})+txt(306,190,PT('foret'),{it:1,a:'end'});return s},
- route(R,n){let s=compass(56,92,30);let w='';for(let i=0;i<26;i++){const x=110+R()*190,y=40+R()*130;w+=`M${f(x)} ${f(y)}q3 -2.5 6 0t6 0`}s+=`<path d="${w}" stroke="var(--ink)" stroke-width=".4" fill="none" opacity=".55"/>`;
-  const lab=(n&&n.pl?n.pl.split('→').map(x=>x.trim()):[PT('orig'),PT('escale'),PT('arr')]).slice(0,4);const N=Math.max(2,lab.length);
-  const pts=[];for(let i=0;i<N;i++){pts.push([126+i*(170/(N-1)),150-i*(96/(N-1))+(i%2?16:-8)])}
-  s+=`<path d="${smooth(pts)}" stroke="var(--ink)" stroke-width="1" stroke-dasharray="1.5 3" fill="none"/>`;
-  pts.forEach((p,i)=>{s+=`<circle cx="${f(p[0])}" cy="${f(p[1])}" r="3.4" fill="var(--pp)" stroke="var(--ink)" stroke-width=".8"/><circle cx="${f(p[0])}" cy="${f(p[1])}" r="1.1" fill="var(--ink)"/>`+txt(p[0]+(i===N-1?-6:6),p[1]+(i%2?12:-7),lab[i]||'',{fs:6.5,it:1,a:i===N-1?'end':'start'})});
-  return s+txt(14,190,PT('route'),{it:1})},
- plantule(R,n){let s='';s+=`<path d="M14 140H306" stroke="var(--ink)" stroke-width=".8"/>`;s+=`<clipPath id="soil${UID}"><rect x="8" y="141" width="304" height="40"/></clipPath><g clip-path="url(#soil${UID++})">`+stipple(160,160,150,R,.02,true).replace(/r=".42"/g,'r=".5"')+'</g>';
-  const p=(x,sc,clone)=>{let q='';q+=`<path d="M${x} 140Q${x+2} ${140-40*sc} ${x} ${140-70*sc}" stroke="var(--ink)" stroke-width="1.2" fill="none"/>`;
-   let rt='';for(let i=0;i<7;i++){rt+=`M${x} 140q${f((R()-.5)*20)} ${f(10+R()*10)} ${f((R()-.5)*30)} ${f(20+R()*20)}`}q+=`<path d="${rt}" stroke="var(--ink)" stroke-width=".45" fill="none"/>`;
-   if(!clone){q+=`<ellipse cx="${x-10*sc}" cy="${140-70*sc}" rx="${11*sc}" ry="${6*sc}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".7"/><ellipse cx="${x+10*sc}" cy="${140-70*sc}" rx="${11*sc}" ry="${6*sc}" fill="var(--pp)" stroke="var(--ink)" stroke-width=".7"/>`}
-   q+=leaf(x,140-(clone?60:50)*sc,32*sc,8*sc,-2.6,R,{veins:5})+leaf(x,140-(clone?60:50)*sc,32*sc,8*sc,-.55,R,{veins:5});
-   if(clone)q+=`<path d="M${x-6} ${140-70*sc}h12" stroke="var(--ink)" stroke-width="1"/>`;return q};
-  s+=p(90,1,false)+p(230,1.15,true);
-  return s+txt(90,190,PT('plantule'),{a:'middle',it:1})+txt(230,190,PT('bouture'),{a:'middle',it:1})}
-};
-const TITLES={rameau:'Rameau fructifère',cerise:'Coupe de la cerise',feuille:'Feuille et nervation',fleur:'Floraison',montagnes:'Paysage du Yunnan',grains:'Morphologie des grains',port:'Port de l’arbre',croisement:'Croisement',rouille:'La rouille du caféier',foret:'Forêt originelle',route:'Routes de diffusion',plantule:'Multiplication'};
-const KEYS=Object.keys(DRAW);const cache={};
-function plate(key,node,ink){const ck=LANG+key+(node?node.id||'':'')+(ink||'');if(cache[ck])return cache[ck];
-  const R=rng((node&&node.id?[...node.id].reduce((a,c)=>a*31+c.charCodeAt(0),7):11)+KEYS.indexOf(key)*997);
-  const svg=`<svg class="plate" viewBox="0 0 ${W} ${H}" style="--ink:${ink||'#2b2926'};--pp:#fbfaf7" font-family="Inter,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans SC,sans-serif" fill="none" role="img" aria-label="${PT('aria')}${(TITLES_L[LANG]||TITLES_L.fr)[key]}"><clipPath id="pc${UID}"><rect x="7.5" y="7.5" width="${W-15}" height="${H-15}"/></clipPath><g clip-path="url(#pc${UID++})">${DRAW[key](R,node)}</g>${frame(KEYS.indexOf(key)+1)}</svg>`;
-  return cache[ck]=svg}
-return {plate,TITLES,KEYS};
-})();
 /* =====================================================================
    PLANCHES BOTANIQUES — style lithographie XIXe rehaussée à l’aquarelle
    Une planche par variété, générée d’après ses caractères : port, couleur
@@ -1013,9 +853,9 @@ const T={
  kr:{sp:'Coffea canephora',lf:'rob',L:1.32,wr:.42,wav:.05,fr:['crim'],fs:.76,fe:1,nc:12,bean:.8,hab:'shrub',pet:6},
  cxr:{sp:'C. congensis × C. canephora',lf:'rob',L:1.25,wr:.38,wav:.04,fr:['crim'],fs:.75,fe:1,nc:11,bean:.78,hab:'shrub',pet:6}
 };
-const LEG={fr:['Fleur','Coupe du fruit','Grain, face plane et face bombée','Port','Jeune plant en essai','1,70 m','≈ 30 cm','Pl.'],
- en:['Flower','Fruit section','Bean, flat and rounded faces','Habit','Young plant in trials','1.70 m','≈ 30 cm','Pl.'],
- zh:['花','果实剖面','种子（平面与凸面）','树形','试验中的幼苗','1.70 米','约 30 厘米','图版']};
+const LEG={fr:['Fleur','Coupe du fruit','Grain, face plane et face bombée','Feuille et nervation','','cm','','Pl.'],
+ en:['Flower','Fruit section','Bean, flat and rounded faces','Leaf and venation','','cm','','Pl.'],
+ zh:['花','果实剖面','种子（平面与凸面）','叶片与叶脉','','厘米','','图版']};
 
 /* ---------- primitives ---------- */
 function leaf(cx,cy,len,wid,ang,R,o){
@@ -1088,37 +928,19 @@ function figBeans(x,y,tr){
   let h='';for(let i=0;i<8;i++){const t=.15+i/7*1.1,xx=x+b+3+Math.sin(t)*b*.92,hh=b*e*Math.cos(t)*.92;h+=`M${f(xx)} ${f(y-hh)}L${f(xx)} ${f(y+hh)}`}
   s+=`<path d="${h}" stroke="${INK}" stroke-width=".28" opacity=".55"/>`;
   return s}
-function human(x,y,h){const k=h/17;return `<g stroke="${INK}" stroke-width="${f(.5)}" fill="none" stroke-linecap="round"><circle cx="${x}" cy="${f(y-h+1.6*k)}" r="${f(1.5*k)}" fill="${INK}"/><path d="M${x} ${f(y-h+3.2*k)}L${x} ${f(y-7*k)}M${x} ${f(y-7*k)}L${f(x-2*k)} ${y}M${x} ${f(y-7*k)}L${f(x+2*k)} ${y}M${f(x-3*k)} ${f(y-h+7*k)}L${x} ${f(y-h+4.6*k)}L${f(x+3*k)} ${f(y-h+7*k)}"/></g>`}
-function figHabit(x,y,tr,R,L){
-  const lc=LEAF[tr.lf][0];let wash='',ink='',lab='';const gl=`<path d="M${x-42} ${y}H${x+42}" stroke="${INK}" stroke-width=".5"/>`;
-  let g='';for(let i=-40;i<40;i+=3)g+=`M${x+i} ${y+.5}l-1.6 2`;ink+=gl+`<path d="${g}" stroke="${INK}" stroke-width=".3" opacity=".5"/>`;
-  const tierTree=(H,Wm,tiers,droop,trunk)=>{let cr=[],br='';
-    ink+=`<path d="M${x} ${y}L${x} ${f(y-H)}" stroke="${INK}" stroke-width="${trunk}"/>`;
-    for(let k=0;k<tiers;k++){const yy=y-H*(.14+.84*k/tiers),hw=Wm*(1-.8*k/tiers)*(.85+R()*.3);
-      for(const sg of[-1,1]){br+=`M${x} ${f(yy)}Q${f(x+sg*hw*.6)} ${f(yy-2)} ${f(x+sg*hw)} ${f(yy+droop)}`;
-        for(let j=1;j<5;j++){const px=x+sg*hw*j/5,py=yy-1+droop*(j/5)*(j/5);br+=`M${f(px)} ${f(py)}l${f(sg*1.2)} 1.6M${f(px)} ${f(py)}l${f(sg*1.2)} -1.4`}}
-      cr.push([x-hw,yy+droop],[x+hw,yy+droop])}
-    const L1=cr.filter((_,i)=>i%2===0),R1=cr.filter((_,i)=>i%2===1).reverse();
-    wash+=`<path d="${P([[x,y-H-2]].concat(R1.reverse(),[[x,y-H*.1]],L1.reverse()))}Z" fill="${lc}" opacity=".5"/>`;
-    ink+=`<path d="${br}" stroke="${INK}" stroke-width=".42" fill="none"/>`};
-  const h=tr.hab;
-  if(h==='tall'){tierTree(50,26,8,5,.9);ink+=human(x+30,y,17)}
-  else if(h==='wild'){tierTree(54,20,7,6,.7);ink+=human(x+30,y,17)}
-  else if(h==='dwarf'){tierTree(30,22,8,3,.9);ink+=human(x+30,y,17)}
-  else if(h==='tree'){ink+=`<path d="M${x} ${y}L${x} ${y-36}M${x} ${y-24}L${x-9} ${y-38}M${x} ${y-28}L${x+10} ${y-42}" stroke="${INK}" stroke-width="1"/>`;
-    for(const [dx,dy,r] of[[0,-52,13],[-12,-44,10],[12,-46,11],[-5,-62,9],[8,-60,9]]){wash+=`<circle cx="${x+dx}" cy="${y+dy}" r="${r}" fill="${lc}" opacity=".5"/>`;ink+=`<circle cx="${x+dx}" cy="${y+dy}" r="${r}" stroke="${INK}" stroke-width=".4" fill="none" stroke-dasharray="2 1.4"/>`}
-    ink+=human(x+30,y,8)}
-  else if(h==='shrub'||h==='erect'||h==='spread'){const sp=h==='erect'?.35:h==='spread'?1.2:.75;const H=h==='erect'?44:36;
-    for(let s=-2;s<=2;s++){const tx=x+s*9*sp,ty=y-H*(1-Math.abs(s)*.12);ink+=`<path d="M${x+s*1.5} ${y}Q${f(x+s*4*sp)} ${f(y-H*.5)} ${f(tx)} ${f(ty)}" stroke="${INK}" stroke-width=".7" fill="none"/>`;
-      for(let j=1;j<6;j++){const py=y-H*(.2+j*.14),px=x+s*(j*1.6)*sp;const w=7+R()*4;ink+=`<path d="M${f(px)} ${f(py)}q${f(-w)} 1 ${f(-w-3)} 4M${f(px)} ${f(py)}q${f(w)} 1 ${f(w+3)} 4" stroke="${INK}" stroke-width=".35" fill="none"/>`}}
-    wash+=`<ellipse cx="${x}" cy="${f(y-H*.55)}" rx="${f(18+16*sp)}" ry="${f(H*.5)}" fill="${lc}" opacity=".45"/>`;ink+=human(x+34,y,14)}
-  else if(h==='seed'){const by=y;wash+=`<path d="M${x-9} ${by-12}L${x+9} ${by-12}L${x+7} ${by}L${x-7} ${by}Z" fill="#3a3530" opacity=".75"/>`;
-    ink+=`<path d="M${x-9} ${by-12}L${x+9} ${by-12}L${x+7} ${by}L${x-7} ${by}Z" stroke="${INK}" stroke-width=".5" fill="none"/><path d="M${x} ${by-12}L${x} ${by-44}" stroke="${INK}" stroke-width=".7"/>`;
-    const pr=[[by-22,9,'#8e9668'],[by-31,8,'#8e9668'],[by-40,6,'#b4ba80']];
-    for(const [py,l,c] of pr)for(const sg of[-1,1]){const lf=leaf(x,py,l*1.6,l*.45,sg>0?-.45:Math.PI+.45,R,{bend:sg*.4,wav:0,col:[c,mixc(c,'#3b3a28',.3)],veins:4,uid:L.uid});L.uid++;wash+=lf.wash;ink+=lf.ink}
-    lab=`<text x="${x+16}" y="${by-20}" font-size="5.6" font-style="italic" fill="${INK}">${L.t[6]}</text>`}
-  if(h!=='seed')lab=`<text x="${x+34}" y="${y+8}" font-size="5" text-anchor="middle" fill="${INK}" opacity=".8">${L.t[5]}</text>`;
-  return{wash,ink:ink+lab}}
+/* Figure 4 — une feuille détachée.
+   La vignette précédente (silhouette de l'arbre et bonhomme bâton) jurait
+   avec le reste de la planche : un gribouillis au milieu d'une gravure. La
+   feuille, elle, sort de la même primitive que le rameau, et dit tout
+   autant de la variété — longueur, largeur, ondulation du limbe, nombre de
+   nervures, teinte du revers. */
+function figLeaf(x,y,tr,R,L){
+  const sc=Math.min(1.25,tr.L),ln=72*sc,wd=ln*tr.wr*.64;
+  const g=leaf(x-ln*.46,y-6,ln,wd,.2,R,{bend:.5,wav:tr.wav||0,col:LEAF[tr.lf],
+    veins:tr.lf==='rob'||tr.lf==='lib'?11:9,rust:0,uid:0});
+  const cm=Math.round(12*sc*(tr.lf==='lib'?1.6:1));
+  const lab=`<text x="${f(x)}" y="${f(y+32)}" font-size="5" text-anchor="middle" fill="${INK}" opacity=".8">≈ ${cm} ${L.t[5]}</text>`;
+  return{wash:g.wash,ink:g.ink+lab}}
 
 /* ---------- planche complète ---------- */
 const cache={};
@@ -1175,7 +997,7 @@ function plate(n,lang){
   const sec=figSection(354,fy+6,tr,col0);
   const fl=flower(fx+4,fy+6,17,.3,1,tr.pet,R);
   const bn=figBeans(320,128,tr);
-  const hb=figHabit(322,206,tr,R,{t,uid:0});
+  const hb=figLeaf(330,198,tr,R,{t,uid:0});
   const num=(x,y,k)=>`<text x="${x}" y="${y}" font-size="6.5" font-style="italic" fill="${INK}">${k}</text>`;
   /* papier, cadre, titres */
   const sci=n.g==='rob'&&n.id!=='can'?'Coffea canephora':tr.sp;
@@ -1189,11 +1011,11 @@ function plate(n,lang){
 <rect width="${VW}" height="${VH}" fill="${PAPER}"/><rect width="${VW}" height="${VH}" filter="url(#${pid}p)"/>${fox}
 <g filter="url(#${pid}w)" transform="translate(.45 .35)" opacity=".93">${W1}${W2}${sec}${hb.wash}</g>
 <g>${I1}${I2}${W3}${CI}${FL}${fl}${bn}${hb.ink}</g>
-${num(fx-14,fy-12,1)}${num(334,fy-14,2)}${num(296,108,3)}${num(286,160,4)}
+${num(fx-14,fy-12,1)}${num(334,fy-14,2)}${num(296,108,3)}${num(288,168,4)}
 <rect x="9.5" y="9.5" width="${VW-19}" height="${VH-19}" fill="none" stroke="${INK}" stroke-width=".7"/><rect x="12.5" y="12.5" width="${VW-25}" height="${VH-25}" fill="none" stroke="${INK}" stroke-width=".3"/>
 <text x="22" y="26" font-size="6.2" letter-spacing="1.4" fill="${INK}">${t[7].toUpperCase()} ${plN}</text>
 <text x="${VW/2}" y="253" font-size="9.6" font-style="italic" text-anchor="middle" fill="${INK}">${latin}</text>
-<text x="${VW/2}" y="264" font-size="5.4" letter-spacing=".3" text-anchor="middle" fill="${INK}" opacity=".78">1. ${t[0]}   2. ${t[1]}   3. ${t[2]}   4. ${tr.hab==='seed'?t[4]:t[3]}</text></svg>`;
+<text x="${VW/2}" y="264" font-size="5.4" letter-spacing=".3" text-anchor="middle" fill="${INK}" opacity=".78">1. ${t[0]}   2. ${t[1]}   3. ${t[2]}   4. ${t[3]}</text></svg>`;
   return cache[ck]=svg}
 return{plate,T};
 })();
@@ -1309,7 +1131,7 @@ const AUD=(()=>{
     if(ac.state!=='running'&&ac.resume)ac.resume().catch(()=>{});
     /* Et si la chaîne d'accords s'est éteinte — les minuteurs sont les
        premiers que le système coupe —, on la relance. */
-    if(started&&dernierAccord&&Date.now()-dernierAccord>40000){timers.forEach(clearTimeout);timers=[];padChord(true);timers.push(setTimeout(sparkle,4000))}}
+    if(started&&dernierAccord&&Date.now()-dernierAccord>30000){timers.forEach(clearTimeout);timers=[];padChord(true);timers.push(setTimeout(sparkle,4000))}}
   function fxs(kind){if(!on||!ac||!started)return;if(ac.state!=='running'){reveiller();return}const now=ac.currentTime;
     /* Ces notes étaient dans le registre de la nappe, qui les masquait : on
        ne les entendait pas. Une octave au-dessus, et un peu plus ouvertes. */
@@ -1338,7 +1160,11 @@ const AUD=(()=>{
   document.addEventListener('visibilitychange',()=>{if(!ac||!started)return;if(document.hidden)ac.suspend();else if(on)reveiller()});
   addEventListener('pageshow',reveiller);addEventListener('focus',reveiller);
   /* Une ronde lente : elle ne coûte rien et rattrape ce que les événements
-     ratent — sur iOS, revenir d'un appel n'émet ni l'un ni l'autre. */
+     ratent — sur iOS, revenir d'un appel n'émet ni l'un ni l'autre.
+     Elle ne suffit pourtant pas : quand le système coupe les minuteurs,
+     il coupe celui-ci avec les autres, et le gardien meurt avec ce qu'il
+     gardait. La boucle d'animation, elle, bat tant que la page est à
+     l'écran : c'est de là que part le second appel, dans loop(). */
   setInterval(()=>{if(!document.hidden)reveiller()},5000);
   return{start,setOn,fx:fxs,reveil:reveiller,get on(){return on}};
 })();
@@ -1652,10 +1478,8 @@ const LOTS=[
    Format : {nom:'', ferme:'', region:'baoshan', variete:'Catimor', process:'Lavé', alt:1500, note:''} */
 const YUNMA_LOTS=[];
 /* Planche illustrée associée à chaque variété / événement */
-const ILL={eug:'foret',can:'feuille',lib:'feuille',cong:'feuille',ara:'rameau',eth:'foret',yem:'route',ind:'route',typ:'rameau',bou:'cerise',mar:'grains',cat:'port',kent:'rouille',hdt:'croisement',java:'route',sl28:'cerise',sl34:'rameau',s288:'croisement',gesha:'fleur',rume:'foret',mnov:'croisement',s795:'croisement',pacas:'port',vsar:'port',pcm:'grains',catimor:'rouille',sarch:'croisement',ctu:'croisement',castillo:'rouille',mars:'rouille',h1:'plantule',star:'fleur',erecta:'port',nganda:'port',bp534:'plantule',sln:'plantule',cxr:'croisement',kr:'plantule',sidra:'cerise',pink:'cerise',mmaya:'plantule',dr132:'cerise',steno:'feuille',wcrf1:'plantule',exc:'feuille',innov:'plantule',libex:'croisement',bmount:'montagnes',laurina:'cerise',fmission:'route',boujaune:'cerise',k7:'rameau',pache:'port',jarc:'foret',t5296:'croisement',t8667:'rouille',vcol:'rouille',ruiru11:'plantule',cr95:'rouille',obata:'croisement',iapar59:'croisement',batian:'rameau',chiroso:'grains',ceni1:'plantule',cifc7963:'rouille'};
 /* Aligné par indice sur EVENTS, qui est trié par année : y insérer une date
    décale tout ce qui suit. La construction compte les deux tableaux. */
-const EV_ILL=[['montagnes'],['route',{id:'e1',pl:'Malaisie → Hainan'}],['route',{id:'e2',pl:'Birmanie → Ruili (Dehong)'}],['montagnes'],['croisement','s288'],['rameau'],['grains'],['port'],['montagnes'],['cerise'],['route',{id:'e4',pl:'Pu’er → Europe'}],['feuille'],['fleur'],['plantule'],['grains'],['route',{id:'e3',pl:'Yunnan → monde'}],['grains'],['grains']];
 
 /* =====================================================================
    ÉCHELLE DU TEMPS (compressée : préhistoire → aujourd’hui)
@@ -1844,7 +1668,13 @@ function drawBackdropLand(){
    ce qui permet de regarder une aube sans l’attendre, et aux tests de
    mesurer la même chose à chaque fois. */
 const CIEL=(()=>{
-  const TOUR=600;                       /* une journée en dix minutes */
+  /* Le tour d'horloge durait dix minutes : arrivé à six heures et demie,
+     on avait la nuit sur les bras au bout de cinq minutes de lecture — le
+     jour, lui, venait de se lever. Deux heures pour vingt-quatre, soit
+     douze fois l'horloge : on reste dans la demi-journée où l'on est
+     arrivé, la lumière bouge assez pour se voir sur une longue visite, et
+     celui qui vient le soir a toujours son couchant. */
+  const TOUR=7200;                      /* une journée en deux heures */
   let fixe=null,depart=0;
   try{const h=new URLSearchParams(location.search).get('heure');
     if(h!==null&&isFinite(+h))fixe=((+h)%24+24)%24}catch(e){}
@@ -1883,7 +1713,11 @@ const CIEL=(()=>{
      c’est ce qui fait que l’ombre tourne encore au crépuscule. */
   const elevation=(h)=>1.16*Math.sin(Math.PI*(h-6.17)/12.5);
   const azimut=(h)=>Math.PI*(h-6.17)/12.5+2.0;
-  return {TOUR,heure,etat,elevation,azimut,get fixe(){return fixe}};
+  /* Pour les essais : se placer à une heure donnée sans arrêter le temps.
+     « ?heure= » fige l'horloge, ce qui ne permet justement pas de vérifier
+     qu'elle avance et que le ciel la suit. */
+  const poser=h=>{fixe=null;depart=(((h%24)+24)%24)-(performance.now()-t0)/1000/TOUR*24};
+  return {TOUR,heure,etat,elevation,azimut,poser,get fixe(){return fixe}};
 })();
 
 /* Soleil : il suit l’heure, et se couche. */
@@ -1894,7 +1728,7 @@ const CSS=document.documentElement.style;
    l'encre et le papier en gris moyen l'un sur l'autre pendant dix-sept
    secondes à chaque crépuscule — mesuré, et illisible. Deux seuils plutôt
    qu'un, pour qu'il ne clignote pas à la frontière. */
-let theme=0,themeCible=0,dernierT=null,dernierPose=-1;
+let theme=0,themeCible=0,dernierT=null,dernierPose=-1,dernierFond=null;
 function sunUpdate(t){
   const h=CIEL.heure(),C=CIEL.etat(h);
   const el=CIEL.elevation(h),az=CIEL.azimut(h);
@@ -1912,8 +1746,14 @@ function sunUpdate(t){
   const maint=performance.now()/1000;
   const dt=dernierT===null?0:Math.min(.25,Math.max(0,maint-dernierT));dernierT=maint;
   theme+=Math.sign(themeCible-theme)*Math.min(Math.abs(themeCible-theme),dt*.95);
-  if(Math.abs(theme-dernierPose)>.004||Math.abs(C.nuit-(SUN.nuit??0))>.004){
-    dernierPose=theme;const n=theme;
+  /* La seconde condition comparait C.nuit à SUN.nuit — qu'on venait
+     d'y recopier quatre lignes plus haut : elle valait toujours zéro. Le
+     papier et le fond ne bougeaient donc que lorsque le thème basculait,
+     et le reste du temps la page gardait la couleur de l'heure d'arrivée.
+     On compare maintenant au dernier fond réellement posé. */
+  const bougeFond=!dernierFond||Math.abs(C.bas[0]-dernierFond[0])+Math.abs(C.bas[1]-dernierFond[1])+Math.abs(C.bas[2]-dernierFond[2])>1.2;
+  if(Math.abs(theme-dernierPose)>.004||bougeFond){
+    dernierPose=theme;dernierFond=C.bas.slice();const n=theme;
     const enc=mel3([33,33,33],[236,234,228],n);
     const pap=mel3([251,250,247],[23,29,46],n);
     CSS.setProperty('--encre',enc.map(Math.round).join(','));
@@ -2028,28 +1868,40 @@ void main(){vec3 n=normalize(vN);vec3 L=normalize(uL);float nl=dot(n,L);float di
      garde cette proportion, sans quoi le Yunnan serait écrasé. */
   const EXT=46000,EXTZ=EXT*1.18;
   const Y0=-4200,AMPL=7000;
-  /* Hauteur en un point, interpolée entre les quatre mailles voisines. */
+  /* Hauteur en un point, interpolée sur seize mailles — bicubique de
+     Catmull-Rom, et non plus bilinéaire adoucie. Le relevé est quantifié
+     sur un octet, soit treize mètres par pas : l'interpolation précédente
+     annulait bien sa dérivée au bord de chaque maille, mais pas sa
+     courbure, et la grille se devinait en coussins carrés sur les versants
+     doux et en marches sur les plateaux. La bicubique passe par les points
+     relevés avec une courbure continue : les crêtes gardent leur arête,
+     les pentes deviennent de vraies courbes. */
+  const ech=(i,j)=>RH[Math.max(0,Math.min(RM-1,j))*RM+Math.max(0,Math.min(RM-1,i))];
+  const cmr=(a,b,c,d,t)=>{const t2=t*t;return .5*(2*b+(c-a)*t+(2*a-5*b+4*c-d)*t2+(3*b-a-3*c+d)*t2*t)};
+  const rang=new Float64Array(4);
   function hgt(x,z){
-    const u=(x+EXT)/(2*EXT)*(RM-1), v=(z+EXTZ)/(2*EXTZ)*(RM-1);
-    const i=Math.max(0,Math.min(RM-2,Math.floor(u))), j=Math.max(0,Math.min(RM-2,Math.floor(v)));
-    const fx=Math.max(0,Math.min(1,u-i)), fz=Math.max(0,Math.min(1,v-j));
-    const h00=RH[j*RM+i],h10=RH[j*RM+i+1],h01=RH[(j+1)*RM+i],h11=RH[(j+1)*RM+i+1];
-    /* Interpolation adoucie : la dérivée s'annule aux bords de la maille,
-       donc pas de cassure d'une maille à l'autre. */
-    const sx=fx*fx*(3-2*fx), sz=fz*fz*(3-2*fz);
-    const h=(h00*(1-sx)+h10*sx)*(1-sz)+(h01*(1-sx)+h11*sx)*sz;
+    const u=Math.max(0,Math.min(RM-1,(x+EXT)/(2*EXT)*(RM-1))), v=Math.max(0,Math.min(RM-1,(z+EXTZ)/(2*EXTZ)*(RM-1)));
+    const i=Math.floor(u), j=Math.floor(v), fx=u-i, fz=v-j;
+    for(let m=0;m<4;m++)rang[m]=cmr(ech(i-1,j-1+m),ech(i,j-1+m),ech(i+1,j-1+m),ech(i+2,j-1+m),fx);
+    const h=Math.max(0,Math.min(255,cmr(rang[0],rang[1],rang[2],rang[3],fz)));
     return Y0+h/255*AMPL}
   /* La maille de rendu était bornée à 250 par l'index sur seize bits —
      au-delà, les sommets ne tiennent plus dans un entier court. L'extension
      des index longs lève la limite ; là où elle manque, on retombe sur 250
      et le relief reste correct, simplement plus doux. */
+  /* La normale était prise sur un écart de 240 unités, soit plus de deux
+     mailles du relevé : elle moyennait le modelé qu'elle était censée
+     révéler, et les versants s'éteignaient en aplats. Mesurée sur la
+     moitié d'une maille de rendu, elle suit la surface bicubique de près —
+     les croupes reprennent leur arête sans que rien ne s'assombrisse,
+     puisque seule la direction change, pas la lumière. */
   const idxLong=gl.getExtension('OES_element_index_uint');
   const N=idxLong?(mobile()?340:440):250,step=EXT*2/N,stepZ=EXTZ*2/N;
   const pos=new Float32Array((N+1)*(N+1)*3),nor=new Float32Array(pos.length),col=new Float32Array(pos.length);
   for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){const x=-EXT+i*step,z=-EXTZ+j*stepZ,y=hgt(x,z),k=(j*(N+1)+i)*3;
     pos[k]=x*2*K;pos[k+1]=y*2*K;pos[k+2]=z*2*K;
-    const e=Math.max(190,step*1.15),dx=(hgt(x+e,z)-hgt(x-e,z))/(2*e),dz=(hgt(x,z+e)-hgt(x,z-e))/(2*e);let nx=-dx,ny=1,nzv=-dz;const l=Math.hypot(nx,ny,nzv);nx/=l;ny/=l;nzv/=l;
-    nor[k]=nx;nor[k+1]=ny;nor[k+2]=nzv;
+    const e=Math.max(120,step*.55),dx=(hgt(x+e,z)-hgt(x-e,z))/(2*e),dz=(hgt(x,z+e)-hgt(x,z-e))/(2*e);let nx=-dx,ny=1,nzv=-dz;const l=Math.hypot(nx,ny,nzv);nx/=l;ny/=l;nzv/=l;
+    nor[k]=nx;nor[k+1]=ny;nor[k+2]=nzv;/* pas de différence fine : voir ci-dessous */
     const t=Math.max(0,Math.min(1,(y-Y0)/AMPL)),sl=1-ny,tx=(fb(x/1600,z/1600)-.5)*.035;
     const base=[.875+.08*t+tx,.845+.085*t+tx,.79+.1*t+tx];const dk=1-sl*.16;
     col[k]=base[0]*dk;col[k+1]=base[1]*dk;col[k+2]=base[2]*dk}
@@ -2089,7 +1941,6 @@ void main(){vec3 n=normalize(vN);vec3 L=normalize(uL);float nl=dot(n,L);float di
 })();
 
 function drawSphereBack(){
-  sunUpdate(S.t);
   if(GL3.ok)GL3.render(S.t);else drawBackdropLand();
   /* vignette chaude + voile de lumière (par-dessus le décor, sous l’arbre) */
   /* La vignette était brune : chaude sur le papier du jour, elle brunissait
@@ -2347,7 +2198,7 @@ function drawTerroirs(){
 /* =====================================================================
    BOUCLE
    ===================================================================== */
-let last=performance.now();
+let last=performance.now(),dernierReveil=0;
 function loop(t){
   /* Le pas était borné à cinquante millisecondes : sur une machine qui
      rend à dix images par seconde, la caméra n'avançait plus qu'à moitié
@@ -2360,6 +2211,17 @@ function loop(t){
   if(S.rotate&&!S.sel&&!ST.on&&t-lastInteract>3500&&!drag)tgt.yaw+=dt*.06;
   const k=1-Math.pow(ST.on||TERR.on?.02:.0009,dt);for(const key in cam)cam[key]+=(tgt[key]-cam[key])*k;
   S.dash=(S.dash+dt*16)%1000;
+  /* Le ciel se posait depuis le dessin de l'arbre, et le dessin s'arrête
+     dès qu'une page est ouverte. On lisait donc la chronologie sous un
+     ciel figé, et en refermant la page le jour sautait d'un coup à la
+     nuit — le bug de l'aube qui tournait en nuit « quelques secondes
+     après ». L'heure, elle, n'avait jamais cessé d'avancer : c'est le
+     ciel qui ne la suivait plus. Il se pose maintenant à chaque image,
+     page ouverte ou non, pour que l'encre et le papier d'une page
+     suivent eux aussi le jour qui passe. */
+  sunUpdate(S.t);
+  /* Le second gardien du son, celui qui ne dépend d'aucun minuteur. */
+  if(t-dernierReveil>1000){dernierReveil=t;AUD.reveil()}
   if(!pageOpen)draw();requestAnimationFrame(loop)
 }
 
@@ -2431,8 +2293,6 @@ addEventListener('resize',mesurerDock);addEventListener('orientationchange',()=>
    ligne à lui seul, juste sous le cartouche, et la touchait. */
 const peeking=(v)=>{document.body.classList.toggle('peeking',v);mesurerDock()};
 function figBot(n){return `<figure class="pl big">${BOT.plate(n,LANG)}<figcaption>${U('plate')} — ${n.n}</figcaption></figure>`}
-function fig(key,n,ink,cls){return `<figure class="pl ${cls||''}">${PLATES.plate(key,n,ink)}<figcaption>${U('plate')} — ${(TITLES_L[LANG]||TITLES_L.fr)[key]}${n&&n.n?' · '+n.n:''}</figcaption></figure>`}
-function evNode(i){const EI=EV_ILL[i]||['montagnes'];return[EI[0],typeof EI[1]==='string'?M[EI[1]]:(EI[1]||{id:'ev'+i})]}
 function select(n,quiet){
   if(quiet){renderPeekNode(n);return}touch();AUD.fx('node');S.sel=n;S.selEv=null;S.focus=new Set([n.id,...ancestors(n.id),...descendants(n.id)]);
   if(n.y>S.year){S.year=n.y;syncTime()}
@@ -2443,8 +2303,7 @@ function renderPeekNode(n){const G=GROUPS[n.g];
   peekEl.classList.add('on');peeking(true)}
 function selectEvent(ev,quiet){
   if(!quiet){touch();S.sel=null;S.selEv=ev;S.focus=null;tgt.ty=ev.wy;tgt.tx=0;tgt.tz=0;tgt.dist=mobile()?3400:4000;tgt.oy=mobile()?-70:-40}
-  const i=EVENTS.indexOf(ev),[k,en]=evNode(i);
-  peekEl.innerHTML=`<div class="pk-tx"><div class="kicker"><span class="dot" style="background:var(--verm)"></span>${U('yb')} · ${ev.y}</div><h3>${ev.t}</h3></div><button class="btn dark" data-page="yunnan">${U('yTimeline')}${IC.arrow}</button><button class="icb" data-peekclose aria-label="${U('close')}">${IC.close}</button>`;
+    peekEl.innerHTML=`<div class="pk-tx"><div class="kicker"><span class="dot" style="background:var(--verm)"></span>${U('yb')} · ${ev.y}</div><h3>${ev.t}</h3></div><button class="btn dark" data-page="yunnan">${U('yTimeline')}${IC.arrow}</button><button class="icb" data-peekclose aria-label="${U('close')}">${IC.close}</button>`;
   peekEl.classList.add('on');peeking(true)}
 function deselect(){const had=S.sel||S.selEv;S.sel=null;S.selEv=null;S.focus=null;peekEl.classList.remove('on');peeking(false);tgt.oy=0;if(had){tgt.tx=0;tgt.tz=0;tgt.dist=Math.max(tgt.dist,mobile()?5800:7600)}}
 peekEl.addEventListener('click',e=>{const f=e.target.closest('[data-fiche]');if(f)return openFiche(M[f.dataset.fiche]);const p=e.target.closest('[data-page]');if(p)return openPage(p.dataset.page);if(e.target.closest('[data-peekclose]'))deselect()});
@@ -2482,7 +2341,7 @@ const PAGES={
    <div class="vsearch"><input id="vq" type="search" placeholder="${U('search')}" autocomplete="off"></div>${gs}`},
    after:()=>{const q=document.getElementById('vq');q.addEventListener('input',()=>{const v=q.value.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
      pin.querySelectorAll('.vrow').forEach(r=>r.style.display=!v||r.dataset.q.includes(v)?'':'none');pin.querySelectorAll('.vgroup').forEach(g=>g.style.display=[...g.querySelectorAll('.vrow')].some(r=>r.style.display!=='none')?'':'none')})}},
- yunnan:{k:()=>NAVK(3),r:()=>`${fig('montagnes',{id:'yov'},RUST,'big')}<h1>${U('yTitle')}</h1>
+ yunnan:{k:()=>NAVK(3),r:()=>`<h1>${U('yTitle')}</h1>
    <p class="lead">${U('yLead')}</p>
    <div class="tlist">${EVENTS.map((e,i)=>`<div class="ti"><span class="ey">${e.y}</span><div><h3>${e.t}</h3><p>${e.d}</p><button class="lk" data-ev="${i}">${U('seeOnTree')}</button></div></div>`).join('')}
    <div class="ti fut"><span class="ey">2027</span><div><h3>${U('fut')[0]}</h3><p>${U('fut')[1]}</p></div></div></div>
@@ -2580,7 +2439,7 @@ function terrSynth(r,lots){
 function terrHTML(){
   const r=selRegion?REGIONS.find(x=>x.id===selRegion):null;const lots=LOTS.filter(l=>!selRegion||l[4]===selRegion);
   const vc=v=>/Geisha/.test(v)?GROUPS.eth.c:v==='Catimor'?GROUPS.intro.c:'#8a857a';const xa=a=>((a-1000)/1000*100).toFixed(1);
-  return `${fig('montagnes',{id:'t'+(selRegion||'all')},RUST,'big')}<h1>${r?r.n+(LANG==='zh'?'':`<em>${r.zh}</em>`):U('tTitle')}</h1>
+  return `<h1>${r?r.n+(LANG==='zh'?'':`<em>${r.zh}</em>`):U('tTitle')}</h1>
   <p class="lead">${r?r.d:U('tLead')}</p>
   ${r&&r.d2?`<p class="tp2">${r.d2}</p>`:''}
   ${terrSynth(r,lots)}
@@ -2646,27 +2505,27 @@ playBtn.onclick=()=>{lastInteract=performance.now();document.getElementById('hin
    VISITE GUIDÉE — raconte l’histoire, de variété en variété
    ===================================================================== */
 const STORY=[
- {y:-610000,ov:1,ids:['can','eug'],ill:'foret',k:'Prologue',t:'Deux espèces sauvages',d:'Dans les forêts d’Afrique, le Robusta (C. canephora) et C. eugenioides évoluent chacun de leur côté depuis des centaines de milliers d’années.'},
- {y:-350000,id:'ara',ill:'rameau',t:'Naissance de l’Arabica',d:'Il y a 350 000 à 610 000 ans, en Éthiopie, les deux espèces se croisent naturellement. L’Arabica naît avec le double de chromosomes. Le Robusta est donc l’un de ses parents.'},
- {y:-30500,id:'eth',ill:'foret',t:'Sauvages et cultivés se séparent',d:'Il y a environ 30 500 ans, les populations sauvages se séparent des ancêtres des futurs caféiers cultivés. L’Éthiopie reste le grand réservoir génétique.'},
- {y:1450,id:'yem',ill:'route',t:'Le Yémen, premier jardin',d:'Au XVe siècle, le café est cultivé au Yémen. Presque toutes les variétés du monde descendent de ce petit groupe d’arbres : c’est un goulet génétique décisif.'},
- {y:1700,id:'typ',ill:'route',t:'Typica, la route hollandaise',d:'De l’Inde à Java, puis Amsterdam et Paris : un plant offert à Louis XIV en 1714 est à l’origine des caféiers des Antilles et d’Amérique latine.'},
- {y:1715,id:'bou',ill:'cerise',t:'Bourbon, l’île française',d:'Sur l’île Bourbon (La Réunion), les Français cultivent leur propre lignée venue du Yémen, plus productive et plus sucrée.'},
- {y:1870,id:'mar',ill:'grains',t:'Une mutation géante',d:'Au Brésil, un Typica mute et donne des grains énormes : le Maragogipe. Les mutations deviennent un moteur de diversité.'},
- {y:1892,ev:0,ids:['typ','bou'],ill:'montagnes',ink:RUST,t:'Le café arrive au Yunnan',d:'Un missionnaire français plante des caféiers autour de son église à Zhukula (la date est débattue : 1892 à 1904). Une vingtaine d’arbres centenaires y vivent encore.'},
- {y:1915,id:'cat',ill:'port',t:'Caturra, le Bourbon nain',d:'Au Brésil, une mutation naine de Bourbon donne un arbre plus compact et plus productif. Ce sera la mère du Catimor.'},
- {y:1927,id:'hdt',ill:'croisement',t:'Timor : le Robusta revient',d:'Sur l’île de Timor, un arbre né d’un croisement spontané Arabica × Robusta résiste à la rouille. Le Robusta réinjecte ses gènes dans l’Arabica.'},
- {y:1936,id:'gesha',ill:'fleur',t:'Gesha, la landrace des forêts',d:'Collectée en Éthiopie dans les années 1930, la Gesha attendra 2004 pour éblouir le monde depuis le Panama.'},
- {y:1959,id:'catimor',ill:'rouille',t:'Catimor, l’arme contre la rouille',d:'Au Portugal, on croise Caturra et Hybride de Timor. Résistant, compact et très productif, le Catimor va conquérir l’Asie.'},
- {y:1988,ev:5,ids:['catimor'],ill:'montagnes',ink:RUST,t:'Le Yunnan bascule',d:'Avec un programme public puis Nestlé, le Yunnan replante massivement en Catimor, qui représente aujourd’hui plus de 95 % de sa production.'},
- {y:2010,id:'dr132',ill:'cerise',ink:RUST,t:'Le Yunnan crée ses variétés',d:'À Ruili, l’institut de Dehong repère un caféier aux fruits jaune doré : De-Re 132, première d’une série de variétés nées au Yunnan.'},
- {y:2010,id:'h1',ill:'plantule',t:'L’ère des hybrides F1',d:'Centroamericano croise un Sarchimor et la landrace Rume Sudan : vigueur hybride, résistance à la rouille et qualité de spécialité.'},
- {y:2019,id:'star',ill:'fleur',t:'Starmaya, la graine qui change tout',d:'Grâce à un parent mâle-stérile, c’est le premier hybride F1 qu’on peut multiplier par graines. Ses plants coûtent deux fois moins cher.'},
- {y:2021,id:'steno',ill:'feuille',t:'Stenophylla, l’espèce retrouvée',d:'Disparue des radars pendant des décennies, elle est retrouvée en Sierra Leone. Elle supporte bien plus de chaleur que l’Arabica, pour une tasse qui lui ressemble.'},
- {y:2024,id:'wcrf1',ill:'plantule',t:'Les variétés de demain, en essai',d:'Quatre hybrides F1 de World Coffee Research sont testés chez des producteurs jusqu’en 2030. Le réseau Innovea prépare déjà la génération suivante.'},
- {y:2025,ev:11,ids:['dr132','catimor','gesha'],ill:'route',ink:RUST,t:'Le Yunnan s’exporte',d:'Avec des cours mondiaux record, le Yunnan devient le premier exportateur de café de Chine : plus de 40 % des exportations du pays.'},
- {y:2026,ev:13,ids:['gesha','catimor'],ill:'grains',ink:RUST,t:'Gems of Yunnan 2026',d:'169 cafés sont en compétition. Le Geisha domine, mais un Catimor de Baoshan atteint 88,53 pts : le Yunnan prouve son potentiel.'},
- {y:2026,ov:1,ill:'montagnes',ink:RUST,k:'Épilogue',t:'Et demain : la sélection Yunma',d:'Début 2027, Yunma part au Yunnan choisir ses producteurs indépendants. À vous d’explorer l’atlas.'}
+ {y:-610000,ov:1,ids:['can','eug'],k:'Prologue',t:'Deux espèces sauvages',d:'Dans les forêts d’Afrique, le Robusta (C. canephora) et C. eugenioides évoluent chacun de leur côté depuis des centaines de milliers d’années.'},
+ {y:-350000,id:'ara',t:'Naissance de l’Arabica',d:'Il y a 350 000 à 610 000 ans, en Éthiopie, les deux espèces se croisent naturellement. L’Arabica naît avec le double de chromosomes. Le Robusta est donc l’un de ses parents.'},
+ {y:-30500,id:'eth',t:'Sauvages et cultivés se séparent',d:'Il y a environ 30 500 ans, les populations sauvages se séparent des ancêtres des futurs caféiers cultivés. L’Éthiopie reste le grand réservoir génétique.'},
+ {y:1450,id:'yem',t:'Le Yémen, premier jardin',d:'Au XVe siècle, le café est cultivé au Yémen. Presque toutes les variétés du monde descendent de ce petit groupe d’arbres : c’est un goulet génétique décisif.'},
+ {y:1700,id:'typ',t:'Typica, la route hollandaise',d:'De l’Inde à Java, puis Amsterdam et Paris : un plant offert à Louis XIV en 1714 est à l’origine des caféiers des Antilles et d’Amérique latine.'},
+ {y:1715,id:'bou',t:'Bourbon, l’île française',d:'Sur l’île Bourbon (La Réunion), les Français cultivent leur propre lignée venue du Yémen, plus productive et plus sucrée.'},
+ {y:1870,id:'mar',t:'Une mutation géante',d:'Au Brésil, un Typica mute et donne des grains énormes : le Maragogipe. Les mutations deviennent un moteur de diversité.'},
+ {y:1892,ev:0,ids:['typ','bou'],ink:RUST,t:'Le café arrive au Yunnan',d:'Un missionnaire français plante des caféiers autour de son église à Zhukula (la date est débattue : 1892 à 1904). Une vingtaine d’arbres centenaires y vivent encore.'},
+ {y:1915,id:'cat',t:'Caturra, le Bourbon nain',d:'Au Brésil, une mutation naine de Bourbon donne un arbre plus compact et plus productif. Ce sera la mère du Catimor.'},
+ {y:1927,id:'hdt',t:'Timor : le Robusta revient',d:'Sur l’île de Timor, un arbre né d’un croisement spontané Arabica × Robusta résiste à la rouille. Le Robusta réinjecte ses gènes dans l’Arabica.'},
+ {y:1936,id:'gesha',t:'Gesha, la landrace des forêts',d:'Collectée en Éthiopie dans les années 1930, la Gesha attendra 2004 pour éblouir le monde depuis le Panama.'},
+ {y:1959,id:'catimor',t:'Catimor, l’arme contre la rouille',d:'Au Portugal, on croise Caturra et Hybride de Timor. Résistant, compact et très productif, le Catimor va conquérir l’Asie.'},
+ {y:1988,ev:5,ids:['catimor'],ink:RUST,t:'Le Yunnan bascule',d:'Avec un programme public puis Nestlé, le Yunnan replante massivement en Catimor, qui représente aujourd’hui plus de 95 % de sa production.'},
+ {y:2010,id:'dr132',ink:RUST,t:'Le Yunnan crée ses variétés',d:'À Ruili, l’institut de Dehong repère un caféier aux fruits jaune doré : De-Re 132, première d’une série de variétés nées au Yunnan.'},
+ {y:2010,id:'h1',t:'L’ère des hybrides F1',d:'Centroamericano croise un Sarchimor et la landrace Rume Sudan : vigueur hybride, résistance à la rouille et qualité de spécialité.'},
+ {y:2019,id:'star',t:'Starmaya, la graine qui change tout',d:'Grâce à un parent mâle-stérile, c’est le premier hybride F1 qu’on peut multiplier par graines. Ses plants coûtent deux fois moins cher.'},
+ {y:2021,id:'steno',t:'Stenophylla, l’espèce retrouvée',d:'Disparue des radars pendant des décennies, elle est retrouvée en Sierra Leone. Elle supporte bien plus de chaleur que l’Arabica, pour une tasse qui lui ressemble.'},
+ {y:2024,id:'wcrf1',t:'Les variétés de demain, en essai',d:'Quatre hybrides F1 de World Coffee Research sont testés chez des producteurs jusqu’en 2030. Le réseau Innovea prépare déjà la génération suivante.'},
+ {y:2025,ev:11,ids:['dr132','catimor','gesha'],ink:RUST,t:'Le Yunnan s’exporte',d:'Avec des cours mondiaux record, le Yunnan devient le premier exportateur de café de Chine : plus de 40 % des exportations du pays.'},
+ {y:2026,ev:13,ids:['gesha','catimor'],ink:RUST,t:'Gems of Yunnan 2026',d:'169 cafés sont en compétition. Le Geisha domine, mais un Catimor de Baoshan atteint 88,53 pts : le Yunnan prouve son potentiel.'},
+ {y:2026,ov:1,ink:RUST,k:'Épilogue',t:'La route continue',d:'Début 2027, Yunma repart dans les montagnes du Yunnan à la rencontre de nouveaux producteurs. Cent treize ans après Nongxianshan, la même route, pour une histoire qui n’a pas fini de s’écrire. En attendant, l’atlas est à vous.'}
 ];
 const ST={on:false,i:0,t:0,paused:false,u0:0,u1:0,from:null,to:null,bump:0};
 const TRANS=3.2,HOLD=4.2;

@@ -4,8 +4,8 @@ Atlas interactif en 3D de la généalogie des variétés de café, avec un accen
 
 ## Contenu du dossier
 
-- `index.html` — **l'application complète, en un seul fichier** : styles, données, traductions, rendu 3D, planches et son. Une seule chose vient du dehors, la feuille de la police Inter, celle du site ; sans elle la page s'affiche très bien, dans la police de secours. Tout le reste est dedans.
-- `ILLUSTRATIONS.md` — l'inventaire des planches, avec un sujet prêt à coller dans un générateur d'images pour chacune.
+- `index.html` — **l'application complète, en un seul fichier** : styles, données, traductions, rendu 3D, planches botaniques et son. Une seule chose vient du dehors, la feuille de la police Inter, celle du site ; sans elle la page s'affiche très bien, dans la police de secours. Tout le reste est dedans.
+- `ILLUSTRATIONS.md` — la commande des illustrations : ce qu'il faudrait, planche par planche, avec un sujet prêt à coller dans un générateur d'images. Les planches schématiques ont été retirées de l'atlas ; seules restent les planches botaniques des fiches.
 - `.htaccess` — la règle de cache du dossier.
 - `assets/` — le logo Yunma vectorisé (version verticale, symbole seul, nom seul). Ces fichiers ne sont pas utilisés par `index.html`, qui contient déjà le logo en SVG, et ne sont pas déposés.
 
@@ -39,19 +39,19 @@ rien ne se recouvre sur un téléphone.
 
 | Lignes | Bloc |
 |---|---|
-| 13–305 | CSS : charte du site (`--bg #efebe2`, `--paper #fbfaf7`, `--ink #212121`, accent `#b95f2c`, olive `#565a41`), Inter puis Helvetica. Boutons droits (2 px) en capitales filetées. Toutes les teintes dérivent de trois triplets (`--encre`, `--pap`, `--fond`) que le cycle jour/nuit réécrit |
-| 306–370 | HTML : canvas WebGL `#gl` (décor) + canvas 2D `#c` (arbre), en-tête, menu, socle du temps, cartouche histoire, pages |
-| 372–686 | i18n : `UI`, `LT_L`, `NODES_L` (EN/ZH des fiches), `REGIONS_L`, `EVENTS_L`, `STORY_L`, `PLT`… Le texte français est la source, dans les données plus bas |
-| 687–839 | `PLATES` : illustrations monochromes (pages Yunnan et Terroirs) |
-| 840–1110 | `BOT` : planches botaniques XIXe générées pour chaque variété. Le tableau `T` contient les caractères de chaque variété : couleur des fruits, forme, feuilles, jeunes pousses, port, rouille… |
-| 1111–1211 | `AUD` : nappe ambiante, réverbération, et les notes des boutons (Web Audio, synthèse). `duck()` efface la nappe d'un souffle à chaque note, sans quoi elle les couvre |
-| 1212–1515 | **Données** : `GROUPS`, `LT` (types de liens), `SRC` (sources), `NODES` (65 variétés), `YLINKS` (arrivées au Yunnan), `EVENTS` (chronologie du Yunnan), `REGIONS` (terroirs), `LOTS`, `ILL` |
-| 1516–1573 | Échelle du temps `TS`, dimensions de l'arbre `HGT` / `RS`, `ERAS`, relevé de relief `RELIEF` |
-| 1574–1680 | Caméra : `MIND` / `MAXD`, vue d'accueil `HOME`, sphère de poussière `SPH_R` |
-| 1681–1961 | Cycle jour/nuit (`CIEL`, `MOMENTS`, `sunUpdate`) + décor WebGL `GL3` (terrain réel du Yunnan, brume, ciel) |
-| 1962–2265 | `draw()` : rendu de l'arbre (points, fils ondulants, étiquettes), survol des terroirs (`TERR`) |
-| 2266–2459 | Pages (`PAGES`), fiche (`openFiche`), `setLang()`, routage par hash |
-| 2460–2560 | Histoire animée (`STORY`, `storyStart`, `storyGo`…), mode épuré, voix des boutons (`VOIX`) |
+| 13–303 | CSS : charte du site (`--bg #efebe2`, `--paper #fbfaf7`, `--ink #212121`, accent `#a84f26`, olive `#565a41`), Inter puis Helvetica. Boutons droits (2 px) en capitales filetées. Toutes les teintes dérivent de trois triplets (`--encre`, `--pap`, `--fond`) que le cycle jour/nuit réécrit |
+| 304–368 | HTML : canvas WebGL `#gl` (décor) + canvas 2D `#c` (arbre), en-tête, menu, socle du temps, cartouche histoire, pages |
+| 369–762 | i18n : `UI`, `LT_L`, `NODES_L` (EN/ZH des fiches), `REGIONS_L`, `EVENTS_L`, `STORY_L`… Le texte français est la source, dans les données plus bas |
+| 763–772 | `IC` : les icônes de l'interface, en SVG inline |
+| 773–1025 | `BOT` : planches botaniques XIXe générées pour chaque variété. Le tableau `T` contient les caractères de chaque variété : couleur des fruits, forme, feuilles, jeunes pousses, port, rouille… La quatrième figure est une feuille détachée (`figLeaf`) |
+| 1026–1179 | `AUD` : nappe ambiante, réverbération, et les notes des boutons (Web Audio, synthèse). `duck()` efface la nappe d'un souffle à chaque note, sans quoi elle les couvre. `reveiller()` la relance quand le système coupe les minuteurs |
+| 1180–1486 | **Données** : `GROUPS`, `LT` (types de liens), `SRC` (sources), `NODES` (65 variétés), `YLINKS` (arrivées au Yunnan), `EVENTS` (chronologie du Yunnan), `REGIONS` (terroirs), `LOTS` |
+| 1487–1575 | Échelle du temps `TS`, dimensions de l'arbre `HGT` / `RS`, `ERAS`, relevé de relief `RELIEF` |
+| 1576–1669 | Caméra : `MIND` / `MAXD`, vue d'accueil `HOME`, sphère de poussière `SPH_R` |
+| 1670–1987 | Cycle jour/nuit (`CIEL`, `MOMENTS`, `sunUpdate`) + décor WebGL `GL3` (terrain réel du Yunnan, ciel). `hgt()` interpole le relevé en bicubique |
+| 1988–2334 | `draw()` : rendu de l'arbre (points, fils ondulants, étiquettes), survol des terroirs (`TERR`) |
+| 2335–2506 | Pages (`PAGES`), fiche (`openFiche`), `setLang()`, routage par hash |
+| 2507–2628 | Histoire animée (`STORY`, `storyStart`, `storyGo`…), mode épuré, boucle d'animation `loop()` |
 
 Les numéros de ligne sont indicatifs : ils bougent à chaque ajout de variété.
 
