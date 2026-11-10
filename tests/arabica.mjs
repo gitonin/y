@@ -495,6 +495,45 @@ titre('Les notes des boutons s’entendent');
  * projection ne lève rien : les repères partent simplement hors de l'écran,
  * ou se posent tous au même endroit. On mesure donc où ils tombent.
  */
+/* ------------------------------------------------------------------ *
+ * La caméra ne passe pas sous les montagnes
+ * ------------------------------------------------------------------ *
+ * En descendant le regard au plus bas, l'œil finissait sous le relief :
+ * on voyait la montagne par en dessous, une coque creuse éclairée du
+ * mauvais côté. Mesuré avant la correction, à quinze mille unités de la
+ * cible : 3 600 unités sous le sol au lacet 3,6 et 2 160 au lacet 4,8 —
+ * soit quatre cents et deux cent cinquante mètres sous terre. On refait
+ * donc le tour complet, à quatre distances, le tangage forcé au minimum,
+ * et l'on vérifie que l'œil reste au-dessus partout.
+ */
+titre('La caméra ne passe pas sous les montagnes');
+{
+  const { ctx, p, bruit } = await ouvrir(VUES[0]);
+  check('le relief est bien là', await p.evaluate(() => !!(GL3.ok && GL3.solXZ)));
+  let pire = Infinity, pireOu = null;
+  for (const dist of [6000, 15000, 30000, 42000]) {
+    for (let i = 0; i < 8; i++) {
+      const yaw = i * Math.PI / 4;
+      await p.evaluate(([y, d]) => {
+        tgt.yaw = cam.yaw = y; tgt.dist = cam.dist = d;
+        tgt.tx = cam.tx = 0; tgt.ty = cam.ty = 0; tgt.tz = cam.tz = 0;
+        tgt.pitch = -0.15;                 /* le plus bas que le doigt permette */
+      }, [yaw, dist]);
+      await p.waitForTimeout(700);
+      const garde = await p.evaluate(() => {
+        const cp = Math.cos(cam.pitch);
+        const ex = cam.tx + cam.dist * cp * Math.sin(cam.yaw);
+        const ez = cam.tz + cam.dist * cp * Math.cos(cam.yaw);
+        return Math.round(cam.ty + cam.dist * Math.sin(cam.pitch) - GL3.solXZ(ex, ez));
+      });
+      if (garde < pire) { pire = garde; pireOu = `${dist} / ${yaw.toFixed(2)}`; }
+    }
+  }
+  check(`l’œil reste au-dessus du sol, tout autour (au pire ${pire} unités, à ${pireOu})`, pire > 0);
+  check(`aucune erreur pendant le tour (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
 titre('Le survol des terroirs');
 {
   const { ctx, p, bruit } = await ouvrir(VUES[0], '#survol');
