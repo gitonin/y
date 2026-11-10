@@ -20,7 +20,10 @@
 export const LANGUES = ['fr', 'en', 'zh'];
 export const SITE = 'https://yunma.fr';
 export const CHEMIN = { fr: '/arabica/', en: '/arabica/en/', zh: '/arabica/zh/' };
-const HREFLANG = { fr: 'fr', en: 'en', zh: 'zh-Hans' };
+/* Les mêmes codes que le reste du site, et que son plan : « fr-FR » et non
+   « fr ». Deux écritures valables, mais une seule évite qu'un contrôle de
+   réciprocité trouve deux pages qui se désignent sans se reconnaître. */
+const HREFLANG = { fr: 'fr-FR', en: 'en', zh: 'zh-Hans' };
 const BALISE = { fr: 'fr', en: 'en', zh: 'zh-CN' };
 
 /** Découpe `const NOM = …` en comptant les accolades, les chaînes exclues. */
@@ -242,6 +245,7 @@ export function tete(D, l) {
   const lignes = [
     `<title>${ech(t.titre)}</title>`,
     `<meta name="description" content="${ech(t.desc)}">`,
+    `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">`,
     `<link rel="canonical" href="${url}">`,
     ...LANGUES.map((x) => `<link rel="alternate" hreflang="${HREFLANG[x]}" href="${SITE}${CHEMIN[x]}">`),
     `<link rel="alternate" hreflang="x-default" href="${SITE}${CHEMIN.fr}">`,
@@ -251,11 +255,11 @@ export function tete(D, l) {
     `<meta property="og:title" content="${ech(t.titre)}">`,
     `<meta property="og:description" content="${ech(t.desc)}">`,
     `<meta property="og:url" content="${url}">`,
-    `<meta property="og:image" content="${SITE}/og/arabica-og.png">`,
+    `<meta property="og:image" content="${SITE}/og/arabica-og.jpg">`,
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="twitter:title" content="${ech(t.titre)}">`,
     `<meta name="twitter:description" content="${ech(t.desc)}">`,
-    `<meta name="twitter:image" content="${SITE}/og/arabica-og.png">`,
+    `<meta name="twitter:image" content="${SITE}/og/arabica-og.jpg">`,
     `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>`,
   ];
   return lignes.join('\n');

@@ -30,7 +30,13 @@ const echecs = [];
    Le jeu et la carte non plus, et pour une autre raison : ils n'appartiennent
    pas au site. Ils ont bien leurs trois langues, mais sous /jeu/<langue>/ et
    /carte/<langue>/, sans en-tête ni menu — donc sans sélecteur de langue à
-   vérifier. Voir tests/jeu.mjs et tests/carte.mjs. */
+   vérifier. Voir tests/jeu.mjs et tests/carte.mjs.
+
+   L'atlas est dans le même cas, à une nuance près : ses trois langues sont
+   bien indexées, mais le français est à /arabica/ et non à /arabica/fr/ —
+   c'est l'adresse que l'on partage, et c'est elle que désigne x-default.
+   Ses renvois de langue sont donc vérifiés par tests/arabica.mjs, qui
+   connaît cette disposition. */
 const pages = [];
 (function parcourir(d) {
   for (const e of readdirSync(d)) {
@@ -38,7 +44,7 @@ const pages = [];
     if (statSync(p).isDirectory()) parcourir(p);
     else if (e === 'index.html') {
       const rel = p.slice(DIST.length).replace(/\\/g, '/').replace(/index\.html$/, '');
-      if (rel.includes('/jeu/') || rel.includes('/carte/')) continue;
+      if (rel.includes('/jeu/') || rel.includes('/carte/') || rel.startsWith('/arabica/')) continue;
       const m = rel.match(/^(.*\/)(fr|en|zh)\/(.*)$/);
       if (m) pages.push({ rel, base: m[1], lang: m[2], reste: m[3], html: readFileSync(p, 'utf8') });
     }

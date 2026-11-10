@@ -74,7 +74,7 @@ for (const [l, chemin] of [['fr', []], ['en', ['en']], ['zh', ['zh']]]) {
   check(`${l} · elle porte sa langue`, f.includes(`<html lang="${BALISE[l]}">`));
   check(`${l} · et sa canonique`, f.includes(`<link rel="canonical" href="${ADRESSE[l]}">`));
   for (const autre of ['fr', 'en', 'zh']) {
-    const h = autre === 'zh' ? 'zh-Hans' : autre;
+    const h = autre === 'zh' ? 'zh-Hans' : autre === 'fr' ? 'fr-FR' : autre;
     check(`${l} · elle renvoie vers ${autre}`, f.includes(`hreflang="${h}" href="${ADRESSE[autre]}"`));
   }
   check(`${l} · x-default pointe le français`, f.includes(`hreflang="x-default" href="${ADRESSE.fr}"`));

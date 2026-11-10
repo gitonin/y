@@ -106,6 +106,6 @@ rmSync(AVANT, { recursive: true, force: true });
 
 console.log(`  arabica.zip  ${tousAtlas.length} fichiers (dossier entier)`);
 console.log(`  site.zip     ${site.length} fichiers modifiés ou nouveaux`);
-if (atlas.length) console.log(`               (dont ${atlas.length} dans /arabica/, déjà dans l’autre colis)`);
+if (atlas.length) console.log(`               (${atlas.length} fichiers de /arabica/ ont aussi changé : ils partent dans l’autre colis)`);
 if (disparus.length) console.log(`  à supprimer en ligne : ${disparus.join(', ')}`);
 console.log(`  livraison/A-DEPOSER.md écrit`);
