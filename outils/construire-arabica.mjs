@@ -19,6 +19,7 @@
  * premier script venu d'ailleurs.
  */
 import { readFile, writeFile, mkdir, copyFile, rm } from 'node:fs/promises';
+import { LANGUES, CHEMIN, BALISE, donnees, lecture, tete } from './seo-arabica.mjs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -178,12 +179,35 @@ async function construire() {
   verifierAutonomie(atlas);
   verifierContenu(atlas);
 
-  await writeFile(path.join(CIBLE, 'index.html'), atlas);
+  /* Trois pages, une par langue, à trois adresses. La version texte et la
+     tête changent ; le reste du fichier est le même, à l'octet près. */
+  const D = donnees(atlas);
+  const tailles = [];
+  for (const l of LANGUES) {
+    const dossier = l === 'fr' ? CIBLE : path.join(CIBLE, l);
+    if (l !== 'fr') await mkdir(dossier, { recursive: true });
+    const page = atlas
+      .replace('<html lang="fr">', `<html lang="${BALISE[l]}">`)
+      .replace('<!--TETE-->', tete(D, l))
+      .replace('<!--LECTURE-->', lecture(D, l))
+      .replace("setLang(LANG_URL,true)", `setLang('${l}',true)`)
+      .replace("const racine=LANG_URL==='fr'?'./':'../'", `const racine='${l === 'fr' ? './' : '../'}'`);
+    if (page.includes('<!--TETE-->') || page.includes('<!--LECTURE-->') || page.includes('LANG_URL')) {
+      throw new Error(`langue ${l} : un marqueur n'a pas été remplacé`);
+    }
+    if (l !== 'fr') {
+      /* Les ressources sont à la racine du dossier, pas dans la langue. */
+      await writeFile(path.join(dossier, 'index.html'), page.replace('href="favicon-96.png"', 'href="../favicon-96.png"'));
+    } else {
+      await writeFile(path.join(dossier, 'index.html'), page);
+    }
+    tailles.push(`${l} ${Math.round(page.length / 1024)} Ko`);
+  }
   await copyFile(path.join(SOURCE, '.htaccess'), path.join(CIBLE, '.htaccess'));
   await copyFile(dans('public', 'brand', 'favicon-96.png'), path.join(CIBLE, 'favicon-96.png'));
 
   const varietes = (atlas.match(/\{id:'/g) ?? []).length;
-  console.log(`  atlas ${Math.round(atlas.length / 1024)} Ko, ${varietes} entrées, charte vérifiée`);
+  console.log(`  atlas ${tailles.join(' · ')}, ${varietes} entrées, ${LANGUES.map((l) => CHEMIN[l]).join(' ')}, charte vérifiée`);
 }
 
 construire().catch((e) => {

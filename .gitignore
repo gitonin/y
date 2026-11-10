@@ -22,3 +22,5 @@ public/arabica/
 
 # Tuiles d'altitude mises de côté par outils/relever-relief.mjs.
 .cache/
+/livraison/
+/.avant/

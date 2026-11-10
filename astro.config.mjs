@@ -20,6 +20,10 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      /* L'atlas vit hors d'Astro — c'est un dossier que l'on redépose seul —
+         mais il doit figurer au plan du site, et avec ses trois langues :
+         sans cela, aucun moteur ne saura qu'il existe. */
+      customPages: [`${site}/arabica/`, `${site}/arabica/en/`, `${site}/arabica/zh/`],
       i18n: {
         defaultLocale: 'fr',
         locales: { fr: 'fr-FR', en: 'en', zh: 'zh-Hans' },

@@ -75,6 +75,21 @@ export const GET: APIRoute = async ({ site }) => {
     );
   }
 
+  /* L'atlas : c'est la page la plus dense du domaine, et celle qu'un moteur
+     de réponse a le plus de raisons de citer. On lui dit donc ce qu'elle
+     contient, et dans quelles langues on peut la lire. */
+  push(
+    '',
+    '## Atlas des variétés de café',
+    '',
+    `Un atlas interactif de la généalogie du caféier, publié par Yunma : 65 variétés, espèces et populations, de la naissance de l'Arabica (il y a 350 000 à 610 000 ans, en Éthiopie) aux sélections encore en essai. Chaque entrée porte sa date, son lieu, ses parents, sa descendance et ses sources. L'atlas donne aussi la chronologie du café au Yunnan (18 dates, de 1892 à 2026), ses sept terroirs et les quinze premiers lots du Gems of Yunnan 2026. Le texte intégral est dans la page, sans script : 74 références citées.`,
+    '',
+    `- [Atlas des variétés de café](${origin}/arabica/) — français`,
+    `- [Coffee variety atlas](${origin}/arabica/en/) — English`,
+    `- [咖啡品种图谱](${origin}/arabica/zh/) — 简体中文`,
+    ''
+  );
+
   push('', '## Questions fréquentes', '');
   for (const item of t.faq.items) push(`- ${item.q} ${item.a}`);
 

@@ -44,6 +44,8 @@ export const GET: APIRoute = ({ site }) => {
     ...AI_CRAWLERS.flatMap((agent) => [`User-agent: ${agent}`, 'Allow: /', '']),
     `Sitemap: ${origin}/sitemap-index.xml`,
     `# Résumé lisible par les IA : ${origin}/llms.txt`,
+    `# Atlas des variétés de café (65 variétés sourcées, texte intégral dans la page) :`,
+    `#   ${origin}/arabica/  ${origin}/arabica/en/  ${origin}/arabica/zh/`,
     '',
   ].join('\n');
 

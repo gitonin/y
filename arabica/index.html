@@ -3,9 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Yunma — Atlas des variétés de café</title>
-<meta name="robots" content="noindex, nofollow">
-<meta name="description" content="L’atlas des variétés de café de Yunma : la généalogie des caféiers en trois dimensions, du Coffea arabica sauvage aux variétés du Yunnan.">
+<!--TETE-->
 <link rel="icon" href="favicon-96.png" type="image/png" sizes="96x96">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -379,9 +377,37 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* ---------- la version texte ----------
+   Sans script, c'est toute la page : on la lit comme un livre. Avec le
+   script, elle disparaît derrière l'atlas et se rouvre depuis la page
+   Sources. Même texte dans les deux cas. */
+.lecture{max-width:720px;margin:0 auto;padding:40px 22px 80px;font-family:var(--font);color:var(--ink)}
+.js .lecture{display:none}
+.pin .lecture{max-width:none;margin:0;padding:0}
+.pin .lecture h1{margin-top:0}
+.lecture h2{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin:36px 0 10px;display:flex;align-items:center;gap:10px}
+.lecture h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.lecture h3{font-size:19px;font-weight:500;letter-spacing:-.015em;margin:22px 0 2px}
+.lecture h3 em{font-style:normal;font-weight:300;color:var(--mute);margin-left:8px}
+.lecture p{font-size:15.5px;line-height:1.6;margin:6px 0}
+.lecture .m{font-size:12.5px;color:var(--mute);margin:0 0 6px}
+.lecture .y{border-left:2px solid var(--verm);padding-left:14px;margin:8px 0 0}
+.lecture .y b{color:var(--verm-txt);font-weight:500}
+.lecture ol,.lecture ul{padding-left:20px}
+.lecture li{font-size:13.5px;line-height:1.65;color:var(--mute)}
+.lecture a{color:var(--ink)}
+
 </style>
 </head>
 <body>
+<!-- La version texte de l'atlas. Elle est dans la page, toujours : sans
+     elle, un moteur de recherche ou un robot d'IA — aucun des deux
+     n'exécute le script — ne verrait qu'une page vide de 480 Ko. Le script
+     la masque dès qu'il démarre, et la rouvre par « Lire tout l'atlas »,
+     au bas de la page Sources : c'est le même texte, pas un texte pour les
+     robots. -->
+<script>document.documentElement.className='js'</script>
+<!--LECTURE-->
 <canvas id="gl" aria-hidden="true"></canvas>
 <canvas id="c" aria-label="Arbre généalogique 3D des variétés de café, dans une sphère"></canvas>
 <div class="grain"></div>
@@ -459,7 +485,7 @@ const UI={
   all:'Toutes',pts:'pts',noLot:'Aucun lot du top 15 dans cette région',ymK:'Yunma · 2027',ymH:'Reprendre la route des montagnes',ymH2:'Nos lots',ymP:'Début 2027, Yunma repart au Yunnan à la rencontre de nouveaux producteurs. Les sept régions de cette carte en comptent des milliers, et la plupart n’ont jamais présenté un lot à un concours. C’est à celles-là que nous allons, ferme par ferme, pour que l’aventure du café yunnanais continue de s’écrire ici.',tropic:'TROPIQUE DU CANCER',kunming:'Kunming',
   sTitle:'Sources & méthode',sLead:'L’axe vertical de la sphère est le temps. L’échelle est compressée, et il faut qu’elle le soit : la naissance de l’Arabica remonte à 350 000 ou 610 000 ans, tandis que certaines variétés de cet atlas sont sorties des pépinières l’an dernier. Les premiers millénaires se resserrent donc, et le dernier siècle s’étire. Autour d’un axe central, les variétés sont rangées par lignée, une couleur par famille — des landraces d’Éthiopie aux sélections du Yunnan, en passant par les deux grandes branches sorties du Yémen, Typica et Bourbon, et par les introgressées, qui ont reçu des gènes de Robusta. Les traits qui relient les variétés disent la nature du lien : filiation, mutation, hybridation. À partir de 1892, l’axe central devient la chronologie du Yunnan, tracée en rouille : c’est le moment où les deux histoires, celle de l’espèce et celle de la province, se mettent à marcher ensemble.',
   sRead:'Lire l’arbre',sRig:'Rigueur',sRigT:'Les dates et les parentés viennent du catalogue World Coffee Research, de l’étude génomique Nature Genetics 2024 et de sources spécialisées. Les mentions « ≈ », « indicative » ou « non vérifiée » signalent une date incertaine ou contestée : Zhukula (1892, 1902 ou 1904), Java, les clones de Robusta. Erecta et Nganda sont des types de port, pas des variétés. L’atlas ne porte aucune illustration : une planche dessinée d’après une description reste une reconstitution, et à ce degré de détail elle affirmerait plus qu’on ne sait. Le texte, lui, peut citer ses sources.',
-  sTerr:'Terroirs',sPer:'Périmètre',sPerT:n=>`L’atlas suit les lignées, pas le catalogue complet : ${n} entrées — les espèces, les grandes landraces, les variétés qui ont fait souche, celles qui sont plantées au Yunnan et celles que vend Yunma. Le catalogue de World Coffee Research compte 71 Arabica ; les absentes sont pour l’essentiel des sélections d’Amérique centrale sans lien avec le Yunnan ni avec les lignées présentées ici (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Les noms de région ou de port qui ne désignent pas une variété — Mandheling, Sulawesi Toraja, Santos, Kona, Moka — n’y figurent pas non plus, sauf quand l’usage en a fait une variété, comme Blue Mountain ou Java. Il manque une variété ? Dites-le-nous.`,
+  toutLire:'Lire tout l’atlas',sTerr:'Terroirs',sPer:'Périmètre',sPerT:n=>`L’atlas suit les lignées, pas le catalogue complet : ${n} entrées — les espèces, les grandes landraces, les variétés qui ont fait souche, celles qui sont plantées au Yunnan et celles que vend Yunma. Le catalogue de World Coffee Research compte 71 Arabica ; les absentes sont pour l’essentiel des sélections d’Amérique centrale sans lien avec le Yunnan ni avec les lignées présentées ici (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Les noms de région ou de port qui ne désignent pas une variété — Mandheling, Sulawesi Toraja, Santos, Kona, Moka — n’y figurent pas non plus, sauf quand l’usage en a fait une variété, comme Blue Mountain ou Java. Il manque une variété ? Dites-le-nous.`,
   sTerrT:'Les positions sont approximatives : chaque région est posée sur sa ville principale, alors qu’elle couvre en réalité des vallées entières et plusieurs centaines de mètres de dénivelé. Les lots, les altitudes et les notes sont ceux des quinze premiers du Gems of Yunnan 2026, publiés par l’Alliance for Coffee Excellence ; un concours n’est pas un recensement, et bien des fermes n’y concourent pas.',sRefs:'Références',
   ago:['<small>il y a</small> ',' <small>ans</small>'],agoP:['il y a ',' ans'],loc:'fr-FR',close:'Fermer',openMenu:'Ouvrir le menu',yb:'Yunnan',tb:'En essai',sound:'Activer ou couper le son',tbNote:'Encore en essai ou au stade de la recherche : pas encore diffusée auprès des producteurs.'},
  en:{menu:'Menu',hint:'Drag to rotate · pinch to zoom',play:'Tell the story',playCourt:'Story',epure:'Hide the controls',epureOff:'Show the controls',back:'← The tree',
@@ -475,7 +501,7 @@ const UI={
   all:'All',pts:'pts',noLot:'No top-15 lot from this region',ymK:'Yunma · 2027',ymH:'Back on the mountain roads',ymH2:'Our lots',ymP:'In early 2027 Yunma returns to Yunnan to meet new producers. The seven regions on this map hold thousands of them, and most have never entered a lot in a competition. Those are the ones we are going to see, farm by farm, so that the Yunnan coffee adventure goes on being written here.',tropic:'TROPIC OF CANCER',kunming:'Kunming',
   sTitle:'Sources & method',sLead:'The sphere’s vertical axis is time. The scale is compressed, and it has to be: Arabica was born 350,000 to 610,000 years ago, while some varieties in this atlas left the nursery last year. The early millennia are squeezed together, the last century stretched out. Around a central axis the varieties are ranged by lineage, one colour per family — from the Ethiopian landraces to the Yunnan selections, by way of the two great branches that came out of Yemen, Typica and Bourbon, and of the introgressed varieties, which took on Robusta genes. The lines between varieties say what kind of link it is: descent, mutation, hybridisation. From 1892 the central axis becomes the Yunnan timeline, drawn in rust: the moment when the two stories, the species’ and the province’s, begin to walk together.',
   sRead:'Reading the tree',sRig:'Accuracy',sRigT:'Dates and lineages come from the World Coffee Research catalogue, the 2024 Nature Genetics genomic study and specialist sources. The marks “≈”, “approximate” or “not verified” flag an uncertain or disputed date: Zhukula (1892, 1902 or 1904), Java, the Robusta clones. Erecta and Nganda are growth habits, not varieties. The atlas carries no illustrations: a plate drawn from a description is a reconstruction, and at that level of detail it would claim more than is known. Text can cite its sources.',
-  sTerr:'Terroirs',sPer:'Scope',sPerT:n=>`The atlas follows lineages, not the full catalog: ${n} entries — the species, the major landraces, the varieties that founded lines, those planted in Yunnan, and those Yunma sells. The World Coffee Research catalog lists 71 Arabicas; the ones missing here are mostly Central American selections with no link to Yunnan or to the lines shown (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Region or port names that do not denote a variety — Mandheling, Sulawesi Toraja, Santos, Kona, Mocha — are left out too, except where usage turned them into one, as with Blue Mountain or Java. A variety missing? Tell us.`,
+  toutLire:'Read the whole atlas',sTerr:'Terroirs',sPer:'Scope',sPerT:n=>`The atlas follows lineages, not the full catalog: ${n} entries — the species, the major landraces, the varieties that founded lines, those planted in Yunnan, and those Yunma sells. The World Coffee Research catalog lists 71 Arabicas; the ones missing here are mostly Central American selections with no link to Yunnan or to the lines shown (Lempira, Parainema, Anacafé 14, IHCAFE 90, Tekisic, Pache Colis…). Region or port names that do not denote a variety — Mandheling, Sulawesi Toraja, Santos, Kona, Mocha — are left out too, except where usage turned them into one, as with Blue Mountain or Java. A variety missing? Tell us.`,
   sTerrT:'Positions are approximate: each region sits on its main town, when in reality it covers whole valleys and several hundred metres of elevation. The lots, altitudes and scores are those of the Gems of Yunnan 2026 top fifteen, published by the Alliance for Coffee Excellence; a competition is not a census, and plenty of farms never enter one.',sRefs:'References',
   ago:['',' <small>years ago</small>'],agoP:['',' years ago'],loc:'en-US',close:'Close',openMenu:'Open menu',yb:'Yunnan',tb:'In trials',sound:'Sound on or off',tbNote:'Still in trials or at the research stage: not yet available to farmers.'},
  zh:{menu:'菜单',hint:'拖动旋转 · 双指缩放',play:'讲述历史',playCourt:'历史',epure:'隐藏控件',epureOff:'显示控件',back:'← 品种树',
@@ -491,7 +517,7 @@ const UI={
   all:'全部',pts:'分',noLot:'该产区没有进入前 15 名的批次',ymK:'Yunma · 2027',ymH:'再次走上山间的路',ymH2:'我们的批次',ymP:'2027 年初，Yunma 将再次回到云南，寻访新的生产者。这张地图上的七个产区里有成千上万位种植者，其中大多数从未把一支批次送去参赛。我们要去的正是他们那里，一座庄园一座庄园地走，让云南咖啡的故事在这里继续写下去。',tropic:'北回归线',kunming:'昆明',
   sTitle:'资料与方法',sLead:'球体的纵轴代表时间。刻度是压缩的，也必须如此：阿拉比卡诞生于距今 35 万至 61 万年前，而本图谱中的一些品种去年才走出苗圃。于是最初的千年被收拢，最近的一个世纪被拉开。品种按谱系环绕中轴排列，一种颜色对应一个家族——从埃塞俄比亚的地方种到云南的选育品种，中间经由从也门分出的两大枝系铁皮卡与波旁，以及获得了罗布斯塔基因的渐渗品种。品种之间的连线也在说话：亲子、变异、杂交。自 1892 年起，中轴成为云南的年表，以锈红色绘出：从这一刻起，物种的历史与这个省份的历史开始并肩而行。',
   sRead:'如何阅读品种树',sRig:'严谨性',sRigT:'年代与亲缘关系来自世界咖啡研究组织（WCR）品种目录、2024 年《自然·遗传学》基因组研究及专业资料。“≈”“仅供参考”“未核实”等标注表示年代不确定或存在争议：朱苦拉（1892、1902 或 1904 年）、爪哇、罗布斯塔无性系。Erecta 与 Nganda 是株型，而非品种。本图谱不设插图：依据文字描述绘制的图版终究是复原，在这样的细节程度上，它所断言的会多于我们所知。而文字可以标注出处。',
-  sTerr:'风土',sPer:'范围',sPerT:n=>`本图谱追踪的是谱系，而非完整目录：共 ${n} 条——物种、主要地方种、开枝散叶的品种、云南在种的品种，以及 Yunma 在售的品种。世界咖啡研究组织的目录收录了 71 个阿拉比卡品种；这里缺席的多为与云南、与本图谱所列谱系无关的中美洲选系（Lempira、Parainema、Anacafé 14、IHCAFE 90、Tekisic、Pache Colis 等）。不指向具体品种的产区名或港口名——曼特宁、苏拉威西托拉雅、桑托斯、科纳、摩卡——同样不收录，除非它在使用中已变成一个品种，如蓝山或爪哇。觉得少了某个品种？请告诉我们。`,
+  toutLire:'阅读全文',sTerr:'风土',sPer:'范围',sPerT:n=>`本图谱追踪的是谱系，而非完整目录：共 ${n} 条——物种、主要地方种、开枝散叶的品种、云南在种的品种，以及 Yunma 在售的品种。世界咖啡研究组织的目录收录了 71 个阿拉比卡品种；这里缺席的多为与云南、与本图谱所列谱系无关的中美洲选系（Lempira、Parainema、Anacafé 14、IHCAFE 90、Tekisic、Pache Colis 等）。不指向具体品种的产区名或港口名——曼特宁、苏拉威西托拉雅、桑托斯、科纳、摩卡——同样不收录，除非它在使用中已变成一个品种，如蓝山或爪哇。觉得少了某个品种？请告诉我们。`,
   sTerrT:'位置为近似值：每个产区都标在其主要城市上，而实际上它覆盖整片河谷，海拔落差可达数百米。批次、海拔与分数取自 Gems of Yunnan 2026 前 15 名，由 Alliance for Coffee Excellence 公布；一场赛事并非普查，许多庄园从未参赛。',sRefs:'参考文献',
   ago:['<small>距今</small> ',' <small>年</small>'],agoP:['距今 ',' 年'],loc:'zh-CN',close:'关闭',openMenu:'打开菜单',yb:'云南',tb:'试验中',sound:'开启或关闭声音',tbNote:'仍处于试验或研究阶段：尚未向种植者推广。'}
 };
@@ -2178,7 +2204,12 @@ const PAGES={
    <div class="sec">${U('sRig')}</div><p>${U('sRigT')}</p>
    <div class="sec">${U('sPer')}</div><p>${U('sPerT')(NODES.length)}</p>
    <div class="sec">${U('sTerr')}</div><p>${U('sTerrT')}</p>
-   <div class="sec">${U('sRefs')}</div><ol class="refs">${Object.values(SRC).map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join('')}</ol>${SIG}`}
+   <div class="sec">${U('sRefs')}</div><ol class="refs">${Object.values(SRC).map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join('')}</ol>
+   <button class="btn dark" data-page="texte" style="margin-top:22px">${U('toutLire')}${IC.arrow}</button>${SIG}`},
+ /* Le texte entier de l'atlas, d'un seul tenant : c'est le bloc que la
+    page porte déjà pour les moteurs, rendu à un lecteur qui veut tout lire
+    d'une traite — ou l'imprimer. */
+ texte:{k:()=>U('toutLire'),r:()=>{const l=document.getElementById('lecture');return l?l.innerHTML:''}}
 };
 let curPage=null;
 function openPage(k,fromHash){const P=PAGES[k];if(!P)return;closeMenu();terrStop(fromHash,true);if(!fromHash)AUD.fx('open');if(ST.on)storyHold();else deselect();curPage=['p',k];
@@ -2282,7 +2313,7 @@ NODES.forEach(n=>FR.nodes[n.id]={n:n.n,alt:n.alt,yl:n.yl,pl:n.pl,d:n.d,yun:n.yun
 EVENTS.forEach((e,i)=>FR.events[i]=[e.t,e.d]);REGIONS.forEach(r=>FR.regions[r.id]=[r.n,r.d,r.d2]);
 for(const k in GROUPS)FR.groups[k]=GROUPS[k].l;for(const k in LT)FR.lt[k]=LT[k].l;ERAS.forEach((e,i)=>FR.eras[i]=e[1]);YLINKS.forEach((l,i)=>FR.yl[i]=l[2]);
 function setLang(l,init){
-  if(!UI[l])l='fr';LANG=l;document.documentElement.lang=l==='zh'?'zh-CN':l;try{localStorage.setItem('yunma-lang',l)}catch(e){}
+  if(!UI[l])l='fr';LANG=l;document.documentElement.lang=l==='zh'?'zh-CN':l;
   if(!FR.story.length)STORY.forEach((s,i)=>FR.story[i]=[s.k,s.t,s.d]);
   NODES.forEach(n=>{const f=FR.nodes[n.id],o=l==='fr'?{}:((NODES_L[l]||{})[n.id]||{});for(const k of['n','alt','yl','pl','d','yun'])n[k]=k in o?o[k]:f[k]});
   EVENTS.forEach((e,i)=>{const o=l!=='fr'&&EVENTS_L[l]?EVENTS_L[l][i]:FR.events[i];e.t=o[0];e.d=o[1]});
@@ -2308,7 +2339,10 @@ function applyStatic(){
   document.querySelectorAll('#langs button').forEach(b=>b.classList.toggle('on',b.dataset.l===LANG));
   document.getElementById('brand').setAttribute('aria-label','Yunma');
 }
-document.getElementById('langs').addEventListener('click',e=>{const b=e.target.closest('[data-l]');if(b)setLang(b.dataset.l)});
+/* Changer de langue change d'adresse : on recharge la page voisine, en
+   gardant le point où l'on en était. */
+document.getElementById('langs').addEventListener('click',e=>{const b=e.target.closest('[data-l]');if(!b||b.dataset.l===LANG)return;
+  const racine=LANG_URL==='fr'?'./':'../';location.href=racine+(b.dataset.l==='fr'?'':b.dataset.l+'/')+location.hash});
 
 /* =====================================================================
    CHRONOLOGIE
@@ -2440,7 +2474,11 @@ S.year=-610000;syncTime();cam.ty=tgt.ty=wy(-610000)+950;cam.dist=tgt.dist=mobile
 if(!reduce){setTimeout(()=>{if(S.intro)S.playing=true},1100)}else{S.intro=false;S.year=2026;syncTime();goHome();ctaPulse()}
 setTimeout(()=>{document.getElementById('hint').style.opacity=0},9000);
 buildBG();
-let L0='fr';try{L0=localStorage.getItem('yunma-lang')||''}catch(e){}if(!L0){const nl=(navigator.language||'fr').toLowerCase();L0=nl.startsWith('zh')?'zh':nl.startsWith('fr')?'fr':'en'}setLang(L0,true);syncTime();
+/* La langue vient de l'adresse : /arabica/ est en français, /arabica/en/
+   en anglais, /arabica/zh/ en chinois. Trois adresses plutôt qu'une, parce
+   qu'un moteur ne peut indexer qu'une page par adresse — et qu'un lecteur
+   qui partage un lien partage la langue dans laquelle il a lu. */
+setLang(LANG_URL,true);syncTime();
 requestAnimationFrame(loop);fromHash();
 const sp=document.getElementById('splash');setTimeout(()=>sp.classList.add('out'),reduce?0:1300);setTimeout(()=>sp.remove(),2800);
 

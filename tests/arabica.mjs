@@ -43,8 +43,8 @@ const titre = (t) => console.log(`\n— ${t}`);
  * ------------------------------------------------------------------ */
 titre('Le dossier se redépose seul');
 const deposes = readdirSync(ATLAS).sort();
-check(`trois fichiers, pas un de plus (${deposes.join(', ')})`,
-  deposes.join(','), '.htaccess,favicon-96.png,index.html');
+check(`le dossier porte ses trois langues (${deposes.join(', ')})`,
+  deposes.join(','), '.htaccess,en,favicon-96.png,index.html,zh');
 
 const page = readFileSync(join(ATLAS, 'index.html'), 'utf8');
 check('aucune empreinte dans un nom de fichier — le dossier se corrige à la main',
@@ -54,18 +54,57 @@ check('la règle de cache interdit de garder une version corrigée',
 /* Hors la feuille de la police, tout doit être dans le fichier : c'est ce qui
    permet de l'ouvrir hors ligne, et de le déposer sans rien d'autre. */
 const dehors = [...page.matchAll(/<(?:script|link|img)\b[^>]*\b(?:src|href)="(https?:\/\/[^"]+)"/g)]
+  .filter((m) => !/rel="(?:canonical|alternate)"/.test(m[0]))   /* la canonique et les renvois de langue ne chargent rien */
   .map((m) => m[1]).filter((u) => !/^https:\/\/fonts\.(googleapis|gstatic)\.com(\/|$)/.test(u));
 check(`rien n'est chargé du dehors, hors la police (${dehors.length})`, dehors.length, 0);
-/* L'atlas se partage par un lien, il ne s'indexe pas — comme le jeu et la
-   carte. Sans cette balise, le contrôle de référencement du site réclame à
-   la page une canonique, des renvois de langue et une entrée au plan. */
-check('la page se tient à l’écart des moteurs',
-  /<meta name="robots" content="noindex, nofollow">/.test(page));
+/* ------------------------------------------------------------------ *
+ * L'atlas est lisible par les moteurs — et par les robots des IA
+ * ------------------------------------------------------------------ *
+ * Une application en trois dimensions ne dit rien à qui n'exécute pas son
+ * script, et ni Google ni GPTBot, ClaudeBot ou PerplexityBot n'en exécutent.
+ * Le texte est donc dans la page, le même que celui qu'elle affiche, et
+ * chaque langue a son adresse — un moteur n'en indexe qu'une par page.
+ */
+titre('Les moteurs et les robots d’IA peuvent le lire');
+const ADRESSE = { fr: 'https://yunma.fr/arabica/', en: 'https://yunma.fr/arabica/en/', zh: 'https://yunma.fr/arabica/zh/' };
+const BALISE = { fr: 'fr', en: 'en', zh: 'zh-CN' };
+for (const [l, chemin] of [['fr', []], ['en', ['en']], ['zh', ['zh']]]) {
+  const f = readFileSync(join(ATLAS, ...chemin, 'index.html'), 'utf8');
+  check(`${l} · la page n’est plus tenue hors index`, !/noindex/.test(f));
+  check(`${l} · elle porte sa langue`, f.includes(`<html lang="${BALISE[l]}">`));
+  check(`${l} · et sa canonique`, f.includes(`<link rel="canonical" href="${ADRESSE[l]}">`));
+  for (const autre of ['fr', 'en', 'zh']) {
+    const h = autre === 'zh' ? 'zh-Hans' : autre;
+    check(`${l} · elle renvoie vers ${autre}`, f.includes(`hreflang="${h}" href="${ADRESSE[autre]}"`));
+  }
+  check(`${l} · x-default pointe le français`, f.includes(`hreflang="x-default" href="${ADRESSE.fr}"`));
+  check(`${l} · elle se présente en partage`, /<meta property="og:title"/.test(f) && /<meta name="twitter:card"/.test(f));
+  /* Les données structurées : c'est ce qui permet à un moteur de réponse de
+     dire ce qu'est la page sans la lire en entier. */
+  const ld = f.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  check(`${l} · elle porte des données structurées`, !!ld);
+  if (ld) {
+    const g = JSON.parse(ld[1])['@graph'] ?? [];
+    const types = g.map((x) => x['@type']);
+    check(`${l} · dont une application et un jeu de données (${types.join(', ')})`,
+      types.includes('WebApplication') && types.includes('Dataset'));
+  }
+  /* Et le texte : sans lui, la page est vide pour qui ne joue pas le script. */
+  const bloc = f.match(/<div id="lecture"[\s\S]*?<\/div>\s*<canvas/);
+  const mots = bloc ? bloc[0].replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length : 0;
+  const signes = bloc ? bloc[0].replace(/<[^>]+>/g, '').replace(/\s+/g, '').length : 0;
+  check(`${l} · le texte de l’atlas est dans la page (${l === 'zh' ? signes + ' signes' : mots + ' mots'})`,
+    l === 'zh' ? signes > 3000 : mots > 3000);
+  /* Les soixante-cinq variétés doivent y être nommées, pas résumées. */
+  for (const nom of ['Catimor', 'Geisha', 'Typica', 'Pacamara']) {
+    check(`${l} · « ${nom} » figure dans le texte`, bloc ? bloc[0].includes(nom) : false);
+  }
+}
 
 /* ------------------------------------------------------------------ *
  * 2. Le site ignore l'atlas
  * ------------------------------------------------------------------ */
-titre('Le site n’y mène pas');
+titre('Le site y mène');
 const DIST = join(RACINE, 'dist');
 if (existsSync(DIST)) {
   const pages = [];
@@ -75,11 +114,26 @@ if (existsSync(DIST)) {
       else if (e.name.endsWith('.html')) pages.push(join(d, e.name));
     }
   })(DIST);
-  const liens = pages.filter((p) => /href="(?:\/|https:\/\/yunma\.fr\/)arabica\//.test(readFileSync(p, 'utf8')));
-  check(`aucune des ${pages.length} pages du site ne renvoie vers l’atlas`, liens.length, 0);
+  /* Une page que rien ne lie n'est trouvée par personne : ni par un moteur,
+     qui suit les liens, ni par un lecteur. L'article du journal est la
+     porte d'entrée, dans chacune des trois langues. */
+  for (const [l, chemin] of [['fr', 'arabica/'], ['en', 'arabica/en/'], ['zh', 'arabica/zh/']]) {
+    const article = join(DIST, l, 'journal', 'atlas-des-varietes-de-cafe', 'index.html');
+    const existe = existsSync(article);
+    check(`${l} · l’article du journal est publié`, existe);
+    if (existe) check(`${l} · et il mène à l’atlas (/${chemin})`, readFileSync(article, 'utf8').includes(`/${chemin}"`));
+  }
   const plan = join(DIST, 'sitemap-0.xml');
-  check('le plan du site ne le cite pas',
-    existsSync(plan) ? readFileSync(plan, 'utf8').includes('/arabica') : false, false);
+  if (existsSync(plan)) {
+    const xml = readFileSync(plan, 'utf8');
+    for (const u of Object.values(ADRESSE)) check(`le plan du site cite ${u}`, xml.includes(u));
+  } else check('le plan du site existe', false);
+  const robots = join(DIST, 'robots.txt');
+  check('robots.txt accueille les robots d’IA',
+    existsSync(robots) ? readFileSync(robots, 'utf8').includes('ClaudeBot') : false);
+  const llms = join(DIST, 'llms.txt');
+  check('llms.txt présente l’atlas',
+    existsSync(llms) ? readFileSync(llms, 'utf8').includes('/arabica/') : false);
 } else {
   console.log('  (dist/ absent : la construction du site n’a pas été lancée, on passe)');
 }
@@ -186,16 +240,33 @@ for (const vue of VUES) {
 /* ------------------------------------------------------------------ *
  * Les langues et les liens profonds
  * ------------------------------------------------------------------ */
+/* La langue vient de l'adresse, et d'elle seule : c'est ce qu'exige un
+   moteur, qui n'indexe qu'une langue par page, et c'est ce qui fait qu'un
+   lien partagé emmène le lecteur dans la langue où on l'a lu. Le bouton de
+   langue ne bascule donc plus sur place : il change d'adresse. */
 titre('Les trois langues');
 {
-  const { ctx, p } = await ouvrir(VUES[0]);
-  for (const [code, attendu] of [['en', 'Menu'], ['zh', '菜单'], ['fr', 'Menu']]) {
-    await p.evaluate((c) => { localStorage.setItem('yunma-lang', c); }, code);
-    await p.reload({ waitUntil: 'load' });
-    await p.waitForTimeout(900);
+  for (const [chemin, code, attendu] of [['/', 'fr', 'Menu'], ['/en/', 'en', 'Menu'], ['/zh/', 'zh', '菜单']]) {
+    const { ctx, p } = await ouvrir(VUES[0]);
+    await p.goto(`http://127.0.0.1:${PORT}${chemin}?heure=13`, { waitUntil: 'load' });
+    await p.waitForTimeout(1200);
     const texte = (await p.locator('.menubtn').textContent())?.trim();
-    check(`en ${code}, le bouton du menu dit « ${texte} »`, texte, attendu);
+    check(`${chemin} s’ouvre en ${code} (« ${texte} »)`, texte, attendu);
+    /* Et la mémoire du navigateur ne doit plus rien y changer. */
+    await p.evaluate(() => { try { localStorage.setItem('yunma-lang', 'zh'); } catch (e) {} });
+    await p.reload({ waitUntil: 'load' });
+    await p.waitForTimeout(1200);
+    const apres = (await p.locator('.menubtn').textContent())?.trim();
+    check(`${chemin} reste en ${code} même après un autre choix mémorisé`, apres, attendu);
+    await ctx.close();
   }
+  /* Le bouton de langue change d'adresse. */
+  const { ctx, p } = await ouvrir(VUES[0]);
+  await p.click('.menubtn'); await p.waitForTimeout(400);
+  await Promise.all([p.waitForURL(/\/zh\/$/, { timeout: 15000 }).catch(() => {}), p.click('#langs [data-l="zh"]')]);
+  await p.waitForTimeout(1200);
+  const arrivee = await p.evaluate(() => ({ url: location.pathname, lang: LANG }));
+  check(`le bouton « 简体中文 » mène à ${arrivee.url} en ${arrivee.lang}`, arrivee.url.endsWith('/zh/') && arrivee.lang === 'zh');
   await ctx.close();
 }
 
@@ -327,7 +398,10 @@ titre('Le jour et la nuit');
   await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
   await p.waitForTimeout(900);
   await p.evaluate(() => { CIEL.poser(6.5); openPage('yunnan'); });
-  await p.waitForTimeout(600);
+  /* La page est lourde : il faut lui laisser quelques images pour que le
+     ciel se repose à la nouvelle heure avant de prendre la première mesure.
+     À six cents millisecondes, on mesurait encore l'heure d'avant. */
+  await p.waitForTimeout(2500);
   const t0 = await p.evaluate(() => ({ h: CIEL.heure(), nuit: SUN.nuit,
     fond: getComputedStyle(document.documentElement).getPropertyValue('--fond').trim().split(',').map(Number) }));
   await p.waitForTimeout(20000);
@@ -719,21 +793,33 @@ titre('On ne reste pas coincé dans le survol');
     check('le bouton du son ne fait pas sortir du survol', e.survol && e.classe && e.cartouche);
     await ctx.close();
   }
-  /* Changer de langue pendant le survol doit réécrire le cartouche. */
+  /* Changer de langue recharge la page — trois adresses, trois pages. Mais
+     l'ancre suit : on repart donc à l'endroit où l'on était, dans l'autre
+     langue. C'est ce qui fait qu'on ne perd pas sa place en changeant. */
   {
     const { ctx, p } = await ouvrir(VUES[1]);
     await enSurvol(p);
     await p.click('.menubtn'); await p.waitForTimeout(400);
-    await p.click('#langs [data-l="en"]'); await p.waitForTimeout(600);
-    await p.click('#menuClose'); await p.waitForTimeout(400);
-    /* Les deux boutons du cartouche sont des icônes : c'est leur nom
-       accessible qui porte le mot, et c'est donc lui qui doit changer. */
+    await Promise.all([p.waitForURL(/\/en\/#survol$/, { timeout: 15000 }).catch(() => {}), p.click('#langs [data-l="en"]')]);
+    await p.waitForTimeout(3500);
+    const retour = await p.evaluate(() => ({ url: location.pathname + location.hash, lang: LANG, survol: TERR.on }));
+    check(`le changement de langue mène à ${retour.url} en ${retour.lang}, sans quitter le survol`,
+      retour.url.endsWith('/en/#survol') && retour.lang === 'en' && retour.survol === true);
+    await ctx.close();
+  }
+  /* Le cartouche du survol doit bien être traduit : on le vérifie
+     directement sur la page anglaise, puisqu'on ne bascule plus sur place. */
+  {
+    const { ctx, p } = await ouvrir(VUES[1]);
+    await p.goto(`http://127.0.0.1:${PORT}/en/?heure=13`, { waitUntil: 'load' });
+    await p.waitForTimeout(2000);
+    await enSurvol(p);
     const q = await p.evaluate(() => ({
       survol: TERR.on,
       quit: document.getElementById('tquit').getAttribute('aria-label'),
       kick: document.getElementById('tkick').textContent.trim(),
     }));
-    check(`le survol tient le changement de langue (« ${q.quit} », « ${q.kick} »)`,
+    check(`le survol est traduit sur la page anglaise (« ${q.quit} », « ${q.kick} »)`,
       q.survol && q.quit === 'Exit' && /terroir/i.test(q.kick) && !/sur /i.test(q.kick));
     await ctx.close();
   }
