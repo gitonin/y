@@ -5,6 +5,7 @@ Atlas interactif en 3D de la généalogie des variétés de café, avec un accen
 ## Contenu du dossier
 
 - `index.html` — **l'application complète, en un seul fichier** : styles, données, traductions, rendu 3D et son. Une seule chose vient du dehors, la feuille de la police Inter, celle du site ; sans elle la page s'affiche très bien, dans la police de secours. Tout le reste est dedans.
+- `cerises.jpg` — la photographie du bloc de renvoi vers le site, recadrée depuis celle de l'accueil de yunma.fr. Une seule image pour les trois langues : les pages anglaise et chinoise la prennent un cran plus haut.
 - `ILLUSTRATIONS.md` — la commande des illustrations : ce qu'il faudrait, planche par planche, avec un sujet prêt à coller dans un générateur d'images. **L'atlas n'en porte plus aucune** : il est entièrement textuel.
 - `.htaccess` — la règle de cache du dossier.
 - `assets/` — le logo Yunma vectorisé (version verticale, symbole seul, nom seul). Ces fichiers ne sont pas utilisés par `index.html`, qui contient déjà le logo en SVG, et ne sont pas déposés.

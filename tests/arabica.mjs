@@ -44,7 +44,7 @@ const titre = (t) => console.log(`\n— ${t}`);
 titre('Le dossier se redépose seul');
 const deposes = readdirSync(ATLAS).sort();
 check(`le dossier porte ses trois langues (${deposes.join(', ')})`,
-  deposes.join(','), '.htaccess,en,favicon-96.png,index.html,zh');
+  deposes.join(','), '.htaccess,cerises.jpg,en,favicon-96.png,index.html,zh');
 
 const page = readFileSync(join(ATLAS, 'index.html'), 'utf8');
 check('aucune empreinte dans un nom de fichier — le dossier se corrige à la main',
@@ -643,6 +643,129 @@ titre('L’atlas est textuel');
   check('aucune planche sur une fiche de variété', reste.planches, 0);
   check(`aucun générateur d’illustration ne subsiste (${reste.modules.join(', ') || 'aucun'})`, reste.modules.length, 0);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le renvoi vers le site
+ * ------------------------------------------------------------------ *
+ * L'atlas ne disait nulle part d'où il venait ni où trouver les cafés dont
+ * il raconte les variétés. Deux chemins maintenant : un bloc de fin au bas
+ * de chaque page, et le logo — mais seulement une fois revenu à l'arbre
+ * nu, car tant qu'il reste quelque chose d'ouvert le logo est la sortie,
+ * et le lui retirer serait le pire des services.
+ */
+titre('Le renvoi vers le site');
+for (const [l, chemin, attenduImg] of [['fr', '/', 'cerises.jpg'], ['en', '/en/', '../cerises.jpg'], ['zh', '/zh/', '../cerises.jpg']]) {
+  const { ctx, p, bruit } = await ouvrir(VUES[0]);
+  await p.goto(`http://127.0.0.1:${PORT}${chemin}?heure=13`, { waitUntil: 'load' });
+  await p.waitForTimeout(1800);
+  /* Le bloc doit se trouver au bas de chacune des pages, fiche comprise. */
+  for (const [nom, ouvrirPage] of [
+    ['les variétés', () => openPage('varietes')],
+    ['le Yunnan', () => openPage('yunnan')],
+    ['les terroirs', () => openPage('terroirs')],
+    ['les sources', () => openPage('sources')],
+    ['une fiche', () => openFiche(M.gesha)],
+  ]) {
+    await p.evaluate(ouvrirPage);
+    await p.waitForTimeout(500);
+    /* La photographie est en chargement différé : sur une page longue elle
+       n'est demandée qu'à l'approche, comme pour un lecteur qui descend. */
+    await p.locator('#pin .push').scrollIntoViewIfNeeded().catch(() => {});
+    await p.waitForTimeout(700);
+    const bloc = await p.evaluate(() => {
+      const a = document.querySelector('#pin .push');
+      if (!a) return null;
+      const img = a.querySelector('img');
+      return { href: a.getAttribute('href'), img: img.getAttribute('src'), charge: img.naturalWidth > 0,
+        dernier: a === document.querySelector('#pin').lastElementChild };
+    });
+    check(`${l} · ${nom} se referme sur le renvoi`, !!bloc && bloc.dernier);
+    if (bloc) {
+      check(`${l} · ${nom} mène aux cafés (${bloc.href})`, bloc.href, `https://yunma.fr/${l}/cafes/`);
+      check(`${l} · ${nom} porte la photographie (${bloc.img})`, bloc.charge && bloc.img === attenduImg);
+    }
+    await p.evaluate(() => closePage());
+    await p.waitForTimeout(250);
+  }
+  check(`${l} · aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* L'encre du bloc est claire et le fond est une photographie : la feuille
+   de style ne peut rien en dire. On mesure donc sur les pixels rendus, en
+   comparant l'encre déclarée à chaque pixel du fond, sous le texte — les
+   pixels de lettre sont écartés, parce que leurs bords sont fondus et
+   qu'un bord fondu a toujours un faible écart avec ce qu'il y a dessous,
+   où que ce soit. C'est la méthode du cartouche de verre. */
+const lin0 = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+const lum0 = (c) => 0.2126 * lin0(c[0]) + 0.7152 * lin0(c[1]) + 0.0722 * lin0(c[2]);
+const contraste0 = (a, b) => { const x = lum0(a), y = lum0(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+for (const vue of VUES) {
+  const { ctx, p } = await ouvrir(vue);
+  await p.evaluate(() => openFiche(M.gesha));
+  await p.waitForTimeout(700);
+  await p.locator('#pin .push').scrollIntoViewIfNeeded().catch(() => {});
+  await p.waitForTimeout(800);
+  const zones = await p.evaluate(() => {
+    const b = (s) => { const r = document.querySelector(s).getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; };
+    document.querySelectorAll('#pin .push-in p,#pin .push .lk2,#pin .push .lg-full').forEach((e) => { e.style.visibility = 'hidden'; });
+    return { phrase: b('#pin .push-in p'), lien: b('#pin .push .lk2') };
+  });
+  await p.waitForTimeout(300);
+  const vueBrute = await sharp(await p.screenshot()).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: LW, height: LH, channels: LC } = vueBrute.info;
+  const encre = [251, 250, 247];
+  let pire = Infinity, ou = null;
+  for (const [nom, [x, y, w, h]] of Object.entries(zones)) {
+    for (let j = Math.round(y); j < Math.round(y + h); j++) {
+      for (let i = Math.round(x); i < Math.round(x + w); i++) {
+        if (i < 0 || j < 0 || i >= LW || j >= LH) continue;
+        const o = (j * LW + i) * LC;
+        const k = contraste0(encre, [vueBrute.data[o], vueBrute.data[o + 1], vueBrute.data[o + 2]]);
+        if (k < pire) { pire = k; ou = nom; }
+      }
+    }
+  }
+  check(`${vue.nom} · le texte du renvoi tient sur la photographie (${pire.toFixed(1)}:1 au pire pixel, ${ou})`, pire >= 7);
+  await ctx.close();
+}
+
+{
+  const { ctx, p, bruit } = await ouvrir(VUES[0]);
+  /* La frise se joue toute seule à l'ouverture : on la pose avant de
+     juger de l'état « rien n'est ouvert ». */
+  await p.evaluate(() => { S.intro = false; S.playing = false; S.year = 2026; syncTime(); });
+  await p.waitForTimeout(500);
+  /* Tant qu'il y a quelque chose d'ouvert, le logo est la sortie. */
+  await p.evaluate(() => { location.hash = 'survol'; });
+  await p.waitForTimeout(3500);
+  await p.click('#brand');
+  await p.waitForTimeout(1200);
+  const sortie = await p.evaluate(() => ({ survol: TERR.on, ask: askOn }));
+  check('dans le survol, le logo ramène à l’arbre sans rien proposer', sortie.survol === false && sortie.ask === false);
+  /* Une fois à l'arbre nu, il propose le site. */
+  await p.click('#brand');
+  await p.waitForTimeout(900);
+  const q = await p.evaluate(() => ({ ask: askOn,
+    titre: document.querySelector('#ask h3')?.textContent ?? '',
+    lien: document.querySelector('#ask a.btn')?.getAttribute('href') ?? '',
+    voile: document.getElementById('scrim').classList.contains('on') }));
+  check(`à l’arbre nu, le logo propose les cafés (« ${q.titre} »)`, q.ask && /Yunma/.test(q.titre));
+  check(`et le bouton mène à la boutique (${q.lien})`, q.lien, 'https://yunma.fr/fr/cafes/');
+  check('un voile passe derrière la fenêtre', q.voile);
+  /* On doit pouvoir refuser : par le bouton, par Échap, par le voile. */
+  await p.click('#ask [data-ask-non]');
+  await p.waitForTimeout(600);
+  check('« rester dans l’atlas » la referme', await p.evaluate(() => askOn), false);
+  await p.click('#brand'); await p.waitForTimeout(700);
+  await p.keyboard.press('Escape'); await p.waitForTimeout(600);
+  check('Échap aussi', await p.evaluate(() => askOn), false);
+  await p.click('#brand'); await p.waitForTimeout(700);
+  await p.click('#scrim', { position: { x: 40, y: 40 } }); await p.waitForTimeout(600);
+  check('le voile aussi', await p.evaluate(() => askOn), false);
+  check(`aucune erreur autour de la fenêtre (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 

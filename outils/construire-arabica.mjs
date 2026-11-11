@@ -8,7 +8,10 @@
  * du site.
  *
  *   public/arabica/
- *     index.html        l'atlas entier : styles, données, rendu 3D, planches
+ *     index.html        l'atlas entier : styles, données, rendu 3D et son
+ *     en/index.html     la même page, en anglais
+ *     zh/index.html     la même page, en chinois
+ *     cerises.jpg       la photographie du bloc de renvoi vers le site
  *     favicon-96.png
  *     .htaccess         interdit de garder en cache une version corrigée
  *
@@ -205,6 +208,10 @@ async function construire() {
   }
   await copyFile(path.join(SOURCE, '.htaccess'), path.join(CIBLE, '.htaccess'));
   await copyFile(dans('public', 'brand', 'favicon-96.png'), path.join(CIBLE, 'favicon-96.png'));
+  /* La photographie du bloc de fin : celle de l'accueil du site, recadrée en
+     bandeau. Les pages anglaise et chinoise la prennent un cran plus haut,
+     dans ce même dossier — une seule image pour les trois. */
+  await copyFile(path.join(SOURCE, 'cerises.jpg'), path.join(CIBLE, 'cerises.jpg'));
 
   const varietes = (atlas.match(/\{id:'/g) ?? []).length;
   console.log(`  atlas ${tailles.join(' · ')}, ${varietes} entrées, ${LANGUES.map((l) => CHEMIN[l]).join(' ')}, charte vérifiée`);

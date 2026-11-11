@@ -55,7 +55,7 @@ a{color:inherit}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
 .kicker{font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:7px}
-.btn{height:34px;padding:0 16px;white-space:nowrap;border-radius:2px;border:1px solid var(--line);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.btn{height:34px;padding:0 16px;text-decoration:none;white-space:nowrap;border-radius:2px;border:1px solid var(--line);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;transition:.2s}
 .btn:hover{border-color:rgba(var(--encre),.45)}
 .btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .btn.dark:hover{background:var(--verm);border-color:var(--verm-txt)}
@@ -377,6 +377,45 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* ---------- le renvoi vers le site ----------
+   L'atlas ne disait nulle part d'où il venait, ni où trouver les cafés dont
+   il raconte les variétés. Le bloc de fin reprend celui du site : la
+   photographie de l'accueil, une phrase posée dessus, un lien. Le dégradé
+   vient de la gauche, parce que c'est là que la photographie est claire —
+   la brume et la montagne — et que le texte s'y pose. */
+.push{position:relative;display:block;margin:38px 0 0;border-radius:2px;overflow:hidden;min-height:200px;background:#2b2724;color:#fbfaf7;text-decoration:none}
+.push img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* Mesuré sur les pixels rendus, encre claire contre le fond réel : à
+   .86/.62 le pire pixel tombait à 4,8:1 — conforme, mais l'atlas tient
+   7:1 partout ailleurs. Le dégradé s'enfonce donc plus loin, sans fermer
+   la photographie : les cerises restent dans le clair. */
+.push::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(22,19,16,.91) 0%,rgba(22,19,16,.83) 40%,rgba(22,19,16,.38) 70%,rgba(22,19,16,0) 100%)}
+.push-in{position:relative;z-index:2;padding:24px 22px 22px;max-width:64%;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.push .lg-full{height:38px;width:auto;color:#fbfaf7;opacity:.95}
+.push p{font-size:21px;font-weight:400;letter-spacing:-.02em;line-height:1.2;margin:0;color:#fbfaf7!important;max-width:22ch}
+.push .lk2{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid rgba(251,250,247,.5);padding-bottom:4px}
+.push .lk2 .arrow{font-size:13px}
+.push:hover .lk2{border-bottom-color:#fbfaf7}
+@media (max-width:560px){
+  /* L'écran est trop étroit pour deux colonnes : le texte prend toute la
+     largeur, et le dégradé passe donc du bas vers le haut. */
+  .push{min-height:230px;display:flex;align-items:flex-end}
+  .push-in{max-width:100%;padding:20px 18px 18px}
+  .push p{font-size:19px}
+  .push::after{background:linear-gradient(180deg,rgba(22,19,16,.14) 0%,rgba(22,19,16,.74) 46%,rgba(22,19,16,.93) 100%)}
+}
+
+/* ---------- la fenêtre « découvrir les cafés » ----------
+   Au clic sur le logo, quand on est déjà sur l'arbre nu : on ne quitte pas
+   l'atlas sans qu'on l'ait voulu. */
+.ask{position:fixed;z-index:25;left:50%;top:50%;transform:translate(-50%,calc(-50% + 12px));width:min(430px,calc(100% - 32px));border-radius:2px;border:1px solid var(--line);box-shadow:0 30px 70px -30px rgba(var(--encre),.45);opacity:0;pointer-events:none;visibility:hidden;transition:opacity .3s,transform .3s}
+.ask.on{opacity:1;transform:translate(-50%,-50%);pointer-events:auto;visibility:visible}
+.ask-in{padding:26px 24px 22px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.ask .lg-full{height:52px;width:auto;color:var(--ink)}
+.ask h3{font-size:22px;font-weight:400;letter-spacing:-.02em;line-height:1.2;margin:0}
+.ask p{font-size:14px;line-height:1.55;color:var(--mute);margin:0}
+.ask-ctl{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+
 /* ---------- la version texte ----------
    Sans script, c'est toute la page : on la lit comme un livre. Avec le
    script, elle disparaît derrière l'atlas et se rouvre depuis la page
@@ -434,6 +473,8 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 
 <button class="icb epureBtn" id="epureOff" hidden></button>
 
+<div class="ask verre" id="ask" role="dialog" aria-modal="true" aria-labelledby="askT"><div class="ask-in"></div></div>
+
 <footer class="dock" id="dock">
   <div class="yrbox"><div class="yr" id="yr">2026</div><div class="era" id="era"></div></div>
   <div class="tl"><input type="range" id="slider" min="0" max="1000" step="1" value="1000" aria-label="Chronologie"><div class="ticks" id="ticks"></div></div>
@@ -475,7 +516,10 @@ const UI={
  fr:{menu:'Menu',hint:'Glisser pour tourner · pincer pour zoomer',play:'Raconter l’histoire',playCourt:'Histoire',epure:'Masquer les commandes',epureOff:'Les commandes',back:'← L’arbre',
   nav:[['L’arbre','explorer en 3D'],['Raconter l’histoire','≈ 2 min'],['Les variétés','fiches'],['Le Yunnan','chronologie'],['Terroirs','carte & lots'],['Sources & méthode','']],
   display:'Affichage',swYun:'Surligner le Yunnan',swRot:'Rotation automatique',home:'Recentrer la vue',lineages:'Lignées',lang:'Langue',
-  sig:'les cafés du Yunnan<br>atlas génétique',readFiche:'Lire la fiche',inYunnan:'présente au Yunnan',yTimeline:'Chronologie du Yunnan',
+  sig:'les cafés du Yunnan<br>atlas génétique',
+  pushT:'Les cafés du Yunnan, torréfiés en petites séries.',pushC:'Découvrir les cafés',
+  askT:'Découvrir les cafés de Yunma ?',askP:'Yunma achète en direct auprès de trois fermes du Yunnan, entre 1 300 et 1 800 mètres, et torréfie en petites séries — les variétés de cet atlas, dans la tasse.',
+  askOui:'Voir les cafés',askNon:'Rester dans l’atlas',readFiche:'Lire la fiche',inYunnan:'présente au Yunnan',yTimeline:'Chronologie du Yunnan',
   hideText:'Masquer le texte',showText:'Afficher le texte',tapHint:'Toucher pour découvrir →',
   date:'Date',place:'Lieu',lineage:'Lignée',approx:'⚠ Position chronologique approximative',atYunnan:'Au Yunnan',parents:'Parents',kids:'Descendance',seeTree:'Voir dans l’arbre →',sources:'Sources',
   vTitle:'Les variétés',vLead:n=>`${n} variétés, espèces et populations, des forêts d’Éthiopie aux variétés encore en essai. Chaque fiche raconte l’origine de la variété, sa parenté et son lien avec le Yunnan.`,search:'Chercher une variété…',prehist:'préhistoire',
@@ -491,7 +535,10 @@ const UI={
  en:{menu:'Menu',hint:'Drag to rotate · pinch to zoom',play:'Tell the story',playCourt:'Story',epure:'Hide the controls',epureOff:'Show the controls',back:'← The tree',
   nav:[['The tree','explore in 3D'],['Tell the story','≈ 2 min'],['Varieties','profiles'],['Yunnan','timeline'],['Terroirs','map & lots'],['Sources & method','']],
   display:'Display',swYun:'Highlight Yunnan',swRot:'Auto-rotate',home:'Reset view',lineages:'Lineages',lang:'Language',
-  sig:'coffees from Yunnan<br>genetic atlas',readFiche:'Read profile',inYunnan:'grown in Yunnan',yTimeline:'Yunnan timeline',
+  sig:'coffees from Yunnan<br>genetic atlas',
+  pushT:'Yunnan coffees, roasted in small batches.',pushC:'Discover the coffees',
+  askT:'Discover Yunma’s coffees?',askP:'Yunma buys direct from three Yunnan farms, between 1,300 and 1,800 metres, and roasts in small batches — the varieties in this atlas, in the cup.',
+  askOui:'See the coffees',askNon:'Stay in the atlas',readFiche:'Read profile',inYunnan:'grown in Yunnan',yTimeline:'Yunnan timeline',
   hideText:'Hide text',showText:'Show text',tapHint:'Tap to explore →',
   date:'Date',place:'Place',lineage:'Lineage',approx:'⚠ Approximate chronological position',atYunnan:'In Yunnan',parents:'Parents',kids:'Descendants',seeTree:'See in the tree →',sources:'Sources',
   vTitle:'Varieties',vLead:n=>`${n} varieties, species and populations, from the forests of Ethiopia to varieties still in trials. Each profile tells the variety’s origin, its lineage and its link with Yunnan.`,search:'Search a variety…',prehist:'prehistory',
@@ -507,7 +554,10 @@ const UI={
  zh:{menu:'菜单',hint:'拖动旋转 · 双指缩放',play:'讲述历史',playCourt:'历史',epure:'隐藏控件',epureOff:'显示控件',back:'← 品种树',
   nav:[['品种树','3D 探索'],['讲述历史','约 2 分钟'],['品种','档案'],['云南','年表'],['风土','地图与批次'],['资料与方法','']],
   display:'显示',swYun:'突出云南',swRot:'自动旋转',home:'重置视角',lineages:'谱系',lang:'语言',
-  sig:'云南咖啡<br>品种基因图谱',readFiche:'查看档案',inYunnan:'云南有种植',yTimeline:'云南年表',
+  sig:'云南咖啡<br>品种基因图谱',
+  pushT:'云南的咖啡，小批量烘焙。',pushC:'探索我们的咖啡',
+  askT:'想看看 Yunma 的咖啡吗？',askP:'Yunma 直接向云南三座庄园采购，海拔 1300 至 1800 米，并以小批量烘焙——这本图谱里的品种，就在杯中。',
+  askOui:'查看咖啡',askNon:'留在图谱',readFiche:'查看档案',inYunnan:'云南有种植',yTimeline:'云南年表',
   hideText:'隐藏文字',showText:'显示文字',tapHint:'点击了解 →',
   date:'年代',place:'地点',lineage:'谱系',approx:'⚠ 年代位置仅为近似',atYunnan:'在云南',parents:'亲本',kids:'后代',seeTree:'在树中查看 →',sources:'资料来源',
   vTitle:'品种',vLead:n=>`${n} 个品种、物种与种群，从埃塞俄比亚的森林到仍在试验中的品种。每份档案都讲述品种的起源、亲缘关系及其与云南的联系。`,search:'搜索品种…',prehist:'史前',
@@ -2091,7 +2141,7 @@ cv.addEventListener('pointerup',endPtr);cv.addEventListener('pointercancel',endP
 cv.addEventListener('pointerleave',()=>{S.hover=null;hideTip()});
 cv.addEventListener('wheel',e=>{e.preventDefault();touch();if(e.shiftKey){tgt.ty=Math.max(-4500,Math.min(4500,tgt.ty-e.deltaY*1.1))}else{tgt.dist=Math.max(MIND,Math.min(MAXD,tgt.dist*Math.exp(e.deltaY*.0012)))}},{passive:false});
 addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;
-  if(e.key==='Escape'){if(menuOpen)closeMenu();else if(pageOpen)closePage();else if(TERR.on)terrStop();else if(ST.on)storyEnd(false);else deselect()}
+  if(e.key==='Escape'){if(askOn)askFermer();else if(menuOpen)closeMenu();else if(pageOpen)closePage();else if(TERR.on)terrStop();else if(ST.on)storyEnd(false);else deselect()}
   if(pageOpen||menuOpen)return;
   if(e.key===' '){e.preventDefault();ST.on?storyPause(!ST.paused):storyStart(0)}
   if(e.key==='ArrowUp')tgt.ty=Math.min(4500,tgt.ty+180);if(e.key==='ArrowDown')tgt.ty=Math.max(-4500,tgt.ty-180);if(e.key==='ArrowLeft')tgt.yaw+=.25;if(e.key==='ArrowRight')tgt.yaw-=.25;
@@ -2161,8 +2211,29 @@ peekEl.addEventListener('click',e=>{const f=e.target.closest('[data-fiche]');if(
 const menu=document.getElementById('menu'),scrim=document.getElementById('scrim');let menuOpen=false;
 function openMenu(){menuOpen=true;menu.classList.add('on');scrim.classList.add('on');if(ST.on&&!ST.paused)storyPause(true)}
 function closeMenu(){menuOpen=false;menu.classList.remove('on');scrim.classList.remove('on')}
-document.getElementById('menuBtn').onclick=openMenu;scrim.onclick=closeMenu;document.getElementById('menuClose').onclick=closeMenu;
-document.getElementById('brand').onclick=e=>{e.preventDefault();terrStop(false,true);closePage();closeMenu();deselect();goHome()};
+document.getElementById('menuBtn').onclick=openMenu;scrim.onclick=()=>{if(askOn)askFermer();else closeMenu()};document.getElementById('menuClose').onclick=closeMenu;
+/* Le logo a deux usages, et l'ordre compte. Tant qu'il y a quelque chose
+   d'ouvert — une page, un survol, le menu, un récit, une variété
+   sélectionnée —, il est la sortie : c'est le geste qu'on fait quand on se
+   sent coincé, et le lui retirer serait le pire des services. Une fois
+   revenu à l'arbre nu, il n'a plus rien à fermer : il propose alors le
+   site, sans y emmener personne de force. */
+const ask=document.getElementById('ask');let askOn=false;
+function askOuvrir(){
+  ask.querySelector('.ask-in').innerHTML=`${LOGO_FULL}<h3 id="askT">${U('askT')}</h3><p>${U('askP')}</p>
+    <div class="ask-ctl"><a class="btn dark" href="${siteCafes()}" rel="noopener">${U('askOui')}${IC.arrow}</a>
+    <button class="btn" data-ask-non>${U('askNon')}</button></div>`;
+  ask.classList.add('on');scrim.classList.add('on');askOn=true;AUD.fx('open');
+  try{ask.querySelector('[data-ask-non]').focus()}catch(e){}
+}
+function askFermer(muet){ask.classList.remove('on');if(!menuOpen)scrim.classList.remove('on');askOn=false;if(!muet)AUD.fx('close')}
+ask.addEventListener('click',e=>{if(e.target.closest('[data-ask-non]'))askFermer()});
+document.getElementById('brand').onclick=e=>{e.preventDefault();
+  const occupe=pageOpen||TERR.on||menuOpen||!!S.sel||!!S.selEv||ST.on||S.playing||askOn;
+  terrStop(false,true);closePage();closeMenu();deselect();askFermer(true);
+  if(occupe){goHome();return}
+  askOuvrir();
+};
 document.getElementById('mnav').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;const k=b.dataset.go;closeMenu();
   if(k==='arbre'){terrStop(false,true);closePage();deselect();goHome()}else if(k==='histoire'){closePage();storyStart(0)}else openPage(k)});
 document.getElementById('chips').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(!b)return;const g=b.dataset.g;S.hidden.has(g)?S.hidden.delete(g):S.hidden.add(g);b.classList.toggle('off',S.hidden.has(g))});
@@ -2178,6 +2249,21 @@ const page=document.getElementById('page'),pin=document.getElementById('pin'),pk
 function srcHTML(keys){return '<div class="sec">'+U('sources')+'</div><div class="src">'+keys.map(k=>SRC[k]?`<a href="${SRC[k][1]}" target="_blank" rel="noopener">${SRC[k][0]}</a>`:'').join('<br>')+'</div>'+SIG}
 let SIG='';
 function relBtn(id,t,note){const m=M[id];return `<button data-fiche="${id}"><span class="dot" style="background:${GROUPS[m.g].c}"></span>${m.n}<small>${LT[t].l.split(' (')[0]}${note?' · '+note:''}</small></button>`}
+/* Le site, depuis l'atlas. L'adresse est absolue : l'atlas se partage, se
+   copie, s'ouvre parfois ailleurs qu'à sa place, et le renvoi doit tenir
+   dans tous ces cas. La page des cafés existe dans les trois langues, au
+   même nom. */
+const SITE='https://yunma.fr';
+const siteCafes=()=>`${SITE}/${LANG}/cafes/`;
+/* L'image vit à côté de la page ; les versions anglaise et chinoise sont
+   un cran plus bas dans l'arborescence. */
+const PHOTO=()=>(LANG==='fr'?'':'../')+'cerises.jpg';
+/* Le bloc de fin : la photographie de l'accueil du site, une phrase et un
+   lien. On le pose au bas de chaque page de l'atlas. */
+const PUSH=()=>`<a class="push" href="${siteCafes()}" rel="noopener">
+  <img src="${PHOTO()}" alt="" loading="lazy" decoding="async">
+  <span class="push-in">${LOGO_FULL}<p>${U('pushT')}</p>
+  <span class="lk2">${U('pushC')}<span class="arrow" aria-hidden="true">→</span></span></span></a>`;
 const NAVK=i=>'0'+(i+1)+' · '+U('nav')[i][0];
 const PAGES={
  varietes:{k:()=>NAVK(2),r:()=>{
@@ -2213,7 +2299,7 @@ const PAGES={
 };
 let curPage=null;
 function openPage(k,fromHash){const P=PAGES[k];if(!P)return;closeMenu();terrStop(fromHash,true);if(!fromHash)AUD.fx('open');if(ST.on)storyHold();else deselect();curPage=['p',k];
-  pkick.textContent=P.k();pin.innerHTML=P.r();P.after&&P.after();page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
+  pkick.textContent=P.k();pin.innerHTML=P.r()+PUSH();P.after&&P.after();page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
   if(!fromHash)try{if(location.hash!=='#'+k)location.hash=k}catch(e){}}
 function openFiche(n,fromHash,keepScroll){closeMenu();terrStop(fromHash,true);if(!keepScroll)AUD.fx('open');if(ST.on)storyHold();const G=GROUPS[n.g];curPage=['f',n.id];
   const par=(n.p||[]).map(([id,t,note])=>relBtn(id,t,note)).join('');const kid=n.kids.map(([id,t,note])=>relBtn(id,t,note)).join('');
@@ -2227,7 +2313,7 @@ function openFiche(n,fromHash,keepScroll){closeMenu();terrStop(fromHash,true);if
    ${par?`<div class="sec">${U('parents')}</div><div class="rel">${par}</div>`:''}
    ${kid?`<div class="sec">${U('kids')}</div><div class="rel">${kid}</div>`:''}
    <button class="btn dark seetree" data-see="${n.id}">${U('seeTree')}</button>
-   ${srcHTML(n.s||[])}`;
+   ${srcHTML(n.s||[])}${PUSH()}`;
   if(!keepScroll)page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
   if(!fromHash)try{if(location.hash!=='#v-'+n.id)location.hash='v-'+n.id}catch(e){}}
 function closePage(fromHash){if(!pageOpen)return;AUD.fx('close');page.classList.remove('on');pageOpen=false;document.body.classList.remove('paged');
