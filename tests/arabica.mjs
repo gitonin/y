@@ -160,6 +160,19 @@ const nav = await chromium.launch({
 });
 
 /** Une page ouverte, et la liste de ce que la console a eu à dire. */
+/* L'atlas s'ouvre désormais sur un seuil : un écran qui dit où l'on
+   entre, et un bouton. Ce bouton n'est pas décoratif — c'est le geste
+   qu'il porte qui autorise le son. Chaque épreuve passe donc la porte,
+   comme un visiteur, plutôt que de court-circuiter l'entrée : sans quoi
+   l'on vérifierait une application où personne n'est jamais entré. */
+const entrer = async (p, son = true) => {
+  try { await p.locator(son ? '#entrer' : '#entrerMuet').click({ timeout: 10000 }); }
+  catch (e) { /* déjà entré, ou seuil absent */ }
+  /* La porte s'efface en une seconde avant d'être retirée du document :
+     on lui laisse le temps, sans quoi on mesure une page à moitié ouverte. */
+  await p.waitForTimeout(1400);
+};
+
 async function ouvrir(vue, hash = '') {
   const ctx = await nav.newContext({
     viewport: { width: vue.width, height: vue.height },
@@ -174,6 +187,7 @@ async function ouvrir(vue, hash = '') {
      exactement celle du site. Sans cela, un contrôle de teinte lancé à
      trois heures du matin mesurerait la palette de nuit. */
   await p.goto(`http://127.0.0.1:${PORT}/?heure=13${hash}`, { waitUntil: 'load' });
+  await entrer(p);
   await p.waitForTimeout(2500);
   return { ctx, p, bruit };
 }
@@ -249,6 +263,7 @@ titre('Les trois langues');
   for (const [chemin, code, attendu] of [['/', 'fr', 'Menu'], ['/en/', 'en', 'Menu'], ['/zh/', 'zh', '菜单']]) {
     const { ctx, p } = await ouvrir(VUES[0]);
     await p.goto(`http://127.0.0.1:${PORT}${chemin}?heure=13`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(1200);
     const texte = (await p.locator('.menubtn').textContent())?.trim();
     check(`${chemin} s’ouvre en ${code} (« ${texte} »)`, texte, attendu);
@@ -343,6 +358,7 @@ titre('Le jour et la nuit');
 
   /* L'arrivée se fait à l'heure du visiteur, pas à une heure choisie. */
   await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+  await entrer(p);
   await p.waitForTimeout(900);
   const depart = await p.evaluate(() => ({ atlas: CIEL.heure(), vraie: new Date().getHours() + new Date().getMinutes() / 60 }));
   const ecart = Math.abs(depart.atlas - depart.vraie);
@@ -360,6 +376,7 @@ titre('Le jour et la nuit');
   const contraste = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
   const palette = async (h) => {
     await p.goto(`http://127.0.0.1:${PORT}/?heure=${h}`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(2600);
     return p.evaluate(() => {
       const cs = getComputedStyle(document.documentElement);
@@ -396,6 +413,7 @@ titre('Le jour et la nuit');
      page du Yunnan à six heures et demie et l'on regarde si le fond suit
      l'heure — et s'il va bien vers le jour, et non vers la nuit. */
   await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+  await entrer(p);
   await p.waitForTimeout(900);
   await p.evaluate(() => { CIEL.poser(6.5); openPage('yunnan'); });
   /* La page est lourde : il faut lui laisser quelques images pour que le
@@ -444,13 +462,18 @@ titre('Le son');
     C.prototype.createOscillator = function (...a) { window.__osc++; return co.apply(this, a); };
   });
   const p = await ctx.newPage();
-  await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
-  await p.waitForTimeout(1200);
-  check('le son n’est pas coupé au départ', await p.evaluate(() => !document.body.classList.contains('muted')));
-  await p.mouse.click(640, 400);                       /* le geste qui autorise le son */
-  await p.waitForTimeout(1200);
   const etat = () => p.evaluate(() => (window.__ac ? window.__ac.state : 'sans contexte'));
-  check(`le contexte audio tourne dès le premier geste (${await etat()})`, await etat(), 'running');
+  await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+  await p.waitForTimeout(1500);
+  /* Avant la porte, rien : pas de contexte audio du tout. C'est ce que le
+     navigateur impose, et c'est pour cela que le seuil existe. */
+  check(`devant le seuil, aucun son n’est ouvert (${await etat()})`, await etat(), 'sans contexte');
+  await entrer(p);
+  await p.waitForTimeout(1500);
+  check('le son n’est pas coupé au départ', await p.evaluate(() => !document.body.classList.contains('muted')));
+  /* Et le geste d'entrée suffit : plus besoin de toucher un bouton pour
+     que la musique arrive. */
+  check(`le contexte audio tourne dès qu’on entre (${await etat()})`, await etat(), 'running');
   /* On le suspend comme le ferait un téléphone qui reçoit un appel. On lit
      l'état au moment même où la promesse se résout : la ronde de réveil
      passe toutes les cinq secondes et peut le relancer aussitôt — attendre
@@ -535,6 +558,7 @@ titre('Les notes des boutons s’entendent');
     await ctx.addInitScript(semerEtBrancher);
     const p = await ctx.newPage();
     await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(400);
     await p.mouse.click(640, 400);                       /* le geste qui autorise le son */
     /* On se cale sur l'horloge audio, pas sur celle de la page : le rendu
@@ -655,10 +679,100 @@ titre('L’atlas est textuel');
  * nu, car tant qu'il reste quelque chose d'ouvert le logo est la sortie,
  * et le lui retirer serait le pire des services.
  */
+/* ------------------------------------------------------------------ *
+ * Le seuil
+ * ------------------------------------------------------------------ *
+ * L'atlas s'ouvrait sur un logo qui s'effaçait tout seul, et la musique
+ * n'arrivait qu'au premier bouton touché — un navigateur de téléphone
+ * n'ouvre pas de contexte audio sans geste. Il s'ouvre maintenant sur une
+ * porte : on dit où l'on entre, et le geste qui l'ouvre autorise le son.
+ */
+titre('Le seuil');
+{
+  const attendus = {
+    fr: { chemin: '/', titre: 'Une histoire de l’Arabica', bouton: 'Entrer dans l’expérience' },
+    en: { chemin: '/en/', titre: 'A history of Arabica', bouton: 'Enter the experience' },
+    zh: { chemin: '/zh/', titre: '一部阿拉比卡的历史', bouton: '进入体验' },
+  };
+  for (const [l, a] of Object.entries(attendus)) {
+    const ctx = await nav.newContext({ viewport: { width: 1100, height: 800 }, locale: 'fr-FR' });
+    const p = await ctx.newPage();
+    const bruit = [];
+    p.on('pageerror', (e) => bruit.push(e.message));
+    await p.goto(`http://127.0.0.1:${PORT}${a.chemin}?heure=13`, { waitUntil: 'load' });
+    await p.waitForTimeout(1500);
+    const vu = await p.evaluate(() => {
+      const s = document.getElementById('splash');
+      if (!s) return null;
+      return { visible: getComputedStyle(s).display !== 'none',
+        titre: s.querySelector('h1').textContent.trim(),
+        bouton: document.getElementById('entrer').textContent.trim(),
+        joue: S.playing };
+    });
+    check(`${l} · la porte est là, et elle parle la langue (« ${vu ? vu.titre : '—'} »)`,
+      !!vu && vu.visible && vu.titre === a.titre && vu.bouton === a.bouton);
+    check(`${l} · la frise attend qu’on entre`, !!vu && vu.joue === false);
+    await entrer(p);
+    const apres = await p.evaluate(() => {
+      const s = document.getElementById('splash');
+      return { ferme: !s || s.classList.contains('out'), joue: S.playing, son: AUD.on };
+    });
+    check(`${l} · on entre, la porte s’efface et l’histoire commence`,
+      apres.ferme === true && apres.joue === true && apres.son === true);
+    check(`${l} · aucune erreur au seuil (${bruit.length})`, bruit.length, 0);
+    await ctx.close();
+  }
+
+  /* La porte silencieuse, pour qui n'est pas seul dans la pièce. Contexte
+     neuf : le seuil ne se montre qu'une fois par onglet, et l'avoir déjà
+     passé ailleurs ferait mesurer une porte qui n'est plus là. */
+  {
+    const ctx = await nav.newContext({ viewport: { width: 1100, height: 800 }, locale: 'fr-FR' });
+    const p = await ctx.newPage();
+    await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+    await p.waitForTimeout(1200);
+    await entrer(p, false);
+    const q = await p.evaluate(() => {
+      const s = document.getElementById('splash');
+      return { ferme: !s || s.classList.contains('out'), son: AUD.on, muet: document.body.classList.contains('muted') };
+    });
+    check('« entrer sans le son » entre quand même, en silence', q.ferme === true && q.son === false && q.muet === true);
+    await ctx.close();
+  }
+
+  /* On ne se fait pas arrêter deux fois : changer de langue recharge la
+     page, et redemander la porte en pleine visite n'aurait aucun sens. */
+  {
+    const { ctx, p } = await ouvrir(VUES[0]);
+    await p.reload({ waitUntil: 'load' });
+    await p.waitForTimeout(1500);
+    check('après un rechargement dans le même onglet, la porte ne revient pas',
+      await p.evaluate(() => !document.getElementById('splash')));
+    await ctx.close();
+  }
+
+  /* Sans script, la porte n'ouvrirait rien et masquerait le texte : elle
+     ne doit pas s'afficher du tout. */
+  {
+    const ctx = await nav.newContext({ viewport: { width: 1100, height: 800 }, javaScriptEnabled: false });
+    const p = await ctx.newPage();
+    await p.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: 'load' });
+    const q = await p.evaluate(() => ({
+      seuil: getComputedStyle(document.getElementById('splash')).display,
+      texte: getComputedStyle(document.getElementById('lecture')).display,
+      mots: document.getElementById('lecture').textContent.trim().split(/\s+/).length,
+    }));
+    check(`sans script, la porte ne s’affiche pas (${q.seuil})`, q.seuil, 'none');
+    check(`et le texte de l’atlas reste la page (${q.mots} mots, ${q.texte})`, q.texte === 'block' && q.mots > 3000);
+    await ctx.close();
+  }
+}
+
 titre('Le renvoi vers le site');
 for (const [l, chemin, attenduImg] of [['fr', '/', 'cerises.jpg'], ['en', '/en/', '../cerises.jpg'], ['zh', '/zh/', '../cerises.jpg']]) {
   const { ctx, p, bruit } = await ouvrir(VUES[0]);
   await p.goto(`http://127.0.0.1:${PORT}${chemin}?heure=13`, { waitUntil: 'load' });
+  await entrer(p);
   await p.waitForTimeout(1800);
   /* Le bloc doit se trouver au bas de chacune des pages, fiche comprise. */
   for (const [nom, ouvrirPage] of [
@@ -935,6 +1049,7 @@ titre('On ne reste pas coincé dans le survol');
   {
     const { ctx, p } = await ouvrir(VUES[1]);
     await p.goto(`http://127.0.0.1:${PORT}/en/?heure=13`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(2000);
     await enSurvol(p);
     const q = await p.evaluate(() => ({
@@ -980,6 +1095,7 @@ titre('Aucune étiquette de bouton ne passe à la ligne');
     await ctx.addInitScript((l) => { try { localStorage.setItem('yunma-lang', l); } catch (e) {} }, langue);
     const p = await ctx.newPage();
     await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(2500);
 
     await p.evaluate(() => { location.hash = 'survol'; });
@@ -1018,6 +1134,7 @@ titre('Un bouton sans mot garde un nom');
     await ctx.addInitScript((l) => { try { localStorage.setItem('yunma-lang', l); } catch (e) {} }, langue);
     const p = await ctx.newPage();
     await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(2500);
     /* On ouvre tout ce qui porte des icônes : l'aperçu, le récit, le survol. */
     await p.evaluate(() => select(M.catimor)); await p.waitForTimeout(500);
@@ -1059,6 +1176,7 @@ titre('Le verre dépoli reste lisible');
     const ctx = await nav.newContext({ viewport: { width: 800, height: 500 }, deviceScaleFactor: 1 });
     const p = await ctx.newPage();
     await p.goto(`http://127.0.0.1:${PORT}/?heure=${h}#survol`, { waitUntil: 'load' });
+    await entrer(p);
     await p.waitForTimeout(5200);
     const z = await p.evaluate(() => {
       const r = document.getElementById('terr').getBoundingClientRect();
@@ -1162,6 +1280,7 @@ titre('Chaque texte tient son contraste, à l’écran');
       const ctx = await nav.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
       const p = await ctx.newPage();
       await p.goto(`http://127.0.0.1:${PORT}/?heure=${h}`, { waitUntil: 'load' });
+      await entrer(p);
       await p.waitForTimeout(2600);
       try { await prep(p); } catch (e) {}
       const els = await p.evaluate(releve);

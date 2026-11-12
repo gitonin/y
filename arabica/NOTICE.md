@@ -55,6 +55,26 @@ rien ne se recouvre sur un téléphone.
 
 Les numéros de ligne sont indicatifs : ils bougent à chaque ajout de variété.
 
+## Le seuil
+
+L'atlas s'ouvre sur une porte : le logo, « Yunma vous présente », *Une
+histoire de l'Arabica*, quelques lignes sur ce qu'on va voir, et deux
+boutons — entrer, ou entrer sans le son.
+
+Ce n'est pas qu'une présentation. Un navigateur de téléphone n'ouvre pas
+de contexte audio sans un geste de l'utilisateur : tant que l'atlas
+démarrait tout seul, la musique n'arrivait qu'au premier bouton touché, et
+parfois jamais. Le geste qui franchit le seuil est ce geste-là. C'est
+aussi pour cela que la frise ne se joue qu'une fois entré : la laisser
+courir derrière la porte, c'est arriver au milieu de l'histoire.
+
+Le seuil ne se montre qu'une fois par onglet (`sessionStorage`). Changer
+de langue recharge la page — trois adresses, trois pages — et se faire
+arrêter au seuil en pleine visite n'aurait aucun sens.
+
+Sans script, il ne s'affiche pas du tout : son bouton n'ouvrirait rien, et
+il masquerait le texte de l'atlas, qui est alors toute la page.
+
 ## Ajouter ou modifier une variété
 
 1. **Fiche** : ajouter une entrée dans `NODES`, avec ces champs :
