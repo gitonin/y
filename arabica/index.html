@@ -350,11 +350,11 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
    il masquerait le texte de l'atlas. On ne l'affiche donc que lorsque le
    script tourne — comme la version texte, à l'envers. */
 .splash{display:none}
-.js .splash{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:calc(var(--st) + 24px) 24px calc(var(--sb) + 24px);
+.js .splash{position:fixed;inset:0;z-index:30;display:flex;overflow:auto;-webkit-overflow-scrolling:touch;padding:calc(var(--st) + 20px) 24px calc(var(--sb) + 20px);
   background:rgba(var(--fond),.92);backdrop-filter:blur(18px) saturate(1.1);-webkit-backdrop-filter:blur(18px) saturate(1.1);
   transition:opacity .9s ease,transform .9s ease}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.splash{background:var(--bg)}}
-.splash-in{max-width:520px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both}
+.splash-in{margin:auto;max-width:520px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both}
 .splash .lg-full{width:104px;height:auto;color:var(--ink)}
 .splash .kicker{justify-content:center;margin-top:26px}
 .splash h1{font-size:clamp(30px,6vw,44px);font-weight:400;letter-spacing:-.035em;line-height:1.05;margin:12px 0 0}
@@ -364,6 +364,27 @@ body.muted .sndbtn i b{animation:none;transform:scaleY(.14)}
 .splash .muet:hover{color:var(--ink);border-bottom-color:rgba(var(--encre),.4)}
 .splash.out{opacity:0;transform:scale(1.015);pointer-events:none}
 @media (max-width:560px){.splash p{font-size:14.5px}.splash .lg-full{width:88px}}
+/* Un écran court — un petit téléphone, ou un grand posé à l'horizontale —
+   n'a pas la place du grand jeu : le bloc se resserre plutôt que de pousser
+   « entrer sans le son » sous le bord de la fenêtre, comme il le faisait sur
+   un 320 × 568. Mesuré : 546 px de contenu pour 568 px de fenêtre, zone sûre
+   non comprise. */
+@media (max-height:700px){
+  .splash .lg-full{width:72px}
+  .splash .kicker{margin-top:16px}
+  .splash h1{font-size:clamp(25px,7vw,32px)}
+  .splash p{font-size:14px;margin-top:11px}
+  .splash .btn{height:44px;margin-top:20px}
+  .splash .muet{margin-top:11px}
+}
+@media (max-height:580px){
+  .splash .lg-full{width:58px}
+  .splash .kicker{margin-top:11px}
+  .splash h1{font-size:23px}
+  .splash p{font-size:13.5px;line-height:1.5;margin-top:9px}
+  .splash .btn{height:40px;margin-top:15px}
+  .splash .muet{margin-top:9px}
+}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .paged .top,.paged .dock{opacity:0;pointer-events:none}
 
@@ -546,7 +567,7 @@ const UI={
   sig:'les cafés du Yunnan<br>atlas génétique',
   pushT:'Les cafés du Yunnan, torréfiés en petites séries.',pushC:'Découvrir les cafés',
   spK:'Yunma vous présente',spT:'Une histoire de l’Arabica',
-  spP:'Soixante-cinq variétés de caféier, de la naissance de l’Arabica en Éthiopie — il y a 350 000 ans, d’un croisement entre deux espèces sauvages — jusqu’aux Geisha plantés aujourd’hui sur les crêtes du Yunnan. Qui descend de qui, quand, et par quelle route. Avec les sources.',
+  spP:'Soixante-cinq variétés de caféier, de la naissance de l’Arabica en Éthiopie aux Geisha plantés aujourd’hui sur les crêtes du Yunnan. Qui descend de qui, et par quelle route.',
   spBtn:'Entrer dans l’expérience',spMuet:'entrer sans le son',
   askT:'Découvrir les cafés de Yunma ?',askP:'Yunma achète en direct auprès de trois fermes du Yunnan, entre 1 300 et 1 800 mètres, et torréfie en petites séries — les variétés de cet atlas, dans la tasse.',
   askOui:'Voir les cafés',askNon:'Rester dans l’atlas',readFiche:'Lire la fiche',inYunnan:'présente au Yunnan',yTimeline:'Chronologie du Yunnan',
@@ -568,7 +589,7 @@ const UI={
   sig:'coffees from Yunnan<br>genetic atlas',
   pushT:'Yunnan coffees, roasted in small batches.',pushC:'Discover the coffees',
   spK:'Yunma presents',spT:'A history of Arabica',
-  spP:'Sixty-five coffee varieties, from the birth of Arabica in Ethiopia — 350,000 years ago, from a cross between two wild species — to the Geisha planted today on the ridges of Yunnan. Who descends from whom, when, and by which road. With sources.',
+  spP:'Sixty-five coffee varieties, from the birth of Arabica in Ethiopia to the Geisha planted today on the ridges of Yunnan. Who descends from whom, and by which road.',
   spBtn:'Enter the experience',spMuet:'enter without sound',
   askT:'Discover Yunma’s coffees?',askP:'Yunma buys direct from three Yunnan farms, between 1,300 and 1,800 metres, and roasts in small batches — the varieties in this atlas, in the cup.',
   askOui:'See the coffees',askNon:'Stay in the atlas',readFiche:'Read profile',inYunnan:'grown in Yunnan',yTimeline:'Yunnan timeline',
@@ -590,7 +611,7 @@ const UI={
   sig:'云南咖啡<br>品种基因图谱',
   pushT:'云南的咖啡，小批量烘焙。',pushC:'探索我们的咖啡',
   spK:'Yunma 云马呈现',spT:'一部阿拉比卡的历史',
-  spP:'六十五个咖啡品种，从阿拉比卡在埃塞俄比亚的诞生——距今 35 万年，由两个野生物种自然杂交而来——到今天种在云南山脊上的瑰夏。谁源自谁，在何时，又经由哪条路。并附资料来源。',
+  spP:'六十五个咖啡品种，从阿拉比卡在埃塞俄比亚的诞生，到今天种在云南山脊上的瑰夏。谁源自谁，又经由哪条路。',
   spBtn:'进入体验',spMuet:'静音进入',
   askT:'想看看 Yunma 的咖啡吗？',askP:'Yunma 直接向云南三座庄园采购，海拔 1300 至 1800 米，并以小批量烘焙——这本图谱里的品种，就在杯中。',
   askOui:'查看咖啡',askNon:'留在图谱',readFiche:'查看档案',inYunnan:'云南有种植',yTimeline:'云南年表',
@@ -920,7 +941,14 @@ const AUD=(()=>{
     const bas=.5*(1-.42*(force||1));
     padBus.gain.cancelScheduledValues(now);padBus.gain.setTargetAtTime(bas,now,.035);
     padBus.gain.setTargetAtTime(.5,now+.14,.34)}
-  function pluck(m,vol,dest,len){const now=ac.currentTime,o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain();
+  /* Vingt millisecondes d'avance. Une note posée à l'instant même se fait
+     rattraper par le moindre hoquet du fil principal : quand il bute —
+     l'ouverture d'une fenêtre en verre dépoli par-dessus la scène en est
+     un bel exemple —, l'enveloppe se retrouve derrière l'horloge audio, le
+     gain saute au lieu de monter, et c'est un clic. Mesuré : au clic du
+     logo, une enveloppe arrivait 2,9 ms en retard ; ailleurs, aucune. */
+  const AVANCE=.02;
+  function pluck(m,vol,dest,len){const now=ac.currentTime+AVANCE,o=ac.createOscillator(),o2=ac.createOscillator(),g=ac.createGain();
     o.type='sine';o.frequency.value=mtof(m);o2.type='sine';o2.frequency.value=mtof(m)*2.003;const g2=ac.createGain();g2.gain.value=.18;
     g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(vol,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+(len||2.6));
     o.connect(g);o2.connect(g2);g2.connect(g);g.connect(dest||sparkBus);o.start(now);o2.start(now);o.stop(now+(len||2.6)+.1);o2.stop(now+(len||2.6)+.1)}
@@ -961,7 +989,12 @@ const AUD=(()=>{
      les recouvre — mesuré, trois d'entre elles n'y dépassaient que de
      quatre à six décibels, contre quatorze une octave au-dessus. */
   const VOIE={next:[9,1,5],prev:[13,-1,5],menu:[10,1,4],close:[12,-1,4],open:[10,1,4],
-              lang:[12,1,3],bascule:[11,1,4],node:[9,1,5],step:[10,1,5],hover:[13,1,2]};
+              lang:[12,1,3],bascule:[11,1,4],node:[9,1,5],step:[10,1,5],hover:[13,1,2],
+              /* La fenêtre qui propose de partir n'ouvre rien : c'est une
+                 question posée. Une seule note, une octave plus bas que les
+                 autres et plus effacée — la tierce montante de « ouvrir »
+                 sonnait là comme une porte qu'on pousse. */
+              demande:[11,1,3]};
   /* avancer=false reprend le degré courant sans bouger le curseur : la
      seconde note d'un geste se prend ainsi dans le même accord, à un ou
      deux degrés de la première — jamais un intervalle plaqué qui
@@ -1008,6 +1041,8 @@ const AUD=(()=>{
     else if(kind==='close'){const a=note('close');duck(.85);pluck(a,.135,sparkBus,1.8);setTimeout(()=>pluck(degre('close',-2,false),.105,sparkBus,2.2),100)}
     /* une variété : une note de l'accord, la suivante à chaque fois. */
     else if(kind==='node'){duck(.9);pluck(note('node'),.13,sparkBus,3)}
+    /* la fenêtre qui propose le site : une note seule, basse et longue. */
+    else if(kind==='demande'){duck(.45);pluck(note('demande'),.085,sparkBus,4.2)}
     /* une étape du récit : deux notes qui montent doucement. */
     else if(kind==='step'){const a=note('step');duck(.8);pluck(a,.135,sparkBus,3.4);setTimeout(()=>pluck(degre('step',2,false),.105,sparkBus,3.6),160)}
     else if(kind==='tick'){if(performance.now()-lastHover<60)return;lastHover=performance.now();const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=2200;g.gain.setValueAtTime(.05,now);g.gain.exponentialRampToValueAtTime(.0001,now+.025);o.connect(g);g.connect(dry);o.start(now);o.stop(now+.03)}}
@@ -1020,7 +1055,13 @@ const AUD=(()=>{
      gardait. La boucle d'animation, elle, bat tant que la page est à
      l'écran : c'est de là que part le second appel, dans loop(). */
   setInterval(()=>{if(!document.hidden)reveiller()},5000);
-  return{start,setOn,fx:fxs,reveil:reveiller,get on(){return on}};
+  /* Quitter la page coupait le son net, au beau milieu d'une nappe et de
+     sept secondes de réverbération : un couperet. On descend d'abord. */
+  function sortir(){if(!ac||!master)return;const now=ac.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value,now);
+    master.gain.linearRampToValueAtTime(.0001,now+.26)}
+  return{start,setOn,fx:fxs,reveil:reveiller,sortir,get on(){return on}};
 })();
 
 
@@ -2255,11 +2296,24 @@ document.getElementById('menuBtn').onclick=openMenu;scrim.onclick=()=>{if(askOn)
    revenu à l'arbre nu, il n'a plus rien à fermer : il propose alors le
    site, sans y emmener personne de force. */
 const ask=document.getElementById('ask');let askOn=false;
+/* Un lien qui quitte l'atlas : on descend le son, puis on s'en va. Les
+   ouvertures dans un autre onglet et les clics avec une touche enfoncée
+   sont laissés au navigateur, qui ne quitte alors rien du tout. */
+addEventListener('click',e=>{
+  const a=e.target.closest&&e.target.closest('a[data-sortie]');
+  if(!a||e.defaultPrevented||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;
+  e.preventDefault();const url=a.href;AUD.sortir();
+  setTimeout(()=>{location.href=url},270);
+},true);
 function askOuvrir(){
   ask.querySelector('.ask-in').innerHTML=`${LOGO_FULL}<h3 id="askT">${U('askT')}</h3><p>${U('askP')}</p>
-    <div class="ask-ctl"><a class="btn dark" href="${siteCafes()}" rel="noopener">${U('askOui')}${IC.arrow}</a>
+    <div class="ask-ctl"><a class="btn dark" href="${siteCafes()}" rel="noopener" data-sortie>${U('askOui')}${IC.arrow}</a>
     <button class="btn" data-ask-non>${U('askNon')}</button></div>`;
-  ask.classList.add('on');scrim.classList.add('on');askOn=true;AUD.fx('open');
+  /* La note d'abord, l'affichage ensuite : poser une plaque de verre
+     dépoli par-dessus la scène en trois dimensions fait buter le fil
+     principal, et une note programmée juste après se fait rattraper. */
+  AUD.fx('demande');
+  ask.classList.add('on');scrim.classList.add('on');askOn=true;
   try{ask.querySelector('[data-ask-non]').focus()}catch(e){}
 }
 function askFermer(muet){ask.classList.remove('on');if(!menuOpen)scrim.classList.remove('on');askOn=false;if(!muet)AUD.fx('close')}
@@ -2296,7 +2350,7 @@ const siteCafes=()=>`${SITE}/${LANG}/cafes/`;
 const PHOTO=()=>(LANG==='fr'?'':'../')+'cerises.jpg';
 /* Le bloc de fin : la photographie de l'accueil du site, une phrase et un
    lien. On le pose au bas de chaque page de l'atlas. */
-const PUSH=()=>`<a class="push" href="${siteCafes()}" rel="noopener">
+const PUSH=()=>`<a class="push" href="${siteCafes()}" rel="noopener" data-sortie>
   <img src="${PHOTO()}" alt="" loading="lazy" decoding="async">
   <span class="push-in">${LOGO_FULL}<p>${U('pushT')}</p>
   <span class="lk2">${U('pushC')}<span class="arrow" aria-hidden="true">→</span></span></span></a>`;

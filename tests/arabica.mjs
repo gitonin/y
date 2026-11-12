@@ -883,6 +883,74 @@ for (const vue of VUES) {
   await ctx.close();
 }
 
+/* ------------------------------------------------------------------ *
+ * Le son du départ
+ * ------------------------------------------------------------------ *
+ * « Ça fait un son un peu désagréable. » Deux causes, toutes deux
+ * mesurables.
+ *
+ * La première : poser une plaque de verre dépoli par-dessus la scène en
+ * trois dimensions fait buter le fil principal, et la note programmée
+ * juste après se retrouvait derrière l'horloge audio — le gain saute au
+ * lieu de monter, et c'est un clic. On ne mesure pas le son rendu pour le
+ * prouver : un enregistreur qui vit sur ce même fil décroche aux mêmes
+ * moments, et la nappe seule y montrait un saut plus grand que son propre
+ * pic, ce qui est impossible. On regarde donc directement l'horloge.
+ *
+ * La seconde : quitter la page coupait net une nappe et sept secondes de
+ * réverbération. On descend le son avant de s'en aller.
+ */
+titre('Le son du départ');
+{
+  const ctx = await nav.newContext({ viewport: { width: 1100, height: 800 }, locale: 'fr-FR' });
+  await ctx.addInitScript(() => {
+    const C = window.AudioContext || window.webkitAudioContext;
+    window.__retard = [];
+    const W = function (...a) {
+      const c = new C(...a);
+      if (!window.__ac) window.__ac = c;
+      for (const m of ['setValueAtTime', 'linearRampToValueAtTime', 'exponentialRampToValueAtTime']) {
+        const o = AudioParam.prototype[m];
+        AudioParam.prototype[m] = function (v, t) {
+          if (window.__ac && t < window.__ac.currentTime - 0.001) window.__retard.push(window.__ac.currentTime - t);
+          return o.call(this, v, t);
+        };
+      }
+      return c;
+    };
+    W.prototype = C.prototype; window.AudioContext = W; window.webkitAudioContext = W;
+  });
+  const p = await ctx.newPage();
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+  await entrer(p);
+  await p.evaluate(() => { S.intro = false; S.playing = false; S.year = 2026; syncTime(); });
+  await p.waitForTimeout(2500);
+  const retards = async (action) => {
+    await p.evaluate(() => { window.__retard = []; });
+    await action();
+    await p.waitForTimeout(1500);
+    return p.evaluate(() => window.__retard.length);
+  };
+  check('la nappe seule ne programme rien en retard', await retards(async () => {}), 0);
+  check('ouvrir la fenêtre du logo non plus', await retards(async () => { await p.click('#brand'); }), 0);
+  check('la refermer non plus', await retards(async () => { await p.click('#ask [data-ask-non]'); }), 0);
+
+  /* Le départ en fondu : on détourne le lien vers le serveur d'épreuve
+     pour ne pas sortir sur le vrai site. */
+  await p.click('#brand');
+  await p.waitForTimeout(900);
+  await p.evaluate((u) => { document.querySelector('#ask a[data-sortie]').href = u; }, `http://127.0.0.1:${PORT}/?heure=13&parti=1`);
+  await p.click('#ask a[data-sortie]');
+  await p.waitForTimeout(120);
+  const pendant = p.url();
+  /* La page de l'atlas est lourde : on laisse au chargement le temps qu'il
+     lui faut, plutôt que de conclure trop tôt qu'il n'est pas parti. */
+  const parti = await p.waitForURL(/parti=1/, { timeout: 15000 }).then(() => true).catch(() => false);
+  check('le départ laisse au son le temps de descendre', !pendant.includes('parti=1'));
+  check('puis il part bel et bien', parti);
+  await ctx.close();
+}
+
 titre('La caméra ne passe pas sous les montagnes');
 {
   const { ctx, p, bruit } = await ouvrir(VUES[0]);
