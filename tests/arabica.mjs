@@ -898,17 +898,47 @@ for (const vue of VUES) {
  * pic, ce qui est impossible. On regarde donc directement l'horloge.
  *
  * La seconde : quitter la page coupait net une nappe et sept secondes de
- * réverbération. On descend le son avant de s'en aller.
+ * réverbération. On descend le son avant de s'en aller, et l'on retient le
+ * départ le temps que la descente aille au bout. Ce que l'on vérifie ici
+ * n'est donc pas « le fondu est programmé » mais « il ne reste rien à
+ * couper quand la page s'en va » : c'est la même chose que ce qu'entend
+ * l'oreille.
  */
 titre('Le son du départ');
 {
   const ctx = await nav.newContext({ viewport: { width: 1100, height: 800 }, locale: 'fr-FR' });
   await ctx.addInitScript(() => {
     const C = window.AudioContext || window.webkitAudioContext;
-    window.__retard = [];
+    window.__retard = []; window.__rampes = [];
+    /* Au moment précis où la page s'en va, on consigne le gain qu'il reste :
+       c'est la seule mesure qui dise ce que l'oreille entend en partant. */
+    addEventListener('pagehide', () => {
+      try {
+        sessionStorage.setItem('yunma-trace', JSON.stringify({
+          rampes: window.__rampes, appui: window.__appui ?? null,
+          hide: performance.now(),
+          gain: window.__maitre ? window.__maitre.gain.value : null,
+        }));
+      } catch (e) { /* rien à faire : on perdra la trace, pas la page */ }
+    });
     const W = function (...a) {
       const c = new C(...a);
       if (!window.__ac) window.__ac = c;
+      /* Le gain principal est le premier que l'atlas fabrique : on suit ses
+         rampes pour savoir quand le fondu de départ est programmé. */
+      const cg = c.createGain.bind(c);
+      c.createGain = function () {
+        const g = cg();
+        if (!window.__maitre) {
+          window.__maitre = g;
+          const o = g.gain.linearRampToValueAtTime.bind(g.gain);
+          g.gain.linearRampToValueAtTime = function (v, t) {
+            window.__rampes.push({ v, ms: performance.now() });
+            return o(v, t);
+          };
+        }
+        return g;
+      };
       for (const m of ['setValueAtTime', 'linearRampToValueAtTime', 'exponentialRampToValueAtTime']) {
         const o = AudioParam.prototype[m];
         AudioParam.prototype[m] = function (v, t) {
@@ -936,18 +966,41 @@ titre('Le son du départ');
   check('la refermer non plus', await retards(async () => { await p.click('#ask [data-ask-non]'); }), 0);
 
   /* Le départ en fondu : on détourne le lien vers le serveur d'épreuve
-     pour ne pas sortir sur le vrai site. */
+     pour ne pas sortir sur le vrai site.
+
+     On ne regarde pas l'adresse de la page pour mesurer le délai : l'outil
+     d'épreuve attend lui-même que la navigation s'engage avant de rendre la
+     main, et cette attente avale justement le délai que l'on cherche à voir
+     — on lisait alors « parti tout de suite » là où le fondu se jouait
+     bel et bien. On mesure donc dans la page, et on relit la trace une fois
+     arrivé. */
   await p.click('#brand');
   await p.waitForTimeout(900);
-  await p.evaluate((u) => { document.querySelector('#ask a[data-sortie]').href = u; }, `http://127.0.0.1:${PORT}/?heure=13&parti=1`);
+  await p.evaluate((u) => {
+    const a = document.querySelector('#ask a[data-sortie]');
+    a.href = u;
+    a.addEventListener('pointerdown', () => { window.__appui = performance.now(); }, true);
+  }, `http://127.0.0.1:${PORT}/?heure=13&parti=1`);
   await p.click('#ask a[data-sortie]');
-  await p.waitForTimeout(120);
-  const pendant = p.url();
   /* La page de l'atlas est lourde : on laisse au chargement le temps qu'il
      lui faut, plutôt que de conclure trop tôt qu'il n'est pas parti. */
-  const parti = await p.waitForURL(/parti=1/, { timeout: 15000 }).then(() => true).catch(() => false);
-  check('le départ laisse au son le temps de descendre', !pendant.includes('parti=1'));
-  check('puis il part bel et bien', parti);
+  const parti = await p.waitForURL(/parti=1/, { timeout: 20000 }).then(() => true).catch(() => false);
+  check('le lien emmène bel et bien sur le site', parti);
+  await p.waitForTimeout(400);
+  const tr = await p.evaluate(() => {
+    const s = sessionStorage.getItem('yunma-trace');
+    return s ? JSON.parse(s) : null;
+  });
+  check('la page a consigné son départ', !!tr);
+  if (tr) {
+    const fondu = tr.rampes.filter((r) => r.v < 0.01).pop();
+    const depuisAppui = fondu && tr.appui !== null ? Math.round(fondu.ms - tr.appui) : null;
+    check(`le son descend dès l’appui sur le lien (${depuisAppui} ms après)`,
+      depuisAppui !== null && depuisAppui < 60);
+    const reste = fondu ? Math.round(tr.hide - fondu.ms) : 0;
+    check(`la page ne s’en va qu’une fois la descente finie (${reste} ms pour 260)`, reste >= 260);
+    check(`et il ne reste rien à couper (gain ${tr.gain})`, tr.gain !== null && tr.gain <= 0.001);
+  }
   await ctx.close();
 }
 

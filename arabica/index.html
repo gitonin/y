@@ -1061,7 +1061,13 @@ const AUD=(()=>{
     master.gain.cancelScheduledValues(now);
     master.gain.setValueAtTime(master.gain.value,now);
     master.gain.linearRampToValueAtTime(.0001,now+.26)}
-  return{start,setOn,fx:fxs,reveil:reveiller,sortir,get on(){return on}};
+  /* Et si l'on ne part finalement pas — le doigt glisse à côté, on relâche
+     ailleurs —, le son remonte comme il est descendu. */
+  function revenir(){if(!ac||!master||!on||!started)return;const now=ac.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value,now);
+    master.gain.linearRampToValueAtTime(.55,now+.5)}
+  return{start,setOn,fx:fxs,reveil:reveiller,sortir,revenir,get on(){return on}};
 })();
 
 
@@ -2296,15 +2302,34 @@ document.getElementById('menuBtn').onclick=openMenu;scrim.onclick=()=>{if(askOn)
    revenu à l'arbre nu, il n'a plus rien à fermer : il propose alors le
    site, sans y emmener personne de force. */
 const ask=document.getElementById('ask');let askOn=false;
-/* Un lien qui quitte l'atlas : on descend le son, puis on s'en va. Les
-   ouvertures dans un autre onglet et les clics avec une touche enfoncée
-   sont laissés au navigateur, qui ne quitte alors rien du tout. */
-addEventListener('click',e=>{
-  const a=e.target.closest&&e.target.closest('a[data-sortie]');
-  if(!a||e.defaultPrevented||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;
-  e.preventDefault();const url=a.href;AUD.sortir();
-  setTimeout(()=>{location.href=url},270);
-},true);
+/* Un lien qui quitte l'atlas. Partir coupait net une nappe et sept
+   secondes de réverbération : c'est ce coup sec que l'on entendait. On
+   descend donc le son avant de s'en aller, et on retient le départ le
+   temps que la descente aille au bout.
+
+   Le fondu part de l'appui et non du clic : on gagne ainsi tout le temps
+   du geste, et l'appui est le premier instant où l'on sait qu'un départ
+   se prépare. Si l'appui ne devient pas un départ — le doigt glisse, on
+   relâche à côté —, le son remonte comme il est descendu.
+
+   Les ouvertures dans un autre onglet et les clics avec une touche
+   enfoncée restent au navigateur, qui ne quitte alors rien du tout. */
+let partDemande=false;
+function marquerSortie(racine){
+  (racine||document).querySelectorAll('a[data-sortie]').forEach(a=>{
+    if(a.dataset.sortiePosee)return;a.dataset.sortiePosee='1';
+    a.addEventListener('pointerdown',()=>{AUD.sortir()},{passive:true});
+    a.addEventListener('click',e=>{
+      if(e.defaultPrevented||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;
+      e.preventDefault();partDemande=true;const url=a.href;AUD.sortir();
+      setTimeout(()=>{location.href=url},270);
+    });
+  });
+}
+/* Relâché sans partir : on remonte, après avoir laissé au clic le temps
+   de se déclarer. */
+addEventListener('pointerup',()=>{setTimeout(()=>{if(!partDemande)AUD.revenir()},90)},true);
+addEventListener('pointercancel',()=>{setTimeout(()=>{if(!partDemande)AUD.revenir()},90)},true);
 function askOuvrir(){
   ask.querySelector('.ask-in').innerHTML=`${LOGO_FULL}<h3 id="askT">${U('askT')}</h3><p>${U('askP')}</p>
     <div class="ask-ctl"><a class="btn dark" href="${siteCafes()}" rel="noopener" data-sortie>${U('askOui')}${IC.arrow}</a>
@@ -2313,6 +2338,7 @@ function askOuvrir(){
      dépoli par-dessus la scène en trois dimensions fait buter le fil
      principal, et une note programmée juste après se fait rattraper. */
   AUD.fx('demande');
+  marquerSortie(ask);
   ask.classList.add('on');scrim.classList.add('on');askOn=true;
   try{ask.querySelector('[data-ask-non]').focus()}catch(e){}
 }
@@ -2389,7 +2415,7 @@ const PAGES={
 };
 let curPage=null;
 function openPage(k,fromHash){const P=PAGES[k];if(!P)return;closeMenu();terrStop(fromHash,true);if(!fromHash)AUD.fx('open');if(ST.on)storyHold();else deselect();curPage=['p',k];
-  pkick.textContent=P.k();pin.innerHTML=P.r()+PUSH();P.after&&P.after();page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
+  pkick.textContent=P.k();pin.innerHTML=P.r()+PUSH();marquerSortie(pin);P.after&&P.after();page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
   if(!fromHash)try{if(location.hash!=='#'+k)location.hash=k}catch(e){}}
 function openFiche(n,fromHash,keepScroll){closeMenu();terrStop(fromHash,true);if(!keepScroll)AUD.fx('open');if(ST.on)storyHold();const G=GROUPS[n.g];curPage=['f',n.id];
   const par=(n.p||[]).map(([id,t,note])=>relBtn(id,t,note)).join('');const kid=n.kids.map(([id,t,note])=>relBtn(id,t,note)).join('');
@@ -2404,6 +2430,7 @@ function openFiche(n,fromHash,keepScroll){closeMenu();terrStop(fromHash,true);if
    ${kid?`<div class="sec">${U('kids')}</div><div class="rel">${kid}</div>`:''}
    <button class="btn dark seetree" data-see="${n.id}">${U('seeTree')}</button>
    ${srcHTML(n.s||[])}${PUSH()}`;
+  marquerSortie(pin);
   if(!keepScroll)page.scrollTop=0;page.classList.add('on');pageOpen=true;document.body.classList.add('paged');
   if(!fromHash)try{if(location.hash!=='#v-'+n.id)location.hash='v-'+n.id}catch(e){}}
 function closePage(fromHash){if(!pageOpen)return;AUD.fx('close');page.classList.remove('on');pageOpen=false;document.body.classList.remove('paged');
