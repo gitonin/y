@@ -87,10 +87,20 @@ const lignes = [
   '',
   '## 2. `site.zip` → racine du site',
   '',
-  `${site.length} fichiers, ${ko(site)} Ko. Décompresser à la racine, en conservant les dossiers.`,
-  '',
-  ...site.map((f) => `- \`/${f}\``),
-  '',
+  /* Un colis vide n'existe pas : il ne faut pas laisser croire qu'il y a
+     quelque chose à déposer, ni laisser chercher un fichier absent. */
+  ...(site.length
+    ? [
+      `${site.length} fichiers, ${ko(site)} Ko. Décompresser à la racine, en conservant les dossiers.`,
+      '',
+      ...site.map((f) => `- \`/${f}\``),
+      '',
+    ]
+    : [
+      'Rien à déposer : aucune page du site ne change par rapport à ce qui est',
+      'en ligne. Il n’y a donc pas de `site.zip` dans ce colis, et c’est normal.',
+      '',
+    ]),
   ...(disparus.length ? ['## À supprimer en ligne', '', ...disparus.map((f) => `- \`/${f}\``), ''] : []),
   '## Après le dépôt',
   '',
