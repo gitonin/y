@@ -298,6 +298,98 @@ titre('Secouer emporte les feuilles au vent, et pas les vœux');
 }
 
 /* ------------------------------------------------------------------ *
+ * Le vœu qu'on envoie
+ * ------------------------------------------------------------------ *
+ * Envoyer un vœu supposait que celui qui le reçoit puisse le lire. Tant
+ * qu'il n'y a pas de base partagée, un vœu n'existe que dans le navigateur
+ * de celui qui l'a écrit : le lien « #w-<identifiant> » menait à l'arbre et
+ * l'étiquette n'y était pas, le bouton « Envoyer » était masqué, et le QR
+ * code de la carte retombait sur l'adresse nue. Le vœu est donc maintenant
+ * dans le lien lui-même.
+ *
+ * Trois choses à tenir : le lien redonne le vœu, le QR code se relit, et
+ * celui qui ouvre le lien tombe dessus.
+ */
+titre('Le vœu tient dans le lien');
+{
+  const { ctx, p, bruit } = await ouvrir(11);
+  const cas = [
+    ['une formule', { s: 'plaque', p: 5, t: '', n: 'Jo' }],
+    ['des mots à soi', { s: 'leaf', p: -1, t: 'Que chaque tasse te réchauffe le cœur, et la suivante aussi', n: 'Antonin' }],
+    ['du chinois', { s: 'tablet', p: -1, t: '愿你的新年满是咖啡香，愿每一杯都暖到心里，愿你平安喜乐', n: '安东' }],
+  ];
+  for (const [nom, d] of cas) {
+    const r = await p.evaluate((dd) => {
+      const url = window.__essai.lien(dd);
+      const relu = window.__essai.decoder(url.split('#v-')[1] || '');
+      const m = window.__qr(url);
+      return { url, taille: url.length, version: m ? (m.length - 17) / 4 : 0,
+        relu: relu && { s: relu.s, p: relu.p, t: relu.t, n: relu.n } };
+    }, d);
+    check(`${nom} : le lien redonne le vœu (${r.taille} signes)`,
+      JSON.stringify(r.relu), JSON.stringify(d));
+    /* Le QR code de la carte doit porter ce lien-là, et non l'adresse nue :
+       c'est tout l'intérêt de la carte. Les six premières versions
+       plafonnaient à cent six signes ; un vœu écrit à la main les dépasse. */
+    check(`${nom} : le QR code le porte (version ${r.version})`, r.version >= 1 && r.version <= 9);
+  }
+  check('un vœu de décor n’a pas de lien à lui',
+    await p.evaluate(() => window.__essai.lien({ s: 'plaque', p: 0, decor: true }).indexOf('#'), null), -1);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+titre('Celui qui ouvre le lien tombe sur le vœu');
+{
+  /* Un autre navigateur, rien en mémoire : c'est bien la situation de celui
+     à qui on l'envoie. */
+  const envoi = { s: 'heart', p: -1, t: 'Un café, un plaid, et toi', n: 'Antonin' };
+  const c1 = await nav.newContext({ viewport: { width: 800, height: 600 }, locale: 'fr-FR' });
+  const e1 = await c1.newPage();
+  await e1.goto(`http://127.0.0.1:${PORT}/?heure=11`, { waitUntil: 'load' });
+  await e1.waitForTimeout(900);
+  const lien = await e1.evaluate((w) => window.__essai.lien(w), envoi);
+  await c1.close();
+  check(`le lien porte le vœu et non l’arbre nu (${lien.length} signes)`, lien.indexOf('#v-') > 0);
+
+  const ctx = await nav.newContext({ viewport: { width: 1000, height: 780 }, locale: 'fr-FR' });
+  const p = await ctx.newPage();
+  const bruit = [];
+  p.on('pageerror', (e) => bruit.push('' + e));
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=11#` + lien.split('#')[1], { waitUntil: 'load' });
+  await p.waitForTimeout(1400);
+  await p.evaluate(() => document.getElementById('enter').click());
+  await p.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
+  /* La caméra y va au bout d'une seconde et deux dixièmes, puis met le
+     temps qu'il faut à s'y rendre : on attend la carte, pas une horloge. */
+  const vu = await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+    null, { timeout: 60000 }).then(() => true).catch(() => false);
+  check('la carte du vœu s’ouvre toute seule', vu);
+  check('et c’est le bon mot',
+    (await p.locator('#cZh').textContent())?.trim(), envoi.t);
+  check('signé du bon prénom',
+    ((await p.locator('#cBy').textContent()) || '').includes(envoi.n));
+  /* Un vœu reçu n'est pas un vœu accroché : il ne gonfle pas le compte. */
+  check('il ne compte pas comme un vœu de l’arbre',
+    ((await p.locator('#count').textContent()) || '').trim(), '');
+  /* La carte, et son QR code. La photographie du fond n'est plus encodée
+     dans la page : elle part quand on ouvre la carte. Les polices, elles,
+     sont prêtes depuis longtemps — et déclenchaient le dessin avant son
+     arrivée, d'où une carte sur beige vide. */
+  await p.click('#cBack'); await p.waitForTimeout(400);
+  await p.evaluate(() => { window.__essai.viser(0); });
+  await p.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
+  await p.click('#cCard');
+  await p.waitForFunction(() => document.getElementById('cmodal').classList.contains('open'), null, { timeout: 60000 });
+  await p.waitForTimeout(600);
+  const fond = await p.evaluate(() => window.__essai.carteFond());
+  check(`la carte porte bien sa photographie (écart de couleur ${fond})`, fond > 25);
+
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
  * La visite guidée
  * ------------------------------------------------------------------ *
  * Un bouton, et l'arbre se montre tout seul. Ce qui compte, et qui se

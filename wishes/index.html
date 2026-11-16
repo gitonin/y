@@ -210,9 +210,10 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 </div>
 
 <div id="modal" class="modal"><div class="box">
-  <h2 data-i="shareTitle"></h2><p data-i="shareText"></p>
+  <h2 id="shareTtl"></h2><p id="shareTxt"></p>
   <input class="field" id="link" readonly>
-  <div class="row"><button class="btn" id="copy" data-i="copy"></button><button class="btn ghost" id="mClose" data-i="close"></button></div>
+  <div class="row"><a class="btn" id="byMail" href="#" data-i="byMail"></a><a class="btn" id="bySms" href="#" data-i="bySms"></a></div>
+  <div class="row"><button class="btn ghost" id="copy" data-i="copy"></button><button class="btn ghost" id="mClose" data-i="close"></button></div>
 </div></div>
 
 <div id="cmodal" class="modal"><div class="box">
@@ -295,6 +296,11 @@ var I18N = {
   ownPh:"Écrivez votre petit mot (60 caractères)",namePh:"Prénom",hang:"Accrocher à l'arbre",shareWish:"Envoyer",back:"Retour",card:"Carte",cardTitle:"Votre carte numérique",
   cardHint:"Téléchargez la carte, ou faites un appui long sur l'image pour l'enregistrer.",jpg:"Image JPEG",pdf:"PDF",cardScan:"Scannez pour retrouver ce vœu sur l'arbre",leaveTitle:"Quitter l'expérience ?",leaveText:"Le site yunma.fr va s'ouvrir dans une nouvelle page. L'arbre reste ouvert ici.",leaveGo:"Aller sur yunma.fr",leaveStay:"Rester ici",saved:"Carte enregistrée.",cardFail:"Téléchargement indisponible ici : appui long sur l'image.",
   shareTitle:"Faire passer l'arbre",shareText:"Envoyez ce lien : la personne découvrira l'arbre, les vœux déjà accrochés, et pourra ajouter le sien.",
+  shareWishTitle:"Envoyer ce vœu",shareWishText:"Ce lien porte le vœu lui-même : en l'ouvrant, votre ami le verra accroché à l'arbre, à son nom.",
+  byMail:"Par mail",bySms:"Par SMS",mailSubject:"Un vœu pour toi, sur l'arbre Yunma",
+  shareBody:function(t,n,u){ return (n?n+" t'a accroché un vœu":"Un vœu t'a été accroché")+" sur l'arbre à souhaits de Yunma :\n\n« "+t+" »\n\nOuvre ce lien pour le voir sur l'arbre :\n"+u+"\n"; },
+  shareBodyNu:function(u){ return "Viens accrocher un vœu à l'arbre à souhaits de Yunma :\n"+u+"\n"; },
+  recu:"Un vœu pour vous",
   copy:"Copier le lien",copied:"Lien copié",close:"Fermer",count:function(n){return n+(n>1?" vœux accrochés":" vœu accroché");},
   hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
@@ -306,6 +312,11 @@ var I18N = {
   ownPh:"Write your note (60 characters)",namePh:"First name",hang:"Hang on the tree",shareWish:"Send",back:"Back",card:"Card",cardTitle:"Your digital card",
   cardHint:"Download the card, or long-press the image to save it.",jpg:"JPEG image",pdf:"PDF",cardScan:"Scan to find this wish on the tree",leaveTitle:"Leave the experience?",leaveText:"The yunma.fr website will open in a new page. The tree stays open here.",leaveGo:"Go to yunma.fr",leaveStay:"Stay here",saved:"Card saved.",cardFail:"Download unavailable here: long-press the image.",
   shareTitle:"Pass the tree on",shareText:"Send this link: they will discover the tree, the wishes already hanging, and can add their own.",
+  shareWishTitle:"Send this wish",shareWishText:"This link carries the wish itself: opening it, your friend will see it hanging on the tree, in their name.",
+  byMail:"By email",bySms:"By text",mailSubject:"A wish for you, on the Yunma tree",
+  shareBody:function(t,n,u){ return (n?n+" hung a wish for you":"A wish was hung for you")+" on Yunma's wishing tree:\n\n“"+t+"”\n\nOpen this link to see it on the tree:\n"+u+"\n"; },
+  shareBodyNu:function(u){ return "Come and hang a wish on Yunma's wishing tree:\n"+u+"\n"; },
+  recu:"A wish for you",
   copy:"Copy link",copied:"Link copied",close:"Close",count:function(n){return n+(n>1?" wishes hanging":" wish hanging");},
   hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
@@ -317,6 +328,11 @@ var I18N = {
   ownPh:"写下你的心愿（60字以内）",namePh:"名字",hang:"挂到树上",shareWish:"分享",back:"返回",card:"贺卡",cardTitle:"你的数字贺卡",
   cardHint:"下载贺卡，或长按图片保存。",jpg:"JPEG 图片",pdf:"PDF",cardScan:"扫码，在树上找到这个心愿",leaveTitle:"要离开吗？",leaveText:"yunma.fr 网站将在新页面打开，许愿树仍留在这里。",leaveGo:"前往 yunma.fr",leaveStay:"留在这里",saved:"贺卡已保存。",cardFail:"此处无法下载：请长按图片保存。",
   shareTitle:"把这棵树传下去",shareText:"发送此链接：对方可以看到这棵树和已挂上的心愿，并添上自己的。",
+  shareWishTitle:"把这个心愿发出去",shareWishText:"这个链接带着心愿本身：朋友打开它，就能在树上看到这枚红牌。",
+  byMail:"用邮件",bySms:"用短信",mailSubject:"送给你的一个心愿，在云马许愿树上",
+  shareBody:function(t,n,u){ return (n?n+"在云马许愿树上为你挂了一个心愿：":"有人在云马许愿树上为你挂了一个心愿：")+"\n\n「"+t+"」\n\n打开链接，在树上看看：\n"+u+"\n"; },
+  shareBodyNu:function(u){ return "来云马许愿树挂一个心愿吧：\n"+u+"\n"; },
+  recu:"送给你的心愿",
   copy:"复制链接",copied:"链接已复制",close:"关闭",count:function(n){return "已挂 "+n+" 个心愿";},
   hung:"你的心愿已挂上。",localOnly:"心愿仅保存在本设备：此访客暂不能写入共享内容。",
   need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
@@ -539,7 +555,7 @@ function applyLang(){
 }
 function setStepSafe(){ try{ setStep(step); }catch(e){} }
 function setLang(l){ lang=l; try{localStorage.setItem("yw_lang",l);}catch(e){} applyLang(); preview(); if(window.__syncTags) window.__syncTags(); }
-function updateCount(){ var n=wishes.filter(function(w){return !w.decor;}).length; $("count").textContent=n?T("count")(n):""; }
+function updateCount(){ var n=wishes.filter(function(w){return !w.decor&&!w.recu;}).length; $("count").textContent=n?T("count")(n):""; }
 var toastT=0; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(function(){t.classList.remove("on");},3800); }
 
 function buildShapes(){
@@ -578,13 +594,64 @@ function fillCard(w){
   zh.textContent=txt; zh.className="zh "+(pre||isCJK(txt)?"zhf":"lat");
   $("cPy").textContent=pre?pre.py:""; $("cTr").textContent=pre&&lang!=="zh"?pre[lang]:"";
   $("cBy").textContent=w.decor?"":(w.mine?T("mine"):(w.n?T("from")+w.n:""));
-  $("cShare").style.display=(w.decor||w.local)?"none":"";
+  /* « Envoyer » était masqué pour tout vœu local, c'est-à-dire pour tous :
+     le lien ne menait à rien. Maintenant qu'il porte le vœu, il n'y a plus
+     que le décor à masquer — un vœu de décor n'est à personne. */
+  $("cShare").style.display=w.decor?"none":"";
 }
 function openCard(w){ cardWish=w; fillCard(w); $("card").classList.add("open"); $("bottom").classList.add("down"); }
 function closeCard(keepCam){ if(!cardWish) return; cardWish=null; $("card").classList.remove("open");
   if(!sheetOpen) $("bottom").classList.remove("down"); if(!keepCam&&window.__home) window.__home(); }
 function shareBase(){ return /^https?:/.test(SHARE_URL)?SHARE_URL:String(location.href).split("#")[0]; }
-function openShare(w){ $("link").value=shareBase()+(w&&!w.decor&&!w.local?"#w-"+w.id:""); $("modal").classList.add("open"); }
+
+/* ------------------------------------------------------------------ le vœu tient dans le lien
+   Envoyer un vœu à quelqu'un supposait que ce quelqu'un puisse le lire. Or
+   tant qu'il n'y a pas de base partagée, un vœu n'existe que dans le
+   navigateur de celui qui l'a écrit : le lien « #w-<identifiant> » menait à
+   l'arbre, et l'étiquette n'y était pas. C'est pourquoi le bouton
+   « Envoyer » était masqué, et pourquoi le QR code de la carte retombait sur
+   l'adresse nue.
+
+   On met donc le vœu lui-même dans le lien. Un vœu est petit : une forme
+   parmi huit, un numéro de formule ou quelques mots, un prénom. Tout cela
+   tient dans le fragment, et le lien se suffit à lui-même — il marche pour
+   un vœu local, il marchera tel quel le jour où la base existera, et il ne
+   demande rien à personne entre-temps.
+
+   Le séparateur est la barre verticale : elle n'apparaît ni dans un prénom
+   ni dans une formule, et l'on ne coupe qu'aux trois premières, pour qu'un
+   vœu qui en contiendrait une ne soit pas tronqué. */
+function b64(s){ try{ return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }catch(e){ return ""; } }
+function deb64(c){ try{ var x=c.replace(/-/g,"+").replace(/_/g,"/"); while(x.length%4) x+="=";
+  return decodeURIComponent(escape(atob(x))); }catch(e){ return null; } }
+function encoderVoeu(w){
+  var si=SHAPE_KEYS.indexOf(w.s); if(si<0) si=0;
+  return b64(si+"|"+(w.p>=0?w.p:"")+"|"+(w.n||"")+"|"+(w.p>=0?"":(w.t||"")));
+}
+function decoderVoeu(code){
+  var s=deb64(code); if(s===null) return null;
+  var a=s.split("|"); if(a.length<3) return null;
+  var si=parseInt(a[0],10), pp=a[1]===""?-1:parseInt(a[1],10);
+  return cleanWish("recu-"+code.slice(0,22),{
+    s:SHAPE_KEYS[(isFinite(si)?si:0)%SHAPE_KEYS.length],
+    p:isFinite(pp)?pp:-1, t:a.slice(3).join("|"), n:a[2], ts:Date.now() });
+}
+/* Le lien d'un vœu : celui qu'on copie, qu'on envoie, et que porte le QR
+   code de la carte. Un vœu de décor n'en a pas — il n'est à personne. */
+function lienVoeu(w){ return w&&!w.decor ? shareBase()+"#v-"+encoderVoeu(w) : shareBase(); }
+
+function openShare(w){
+  var url=lienVoeu(w), perso=!!(w&&!w.decor);
+  $("link").value=url;
+  $("shareTxt").textContent=T(perso?"shareWishText":"shareText");
+  $("shareTtl").textContent=T(perso?"shareWishTitle":"shareTitle");
+  /* Le corps du message : le vœu, qui il est, et le lien. C'est ce qui part
+     par mail ou par SMS ; le reste n'est qu'une adresse sans contexte. */
+  var corps=perso?T("shareBody")(wishText(w),w.n,url):T("shareBodyNu")(url);
+  $("byMail").href="mailto:?subject="+encodeURIComponent(T("mailSubject"))+"&body="+encodeURIComponent(corps);
+  $("bySms").href="sms:?&body="+encodeURIComponent(corps);
+  $("modal").classList.add("open");
+}
 
 $("lang").onclick=function(){ setLang(lang==="fr"?"en":(lang==="en"?"zh":"fr")); };
 Array.prototype.forEach.call(document.querySelectorAll("#intro .langs button"),function(b){ b.onclick=function(){ setLang(b.getAttribute("data-l")); }; });
@@ -603,6 +670,26 @@ $("copy").onclick=function(){ var inp=$("link"), done=function(){ toast(T("copie
   try{ navigator.clipboard.writeText(inp.value).then(done,function(){ inp.focus(); inp.select(); }); }catch(e){ inp.focus(); inp.select(); } };
 
 /* ------------------------------------------------------------------ data */
+/* Le vœu reçu par un lien. Il est lu avant même que la scène existe, pour
+   qu'il soit déjà accroché quand elle s'ouvre : on ne le voit pas arriver,
+   il est là. Il n'est pas rangé parmi les vœux de l'appareil — ce n'est pas
+   le vœu du visiteur, c'est celui qu'on lui a envoyé. */
+var recu=null;
+function lireRecu(){
+  var m=/^#v-([A-Za-z0-9_-]+)$/.exec(location.hash||""); if(!m) return false;
+  var v=decoderVoeu(m[1]); if(!v) return false;
+  if(recu&&recu.id===v.id) return false;
+  recu=v; recu.recu=true; return true;
+}
+lireRecu();
+/* Un lien ouvert alors qu'on est déjà sur l'arbre ne recharge pas la page :
+   il ne fait que changer l'ancre. Sans cette écoute, l'ami qui suit un
+   second lien depuis le même onglet ne verrait rien venir. */
+addEventListener("hashchange",function(){
+  if(!lireRecu()) return;
+  hashDone=false; mergeWishes();
+});
+
 function mergeWishes(){
   var list=(remote||[]).slice(), ids={}; list.forEach(function(w){ids[w.id]=1;});
   localW.forEach(function(w){ if(!ids[w.id]) list.push(w); });
@@ -610,6 +697,9 @@ function mergeWishes(){
   list.forEach(function(w){ if(mine[w.id]||w.local) w.mine=true; });
   list.sort(function(a,b){ return a.ts-b.ts || (a.id<b.id?-1:1); });
   if(!list.length) list=DECOR.slice();
+  /* Le vœu reçu passe en dernier : il prend donc la dernière place libre,
+     et c'est celle vers laquelle la caméra ira. */
+  if(recu&&!list.some(function(w){ return w.id===recu.id; })) list.push(recu);
   wishes=list; updateCount(); if(window.__syncTags) window.__syncTags();
 }
 function saveLocal(){ try{ localStorage.setItem("yw_local",JSON.stringify(localW)); }catch(e){} }
@@ -660,10 +750,22 @@ buildShapes(); applyLang(); preview();
 /* ---- QR (byte mode, level M, versions 1-6) + one-image PDF ---- */
 function qrMatrix(text){
   var bytes=[], i, j, k, s=unescape(encodeURIComponent(text)); for(i=0;i<s.length;i++) bytes.push(s.charCodeAt(i));
-  var V=[null,[26,10,1],[44,16,1],[70,26,1],[100,18,2],[134,24,2],[172,16,4]], ver=0;
-  for(i=1;i<=6;i++){ if(bytes.length<=V[i][0]-V[i][1]*V[i][2]-2){ ver=i; break; } }
+  /* Par version : nombre total de mots-code, mots de correction par bloc,
+     nombre de blocs, et niveau de correction (0 = M, 1 = L).
+
+     Les six premières tiennent le niveau M, qui corrige quinze pour cent
+     d'un code abîmé ; au-delà, on passe en L, qui n'en corrige que sept mais
+     laisse bien plus de place. Le vœu est maintenant dans le lien, et un
+     vœu écrit à la main dépasse les cent six signes de la version 6 : mieux
+     vaut un code un peu moins robuste qui mène au bon mot qu'un code
+     parfait qui mène à l'arbre nu. Les versions 7 à 9 en L sont les seules
+     au-delà de 6 dont les blocs sont tous de même taille — c'est ce que ce
+     codeur sait faire, et cela va jusqu'à deux cent trente signes. */
+  var V=[null,[26,10,1,0],[44,16,1,0],[70,26,1,0],[100,18,2,0],[134,24,2,0],[172,16,4,0],
+    [196,20,2,1],[242,24,2,1],[292,30,2,1]], ver=0;
+  for(i=1;i<V.length;i++){ if(bytes.length<=V[i][0]-V[i][1]*V[i][2]-2){ ver=i; break; } }
   if(!ver) return null;
-  var tot=V[ver][0], ecl=V[ver][1], nb=V[ver][2], dcw=tot-ecl*nb, bits=[];
+  var tot=V[ver][0], ecl=V[ver][1], nb=V[ver][2], niv=V[ver][3], dcw=tot-ecl*nb, bits=[];
   var put=function(v,n){ for(var b=n-1;b>=0;b--) bits.push((v>>b)&1); };
   put(4,4); put(bytes.length,8); bytes.forEach(function(b){ put(b,8); });
   for(i=0;i<4&&bits.length<dcw*8;i++) bits.push(0);
@@ -683,8 +785,24 @@ function qrMatrix(text){
   [[0,0],[0,N-7],[N-7,0]].forEach(function(o){ for(var dr=-1;dr<=7;dr++) for(var dc=-1;dc<=7;dc++){
     var inn=dr>=0&&dr<=6&&dc>=0&&dc<=6; setF(o[0]+dr,o[1]+dc, inn&&(dr===0||dr===6||dc===0||dc===6||(dr>=2&&dr<=4&&dc>=2&&dc<=4))); } });
   for(i=8;i<N-8;i++){ setF(6,i,i%2===0); setF(i,6,i%2===0); }
-  if(ver>=2){ var ac=N-7; for(var dr=-2;dr<=2;dr++) for(var dc=-2;dc<=2;dc++) setF(ac+dr,ac+dc,Math.max(Math.abs(dr),Math.abs(dc))!==1); }
-  var fmt=function(mask,mm){ var dd=mask, e=dd<<10; for(var b=14;b>=10;b--) if((e>>b)&1) e^=0x537<<(b-10); var f=((dd<<10)|e)^0x5412, bit=function(q){return (f>>q)&1;}, q;
+  /* Les motifs d'alignement. Jusqu'à la version 6 il n'y en a qu'un, dans
+     le coin ; à partir de la 7 ils forment une grille, moins les trois
+     coins déjà occupés par les repères de position. */
+  var CEN=[null,[],[],[],[],[],[],[6,22,38],[6,24,42],[6,26,46]];
+  (function(){ var c=ver>=7?CEN[ver]:(ver>=2?[6,N-7]:[]);
+    for(var a=0;a<c.length;a++) for(var b2=0;b2<c.length;b2++){
+      if((a===0&&b2===0)||(a===0&&b2===c.length-1)||(a===c.length-1&&b2===0)) continue;
+      for(var dr=-2;dr<=2;dr++) for(var dc=-2;dc<=2;dc++)
+        setF(c[a]+dr,c[b2]+dc,Math.max(Math.abs(dr),Math.abs(dc))!==1); } })();
+  /* Et, à partir de la version 7, le numéro de version lui-même, écrit deux
+     fois : en bas à gauche et en haut à droite. */
+  var VINF={7:0x07C94,8:0x085BC,9:0x09A99};
+  if(VINF[ver]!==undefined){ var vb=VINF[ver];
+    for(i=0;i<18;i++){ var bit=(vb>>i)&1;
+      setF(N-11+(i%3),Math.floor(i/3),bit); setF(Math.floor(i/3),N-11+(i%3),bit); } }
+  /* Les cinq bits de format portent le niveau de correction puis le
+     masque. M vaut 00, L vaut 01 — d'où le décalage. */
+  var fmt=function(mask,mm){ var dd=(niv?1:0)<<3|mask, e=dd<<10; for(var b=14;b>=10;b--) if((e>>b)&1) e^=0x537<<(b-10); var f=((dd<<10)|e)^0x5412, bit=function(q){return (f>>q)&1;}, q;
     var S=function(xx,yy,v){ mm[yy][xx]=v; };
     for(q=0;q<=5;q++) S(8,q,bit(q)); S(8,7,bit(6)); S(8,8,bit(7)); S(7,8,bit(8)); for(q=9;q<15;q++) S(14-q,8,bit(q));
     for(q=0;q<8;q++) S(N-1-q,8,bit(q)); for(q=8;q<15;q++) S(8,N-15+q,bit(q)); S(8,N-8,1); };
@@ -782,7 +900,11 @@ function buildCard(w){
   blocks.forEach(function(b){ g.fillStyle=b[0]; g.font=b[1]; g.fillText(b[2],lx,y+b[3]/2,lw); y+=b[3]; });
   // footer : QR, link, logo
   var fy=cy+630; g.strokeStyle="rgba(33,33,33,.14)"; g.lineWidth=1; g.beginPath(); g.moveTo(cx+pad,fy); g.lineTo(cx+cw-pad,fy); g.stroke();
-  var url=CARD_URL+((w.decor||w.local)?"":"#w-"+w.id), qm=qrMatrix(url)||qrMatrix(CARD_URL), qs=150, qx=cx+pad, qy=fy+26;
+  /* Le QR code porte le vœu, et non plus l'adresse nue de l'arbre : c'est
+     tout l'intérêt de la carte. S'il ne tient pas — un vœu écrit à la main
+     dans une langue à trois octets par signe —, on retombe sur l'arbre,
+     mais le lien imprimé dessous, lui, reste complet. */
+  var url=w.decor?CARD_URL:CARD_URL+"#v-"+encoderVoeu(w), qm=qrMatrix(url)||qrMatrix(CARD_URL), qs=150, qx=cx+pad, qy=fy+26;
   if(qm){ var n=qm.length, cell=qs/n; g.fillStyle="#212121"; for(var r=0;r<n;r++) for(var c=0;c<n;c++) if(qm[r][c]) g.fillRect(qx+c*cell,qy+r*cell,cell+.4,cell+.4); }
   var lgh=150, lgw=logoImg.naturalWidth?lgh*logoImg.naturalWidth/logoImg.naturalHeight:0, lgx=cx+cw-pad-lgw;
   if(lgw) g.drawImage(logoImg,lgx,qy,lgw,lgh);
@@ -796,12 +918,20 @@ function buildCard(w){
 var cardCv=null;
 function openCardModal(w){ if(!w) return;
   photoCharger();
-  var go=function(){ if(go.done) return; go.done=true; cardCv=buildCard(w); window.__cardCv=cardCv; $("cimg").src=cardCv.toDataURL("image/jpeg",.9);
+  /* La carte attend trois choses : ses deux polices, et la photographie du
+     fond. Celle-ci n'est plus encodée dans la page — elle part quand on
+     ouvre la carte, et pas avant —, donc elle arrive la dernière. Sans
+     cette attente, les polices prêtes déclenchaient le dessin tout de
+     suite, et la carte sortait sur un beige vide.
+
+     Au bout de deux secondes et demie on n'attend plus : une carte sans sa
+     photographie vaut mieux qu'une fenêtre qui ne s'ouvre pas. */
+  var go=function(){ if(go.done) return;
+    if(!photoImg.complete&&!go.tard) return;
+    go.done=true; cardCv=buildCard(w); window.__cardCv=cardCv; $("cimg").src=cardCv.toDataURL("image/jpeg",.9);
     $("cmodal").classList.add("open"); };
-  /* On attend aussi la photographie : elle n'est plus dans la page, et une
-     carte sans son fond serait un beige vide. */
   if(!photoImg.complete) photoImg.addEventListener("load",go,{once:true});
-  setTimeout(go,1800);
+  setTimeout(function(){ go.tard=true; go(); },2500);
   try{ Promise.all([document.fonts.load('80px "Ma Shan Zheng"',"许愿树"+wishText(w)),document.fonts.load('500 60px "Caveat"',wishText(w)||"a")]).then(go,go); }catch(e){ go(); }
 }
 function saveCard(kind){ if(!cardCv) return;
@@ -812,7 +942,7 @@ function saveCard(kind){ if(!cardCv) return;
       function(){ toast(T("cardFail")); });
   },"image/jpeg",.92);
 }
-window.__pdf=pdfFromJpeg;
+window.__pdf=pdfFromJpeg; window.__qr=qrMatrix;
 $("cCard").onclick=function(){ openCardModal(cardWish); };
 $("cJpg").onclick=function(){ saveCard("jpg"); };
 $("cPdf").onclick=function(){ saveCard("pdf"); };
@@ -1518,8 +1648,19 @@ window.__syncTags=function(){
   else tryHash();
 };
 var hashDone=false;
-function tryHash(){ if(hashDone||!entered) return; var m=/^#w-([\w-]+)$/.exec(location.hash||""); if(!m){ hashDone=true; return; }
-  var t=tags[m[1]]; if(t){ hashDone=true; setTimeout(function(){ focusTag(t); },1200); } }
+/* Deux sortes de liens mènent à un vœu précis. « #v-… » porte le vœu
+   lui-même : il marche partout, et c'est celui qu'on envoie aujourd'hui.
+   « #w-<identifiant> » désigne un vœu de la base partagée : il ne marchera
+   que le jour où elle existera, et on le garde pour ce jour-là. */
+function tryHash(){ if(hashDone||!entered) return;
+  var h=location.hash||"", id=null;
+  if(recu) id=recu.id;
+  else { var m=/^#w-([\w-]+)$/.exec(h); if(m) id=m[1]; }
+  if(!id){ hashDone=true; return; }
+  var t=tags[id]; if(!t) return;
+  hashDone=true;
+  setTimeout(function(){ focusTag(t); if(recu) toast(T("recu")); },1200);
+}
 window.__enter=function(){ tryHash(); };
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ redraws.forEach(function(f){f();}); buildShapes(); preview(); });
 
@@ -1862,6 +2003,20 @@ window.__essai={
       if(Math.abs(a[o]-b[o])<1e-4&&Math.abs(a[o+5]-b[o+5])<1e-4) n++; }
     return Math.round(n/feuilles.count*100); },
   visiteOn:function(){ return CINE.on; },
+  lien:function(w){ return lienVoeu(w); },
+  decoder:function(c){ return decoderVoeu(c); },
+  recu:function(){ return recu; },
+  /* Le fond de la carte : la photographie, ou le beige vide si elle est
+     arrivée trop tard. On mesure l'écart des couleurs dans le bas de la
+     carte — une photographie varie, un aplat non. */
+  carteFond:function(){
+    var cv=window.__cardCv; if(!cv) return -1;
+    var g=cv.getContext("2d"), d=g.getImageData(60,1050,930,360).data, i, n=0;
+    var mr=0,mv=0,mb=0; for(i=0;i<d.length;i+=16){ mr+=d[i];mv+=d[i+1];mb+=d[i+2];n++; }
+    mr/=n;mv/=n;mb/=n; var e=0;
+    for(i=0;i<d.length;i+=16) e+=Math.abs(d[i]-mr)+Math.abs(d[i+1]-mv)+Math.abs(d[i+2]-mb);
+    return Math.round(e/n);
+  },
   /* Ce que coûte une image de chute, en millisecondes de calcul pur. */
   coutChute:function(){ chutePrete(); var n=24, t0, i, m=[];
     for(i=0;i<n;i++){ t0=performance.now(); chuteMaj(.4+i*.08); m.push(performance.now()-t0); }

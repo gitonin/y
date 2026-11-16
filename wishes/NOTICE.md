@@ -104,16 +104,39 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   mille flocons dans un cylindre de vingt-deux unités, recollés de l'autre côté
   dès qu'ils en sortent. Le même nuage sert de poussière d'or la nuit.
 
+## Envoyer un vœu
+
+**Le vœu tient dans le lien.** C'est ce qui permet de l'envoyer aujourd'hui,
+sans base de données : `…/wishes#v-<vœu encodé>`. Celui qui l'ouvre le voit
+accroché à l'arbre, à son nom, carte ouverte — la caméra y va toute seule.
+
+Le lien part par mail, par SMS, ou se copie, depuis le bouton **Envoyer** de la
+carte d'un vœu. Et c'est lui que porte le **QR code** de la carte à
+télécharger : il menait à l'arbre nu, il mène maintenant au bon mot.
+
+Le codeur de QR code a dû grandir pour cela. Il s'arrêtait à la version 6, soit
+cent six signes ; un vœu écrit à la main les dépasse. Il monte maintenant à la
+version 9 — jusqu'à deux cent trente signes — en passant du niveau de
+correction M au niveau L au-delà de la version 6 : mieux vaut un code un peu
+moins robuste qui mène au bon mot qu'un code parfait qui mène à l'arbre nu. Les
+versions 7 à 9 en L sont les seules au-delà de 6 dont les blocs sont tous de
+même taille, et c'est ce que ce codeur sait faire. Les codes produits sont
+relus par un décodeur tiers dans la suite d'épreuves : c'est la seule preuve
+qu'ils mènent quelque part.
+
+Un lien `…#w-<identifiant>` désigne un vœu de la base partagée. Il est reconnu,
+mais il ne mènera à quelque chose que le jour où cette base existera.
+
 ## Ce qui reste à faire
 
-**Les vœux ne sont pas encore partagés.** L'expérience a été écrite dans un
-environnement qui fournissait une base de données. Tant que la constante `API`
-est vide, chaque vœu reste dans le navigateur de celui qui l'a écrit, et l'arbre
-montre les vingt-huit vœux de départ. Rien ne casse et rien ne ment : le message
-« accroché sur cet appareil seulement » le dit.
+**Les vœux ne sont pas encore partagés** — au sens où l'arbre de l'un n'est pas
+l'arbre de l'autre. Un vœu envoyé arrive bien (voir ci-dessus), mais il ne reste
+pas : il n'apparaît pas à ceux qui viendront ensuite. Tant que la constante
+`API` est vide, chaque vœu accroché reste dans le navigateur de celui qui l'a
+écrit, et le message « accroché sur cet appareil seulement » le dit.
 
-Pour ouvrir l'arbre à tous, poser dans `API` l'adresse d'une petite API sur
-Infomaniak (PHP et MySQL font l'affaire) :
+Pour que l'arbre se remplisse vraiment, poser dans `API` l'adresse d'une petite
+API sur Infomaniak (PHP et MySQL font l'affaire) :
 
     GET  → [{id, s, p, t, n, ts}, …]   les six cents derniers vœux
     POST → {id, s, p, t, n}            un vœu de plus
