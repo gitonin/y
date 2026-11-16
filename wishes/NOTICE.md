@@ -24,30 +24,33 @@ partage. Le corriger ne demande pas de reconstruire les cent fichiers du site.
 
 ## Le décor
 
-L'arbre est **posé au sol**, dans une clairière de neige, au milieu des
-montagnes du Yunnan. Trois réglages portent tout le paysage, et chacun a été
-trouvé en regardant l'image :
+L'arbre **flotte sur une île**, au-dessus des montagnes du Yunnan. Il avait
+été posé au sol, dans une clairière de neige, le temps d'un essai : on est
+revenu à l'île, qui tient mieux la promesse — un caféier suspendu, et la
+province entière derrière.
 
-- **la maille du sol est polaire**, et non carrée : les anneaux se resserrent
-  géométriquement vers le centre — six centimètres d'écart au pied de
-  l'arbre, quarante unités à l'horizon. Une grille carrée de deux cent
-  soixante pas sur mille huit cents unités donnait sept unités par maille,
-  soit deux sommets sous un arbre qui en fait quatre de large. Et l'on
-  dessine quarante-huit mille triangles au lieu de cent trente-cinq mille.
-- **le replat** : le relevé réel ne passe pas par zéro sous l'arbre, et une
-  crête au milieu du tronc n'aurait pas de sens. Le sol est plat sur douze
-  unités, puis rejoint le relief sur cent dix. Un replat de trois cents
-  unités donnait une nappe blanche vide au premier plan.
-- **le soleil d'hiver**. L'atlas le fait culminer à soixante-six degrés :
-  c'est le Yunnan de toute l'année. Ici on est fin décembre, et à
-  vingt-quatre degrés de latitude il ne monte qu'à quarante-deux. Au zénith,
-  la lumière tombe à plat sur la neige et la montagne disparaît en nappe
-  blanche ; rasante, elle lui rend ses versants. Tout le paysage tient à ce
-  nombre.
+Trois choses portent ce paysage :
 
-Le ciel de jour est aussi **refroidi** par rapport à celui de l'atlas : une
-neige blanche sur le crème du site ne faisait qu'un seul ton, et il n'y avait
-plus d'horizon du tout.
+- **le terrain de l'atlas**, le même relevé du Yunnan, posé neuf cents
+  unités plus bas que l'île et montré sur un tiers de sa largeur : toute la
+  province étalée sur un horizon se chiffonne comme du papier ;
+- **la brume linéaire**, dont le début et la fin suivent la distance de la
+  caméra : l'île reste nette quand on s'en approche, et l'horizon reste
+  lointain quand on s'en éloigne ;
+- **le flottement** : l'île monte et descend de sept centièmes d'unité. Vu
+  de près, c'est un sixième de l'écran — d'où le rattrapage de la visée
+  décrit plus bas, sans quoi le mot qu'on lit ne tiendrait pas en place.
+
+## Le cadrage
+
+Le premier regard doit porter l'ensemble : la cime dans l'écran, et le
+dessous de l'île **au-dessus du bouton d'appel**, qui mange le bas. On
+encadre donc une hauteur connue — du bout des racines au sommet de l'arbre
+—, on retire de l'écran utile la bande prise par l'appel, et l'on vise sous
+le milieu de ce qui reste. La distance se déduit du champ, en hauteur comme
+en largeur : sur un téléphone, c'est la largeur qui commande.
+
+L'épreuve le vérifie sur trois écrans — large, carré, téléphone.
 
 ## Ce qui vient de l'atlas
 
@@ -58,9 +61,9 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   le même code (`outils/relief-commun.mjs`). L'atlas le garde en 380 × 380 parce
   qu'on y vole au ras du sol ; ici 192 suffit, puisqu'on n'en fait qu'un
   horizon : cent quarante kilos de moins dans la page.
-  Il est posé neuf cents unités plus bas que l'île, et l'on n'en montre qu'un
-  tiers en largeur — toute la province étalée sur un horizon se chiffonne comme
-  du papier.
+- **Le soleil** monte à la même hauteur que dans l'atlas. Il avait été rabaissé
+  à quarante-deux degrés pour la neige de décembre, qui donnait sinon une nappe
+  blanche sans versants ; la neige partie, le soleil est revenu.
 - **Le cycle du jour** (`CIEL`) est recopié à la virgule près : une journée en
   deux heures, treize moments, les mêmes couleurs. `?heure=20` fige l'horloge,
   pour les épreuves.
@@ -92,31 +95,62 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   voix, une pièce calme, un grondement lointain et un coup bref ne déclenchent
   rien — c'est vérifié. Rien n'est enregistré et rien ne sort de l'appareil :
   on ne lit qu'un niveau, et on l'oublie aussitôt. Le micro existe aussi sur un
-  ordinateur : la pilule n'est pas réservée au téléphone.
+  ordinateur : l'entrée du menu n'est pas réservée au téléphone.
 - **Rien ne se sélectionne**, sauf les champs de saisie, le lien qu'on copie et
   l'image de la carte, qu'un appui long doit pouvoir enregistrer. Sur un
   téléphone, un appui un peu long ouvrait sinon une sélection bleue avec ses
   poignées, et la loupe du système par-dessus la scène.
-- **Secouer le téléphone** fait aussi tomber les feuilles et les cerises. Les feuilles
+- **Le vent** — l'entrée « Faire voler les feuilles » du menu, ou un souffle
+  dans le micro — fait tomber les feuilles et les cerises. Les feuilles
   voltigent, puis une bourrasque les emporte et les efface au loin ; les cerises
   sont lourdes et tombent presque droit ; les vœux restent accrochés. Puis tout
   repousse, chacun à son tour, étalé sur près de quatre secondes — l'arbre se
   remplit au lieu de se rhabiller d'un coup. Six mille instances sont
   recomposées à la main pendant les neuf secondes de l'animation : 1 ms par
   image, et plus rien ensuite.
-- **La visite guidée** (le bouton ▶) : l'arbre tourne, s'approche d'un vœu tiré
-  au sort, le laisse lire, repart, en choisit un autre, lâche ses feuilles au
-  vent, les laisse repousser, et recommence. Le premier geste du visiteur
-  reprend la main.
-- **Le gyroscope** déplace un peu le regard quand on incline l'appareil. Un peu
-  seulement, et borné à quinze degrés : un téléphone posé sur une table ne doit
-  pas emporter la caméra. Le bouton n'apparaît que là où les capteurs existent —
-  sur un ordinateur, les événements existent mais ne se déclenchent jamais. Une
-  invitation le propose une fois, au bas de l'écran, sur les appareils qui en
-  ont un : dans une barre d'outils, un bouton ne se remarque pas.
-- **La neige** tourne autour de celui qui regarde plutôt que d'exister partout :
-  mille flocons dans un cylindre de vingt-deux unités, recollés de l'autre côté
-  dès qu'ils en sortent. Le même nuage sert de poussière d'or la nuit.
+- **La visite guidée** : l'arbre tourne, s'approche d'un vœu tiré au sort, le
+  laisse lire, repart, en choisit un autre, lâche ses feuilles au vent, les
+  laisse repousser, et recommence. Le premier geste du visiteur reprend la main.
+- **La poussière d'or** tourne autour de celui qui regarde plutôt que d'exister
+  partout : deux cent soixante grains dans un cylindre de vingt-deux unités,
+  recollés de l'autre côté dès qu'ils en sortent.
+
+## Toucher un vœu
+
+Toucher une étiquette **s'en approche, et rien de plus**. Le mot est écrit
+dessus ; le redire dans un panneau par-dessus la scène n'ajoute rien et cache
+l'arbre. La fiche reste pour les deux vœux qui ont quelque chose à dire de plus
+— celui qu'on vient d'accrocher, et celui qu'on vous a envoyé —, et alors la
+visée remonte au-dessus d'elle, de la hauteur qu'elle occupe.
+
+Trois réglages font que l'on arrive **sur le mot** :
+
+- **l'angle**. Celui qui touche une étiquette l'a vue : son angle est forcément
+  dégagé, et l'on se contente d'avancer — faire le tour de l'arbre pour revenir
+  sur le même mot désoriente, et rien ne le justifie. La visite guidée et un
+  lien reçu, eux, n'ont pas d'angle choisi par quelqu'un : ils en cherchent un.
+  Vingt et un angles sont essayés autour du vœu, cinq rayons chacun — le centre
+  du mot, ses deux bords, son haut, son bas —, et l'on garde le premier qui ne
+  traverse ni feuille ni cerise. Un seul rayon ne suffisait pas : une feuille
+  qui couvre la moitié d'une étiquette ne croise pas son milieu. La recherche
+  s'arrête au bout de trente millisecondes, et garde alors le moins mauvais :
+  mieux vaut un angle imparfait tout de suite qu'un temps mort au doigt.
+- **la distance** se déduit de la forme de l'écran, comme à l'accueil : deux
+  unités et demie sur un ordinateur, trois et demie sur un téléphone, dont le
+  champ est bien plus étroit. Deux et demie sur un téléphone mettaient le nez
+  dans les feuilles.
+- **le flottement**. L'île monte et descend ; vue de près, un vœu monterait et
+  descendrait avec elle d'un sixième de l'écran. La visée suit donc l'île, et le
+  mot ne bouge plus.
+
+## Le menu
+
+Le haut de l'écran portait cinq pilules, et le logo s'écrasait entre elles. Il
+n'en reste que deux — le son, et le menu —, et les actions sont passées dans un
+panneau : la langue, la visite guidée, faire voler les feuilles, et souffler
+pour les faire voler là où le micro existe. Le partage est resté en bas, à côté
+de « Accrocher un vœu » : ce sont les deux gestes qui comptent, et ils ne se
+cachent pas dans un menu.
 
 ## Envoyer un vœu
 
@@ -162,16 +196,17 @@ qui s'y accroche l'engage.
 **Le chinois n'est pas relu par un locuteur natif** : l'interface et les
 versions chinoises des vœux « Noël » et « café » sont à faire vérifier.
 
-**Ni le gyroscope, ni la secousse, ni le souffle n'ont été essayés sur un vrai
-appareil.** L'épreuve vérifie les nombres — les bornes de l'inclinaison, la
-chute, la repousse, et le détecteur de souffle nourri de faux spectres —, mais
-les seuils ont été choisis, pas mesurés : trois dépassements de 22 m/s² en une
-seconde pour la secousse ; pour le souffle, des graves au-dessus de −52 dB,
-treize décibels de plus que les aigus, tenus un quart de seconde. À régler sur
+**Le souffle n'a pas été essayé sur un vrai appareil.** L'épreuve vérifie les
+nombres — la chute, la repousse, et le détecteur nourri de faux spectres —, mais
+les seuils ont été choisis, pas mesurés : des graves au-dessus de −52 dB, treize
+décibels de plus que les aigus, tenus un quart de seconde. À régler sur
 l'appareil.
 
 Un avertissement qui a coûté du temps : **une page publiée comme artefact
 claude.ai ne peut atteindre ni le micro, ni les capteurs de mouvement** — le
 cadre les refuse sans même poser la question. Un essai qui y échoue ne prouve
-donc rien sur ces trois gestes-là ; il faut déposer le dossier pour les
-juger.
+donc rien sur le souffle ; il faut déposer le dossier pour le juger.
+
+Le gyroscope a été essayé, puis retiré : agiter le téléphone ne faisait rien de
+sûr, l'autorisation s'ajoutait à celle du micro, et le geste n'était évident
+pour personne. Souffler fait le même travail, et c'est le geste du vent.

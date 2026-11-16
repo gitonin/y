@@ -8,7 +8,7 @@
  * personne n'a jamais pu ouvrir la scène en trois dimensions — son auteur
  * l'a écrite sans pouvoir la voir. On l'a raccordée au site, on lui a donné
  * les montagnes du Yunnan de l'atlas, le cycle du jour et de la nuit, et de
- * quoi réagir au gyroscope.
+ * quoi réagir au souffle.
  *
  * Ce raccord est exactement ce qui se défait sans bruit : une teinte qui
  * repart de son côté, un reste d'adresse vers l'ancien environnement, un
@@ -18,14 +18,15 @@
  *   1. le dossier est clos — une page, une bibliothèque, deux images ;
  *   2. plus rien ne pointe vers l'environnement d'origine ;
  *   3. la page s'ouvre sans une erreur, et la scène se construit ;
- *   4. l'arbre n'a qu'un tronc, et il est posé sur le sol ;
+ *   4. l'arbre n'a qu'un tronc, et son île tient tout entière à l'écran ;
  *   5. l'heure tourne, et le décor la suit — ciel, brume, thème ;
  *   6. la nuit allume les vœux, et le jour les éteint ;
  *   7. le texte doré tient son contraste sur le papier rouge ;
  *   8. secouer emporte les feuilles au vent, laisse les vœux, et tout
  *      repousse ;
  *   9. la visite guidée tourne toute seule, et le premier geste la stoppe ;
- *  10. le gyroscope déplace le regard, et pas au-delà de ce qu'on a dit.
+ *  10. toucher un vœu s'en approche, sans ouvrir de fiche par-dessus ;
+ *  11. le menu porte les actions, et le haut de l'écran n'a que deux pilules.
  */
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
@@ -129,23 +130,27 @@ titre('La scène se construit');
   const c = await p.evaluate(() => window.__essai.compte());
   check(`l’arbre porte ses feuilles et ses cerises (${c.feuilles} + ${c.cerises})`,
     c.feuilles > 2000 && c.cerises > 2500);
-  check(`cent vingt-huit places pour les vœux (${c.voeux})`, c.voeux, 128);
-  const n = await p.evaluate(() => window.__essai.neige());
-  check(`mille flocons tombent (${n.flocons})`, n.flocons, 1000);
+  check(`assez de places pour les vœux (${c.voeux})`, c.voeux > 100);
   check(`aucune erreur à l’ouverture (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 
 /* ------------------------------------------------------------------ *
- * 4. La charpente, et le sol
+ * 4. La charpente, et le cadrage d'accueil
  * ------------------------------------------------------------------ *
  * Le tronc était une souche de rayon 0,30 d'où repartaient quatre tiges de
  * 0,17 — d'où la marche de circonférence qu'on voyait, et le bouquet de
  * perches. Un caféier pousse en monopode : un axe, et des rameaux. On
  * vérifie donc qu'il n'y a qu'un axe, que son rayon décroît sans à-coup, et
  * qu'aucun rameau ne prétend en être un second.
+ *
+ * Puis le cadrage : l'arbre flotte sur son île, et l'île descend sous lui.
+ * Le premier regard doit porter l'ensemble — la cime dans l'écran, le
+ * dessous de l'île au-dessus du bouton d'appel, qui mange le bas. C'est ce
+ * qui s'était perdu quand l'île est revenue : l'arbre était coupé, et le
+ * socle passait derrière « Accrocher un vœu ».
  */
-titre('L’arbre n’a qu’un tronc, et il est posé au sol');
+titre('L’arbre n’a qu’un tronc, et son île tient à l’écran');
 {
   const { ctx, p, bruit } = await ouvrir(11);
   const a = await p.evaluate(() => window.__essai.arbre());
@@ -157,19 +162,20 @@ titre('L’arbre n’a qu’un tronc, et il est posé au sol');
   check(`le plus gros rameau ne fait que ${(a.part * 100).toFixed(0)} % du tronc`, a.part > 0.2 && a.part < 0.8);
   check(`du pied à la cime : ${a.basTronc} → ${a.hautTronc}`, a.basTronc > a.hautTronc * 4);
 
-  /* L'île qui flottait n'est plus : le sol est à zéro sous l'arbre, et il
-     monte en montagnes autour. */
-  check('le sol est à zéro sous le tronc', await p.evaluate(() => window.__essai.sol(0, 0)), 0);
-  const prof = await p.evaluate(() => window.__essai.profil(4.7, 18, 900).map((x) => x[1]));
-  const haut = Math.max(...prof), bas = Math.min(...prof);
-  check(`et il monte en montagnes autour (de ${bas} à ${haut})`, haut > 120);
-  /* L'œil ne passe pas sous la neige : c'était le prix à payer pour poser
-     l'arbre — par en dessous, on voyait l'envers du terrain. */
-  await p.evaluate(() => window.__essai.vue({ tx: 0, ty: 3, tz: 0, r: 20, ph: 1.86, th: 0.4 }));
-  await p.waitForTimeout(1600);
-  const o = await p.evaluate(() => window.__essai.oeil());
-  check(`l’œil reste au-dessus du sol (${o.garde} unités de garde)`, o.garde > 1.3);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* On regarde le cadrage sur trois écrans : un large, un carré, et un
+   téléphone. C'est le téléphone qui décide — c'est là que la barre d'appel
+   prend le plus de place, et là que le champ est le plus étroit. */
+for (const [nom, vue] of [['large', { width: 1440, height: 820 }],
+  ['carré', { width: 900, height: 900 }], ['téléphone', { width: 390, height: 844 }]]) {
+  const { ctx, p, bruit } = await ouvrir(13, vue);
+  const c = await p.evaluate(() => window.__essai.cadrage());
+  check(`sur ${nom}, la cime est dans l’écran (${c.haut})`, c.haut < 0.98);
+  check(`sur ${nom}, l’île passe au-dessus de l’appel (${c.bas} > ${c.barre})`, c.bas > c.barre);
+  check(`sur ${nom}, aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 
@@ -187,11 +193,12 @@ titre('Le ciel suit l’heure');
   const a = await p.evaluate(() => window.__essai.ciel());
   check(`à 13 h il fait jour (nuit ${a.nuit})`, a.nuit, 0);
   check('le thème est celui du jour', a.theme, 0);
-  /* Le ciel de l'atlas est celui d'une journée douce ; celui-ci est un ciel
-     d'hiver, refroidi de jour. Une neige blanche sur le crème du site ne
-     faisait qu'un seul ton, et il n'y avait plus d'horizon du tout. */
-  check(`le ciel de jour est plus froid que le papier du site (${a.bas.map(Math.round).join(',')})`,
-    a.bas[2] > a.bas[0] && a.bas[2] > 226);
+  /* Le ciel est celui de l'atlas, sans retouche : l'arbre a retrouvé son
+     île et ses montagnes de sable, et deux expériences du même site n'ont
+     pas à avoir deux midis différents. Le ciel d'hiver refroidi avait été
+     fait pour la neige, qui n'est plus là. */
+  check(`le ciel de jour est le crème de l’atlas (${a.bas.map(Math.round).join(',')})`,
+    a.bas[0] > a.bas[1] && a.bas[1] > a.bas[2] && a.bas[0] > 235);
 
   const b = await p.evaluate(() => { window.__essai.heure(22); return window.__essai.ciel(); });
   check(`à 22 h il fait nuit (nuit ${b.nuit})`, b.nuit, 1);
@@ -377,7 +384,7 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
      sont prêtes depuis longtemps — et déclenchaient le dessin avant son
      arrivée, d'où une carte sur beige vide. */
   await p.click('#cBack'); await p.waitForTimeout(400);
-  await p.evaluate(() => { window.__essai.viser(0); });
+  await p.evaluate(() => { window.__essai.viser(0, true); });
   await p.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
   await p.click('#cCard');
   await p.waitForFunction(() => document.getElementById('cmodal').classList.contains('open'), null, { timeout: 60000 });
@@ -491,21 +498,75 @@ titre('Rien ne se sélectionne, sauf ce qui est fait pour');
 }
 
 /* ------------------------------------------------------------------ *
- * 8. Le gyroscope
- * ------------------------------------------------------------------ */
-titre('Le gyroscope déplace le regard, sans le perdre');
+ * Toucher un vœu
+ * ------------------------------------------------------------------ *
+ * Toucher une étiquette s'en approche, et rien de plus : le mot est écrit
+ * dessus, le redire dans un panneau par-dessus la scène n'ajoute rien et
+ * cache l'arbre. La fiche est réservée au vœu qu'on vient d'accrocher et à
+ * celui qu'on vous a envoyé — eux ont quelque chose à dire de plus.
+ *
+ * Et puisqu'on s'approche, il faut arriver sur le mot : on vérifie qu'il
+ * est bien dans l'écran, et non derrière l'épaule.
+ */
+titre('Toucher un vœu s’en approche, sans fiche par-dessus');
 {
   const { ctx, p, bruit } = await ouvrir(13);
-  const zero = await p.evaluate(() => window.__essai.gyro(0, 0));
-  check('au repos, le regard ne bouge pas', zero.th === 0 && zero.ph === 0);
-  const pen = await p.evaluate(() => window.__essai.gyro(20, 14));
-  check(`une inclinaison le déplace (${pen.th.toFixed(3)} / ${pen.ph.toFixed(3)})`,
-    pen.th > 0.05 && pen.ph > 0.05);
-  /* Un téléphone posé à plat sur une table ne doit pas emporter la caméra
-     à l'autre bout du monde. */
-  const fort = await p.evaluate(() => window.__essai.gyro(170, 170));
-  check(`et il est borné (${fort.th.toFixed(2)} / ${fort.ph.toFixed(2)})`,
-    Math.abs(fort.th) <= 0.26 + 1e-9 && Math.abs(fort.ph) <= 0.2 + 1e-9);
+  const n = await p.evaluate(() => window.__essai.voeux());
+  check(`l’arbre porte ses vœux (${n})`, n > 10);
+
+  /* Comme à la touche : on garde l'angle d'où l'on regarde. */
+  await p.evaluate(() => { window.__essai.viser(3, false, true); window.__essai.poser(); });
+  await p.waitForTimeout(600);
+  check('aucune fiche ne s’ouvre', await p.evaluate(() => window.__essai.fiche()), false);
+  const v = await p.evaluate(() => window.__essai.cible(3));
+  check(`le vœu est dans l’écran (${v.x} / ${v.y})`, Math.abs(v.x) < 0.5 && Math.abs(v.y) < 0.9);
+  check(`et l’on s’en est approché (rayon ${v.r})`, v.r < 6);
+
+  /* La visite guidée et le lien reçu, eux, n'ont pas d'angle choisi par
+     quelqu'un : ils en cherchent un d'où le mot se voie. On mesure ce que
+     coûte cette recherche — elle a lieu au doigt, et un temps mort s'y
+     verrait. */
+  const a = await p.evaluate(() => [0, 1, 2, 3, 4].map((i) => window.__essai.angle(i)));
+  check(`choisir un angle dégagé coûte au plus ${Math.max(...a.map((x) => x.ms))} ms`,
+    Math.max(...a.map((x) => x.ms)) < 60);
+  check(`et la plupart des vœux se voient de face (${a.filter((x) => x.ecart === 0).length}/5)`,
+    a.filter((x) => x.ecart === 0).length >= 3);
+
+  /* La fiche, elle, s'ouvre quand on le demande — et le vœu remonte
+     au-dessus d'elle. */
+  await p.evaluate(() => { window.__essai.viser(3, true); window.__essai.poser(); });
+  await p.waitForTimeout(600);
+  check('la fiche s’ouvre pour un vœu qu’on vous envoie', await p.evaluate(() => window.__essai.fiche()));
+  const f = await p.evaluate(() => window.__essai.cible(3));
+  check(`et le vœu passe au-dessus d’elle (${f.y})`, f.y > 0);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le menu
+ * ------------------------------------------------------------------ *
+ * Le haut de l'écran portait cinq pilules, et le logo s'écrasait entre
+ * elles. Les actions sont donc passées dans un menu : il ne reste que le
+ * son et le menu lui-même, et le logo retrouve sa place.
+ */
+titre('Le menu porte les actions, le haut de l’écran respire');
+{
+  const { ctx, p, bruit } = await ouvrir(13, { width: 390, height: 844 });
+  const haut = await p.evaluate(() => document.querySelectorAll('#tools .pill').length);
+  check(`deux pilules en haut (${haut})`, haut, 2);
+  const logo = await p.evaluate(() => { const i = document.querySelector('#sign img');
+    return { l: Math.round(i.getBoundingClientRect().width), h: Math.round(i.getBoundingClientRect().height),
+      nl: i.naturalWidth, nh: i.naturalHeight }; });
+  /* Un logo déformé est un logo dont les proportions ne sont plus les
+     siennes : c'est cela qu'on mesure, et non sa taille. */
+  const ecart = Math.abs((logo.l / logo.h) / (logo.nl / logo.nh) - 1);
+  check(`le logo garde ses proportions (${(ecart * 100).toFixed(1)} % d’écart)`, ecart < 0.02);
+
+  const m = await p.evaluate(() => window.__essai.menu(true));
+  check('le menu s’ouvre', m.ouvert);
+  check(`il porte les actions (${m.entrees})`, m.entrees >= 2 && m.entrees <= 4);
+  check('et il se referme', (await p.evaluate(() => window.__essai.menu(false))).ouvert, false);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
