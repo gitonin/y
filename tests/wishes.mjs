@@ -18,11 +18,14 @@
  *   1. le dossier est clos — une page, une bibliothèque, deux images ;
  *   2. plus rien ne pointe vers l'environnement d'origine ;
  *   3. la page s'ouvre sans une erreur, et la scène se construit ;
- *   4. l'heure tourne, et le décor la suit — ciel, brume, thème ;
- *   5. la nuit allume les vœux, et le jour les éteint ;
- *   6. le texte doré tient son contraste sur le papier rouge ;
- *   7. secouer fait tomber les feuilles, laisse les vœux, et tout repousse ;
- *   8. le gyroscope déplace le regard, et pas au-delà de ce qu'on a dit.
+ *   4. l'arbre n'a qu'un tronc, et il est posé sur le sol ;
+ *   5. l'heure tourne, et le décor la suit — ciel, brume, thème ;
+ *   6. la nuit allume les vœux, et le jour les éteint ;
+ *   7. le texte doré tient son contraste sur le papier rouge ;
+ *   8. secouer emporte les feuilles au vent, laisse les vœux, et tout
+ *      repousse ;
+ *   9. la visite guidée tourne toute seule, et le premier geste la stoppe ;
+ *  10. le gyroscope déplace le regard, et pas au-delà de ce qu'on a dit.
  */
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
@@ -125,9 +128,48 @@ titre('La scène se construit');
   check('le relief du Yunnan est là', await p.evaluate(() => window.__essai.relief()));
   const c = await p.evaluate(() => window.__essai.compte());
   check(`l’arbre porte ses feuilles et ses cerises (${c.feuilles} + ${c.cerises})`,
-    c.feuilles > 3000 && c.cerises > 3000);
-  check(`cent cinquante-sept places pour les vœux (${c.voeux})`, c.voeux, 157);
+    c.feuilles > 2000 && c.cerises > 2500);
+  check(`cent vingt-huit places pour les vœux (${c.voeux})`, c.voeux, 128);
+  const n = await p.evaluate(() => window.__essai.neige());
+  check(`mille flocons tombent (${n.flocons})`, n.flocons, 1000);
   check(`aucune erreur à l’ouverture (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * 4. La charpente, et le sol
+ * ------------------------------------------------------------------ *
+ * Le tronc était une souche de rayon 0,30 d'où repartaient quatre tiges de
+ * 0,17 — d'où la marche de circonférence qu'on voyait, et le bouquet de
+ * perches. Un caféier pousse en monopode : un axe, et des rameaux. On
+ * vérifie donc qu'il n'y a qu'un axe, que son rayon décroît sans à-coup, et
+ * qu'aucun rameau ne prétend en être un second.
+ */
+titre('L’arbre n’a qu’un tronc, et il est posé au sol');
+{
+  const { ctx, p, bruit } = await ouvrir(11);
+  const a = await p.evaluate(() => window.__essai.arbre());
+  check(`un seul axe (${a.troncs})`, a.troncs, 1);
+  check(`il va du sol à la cime (${a.haut} unités)`, a.haut > 6.5 && a.haut < 8.5);
+  check(`son rayon décroît sans marche (le plus grand écart vaut ${a.saut.toFixed(2)} fois l’écart moyen)`,
+    a.saut < 1.35);
+  check(`et le pied s’évase, lui, de ${((a.patte - 1) * 100).toFixed(0)} %`, a.patte > 1.2);
+  check(`le plus gros rameau ne fait que ${(a.part * 100).toFixed(0)} % du tronc`, a.part > 0.2 && a.part < 0.8);
+  check(`du pied à la cime : ${a.basTronc} → ${a.hautTronc}`, a.basTronc > a.hautTronc * 4);
+
+  /* L'île qui flottait n'est plus : le sol est à zéro sous l'arbre, et il
+     monte en montagnes autour. */
+  check('le sol est à zéro sous le tronc', await p.evaluate(() => window.__essai.sol(0, 0)), 0);
+  const prof = await p.evaluate(() => window.__essai.profil(4.7, 18, 900).map((x) => x[1]));
+  const haut = Math.max(...prof), bas = Math.min(...prof);
+  check(`et il monte en montagnes autour (de ${bas} à ${haut})`, haut > 120);
+  /* L'œil ne passe pas sous la neige : c'était le prix à payer pour poser
+     l'arbre — par en dessous, on voyait l'envers du terrain. */
+  await p.evaluate(() => window.__essai.vue({ tx: 0, ty: 3, tz: 0, r: 20, ph: 1.86, th: 0.4 }));
+  await p.waitForTimeout(1600);
+  const o = await p.evaluate(() => window.__essai.oeil());
+  check(`l’œil reste au-dessus du sol (${o.garde} unités de garde)`, o.garde > 1.3);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 
@@ -145,7 +187,11 @@ titre('Le ciel suit l’heure');
   const a = await p.evaluate(() => window.__essai.ciel());
   check(`à 13 h il fait jour (nuit ${a.nuit})`, a.nuit, 0);
   check('le thème est celui du jour', a.theme, 0);
-  check(`le bas du ciel est le papier du site (${a.bas.join(',')})`, a.bas.join(','), '239,235,226');
+  /* Le ciel de l'atlas est celui d'une journée douce ; celui-ci est un ciel
+     d'hiver, refroidi de jour. Une neige blanche sur le crème du site ne
+     faisait qu'un seul ton, et il n'y avait plus d'horizon du tout. */
+  check(`le ciel de jour est plus froid que le papier du site (${a.bas.map(Math.round).join(',')})`,
+    a.bas[2] > a.bas[0] && a.bas[2] > 226);
 
   const b = await p.evaluate(() => { window.__essai.heure(22); return window.__essai.ciel(); });
   check(`à 22 h il fait nuit (nuit ${b.nuit})`, b.nuit, 1);
@@ -209,7 +255,7 @@ titre('Le vœu se lit sur son étiquette');
 /* ------------------------------------------------------------------ *
  * 7. Secouer l'arbre
  * ------------------------------------------------------------------ */
-titre('Secouer fait tomber les feuilles, et pas les vœux');
+titre('Secouer emporte les feuilles au vent, et pas les vœux');
 {
   const { ctx, p, bruit } = await ouvrir(13);
   const avant = await p.evaluate(() => window.__essai.hauteurs());
@@ -219,20 +265,26 @@ titre('Secouer fait tomber les feuilles, et pas les vœux');
   await p.evaluate(() => window.__essai.secouer());
   /* Le rendu de l'épreuve est lent : on suit l'horloge de la scène, pas
      celle du mur, sans quoi on mesure la chute au ralenti. */
-  await p.waitForFunction(() => window.__essai.secousse() >= 2.3, null, { timeout: 120000 });
+  await p.waitForFunction(() => window.__essai.secousse() >= 2.4, null, { timeout: 120000 });
   const bas = await p.evaluate(() => window.__essai.hauteurs());
   check(`les feuilles sont tombées (${avant.feuilleY.toFixed(2)} → ${bas.feuilleY.toFixed(2)})`,
     bas.feuilleY < avant.feuilleY - 0.8);
   check(`les cerises aussi (${avant.ceriseY.toFixed(2)} → ${bas.ceriseY.toFixed(2)})`,
     bas.ceriseY < avant.ceriseY - 0.8);
-  /* Ce qui tombe au-dessus de l'île s'y pose : on voyait les feuilles
-     traverser le sol et faire un tapis dans le vide. */
-  check(`ce qui part d’au-dessus de l’île s’y pose (${bas.poseY.toFixed(2)})`,
-    Math.abs(bas.poseY - 0.22) < 0.02);
-  check(`et rien n’est passé au travers (${bas.sous})`, bas.sous, 0);
+  /* Les feuilles ne tombent pas : elles s'envolent. On mesure donc leur
+     écart au tronc, et non leur hauteur. */
+  const ec = await p.evaluate(() => window.__essai.ecart());
+  check(`et le vent les emporte (${ec.moy.toFixed(1)} unités du tronc, au plus loin ${ec.max.toFixed(1)})`,
+    ec.moy > 1.5 && ec.max > 6);
   check(`les vœux sont restés accrochés (${voeux})`, await p.evaluate(() => window.__essai.voeux()), voeux);
 
-  await p.waitForFunction(() => window.__essai.secousse() >= 4.5, null, { timeout: 120000 });
+  /* La repousse est étalée : si tout revenait d'un coup, l'arbre se
+     rhabillerait d'un bloc au lieu de se remplir. */
+  await p.waitForFunction(() => window.__essai.secousse() >= 7.0, null, { timeout: 180000 });
+  const mi = await p.evaluate(() => window.__essai.repousse());
+  check(`à mi-repousse, une partie seulement est revenue (${mi} %)`, mi > 5 && mi < 95);
+
+  await p.waitForFunction(() => window.__essai.secousse() >= 9.0, null, { timeout: 180000 });
   await p.waitForTimeout(400);
   const apres = await p.evaluate(() => window.__essai.hauteurs());
   check(`tout a repoussé (${apres.feuilleY.toFixed(2)})`, Math.abs(apres.feuilleY - avant.feuilleY) < 0.02);
@@ -242,6 +294,43 @@ titre('Secouer fait tomber les feuilles, et pas les vœux');
   const cout = await p.evaluate(() => window.__essai.coutChute());
   check(`une image de chute coûte moins de 4 ms (${cout.median})`, cout.median < 4);
   check(`aucune erreur pendant la secousse (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * La visite guidée
+ * ------------------------------------------------------------------ *
+ * Un bouton, et l'arbre se montre tout seul. Ce qui compte, et qui se
+ * casse sans bruit : qu'elle tourne vraiment, qu'elle approche des vœux, et
+ * que le premier geste du visiteur la lui reprenne — on ne lutte pas
+ * contre quelqu'un qui veut tourner l'arbre lui-même.
+ */
+titre('La visite guidée tourne, et rend la main');
+{
+  const { ctx, p, bruit } = await ouvrir(11);
+  check('au repos, elle est arrêtée', await p.evaluate(() => window.__essai.visiteOn()), false);
+  await p.evaluate(() => window.__essai.visite(true));
+  const a = await p.evaluate(() => window.__essai.visiteEtat());
+  /* Le rendu logiciel de l'épreuve tombe à une image par seconde, et
+     l'horloge de la scène est plafonnée à cinquante millisecondes par
+     image : deux secondes de mur ne font qu'un dixième de seconde de
+     scène. On attend donc que la vue ait tourné, pas qu'il se soit écoulé
+     un temps. */
+  const tourne = await p.waitForFunction((t0) => window.__essai.visiteEtat().th > t0 + 0.12,
+    a.th, { timeout: 180000 }).then(() => true).catch(() => false);
+  const b = await p.evaluate(() => window.__essai.visiteEtat());
+  check(`elle fait tourner la vue (${a.th} → ${b.th})`, tourne);
+  /* Elle doit aussi s'approcher d'un vœu : c'est la raison d'être de la
+     visite, et c'est l'étape qu'un ordre mal tiré pourrait sauter. */
+  await p.evaluate(() => window.__essai.avancer());
+  await p.waitForFunction(() => window.__essai.visiteEtat().vise, null, { timeout: 60000 });
+  const c = await p.evaluate(() => window.__essai.visiteEtat());
+  check(`elle s’approche d’un vœu (rayon ${c.r})`, c.r < 4);
+  /* Le premier geste sur la scène la stoppe. */
+  await p.mouse.move(500, 400); await p.mouse.down(); await p.mouse.up();
+  await p.waitForTimeout(300);
+  check('le premier geste la stoppe', await p.evaluate(() => window.__essai.visiteOn()), false);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 

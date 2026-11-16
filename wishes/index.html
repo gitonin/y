@@ -32,8 +32,20 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(var(--ink-rgb),.2);
   font-size:12px;letter-spacing:.08em;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .pill b{font-weight:500;opacity:.38}.pill b.on{opacity:1}
-.pill#gyro{opacity:.55}.pill#gyro.on{opacity:1}
+.pill#gyro,.pill#cine{opacity:.55}.pill#gyro.on,.pill#cine.on{opacity:1}
+.pill#cine svg{fill:currentColor;stroke:none}
 .pill[hidden]{display:none}
+/* L'invitation à ouvrir le gyroscope : elle ne paraît qu'une fois, sur un
+   appareil qui en a un, et se referme d'un geste. Sur un écran tactile, un
+   bouton dans une barre d'outils ne se remarque pas ; une phrase, si. */
+#gyroAsk{display:flex;align-items:center;gap:10px;margin-top:2px;padding:8px 8px 8px 14px;border-radius:4px;
+  background:rgba(var(--beige-rgb),.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.22);font-size:12px;max-width:92vw}
+#gyroAsk[hidden]{display:none}
+#gyroAsk span{line-height:1.3}
+#gyroAsk #gyroYes{padding:7px 11px;border-radius:4px;background:var(--rust);color:var(--beige);
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+#gyroAsk #gyroNo{width:26px;height:26px;border-radius:4px;font-size:17px;line-height:1;opacity:.6}
 .pill svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
 /* bottom */
@@ -157,6 +169,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   <div id="brandt"><button id="sign" aria-label="yunma.fr"><img class="lg" alt="yunma"></button></div>
   <div id="tools">
     <button class="pill" id="lang" aria-label="Langue"><b data-l="fr">FR</b><b data-l="en">EN</b><b data-l="zh">中</b></button>
+    <button class="pill" id="cine" aria-label="Visite"><svg viewBox="0 0 24 24"><path id="cineI" d="M8 5.5l10 6.5-10 6.5z"/></svg></button>
     <button class="pill" id="gyro" aria-label="Gyroscope" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="3.4" ry="8.4"/><path d="M3.6 12h16.8"/></svg></button>
     <button class="pill" id="snd" aria-label="Son"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndw" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg></button>
   </div>
@@ -169,6 +182,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
     <button class="btn ghost round" id="share" aria-label="Partager"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg></button>
   </div>
   <div id="hint" data-i="hint"></div>
+  <div id="gyroAsk" hidden><span data-i="gyroAsk"></span><button id="gyroYes" data-i="gyroYes"></button><button id="gyroNo" aria-label="Non">×</button></div>
 </div>
 
 <div id="sheet" aria-hidden="true">
@@ -274,6 +288,7 @@ var PRESETS = [
 
 var I18N = {
  fr:{title:"L'arbre à souhaits",introText:"En Chine, on confie ses vœux à un arbre : une étiquette rouge, un fil d'or, quelques mots. Pour les fêtes, accrochez le vôtre à ce caféier du Yunnan — puis passez le lien à ceux que vous aimez.",
+  gyroAsk:"Incliner et secouer l'arbre ?",gyroYes:"Activer",cineOn:"Visite guidée",cineOff:"Reprendre la main",
   gyroOn:"Gyroscope activé : inclinez le téléphone, et secouez-le.",gyroNon:"Le gyroscope n'a pas été autorisé.",
   enter:"Entrer",by:"Une expérience signée",add:"Accrocher un vœu",hint:"Glisser pour tourner · pincer pour zoomer · toucher une étiquette",
   sheetTitle:"Votre vœu",s1:"1 · L'étiquette",st1:"Choisissez la forme de votre étiquette",st2:"Choisissez votre vœu",st3:"Signez, puis accrochez",stepOf:"Étape",next:"Continuer",g_own:"Mes propres mots",ownNote:"60 caractères au maximum : un mot court se lit mieux sur l'étiquette.",nameNote:"Votre prénom s'écrit sous le vœu. Vous pouvez laisser ce champ vide.",s2:"2 · Le vœu",g_zh:"Vœux chinois traditionnels",g_w:"Noël et nouvelle année",g_c:"Fêtes et café",s3:"… ou vos propres mots",s4:"Votre prénom (facultatif)",
@@ -284,6 +299,7 @@ var I18N = {
   hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
+  gyroAsk:"Tilt and shake the tree?",gyroYes:"Turn on",cineOn:"Guided tour",cineOff:"Take back control",
   gyroOn:"Gyroscope on: tilt the phone, and shake it.",gyroNon:"The gyroscope was not allowed.",
   enter:"Enter",by:"An experience by",add:"Hang a wish",hint:"Drag to orbit · pinch to zoom · tap a tag",
   sheetTitle:"Your wish",s1:"1 · The tag",st1:"Choose the shape of your tag",st2:"Choose your wish",st3:"Sign it, then hang it",stepOf:"Step",next:"Continue",g_own:"My own words",ownNote:"60 characters at most: a short note reads better on the tag.",nameNote:"Your first name is written under the wish. You can leave this empty.",s2:"2 · The wish",g_zh:"Traditional Chinese wishes",g_w:"Christmas and New Year",g_c:"Holidays and coffee",s3:"… or your own words",s4:"Your first name (optional)",
@@ -294,6 +310,7 @@ var I18N = {
   hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
+  gyroAsk:"倾斜并摇动这棵树？",gyroYes:"开启",cineOn:"自动导览",cineOff:"交还控制",
   gyroOn:"已开启陀螺仪：倾斜手机，也可以摇一摇。",gyroNon:"陀螺仪未获授权。",
   enter:"进入",by:"出品",add:"挂上心愿",hint:"拖动旋转 · 双指缩放 · 轻点红牌",
   sheetTitle:"你的心愿",s1:"1 · 选择红牌",st1:"选择红牌的形状",st2:"选一句祝福",st3:"署名，然后挂上",stepOf:"步骤",next:"继续",g_own:"自己写",ownNote:"最多60字：短短一句，在红牌上更好看。",nameNote:"名字会写在心愿下方，也可以不填。",s2:"2 · 选一句祝福",g_zh:"中国传统祝福",g_w:"圣诞与新年",g_c:"节日与咖啡",s3:"……或写下自己的话",s4:"你的名字（可不填）",
@@ -329,20 +346,45 @@ function limb(p0,d0,len,r0,r1,n,wob,lift,depth){
     p=vadd(p,vscale(d,len/n)); pts.push(p); radii.push(r0+(r1-r0)*i/n); dirs.push(d); }
   var b={pts:pts,radii:radii,dirs:dirs,depth:depth}; branches.push(b); return b;
 }
+/* Un caféier n'a qu'un tronc.
+   Il en avait quatre : une souche courte de rayon 0,30, puis quatre tiges
+   de 0,17 repartant toutes du même point. D'où la marche qu'on voyait —
+   deux circonférences l'une sur l'autre — et le bouquet de perches au
+   lieu d'un arbre.
+
+   Coffea arabica pousse en monopode : un axe vertical unique, et des
+   rameaux horizontaux par paires opposées, de plus en plus courts vers le
+   haut. C'est ce qui lui donne sa silhouette en cône, et c'est ce qu'on
+   fait ici. Le tronc va d'un seul tenant du sol à la cime, sans marche,
+   et son rayon décroît continûment. */
 (function(){
-  var trunk=limb([0,0.1,0],[0.04,1,0.02],1.45,0.42,0.30,6,0.10,0.05,0), tp=trunk.pts[6], stems=[], s,i,k;
-  for(s=0;s<4;s++){ var central=s===3, a=s*2.094+R()*.5, tilt=central?0.04:0.44+R()*.12;
-    stems.push(limb(tp,vnorm([Math.cos(a)*Math.sin(tilt),Math.cos(tilt),Math.sin(a)*Math.sin(tilt)]),central?5.0:3.9+R()*.6,central?.2:.17,.035,12,.07,.055,1)); }
-  stems.forEach(function(st){ var ph=R()*6.283;
-    for(i=2;i<=12;i++){ var t=(i-2)/10; ph+=1.571+(R()-.5)*.5;
-      for(k=0;k<2;k++){ var a=ph+k*3.1416+(R()-.5)*.3, d=vnorm([Math.cos(a),0.2+R()*.16,Math.sin(a)]);
-        var len=(2.5-1.75*t)*(0.85+R()*.3), bp=st.pts[i], rad=Math.hypot(bp[0],bp[2]);
-        if(rad>0.35&&(bp[0]*d[0]+bp[2]*d[2])/rad<-0.2) len*=0.45;
-        var lat=limb(bp,d,len,Math.max(.022,st.radii[i]*.5),.009,7,.16,-0.075,2);
-        [2,4].forEach(function(j){ if(len<1||R()<.25) return; var side=perp(lat.dirs[j]), sg=R()<.5?1:-1;
-          var d2=vnorm(vadd(vadd(vscale(lat.dirs[j],.7),vscale(side,sg*.8)),[0,.1,0]));
-          limb(lat.pts[j],d2,len*(.3+R()*.2),lat.radii[j]*.7,.007,4,.18,-0.07,3); });
-      } } });
+  var N=26, i, k;
+  var trunk=limb([0,0,0],[0,1,0],7.1,0.38,0.05,N,0.012,0.0,0);
+  var ph=R()*6.283;
+  /* Les étages commencent assez haut pour qu'on voie le fût, et s'arrêtent
+     une maille avant la cime, qui reste nue : un caféier porte sa flèche. */
+  for(i=4;i<=N-1;i++){
+    var t=(i-4)/(N-5);                      /* 0 au premier étage, 1 au dernier */
+    /* Chaque étage tourne d'un quart de tour sur le précédent : c'est la
+       phyllotaxie du caféier, et c'est elle qui empêche les rameaux de se
+       superposer d'un étage à l'autre. */
+    ph+=1.571+(R()-.5)*.42;
+    for(k=0;k<2;k++){
+      var a=ph+k*3.1416+(R()-.5)*.22;
+      /* Presque à l'horizontale, à peine relevés : ce sont des rameaux
+         plagiotropes, pas des branches qui montent. */
+      var d=vnorm([Math.cos(a),0.13+R()*.12,Math.sin(a)]);
+      var len=(3.0-2.05*t)*(0.86+R()*.28);
+      var bp=trunk.pts[i];
+      var lat=limb(bp,d,len,Math.max(.022,trunk.radii[i]*.55),.009,7,.15,-0.08,2);
+      /* Des ramifications secondaires, qui densifient le feuillage sans
+         changer la silhouette. */
+      [1,3,5].forEach(function(j){ if(len<.9||R()<.3) return;
+        var side=perp(lat.dirs[j]), sg=R()<.5?1:-1;
+        var d2=vnorm(vadd(vadd(vscale(lat.dirs[j],.72),vscale(side,sg*.78)),[0,.08,0]));
+        limb(lat.pts[j],d2,len*(.32+R()*.22),lat.radii[j]*.7,.007,4,.17,-0.07,3); });
+    }
+  }
 })();
 branches[0].radii[0]*=1.75; branches[0].radii[1]*=1.25;
 var treeTop=0, treeRad=0; branches.forEach(function(b){ b.pts.forEach(function(p){ if(p[1]>treeTop) treeTop=p[1]; treeRad=Math.max(treeRad,Math.hypot(p[0],p[2])); }); });
@@ -372,7 +414,12 @@ var slots=[], ribbonSpots=[];
   for(i=c.length-1;i>0;i--){ j=Math.floor(R()*(i+1)); var t=c[i]; c[i]=c[j]; c[j]=t; }
   c.forEach(function(a){
     var rad=Math.hypot(a.p[0],a.p[2]); if(rad<0.9) return;
-    var L=0.3+R()*0.5+(a.p[1]<3.2?R()*0.7:0); L=Math.min(L,a.p[1]-a.r-(rad<3.1?1.05:0.2)); if(L<0.25) return;
+    /* Le fil s'arrête assez haut pour que l'étiquette ne touche pas la
+       neige : son corps fait un peu plus d'un demi, et il lui faut encore
+       un tiers de dégagement. Quand l'arbre flottait, une étiquette qui
+       descendait trop bas ne gênait personne ; posé au sol, elle traverse
+       la congère. */
+    var L=0.3+R()*0.5+(a.p[1]<3.2?R()*0.7:0); L=Math.min(L,a.p[1]-a.r-1.0); if(L<0.25) return;
     var pos=[a.p[0], a.p[1]-a.r-L, a.p[2]];
     for(var k=0;k<slots.length;k++){ var s=slots[k].pos; if(Math.hypot(s[0]-pos[0],s[2]-pos[2])<0.36 && Math.abs(s[1]-pos[1])<0.7) return; }
     if(slots.length<170) slots.push({a:a,L:L,pos:pos,ph:R()*6.283,w:0.7+R()*0.6});
@@ -825,10 +872,14 @@ document.addEventListener("click",function(e){ var b=e.target&&e.target.closest?
 function setMuted(m){ muted=m; $("sndw").style.display=m?"none":""; $("snd").style.opacity=m?.55:1;
   if(AC&&master){ var t=AC.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(m?0:.75,t+1.2); } }
 $("snd").onclick=function(){ if(!AC) startAudio(); setMuted(!muted); };
+$("cine").onclick=function(){ if(!AC) startAudio(); cineBasculer(); };
+$("cine").setAttribute("aria-label",T("cineOn"));
+$("add").addEventListener("click",function(){ cineStop(); });
 document.addEventListener("visibilitychange",function(){ if(!AC) return; try{ if(document.hidden) AC.suspend(); else AC.resume(); }catch(e){} });
 
 $("enter").onclick=function(){
   entered=true; startAudio(); $("intro").classList.add("gone"); $("top").classList.remove("hide"); $("bottom").classList.remove("down");
+  gyroInviter();
   setTimeout(function(){ $("hint").style.opacity=0; },9000);
   if(window.__enter) window.__enter();
 };
@@ -881,8 +932,16 @@ var CIEL=(function(){
   }
   /* Le soleil : zéro à six heures dix, zéro à dix-huit heures quarante, au
      plus haut un peu après midi. Sous l'horizon, il continue sa course —
-     c'est ce qui fait que l'ombre tourne encore au crépuscule. */
-  function elevation(h){ return 1.16*Math.sin(Math.PI*(h-6.17)/12.5); }
+     c'est ce qui fait que l'ombre tourne encore au crépuscule.
+
+     L'atlas le fait culminer à soixante-six degrés : c'est le Yunnan de
+     toute l'année. Ici on est fin décembre, et à vingt-quatre degrés de
+     latitude le soleil d'hiver ne monte qu'à quarante-deux. Ce n'est pas
+     un détail de puriste : au zénith, la lumière tombe à plat sur la neige
+     et la montagne disparaît en nappe blanche. Rasante, elle lui rend ses
+     versants et ses ombres longues — c'est tout le paysage qui tient à ce
+     nombre. */
+  function elevation(h){ return .745*Math.sin(Math.PI*(h-6.17)/12.5); }
   function azimut(h){ return Math.PI*(h-6.17)/12.5+2.0; }
   /* Se placer à une heure donnée sans arrêter le temps : « ?heure= » fige
      l'horloge, ce qui ne permet justement pas de vérifier qu'elle avance. */
@@ -891,8 +950,20 @@ var CIEL=(function(){
 })();
 /* L'état du ciel au moment présent. Tout le décor lit ici. */
 var SUN={dir:[-.55,.72,.42],col:[1,.99,.965],nuit:0,jour:1,el:.5,ciel:CIEL.etat(CIEL.heure())};
+/* Le ciel de l'atlas est celui d'une journée douce ; celui-ci est un ciel
+   d'hiver. On le refroidit de jour — le bleu monte, le crème descend — sans
+   toucher au crépuscule ni à la nuit, qui sont déjà froids. Sans cela, une
+   neige blanche sur un ciel crème ne fait qu'un seul ton, et il n'y a plus
+   d'horizon du tout. */
+var HIVER_BAS=[216,226,238], HIVER_HAUT=[176,200,230];
+function hiver(c,part){
+  return [c[0]+(part[0]-c[0])*.42,c[1]+(part[1]-c[1])*.42,c[2]+(part[2]-c[2])*.42];
+}
 function sunMaj(){
   var h=CIEL.heure(), c=CIEL.etat(h), el=CIEL.elevation(h), az=CIEL.azimut(h), ce=Math.cos(el);
+  var j0=Math.max(0,Math.min(1,(el+.04)/.14));
+  c.bas=CIEL.mel(c.bas,hiver(c.bas,HIVER_BAS),j0);
+  c.haut=CIEL.mel(c.haut,hiver(c.haut,HIVER_HAUT),j0);
   SUN.dir=[ce*Math.cos(az),Math.sin(el),ce*Math.sin(az)];
   SUN.col=[c.lum[0]/255,c.lum[1]/255,c.lum[2]/255];
   SUN.el=el; SUN.nuit=c.nuit; SUN.ciel=c;
@@ -943,7 +1014,14 @@ var C=function(h){ return new THREE.Color(h).convertSRGBToLinear(); };
 var PR=Math.min(window.devicePixelRatio||1,1.75);
 renderer.setPixelRatio(PR); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.outputEncoding=THREE.sRGBEncoding; renderer.setClearColor(0xf3efe6,1);
-var scene=new THREE.Scene(); scene.fog=new THREE.Fog(C(0xf1ede3),8,36);
+var scene=new THREE.Scene();
+/* La brume était linéaire et suivait la distance de la caméra : elle
+   convenait à une île dans le vide, où il n'y avait rien d'autre à voir.
+   Avec quinze cents unités de montagnes derrière l'arbre, il faut une
+   brume qui efface le lointain sans toucher le proche — donc une
+   exponentielle. À cette densité, l'arbre à vingt unités en reçoit huit
+   dix-millièmes, et une crête à mille en reçoit les cinq neuvièmes. */
+scene.fog=new THREE.FogExp2(C(0xf1ede3),0.00088);
 /* Le fond porte maintenant mille quatre cents unités de montagnes : le plan
    lointain, qui s'arrêtait à quatre-vingt-dix, les coupait net. La précision
    de profondeur reste large — vingt-quatre bits à partir d'un demi — et
@@ -995,23 +1073,26 @@ var skyMat=new THREE.ShaderMaterial({
 var skyDome=new THREE.Mesh(new THREE.SphereGeometry(2000,40,24),skyMat);
 skyDome.renderOrder=-10; skyDome.frustumCulled=false; scene.add(skyDome);
 
-/* ---- les montagnes du Yunnan ----
+/* ---- le sol : les montagnes du Yunnan, et l'arbre posé dessus ----
    Le même relevé que l'atlas, à la même place du monde : de 97,8° à 102,6°
-   est et de 21° à 26,2° nord, soit environ 490 km sur 578. Ici elles ne
-   sont qu'un horizon — on ne s'en approche jamais —, d'où une maille plus
-   large et une finesse de relevé moitié moindre.
+   est et de 21° à 26,2° nord. On n'en montre qu'un tiers en largeur — toute
+   la province étalée sur un horizon se chiffonne comme du papier — et
+   l'altitude est exagérée, comme dans l'atlas.
 
-   L'altitude est exagérée, comme dans l'atlas : 3 100 m de dénivelé réel
-   sur 490 km de large ne feraient, à l'échelle, qu'un pli imperceptible.
+   LA MAILLE EST POLAIRE, et c'est ce qui permet de poser l'arbre dessus.
+   Une grille carrée de deux cent soixante pas sur mille huit cents unités
+   donne sept unités par maille : au pied d'un arbre qui en fait quatre de
+   large, c'est deux sommets en tout. Les anneaux, eux, se resserrent
+   géométriquement vers le centre — six centimètres d'écart au pied, quarante
+   unités à l'horizon. On a le détail là où on regarde, et presque rien à
+   dessiner là où l'on ne distingue plus rien. Quarante-huit mille triangles
+   au lieu de cent trente-cinq mille.
 
-   Le relief est surtout très bas, et c'est tout le réglage. Posé à hauteur
-   d'île, il mangeait le ciel : des crêtes à dix unités de l'arbre, hautes
-   comme lui, et plus d'horizon du tout. Neuf cents unités plus bas, il
-   disparaissait dans les coins. Cinq cent vingt : les crêtes passent au
-   tiers bas de l'image, derrière l'île, l'arbre se détache sur le ciel, et
-   c'est là que vient le vertige — il est au-dessus du Yunnan, pas posé
-   dessus. */
-var EXT=900, EXTZ=EXT*1.18, Y0=-470, AMPL=430, terrain=null, terMat=null;
+   LE REPLAT. Le relevé réel ne passe pas par zéro sous l'arbre, et une crête
+   au milieu du tronc n'aurait pas de sens. Le sol est donc plat au pied,
+   puis rejoint le relief en s'éloignant : le raccord est une courbe douce
+   sur deux cents unités, invisible. */
+var EXT=900, EXTZ=EXT*1.18, AMPL=700, terrain=null, terMat=null, solH=null;
 (function(){
   var b, m=RELIEF.m, a=new Uint8Array(m*m), i, j;
   try{ b=atob(RELIEF.d); }catch(e){ return; }
@@ -1021,84 +1102,114 @@ var EXT=900, EXTZ=EXT*1.18, Y0=-470, AMPL=430, terrain=null, terMat=null;
      page y gagne un bon tiers une fois compressée. */
   if(RELIEF.c==="moyenne") for(j=0;j<m;j++) for(i=0;i<m;i++){ var k=j*m+i, g=i?a[k-1]:0, dd=j?a[k-m]:0; a[k]=(a[k]+((g+dd)>>1))&255; }
   var ech=function(i,j){ return a[Math.max(0,Math.min(m-1,j))*m+Math.max(0,Math.min(m-1,i))]; };
-  /* On ne montre pas toute la province, mais un tiers : quatre cent
-     quatre-vingt-dix kilomètres étalés sur un horizon, ce sont des crêtes
-     tous les dix pixels, et le relief se chiffonne comme du papier. Un tiers
-     de la zone sur la même largeur, ce sont des croupes trois fois plus
-     larges — celles de l'atlas, qu'on regarde d'un peu plus loin. La fenêtre
-     est prise au centre de la ceinture caféière. */
   var ZOOM=.34, Z0=(1-ZOOM)/2;
-  /* Interpolation bicubique de Catmull-Rom : le relevé est quantifié sur un
-     octet, soit douze mètres par pas, et une bilinéaire laisserait voir la
-     grille en coussins sur les versants doux. */
   var cmr=function(p,q,r,s,t){ var t2=t*t; return .5*(2*q+(r-p)*t+(2*p-5*q+4*r-s)*t2+(3*q-p-3*r+s)*t2*t); };
   var rang=new Float64Array(4);
-  /* Un bruit de valeur, deux octaves : il ne sert qu'à la couleur, pour
-     que les versants ne soient pas d'un seul ton. */
+  /* Un bruit de valeur, deux octaves : le modelé du replat, et le grain de
+     la couleur. */
   function h2(i,j){ var n=Math.sin(i*127.1+j*311.7)*43758.5453; return n-Math.floor(n); }
   function vb(x,z){ var i=Math.floor(x), j=Math.floor(z), fx=x-i, fz=z-j;
     fx=fx*fx*(3-2*fx); fz=fz*fz*(3-2*fz);
-    var a0=h2(i,j), b0=h2(i+1,j), c0=h2(i,j+1), d0=h2(i+1,j+1);
-    return (a0+(b0-a0)*fx)+((c0+(d0-c0)*fx)-(a0+(b0-a0)*fx))*fz; }
+    var a0=h2(i,j), b0=h2(i+1,j), c0=h2(i,j+1), d0=h2(i+1,j+1), h0=a0+(b0-a0)*fx;
+    return h0+((c0+(d0-c0)*fx)-h0)*fz; }
   function grain(x,z){ return .66*vb(x,z)+.34*vb(x*2.03+3.1,z*2.03); }
-  function hgt(x,z){
+  function releve(x,z){
     var u=Math.max(0,Math.min(m-1,(Z0+(x+EXT)/(2*EXT)*ZOOM)*(m-1))), v=Math.max(0,Math.min(m-1,(Z0+(z+EXTZ)/(2*EXTZ)*ZOOM)*(m-1)));
     var i0=Math.floor(u), j0=Math.floor(v), fx=u-i0, fz=v-j0, q;
     for(q=0;q<4;q++) rang[q]=cmr(ech(i0-1,j0-1+q),ech(i0,j0-1+q),ech(i0+1,j0-1+q),ech(i0+2,j0-1+q),fx);
     var h=Math.max(0,Math.min(255,cmr(rang[0],rang[1],rang[2],rang[3],fz)));
-    return Y0+h/255*AMPL;
-  }
-  var N=petit()?190:260, step=EXT*2/N, stepZ=EXTZ*2/N;
-  var pos=new Float32Array((N+1)*(N+1)*3), nor=new Float32Array(pos.length), col=new Float32Array(pos.length);
-  for(j=0;j<=N;j++) for(i=0;i<=N;i++){
-    var x=-EXT+i*step, z=-EXTZ+j*stepZ, y=hgt(x,z), k=(j*(N+1)+i)*3;
+    return h/255*AMPL; }
+  /* Le replat ne fait que douze unités, et le raccord cent dix : l'arbre
+     est dans une clairière, pas au milieu d'une plaine. Un replat de trois
+     cents unités donnait une nappe blanche vide au premier plan et
+     repoussait les montagnes au fond de l'image. */
+  var RP0=12, RP1=110;
+  /* Le relevé est pris en écart à sa valeur sous l'arbre : c'est ce qui met
+     le pied de l'arbre à zéro et fait monter les crêtes au-dessus de lui.
+     Sans cette soustraction, tout le relief restait sous le sol, et
+     l'horizon n'était qu'une plaine qui s'enfonce. */
+  var dRef=releve(0,0);
+  function relH(x,z){ return releve(x,z)-dRef; }
+  function hgt(x,z){
+    var d=Math.hypot(x,z);
+    /* Au pied : un sol presque plat, à peine modelé, pour que la neige ne
+       soit pas un patinoire. */
+    /* Le modelé local s'efface sous l'arbre : une bosse d'une unité au
+       pied d'un tronc, et l'arbre est à moitié enterré d'un côté et en
+       l'air de l'autre. */
+    var loc=Math.max(0,Math.min(1,(Math.hypot(x,z)-4.5)/18)); loc=loc*loc*(3-2*loc);
+    /* Des congères, et non une patinoire : trois longueurs d'onde, de la
+       ride d'un mètre à la butte de trente. Sans elles, les quatre-vingts
+       unités qui séparent l'arbre des premières pentes ne sont qu'une
+       nappe blanche. */
+    var pied=loc*((grain(x/13,z/13)-.5)*.6+(grain(x/42,z/42)-.5)*2.4+(grain(x/130,z/130)-.5)*7.5);
+    if(d>=RP1) return relH(x,z);
+    var k=Math.max(0,Math.min(1,(d-RP0)/(RP1-RP0))); k=k*k*(3-2*k);
+    return pied*(1-k)+relH(x,z)*k; }
+  solH=hgt;
+
+  /* La maille : des anneaux en progression géométrique, et des secteurs. */
+  var NR=150, NS=160, R0=1.1, RM=1500, q=Math.pow(RM/R0,1/NR);
+  var nv=(NR+1)*(NS+1)+1, pos=new Float32Array(nv*3), nor=new Float32Array(nv*3), col=new Float32Array(nv*3);
+  /* La neige est claire, mais son albédo ne l'est pas : à 0,95 elle reçoit
+     la lumière du ciel plus celle du soleil, dépasse un, et se découpe en
+     aplat blanc sur un ciel blanc — plus de relief, plus d'horizon. À 0,62
+     elle monte à 0,93 en plein soleil, c'est-à-dire blanche, et retombe à
+     0,38 sur les versants à l'ombre. C'est cet écart qui fait les montagnes. */
+  /* Les valeurs sont linéaires — c'est ce que three.js attend d'une
+     couleur de sommet — et non des valeurs d'écran. À 0,50 linéaire, la
+     neige au soleil s'affiche à 0,90 d'écran, c'est-à-dire blanche, et
+     retombe à 0,55 sur les versants à l'ombre. C'est cet écart qui fait
+     les montagnes ; à 0,95 tout dépassait un et se découpait en aplat. */
+  var ROCHE=[.185,.178,.172], NEIGE=[.500,.520,.560], OMBRE=[.255,.300,.420];
+  function poser(idx,x,z){
+    var y=hgt(x,z), k=idx*3;
     pos[k]=x; pos[k+1]=y; pos[k+2]=z;
-    /* La normale se mesure sur la moitié d'une maille de rendu : plus large,
-       elle moyennerait le modelé qu'elle est censée révéler, et les versants
-       s'éteindraient en aplats. */
-    var e=Math.max(3,step*.55), dx=(hgt(x+e,z)-hgt(x-e,z))/(2*e), dz=(hgt(x,z+e)-hgt(x,z-e))/(2*e);
+    /* La normale se mesure sur un écart proportionnel à l'anneau : au pied
+       elle suit le modelé fin, au loin elle suit la croupe. */
+    var e=Math.max(.6,Math.hypot(x,z)*.035);
+    var dx=(hgt(x+e,z)-hgt(x-e,z))/(2*e), dz=(hgt(x,z+e)-hgt(x,z-e))/(2*e);
     var nx=-dx, ny=1, nz=-dz, L=Math.hypot(nx,ny,nz); nx/=L; ny/=L; nz/=L;
     nor[k]=nx; nor[k+1]=ny; nor[k+2]=nz;
-    /* La teinte de l'atlas, au nombre près : un sable chaud qui blanchit
-       avec l'altitude, et des versants à peine assombris. Le grain, lui,
-       empêche les grandes pentes douces de tourner à l'aplat. */
-    var t=Math.max(0,Math.min(1,(y-Y0)/AMPL)), sl=1-ny, dk=1-sl*.16;
-    var tx=(grain(x/90,z/90)-.5)*.035;
-    col[k]=(.875+.08*t+tx)*dk; col[k+1]=(.845+.085*t+tx)*dk; col[k+2]=(.79+.1*t+tx)*dk;
+    /* La neige tient sur ce qui est plat, et glisse des parois : c'est ce
+       qui fait lire les arêtes. Elle tient mieux en altitude. */
+    var alt=Math.max(0,Math.min(1,(y+AMPL*.5)/AMPL));
+    var tenue=Math.max(0,Math.min(1,(ny-.52)/.34)); tenue=tenue*tenue*(3-2*tenue);
+    var neige=Math.max(0,Math.min(1,tenue*(.55+.45*alt)));
+    var g=(grain(x/26,z/26)-.5)*.038;
+    /* Le creux bleuit : la neige à l'ombre prend la couleur du ciel. Et le
+       versant s'assombrit avec sa pente — c'est ce qui fait lire une crête
+       même quand le soleil l'éclaire de face, et c'est le réglage qui avait
+       déjà sauvé les montagnes de l'atlas. */
+    var bleu=Math.max(0,Math.min(1,(1-ny)*2.0));
+    var dk=1-(1-ny)*.46;
+    for(var c=0;c<3;c++){
+      var blanc=NEIGE[c]+(OMBRE[c]-NEIGE[c])*bleu*.7;
+      col[k+c]=Math.max(0,Math.min(1,(ROCHE[c]+(blanc-ROCHE[c])*neige+g)*dk));
+    }
   }
-  var idx=new Uint32Array(N*N*6), q2=0;
-  for(j=0;j<N;j++) for(i=0;i<N;i++){ var p0=j*(N+1)+i, p1=p0+1, p2=p0+N+1, p3=p2+1;
-    idx[q2++]=p0; idx[q2++]=p2; idx[q2++]=p1; idx[q2++]=p1; idx[q2++]=p2; idx[q2++]=p3; }
-  var g=new THREE.BufferGeometry();
-  g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
-  g.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
-  g.setAttribute("aC",new THREE.Float32BufferAttribute(col,3));
-  g.setIndex(new THREE.BufferAttribute(idx,1));
-  /* Matière brute, comme le ciel : la brume du lointain y est écrite à la
-     main, et elle va vers le bas du ciel. C'est l'air, et c'est ce qui donne
-     sa profondeur à la vallée. La brume de la scène, elle, s'arrête à
-     quelques dizaines d'unités autour de l'arbre : elle avalerait tout. */
-  terMat=new THREE.ShaderMaterial({ fog:false,
-    uniforms:{ uBas:{value:new THREE.Vector3(.94,.92,.89)}, uHaut:{value:new THREE.Vector3(.97,.96,.94)},
-      uL:{value:new THREE.Vector3(0,1,0)}, uLC:{value:new THREE.Vector3(1,.99,.96)}, uNuit:{value:0} },
-    vertexShader:[
-    "attribute vec3 aC; varying vec3 vN; varying vec3 vC; varying float vD;",
-    "void main(){ vec4 mv=modelViewMatrix*vec4(position,1.0); vD=-mv.z; vN=normal; vC=aC;",
-    "  gl_Position=projectionMatrix*mv; }"].join("\n"),
-    fragmentShader:[
-    "precision highp float;",
-    "varying vec3 vN; varying vec3 vC; varying float vD;",
-    "uniform vec3 uBas,uHaut,uL,uLC; uniform float uNuit;",
-    "void main(){",
-    "  vec3 n=normalize(vN), L=normalize(uL);",
-    "  float nl=dot(n,L), dif=max(nl,0.0), wrap=clamp(nl*0.5+0.5,0.0,1.0), hemi=n.y*0.5+0.5;",
-    "  vec3 sky=uHaut*1.02, gnd=mix(uBas,vec3(0.9,0.855,0.79),0.55);",
-    "  vec3 col=vC*(mix(gnd,sky,hemi)*0.6+uLC*(dif*0.52+wrap*wrap*0.12));",
-    "  col=min(col,vec3(1.0));",
-    "  float m=clamp(1.0-exp(-pow(vD/1400.0,2.0)*1.25),0.0,0.94);",
-    "  gl_FragColor=vec4(mix(col,uBas,m),1.0);",
-    "}"].join("\n")});
-  terrain=new THREE.Mesh(g,terMat); terrain.frustumCulled=false; terrain.renderOrder=-9; scene.add(terrain);
+  poser(0,0,0);
+  for(j=0;j<=NR;j++){ var r=R0*Math.pow(q,j);
+    for(i=0;i<=NS;i++){ var th=i/NS*6.283185307;
+      poser(1+j*(NS+1)+i, Math.cos(th)*r, Math.sin(th)*r); } }
+  var idx=new Uint32Array((NS*2+NR*NS*6)), p2=0;
+  for(i=0;i<NS;i++){ idx[p2++]=0; idx[p2++]=1+i+1; idx[p2++]=1+i; }
+  for(j=0;j<NR;j++) for(i=0;i<NS;i++){
+    var A=1+j*(NS+1)+i, B=A+1, Cc=A+(NS+1), D=Cc+1;
+    idx[p2++]=A; idx[p2++]=Cc; idx[p2++]=B; idx[p2++]=B; idx[p2++]=Cc; idx[p2++]=D; }
+  var g2=new THREE.BufferGeometry();
+  g2.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
+  g2.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
+  g2.setAttribute("color",new THREE.Float32BufferAttribute(col,3));
+  g2.setIndex(new THREE.BufferAttribute(idx,1));
+  g2.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,0,0),2400);
+  /* Une matière ordinaire, et non plus un shader à part : c'est ce qui
+     permet au sol de recevoir l'ombre de l'arbre, qui est tout l'intérêt de
+     l'avoir posé. Phong plutôt que Standard — la neige est diffuse, elle n'a
+     que faire d'un calcul de réflexion physique sur tout l'écran. */
+  terMat=new THREE.MeshPhongMaterial({vertexColors:true,shininess:0,flatShading:false});
+  terrain=new THREE.Mesh(g2,terMat); terrain.receiveShadow=true; terrain.frustumCulled=false;
+  terrain.renderOrder=-9; scene.add(terrain);
 })();
 
 /* ---- les lumières ----
@@ -1107,7 +1218,7 @@ var EXT=900, EXTZ=EXT*1.18, Y0=-470, AMPL=430, terrain=null, terMat=null;
    un aplat noir, et l'arbre y disparaîtrait avec les vœux. */
 var hemi=new THREE.HemisphereLight(C(0xfff6e4),C(0xb9a58a),0.62); scene.add(hemi);
 var sun=new THREE.DirectionalLight(C(0xffeed2),1.0); sun.position.set(6.5,12,5.5); sun.target.position.set(0,2.5,0);
-sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-7; sun.shadow.camera.right=7; sun.shadow.camera.top=7; sun.shadow.camera.bottom=-7;
+sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-9; sun.shadow.camera.right=9; sun.shadow.camera.top=9; sun.shadow.camera.bottom=-9;
 sun.shadow.camera.near=1; sun.shadow.camera.far=32; sun.shadow.bias=-0.0006; sun.shadow.normalBias=0.03; sun.shadow.radius=3;
 scene.add(sun); scene.add(sun.target);
 var rim=new THREE.DirectionalLight(C(0xf0c979),0.32); rim.position.set(-7,4,-6); scene.add(rim);
@@ -1142,15 +1253,10 @@ function cielMaj(t){
   skyMat.uniforms.uLum.value.set(SUN.col[0],SUN.col[1],SUN.col[2]);
   skyMat.uniforms.uSoleil.value.set(SUN.dir[0],SUN.dir[1],SUN.dir[2]);
   skyMat.uniforms.uNuit.value=SUN.nuit; skyMat.uniforms.uJour.value=SUN.jour; skyMat.uniforms.uT.value=t;
-  if(terMat){
-    terMat.uniforms.uBas.value.set(bas[0],bas[1],bas[2]);
-    terMat.uniforms.uHaut.value.set(haut[0],haut[1],haut[2]);
-    terMat.uniforms.uL.value.set(SUN.dir[0],SUN.dir[1],SUN.dir[2]);
-    terMat.uniforms.uLC.value.set(SUN.col[0],SUN.col[1],SUN.col[2]);
-    terMat.uniforms.uNuit.value=SUN.nuit;
-  }
-  /* La brume de la scène va vers le bas du ciel, elle aussi : sans quoi
-     l'arbre se détacherait sur un halo beige en pleine nuit. */
+  /* La brume va vers le bas du ciel : c'est elle qui efface le lointain,
+     et c'est ce qui donne sa profondeur à la vallée. Elle prend la couleur
+     de l'heure, sans quoi l'arbre se détacherait sur un halo beige en
+     pleine nuit. */
   fondTmp.setRGB(bas[0],bas[1],bas[2]).convertSRGBToLinear();
   scene.fog.color.copy(fondTmp);
   renderer.setClearColor(fondTmp,1);
@@ -1188,38 +1294,20 @@ function tubes(list){
 }
 var treeMesh=new THREE.Mesh(tubes(branches.concat(extras)),barkMat); treeMesh.castShadow=true; treeMesh.receiveShadow=true; world.add(treeMesh);
 
-// floating island
+/* L'île qui flottait n'est plus. L'arbre est posé au sol, dans les
+   montagnes : c'est le sol lui-même qui porte le pied, les racines de
+   surface et les pierres. Ce qui a disparu avec elle : la galette de
+   terre, les racines qui pendaient dessous, les rochers en lévitation et
+   l'ombre portée dans le vide — tout cela n'avait de sens qu'au-dessus
+   du néant. */
 (function(){
-  var prof=[[.001,-2.7],[.45,-2.1],[1.05,-1.45],[1.75,-.85],[2.45,-.4],[2.85,-.12],[2.95,.0],[2.7,.07],[1.9,.14],[1,.2],[.001,.22]]
-    .map(function(p){ return new THREE.Vector2(p[0],p[1]); });
-  var g=new THREE.LatheGeometry(prof,56), P=g.attributes.position, col=[], i;
-  var cTop=C(0x6f7450), cTop2=C(0x8a8658), cEarth=C(0x7a5a40), cRock=C(0x6b5f55), cDeep=C(0x4a4038);
-  for(i=0;i<P.count;i++){
-    var x=P.getX(i), y=P.getY(i), z=P.getZ(i), a=Math.atan2(z,x), rr0=Math.hypot(x,z);
-    var f=1+.10*Math.sin(3*a+y*2)+.06*Math.sin(7*a-y*5)+.035*Math.sin(13*a+y*9);
-    if(y<0.05){ x*=f; z*=f; y+=.07*Math.sin(5*a+rr0*3)*Math.min(1,-y+.1); } else { y+=.03*Math.sin(4*a+rr0*4)*Math.min(1,rr0); }
-    P.setXYZ(i,x,y,z);
-    var c = y>0.02 ? cTop.clone().lerp(cTop2,.5+.5*Math.sin(a*5+rr0*6)) : (y>-.45 ? cEarth.clone().lerp(cTop,clamp((y+.12)/.14,0,1)*.6) : cRock.clone().lerp(cDeep,clamp((-y-.45)/2,0,1)));
-    col.push(c.r,c.g,c.b);
-  }
-  g.setAttribute("color",new THREE.Float32BufferAttribute(col,3)); g.computeVertexNormals();
-  var m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:0,bumpMap:barkTex,bumpScale:.03}));
-  m.castShadow=true; m.receiveShadow=true; world.add(m);
-  // roots dangling under the island
-  var under=[], k,j; for(k=0;k<14;k++){ var a2=R()*6.283, r2=.3+R()*1.6, y0=-2.6+r2*.95, L=.5+R()*1.3, pts=[], rr2=[];
-    for(j=0;j<=5;j++){ pts.push([Math.cos(a2)*r2+(R()-.5)*.08, y0-L*j/5, Math.sin(a2)*r2+(R()-.5)*.08]); rr2.push(.022*(1-j/6)); }
-    under.push({pts:pts,radii:rr2,depth:4}); }
-  var um=new THREE.Mesh(tubes(under),barkMat); world.add(um);
-  // stones
+  /* Les pierres, maintenant posées autour du pied. */
   var rockMat=new THREE.MeshStandardMaterial({color:C(0x8b8378),roughness:1,flatShading:true});
-  for(k=0;k<7;k++){ var s=new THREE.Mesh(new THREE.IcosahedronGeometry(.12+R()*.2,1),rockMat), a3=R()*6.283, r3=1.3+R()*1.3;
-    s.position.set(Math.cos(a3)*r3,.14,Math.sin(a3)*r3); s.scale.set(1,.55+R()*.3,1); s.rotation.y=R()*6; s.castShadow=true; s.receiveShadow=true; world.add(s); }
+  for(var k=0;k<9;k++){ var s2=new THREE.Mesh(new THREE.IcosahedronGeometry(.13+R()*.26,1),rockMat),
+    a3=R()*6.283, r3=1.9+R()*3.4;
+    s2.position.set(Math.cos(a3)*r3,.02,Math.sin(a3)*r3);
+    s2.scale.set(1,.42+R()*.26,1); s2.rotation.y=R()*6; s2.castShadow=true; s2.receiveShadow=true; world.add(s2); }
 })();
-var floaters=[];
-(function(){ var rockMat=new THREE.MeshStandardMaterial({color:C(0x7d7267),roughness:1,flatShading:true});
-  for(var k=0;k<8;k++){ var s=new THREE.Mesh(new THREE.IcosahedronGeometry(.14+R()*.3,1),rockMat), a=R()*6.283, r=3.6+R()*2.2;
-    s.position.set(Math.cos(a)*r,-2.2+R()*2.4,Math.sin(a)*r); s.scale.set(1,.6+R()*.5,.8+R()*.4); s.rotation.set(R()*6,R()*6,R()*6); s.castShadow=true;
-    s.userData={y:s.position.y,ph:R()*6.283,sp:.25+R()*.3}; scene.add(s); floaters.push(s); } })();
 
 var feuilles=null, cerises=null;
 // coffee leaves : glossy, elliptical, in opposite pairs along the lateral branches
@@ -1262,26 +1350,59 @@ var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0x
     col.set(c[3]).convertSRGBToLinear(); col.multiplyScalar(.9+R()*.25); im.setColorAt(i,col); });
   im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true; im.receiveShadow=true; im.frustumCulled=false; world.add(im); cerises=im;
 })();
-// drifting leaves
+/* Les douze feuilles qui dérivaient dans le vide ont été retirées : au-
+   dessus d'une île qui flotte, elles disaient le vent ; sur une montagne
+   enneigée, des feuilles vertes qui tournent dans l'air d'hiver ne disent
+   rien du tout. La neige les remplace. */
 var falling=[];
-(function(){ for(var i=0;i<12;i++){ var m=new THREE.Mesh(leafGeo,new THREE.MeshStandardMaterial({map:leafTex,alphaTest:.5,side:THREE.DoubleSide,roughness:.7,color:C(LEAF_COLS[5+i%4])}));
-  m.scale.setScalar(.6+R()*.4); m.userData={a:R()*6.283,r:1+R()*4.4,y:R()*8-2.5,sp:.18+R()*.22,ph:R()*6.283}; scene.add(m); falling.push(m); } })();
 
 // golden dust + mist
 var softTex=canvasTex(64,64,function(g,w){ var gr=g.createRadialGradient(w/2,w/2,0,w/2,w/2,w/2); gr.addColorStop(0,"rgba(255,255,255,1)"); gr.addColorStop(.4,"rgba(255,255,255,.45)"); gr.addColorStop(1,"rgba(255,255,255,0)"); g.fillStyle=gr; g.fillRect(0,0,w,w); });
-var DUST=260, dustPos=new Float32Array(DUST*3), dustSeed=[];
-(function(){ for(var i=0;i<DUST;i++){ var a=R()*6.283, r=.6+R()*6.2; dustPos[i*3]=Math.cos(a)*r; dustPos[i*3+1]=-2.5+R()*9.5; dustPos[i*3+2]=Math.sin(a)*r; dustSeed.push(R()*6.283,.05+R()*.12); } })();
+/* La neige. Elle tourne autour de celui qui regarde plutôt que d'exister
+   partout : mille flocons dans un cylindre de vingt-deux unités, qu'on
+   recolle de l'autre côté dès qu'ils sortent du champ. On en dessine mille
+   au lieu d'un million, et l'on en voit autant.
+
+   Le même nuage sert de poussière d'or la nuit : même géométrie, deux
+   couleurs. */
+var DUST=1000, dustPos=new Float32Array(DUST*3), dustSeed=[];
+(function(){ for(var i=0;i<DUST;i++){ var a=R()*6.283, r=Math.sqrt(R())*22;
+  dustPos[i*3]=Math.cos(a)*r; dustPos[i*3+1]=R()*20-1; dustPos[i*3+2]=Math.sin(a)*r;
+  /* Par flocon : sa phase de dérive, et sa vitesse de chute. */
+  dustSeed.push(R()*6.283,.45+R()*.75); } })();
 var dustGeo=new THREE.BufferGeometry(); dustGeo.setAttribute("position",new THREE.BufferAttribute(dustPos,3));
-var dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({map:softTex,color:C(0xe0b65a),size:.085,sizeAttenuation:true,transparent:true,opacity:.75,depthWrite:false}));
+var dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({map:softTex,color:0xdbe4f2,size:.165,sizeAttenuation:true,
+  transparent:true,opacity:.92,depthWrite:false}));
 dust.frustumCulled=false; scene.add(dust);
+function neigeMaj(t,dt,cx,cz){
+  var i, o;
+  for(i=0;i<DUST;i++){
+    o=i*3;
+    dustPos[o+1]-=dustSeed[i*2+1]*dt;
+    dustPos[o]+=Math.sin(t*.5+dustSeed[i*2])*dt*.55;
+    dustPos[o+2]+=Math.cos(t*.37+dustSeed[i*2])*dt*.42;
+    /* Retombé au sol : il repart du haut. Sorti du cylindre : on le recolle
+       de l'autre côté — c'est ce qui fait que la neige suit le regard sans
+       qu'on ait à en semer sur toute la montagne. */
+    var dx=dustPos[o]-cx, dz=dustPos[o+2]-cz;
+    if(dx>22) dustPos[o]-=44; else if(dx<-22) dustPos[o]+=44;
+    if(dz>22) dustPos[o+2]-=44; else if(dz<-22) dustPos[o+2]+=44;
+    /* Même raison que pour les feuilles : mille interrogations du relief par
+       image pour savoir si un flocon a touché terre, alors qu'un seuil fixe
+       suffit — on ne voit pas un flocon se poser. */
+    if(dustPos[o+1]<-1.8) dustPos[o+1]=19+R()*2;
+  }
+  dustGeo.attributes.position.needsUpdate=true;
+}
+/* La brume de fond de vallée. Elle flottait sous l'île, à deux mètres et
+   demi au-dessous de zéro : depuis que l'arbre est posé au sol, elle était
+   enterrée. Elle rase maintenant la neige, plus loin et plus large — c'est
+   ce qui sépare le pied de l'arbre des premières pentes. */
 var mists=[];
-(function(){ for(var i=0;i<11;i++){ var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:softTex,color:0xfffdf6,transparent:true,opacity:.3+R()*.2,depthWrite:false}));
-  var a=R()*6.283, r=1+R()*4.2; sp.position.set(Math.cos(a)*r,-2.5-R()*1.3,Math.sin(a)*r); var s=4.5+R()*4.5; sp.scale.set(s,s*.55,1);
-  sp.userData={a:a,r:r,sp:(R()-.5)*.05,op:sp.material.opacity}; scene.add(sp); mists.push(sp); } })();
-// soft contact shadow far below, to make the island read as floating
+(function(){ for(var i=0;i<13;i++){ var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:softTex,color:0xfffdf6,transparent:true,opacity:.11+R()*.11,depthWrite:false}));
+  var a=R()*6.283, r=16+R()*40; sp.position.set(Math.cos(a)*r,1.4+R()*3.2,Math.sin(a)*r); var s=18+R()*26; sp.scale.set(s,s*.42,1);
+  sp.userData={a:a,r:r,sp:(R()-.5)*.018,op:sp.material.opacity}; scene.add(sp); mists.push(sp); } })();
 var ombreSol=null;
-(function(){ var t=canvasTex(128,128,function(g,w){ var gr=g.createRadialGradient(w/2,w/2,0,w/2,w/2,w/2); gr.addColorStop(0,"rgba(90,70,45,.34)"); gr.addColorStop(.6,"rgba(90,70,45,.10)"); gr.addColorStop(1,"rgba(90,70,45,0)"); g.fillStyle=gr; g.fillRect(0,0,w,w); });
-  var m=new THREE.Mesh(new THREE.PlaneGeometry(13,13),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,fog:false})); m.rotation.x=-Math.PI/2; m.position.y=-4.6; scene.add(m); ombreSol=m; })();
 
 // ribbons
 var ribbons=[];
@@ -1290,7 +1411,7 @@ var ribbons=[];
     g.fillStyle="#e9c877"; g.font="20px "+ZH_FONT; g.textAlign="center"; g.textBaseline="middle"; ["福","愿","安","喜","吉"].forEach(function(c,i){ g.fillText(c,w/2,28+i*50); }); });
   var mat=new THREE.MeshStandardMaterial({map:tex,side:THREE.DoubleSide,roughness:.45,metalness:0});
   var geo=new THREE.PlaneGeometry(.055,1,1,6); geo.translate(0,-.5,0);
-  ribbonSpots.forEach(function(a){ var m=new THREE.Mesh(geo,mat), L=.7+R()*1.1; m.position.set(a.p[0],a.p[1]-a.r,a.p[2]); m.scale.set(1,L,1);
+  ribbonSpots.forEach(function(a){ var m=new THREE.Mesh(geo,mat), L=Math.min(.7+R()*1.1,Math.max(.25,a.p[1]-a.r-.35)); m.position.set(a.p[0],a.p[1]-a.r,a.p[2]); m.scale.set(1,L,1);
     m.rotation.y=R()*6.283; m.userData={ph:R()*6.283,ry:m.rotation.y}; m.castShadow=true; world.add(m); ribbons.push(m); });
 })();
 
@@ -1316,10 +1437,10 @@ function nuitMaj(t){
   for(var i=0;i<matsVoeu.length;i++) matsVoeu[i].emissiveIntensity=.62*n;
   silkMat.emissiveIntensity=.5*n;
   goldMat.emissive.copy(orJour).lerp(orNuit,n);
-  /* La poussière devient de l'or en suspension ; de jour elle n'est qu'un
-     grain de lumière. */
-  dust.material.opacity=.75*j+.95*n;
-  dust.material.color.setRGB(.878+.08*n,.714+.04*n,.353-.06*n).convertSRGBToLinear();
+  /* Blanche de jour, dorée la nuit : la même neige, et deux saisons de
+     lumière dans la même journée. */
+  dust.material.opacity=.82*j+.92*n;
+  dust.material.color.setRGB(.86+.14*n,.894+.05*n,.949-.32*n).convertSRGBToLinear();
   /* La brume blanche du jour deviendrait un drap gris la nuit : elle prend
      la couleur du bas du ciel, et s'efface de moitié. */
   var c=SUN.ciel, k;
@@ -1422,77 +1543,102 @@ function focusTag(t){ focused=true; var p=t.slot.pos, th=Math.atan2(p[0],p[2]);
    on recompose chaque matrice à la main — une rotation de trois sur trois
    et une translation, soit une cinquantaine d'opérations par instance.
    Quatre secondes de ce prix, et plus rien ensuite. */
-function Chute(im){
+function Chute(im,vol){
   if(!im) return null;
   var n=im.count, base=im.instanceMatrix.array.slice(), i;
-  /* Par instance : le retard avant de lâcher, la dérive latérale, et un axe
-     de culbute. Tirés une fois, pour que deux secousses ne donnent pas deux
-     chutes identiques il suffira de retirer le retard. */
-  var ret=new Float32Array(n), dvx=new Float32Array(n), dvz=new Float32Array(n), sp=new Float32Array(n);
-  var ax=new Float32Array(n*3);
+  /* Par instance : le retard avant de lâcher, la phase de sa voltige, son
+     axe de culbute, et le retard de sa repousse — tirés une fois. */
+  var ret=new Float32Array(n), ph=new Float32Array(n), sp=new Float32Array(n), rep=new Float32Array(n);
+  var ax=new Float32Array(n*3), ec=new Float32Array(n*2), fo=new Float32Array(n), dis=new Float32Array(n);
   for(i=0;i<n;i++){
-    ret[i]=R()*.55; dvx[i]=(R()-.5)*1.5; dvz[i]=(R()-.5)*1.5; sp[i]=2.2+R()*4.2;
+    ret[i]=R()*1.05; ph[i]=R()*6.283; sp[i]=1.6+R()*3.4; rep[i]=R();
+    /* L'écart au vent, large : sans lui tout part en un seul banc, et l'on
+       voit un ruban de feuilles au lieu d'une bourrasque. Et une force
+       propre à chacune, parce qu'une feuille ne pèse pas comme sa voisine. */
+    ec[i*2]=(R()-.5)*1.5; ec[i*2+1]=(R()-.5)*1.5;
+    fo[i]=.45+R()*1.3; dis[i]=5+R()*7;
     var x=R()-.5, y=R()-.5, z=R()-.5, L=Math.hypot(x,y,z)||1;
     ax[i*3]=x/L; ax[i*3+1]=y/L; ax[i*3+2]=z/L;
   }
-  return {im:im,n:n,base:base,ret:ret,dvx:dvx,dvz:dvz,sp:sp,ax:ax};
+  return {im:im,n:n,base:base,ret:ret,ph:ph,sp:sp,rep:rep,ax:ax,ec:ec,fo:fo,dis:dis,vol:vol};
 }
-var chutes=[], SECOUSSE={t:-99,duree:4.6};
-function chutePrete(){ if(chutes.length) return; var a=Chute(feuilles), b=Chute(cerises);
+var chutes=[], SECOUSSE={t:-99,duree:9.2,vx:1,vz:0};
+function chutePrete(){ if(chutes.length) return; var a=Chute(feuilles,1), b=Chute(cerises,0);
   if(a) chutes.push(a); if(b) chutes.push(b); }
-/* `a` est le temps écoulé depuis la secousse. Avant 2,6 s les feuilles
-   tombent ; après, elles repoussent de zéro, chacune à son tour. */
+
+/* Ce que fait une feuille entre le moment où elle lâche et celui où elle a
+   repoussé. Trois temps :
+
+   la VOLTIGE — elle descend lentement en se balançant, comme une feuille,
+   et non comme une pierre ; la BOURRASQUE — à partir d'une seconde, le vent
+   se lève, la rase au sol puis l'emporte, et elle s'efface en s'éloignant ;
+   la REPOUSSE — chacune revient à son tour, étalée sur près de quatre
+   secondes, dans un ordre tiré au sort. On ne voit donc pas l'arbre se
+   rhabiller d'un coup, mais se remplir.
+
+   Les cerises, elles, sont lourdes : elles tombent plus droit, volent moins
+   loin, et ne voltigent pas. C'est le paramètre `vol`. */
+var CHUTE_FIN=3.9, REPOUSSE=4.9;
 function chuteMaj(a){
   var k, c, i, o;
+  var vx=SECOUSSE.vx, vz=SECOUSSE.vz;
   for(k=0;k<chutes.length;k++){
-    c=chutes[k]; var arr=c.im.instanceMatrix.array;
+    c=chutes[k]; var arr=c.im.instanceMatrix.array, vol=c.vol;
     for(i=0;i<c.n;i++){
       o=i*16;
-      var t=a-c.ret[i];
-      if(t<=0){ /* pas encore lâchée : telle quelle */
-        for(var q=0;q<16;q++) arr[o+q]=c.base[o+q];
-        continue; }
-      if(t<2.6){
-        /* La chute : une parabole, une dérive, et une culbute autour d'un
-           axe tiré au départ.
-
-           Ce qui tombe au-dessus de l'île s'y pose, au lieu de la traverser
-           — on voyait passer les feuilles sous le sol, et se former un tapis
-           dans le vide. On calcule l'instant du contact, et on fige tout à
-           cet instant-là : la feuille garde l'inclinaison qu'elle avait en
-           touchant terre. Ce qui tombe à côté continue, et s'efface. */
-        var bx=c.base[o+12], bz=c.base[o+14];
-        var tSol=(bx*bx+bz*bz)<8.1?Math.sqrt(Math.max(0,(c.base[o+13]-.22)/1.225)):1e9;
-        var te=Math.min(t,tSol);
-        var dy=-1.225*te*te, dx=c.dvx[i]*te*.6, dz=c.dvz[i]*te*.6, an=te*c.sp[i];
+      var t=a-c.ret[i], q;
+      if(t<=0){ for(q=0;q<16;q++) arr[o+q]=c.base[o+q]; continue; }
+      if(t<CHUTE_FIN){
+        var bx=c.base[o+12], by=c.base[o+13], bz=c.base[o+14], p=c.ph[i];
+        /* La descente : vitesse limite atteinte tout de suite, et un
+           balancement — une feuille ne tombe pas, elle se pose. */
+        var y=by-(1.55+vol*0)*t*(vol?1:1.9)+(vol?.30*Math.sin(t*3.3+p):0);
+        /* La bourrasque, qui monte en puissance puis emporte. */
+        /* La cerise est lourde : elle tombe presque droit et ne vole
+           pas. Seule la feuille se fait emporter. */
+        var souffle=Math.max(0,t-(vol?.85:1.4)), w=souffle*souffle*(vol?1.35:.16)*c.fo[i];
+        var dx=(vx+c.ec[i*2])*w*2.4+(vol?.55*Math.sin(t*2.1+p):0);
+        var dz=(vz+c.ec[i*2+1])*w*2.4+(vol?.55*Math.cos(t*1.7+p):0);
+        /* Le sol : elle y glisse, puis le vent la soulève. On ne demande
+           pas sa hauteur au relief — six mille interrogations bicubiques par
+           image coûtaient six millisecondes et demie, contre une avant. Dans
+           les dix unités autour du tronc, le replat ne s'écarte pas de zéro
+           d'un demi, et personne ne verra la différence. */
+        var sol=.06;
+        if(y<sol) y=sol+Math.min(1.5,w*.55);
+        var an=t*c.sp[i]*(vol?1:.5);
         var cs=Math.cos(an), sn=Math.sin(an), ic=1-cs;
         var X=c.ax[i*3], Y=c.ax[i*3+1], Z=c.ax[i*3+2];
-        var r0=cs+X*X*ic,    r1=X*Y*ic-Z*sn, r2=X*Z*ic+Y*sn;
-        var r3=Y*X*ic+Z*sn,  r4=cs+Y*Y*ic,   r5=Y*Z*ic-X*sn;
-        var r6=Z*X*ic-Y*sn,  r7=Z*Y*ic+X*sn, r8=cs+Z*Z*ic;
+        var r0=cs+X*X*ic,   r1=X*Y*ic-Z*sn, r2=X*Z*ic+Y*sn;
+        var r3=Y*X*ic+Z*sn, r4=cs+Y*Y*ic,   r5=Y*Z*ic-X*sn;
+        var r6=Z*X*ic-Y*sn, r7=Z*Y*ic+X*sn, r8=cs+Z*Z*ic;
         /* La matrice d'instance est rangée par colonnes : trois colonnes de
-           base, puis la position. On tourne les trois premières, et on
-           décale la quatrième. */
+           base, puis la position. On tourne les trois premières. */
         for(var col=0;col<3;col++){
           var b0=c.base[o+col*4], b1=c.base[o+col*4+1], b2=c.base[o+col*4+2];
           arr[o+col*4]  =r0*b0+r1*b1+r2*b2;
           arr[o+col*4+1]=r3*b0+r4*b1+r5*b2;
           arr[o+col*4+2]=r6*b0+r7*b1+r8*b2;
         }
-        /* Une fois passée sous l'île, la feuille s'efface : on la rend
-           minuscule plutôt que de la laisser traverser les montagnes. */
-        var y0=c.base[o+13]+dy;
-        if(y0<-4.2){ var f=Math.max(0,(y0+6.2)/2); for(var q2=0;q2<12;q2++) arr[o+q2]*=f; }
-        arr[o+12]=c.base[o+12]+dx; arr[o+13]=y0; arr[o+14]=c.base[o+14]+dz;
+        /* Elle s'efface en s'éloignant : on ne la suit pas jusqu'à
+           l'horizon, et rien ne va se coincer dans la montagne. */
+        /* Chacune s'efface à sa propre distance : un seuil commun donne
+           un bord net, et l'on voit la limite du monde. Les cerises, elles,
+           s'effacent avec le temps — elles ne vont nulle part. */
+        var loin=Math.hypot(dx,dz), ef=1;
+        if(loin>c.dis[i]) ef=Math.max(0,1-(loin-c.dis[i])/6.5);
+        if(!vol) ef=Math.min(ef,Math.max(0,1-(t-2.2)/1.4));
+        if(ef<1) for(var q2=0;q2<12;q2++) arr[o+q2]*=ef;
+        arr[o+12]=bx+dx; arr[o+13]=y; arr[o+14]=bz+dz;
       } else {
-        /* La repousse : chacune revient de zéro, en léger décalage, avec un
-           petit dépassement — c'est ce qui donne l'impression que ça pousse
-           et non que ça réapparaît. */
-        var u=(t-2.6-c.ret[i]*1.4)/1.25;
-        if(u<=0){ for(var q3=0;q3<16;q3++) arr[o+q3]=0; continue; }
-        if(u>=1){ for(var q4=0;q4<16;q4++) arr[o+q4]=c.base[o+q4]; continue; }
+        /* La repousse : chacune à son tour, dans un ordre tiré au sort, et
+           avec un petit dépassement — c'est ce qui donne l'impression que
+           ça pousse, et non que ça réapparaît. */
+        var u=(t-CHUTE_FIN-c.rep[i]*(REPOUSSE-1.3))/1.3;
+        if(u<=0){ for(q=0;q<16;q++) arr[o+q]=0; continue; }
+        if(u>=1){ for(q=0;q<16;q++) arr[o+q]=c.base[o+q]; continue; }
         var e=1+2.70158*Math.pow(u-1,3)+1.70158*Math.pow(u-1,2);
-        for(var q5=0;q5<12;q5++) arr[o+q5]=c.base[o+q5]*e;
+        for(var q3=0;q3<12;q3++) arr[o+q3]=c.base[o+q3]*e;
         arr[o+12]=c.base[o+12]; arr[o+13]=c.base[o+13]; arr[o+14]=c.base[o+14]; arr[o+15]=1;
       }
     }
@@ -1503,6 +1649,8 @@ function secouer(){
   if(!entered) return;
   if(clock-SECOUSSE.t<SECOUSSE.duree) return;   /* une secousse à la fois */
   chutePrete(); if(!chutes.length) return;
+  /* Le vent ne souffle pas deux fois dans la même direction. */
+  var a=R()*6.283; SECOUSSE.vx=Math.cos(a); SECOUSSE.vz=Math.sin(a);
   SECOUSSE.t=clock; sfx("tag");
 }
 
@@ -1563,6 +1711,72 @@ function gyroBasculer(){
 if(GYRO.dispo){ $("gyro").hidden=false; $("gyro").onclick=gyroBasculer;
   try{ if(localStorage.getItem("yw_gyro")==="on") gyroBasculer(); }catch(e){} }
 
+/* L'invitation à ouvrir le gyroscope. Elle ne paraît qu'une fois : un
+   appareil qui en a un, un visiteur qui vient d'entrer, et le capteur
+   encore éteint. Refusée ou acceptée, on ne la repose plus. */
+function gyroInviter(){
+  if(!GYRO.dispo||GYRO.on) return;
+  try{ if(localStorage.getItem("yw_gyro_vu")==="1") return; }catch(e){}
+  setTimeout(function(){ if(!GYRO.on&&entered&&!sheetOpen) $("gyroAsk").hidden=false; },2600);
+}
+function gyroRange(){ $("gyroAsk").hidden=true; try{ localStorage.setItem("yw_gyro_vu","1"); }catch(e){} }
+$("gyroYes").onclick=function(){ gyroRange(); gyroBasculer(); };
+$("gyroNo").onclick=gyroRange;
+
+/* ------------------------------------------------------------------ la visite guidée
+   Un bouton, et l'arbre se montre tout seul : il tourne, s'approche d'un
+   vœu, le laisse lire, repart, en choisit un autre, puis lâche ses feuilles
+   au vent et les laisse repousser. Puis il recommence, dans un ordre tiré au
+   sort à chaque fois — ce n'est pas une bande-annonce, c'est une veilleuse.
+
+   Le premier geste du visiteur reprend la main : on ne lutte jamais contre
+   quelqu'un qui veut tourner l'arbre lui-même. */
+var CINE={on:false,prochain:0,etape:0,ronde:true};
+function cineBasculer(){ CINE.on?cineStop():cineStart(); }
+function cineStart(){
+  if(CINE.on||!entered) return;
+  /* L'étape part de moins un : la première qu'on exécute est donc la ronde
+     large, et non l'approche d'un vœu. Partie de zéro, la visite se collait
+     à une étiquette dès la première image et ne tournait jamais. */
+  CINE.on=true; CINE.etape=-1; CINE.prochain=0; CINE.ronde=true;
+  $("cine").classList.add("on"); $("cineI").setAttribute("d","M8.5 6h2.6v12H8.5zM12.9 6h2.6v12h-2.6z");
+  $("cine").setAttribute("aria-label",T("cineOff"));
+  closeCard(true); window.__home();
+}
+function cineStop(muet){
+  if(!CINE.on) return;
+  CINE.on=false;
+  $("cine").classList.remove("on"); $("cineI").setAttribute("d","M8 5.5l10 6.5-10 6.5z");
+  $("cine").setAttribute("aria-label",T("cineOn"));
+  if(!muet) closeCard(true);
+}
+function cineMaj(dt){
+  if(!CINE.on) return;
+  /* La ronde : lente, et seulement quand on ne regarde pas un vœu de près. */
+  if(CINE.ronde){ goal.th+=dt*.115; idle=0; }
+  if(clock<CINE.prochain) return;
+  var ids=Object.keys(tags);
+  CINE.etape++;
+  var e=CINE.etape%5;
+  if(e===1||e===3){
+    /* Un vœu, tiré au sort, et le temps de le lire. */
+    if(ids.length){ var t=tags[ids[Math.floor(R()*ids.length)]];
+      if(t){ CINE.ronde=false; focusTag(t); CINE.prochain=clock+5.4; return; } }
+    e=2;
+  }
+  if(e===4){
+    /* Le vent. On recule d'abord : la bourrasque ne se voit pas le nez
+       sur une étiquette. */
+    closeCard(true); window.__home(); CINE.ronde=true;
+    goal.ph=1.30; goal.r=homeR*1.12;
+    secouer(); CINE.prochain=clock+SECOUSSE.duree+.8; return;
+  }
+  /* La ronde large : on reprend de la distance, à une hauteur tirée au sort. */
+  closeCard(true); window.__home(); CINE.ronde=true;
+  goal.ph=1.12+R()*.46; goal.r=homeR*(.82+R()*.5);
+  CINE.prochain=clock+5.6;
+}
+
 /* Une poignée pour les épreuves : se placer à une heure, viser un vœu,
    lire l'état du ciel. Rien d'autre ne passe par là. */
 window.__essai={
@@ -1571,11 +1785,83 @@ window.__essai={
   voeux:function(){ return Object.keys(tags).length; },
   viser:function(i){ var k=Object.keys(tags); if(k[i]!==undefined) focusTag(tags[k[i]]); return k.length; },
   maison:function(){ window.__home(); },
+  /* Montrer le squelette seul : c'est le seul moyen de regarder le tronc. */
+  nu:function(v){ if(feuilles) feuilles.visible=!v; if(cerises) cerises.visible=!v;
+    Object.keys(tags).forEach(function(k){ tags[k].pivot.visible=!v; });
+    ribbons.forEach(function(r){ r.visible=!v; }); },
+  /* Se placer où l'on veut, pour photographier un détail. */
+  vue:function(o){ focused=true;
+    if(o.tx!==undefined){ goal.tg.set(o.tx,o.ty,o.tz); cam.tg.set(o.tx,o.ty,o.tz); }
+    if(o.r!==undefined){ goal.r=cam.r=o.r; }
+    if(o.ph!==undefined){ goal.ph=cam.ph=o.ph; }
+    if(o.th!==undefined){ goal.th=cam.th=o.th; } },
   relief:function(){ return !!terrain; },
+  /* Le profil du sol le long d'un rayon : c'est ce qui dit si l'on a des
+     montagnes ou une patinoire. */
+  profil:function(th,n,dmax){ var o=[], i;
+    for(i=0;i<=(n||20);i++){ var d=(i/(n||20))*(dmax||900);
+      o.push([Math.round(d),Math.round(solH(Math.cos(th||0)*d,Math.sin(th||0)*d))]); }
+    return o; },
   secouer:function(){ SECOUSSE.t=-99; secouer(); },
+  visite:function(v){ v?cineStart():cineStop(); return CINE.on; },
+  visiteEtat:function(){ return {on:CINE.on,etape:CINE.etape,ronde:CINE.ronde,
+    r:+goal.r.toFixed(2),th:+goal.th.toFixed(2),vise:focused}; },
+  avancer:function(){ CINE.prochain=0; },
   secousse:function(){ return clock-SECOUSSE.t; },
   gyro:function(g,b){ GYRO.dispo=true; if(!GYRO.on) gyroPoser(true); gyroOrient({gamma:g,beta:b}); return {th:GYRO.th,ph:GYRO.ph}; },
   compte:function(){ return {feuilles:feuilles?feuilles.count:0,cerises:cerises?cerises.count:0,voeux:slots.length}; },
+  /* La charpente : un caféier n'a qu'un axe. S'il en repousse quatre, la
+     marche de circonférence revient avec eux. */
+  arbre:function(){
+    var troncs=0, haut=0, i, b;
+    for(i=0;i<branches.length;i++){ b=branches[i];
+      if(b.depth===0) troncs++;
+      for(var j=0;j<b.pts.length;j++) if(b.pts[j][1]>haut) haut=b.pts[j][1]; }
+    var t=null; for(i=0;i<branches.length;i++) if(branches[i].depth===0){ t=branches[i]; break; }
+    /* Le plus gros saut de rayon le long du tronc, d'une maille à l'autre. */
+    /* La régularité du fût, à partir de la troisième maille : les deux
+       premières portent l'empattement des racines, qui est un évasement
+       voulu et non une marche.
+
+       On compare les écarts entre mailles au plus grand d'entre eux, et non
+       chaque écart au rayon du moment : une décroissance linéaire perd
+       vingt pour cent de son rayon à la dernière maille sans qu'il y ait
+       la moindre marche, puisqu'il n'y reste presque rien. Ce qu'on cherche
+       est un écart qui sorte du rang. */
+    var saut=1, moy=0, nb=0, pire=0;
+    if(t){ for(i=3;i<t.radii.length;i++){ var e=Math.abs(t.radii[i]-t.radii[i-1]); moy+=e; nb++; if(e>pire)pire=e; }
+      saut=nb?pire/(moy/nb):1; }
+    var patte=t?t.radii[0]/t.radii[2]:1;
+    /* Et le rayon du plus gros rameau rapporté à celui du tronc au même
+       niveau : c'est ce qui dit s'il y a une seconde tige ou des branches. */
+    var part=0; for(i=0;i<branches.length;i++){ b=branches[i];
+      if(b.depth!==2||!t) continue;
+      var y=b.pts[0][1], k=Math.max(0,Math.min(t.radii.length-1,Math.round(y/haut*(t.radii.length-1))));
+      part=Math.max(part,b.radii[0]/t.radii[k]); }
+    return {troncs:troncs,haut:+haut.toFixed(2),saut:+saut.toFixed(3),part:+part.toFixed(2),patte:+patte.toFixed(2),
+      basTronc:t?+t.radii[0].toFixed(3):0,hautTronc:t?+t.radii[t.radii.length-1].toFixed(3):0};
+  },
+  /* Le sol sous un point : zéro au pied de l'arbre, le relief au loin. */
+  sol:function(x,z){ return solH?+solH(x,z).toFixed(2):null; },
+  /* Où est l'œil, et à quelle hauteur au-dessus de la neige. */
+  oeil:function(){ return {y:+camera.position.y.toFixed(2),
+    garde:+(camera.position.y-(solH?solH(camera.position.x,camera.position.z):0)).toFixed(2)}; },
+  neige:function(){ return {flocons:DUST,visible:dust.visible,opacite:+dust.material.opacity.toFixed(2)}; },
+  /* L'écart des feuilles au tronc : c'est lui qui dit si le vent les
+     emporte, puisqu'elles ne tombent pas, elles s'envolent. */
+  ecart:function(){ if(!feuilles) return {moy:0,max:0};
+    var a=feuilles.instanceMatrix.array, s=0, m=0, n=0, i;
+    for(i=0;i<feuilles.count;i++){ var o=i*16;
+      if(a[o]===0&&a[o+5]===0) continue;
+      var d=Math.hypot(a[o+12],a[o+14]); s+=d; if(d>m)m=d; n++; }
+    return {moy:n?s/n:0,max:m}; },
+  /* La part des feuilles déjà revenues, en pour cent. */
+  repousse:function(){ if(!feuilles||!chutes.length) return 0;
+    var a=feuilles.instanceMatrix.array, b=chutes[0].base, n=0, i;
+    for(i=0;i<feuilles.count;i++){ var o=i*16;
+      if(Math.abs(a[o]-b[o])<1e-4&&Math.abs(a[o+5]-b[o+5])<1e-4) n++; }
+    return Math.round(n/feuilles.count*100); },
+  visiteOn:function(){ return CINE.on; },
   /* Ce que coûte une image de chute, en millisecondes de calcul pur. */
   coutChute:function(){ chutePrete(); var n=24, t0, i, m=[];
     for(i=0;i<n;i++){ t0=performance.now(); chuteMaj(.4+i*.08); m.push(performance.now()-t0); }
@@ -1622,6 +1908,10 @@ window.__essai={
     var e=enc/nEnc, a=Math.max(e,pap), b=Math.min(e,pap);
     return {ratio:(a+.05)/(b+.05),part:Math.round(nEnc/n*100)}; }
 };
+/* Le premier geste sur la scène reprend la main : on ne lutte pas contre
+   quelqu'un qui veut tourner l'arbre lui-même. */
+canvas.addEventListener("pointerdown",function(){ cineStop(); },true);
+canvas.addEventListener("wheel",function(){ cineStop(); },{passive:true,capture:true});
 var ptrs={}, nP=0, pinch=0, moved=0, downT=0, ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
 canvas.addEventListener("pointerdown",function(e){ try{canvas.setPointerCapture(e.pointerId);}catch(x){} ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; nP=Object.keys(ptrs).length;
   if(nP===1){ moved=0; downT=performance.now(); } pinch=0; idle=0; });
@@ -1692,7 +1982,8 @@ function frame(now){
   /* L'heure d'abord : tout le décor en dépend, et le thème de l'interface
      avec lui. */
   sunMaj(); themeMaj(); lumMaj(); cielMaj(t);
-  idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0) goal.th+=dt*.045;
+  cineMaj(dt);
+  idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0&&!CINE.on) goal.th+=dt*.045;
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
   cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);
   /* L'inclinaison du téléphone s'ajoute au regard, en douceur : appliquée
@@ -1701,13 +1992,21 @@ function frame(now){
   GYRO.cph+=(GYRO.ph-GYRO.cph)*(1-Math.exp(-dt*3.2));
   var vth=cam.th+GYRO.cth, vph=clamp(cam.ph+GYRO.cph,.3,1.86), sp=Math.sin(vph);
   camera.position.set(cam.tg.x+cam.r*sp*Math.sin(vth), cam.tg.y+cam.r*Math.cos(vph), cam.tg.z+cam.r*sp*Math.cos(vth));
+  /* L'œil ne passe pas sous la neige. Tant que l'arbre flottait, regarder
+     par en dessous montrait le ciel ; posé au sol, cela montre l'envers du
+     terrain — une coque creuse, sans fond. On remonte l'œil juste ce qu'il
+     faut, et l'on vise toujours l'arbre : le cadrage se redresse de
+     lui-même plutôt que de buter. */
+  if(solH){ var sy=solH(camera.position.x,camera.position.z)+1.35;
+    if(camera.position.y<sy) camera.position.y=sy; }
   camera.lookAt(cam.tg);
   if(clock-SECOUSSE.t<SECOUSSE.duree) chuteMaj(clock-SECOUSSE.t);
-  scene.fog.near=Math.max(cam.r-3.5,1.5); scene.fog.far=cam.r+24;
   /* Le dôme du ciel suit la caméra : il est immense, mais il n'a pas à être
      traversé quand on s'éloigne de l'arbre. */
   skyDome.position.copy(camera.position);
-  world.position.y=Math.sin(t*.38)*.07; world.rotation.z=Math.sin(t*.21)*.006;
+  /* L'île tanguait doucement ; un arbre planté, non. Il ne reste que le
+     balancement de la cime sous le vent. */
+  world.rotation.z=Math.sin(t*.21)*.0045;
   var gust=.5+.5*Math.sin(t*.23)*Math.sin(t*.11+1.3);
   Object.keys(tags).forEach(function(id){ var g=tags[id], a=t-g.born, amp=.045+.07*gust, s=1;
     if(a<1.1){ var x=clamp(a/1.1,0,1), c1=1.70158, c3=c1+1; s=1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2); }
@@ -1717,12 +2016,10 @@ function frame(now){
     g.body.rotation.y+=(Math.sin(t*.45+g.slot.ph)*.012)*dt*6; });
   nuitMaj(t);
   for(i=0;i<ribbons.length;i++){ var rb=ribbons[i]; rb.rotation.z=Math.sin(t*.9+rb.userData.ph)*(.05+.1*gust); rb.rotation.x=Math.cos(t*.7+rb.userData.ph)*(.04+.08*gust); }
-  for(i=0;i<DUST;i++){ var o=i*3; dustPos[o+1]+=dustSeed[i*2+1]*dt; dustPos[o]+=Math.sin(t*.4+dustSeed[i*2])*dt*.05; if(dustPos[o+1]>7.2) dustPos[o+1]=-2.6; }
-  dustGeo.attributes.position.needsUpdate=true;
+  neigeMaj(t,dt,camera.position.x,camera.position.z);
   for(i=0;i<falling.length;i++){ var f=falling[i], u=f.userData; u.y-=u.sp*dt; u.a+=dt*.12; if(u.y<-3.4){ u.y=5.4+R()*1.5; u.r=1+R()*4.4; }
     f.position.set(Math.cos(u.a)*u.r+Math.sin(t*.8+u.ph)*.25,u.y,Math.sin(u.a)*u.r); f.rotation.set(t*.7+u.ph,t*.5+u.ph,Math.sin(t+u.ph)*.8); }
   for(i=0;i<mists.length;i++){ var ms=mists[i]; ms.userData.a+=ms.userData.sp*dt; ms.position.x=Math.cos(ms.userData.a)*ms.userData.r; ms.position.z=Math.sin(ms.userData.a)*ms.userData.r; }
-  for(i=0;i<floaters.length;i++){ var fl=floaters[i]; fl.position.y=fl.userData.y+Math.sin(t*fl.userData.sp+fl.userData.ph)*.12; fl.rotation.y+=dt*.05; }
   if(post){
     var close=clamp((9-cam.r)/7,0,1), u2=postMat.uniforms;
     u2.uFocus.value=Math.max(cam.r,1); u2.uAperture.value=5.5+close*9; u2.uTime.value=t%10;
