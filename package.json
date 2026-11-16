@@ -32,7 +32,8 @@
     "test:jeu": "node tests/jeu.mjs",
     "test:carte": "node tests/carte.mjs",
     "test:arabica": "node tests/arabica.mjs",
-    "test": "npm run test:boutique && npm run test:rupture && npm run test:stock && npm run test:retractation && npm run test:cgv && npm run test:jeu && npm run test:carte && npm run test:arabica && npm run test:mise-en-page && npm run test:blocs && npm run test:theme"
+    "test": "npm run test:boutique && npm run test:rupture && npm run test:stock && npm run test:retractation && npm run test:cgv && npm run test:jeu && npm run test:carte && npm run test:arabica && npm run test:mise-en-page && npm run test:blocs && npm run test:theme",
+    "test:wishes": "node outils/construire-wishes.mjs && node tests/wishes.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

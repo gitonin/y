@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>L'arbre à souhaits — Yunma</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Le jour et la nuit. Les cinq couleurs de la charte sont reposées par le
+   script à chaque bascule — voir « thème » plus bas —, et les deux
+   variantes en composantes servent aux transparences : une seule encre,
+   déclinée, plutôt que trente règles à retrouver une à une. */
+:root{--beige:#efebe2;--paper:#fbfaf7;--ink:#212121;--rust:#b95f2c;--green:#565a41;
+  --ink-rgb:33,33,33;--beige-rgb:239,235,226}
+html{transition:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--beige);color:var(--ink);
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+.zhf{font-family:"Ma Shan Zheng","Kaiti SC","STKaiti","KaiTi","Songti SC",serif}
+
+/* top bar */
+#top{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
+  padding:14px 16px;pointer-events:none;z-index:5;transition:opacity .6s}
+#top>*{pointer-events:auto}
+#brandt{line-height:1.05;min-width:0;flex:1 1 auto;padding-right:12px}#tools{flex:0 0 auto}
+#brandt .zhf{font-size:26px;color:var(--rust);letter-spacing:2px}
+#brandt small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-top:8px;line-height:1.3}
+#tools{display:flex;gap:8px;align-items:center}
+.pill{height:34px;min-width:34px;padding:0 10px;border-radius:4px;background:rgba(var(--beige-rgb),.78);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(var(--ink-rgb),.2);
+  font-size:12px;letter-spacing:.08em;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.pill b{font-weight:500;opacity:.38}.pill b.on{opacity:1}
+.pill#gyro{opacity:.55}.pill#gyro.on{opacity:1}
+.pill[hidden]{display:none}
+.pill svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* bottom */
+#bottom{position:fixed;left:0;right:0;bottom:0;padding:0 16px 14px;display:flex;flex-direction:column;align-items:center;
+  gap:10px;z-index:5;pointer-events:none;transition:opacity .5s,transform .5s}
+#bottom>*{pointer-events:auto}
+#count{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);pointer-events:none;font-weight:500}
+#cta{display:flex;gap:8px;align-items:center}
+.btn{height:50px;padding:0 26px;border-radius:4px;background:var(--rust);color:var(--beige);font-size:12.5px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;transition:background .2s}
+.btn:hover{filter:brightness(.9)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:rgba(var(--beige-rgb),.82);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.55);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn.round{width:50px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.btn.round svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.btn[disabled]{opacity:.45}
+#sign{padding:0;display:block}#sign img{height:56px;width:auto;display:block}
+/* Le logo est un dessin noir sur fond transparent : sur le bleu de minuit,
+   il disparaît. On ne le recompose pas — on l'inverse, ce qui en donne la
+   version claire, et par fractions, pour qu'il suive le fondu du thème au
+   lieu de basculer d'un coup. */
+img.lg{filter:invert(var(--logo-inv,0))}
+#introLogo{height:116px;width:auto;margin-bottom:26px}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+#hint{font-size:11px;color:rgba(var(--ink-rgb),.6);letter-spacing:.04em;transition:opacity 1s;text-align:center}
+
+/* intro */
+#intro{position:fixed;inset:0;z-index:20;background:var(--beige);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:24px 28px 18px;
+  overflow-y:auto;transition:opacity 1.6s ease,visibility 1.6s}
+#intro>:first-child{margin-top:auto}#intro>:last-child{margin-bottom:auto}#intro>*{flex:0 0 auto}
+@media (max-height:640px){#introLogo{height:76px;margin-bottom:14px}#intro p{margin-bottom:18px}#intro .by img{height:56px}#intro .langs{margin-top:12px}}
+#intro.gone{opacity:0;visibility:hidden}
+#intro .seal{width:70px;height:70px;border-radius:4px;background:var(--rust);color:var(--beige);display:flex;align-items:center;
+  justify-content:center;font-size:44px;margin-bottom:26px}
+#intro h1{font-weight:500;font-size:26px;letter-spacing:.01em;margin:0 0 10px}
+#intro .zh{font-size:22px;color:var(--rust);letter-spacing:.3em;margin-bottom:16px;padding-left:.3em}
+#intro p{max-width:310px;font-size:14px;line-height:1.6;color:var(--ink);margin:0 0 28px}
+#intro .langs{margin-top:22px;font-size:12px;letter-spacing:.14em}
+#intro .langs button{padding:8px 10px;opacity:.4}#intro .langs button.on{opacity:1;text-decoration:underline;text-underline-offset:4px}
+#intro .by{margin-top:28px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+#intro .by img{display:block;height:78px;width:auto;margin:10px auto 0}
+
+/* sheet */
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:12;background:rgba(var(--beige-rgb),.96);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border-radius:8px 8px 0 0;box-shadow:0 -20px 60px -24px rgba(var(--ink-rgb),.35);
+  max-height:78vh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  max-width:560px;margin:0 auto}
+#sheet.open{transform:none}
+#sheet header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 18px 10px}
+#sheet header h2{margin:0;font-size:18px;font-weight:500;line-height:1.25}
+#stepN{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:5px}
+#steps{display:flex;gap:6px;padding:0 18px 12px}#steps i{flex:1;height:3px;background:rgba(var(--ink-rgb),.14);transition:background .3s}#steps i.on{background:var(--rust)}
+.st{display:none}.st.on{display:block;animation:stin .35s ease}
+@keyframes stin{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+#tabs{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 12px}
+#tabs button{padding:8px 11px;border-radius:4px;font-size:12px;box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.3);color:var(--ink)}
+#tabs button.on{background:var(--ink);color:var(--beige);box-shadow:none}
+.note{font-size:12px;line-height:1.5;color:rgba(var(--ink-rgb),.65);margin:8px 0 0}
+#prevBig{display:block;height:190px;width:auto;max-width:60%;margin:6px auto 18px;filter:drop-shadow(0 8px 10px rgba(90,20,10,.32))}
+#sheet .x{width:34px;height:34px;border-radius:4px;font-size:20px;line-height:1;box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.3)}
+#sheet .body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 18px 12px}
+#sheet h3{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:500;margin:14px 0 8px}
+#shapes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:2px 0 6px}
+#shapes button{height:104px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  background:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.14);transition:box-shadow .2s,background .2s}
+#shapes button.on{background:#f8f6f0;box-shadow:inset 0 0 0 2px var(--rust)}
+#shapes canvas{max-width:58px;max-height:82px;filter:drop-shadow(0 3px 4px rgba(90,20,10,.3))}
+#presets{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#presets .m{font-size:14px;line-height:1.3;color:var(--ink);display:block}#presets .m.zhf{font-size:19px;color:var(--rust)}
+#presets button{text-align:left;padding:10px 12px;border-radius:4px;background:var(--paper);
+  box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.14)}
+#presets button.on{background:#f8f6f0;box-shadow:inset 0 0 0 2px var(--rust)}
+#presets .z{font-size:22px;color:var(--rust);display:block;line-height:1.15}
+#presets .p{font-size:10px;color:rgba(var(--ink-rgb),.45);display:block;margin:2px 0 3px;letter-spacing:.02em}
+#presets .t{font-size:12px;color:rgba(var(--ink-rgb),.78);display:block;line-height:1.3}
+.field{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:4px;border:0;outline:0;color:var(--ink);
+  background:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.3);resize:none}
+.field:focus{box-shadow:inset 0 0 0 2px var(--rust);background:#f8f6f0}
+#sheet footer{display:flex;gap:14px;align-items:center;padding:10px 18px 16px;border-top:1px solid rgba(var(--ink-rgb),.08)}
+#prev{height:58px;width:auto;max-width:54px;filter:drop-shadow(0 4px 6px rgba(90,20,10,.35))}
+#sheet footer .btn{flex:1;padding:0 10px}#sheet footer .btn.ghost{flex:0 0 auto;padding:0 16px}
+
+/* card */
+#card{position:fixed;left:12px;right:12px;bottom:14px;z-index:11;max-width:440px;margin:0 auto;padding:18px 18px 14px;
+  background:rgba(var(--beige-rgb),.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:8px;
+  box-shadow:0 20px 60px -28px rgba(var(--ink-rgb),.45),inset 0 0 0 1px rgba(var(--ink-rgb),.12);
+  transform:translateY(130%);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+#card.open{transform:none}
+#card .zh{font-size:34px;color:var(--rust);line-height:1.15;word-break:break-word}
+#card .zh.lat{font-family:"Caveat","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:28px;color:var(--ink)}
+#card .py{font-size:12px;color:rgba(var(--ink-rgb),.5);margin-top:2px;letter-spacing:.04em}
+#card .tr{font-size:15px;margin-top:8px;line-height:1.4}
+#card .by{font-size:12px;color:var(--green);margin-top:8px;letter-spacing:.04em}
+#card .row{display:flex;gap:8px;margin-top:14px}
+#card .row .btn{height:44px;font-size:11.5px;padding:0 6px;flex:1}
+#cimg{display:block;max-height:50vh;max-width:100%;margin:4px auto 12px;border-radius:3px;box-shadow:0 12px 30px -14px rgba(60,40,20,.55);-webkit-touch-callout:default;user-select:auto;-webkit-user-select:auto}
+#cmodal .row .btn,#lmodal .row .btn{padding:0 6px;font-size:11.5px;letter-spacing:.1em}
+
+/* modal + toast */
+.modal{position:fixed;inset:0;z-index:30;background:rgba(var(--ink-rgb),.45);display:none;align-items:center;justify-content:center;padding:22px}
+.modal.open{display:flex}
+.modal .box{background:var(--beige);border-radius:8px;padding:22px;max-width:380px;width:100%}
+.modal h2{margin:0 0 8px;font-size:18px;font-weight:500}
+.modal p{margin:0 0 14px;font-size:13px;line-height:1.55;color:var(--ink)}
+.modal .row{display:flex;gap:8px;margin-top:12px}.modal .row .btn{flex:1;height:46px;font-size:12px}
+#toast{position:fixed;left:50%;top:88px;transform:translate(-50%,-20px);z-index:40;background:var(--ink);color:var(--beige);
+  font-size:13px;line-height:1.4;padding:10px 16px;border-radius:4px;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none;
+  max-width:86vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.hide{opacity:0!important;pointer-events:none!important}
+#bottom.down{transform:translateY(30px);opacity:0;pointer-events:none}#bottom.down>*{pointer-events:none}
+#err{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:30px;text-align:center;z-index:50;background:var(--paper);font-size:14px;line-height:1.5}
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="0"></canvas>
+
+<div id="top" class="hide">
+  <div id="brandt"><button id="sign" aria-label="yunma.fr"><img class="lg" alt="yunma"></button></div>
+  <div id="tools">
+    <button class="pill" id="lang" aria-label="Langue"><b data-l="fr">FR</b><b data-l="en">EN</b><b data-l="zh">中</b></button>
+    <button class="pill" id="gyro" aria-label="Gyroscope" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="3.4" ry="8.4"/><path d="M3.6 12h16.8"/></svg></button>
+    <button class="pill" id="snd" aria-label="Son"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndw" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg></button>
+  </div>
+</div>
+
+<div id="bottom" class="down">
+  <div id="count"></div>
+  <div id="cta">
+    <button class="btn" id="add" data-i="add"></button>
+    <button class="btn ghost round" id="share" aria-label="Partager"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg></button>
+  </div>
+  <div id="hint" data-i="hint"></div>
+</div>
+
+<div id="sheet" aria-hidden="true">
+  <header><div><div id="stepN"></div><h2 id="stTitle"></h2></div><button class="x" id="sheetX" aria-label="Fermer">×</button></header>
+  <div id="steps"><i></i><i></i><i></i></div>
+  <div class="body">
+    <section class="st" data-st="1"><div id="shapes"></div></section>
+    <section class="st" data-st="2">
+      <div id="tabs"></div>
+      <div id="presets"></div>
+      <div id="ownBox"><textarea class="field" id="own" rows="3" maxlength="60"></textarea><p class="note" data-i="ownNote"></p></div>
+    </section>
+    <section class="st" data-st="3">
+      <canvas id="prevBig"></canvas>
+      <input class="field" id="name" maxlength="20" autocomplete="off">
+      <p class="note" data-i="nameNote"></p>
+    </section>
+  </div>
+  <footer><canvas id="prev"></canvas><button class="btn ghost" id="stBack" data-i="back"></button><button class="btn" id="stNext" data-i="next"></button><button class="btn" id="hang" data-i="hang"></button></footer>
+</div>
+
+<div id="card">
+  <div class="zh zhf" id="cZh"></div><div class="py" id="cPy"></div><div class="tr" id="cTr"></div><div class="by" id="cBy"></div>
+  <div class="row"><button class="btn" id="cShare" data-i="shareWish"></button><button class="btn ghost" id="cCard" data-i="card"></button><button class="btn ghost" id="cBack" data-i="back"></button></div>
+</div>
+
+<div id="modal" class="modal"><div class="box">
+  <h2 data-i="shareTitle"></h2><p data-i="shareText"></p>
+  <input class="field" id="link" readonly>
+  <div class="row"><button class="btn" id="copy" data-i="copy"></button><button class="btn ghost" id="mClose" data-i="close"></button></div>
+</div></div>
+
+<div id="cmodal" class="modal"><div class="box">
+  <h2 data-i="cardTitle"></h2>
+  <img id="cimg" alt="">
+  <p data-i="cardHint"></p>
+  <div class="row"><button class="btn" id="cJpg" data-i="jpg"></button><button class="btn" id="cPdf" data-i="pdf"></button><button class="btn ghost" id="cClose" data-i="close"></button></div>
+</div></div>
+
+<div id="lmodal" class="modal"><div class="box" style="text-align:center">
+  <img class="lg" alt="yunma" style="height:96px;margin:2px auto 14px;display:block">
+  <h2 data-i="leaveTitle"></h2><p data-i="leaveText"></p>
+  <div class="row"><a class="btn" id="leaveGo" href="https://yunma.fr" target="_blank" rel="noopener" data-i="leaveGo"></a><button class="btn ghost" id="leaveStay" data-i="leaveStay"></button></div>
+</div></div>
+
+<div id="intro">
+  <img class="lg" id="introLogo" alt="yunma">
+  <div class="zh zhf">许愿树</div>
+  <h1 data-i="title"></h1>
+  <p data-i="introText"></p>
+  <button class="btn" id="enter" data-i="enter"></button>
+  <div class="langs"><button data-l="fr">Français</button>·<button data-l="en">English</button>·<button data-l="zh">中文</button></div>
+</div>
+<div id="toast"></div>
+<div id="err"></div>
+
+<script>
+/* Le logo et la photographie de la carte étaient encodés dans la page : trois
+   cent cinq kilo-octets de base64, téléchargés par tout le monde avant la
+   première image, et que la compression ne peut pas réduire — ce sont déjà
+   des fichiers compressés.
+
+   Ils sont maintenant deux fichiers à côté. Le logo part tout de suite,
+   puisqu'il est à l'écran d'accueil ; la photographie attend qu'on demande
+   sa carte, ce que presque personne ne fait avant d'avoir accroché un vœu.
+   La page passe ainsi de 466 à 200 kilo-octets. */
+window.YW_LOGO="assets/logo-yunma-transparent.png";
+window.YW_PHOTO="assets/carte-photo-1050x1480.jpg";
+</script>
+<script src="three.min.js"></script>
+<script>
+(function(){
+"use strict";
+/* ------------------------------------------------------------------ config */
+var CARD_URL = "https://yunma.fr/wishes", CARD_URL_TEXT = "yunma.fr/wishes", SITE_URL = "https://yunma.fr";
+/* Le lien qu'on envoie. Il doit mener à l'arbre tel qu'il est en ligne ;
+   ouvert ailleurs, on retombe sur l'adresse de la page elle-même. */
+var SHARE_URL = "https://yunma.fr/wishes";
+var $ = function(id){ return document.getElementById(id); };
+
+var PRESETS = [
+ {k:"zh",zh:"平安喜乐",py:"píng'ān xǐlè",fr:"Paix et joie",en:"Peace and joy"},
+ {k:"zh",zh:"万事如意",py:"wànshì rúyì",fr:"Que tout se passe selon vos vœux",en:"May everything go as you wish"},
+ {k:"zh",zh:"心想事成",py:"xīn xiǎng shì chéng",fr:"Que vos souhaits se réalisent",en:"May your wishes come true"},
+ {k:"zh",zh:"身体健康",py:"shēntǐ jiànkāng",fr:"Bonne santé",en:"Good health"},
+ {k:"zh",zh:"阖家幸福",py:"hé jiā xìngfú",fr:"Bonheur à toute la famille",en:"Happiness to the whole family"},
+ {k:"w",fr:"Joyeux Noël",en:"Merry Christmas",zh:"圣诞快乐"},
+ {k:"w",fr:"Bonne année",en:"Happy New Year",zh:"新年快乐"},
+ {k:"w",fr:"Douces fêtes de fin d'année",en:"Happy holidays",zh:"节日快乐"},
+ {k:"w",fr:"Que l'année nouvelle soit douce",en:"May the new year be gentle",zh:"愿新的一年温柔以待"},
+ {k:"w",fr:"Meilleurs vœux à ceux que j'aime",en:"Best wishes to those I love",zh:"祝我爱的人一切都好"},
+ {k:"c",fr:"Un Noël tout chaud, comme un café",en:"A Christmas as warm as coffee",zh:"愿圣诞像咖啡一样温暖"},
+ {k:"c",fr:"Que ton année sente bon le café",en:"May your year smell of fresh coffee",zh:"愿你的新年满是咖啡香"},
+ {k:"c",fr:"Un café, un plaid, et toi",en:"A coffee, a blanket, and you",zh:"一杯咖啡，一条毯子，还有你"},
+ {k:"c",fr:"Plus de cafés ensemble l'an prochain",en:"More coffees together next year",zh:"明年多一起喝咖啡"},
+ {k:"c",fr:"Des matins doux et des tasses pleines",en:"Soft mornings and full cups",zh:"愿清晨温柔，杯杯满满"},
+ {k:"c",fr:"Joyeux Noël, mon grain préféré",en:"Merry Christmas, my favourite bean",zh:"圣诞快乐，我最爱的那颗豆"},
+ {k:"c",fr:"Bonne année, serrée et sans sucre",en:"Happy New Year: strong, no sugar",zh:"新年快乐，浓一点，不加糖"},
+ {k:"c",fr:"Du café, de l'amour, des fêtes",en:"Coffee, love and holidays",zh:"咖啡、爱与节日"},
+ {k:"c",fr:"Que chaque tasse te réchauffe le cœur",en:"May every cup warm your heart",zh:"愿每一杯都暖到心里"},
+ {k:"c",fr:"Bonne année, pleine d'arômes",en:"A new year full of aroma",zh:"愿新年香气满满"}
+];
+
+var I18N = {
+ fr:{title:"L'arbre à souhaits",introText:"En Chine, on confie ses vœux à un arbre : une étiquette rouge, un fil d'or, quelques mots. Pour les fêtes, accrochez le vôtre à ce caféier du Yunnan — puis passez le lien à ceux que vous aimez.",
+  gyroOn:"Gyroscope activé : inclinez le téléphone, et secouez-le.",gyroNon:"Le gyroscope n'a pas été autorisé.",
+  enter:"Entrer",by:"Une expérience signée",add:"Accrocher un vœu",hint:"Glisser pour tourner · pincer pour zoomer · toucher une étiquette",
+  sheetTitle:"Votre vœu",s1:"1 · L'étiquette",st1:"Choisissez la forme de votre étiquette",st2:"Choisissez votre vœu",st3:"Signez, puis accrochez",stepOf:"Étape",next:"Continuer",g_own:"Mes propres mots",ownNote:"60 caractères au maximum : un mot court se lit mieux sur l'étiquette.",nameNote:"Votre prénom s'écrit sous le vœu. Vous pouvez laisser ce champ vide.",s2:"2 · Le vœu",g_zh:"Vœux chinois traditionnels",g_w:"Noël et nouvelle année",g_c:"Fêtes et café",s3:"… ou vos propres mots",s4:"Votre prénom (facultatif)",
+  ownPh:"Écrivez votre petit mot (60 caractères)",namePh:"Prénom",hang:"Accrocher à l'arbre",shareWish:"Envoyer",back:"Retour",card:"Carte",cardTitle:"Votre carte numérique",
+  cardHint:"Téléchargez la carte, ou faites un appui long sur l'image pour l'enregistrer.",jpg:"Image JPEG",pdf:"PDF",cardScan:"Scannez pour retrouver ce vœu sur l'arbre",leaveTitle:"Quitter l'expérience ?",leaveText:"Le site yunma.fr va s'ouvrir dans une nouvelle page. L'arbre reste ouvert ici.",leaveGo:"Aller sur yunma.fr",leaveStay:"Rester ici",saved:"Carte enregistrée.",cardFail:"Téléchargement indisponible ici : appui long sur l'image.",
+  shareTitle:"Faire passer l'arbre",shareText:"Envoyez ce lien : la personne découvrira l'arbre, les vœux déjà accrochés, et pourra ajouter le sien.",
+  copy:"Copier le lien",copied:"Lien copié",close:"Fermer",count:function(n){return n+(n>1?" vœux accrochés":" vœu accroché");},
+  hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
+  need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
+ en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
+  gyroOn:"Gyroscope on: tilt the phone, and shake it.",gyroNon:"The gyroscope was not allowed.",
+  enter:"Enter",by:"An experience by",add:"Hang a wish",hint:"Drag to orbit · pinch to zoom · tap a tag",
+  sheetTitle:"Your wish",s1:"1 · The tag",st1:"Choose the shape of your tag",st2:"Choose your wish",st3:"Sign it, then hang it",stepOf:"Step",next:"Continue",g_own:"My own words",ownNote:"60 characters at most: a short note reads better on the tag.",nameNote:"Your first name is written under the wish. You can leave this empty.",s2:"2 · The wish",g_zh:"Traditional Chinese wishes",g_w:"Christmas and New Year",g_c:"Holidays and coffee",s3:"… or your own words",s4:"Your first name (optional)",
+  ownPh:"Write your note (60 characters)",namePh:"First name",hang:"Hang on the tree",shareWish:"Send",back:"Back",card:"Card",cardTitle:"Your digital card",
+  cardHint:"Download the card, or long-press the image to save it.",jpg:"JPEG image",pdf:"PDF",cardScan:"Scan to find this wish on the tree",leaveTitle:"Leave the experience?",leaveText:"The yunma.fr website will open in a new page. The tree stays open here.",leaveGo:"Go to yunma.fr",leaveStay:"Stay here",saved:"Card saved.",cardFail:"Download unavailable here: long-press the image.",
+  shareTitle:"Pass the tree on",shareText:"Send this link: they will discover the tree, the wishes already hanging, and can add their own.",
+  copy:"Copy link",copied:"Link copied",close:"Close",count:function(n){return n+(n>1?" wishes hanging":" wish hanging");},
+  hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
+  need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
+ zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
+  gyroOn:"已开启陀螺仪：倾斜手机，也可以摇一摇。",gyroNon:"陀螺仪未获授权。",
+  enter:"进入",by:"出品",add:"挂上心愿",hint:"拖动旋转 · 双指缩放 · 轻点红牌",
+  sheetTitle:"你的心愿",s1:"1 · 选择红牌",st1:"选择红牌的形状",st2:"选一句祝福",st3:"署名，然后挂上",stepOf:"步骤",next:"继续",g_own:"自己写",ownNote:"最多60字：短短一句，在红牌上更好看。",nameNote:"名字会写在心愿下方，也可以不填。",s2:"2 · 选一句祝福",g_zh:"中国传统祝福",g_w:"圣诞与新年",g_c:"节日与咖啡",s3:"……或写下自己的话",s4:"你的名字（可不填）",
+  ownPh:"写下你的心愿（60字以内）",namePh:"名字",hang:"挂到树上",shareWish:"分享",back:"返回",card:"贺卡",cardTitle:"你的数字贺卡",
+  cardHint:"下载贺卡，或长按图片保存。",jpg:"JPEG 图片",pdf:"PDF",cardScan:"扫码，在树上找到这个心愿",leaveTitle:"要离开吗？",leaveText:"yunma.fr 网站将在新页面打开，许愿树仍留在这里。",leaveGo:"前往 yunma.fr",leaveStay:"留在这里",saved:"贺卡已保存。",cardFail:"此处无法下载：请长按图片保存。",
+  shareTitle:"把这棵树传下去",shareText:"发送此链接：对方可以看到这棵树和已挂上的心愿，并添上自己的。",
+  copy:"复制链接",copied:"链接已复制",close:"关闭",count:function(n){return "已挂 "+n+" 个心愿";},
+  hung:"你的心愿已挂上。",localOnly:"心愿仅保存在本设备：此访客暂不能写入共享内容。",
+  need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
+};
+var lang = "fr";
+try{ var sl = localStorage.getItem("yw_lang"); if(I18N[sl]) lang=sl; else { var nl=navigator.language||"fr"; lang=/^zh/i.test(nl)?"zh":(/^fr/i.test(nl)?"fr":"en"); } }catch(e){}
+function T(k){ return I18N[lang][k]; }
+
+/* ------------------------------------------------------------------ rng + vec */
+function mulberry(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+var R = mulberry(88168);
+function vadd(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]];}
+function vsub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]];}
+function vscale(a,s){return [a[0]*s,a[1]*s,a[2]*s];}
+function vdot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+function vcross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];}
+function vlen(a){return Math.sqrt(vdot(a,a));}
+function vnorm(a){var l=vlen(a)||1;return [a[0]/l,a[1]/l,a[2]/l];}
+function perp(d){ return vnorm(vcross(d, Math.abs(d[1])<0.9?[0,1,0]:[1,0,0])); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+
+/* ------------------------------------------------------------------ coffee tree skeleton (pure math) */
+var branches = [];
+function limb(p0,d0,len,r0,r1,n,wob,lift,depth){
+  var pts=[p0], radii=[r0], dirs=[d0], p=p0, d=d0, i;
+  for(i=1;i<=n;i++){ d=vnorm([d[0]+(R()-.5)*wob, d[1]+(R()-.5)*wob*.5+lift, d[2]+(R()-.5)*wob]);
+    p=vadd(p,vscale(d,len/n)); pts.push(p); radii.push(r0+(r1-r0)*i/n); dirs.push(d); }
+  var b={pts:pts,radii:radii,dirs:dirs,depth:depth}; branches.push(b); return b;
+}
+(function(){
+  var trunk=limb([0,0.1,0],[0.04,1,0.02],1.45,0.42,0.30,6,0.10,0.05,0), tp=trunk.pts[6], stems=[], s,i,k;
+  for(s=0;s<4;s++){ var central=s===3, a=s*2.094+R()*.5, tilt=central?0.04:0.44+R()*.12;
+    stems.push(limb(tp,vnorm([Math.cos(a)*Math.sin(tilt),Math.cos(tilt),Math.sin(a)*Math.sin(tilt)]),central?5.0:3.9+R()*.6,central?.2:.17,.035,12,.07,.055,1)); }
+  stems.forEach(function(st){ var ph=R()*6.283;
+    for(i=2;i<=12;i++){ var t=(i-2)/10; ph+=1.571+(R()-.5)*.5;
+      for(k=0;k<2;k++){ var a=ph+k*3.1416+(R()-.5)*.3, d=vnorm([Math.cos(a),0.2+R()*.16,Math.sin(a)]);
+        var len=(2.5-1.75*t)*(0.85+R()*.3), bp=st.pts[i], rad=Math.hypot(bp[0],bp[2]);
+        if(rad>0.35&&(bp[0]*d[0]+bp[2]*d[2])/rad<-0.2) len*=0.45;
+        var lat=limb(bp,d,len,Math.max(.022,st.radii[i]*.5),.009,7,.16,-0.075,2);
+        [2,4].forEach(function(j){ if(len<1||R()<.25) return; var side=perp(lat.dirs[j]), sg=R()<.5?1:-1;
+          var d2=vnorm(vadd(vadd(vscale(lat.dirs[j],.7),vscale(side,sg*.8)),[0,.1,0]));
+          limb(lat.pts[j],d2,len*(.3+R()*.2),lat.radii[j]*.7,.007,4,.18,-0.07,3); });
+      } } });
+})();
+branches[0].radii[0]*=1.75; branches[0].radii[1]*=1.25;
+var treeTop=0, treeRad=0; branches.forEach(function(b){ b.pts.forEach(function(p){ if(p[1]>treeTop) treeTop=p[1]; treeRad=Math.max(treeRad,Math.hypot(p[0],p[2])); }); });
+
+// nodes along the lateral branches : leaves grow in opposite pairs, cherries cluster at the nodes
+var anchorsAll=[], nodes=[];
+branches.forEach(function(b){ if(b.depth<2) return;
+  for(var i=1;i<b.pts.length;i++){
+    var mid=vscale(vadd(b.pts[i],b.pts[i-1]),.5);
+    nodes.push({p:mid,d:b.dirs[i],r:(b.radii[i]+b.radii[i-1])/2,t:(i-.5)/(b.pts.length-1)});
+    nodes.push({p:b.pts[i],d:b.dirs[i],r:b.radii[i],t:i/(b.pts.length-1)});
+    if((b.depth===2&&i>=3)||(b.depth===3&&i>=2)) anchorsAll.push({p:b.pts[i],r:b.radii[i]});
+  }
+});
+// surface roots
+var extras=[];
+(function(){ var i,j;
+  for(i=0;i<7;i++){ var a=i/7*6.283+R()*.5, pts=[[0,0.3,0]], rr=[0.2], p=[0,0.3,0];
+    for(j=1;j<=6;j++){ a+=(R()-.5)*.35; p=[p[0]+Math.cos(a)*0.33, Math.max(0.1,0.3-j*0.045), p[2]+Math.sin(a)*0.33]; pts.push(p); rr.push(0.2*(1-j/6.4)); }
+    extras.push({pts:pts,radii:rr,depth:1}); }
+})();
+
+// tag slots : deterministic, spaced, identical for every visitor
+var slots=[], ribbonSpots=[];
+(function(){
+  var c=anchorsAll.slice(), i,j;
+  for(i=c.length-1;i>0;i--){ j=Math.floor(R()*(i+1)); var t=c[i]; c[i]=c[j]; c[j]=t; }
+  c.forEach(function(a){
+    var rad=Math.hypot(a.p[0],a.p[2]); if(rad<0.9) return;
+    var L=0.3+R()*0.5+(a.p[1]<3.2?R()*0.7:0); L=Math.min(L,a.p[1]-a.r-(rad<3.1?1.05:0.2)); if(L<0.25) return;
+    var pos=[a.p[0], a.p[1]-a.r-L, a.p[2]];
+    for(var k=0;k<slots.length;k++){ var s=slots[k].pos; if(Math.hypot(s[0]-pos[0],s[2]-pos[2])<0.36 && Math.abs(s[1]-pos[1])<0.7) return; }
+    if(slots.length<170) slots.push({a:a,L:L,pos:pos,ph:R()*6.283,w:0.7+R()*0.6});
+    else if(ribbonSpots.length<22) ribbonSpots.push(a);
+  });
+  for(i=0;ribbonSpots.length<22&&i<c.length;i+=9) ribbonSpots.push(c[i]);
+})();
+
+/* ------------------------------------------------------------------ tag shapes */
+function rr(P,x0,y0,x1,y1,r){ P.moveTo(x0+r,y0); P.lineTo(x1-r,y0); P.quadraticCurveTo(x1,y0,x1,y0+r); P.lineTo(x1,y1-r);
+  P.quadraticCurveTo(x1,y1,x1-r,y1); P.lineTo(x0+r,y1); P.quadraticCurveTo(x0,y1,x0,y1-r); P.lineTo(x0,y0+r); P.quadraticCurveTo(x0,y0,x0+r,y0); }
+var SHAPES = {
+ plaque:{w:.34,h:.56,top:0,bot:1,tx:[.2,.2,.8,.86],head:1,path:function(P){ rr(P,0,0,1,1,.07); }},
+ tablet:{w:.34,h:.54,top:0,bot:1,tx:[.2,.19,.8,.9],head:1,path:function(P){ var n=.13;
+   P.moveTo(n,0);P.lineTo(1-n,0);P.quadraticCurveTo(1-n,n*.62,1,n*.62);P.lineTo(1,1-n*.62);P.quadraticCurveTo(1-n,1-n*.62,1-n,1);
+   P.lineTo(n,1);P.quadraticCurveTo(n,1-n*.62,0,1-n*.62);P.lineTo(0,n*.62);P.quadraticCurveTo(n,n*.62,n,0); }},
+ round:{w:.46,h:.46,top:0,bot:1,tx:[.22,.24,.78,.82],path:function(P){ var k=.2761;
+   P.moveTo(.5,0);P.bezierCurveTo(.5+k,0,1,.5-k,1,.5);P.bezierCurveTo(1,.5+k,.5+k,1,.5,1);P.bezierCurveTo(.5-k,1,0,.5+k,0,.5);P.bezierCurveTo(0,.5-k,.5-k,0,.5,0); }},
+ gourd:{w:.42,h:.6,top:.03,bot:.99,tx:[.2,.52,.8,.93],path:function(P){
+   P.moveTo(.5,.03);P.bezierCurveTo(.72,.03,.80,.20,.72,.32);P.bezierCurveTo(.68,.38,.62,.40,.62,.43);P.bezierCurveTo(.62,.47,.98,.52,.98,.74);
+   P.bezierCurveTo(.98,.90,.76,.99,.5,.99);P.bezierCurveTo(.24,.99,.02,.90,.02,.74);P.bezierCurveTo(.02,.52,.38,.47,.38,.43);
+   P.bezierCurveTo(.38,.40,.32,.38,.28,.32);P.bezierCurveTo(.20,.20,.28,.03,.5,.03); }},
+ heart:{w:.5,h:.48,top:.25,bot:.97,tx:[.24,.37,.76,.72],path:function(P){
+   P.moveTo(.5,.25);P.bezierCurveTo(.42,.05,.12,.02,.04,.24);P.bezierCurveTo(-.03,.46,.2,.68,.5,.97);
+   P.bezierCurveTo(.8,.68,1.03,.46,.96,.24);P.bezierCurveTo(.88,.02,.58,.05,.5,.25); }},
+ fan:{w:.6,h:.48,top:.15,bot:.99,tx:[.27,.3,.73,.76],path:function(P){
+   P.moveTo(.02,.42);P.quadraticCurveTo(.5,-.12,.98,.42);P.lineTo(.6,.97);P.quadraticCurveTo(.5,1.02,.4,.97);P.lineTo(.02,.42); }},
+ leaf:{w:.46,h:.62,top:.05,bot:1,tx:[.26,.2,.74,.63],path:function(P){
+   P.moveTo(.5,.06);P.bezierCurveTo(.80,0,1,.22,.94,.42);P.bezierCurveTo(.88,.62,.64,.70,.55,.82);P.bezierCurveTo(.52,.88,.51,.94,.5,1);
+   P.bezierCurveTo(.49,.94,.48,.88,.45,.82);P.bezierCurveTo(.36,.70,.12,.62,.06,.42);P.bezierCurveTo(0,.22,.20,0,.5,.06); }},
+ bell:{w:.44,h:.5,top:.03,bot:.92,tx:[.27,.24,.73,.8],path:function(P){
+   P.moveTo(.5,.03);P.bezierCurveTo(.72,.03,.80,.22,.82,.45);P.bezierCurveTo(.84,.66,.90,.78,.98,.86);P.lineTo(.98,.92);P.lineTo(.02,.92);
+   P.lineTo(.02,.86);P.bezierCurveTo(.10,.78,.16,.66,.18,.45);P.bezierCurveTo(.20,.22,.28,.03,.5,.03); }}
+};
+var SHAPE_KEYS = Object.keys(SHAPES), TM = 0.04;
+var ZH_FONT = '"Ma Shan Zheng","Kaiti SC","STKaiti","KaiTi","Songti SC",serif';
+var LAT_FONT = '"Caveat","Helvetica Neue",Helvetica,Arial,sans-serif';
+function isCJK(s){ return /^[　-〿㐀-鿿＀-￯\s·]+$/.test(s); }
+
+function drawTag(cv, sk, text, name, k){
+  var S=SHAPES[sk]||SHAPES.plaque, W=256, H=Math.round(W*S.h/S.w);
+  k=k||1; cv.width=W*k; cv.height=H*k; var g=cv.getContext("2d"); g.setTransform(k,0,0,k,0,0);
+  var X=function(u){return (TM+u*(1-2*TM))*W;}, Y=function(v){return (TM+v*(1-2*TM))*H;};
+  var P={moveTo:function(a,b){g.moveTo(X(a),Y(b));},lineTo:function(a,b){g.lineTo(X(a),Y(b));},
+    quadraticCurveTo:function(a,b,c,d){g.quadraticCurveTo(X(a),Y(b),X(c),Y(d));},
+    bezierCurveTo:function(a,b,c,d,e,f){g.bezierCurveTo(X(a),Y(b),X(c),Y(d),X(e),Y(f));}};
+  g.clearRect(0,0,W,H);
+  g.save(); g.beginPath(); S.path(P); g.closePath(); g.clip();
+  var gr=g.createLinearGradient(0,0,W*.6,H); gr.addColorStop(0,"#cc2e22"); gr.addColorStop(.55,"#b72219"); gr.addColorStop(1,"#98160f");
+  g.fillStyle=gr; g.fillRect(0,0,W,H);
+  var rnd=mulberry(sk.length*977+7), i;
+  for(i=0;i<70;i++){ var gx=rnd()*W; g.strokeStyle="rgba("+(rnd()<.5?"60,8,4":"255,150,120")+","+(0.03+rnd()*0.06)+")"; g.lineWidth=.6+rnd()*1.4;
+    g.beginPath(); g.moveTo(gx,0); g.bezierCurveTo(gx+rnd()*8-4,H*.3,gx+rnd()*8-4,H*.7,gx+rnd()*10-5,H); g.stroke(); }
+  var gold=g.createLinearGradient(0,0,W,H); gold.addColorStop(0,"#f1d58c"); gold.addColorStop(.5,"#c99b3f"); gold.addColorStop(1,"#ecd08a");
+  g.lineWidth=W*0.05; g.strokeStyle=gold; g.beginPath(); S.path(P); g.closePath(); g.stroke();
+  g.restore();
+  var cy=(S.top+S.bot)/2;
+  g.save(); g.translate(W/2,Y(cy)); g.scale(.86,.88); g.translate(-W/2,-Y(cy)); g.beginPath(); S.path(P); g.closePath();
+  g.lineWidth=1.6; g.strokeStyle="rgba(240,208,130,.85)"; g.stroke(); g.restore();
+  // eyelet
+  var ex=W/2, ey=Y(S.top)+16; g.beginPath(); g.arc(ex,ey,7,0,6.283); g.fillStyle=gold; g.fill();
+  g.beginPath(); g.arc(ex,ey,3.4,0,6.283); g.fillStyle="#3a0d0a"; g.fill();
+  // text block
+  var x0=X(S.tx[0]), y0=Y(S.tx[1]), x1=X(S.tx[2]), y1=Y(S.tx[3]);
+  g.textAlign="center"; g.textBaseline="middle";
+  if(S.head){ g.fillStyle="#f0d48a"; g.font="17px "+ZH_FONT; g.fillText("祈 福",W/2,y0-4); y0+=16;
+    g.font="13px "+ZH_FONT; g.fillText("有求必应",W/2,Y(.945)); }
+  /* Le vœu et le prénom sont en or, et non plus en encre sombre. Deux
+     raisons, et la première est de jour : l'encre noire sur le rouge du
+     papier ne tenait que 2,8:1, moins bien que l'or qui en tient 4,6. La
+     seconde est de nuit : une étiquette qui s'allume de l'intérieur ne peut
+     pas éclairer ce qui est noir dessus — les mots seraient restés en
+     silhouette. En or, ce sont eux les plus clairs du dessin, donc eux qui
+     brillent le plus. Un mince contour sombre les détache des parties
+     claires du dégradé. */
+  var ORTX="#f3d894", OROMB="rgba(52,8,4,.62)";
+  name=(name||"").trim();
+  if(name){ y1-=18; g.font="italic 14px "+LAT_FONT; g.lineWidth=2.4; g.strokeStyle=OROMB; g.lineJoin="round";
+    g.strokeText("— "+name,W/2,y1+11,x1-x0+10); g.fillStyle="rgba(243,216,148,.9)"; g.fillText("— "+name,W/2,y1+11,x1-x0+10); }
+  var rw=x1-x0, rh=y1-y0; text=(text||"").trim();
+  g.lineJoin="round"; g.lineWidth=2.8; g.strokeStyle=OROMB; g.fillStyle=ORTX;
+  if(isCJK(text)){
+    var ch=Array.from(text.replace(/\s+/g,"")), n=ch.length, best=0, bc=1, c;
+    for(c=1;c<=4;c++){ var rows=Math.ceil(n/c), sz=Math.min(rw/c,rh/rows)*.94; if(sz>best*1.2){best=sz;bc=c;} }
+    best=Math.min(best,64); var rws=Math.ceil(n/bc); g.font=best+"px "+ZH_FONT;
+    for(i=0;i<n;i++){ var col=Math.floor(i/rws), row=i%rws;
+      var cx=(x0+x1)/2+((bc-1)/2-col)*best, cy2=y0+(rh-rws*best)/2+(row+.5)*best;
+      g.strokeText(ch[i],cx,cy2); g.fillText(ch[i],cx,cy2); }
+  } else if(text){
+    var words=text.split(/\s+/), fs, lines;
+    for(fs=40;fs>=11;fs-=2){ g.font=fs+"px "+LAT_FONT; lines=[]; var cur="", ok=true;
+      for(i=0;i<words.length;i++){ var tr=cur?cur+" "+words[i]:words[i];
+        if(g.measureText(tr).width<=rw) cur=tr; else { if(cur) lines.push(cur); cur=words[i]; if(g.measureText(cur).width>rw) ok=false; } }
+      if(cur) lines.push(cur);
+      if((ok||fs<=11) && lines.length*fs*1.02<=rh) break; }
+    var lh=fs*1.02; for(i=0;i<lines.length;i++){ var ly=y0+(rh-lines.length*lh)/2+(i+.5)*lh;
+      g.strokeText(lines[i],(x0+x1)/2,ly,rw+6); g.fillText(lines[i],(x0+x1)/2,ly,rw+6); }
+  }
+}
+function wishText(w){ var P=w.p>=0?PRESETS[w.p]:null; return P ? (P.k==="zh"?P.zh:P[lang]) : String(w.t||"").slice(0,60); }
+function cleanWish(id,d){ d=d||{}; var p=typeof d.p==="number"&&d.p>=0&&d.p<PRESETS.length?Math.floor(d.p):-1;
+  return {id:String(id), s:SHAPES[d.s]?d.s:"plaque", p:p, t:p<0?String(d.t||"").slice(0,60):"", n:String(d.n||"").slice(0,20), ts:+d.ts||0, local:!!d.local, decor:!!d.decor}; }
+
+/* ------------------------------------------------------------------ UI state */
+var wishes=[], remote=null, localW=[], firstLoad=true, db=null, entered=false, pendingFocus=null, selShape="plaque", selPreset=0, cardWish=null, sheetOpen=false, step=1, tab="zh";
+try{ localW=JSON.parse(localStorage.getItem("yw_local")||"[]").map(function(d){return cleanWish(d.id,d);}); }catch(e){ localW=[]; }
+var DECOR = PRESETS.map(function(_,i){ return cleanWish("decor"+i,{s:SHAPE_KEYS[i%SHAPE_KEYS.length],p:i,ts:i,decor:true}); })
+  .concat(PRESETS.slice(0,10).map(function(_,i){ return cleanWish("decorb"+i,{s:SHAPE_KEYS[(i*3+2)%SHAPE_KEYS.length],p:(i*5+3)%PRESETS.length,ts:20+i,decor:true}); }));
+
+function applyLang(){
+  document.documentElement.lang=lang;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-i]"),function(el){ el.textContent=T(el.getAttribute("data-i")); });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-l]"),function(el){ el.classList.toggle("on",el.getAttribute("data-l")===lang); });
+  $("own").placeholder=T("ownPh"); $("name").placeholder=T("namePh");
+  document.title=T("title")+" — Yunma";
+  buildPresets(); setStepSafe(); updateCount(); if(cardWish) fillCard(cardWish);
+}
+function setStepSafe(){ try{ setStep(step); }catch(e){} }
+function setLang(l){ lang=l; try{localStorage.setItem("yw_lang",l);}catch(e){} applyLang(); preview(); if(window.__syncTags) window.__syncTags(); }
+function updateCount(){ var n=wishes.filter(function(w){return !w.decor;}).length; $("count").textContent=n?T("count")(n):""; }
+var toastT=0; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(function(){t.classList.remove("on");},3800); }
+
+function buildShapes(){
+  var box=$("shapes"); box.textContent="";
+  SHAPE_KEYS.forEach(function(k){ var b=document.createElement("button"), cv=document.createElement("canvas");
+    drawTag(cv,k,"福",""); b.appendChild(cv); b.className=k===selShape?"on":""; b.setAttribute("aria-label",k);
+    b.onclick=function(){ selShape=k; Array.prototype.forEach.call(box.children,function(x){x.classList.remove("on");}); b.classList.add("on"); preview(); };
+    box.appendChild(b); });
+}
+function buildPresets(){
+  var tabs=$("tabs"), box=$("presets"); tabs.textContent=""; box.textContent="";
+  ["zh","w","c","own"].forEach(function(k){ var b=document.createElement("button"); b.textContent=T("g_"+k); b.className=k===tab?"on":"";
+    b.onclick=function(){ tab=k; if(k!=="own"&&(!PRESETS[selPreset]||PRESETS[selPreset].k!==k)){ for(var i=0;i<PRESETS.length;i++) if(PRESETS[i].k===k){ selPreset=i; break; } } buildPresets(); preview(); };
+    tabs.appendChild(b); });
+  box.style.display=tab==="own"?"none":""; $("ownBox").style.display=tab==="own"?"":"none";
+  PRESETS.forEach(function(p,i){ if(p.k!==tab) return;
+    var b=document.createElement("button"), parts=p.k==="zh"?[["z zhf",p.zh],["p",p.py],["t",lang==="zh"?"":p[lang]]]:[[lang==="zh"?"m zhf":"m",p[lang]]];
+    parts.forEach(function(a){ if(!a[1]) return; var s=document.createElement("span"); s.className=a[0]; s.textContent=a[1]; b.appendChild(s); });
+    if(i===selPreset) b.className="on";
+    b.onclick=function(){ selPreset=i; Array.prototype.forEach.call(box.querySelectorAll("button"),function(x){x.classList.remove("on");}); b.classList.add("on"); preview(); };
+    box.appendChild(b); });
+}
+function setStep(n){ step=n;
+  Array.prototype.forEach.call(document.querySelectorAll(".st"),function(el){ el.classList.toggle("on",+el.getAttribute("data-st")===n); });
+  Array.prototype.forEach.call($("steps").children,function(el,i){ el.classList.toggle("on",i<n); });
+  $("stepN").textContent=T("stepOf")+" "+n+" / 3"; $("stTitle").textContent=T("st"+n);
+  $("stBack").style.display=n>1?"":"none"; $("stNext").style.display=n<3?"":"none"; $("hang").style.display=n===3?"":"none"; $("prev").style.display=n===3?"none":"";
+  var b=document.querySelector("#sheet .body"); if(b) b.scrollTop=0; preview(); }
+function draftWish(){ var own=tab==="own"?$("own").value.trim().slice(0,60):"";
+  return {s:selShape, p:tab==="own"?-1:selPreset, t:own, n:$("name").value.trim().slice(0,20)}; }
+function preview(){ var d=draftWish(); drawTag($("prev"),d.s,wishText(d),d.n); drawTag($("prevBig"),d.s,wishText(d),d.n,2); }
+function openSheet(o){ sheetOpen=o; $("sheet").classList.toggle("open",o); $("sheet").setAttribute("aria-hidden",o?"false":"true");
+  $("bottom").classList.toggle("down",o||!!cardWish||!entered); if(o){ closeCard(true); setStep(1); } }
+function fillCard(w){
+  var pre=w.p>=0&&PRESETS[w.p]&&PRESETS[w.p].k==="zh"?PRESETS[w.p]:null, zh=$("cZh"), txt=wishText(w);
+  zh.textContent=txt; zh.className="zh "+(pre||isCJK(txt)?"zhf":"lat");
+  $("cPy").textContent=pre?pre.py:""; $("cTr").textContent=pre&&lang!=="zh"?pre[lang]:"";
+  $("cBy").textContent=w.decor?"":(w.mine?T("mine"):(w.n?T("from")+w.n:""));
+  $("cShare").style.display=(w.decor||w.local)?"none":"";
+}
+function openCard(w){ cardWish=w; fillCard(w); $("card").classList.add("open"); $("bottom").classList.add("down"); }
+function closeCard(keepCam){ if(!cardWish) return; cardWish=null; $("card").classList.remove("open");
+  if(!sheetOpen) $("bottom").classList.remove("down"); if(!keepCam&&window.__home) window.__home(); }
+function shareBase(){ return /^https?:/.test(SHARE_URL)?SHARE_URL:String(location.href).split("#")[0]; }
+function openShare(w){ $("link").value=shareBase()+(w&&!w.decor&&!w.local?"#w-"+w.id:""); $("modal").classList.add("open"); }
+
+$("lang").onclick=function(){ setLang(lang==="fr"?"en":(lang==="en"?"zh":"fr")); };
+Array.prototype.forEach.call(document.querySelectorAll("#intro .langs button"),function(b){ b.onclick=function(){ setLang(b.getAttribute("data-l")); }; });
+$("add").onclick=function(){ openSheet(true); };
+$("sheetX").onclick=function(){ openSheet(false); };
+$("own").oninput=preview;
+$("stBack").onclick=function(){ if(step>1) setStep(step-1); };
+$("stNext").onclick=function(){ if(step===2&&tab==="own"&&!$("own").value.trim()){ toast(T("need")); return; } if(step<3) setStep(step+1); };
+$("name").oninput=preview;
+$("share").onclick=function(){ openShare(null); };
+$("cShare").onclick=function(){ openShare(cardWish); };
+$("cBack").onclick=function(){ closeCard(false); };
+$("mClose").onclick=function(){ $("modal").classList.remove("open"); };
+$("modal").onclick=function(e){ if(e.target===$("modal")) $("modal").classList.remove("open"); };
+$("copy").onclick=function(){ var inp=$("link"), done=function(){ toast(T("copied")); };
+  try{ navigator.clipboard.writeText(inp.value).then(done,function(){ inp.focus(); inp.select(); }); }catch(e){ inp.focus(); inp.select(); } };
+
+/* ------------------------------------------------------------------ data */
+function mergeWishes(){
+  var list=(remote||[]).slice(), ids={}; list.forEach(function(w){ids[w.id]=1;});
+  localW.forEach(function(w){ if(!ids[w.id]) list.push(w); });
+  var mine={}; try{ JSON.parse(localStorage.getItem("yw_mine")||"[]").forEach(function(i){mine[i]=1;}); }catch(e){}
+  list.forEach(function(w){ if(mine[w.id]||w.local) w.mine=true; });
+  list.sort(function(a,b){ return a.ts-b.ts || (a.id<b.id?-1:1); });
+  if(!list.length) list=DECOR.slice();
+  wishes=list; updateCount(); if(window.__syncTags) window.__syncTags();
+}
+function saveLocal(){ try{ localStorage.setItem("yw_local",JSON.stringify(localW)); }catch(e){} }
+function rememberMine(id){ try{ var m=JSON.parse(localStorage.getItem("yw_mine")||"[]"); m.push(id); localStorage.setItem("yw_mine",JSON.stringify(m.slice(-50))); }catch(e){} }
+
+$("hang").onclick=function(){
+  var d=draftWish(); if(d.p<0&&!d.t){ toast(T("need")); return; }
+  var id="w"+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);
+  var w=cleanWish(id,{s:d.s,p:d.p,t:d.t,n:d.n,ts:Date.now()}); w.mine=true; w.local=true;
+  localW.push(w); rememberMine(id); pendingFocus=id; openSheet(false); mergeWishes(); sfx("hang");
+  var fail=function(){ saveLocal(); toast(T("localOnly")); };
+  if(!API){ fail(); return; }
+  $("hang").disabled=true;
+  fetch(API,{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({s:w.s,p:w.p,t:w.t,n:w.n,id:id})})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(){
+      w.local=false; localW=localW.filter(function(x){return x.id!==id;}); saveLocal(); toast(T("hung"));
+      if(cardWish&&cardWish.id===id) fillCard(w); charger();
+    },fail).then(function(){ $("hang").disabled=false; });
+};
+/* ------------------------------------------------------------------ les vœux des autres
+   L'expérience a été écrite chez Claude, où une base était fournie. Sur
+   yunma.fr il n'y en a pas : tant que `API` est vide, chaque vœu reste dans
+   le navigateur de celui qui l'a écrit, et l'arbre montre les vingt-huit
+   vœux de départ. Rien ne casse, rien ne ment — le message « accroché sur
+   cet appareil seulement » le dit.
+
+   Pour ouvrir l'arbre à tous, il suffira de poser ici l'adresse d'une
+   petite API sur Infomaniak (PHP et MySQL font l'affaire) :
+     GET  → [{id,s,p,t,n,ts}, …]   les six cents derniers vœux
+     POST → {id,s,p,t,n}            un vœu de plus
+   Côté serveur, trois choses à ne pas oublier : une limite de débit, une
+   longueur maximale, et une modération du texte libre — la page est signée
+   Yunma, et ce qui s'y accroche l'engage. */
+var API="";
+function charger(){
+  if(!API){ remote=[]; mergeWishes(); return; }
+  fetch(API,{headers:{"accept":"application/json"}})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(a){ remote=(Array.isArray(a)?a:[]).slice(-600).map(function(x){ return cleanWish(x.id,x); }); mergeWishes(); },
+          function(){ if(remote===null) remote=[]; mergeWishes(); });
+}
+charger();
+
+buildShapes(); applyLang(); preview();
+
+/* ---- QR (byte mode, level M, versions 1-6) + one-image PDF ---- */
+function qrMatrix(text){
+  var bytes=[], i, j, k, s=unescape(encodeURIComponent(text)); for(i=0;i<s.length;i++) bytes.push(s.charCodeAt(i));
+  var V=[null,[26,10,1],[44,16,1],[70,26,1],[100,18,2],[134,24,2],[172,16,4]], ver=0;
+  for(i=1;i<=6;i++){ if(bytes.length<=V[i][0]-V[i][1]*V[i][2]-2){ ver=i; break; } }
+  if(!ver) return null;
+  var tot=V[ver][0], ecl=V[ver][1], nb=V[ver][2], dcw=tot-ecl*nb, bits=[];
+  var put=function(v,n){ for(var b=n-1;b>=0;b--) bits.push((v>>b)&1); };
+  put(4,4); put(bytes.length,8); bytes.forEach(function(b){ put(b,8); });
+  for(i=0;i<4&&bits.length<dcw*8;i++) bits.push(0);
+  while(bits.length%8) bits.push(0);
+  var data=[]; for(i=0;i<bits.length;i+=8){ var v=0; for(j=0;j<8;j++) v=v<<1|bits[i+j]; data.push(v); }
+  for(i=0;data.length<dcw;i++) data.push(i%2?0x11:0xEC);
+  var ex=[], lg=[], x=1; for(i=0;i<255;i++){ ex[i]=x; lg[x]=i; x<<=1; if(x&256) x^=0x11d; } for(i=255;i<512;i++) ex[i]=ex[i-255];
+  var gen=[1]; for(i=0;i<ecl;i++){ var ng=[]; for(j=0;j<=gen.length;j++) ng[j]=0;
+    for(j=0;j<gen.length;j++){ ng[j]^=gen[j]; ng[j+1]^=gen[j]?ex[lg[gen[j]]+i]:0; } gen=ng; }
+  var bl=dcw/nb, blocks=[], ecs=[];
+  for(k=0;k<nb;k++){ var d=data.slice(k*bl,(k+1)*bl), rem=d.concat(new Array(ecl).fill(0));
+    for(i=0;i<d.length;i++){ var c=rem[i]; if(c) for(j=1;j<gen.length;j++) if(gen[j]) rem[i+j]^=ex[lg[gen[j]]+lg[c]]; }
+    blocks.push(d); ecs.push(rem.slice(d.length)); }
+  var cw=[]; for(i=0;i<bl;i++) for(k=0;k<nb;k++) cw.push(blocks[k][i]); for(i=0;i<ecl;i++) for(k=0;k<nb;k++) cw.push(ecs[k][i]);
+  var N=17+4*ver, m=[], res=[]; for(i=0;i<N;i++){ m.push(new Array(N).fill(0)); res.push(new Array(N).fill(false)); }
+  var setF=function(r,c,v){ if(r<0||c<0||r>=N||c>=N) return; m[r][c]=v?1:0; res[r][c]=true; };
+  [[0,0],[0,N-7],[N-7,0]].forEach(function(o){ for(var dr=-1;dr<=7;dr++) for(var dc=-1;dc<=7;dc++){
+    var inn=dr>=0&&dr<=6&&dc>=0&&dc<=6; setF(o[0]+dr,o[1]+dc, inn&&(dr===0||dr===6||dc===0||dc===6||(dr>=2&&dr<=4&&dc>=2&&dc<=4))); } });
+  for(i=8;i<N-8;i++){ setF(6,i,i%2===0); setF(i,6,i%2===0); }
+  if(ver>=2){ var ac=N-7; for(var dr=-2;dr<=2;dr++) for(var dc=-2;dc<=2;dc++) setF(ac+dr,ac+dc,Math.max(Math.abs(dr),Math.abs(dc))!==1); }
+  var fmt=function(mask,mm){ var dd=mask, e=dd<<10; for(var b=14;b>=10;b--) if((e>>b)&1) e^=0x537<<(b-10); var f=((dd<<10)|e)^0x5412, bit=function(q){return (f>>q)&1;}, q;
+    var S=function(xx,yy,v){ mm[yy][xx]=v; };
+    for(q=0;q<=5;q++) S(8,q,bit(q)); S(8,7,bit(6)); S(8,8,bit(7)); S(7,8,bit(8)); for(q=9;q<15;q++) S(14-q,8,bit(q));
+    for(q=0;q<8;q++) S(N-1-q,8,bit(q)); for(q=8;q<15;q++) S(8,N-15+q,bit(q)); S(8,N-8,1); };
+  for(i=0;i<9;i++){ if(i!==6){ setF(8,i,0); setF(i,8,0); } } for(i=0;i<8;i++){ setF(8,N-1-i,0); setF(N-1-i,8,0); }
+  var bi=0, upw=true, col;
+  for(col=N-1;col>0;col-=2){ if(col===6) col--; for(i=0;i<N;i++){ var r=upw?N-1-i:i; for(j=0;j<2;j++){ var cc=col-j; if(res[r][cc]) continue;
+        var byte=cw[bi>>3]; m[r][cc]=byte===undefined?0:(byte>>(7-(bi&7)))&1; bi++; } } upw=!upw; }
+  var MK=[function(r,c){return (r+c)%2===0;},function(r){return r%2===0;},function(r,c){return c%3===0;},function(r,c){return (r+c)%3===0;},
+    function(r,c){return (Math.floor(r/2)+Math.floor(c/3))%2===0;},function(r,c){return (r*c)%2+(r*c)%3===0;},
+    function(r,c){return ((r*c)%2+(r*c)%3)%2===0;},function(r,c){return ((r+c)%2+(r*c)%3)%2===0;}];
+  var best=null, bp=1e9;
+  for(k=0;k<8;k++){ var mm=m.map(function(row,r){ return row.map(function(v,c){ return res[r][c]?v:(v^(MK[k](r,c)?1:0)); }); }); fmt(k,mm);
+    var p=0, dark=0, r2, c2;
+    for(var pass=0;pass<2;pass++) for(r2=0;r2<N;r2++){ var run=0, prev=-1, hist="";
+      for(c2=0;c2<N;c2++){ var vv=pass?mm[c2][r2]:mm[r2][c2]; hist+=vv; if(vv===prev){ run++; if(run===5) p+=3; else if(run>5) p++; } else { run=1; prev=vv; } }
+      var idx=-1; while((idx=hist.indexOf("10111010000",idx+1))>=0) p+=40; idx=-1; while((idx=hist.indexOf("00001011101",idx+1))>=0) p+=40; }
+    for(r2=0;r2<N;r2++) for(c2=0;c2<N;c2++){ dark+=mm[r2][c2]; if(r2<N-1&&c2<N-1){ var q=mm[r2][c2]; if(q===mm[r2+1][c2]&&q===mm[r2][c2+1]&&q===mm[r2+1][c2+1]) p+=3; } }
+    p+=10*Math.floor(Math.abs(dark*100/(N*N)-50)/5);
+    if(p<bp){ bp=p; best=mm; } }
+  return best;
+}
+function pdfFromJpeg(jpg,w,h,pw,ph,links){
+  links=links||[];
+  var enc=function(s){ var a=new Uint8Array(s.length); for(var i=0;i<s.length;i++) a[i]=s.charCodeAt(i)&255; return a; };
+  var content="q "+pw.toFixed(2)+" 0 0 "+ph.toFixed(2)+" 0 0 cm /Im0 Do Q", k=pw/w, i;
+  var parts=[], offs=[], len=0, add=function(a){ parts.push(a); len+=a.length; };
+  add(enc("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n"));
+  var obj=function(n,body,stream){ offs[n]=len; add(enc(n+" 0 obj\n"+body+"\n")); if(stream){ add(enc("stream\n")); add(stream); add(enc("\nendstream\n")); } add(enc("endobj\n")); };
+  var an=""; for(i=0;i<links.length;i++) an+=(6+i)+" 0 R ";
+  obj(1,"<</Type/Catalog/Pages 2 0 R>>");
+  obj(2,"<</Type/Pages/Kids[3 0 R]/Count 1>>");
+  obj(3,"<</Type/Page/Parent 2 0 R/MediaBox[0 0 "+pw.toFixed(2)+" "+ph.toFixed(2)+"]/Resources<</XObject<</Im0 4 0 R>>>>/Contents 5 0 R"+(an?"/Annots["+an+"]":"")+">>");
+  obj(4,"<</Type/XObject/Subtype/Image/Width "+w+"/Height "+h+"/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length "+jpg.length+">>",jpg);
+  obj(5,"<</Length "+content.length+">>",enc(content));
+  links.forEach(function(l,j){ obj(6+j,"<</Type/Annot/Subtype/Link/Border[0 0 0]/Rect["+(l.x*k).toFixed(2)+" "+(ph-(l.y+l.h)*k).toFixed(2)+" "+((l.x+l.w)*k).toFixed(2)+" "+(ph-l.y*k).toFixed(2)+"]/A<</S/URI/URI("+l.url.replace(/[()\\]/g,"")+")>>>>"); });
+  var n=6+links.length, xo=len, x="xref\n0 "+n+"\n0000000000 65535 f \n"; for(i=1;i<n;i++) x+=("0000000000"+offs[i]).slice(-10)+" 00000 n \n";
+  add(enc(x+"trailer\n<</Size "+n+"/Root 1 0 R>>\nstartxref\n"+xo+"\n%%EOF\n"));
+  var out=new Uint8Array(len), o=0; parts.forEach(function(a){ out.set(a,o); o+=a.length; }); return out;
+}
+var logoImg=new Image(), photoImg=new Image(); logoImg.src=window.YW_LOGO||"";
+/* La photographie ne sert qu'à la carte : on ne va la chercher qu'au moment
+   où quelqu'un l'ouvre. Elle est en cache bien avant qu'il n'appuie sur
+   « enregistrer ». */
+var photoDemandee=false;
+function photoCharger(){ if(photoDemandee) return; photoDemandee=true; photoImg.src=window.YW_PHOTO||""; }
+Array.prototype.forEach.call(document.querySelectorAll("img.lg"),function(im){ im.src=window.YW_LOGO||""; });
+/* Enregistrer la carte. L'expérience passait par un service de
+   téléchargement qui n'existe que chez Claude ; sur yunma.fr il n'y en a
+   pas, et il n'en faut pas : un lien, une adresse d'objet, et le navigateur
+   fait le reste. Les deux boutons sont donc toujours là. */
+function telecharger(blob,nom){
+  try{
+    var u=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=u; a.download=nom; a.rel="noopener"; a.style.display="none";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(u); },4000);
+    return true;
+  }catch(e){ return false; }
+}
+function wrapText(g,text,maxW){ var sp=/\s/.test(text), toks=sp?text.split(/\s+/):Array.from(text), out=[], cur="";
+  toks.forEach(function(w){ var tr=cur?cur+(sp?" ":"")+w:w; if(!cur||g.measureText(tr).width<=maxW) cur=tr; else { out.push(cur); cur=w; } });
+  if(cur) out.push(cur); return out; }
+function rrect(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.lineTo(x+w-r,y); g.quadraticCurveTo(x+w,y,x+w,y+r); g.lineTo(x+w,y+h-r); g.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  g.lineTo(x+r,y+h); g.quadraticCurveTo(x,y+h,x,y+h-r); g.lineTo(x,y+r); g.quadraticCurveTo(x,y,x+r,y); g.closePath(); }
+function buildCard(w){
+  var W=1050,H=1480,cv=document.createElement("canvas"); cv.width=W; cv.height=H; var g=cv.getContext("2d"), i, HV='"Helvetica Neue",Helvetica,Arial,sans-serif';
+  g.fillStyle="#ebe7de"; g.fillRect(0,0,W,H);
+  if(photoImg.complete&&photoImg.naturalWidth){ var pr=Math.max(W/photoImg.naturalWidth,H/photoImg.naturalHeight), pw=photoImg.naturalWidth*pr, phh=photoImg.naturalHeight*pr; g.drawImage(photoImg,(W-pw)/2,(H-phh)/2,pw,phh); }
+  // white cartouche
+  var cx=56, cy=56, cw=W-112, ch=830, pad=54;
+  g.save(); g.shadowColor="rgba(70,45,20,.28)"; g.shadowBlur=50; g.shadowOffsetY=18; g.fillStyle="#ffffff"; rrect(g,cx,cy,cw,ch,10); g.fill(); g.restore();
+  // header
+  g.textAlign="left"; g.textBaseline="middle"; g.fillStyle="#8f512c"; g.font="54px "+ZH_FONT; g.fillText("许愿树",cx+pad,cy+74);
+  var hw=g.measureText("许愿树").width; g.fillStyle="#575a44"; g.font="500 19px "+HV; try{ g.letterSpacing="4px"; }catch(e){}
+  g.fillText(lang==="zh"?"云南咖啡树上的一个心愿":T("title").toUpperCase(),cx+pad+hw+22,cy+78); try{ g.letterSpacing="0px"; }catch(e){}
+  g.strokeStyle="#8f512c"; g.lineWidth=2; g.beginPath(); g.moveTo(cx+pad,cy+124); g.lineTo(cx+cw-pad,cy+124); g.stroke();
+  // the tag, hanging from the golden line
+  var S=SHAPES[w.s]||SHAPES.plaque, tc=document.createElement("canvas"); drawTag(tc,w.s,wishText(w),w.n,3);
+  var th=Math.min(420,310*S.h/S.w), tw=th*S.w/S.h, tcx=cx+pad+170, tx=tcx-tw/2, ty=cy+178+(420-th)/2, eye=ty+th*(TM+S.top*(1-2*TM))+16*tw/256;
+  g.strokeStyle="#c9a04a"; g.lineWidth=3; g.beginPath(); g.moveTo(tcx,cy+124); g.lineTo(tcx,eye); g.stroke();
+  var MX=function(a){return tx+(TM+a*(1-2*TM))*tw;}, MY=function(b){return ty+(TM+b*(1-2*TM))*th;};
+  var PA={moveTo:function(a,b){g.moveTo(MX(a),MY(b));},lineTo:function(a,b){g.lineTo(MX(a),MY(b));},quadraticCurveTo:function(a,b,c,d){g.quadraticCurveTo(MX(a),MY(b),MX(c),MY(d));},
+    bezierCurveTo:function(a,b,c,d,e,f){g.bezierCurveTo(MX(a),MY(b),MX(c),MY(d),MX(e),MY(f));}};
+  g.save(); g.beginPath(); S.path(PA); g.closePath(); g.shadowColor="rgba(90,30,10,.36)"; g.shadowBlur=30; g.shadowOffsetY=16; g.fillStyle="#b3241c"; g.fill(); g.restore();
+  g.save(); g.beginPath(); S.path(PA); g.closePath(); g.clip(); g.drawImage(tc,tx,ty,tw,th); g.restore();
+  // the words, to the right of the tag
+  var pre=w.p>=0&&PRESETS[w.p]&&PRESETS[w.p].k==="zh"?PRESETS[w.p]:null, txt=wishText(w), lx=cx+pad+380, lw=cx+cw-pad-lx, blocks=[], lines;
+  if(pre){ blocks.push(["#8f512c","96px "+ZH_FONT,pre.zh,108]); blocks.push(["rgba(33,33,33,.5)","25px "+HV,pre.py,50]);
+    if(lang!=="zh"){ g.font="300 34px "+HV; wrapText(g,pre[lang],lw).forEach(function(l){ blocks.push(["#212121","300 34px "+HV,l,44]); }); }
+  } else { var cj=isCJK(txt), f=cj?"66px "+ZH_FONT:"58px "+LAT_FONT; g.font=f; lines=wrapText(g,txt,lw).slice(0,5);
+    lines.forEach(function(l){ blocks.push([cj?"#8f512c":"#212121",f,l,cj?80:64]); }); }
+  if(w.n) blocks.push(["#575a44","italic 28px "+HV,"— "+w.n,58]);
+  if(!w.decor&&w.ts>1e12){ var ds=""; try{ ds=new Date(w.ts).toLocaleDateString(lang==="zh"?"zh-CN":lang,{year:"numeric",month:"long",day:"numeric"}); }catch(e){} if(ds) blocks.push(["rgba(33,33,33,.45)","21px "+HV,ds,w.n?34:54]); }
+  var tot=0; blocks.forEach(function(b){ tot+=b[3]; }); var y=cy+124+(506-tot)/2;
+  blocks.forEach(function(b){ g.fillStyle=b[0]; g.font=b[1]; g.fillText(b[2],lx,y+b[3]/2,lw); y+=b[3]; });
+  // footer : QR, link, logo
+  var fy=cy+630; g.strokeStyle="rgba(33,33,33,.14)"; g.lineWidth=1; g.beginPath(); g.moveTo(cx+pad,fy); g.lineTo(cx+cw-pad,fy); g.stroke();
+  var url=CARD_URL+((w.decor||w.local)?"":"#w-"+w.id), qm=qrMatrix(url)||qrMatrix(CARD_URL), qs=150, qx=cx+pad, qy=fy+26;
+  if(qm){ var n=qm.length, cell=qs/n; g.fillStyle="#212121"; for(var r=0;r<n;r++) for(var c=0;c<n;c++) if(qm[r][c]) g.fillRect(qx+c*cell,qy+r*cell,cell+.4,cell+.4); }
+  var lgh=150, lgw=logoImg.naturalWidth?lgh*logoImg.naturalWidth/logoImg.naturalHeight:0, lgx=cx+cw-pad-lgw;
+  if(lgw) g.drawImage(logoImg,lgx,qy,lgw,lgh);
+  var sx=qx+qs+34, sw=lgx-sx-30; g.fillStyle="rgba(33,33,33,.72)"; g.font="300 25px "+HV; lines=wrapText(g,T("cardScan"),sw);
+  for(i=0;i<lines.length&&i<2;i++) g.fillText(lines[i],sx,qy+24+i*34);
+  g.fillStyle="#212121"; g.font="500 38px "+HV; g.fillText(CARD_URL_TEXT,sx,qy+qs-24); var uw=g.measureText(CARD_URL_TEXT).width;
+  cv.links=[{x:sx,y:qy+qs-50,w:uw,h:52,url:CARD_URL},{x:qx,y:qy,w:qs,h:qs,url:url}];
+  if(lgw) cv.links.push({x:lgx,y:qy,w:lgw,h:lgh,url:SITE_URL});
+  return cv;
+}
+var cardCv=null;
+function openCardModal(w){ if(!w) return;
+  photoCharger();
+  var go=function(){ if(go.done) return; go.done=true; cardCv=buildCard(w); window.__cardCv=cardCv; $("cimg").src=cardCv.toDataURL("image/jpeg",.9);
+    $("cmodal").classList.add("open"); };
+  /* On attend aussi la photographie : elle n'est plus dans la page, et une
+     carte sans son fond serait un beige vide. */
+  if(!photoImg.complete) photoImg.addEventListener("load",go,{once:true});
+  setTimeout(go,1800);
+  try{ Promise.all([document.fonts.load('80px "Ma Shan Zheng"',"许愿树"+wishText(w)),document.fonts.load('500 60px "Caveat"',wishText(w)||"a")]).then(go,go); }catch(e){ go(); }
+}
+function saveCard(kind){ if(!cardCv) return;
+  cardCv.toBlob(function(blob){ if(!blob){ toast(T("cardFail")); return; }
+    var fin=function(data,name){ toast(telecharger(data,name)?T("saved"):T("cardFail")); };
+    if(kind==="jpg") fin(blob,"yunma-voeu.jpg");
+    else blob.arrayBuffer().then(function(buf){ fin(new Blob([pdfFromJpeg(new Uint8Array(buf),1050,1480,297.64,419.53,cardCv.links)],{type:"application/pdf"}),"yunma-voeu.pdf"); },
+      function(){ toast(T("cardFail")); });
+  },"image/jpeg",.92);
+}
+window.__pdf=pdfFromJpeg;
+$("cCard").onclick=function(){ openCardModal(cardWish); };
+$("cJpg").onclick=function(){ saveCard("jpg"); };
+$("cPdf").onclick=function(){ saveCard("pdf"); };
+$("cClose").onclick=function(){ $("cmodal").classList.remove("open"); };
+$("sign").onclick=function(){ $("lmodal").classList.add("open"); };
+$("leaveStay").onclick=$("leaveGo").onclick=function(){ setTimeout(function(){ $("lmodal").classList.remove("open"); },60); };
+$("lmodal").onclick=function(e){ if(e.target===$("lmodal")) $("lmodal").classList.remove("open"); };
+$("cmodal").onclick=function(e){ if(e.target===$("cmodal")) $("cmodal").classList.remove("open"); };
+
+/* ------------------------------------------------------------------ audio (synthesised, no files) */
+var AC=null, master=null, muted=false, bus=null, sfxBus=null, SCALE=[], mIdx=7;
+(function(){ var r=[1,1.2,4/3,1.5,1.8]; for(var i=0;i<14;i++) SCALE.push(123.47*r[i%5]*Math.pow(2,Math.floor(i/5))); })();
+function startAudio(){
+  try{
+    var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return; AC=new Ctx();
+    var comp=AC.createDynamicsCompressor(); comp.threshold.value=-16; comp.ratio.value=3; comp.connect(AC.destination);
+    master=AC.createGain(); master.gain.value=0; master.connect(comp);
+    var len=Math.floor(AC.sampleRate*7.5), buf=AC.createBuffer(2,len,AC.sampleRate), c,i;
+    for(c=0;c<2;c++){ var ch=buf.getChannelData(c); for(i=0;i<len;i++) ch[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.2); }
+    var conv=AC.createConvolver(); conv.buffer=buf; var wet=AC.createGain(); wet.gain.value=.85; conv.connect(wet); wet.connect(master);
+    bus=AC.createGain(); bus.gain.value=.7; bus.connect(master); bus.connect(conv);
+    sfxBus=AC.createGain(); sfxBus.gain.value=.8; sfxBus.connect(master); var sfxSend=AC.createGain(); sfxSend.gain.value=1.1; sfxBus.connect(sfxSend); sfxSend.connect(conv);
+    var lp=AC.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=1500; lp.connect(bus);
+    // a very low gong : soft mallet, slow beating partials, long tail
+    var gong=function(){ if(!AC||AC.state!=="running") return; var t=AC.currentTime+.05, FS=[98,110,123.47,146.83,164.81,196,220,246.94], f=FS[Math.floor(Math.random()*FS.length)], v=(.7+Math.random()*.25)*(f>170?.75:1), dk=f>170?.6:.8;
+      [[1,.5,17],[2,.26,13],[2.76,.13,9],[3.42,.06,6],[4.3,.03,4]].forEach(function(p){ [0,.45].forEach(function(b){
+        var o=AC.createOscillator(), g=AC.createGain(); o.type="sine"; o.frequency.value=f*p[0]+b;
+        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(p[1]*v,t+.05); g.gain.exponentialRampToValueAtTime(.0001,t+p[2]*dk);
+        o.connect(g); g.connect(lp); o.start(t); o.stop(t+p[2]*dk+.1); }); });
+      var th=AC.createOscillator(), tg=AC.createGain(); th.type="sine"; th.frequency.setValueAtTime(f*2.2,t); th.frequency.exponentialRampToValueAtTime(f,t+.3);
+      tg.gain.setValueAtTime(0,t); tg.gain.linearRampToValueAtTime(.35*v,t+.01); tg.gain.exponentialRampToValueAtTime(.0001,t+.5); th.connect(tg); tg.connect(lp); th.start(t); th.stop(t+.6); };
+    setTimeout(gong,1200); (function loop(){ setTimeout(function(){ gong(); loop(); },7000+Math.random()*6000); })();
+    master.gain.linearRampToValueAtTime(.75,AC.currentTime+2.5);
+    if(AC.state==="suspended") AC.resume();
+  }catch(e){ AC=null; }
+}
+function pluck(f,t,vol,dest){ if(!AC) return; t=t||AC.currentTime;
+  var o=AC.createOscillator(), o2=AC.createOscillator(), g=AC.createGain(), g2=AC.createGain(), lp=AC.createBiquadFilter();
+  o.type="triangle"; o.frequency.setValueAtTime(f*.985,t); o.frequency.exponentialRampToValueAtTime(f,t+.12); o2.type="sine"; o2.frequency.value=f*2.003; g2.gain.value=.18;
+  lp.type="lowpass"; lp.frequency.value=1700; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+4.2);
+  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(lp); lp.connect(dest||sfxBus); o.start(t); o2.start(t); o.stop(t+4.4); o2.stop(t+4.4); }
+function blip(f,type,peak,dec,t,f2){ var o=AC.createOscillator(), g=AC.createGain(); o.type=type; o.frequency.setValueAtTime(f,t); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t+dec);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(peak,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+dec); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t+dec+.05); }
+// interaction sounds : wooden fish for buttons, a pentatonic pluck per choice, a small bell on a tag, a bowl when a wish is hung
+function sfx(kind,n){ if(!AC||muted||!sfxBus||AC.state!=="running") return; var t=AC.currentTime+.005;
+  try{
+    if(kind==="tap"){ blip(760,"sine",.13,.07,t,520); blip(1520,"triangle",.035,.035,t); }
+    else if(kind==="open"){ blip(392,"sine",.09,.22,t,330); blip(588,"sine",.04,.3,t+.05); }
+    else if(kind==="select"){ pluck(SCALE[5+((n||0)%8)],t,.075,sfxBus); }
+    else if(kind==="tag"){ blip(1318.5,"sine",.07,1.2,t); blip(1975.5,"sine",.03,.9,t); blip(2637,"sine",.014,.6,t); }
+    else if(kind==="hang"){ blip(98,"sine",.3,7,t); blip(98.5,"sine",.22,7,t); blip(196,"sine",.1,5,t); blip(270.5,"sine",.04,3,t); [5,7,8,10].forEach(function(i,k){ pluck(SCALE[i],t+.25+k*.16,.06,sfxBus); }); }
+  }catch(e){} }
+document.addEventListener("click",function(e){ var b=e.target&&e.target.closest?e.target.closest("button"):null; if(!b) return;
+  var par=b.parentNode, id=b.id; if(id==="hang"||id==="enter"||id==="snd") return;
+  if(par&&(par.id==="shapes"||par.id==="presets"||par.id==="tabs")){ sfx("select",Array.prototype.indexOf.call(par.children,b)); return; }
+  sfx(id==="add"?"open":"tap"); },true);
+function setMuted(m){ muted=m; $("sndw").style.display=m?"none":""; $("snd").style.opacity=m?.55:1;
+  if(AC&&master){ var t=AC.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(m?0:.75,t+1.2); } }
+$("snd").onclick=function(){ if(!AC) startAudio(); setMuted(!muted); };
+document.addEventListener("visibilitychange",function(){ if(!AC) return; try{ if(document.hidden) AC.suspend(); else AC.resume(); }catch(e){} });
+
+$("enter").onclick=function(){
+  entered=true; startAudio(); $("intro").classList.add("gone"); $("top").classList.remove("hide"); $("bottom").classList.remove("down");
+  setTimeout(function(){ $("hint").style.opacity=0; },9000);
+  if(window.__enter) window.__enter();
+};
+
+/* Relief du Yunnan — relevé réel, lissé, fabriqué par
+   outils/relief-wishes.mjs depuis carte/relief.json. Une altitude par
+   maille, de `min` à `max` mètres, du coin sud-ouest au coin nord-est.
+   Donnée versionnée : ne pas la modifier à la main. */
+const RELIEF={m:192,o:97.8,e:102.6,s:21,n:26.2,min:232.8,max:3348.1,c:'moyenne',d:'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BAL//P3+/v8BAgMB/fz/BAQA+Pf8AwcEAgMGBwT//Pz9/v7/AQQEAf/++/r6+vn39/n7/gMEBAL+/f4AAP7+//79/gEDAgABAwUFAv/9/P3+AAECAQAB/wD//v4BAP38/AADAgEA/v79/v///f7/AgEA/v/+/v79/fv9/Pv8/f7+/v4AAP/9+vr9AAIDAwH/FQMDBQUFBwwPDgoE/vr6+/3/AgMB//38/f//AAD+/f4BAgEAAAEA/v38/P0BAgIBAP37+/3///8AAwIA/fz+AQL8+PoACAkHAwUHBgIAAP7+/Pz8AAUGBAH9/Pz8/P39/v8AAgcJBwH9/P7///39/f7+/wEBAAACAgUEAv/9/Pz9AAMBAP/+/wD+/f0AAf/8/P4BAQIA/v7/AAH//v4AAQH+/v79//8A/wD9/P7//wD++/r9/v76+/4BAf79/f37GAMEBAQECQwMBQD69/f3+vwBAgL//v39//8AAQMBAP//AwMCAAAA//37/P8CBAD9/Pv5+v3///8AAQMB/vz9///9/QAECAoGBAUFAgAAAQD9+/v6/QADBAIA////AgQFBAQCBQcIBP78/P7//fz8/gECAgD///8BAwMEAf79/fz+AAEA/v39///+/v7/AAD+/f3+AQL///3//////v3/AQEA//7+//8BAQEAAAACAwL//Pr8/Pv7/gEB/fn4+fr5GgMEBAICBAcE/vb19Pb3+v4AAQEA/v7///8AAwMEAf39AQQFAwH///38/QEFBQH9+/n5+/4AAAABAwMC//z8/wECBAYJCggFAQEB//0AAAD7+/r7+/4AAwQFAwEAAgYICAYFBQQC/fz8AAEB/vz7AAQFAwH+/v8AAgMDAP/+/f79/f79/f0AAAH//v7+AAH//v3+AAEA/v39/f79/v7/AP8AAAD//wECAQEAAAECAgIA/////f4AAgD9+fn4+vv5HQQFBAIBAAD++vf29/j7/f4AAf///v///gABAgQC//37/gIGBgMA/f39/wIFBgL9+vn7/QEBAwMDBQQD//r8AAQGBwoLCgX//Pz9/fz/AP77+vr8/f8BBAYHBQH+AAMFBwcGBAH++/wABQYF//z8AAUGAwD9/v8BAgIBAf/+/f39+/z9/gACAgH//f4AAgEA//39/f////////39/f////8AAf8AAgQDAgD///8A//7/AgUD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AQD//v3+/wAB//3+AAMFBAICAgD8+vz/AQAAAf///f8BAQD/AAIGBgUDAQAAAP8AAgICAgMEAwIAAQECH///AAICAQAAAAD//f7//////v7+///////9+/r6+/3+/fz6+/4DBQUGBwkHAfz6+vv+AgYHBwQEAwMDAf/8+vn6/f4A///9/v8BAv/+/P38/Pz8/Pz/AgUHBQIA/fz7+/3+//////////8AAQD//fv49vb3+vz9//8AAQEBAf//AQMEAwH//v79/f79/f//AQQFAgABAwH9/P0AAQEAAAAAAAIGBQQCAwUHBwUBAAABAQAAAAMFBAQEAwH+/P3/IQABAgIBAf8A//7///8AAP///////wAAAP79/P7+/v38+vn6/gQHBgUFCAkJA/78/P0ABgkIBQMCBAMDAwEBAP79/f8BAP/+/gABAQD+/v38/Pv8/f3/AQMDAP/+//79/f4AAAABAAAAAQECAgMCAP36+Pf6/P4AAQEB///+/f39AAMDAv/+/Pz7+/z8/f8BAgMCAf8DBAL9/P0AAQD/AAEBAgUHBwQCAgQGBgMA//////7+/gMFBgQEAgD+/v4AIAABAgEBAP8AAAD//wAAAAAAAP8A/wAAAAEBAQEA//v5+Pv/AwcJBwYFCAoIBP/8/f0CBwoIBQMDBQUGBQUFBP/7+/4AAP/+/wABAQEAAAD//Pz9/Pz+AAEB//4BAwD9/v8BAgIBAQICAQMEBgUFAwD9+/z9/gACAwMB/v38+/v9/gAA//38+vr7+/z9/gABAQEA/gACBAD9+/4AAAAAAQICAwUHAwH//wIEAwD+/v7+/f39/gEFBQMCAQEBAQMDIAECAgEB/wAAAAAAAQECAQEBAQD//wABAgMEAgH+/Pn6/gQHCQoJBwYGBwcGAv76+/wBBgkGAwMDBQYFAwMDAPz4+f0A//7+/wAAAAABAgIA///+/v3+AQMCAAEEBAH//wECAwMDAgICBAUHBwYGAwEAAQICAQABAgIA/vz8+/39//////79/fz7/f//AAABAf///gACAf/8/P8AAgEDAwICAwQC//z7/f8BAP38/v/9/fz8/gEDAwAAAgECAQIDIQICAgEBAQEBAgEBAwMCAQIAAAD/AQECAwUEAv36+v0BBAoMDQoHBgQEBAMA/fj3+PwCBQUDAAADAwUEAgD//Pb2+f4AAP79/v7+/v8AAgEBAAEB/v0BBAYFBQUGBgQBAQIEBAMCAQABAwUGBQQCAgMFBwYEAP39AAD//f39/f8BAgICAQEAAAD//wEDAQABAQACAgIBAf/+/f8BAgMDBAIBAAH//Pr6+/4A//z9//7+/Pz8/wECAP8AAgIBAP//JAEBAQIBAQECAQICAwQDAQAA//4AAgMDBAYE//n4+wEFBwoMCggGAgD+/vz6+PX1+f4DBQQCAP8BAwIDAP779/T2+/8BAP39/f7///4AAQECAgEA//8CBwkJCAgHBgQCAQIDAwIA//7/AQMDAgEBAwYIBwP++/n7/wD//f7+AQMEBAQFAwEAAAABAgQFBAMBAgQGBwUCAAD//f0AAgMCAQD///39/Pv7/P3+/f3+//77/P3/AAEBAAEBAQIC//38JgIBAQEBAgIBAQACBAMCAf////4AAwQFBQUC/fn4/gMDBAUGBAQDAfz6+fj39/f6/gEDBQUEAQEBAgIA//769/b5/wIB//39//7/AAABAgMEAwD//f4DBggHBwcEAQD////+AAD//f7+AQIDAwICAwMD//n29ff8AAH//v8CBAcGBAMCAf/+AAEEBQYHBwQEBQgICAQBAAD9/P3/AQEB/wD//v7//v39/f7+/v7//v39/gACAwICAgIBAAICAP37KQMCAgEBAQEA/wABAgICAAEBAP4AAgUFBQP/+ff5/QIEAwUDAgECAf36+fn5+/4BAwMCBAYFBAICAgD//fz6+Pn8AQICAP///wABAQIEBAcGBQH+/f4BBAQEBAL++fj5+vn7/QD///8CAwQFBQMB/vz69fPz9fj/AQIA/wEEBwkGAv////7/AQUGBgYGBgQGCAgIBAH+/vz8/P4BAwIA/////wEBAf/+//8A/wD//fz+AQQEAwICAwL//wEDAPz9KwIEAwEAAP////8AAAL//wEBAP7/AQMFBQH79/n7/wMGBwcFBAMEBAD9/f79/wMICAQAAgUIBgQDAgH//vv4+Pr+AAICAwEAAQABAgMFBwkIBQH+////AQIA/vz39PP09vj7/wEDAgQFBQcFBQH89/Xz8vL09/wBAwEBAAIFBwYC/v3+/gADBgYFAwIAAQMEBgcGAf38/Pz8/f8DBQUCAAAAAQIEAv/+AAIDAgD//v4AAgMDAgIDAwH+/wECAP79KgMDBAIA////////AP///v///v3+AAIDAf/7+vz/AAQHBwcIBwYHBAD//wD//wUJCgUBAQYJCAQDAgICAfz5+fv+/wIDBAQCAQECAwUICgkGAwD+AP7+AP/9+fbz8/P1+P0ABAUGBgUGBQUEAv749PLz8/T3+/4BAgIAAAECAgD//f7+AAMHCAUB/fz8/gABBAYEAvz6+vz8/QAEBgUDAQABAgQFAv/+/wECAgIB/v3/AQIBAgEBAQD//f8AAQABJwACAwH+/v7+//8A/////v38+/z9/wABAP/9/f4AAQMEBAQGCAkHA/37/f/+/gEHCAYDAQQHBwUDAgMFA//7+vz+/wEEBQUDAwIDAwYICAYC//7////9/Pv49vX29vj7AAMGBgYFBQUDAwMCAfz59fX19vj7/f8CAQEA//8A//7//v//AAMFBAH8+vn7/f8BAgQGA/75+vz9/gACBAUDAf8AAQMEAf79/wABBAUC//3/AAEBAQEA//7//v3+AAECJv8BAgH//v7///////8A//36+fz+AAH/AP/+/v8AAQAA/wADBggGAPv4+fz8/P8CBggGAwADAwMCAAIFBAL+/P3+AAIFBwcFBAQEBQYFBAD8+/z//vz6+fj4+fr7/P4CBgYFBAMBAQIAAAECAP36+ff4+vv9/wECAwH//f//AAEBAgD+/gAB//38+fv8/v8BAwUHBP/6+vz+AAECAwUEAf/9AAAC//38/QACBgUD/v3/AAECAgIA/P7///7+/wEBJAAAAQH+/f//AAAA/gAAAPv6+/0BAQD/AAD//v8BAf/9/v8CBgYEAPz5+Pn8/P0BBAgJBf/9AAEBAQECBQMA//7/AAMGCQkGBQUFBAIB/vz5+fr7+vn3+fr9AQICAgMGBgYC//3+AAD//v///fz5+Pj5+/7+AQQGBAH+/v8CBAQFAwH+/v/////9/Pz9/wADBAQGA/77+vz/AQQDAwQEAv/9/f//AP79/gEEBgQA/v7+/gABAgL//f0AAv8A///+JgAAAQD///8AAAD///8A/vz6/QEDAgEAAQAA/wABAf/+/QAFBQUB/vv6+fn6/f8CBAcJBP77/f8BAAAAAgMCAAAAAQIIDAsIBAIBAP79+vr4+Pn4+Pj6/gEGCAcFBAQHBgH+/f//AQEA/f38+/v6+fj6/P7/AwYHBAD+/gEEBgYGAwEA//8AAQH//f3/AAIDAwMCAP77+/z/BAUFAwQDAf79/f4AAv//AAIEBAL///7+/v8BAQD+/P8DBAQB/wD/KAEA//4A/wAAAAAA///+/v39/wIFBAIAAQAA/v4AAQD9/wQGBgP//Pv6+vn6/QIFBQcGBP78/AECAv/+/wABAgICAwIFCgoGAQD+/Pz8+/v6+vn5+/0AAwYJCQYCBAUEAf//AAICAwIA/vz6+vr6+vf5/P4BBQYFAv7+AAQFBgYEAgAA//8AAgIA/f3/AgICAgEA/v79+/z/BAYFBAIC//79/f4BAgIBAAICAQH///79/wAA/v79/gIFBgQBAAAAJwD//v//AAEAAAD/AP//AAD/AAMEBAMB///+/P3+/v39AAUGBQD8+/v7+vr6/gMFBQQEAgD+/gECAv/9/f4BAwUFAwEBAwQC/vz8/f39/vz8+/3/AAIDBQcIBQEAAQMA//8CBQUDAwIA//78+/r7+Pn5/QADBQUC/v3/AwYGBgUEAwIB//7/AgL//f0BAQEBAQEAAAD++/r/BAYEAwEA/fz7/f4AAwMBAP8AAP///f7/AQH//v7/AgMFBgL//v8AJf//////AAAA//////4BAgIB/wECBAMA///+/Pv7/f3+AQMDAP37/f79+/v9/gECAQEDAwL/AAECAv/9+/0BBAQFAv79/v38+/v8/f79/fz8AAMEBQQFBgcEAP38AAH/AAQGBgMBAAICAgEA/fr4+fj8/wIGBQL+/gAFBwcHBQUFBQUB/fwAAwMA/v3/AQAAAgICAv/9+vr+AgQDAgH+/Pr7/P8AAgMA//7+/v3+/wEDAgH+/gADAwMDAwL+/f7+Iv7///8AAQAA//79/v8BAQD//v8AAwMBAgEA//38/P8DAwL//Pr8/wD+/P///vz+AAMFBgQAAAEDAf/8/P7/AQMCAP7+/vv5+fn6+/v5+fv/BAYHBQQGBwUB/fv+//8BAwUEAv79/wIEBAMD//v4+fv+AgUFAv7/AQUHCAYFAwQFBQP/+vz/AwP//fz/AAACBAQEAP36+fv/AgIBAAD//Pv6/P4AAgEA/Pz7/PwAAwUEAf79/wMFAwEAAwL//P3+IQD/AAEBAAEBAP79/gD///79/v3/AQIEAwQEAf79/gEFBgP+/P3+AAD+/gEB/vv+AQUICAT/AAMDAf79/f7+/wAAAAEFAv349/n6+/n5+fwBBAYEAgQGBwT//f7///4AAgH//Pz9AQICAwQDAfz7+/4CAwQB//8CBwcGBQMBAAECAP35+fv/AQD9/Pz/AAIDAwQC/vv4+f0AAgEAAQD//fv8/f8BAAD//Pr6+/8EBwgC/vz+/wEDAf7/AgMB/vz+IQABAQEBAQAB//79/v8AAP7+/v3+/wMEBAQDAf79/gAFCAYC/wACBAICAQIC/vv9AgcIBgH+/wEB//38/P7+/wAAAgYGA/v49/v9/v78/P4BAwIAAQMGBQL//wAC//39/fz8/f7//wD//wAB//z9/wEBAP7+/gMICAX//v///f39+/j4+vz9/v39/Pz/AQICAgL//fv5+/8CAgEBAQH//fz9/v//AP7+/Pr6/gIHCgYA/Pz8/v8AAP8BAwUC/v39IgEBAQIAAQAA/v3+/wABAQD+/v79/wECAgEAAAD+/f4BBQUFAgQFBQcIBwQB/fz9AgUHBP79/wD//Pv7/f8CAgIEBgcD/Pb0+f4DBQQCAQD/AAAAAwYHBQP+/gEC//v5+/v+AP/+/Pz6+fv8+vz+///9+/v9AgcHBP36+/7//Pv6+vr9/v79/f39/f7/AQEBAP///vv8/QADAwAAAQEA/f7//v///v38/Pz9AQUICAYA/fz8/f4BAgUFBQMC//3+IwABAQABAAD//v7+/wECAgH//f7+/wABAf8A/wD//fz+AAMGBwcFBgYJCAUC/vv8AAQEAf39/v78+vr7/gIFBQYICQT79PH0+gAEBwgHBQH+/v4BBAcIBQD9+/4A/fr6+/z///77+vr6+fn5+vr7/fv6+vwABAYE//r4+v7++/n7/AADAv77/P3//v8AAQMBAf8A/v3+AAECAgEAAgEA/v8AAP///f3+//8CAwYICQYA/fz7/P8ECQoIBQH///7+IQEBAQEBAf///v7//wECAwH+/v7+/v7+////AAD//vz9/QEHCggFAgIDBAQD//37/QEB/v/+///7+vr9AQMFBwgLCQD08PH3/QADBQYIBwP//f7/BAYEAf77+fr7+vr7/QACAP7+/gAA//36+vn6+vr6/QACAwMB/fr4+v7//vz8AQYFAPv7/QAAAQEBAwQFAwMBAAAAAwMDAgEBAgH//wAAAQAA/f3/AQMEBAUGBwQA/fv6+wEHCwoIAf38/f7/IgAAAAECAP//////AAABAQD+/f////79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/fv6+fr8/wICAQEBAwL/+vb4/QABAAACBAQEBQUC/Pj4+Pv/BQoMCwkGAv37+vv8/f8BAgEBAP/+/f4AAgAB/v39/v8AAAEB//37+/z9/gD////+/v8AAAAA/v8BAP37IQABAQAA/wAA//8AAAECBAH+/f39/Pr7/f3+AAMEBAH+/Pz9AAH//f0AAf/8/f8DAv78/QAEBQD8+fr8/QEEBgUDAgEBAQEC//z7/Pz8/f4A/vn4+/8A//z7+/3+/v///vz7+/wAAwUFAgEBAQH9+ff6AAMBAAIDBQQEBAH8+Pf5+/8ECAsMCgYC/vz6+/38/QABAgEA///9/P4BAQIA/fz9/gD/AAABAP/+/f7+AQEBAAAB///////+/f7//fr6IAEBAQAA/wD//v8AAQEEAgH+/f79+/r7/Pz+AAMGBAD8+/wAAwMBAAABAP//AAMDAP78/QACBAH7+fz/AwQHCAcFAP7+/v8AAP77+/v9/gEA/vv7/gAA/vv7/f3+//8A//39/gACBgcGBAMBAf77+Pn+AwMBAQMDAwEAAPz49vj6/wIFCAgIBwL++vn6/fz9/gABAgD+/v78/f8BAwL//f3+AAD//wAB////AQAAAgMCAgMBAQEB/v39//8A/v38HwAAAQD+/v7//v8BAQICAwD+/f79/Pv7/Pz+AQUGA//6+/4DBAICAwMBAQACBAQD//38/gACBAH9/P8DBAYHCAgFAP7+/wACAf/8+vz+/wD//fz+AAH//v3+///+/v/+//8AAAEDBgYFBQQDAPz6+fwAAgEAAgICAP79/Pn4+fwAAgMGBgcGA/749/n7/P3+/QACAgD+/f3+/wADAwL//f4AAAIBAAD//wAAAQECAwIBAgMDAQIBAP7/AgUEAwEAIAAAAAD//v7+AAABAQIDA//+/f/+/Pz7/P7/AQUGA/77+/8DAwECBAQBAAIEBgQB//38/gADBAP//gADBAUFBwcD//3/AgIEA//8+vz/AP///v3/AQD//wAA//7////+/gECAAEDBQUEAgMB/vv6/P4BAQD/AQEC//39/fv8/QACAgQFBwYEAPv3+Pr8/f39/gACAgD+/f8AAQECBAH+/v8BAgIC/////wABAQIBAP//AQIAAAICAAAABAYGAwEB'};
+
+/* ------------------------------------------------------------------ ciel : l'heure qu'il est
+   Repris de l'atlas des variétés, à la virgule près : c'est la même
+   journée du Yunnan, et deux expériences du même site n'ont pas à avoir
+   deux couchants différents.
+
+   Le tour d'horloge dure deux heures pour vingt-quatre : on reste dans la
+   demi-journée où l'on est arrivé, la lumière bouge assez pour se voir sur
+   une longue visite, et celui qui vient le soir a toujours son couchant.
+   « ?heure=20 » fige l'horloge — c'est pour les épreuves. */
+var CIEL=(function(){
+  var TOUR=7200, fixe=null, depart=10;
+  try{ var h=new URLSearchParams(location.search).get("heure"); if(h!==null&&isFinite(+h)) fixe=((+h)%24+24)%24; }catch(e){}
+  try{ var d=new Date(); depart=d.getHours()+d.getMinutes()/60; }catch(e){}
+  var t0=performance.now();
+  function heure(){ return fixe!==null?fixe:(depart+(performance.now()-t0)/1000/TOUR*24)%24; }
+  /* Pour chaque moment : l'heure, le bas du ciel (c'est aussi la brume et
+     le fond de la page), le haut du ciel, la couleur de la lumière, et la
+     part de nuit — 0 en plein jour, 1 au plus noir. */
+  var MOMENTS=[
+    [ 0.0,[ 10, 16, 32],[  4,  7, 15],[ 46, 60, 96],1   ],
+    [ 4.2,[ 24, 31, 54],[  8, 12, 25],[ 58, 70,105],.94 ],
+    [ 5.6,[ 92, 78,104],[ 30, 36, 66],[122, 92,118],.74 ],
+    [ 6.4,[232,172,158],[122,134,176],[244,170,140],.40 ],
+    [ 7.6,[243,226,212],[196,210,228],[255,236,214],.14 ],
+    [ 9.5,[239,235,226],[246,244,238],[255,250,242],.02 ],
+    [13.0,[239,235,226],[248,246,240],[255,253,248],0   ],
+    [16.5,[241,230,216],[236,236,234],[255,240,218],.05 ],
+    [18.1,[232,176,150],[170,150,178],[250,180,132],.30 ],
+    [19.0,[160, 96,122],[ 86, 66,116],[180,104,128],.62 ],
+    [19.9,[ 62, 40, 78],[ 26, 26, 58],[ 86, 58, 96],.86 ],
+    [21.2,[ 10, 16, 32],[  4,  7, 15],[ 46, 60, 96],1   ],
+    [24.0,[ 10, 16, 32],[  4,  7, 15],[ 46, 60, 96],1   ]
+  ];
+  function lisse(x){ return x*x*(3-2*x); }
+  function mel(a,b,k){ return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k]; }
+  function etat(h){
+    var i=0; while(i<MOMENTS.length-2&&MOMENTS[i+1][0]<=h) i++;
+    var A=MOMENTS[i], B=MOMENTS[i+1], k=lisse(Math.max(0,Math.min(1,(h-A[0])/(B[0]-A[0]))));
+    return {h:h,bas:mel(A[1],B[1],k),haut:mel(A[2],B[2],k),lum:mel(A[3],B[3],k),nuit:A[4]+(B[4]-A[4])*k};
+  }
+  /* Le soleil : zéro à six heures dix, zéro à dix-huit heures quarante, au
+     plus haut un peu après midi. Sous l'horizon, il continue sa course —
+     c'est ce qui fait que l'ombre tourne encore au crépuscule. */
+  function elevation(h){ return 1.16*Math.sin(Math.PI*(h-6.17)/12.5); }
+  function azimut(h){ return Math.PI*(h-6.17)/12.5+2.0; }
+  /* Se placer à une heure donnée sans arrêter le temps : « ?heure= » fige
+     l'horloge, ce qui ne permet justement pas de vérifier qu'elle avance. */
+  function poser(h){ fixe=null; depart=(((h%24)+24)%24)-(performance.now()-t0)/1000/TOUR*24; }
+  return {TOUR:TOUR,heure:heure,etat:etat,elevation:elevation,azimut:azimut,poser:poser,mel:mel};
+})();
+/* L'état du ciel au moment présent. Tout le décor lit ici. */
+var SUN={dir:[-.55,.72,.42],col:[1,.99,.965],nuit:0,jour:1,el:.5,ciel:CIEL.etat(CIEL.heure())};
+function sunMaj(){
+  var h=CIEL.heure(), c=CIEL.etat(h), el=CIEL.elevation(h), az=CIEL.azimut(h), ce=Math.cos(el);
+  SUN.dir=[ce*Math.cos(az),Math.sin(el),ce*Math.sin(az)];
+  SUN.col=[c.lum[0]/255,c.lum[1]/255,c.lum[2]/255];
+  SUN.el=el; SUN.nuit=c.nuit; SUN.ciel=c;
+  /* Au-dessus de l'horizon ou non : c'est ce qui éteint le halo, allume les
+     étoiles, et fait passer la lumière du soleil à la lune. */
+  SUN.jour=Math.max(0,Math.min(1,(el+.06)/.16));
+}
+sunMaj();
+
+/* ------------------------------------------------------------------ thème : le jour et la nuit sur l'interface
+   L'interface ne suit pas le ciel pas à pas : elle bascule d'un coup, avec
+   un fondu. Suivre la clarté du ciel laisserait l'encre et le papier en gris
+   moyen l'un sur l'autre pendant tout le crépuscule — c'est la leçon de
+   l'atlas, et elle vaut ici aussi. Deux seuils plutôt qu'un, pour que ça ne
+   clignote pas à la frontière. */
+var CSSV=document.documentElement.style, theme=0, themeCible=0, themePose=-1, themeT=null;
+/* Les cinq couleurs de la charte du site, et leurs répondantes de nuit.
+   Le beige du jour est aussi, au nombre près, le bas du ciel à midi : la
+   page et l'horizon sont de la même couleur, et ce n'est pas un hasard —
+   c'est le même papier. Les teintes de nuit sont celles de l'atlas, qui a
+   déjà fait l'épreuve du contraste au plus noir. */
+var JOUR={beige:[239,235,226],paper:[251,250,247],ink:[ 33, 33, 33],rust:[185, 95, 44],green:[ 86, 90, 65]};
+var NUIT={beige:[ 16, 22, 38],paper:[ 26, 33, 52],ink:[236,234,228],rust:[223,140, 87],green:[150,156,120]};
+function themeMaj(){
+  var c=SUN.ciel, clarte=(.2126*c.bas[0]+.7152*c.bas[1]+.0722*c.bas[2])/255;
+  if(clarte<.46) themeCible=1; else if(clarte>.52) themeCible=0;
+  var m=performance.now()/1000, dt=themeT===null?0:Math.min(.25,Math.max(0,m-themeT)); themeT=m;
+  theme+=Math.sign(themeCible-theme)*Math.min(Math.abs(themeCible-theme),dt*.95);
+  if(Math.abs(theme-themePose)<=.004) return;
+  themePose=theme;
+  ["beige","paper","ink","rust","green"].forEach(function(k){
+    CSSV.setProperty("--"+k,"rgb("+CIEL.mel(JOUR[k],NUIT[k],theme).map(Math.round).join(",")+")"); });
+  /* Les boutons et les traits sont posés en « rgba(33,33,33,…) » un peu
+     partout : une seule variable d'encre, déclinée, évite d'aller les
+     chercher un à un. */
+  CSSV.setProperty("--ink-rgb",CIEL.mel(JOUR.ink,NUIT.ink,theme).map(Math.round).join(","));
+  CSSV.setProperty("--beige-rgb",CIEL.mel(JOUR.beige,NUIT.beige,theme).map(Math.round).join(","));
+  CSSV.setProperty("--logo-inv",theme.toFixed(3));
+}
+themeMaj();
+
+/* ------------------------------------------------------------------ 3D */
+if(!window.THREE){ $("err").style.display="flex"; $("err").textContent=T("nogl"); return; }
+var canvas=$("c"), renderer;
+try{ renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:false,alpha:false,powerPreference:"high-performance"}); }
+catch(e){ $("err").style.display="flex"; $("err").textContent=T("nogl"); return; }
+var C=function(h){ return new THREE.Color(h).convertSRGBToLinear(); };
+var PR=Math.min(window.devicePixelRatio||1,1.75);
+renderer.setPixelRatio(PR); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding; renderer.setClearColor(0xf3efe6,1);
+var scene=new THREE.Scene(); scene.fog=new THREE.Fog(C(0xf1ede3),8,36);
+/* Le fond porte maintenant mille quatre cents unités de montagnes : le plan
+   lointain, qui s'arrêtait à quatre-vingt-dix, les coupait net. La précision
+   de profondeur reste large — vingt-quatre bits à partir d'un demi — et
+   l'arbre, qu'on approche jusqu'à une unité et demie, n'y perd rien. */
+var camera=new THREE.PerspectiveCamera(42,1,0.5,2600);
+/* Un téléphone : la maille du relief y est plus large, et c'est tout. */
+function petit(){ try{ return Math.min(window.innerWidth,window.innerHeight)<620||/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent); }catch(e){ return false; } }
+var world=new THREE.Group(); scene.add(world);
+
+function canvasTex(w,h,fn){ var cv=document.createElement("canvas"); cv.width=w; cv.height=h; fn(cv.getContext("2d"),w,h);
+  var t=new THREE.CanvasTexture(cv); t.encoding=THREE.sRGBEncoding; return t; }
+
+/* ---- le ciel ----
+   Un dôme, et un seul shader qui porte toute l'heure : le dégradé du bas
+   vers le haut, les étoiles, et le halo du soleil. Il est écrit en valeurs
+   d'écran et non en lumière : une matière brute ne passe pas par la
+   conversion de sortie de three.js, donc ce qu'on écrit ici est ce qui
+   s'affiche — comme dans l'atlas, et avec les mêmes nombres. */
+var skyMat=new THREE.ShaderMaterial({
+  side:THREE.BackSide, depthWrite:false, fog:false,
+  uniforms:{ uBas:{value:new THREE.Vector3(.94,.92,.89)}, uHaut:{value:new THREE.Vector3(.97,.96,.94)},
+    uLum:{value:new THREE.Vector3(1,.99,.96)}, uSoleil:{value:new THREE.Vector3(0,1,0)},
+    uNuit:{value:0}, uJour:{value:1}, uT:{value:0} },
+  vertexShader:"varying vec3 vD; void main(){ vD=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }",
+  fragmentShader:[
+  "precision highp float;",
+  "varying vec3 vD;",
+  "uniform vec3 uBas,uHaut,uLum,uSoleil; uniform float uNuit,uJour,uT;",
+  "float h21(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }",
+  "void main(){",
+  "  vec3 d=normalize(vD); float y=d.y*0.5+0.5;",
+  "  vec3 c=mix(uBas,uHaut,smoothstep(0.50,0.94,y));",
+  /* Les étoiles : une grille fine posée sur la direction du regard, une
+     case sur une vingtaine allumée, et un battement très lent. Elles
+     tiennent au ciel et non à l'écran — on tourne, elles restent. */
+  "  if(uNuit>0.02){",
+  "    vec2 su=vec2(atan(d.z,d.x)*22.0, asin(clamp(d.y,-1.0,1.0))*26.0);",
+  "    vec2 ci=floor(su), cf=fract(su); float r1=h21(ci);",
+  "    if(r1>0.955){ vec2 o=vec2(h21(ci+1.7),h21(ci+4.3)); float dd=length(cf-o);",
+  "      float br=(r1-0.955)/0.045;",
+  "      float sc=smoothstep(0.26,0.0,dd)*(0.35+0.65*br*br);",
+  "      sc*=0.6+0.4*sin(uT*(0.6+br*1.7)+r1*40.0);",
+  "      c+=vec3(0.82,0.88,1.0)*sc*1.9*uNuit*smoothstep(0.50,0.66,y); } }",
+  "  float sd=max(0.0,dot(d,uSoleil));",
+  "  float halo=pow(sd,5.0)*0.34+pow(sd,120.0)*0.55;",
+  "  c=mix(c,mix(vec3(1.0,0.995,0.985),uLum,0.22+0.5*uNuit),halo*uJour);",
+  "  gl_FragColor=vec4(c,1.0);",
+  "}"].join("\n")});
+var skyDome=new THREE.Mesh(new THREE.SphereGeometry(2000,40,24),skyMat);
+skyDome.renderOrder=-10; skyDome.frustumCulled=false; scene.add(skyDome);
+
+/* ---- les montagnes du Yunnan ----
+   Le même relevé que l'atlas, à la même place du monde : de 97,8° à 102,6°
+   est et de 21° à 26,2° nord, soit environ 490 km sur 578. Ici elles ne
+   sont qu'un horizon — on ne s'en approche jamais —, d'où une maille plus
+   large et une finesse de relevé moitié moindre.
+
+   L'altitude est exagérée, comme dans l'atlas : 3 100 m de dénivelé réel
+   sur 490 km de large ne feraient, à l'échelle, qu'un pli imperceptible.
+
+   Le relief est surtout très bas, et c'est tout le réglage. Posé à hauteur
+   d'île, il mangeait le ciel : des crêtes à dix unités de l'arbre, hautes
+   comme lui, et plus d'horizon du tout. Neuf cents unités plus bas, il
+   disparaissait dans les coins. Cinq cent vingt : les crêtes passent au
+   tiers bas de l'image, derrière l'île, l'arbre se détache sur le ciel, et
+   c'est là que vient le vertige — il est au-dessus du Yunnan, pas posé
+   dessus. */
+var EXT=900, EXTZ=EXT*1.18, Y0=-470, AMPL=430, terrain=null, terMat=null;
+(function(){
+  var b, m=RELIEF.m, a=new Uint8Array(m*m), i, j;
+  try{ b=atob(RELIEF.d); }catch(e){ return; }
+  for(i=0;i<a.length;i++) a[i]=b.charCodeAt(i);
+  /* Le relevé est stocké en écart à la moyenne du voisin de gauche et de
+     celui du dessus : un relief est lisse, les écarts sont petits, et la
+     page y gagne un bon tiers une fois compressée. */
+  if(RELIEF.c==="moyenne") for(j=0;j<m;j++) for(i=0;i<m;i++){ var k=j*m+i, g=i?a[k-1]:0, dd=j?a[k-m]:0; a[k]=(a[k]+((g+dd)>>1))&255; }
+  var ech=function(i,j){ return a[Math.max(0,Math.min(m-1,j))*m+Math.max(0,Math.min(m-1,i))]; };
+  /* On ne montre pas toute la province, mais un tiers : quatre cent
+     quatre-vingt-dix kilomètres étalés sur un horizon, ce sont des crêtes
+     tous les dix pixels, et le relief se chiffonne comme du papier. Un tiers
+     de la zone sur la même largeur, ce sont des croupes trois fois plus
+     larges — celles de l'atlas, qu'on regarde d'un peu plus loin. La fenêtre
+     est prise au centre de la ceinture caféière. */
+  var ZOOM=.34, Z0=(1-ZOOM)/2;
+  /* Interpolation bicubique de Catmull-Rom : le relevé est quantifié sur un
+     octet, soit douze mètres par pas, et une bilinéaire laisserait voir la
+     grille en coussins sur les versants doux. */
+  var cmr=function(p,q,r,s,t){ var t2=t*t; return .5*(2*q+(r-p)*t+(2*p-5*q+4*r-s)*t2+(3*q-p-3*r+s)*t2*t); };
+  var rang=new Float64Array(4);
+  /* Un bruit de valeur, deux octaves : il ne sert qu'à la couleur, pour
+     que les versants ne soient pas d'un seul ton. */
+  function h2(i,j){ var n=Math.sin(i*127.1+j*311.7)*43758.5453; return n-Math.floor(n); }
+  function vb(x,z){ var i=Math.floor(x), j=Math.floor(z), fx=x-i, fz=z-j;
+    fx=fx*fx*(3-2*fx); fz=fz*fz*(3-2*fz);
+    var a0=h2(i,j), b0=h2(i+1,j), c0=h2(i,j+1), d0=h2(i+1,j+1);
+    return (a0+(b0-a0)*fx)+((c0+(d0-c0)*fx)-(a0+(b0-a0)*fx))*fz; }
+  function grain(x,z){ return .66*vb(x,z)+.34*vb(x*2.03+3.1,z*2.03); }
+  function hgt(x,z){
+    var u=Math.max(0,Math.min(m-1,(Z0+(x+EXT)/(2*EXT)*ZOOM)*(m-1))), v=Math.max(0,Math.min(m-1,(Z0+(z+EXTZ)/(2*EXTZ)*ZOOM)*(m-1)));
+    var i0=Math.floor(u), j0=Math.floor(v), fx=u-i0, fz=v-j0, q;
+    for(q=0;q<4;q++) rang[q]=cmr(ech(i0-1,j0-1+q),ech(i0,j0-1+q),ech(i0+1,j0-1+q),ech(i0+2,j0-1+q),fx);
+    var h=Math.max(0,Math.min(255,cmr(rang[0],rang[1],rang[2],rang[3],fz)));
+    return Y0+h/255*AMPL;
+  }
+  var N=petit()?190:260, step=EXT*2/N, stepZ=EXTZ*2/N;
+  var pos=new Float32Array((N+1)*(N+1)*3), nor=new Float32Array(pos.length), col=new Float32Array(pos.length);
+  for(j=0;j<=N;j++) for(i=0;i<=N;i++){
+    var x=-EXT+i*step, z=-EXTZ+j*stepZ, y=hgt(x,z), k=(j*(N+1)+i)*3;
+    pos[k]=x; pos[k+1]=y; pos[k+2]=z;
+    /* La normale se mesure sur la moitié d'une maille de rendu : plus large,
+       elle moyennerait le modelé qu'elle est censée révéler, et les versants
+       s'éteindraient en aplats. */
+    var e=Math.max(3,step*.55), dx=(hgt(x+e,z)-hgt(x-e,z))/(2*e), dz=(hgt(x,z+e)-hgt(x,z-e))/(2*e);
+    var nx=-dx, ny=1, nz=-dz, L=Math.hypot(nx,ny,nz); nx/=L; ny/=L; nz/=L;
+    nor[k]=nx; nor[k+1]=ny; nor[k+2]=nz;
+    /* La teinte de l'atlas, au nombre près : un sable chaud qui blanchit
+       avec l'altitude, et des versants à peine assombris. Le grain, lui,
+       empêche les grandes pentes douces de tourner à l'aplat. */
+    var t=Math.max(0,Math.min(1,(y-Y0)/AMPL)), sl=1-ny, dk=1-sl*.16;
+    var tx=(grain(x/90,z/90)-.5)*.035;
+    col[k]=(.875+.08*t+tx)*dk; col[k+1]=(.845+.085*t+tx)*dk; col[k+2]=(.79+.1*t+tx)*dk;
+  }
+  var idx=new Uint32Array(N*N*6), q2=0;
+  for(j=0;j<N;j++) for(i=0;i<N;i++){ var p0=j*(N+1)+i, p1=p0+1, p2=p0+N+1, p3=p2+1;
+    idx[q2++]=p0; idx[q2++]=p2; idx[q2++]=p1; idx[q2++]=p1; idx[q2++]=p2; idx[q2++]=p3; }
+  var g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
+  g.setAttribute("aC",new THREE.Float32BufferAttribute(col,3));
+  g.setIndex(new THREE.BufferAttribute(idx,1));
+  /* Matière brute, comme le ciel : la brume du lointain y est écrite à la
+     main, et elle va vers le bas du ciel. C'est l'air, et c'est ce qui donne
+     sa profondeur à la vallée. La brume de la scène, elle, s'arrête à
+     quelques dizaines d'unités autour de l'arbre : elle avalerait tout. */
+  terMat=new THREE.ShaderMaterial({ fog:false,
+    uniforms:{ uBas:{value:new THREE.Vector3(.94,.92,.89)}, uHaut:{value:new THREE.Vector3(.97,.96,.94)},
+      uL:{value:new THREE.Vector3(0,1,0)}, uLC:{value:new THREE.Vector3(1,.99,.96)}, uNuit:{value:0} },
+    vertexShader:[
+    "attribute vec3 aC; varying vec3 vN; varying vec3 vC; varying float vD;",
+    "void main(){ vec4 mv=modelViewMatrix*vec4(position,1.0); vD=-mv.z; vN=normal; vC=aC;",
+    "  gl_Position=projectionMatrix*mv; }"].join("\n"),
+    fragmentShader:[
+    "precision highp float;",
+    "varying vec3 vN; varying vec3 vC; varying float vD;",
+    "uniform vec3 uBas,uHaut,uL,uLC; uniform float uNuit;",
+    "void main(){",
+    "  vec3 n=normalize(vN), L=normalize(uL);",
+    "  float nl=dot(n,L), dif=max(nl,0.0), wrap=clamp(nl*0.5+0.5,0.0,1.0), hemi=n.y*0.5+0.5;",
+    "  vec3 sky=uHaut*1.02, gnd=mix(uBas,vec3(0.9,0.855,0.79),0.55);",
+    "  vec3 col=vC*(mix(gnd,sky,hemi)*0.6+uLC*(dif*0.52+wrap*wrap*0.12));",
+    "  col=min(col,vec3(1.0));",
+    "  float m=clamp(1.0-exp(-pow(vD/1400.0,2.0)*1.25),0.0,0.94);",
+    "  gl_FragColor=vec4(mix(col,uBas,m),1.0);",
+    "}"].join("\n")});
+  terrain=new THREE.Mesh(g,terMat); terrain.frustumCulled=false; terrain.renderOrder=-9; scene.add(terrain);
+})();
+
+/* ---- les lumières ----
+   Le soleil suit l'heure et se couche pour de bon. Quand il passe sous
+   l'horizon, une lune froide prend le relais : sans elle, la nuit serait
+   un aplat noir, et l'arbre y disparaîtrait avec les vœux. */
+var hemi=new THREE.HemisphereLight(C(0xfff6e4),C(0xb9a58a),0.62); scene.add(hemi);
+var sun=new THREE.DirectionalLight(C(0xffeed2),1.0); sun.position.set(6.5,12,5.5); sun.target.position.set(0,2.5,0);
+sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-7; sun.shadow.camera.right=7; sun.shadow.camera.top=7; sun.shadow.camera.bottom=-7;
+sun.shadow.camera.near=1; sun.shadow.camera.far=32; sun.shadow.bias=-0.0006; sun.shadow.normalBias=0.03; sun.shadow.radius=3;
+scene.add(sun); scene.add(sun.target);
+var rim=new THREE.DirectionalLight(C(0xf0c979),0.32); rim.position.set(-7,4,-6); scene.add(rim);
+var lune=new THREE.DirectionalLight(C(0xa8b8dc),0.0); lune.position.set(-8,10,-6); scene.add(lune);
+/* L'arbre et l'île sont dans `world`, qui monte et descend doucement ; le
+   soleil, lui, tourne autour du monde. On le repose à chaque image. */
+function lumMaj(){
+  var d=SUN.dir, j=SUN.jour, n=SUN.nuit;
+  sun.position.set(d[0]*22,Math.max(.6,d[1])*22,d[2]*22);
+  sun.color.setRGB(SUN.col[0],SUN.col[1],SUN.col[2]).convertSRGBToLinear();
+  sun.intensity=1.0*j;
+  /* L'ombre portée s'efface avec le soleil : une ombre dure sous une lune
+     se voit tout de suite, et ne ressemble à rien. */
+  sun.castShadow=j>.08;
+  lune.intensity=.27*n;
+  rim.intensity=.32*j+.10*n;
+  var c=SUN.ciel;
+  /* Le ciel au-dessus et le sol en dessous : la lumière d'ambiance vient
+     des deux, et c'est elle qui tient la nuit sans l'écraser. */
+  hemi.color.setRGB(c.haut[0]/255,c.haut[1]/255,c.haut[2]/255).convertSRGBToLinear();
+  hemi.groundColor.setRGB(c.bas[0]/255*.72,c.bas[1]/255*.68,c.bas[2]/255*.62).convertSRGBToLinear();
+  hemi.intensity=.62*j+.30*n;
+}
+/* Le ciel, la brume de la scène et le fond de la page prennent la couleur
+   du bas du ciel : à midi le papier du site, à minuit le bleu presque noir.
+   Tout se tient alors sans qu'on ait à accorder deux valeurs à la main. */
+var fondTmp=new THREE.Color();
+function cielMaj(t){
+  var c=SUN.ciel, bas=[c.bas[0]/255,c.bas[1]/255,c.bas[2]/255], haut=[c.haut[0]/255,c.haut[1]/255,c.haut[2]/255];
+  skyMat.uniforms.uBas.value.set(bas[0],bas[1],bas[2]);
+  skyMat.uniforms.uHaut.value.set(haut[0],haut[1],haut[2]);
+  skyMat.uniforms.uLum.value.set(SUN.col[0],SUN.col[1],SUN.col[2]);
+  skyMat.uniforms.uSoleil.value.set(SUN.dir[0],SUN.dir[1],SUN.dir[2]);
+  skyMat.uniforms.uNuit.value=SUN.nuit; skyMat.uniforms.uJour.value=SUN.jour; skyMat.uniforms.uT.value=t;
+  if(terMat){
+    terMat.uniforms.uBas.value.set(bas[0],bas[1],bas[2]);
+    terMat.uniforms.uHaut.value.set(haut[0],haut[1],haut[2]);
+    terMat.uniforms.uL.value.set(SUN.dir[0],SUN.dir[1],SUN.dir[2]);
+    terMat.uniforms.uLC.value.set(SUN.col[0],SUN.col[1],SUN.col[2]);
+    terMat.uniforms.uNuit.value=SUN.nuit;
+  }
+  /* La brume de la scène va vers le bas du ciel, elle aussi : sans quoi
+     l'arbre se détacherait sur un halo beige en pleine nuit. */
+  fondTmp.setRGB(bas[0],bas[1],bas[2]).convertSRGBToLinear();
+  scene.fog.color.copy(fondTmp);
+  renderer.setClearColor(fondTmp,1);
+}
+
+// bark
+var barkTex=canvasTex(512,512,function(g,w,h){
+  g.fillStyle="#7b6654"; g.fillRect(0,0,w,h); var r=mulberry(11), i;
+  for(i=0;i<900;i++){ var x=r()*w, y=r()*h, l=30+r()*150, d=r(); g.strokeStyle=d<.55?"rgba(38,26,18,"+(.08+r()*.22)+")":"rgba(214,190,160,"+(.05+r()*.14)+")";
+    g.lineWidth=.6+r()*2.6; g.beginPath(); g.moveTo(x,y); g.bezierCurveTo(x+r()*10-5,y+l*.3,x+r()*10-5,y+l*.7,x+r()*12-6,y+l); g.stroke(); }
+  for(i=0;i<60;i++){ g.fillStyle="rgba(98,110,70,"+(.05+r()*.1)+")"; g.beginPath(); g.ellipse(r()*w,r()*h,6+r()*22,10+r()*40,r(),0,6.283); g.fill(); }
+});
+barkTex.wrapS=barkTex.wrapT=THREE.RepeatWrapping; barkTex.anisotropy=4;
+var barkMat=new THREE.MeshStandardMaterial({map:barkTex,bumpMap:barkTex,bumpScale:0.035,roughness:.95,metalness:0});
+
+function tubes(list){
+  var pos=[],nor=[],uv=[],idx=[];
+  list.forEach(function(b){
+    var rad=b.depth===0?16:(b.depth===1?10:(b.depth===2?7:5)), n=b.pts.length, base=pos.length/3, i,j, nrm=null, vl=0;
+    for(i=0;i<n;i++){
+      var t=vnorm(vsub(b.pts[Math.min(i+1,n-1)],b.pts[Math.max(i-1,0)]));
+      nrm = nrm? vnorm(vsub(nrm,vscale(t,vdot(nrm,t)))) : perp(t);
+      var bn=vcross(t,nrm); if(i>0) vl+=vlen(vsub(b.pts[i],b.pts[i-1]));
+      for(j=0;j<=rad;j++){ var a=j/rad*6.2832, cs=Math.cos(a), sn=Math.sin(a);
+        var gn=b.depth<=1?1+.10*Math.sin(a*3+i*.9)+.05*Math.sin(a*7+i*2.1):1, r=b.radii[i]*gn;
+        var d=[nrm[0]*cs+bn[0]*sn,nrm[1]*cs+bn[1]*sn,nrm[2]*cs+bn[2]*sn];
+        pos.push(b.pts[i][0]+d[0]*r,b.pts[i][1]+d[1]*r,b.pts[i][2]+d[2]*r); nor.push(d[0],d[1],d[2]);
+        uv.push(j/rad*(b.depth===0?3:(b.depth===1?2:1)), vl*.55); }
+    }
+    for(i=0;i<n-1;i++) for(j=0;j<rad;j++){ var p0=base+i*(rad+1)+j, p1=p0+rad+1; idx.push(p0,p0+1,p1, p0+1,p1+1,p1); }
+  });
+  var g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3)); g.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
+  g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2)); g.setIndex(idx); return g;
+}
+var treeMesh=new THREE.Mesh(tubes(branches.concat(extras)),barkMat); treeMesh.castShadow=true; treeMesh.receiveShadow=true; world.add(treeMesh);
+
+// floating island
+(function(){
+  var prof=[[.001,-2.7],[.45,-2.1],[1.05,-1.45],[1.75,-.85],[2.45,-.4],[2.85,-.12],[2.95,.0],[2.7,.07],[1.9,.14],[1,.2],[.001,.22]]
+    .map(function(p){ return new THREE.Vector2(p[0],p[1]); });
+  var g=new THREE.LatheGeometry(prof,56), P=g.attributes.position, col=[], i;
+  var cTop=C(0x6f7450), cTop2=C(0x8a8658), cEarth=C(0x7a5a40), cRock=C(0x6b5f55), cDeep=C(0x4a4038);
+  for(i=0;i<P.count;i++){
+    var x=P.getX(i), y=P.getY(i), z=P.getZ(i), a=Math.atan2(z,x), rr0=Math.hypot(x,z);
+    var f=1+.10*Math.sin(3*a+y*2)+.06*Math.sin(7*a-y*5)+.035*Math.sin(13*a+y*9);
+    if(y<0.05){ x*=f; z*=f; y+=.07*Math.sin(5*a+rr0*3)*Math.min(1,-y+.1); } else { y+=.03*Math.sin(4*a+rr0*4)*Math.min(1,rr0); }
+    P.setXYZ(i,x,y,z);
+    var c = y>0.02 ? cTop.clone().lerp(cTop2,.5+.5*Math.sin(a*5+rr0*6)) : (y>-.45 ? cEarth.clone().lerp(cTop,clamp((y+.12)/.14,0,1)*.6) : cRock.clone().lerp(cDeep,clamp((-y-.45)/2,0,1)));
+    col.push(c.r,c.g,c.b);
+  }
+  g.setAttribute("color",new THREE.Float32BufferAttribute(col,3)); g.computeVertexNormals();
+  var m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:0,bumpMap:barkTex,bumpScale:.03}));
+  m.castShadow=true; m.receiveShadow=true; world.add(m);
+  // roots dangling under the island
+  var under=[], k,j; for(k=0;k<14;k++){ var a2=R()*6.283, r2=.3+R()*1.6, y0=-2.6+r2*.95, L=.5+R()*1.3, pts=[], rr2=[];
+    for(j=0;j<=5;j++){ pts.push([Math.cos(a2)*r2+(R()-.5)*.08, y0-L*j/5, Math.sin(a2)*r2+(R()-.5)*.08]); rr2.push(.022*(1-j/6)); }
+    under.push({pts:pts,radii:rr2,depth:4}); }
+  var um=new THREE.Mesh(tubes(under),barkMat); world.add(um);
+  // stones
+  var rockMat=new THREE.MeshStandardMaterial({color:C(0x8b8378),roughness:1,flatShading:true});
+  for(k=0;k<7;k++){ var s=new THREE.Mesh(new THREE.IcosahedronGeometry(.12+R()*.2,1),rockMat), a3=R()*6.283, r3=1.3+R()*1.3;
+    s.position.set(Math.cos(a3)*r3,.14,Math.sin(a3)*r3); s.scale.set(1,.55+R()*.3,1); s.rotation.y=R()*6; s.castShadow=true; s.receiveShadow=true; world.add(s); }
+})();
+var floaters=[];
+(function(){ var rockMat=new THREE.MeshStandardMaterial({color:C(0x7d7267),roughness:1,flatShading:true});
+  for(var k=0;k<8;k++){ var s=new THREE.Mesh(new THREE.IcosahedronGeometry(.14+R()*.3,1),rockMat), a=R()*6.283, r=3.6+R()*2.2;
+    s.position.set(Math.cos(a)*r,-2.2+R()*2.4,Math.sin(a)*r); s.scale.set(1,.6+R()*.5,.8+R()*.4); s.rotation.set(R()*6,R()*6,R()*6); s.castShadow=true;
+    s.userData={y:s.position.y,ph:R()*6.283,sp:.25+R()*.3}; scene.add(s); floaters.push(s); } })();
+
+var feuilles=null, cerises=null;
+// coffee leaves : glossy, elliptical, in opposite pairs along the lateral branches
+var leafTex=canvasTex(96,240,function(g,w,h){
+  g.clearRect(0,0,w,h); g.beginPath(); g.moveTo(w*.5,2);
+  g.bezierCurveTo(w*.86,h*.10,w,h*.34,w*.93,h*.52); g.bezierCurveTo(w*.86,h*.72,w*.62,h*.88,w*.5,h-1);
+  g.bezierCurveTo(w*.38,h*.88,w*.14,h*.72,w*.07,h*.52); g.bezierCurveTo(0,h*.34,w*.14,h*.10,w*.5,2); g.closePath();
+  var gr=g.createLinearGradient(0,0,w,0); gr.addColorStop(0,"#ffffff"); gr.addColorStop(.48,"#ececec"); gr.addColorStop(.52,"#c9c9c9"); gr.addColorStop(1,"#e2e2e2"); g.fillStyle=gr; g.fill();
+  g.save(); g.clip(); g.strokeStyle="rgba(255,255,255,.7)"; g.lineWidth=2.2; g.beginPath(); g.moveTo(w*.5,0); g.lineTo(w*.5,h); g.stroke();
+  g.strokeStyle="rgba(40,50,30,.32)"; g.lineWidth=1.1;
+  for(var i=1;i<10;i++){ var y=h*(.04+i*.09); g.beginPath(); g.moveTo(w*.5,y); g.quadraticCurveTo(w*.8,y+h*.02,w*.98,y+h*.09); g.stroke();
+    g.beginPath(); g.moveTo(w*.5,y); g.quadraticCurveTo(w*.2,y+h*.02,w*.02,y+h*.09); g.stroke(); }
+  g.restore();
+});
+var leafGeo=new THREE.PlaneGeometry(.17,.44,2,4); leafGeo.translate(0,-.22,0);
+(function(){ var p=leafGeo.attributes.position; for(var i=0;i<p.count;i++){ var yy=-p.getY(i)/.44; p.setZ(i,-(yy*yy)*.075-(Math.abs(p.getX(i))<.01?.02:0)); } leafGeo.computeVertexNormals(); })();
+var leafMat=new THREE.MeshStandardMaterial({map:leafTex,alphaTest:.5,side:THREE.DoubleSide,roughness:.36,metalness:0});
+var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0xb49a3c,0x8a6a34];
+(function(){
+  var im=new THREE.InstancedMesh(leafGeo,leafMat,nodes.length*2), m4=new THREE.Matrix4(), vx=new THREE.Vector3(), vy=new THREE.Vector3(), vz=new THREE.Vector3(), vs=new THREE.Vector3(), k=0, col=new THREE.Color();
+  nodes.forEach(function(nd){ var side=perp(nd.d); [1,-1].forEach(function(sg){
+    var a=vnorm([side[0]*sg+nd.d[0]*.4+(R()-.5)*.3, side[1]*sg+nd.d[1]*.4-.28-R()*.4, side[2]*sg+nd.d[2]*.4+(R()-.5)*.3]);
+    var up=[(R()-.5)*.6,1,(R()-.5)*.6], n=vnorm(vsub(up,vscale(a,vdot(up,a)))), y=vscale(a,-1), x=vcross(y,n), sc=.78+R()*.55;
+    vx.set(x[0],x[1],x[2]); vy.set(y[0],y[1],y[2]); vz.set(n[0],n[1],n[2]); m4.makeBasis(vx,vy,vz); m4.scale(vs.set(sc,sc,sc));
+    m4.setPosition(nd.p[0]+a[0]*nd.r,nd.p[1]+a[1]*nd.r,nd.p[2]+a[2]*nd.r); im.setMatrixAt(k,m4);
+    var ci=R()<.9?Math.floor(R()*6):6+Math.floor(R()*3); col.set(LEAF_COLS[ci]).convertSRGBToLinear(); col.multiplyScalar(.85+R()*.35); im.setColorAt(k,col); k++; }); });
+  im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true;
+  im.castShadow=true; im.receiveShadow=true; im.frustumCulled=false;
+  im.customDepthMaterial=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,map:leafTex,alphaTest:.5});
+  world.add(im); feuilles=im;
+})();
+// coffee cherries : clusters hugging the branch at the leaf nodes, from green to deep red
+(function(){
+  var RED=[0xb81e1a,0x9c1519,0xc92a1e,0xa81a22], MID=[0xd9762b,0xdba531,0xcf5a24], GRN=[0x7a9440,0x93a84a,0x6a8a3c], list=[];
+  nodes.forEach(function(nd){ if(R()>.5) return; var n=3+Math.floor(R()*5), u=perp(nd.d), v=vcross(nd.d,u), ripe=R(), pal=ripe<.64?RED:(ripe<.84?MID:GRN);
+    for(var i=0;i<n;i++){ var th=R()*6.283, off=nd.r+.03, al=(R()-.5)*.11, cs=Math.cos(th)*off, sn=Math.sin(th)*off, pl=R()<.82?pal:[RED,MID,GRN][Math.floor(R()*3)];
+      list.push([nd.p[0]+u[0]*cs+v[0]*sn+nd.d[0]*al, nd.p[1]+u[1]*cs+v[1]*sn+nd.d[1]*al, nd.p[2]+u[2]*cs+v[2]*sn+nd.d[2]*al, pl[Math.floor(R()*pl.length)]]); } });
+  var im=new THREE.InstancedMesh(new THREE.SphereGeometry(.036,8,6),new THREE.MeshStandardMaterial({roughness:.26,metalness:0}),list.length), d=new THREE.Object3D(), col=new THREE.Color();
+  list.forEach(function(c,i){ var sc=.8+R()*.4; d.position.set(c[0],c[1],c[2]); d.rotation.set(R()*3,R()*3,R()*3); d.scale.set(sc,sc*1.16,sc); d.updateMatrix(); im.setMatrixAt(i,d.matrix);
+    col.set(c[3]).convertSRGBToLinear(); col.multiplyScalar(.9+R()*.25); im.setColorAt(i,col); });
+  im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true; im.receiveShadow=true; im.frustumCulled=false; world.add(im); cerises=im;
+})();
+// drifting leaves
+var falling=[];
+(function(){ for(var i=0;i<12;i++){ var m=new THREE.Mesh(leafGeo,new THREE.MeshStandardMaterial({map:leafTex,alphaTest:.5,side:THREE.DoubleSide,roughness:.7,color:C(LEAF_COLS[5+i%4])}));
+  m.scale.setScalar(.6+R()*.4); m.userData={a:R()*6.283,r:1+R()*4.4,y:R()*8-2.5,sp:.18+R()*.22,ph:R()*6.283}; scene.add(m); falling.push(m); } })();
+
+// golden dust + mist
+var softTex=canvasTex(64,64,function(g,w){ var gr=g.createRadialGradient(w/2,w/2,0,w/2,w/2,w/2); gr.addColorStop(0,"rgba(255,255,255,1)"); gr.addColorStop(.4,"rgba(255,255,255,.45)"); gr.addColorStop(1,"rgba(255,255,255,0)"); g.fillStyle=gr; g.fillRect(0,0,w,w); });
+var DUST=260, dustPos=new Float32Array(DUST*3), dustSeed=[];
+(function(){ for(var i=0;i<DUST;i++){ var a=R()*6.283, r=.6+R()*6.2; dustPos[i*3]=Math.cos(a)*r; dustPos[i*3+1]=-2.5+R()*9.5; dustPos[i*3+2]=Math.sin(a)*r; dustSeed.push(R()*6.283,.05+R()*.12); } })();
+var dustGeo=new THREE.BufferGeometry(); dustGeo.setAttribute("position",new THREE.BufferAttribute(dustPos,3));
+var dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({map:softTex,color:C(0xe0b65a),size:.085,sizeAttenuation:true,transparent:true,opacity:.75,depthWrite:false}));
+dust.frustumCulled=false; scene.add(dust);
+var mists=[];
+(function(){ for(var i=0;i<11;i++){ var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:softTex,color:0xfffdf6,transparent:true,opacity:.3+R()*.2,depthWrite:false}));
+  var a=R()*6.283, r=1+R()*4.2; sp.position.set(Math.cos(a)*r,-2.5-R()*1.3,Math.sin(a)*r); var s=4.5+R()*4.5; sp.scale.set(s,s*.55,1);
+  sp.userData={a:a,r:r,sp:(R()-.5)*.05,op:sp.material.opacity}; scene.add(sp); mists.push(sp); } })();
+// soft contact shadow far below, to make the island read as floating
+var ombreSol=null;
+(function(){ var t=canvasTex(128,128,function(g,w){ var gr=g.createRadialGradient(w/2,w/2,0,w/2,w/2,w/2); gr.addColorStop(0,"rgba(90,70,45,.34)"); gr.addColorStop(.6,"rgba(90,70,45,.10)"); gr.addColorStop(1,"rgba(90,70,45,0)"); g.fillStyle=gr; g.fillRect(0,0,w,w); });
+  var m=new THREE.Mesh(new THREE.PlaneGeometry(13,13),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,fog:false})); m.rotation.x=-Math.PI/2; m.position.y=-4.6; scene.add(m); ombreSol=m; })();
+
+// ribbons
+var ribbons=[];
+(function(){
+  var tex=canvasTex(32,256,function(g,w,h){ g.fillStyle="#c3271d"; g.fillRect(0,0,w,h); g.fillStyle="rgba(255,255,255,.08)"; g.fillRect(0,0,w*.3,h);
+    g.fillStyle="#e9c877"; g.font="20px "+ZH_FONT; g.textAlign="center"; g.textBaseline="middle"; ["福","愿","安","喜","吉"].forEach(function(c,i){ g.fillText(c,w/2,28+i*50); }); });
+  var mat=new THREE.MeshStandardMaterial({map:tex,side:THREE.DoubleSide,roughness:.45,metalness:0});
+  var geo=new THREE.PlaneGeometry(.055,1,1,6); geo.translate(0,-.5,0);
+  ribbonSpots.forEach(function(a){ var m=new THREE.Mesh(geo,mat), L=.7+R()*1.1; m.position.set(a.p[0],a.p[1]-a.r,a.p[2]); m.scale.set(1,L,1);
+    m.rotation.y=R()*6.283; m.userData={ph:R()*6.283,ry:m.rotation.y}; m.castShadow=true; world.add(m); ribbons.push(m); });
+})();
+
+/* ---- tags ---- */
+var goldMat=new THREE.MeshStandardMaterial({color:C(0xd9b257),emissive:C(0x4a340c),roughness:.38,metalness:.35});
+var silkMat=new THREE.MeshStandardMaterial({color:C(0xb5231b),roughness:.6,emissive:new THREE.Color(0x7a1008),emissiveIntensity:0});
+var matsVoeu=[];
+/* L'or du fil et des perles, de jour puis de nuit. De jour il réfléchit, la
+   nuit il émet : c'est la même différence qu'entre un bijou et une bougie. */
+var orJour=C(0x4a340c).clone(), orNuit=C(0xb8832a).clone();
+/* Les halos : un point lumineux derrière chaque étiquette, tous dans un
+   seul tracé plutôt qu'un lutin par vœu — cent soixante-dix lutins, ce
+   sont cent soixante-dix appels de dessin par image. */
+var haloPos=new Float32Array(slots.length*3), haloGeo=new THREE.BufferGeometry();
+haloGeo.setAttribute("position",new THREE.BufferAttribute(haloPos,3));
+var haloMat=new THREE.PointsMaterial({map:softTex,color:0xffc271,size:.62,sizeAttenuation:true,
+  transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending,fog:false});
+var halos=new THREE.Points(haloGeo,haloMat); halos.frustumCulled=false; halos.renderOrder=3; scene.add(halos);
+var haloTmp=new THREE.Vector3();
+/* Ce qui s'allume et ce qui s'éteint quand la nuit vient. */
+function nuitMaj(t){
+  var n=SUN.nuit, j=SUN.jour;
+  for(var i=0;i<matsVoeu.length;i++) matsVoeu[i].emissiveIntensity=.62*n;
+  silkMat.emissiveIntensity=.5*n;
+  goldMat.emissive.copy(orJour).lerp(orNuit,n);
+  /* La poussière devient de l'or en suspension ; de jour elle n'est qu'un
+     grain de lumière. */
+  dust.material.opacity=.75*j+.95*n;
+  dust.material.color.setRGB(.878+.08*n,.714+.04*n,.353-.06*n).convertSRGBToLinear();
+  /* La brume blanche du jour deviendrait un drap gris la nuit : elle prend
+     la couleur du bas du ciel, et s'efface de moitié. */
+  var c=SUN.ciel, k;
+  for(k=0;k<mists.length;k++){ var ms=mists[k];
+    ms.material.color.setRGB(c.bas[0]/255,c.bas[1]/255,c.bas[2]/255).convertSRGBToLinear();
+    ms.material.opacity=ms.userData.op*(1-.55*n); }
+  if(ombreSol) ombreSol.material.opacity=1-.85*n;
+  /* Les halos ne coûtent rien de jour : on ne les dessine pas. */
+  haloMat.opacity=.78*Math.max(0,(n-.12)/.88);
+  halos.visible=haloMat.opacity>.01;
+  if(!halos.visible) return;
+  var ids=Object.keys(tags), q=0;
+  for(k=0;k<ids.length&&q<slots.length;k++){
+    var g=tags[ids[k]]; if(!g) continue;
+    g.body.getWorldPosition(haloTmp);
+    haloPos[q*3]=haloTmp.x; haloPos[q*3+1]=haloTmp.y-g.h*.45; haloPos[q*3+2]=haloTmp.z; q++;
+  }
+  haloGeo.setDrawRange(0,q); haloGeo.attributes.position.needsUpdate=true;
+}
+var threadGeo=new THREE.CylinderGeometry(.0055,.0055,1,5); threadGeo.translate(0,-.5,0);
+var beadGeo=new THREE.SphereGeometry(.017,10,8), tasselGeo=new THREE.CylinderGeometry(.005,.024,.17,7); tasselGeo.translate(0,-.085,0);
+var shapeGeo={};
+function geoFor(sk){
+  if(shapeGeo[sk]) return shapeGeo[sk];
+  var S=SHAPES[sk], sh=new THREE.Shape();
+  var X=function(u){return (u-.5)*S.w;}, Y=function(v){return -v*S.h;};
+  S.path({moveTo:function(a,b){sh.moveTo(X(a),Y(b));},lineTo:function(a,b){sh.lineTo(X(a),Y(b));},
+    quadraticCurveTo:function(a,b,c,d){sh.quadraticCurveTo(X(a),Y(b),X(c),Y(d));},
+    bezierCurveTo:function(a,b,c,d,e,f){sh.bezierCurveTo(X(a),Y(b),X(c),Y(d),X(e),Y(f));}});
+  var g=new THREE.ExtrudeGeometry(sh,{depth:.016,bevelEnabled:false,curveSegments:10}); g.translate(0,S.top*S.h,-.008);
+  var p=g.attributes.position, n=g.attributes.normal, uv=g.attributes.uv, i;
+  for(i=0;i<p.count;i++){ var u=TM+(p.getX(i)/S.w+.5)*(1-2*TM), v=TM+((S.top*S.h-p.getY(i))/S.h)*(1-2*TM);
+    if(n.getZ(i)<-.5) u=1-u; uv.setXY(i,u,1-v); }
+  uv.needsUpdate=true; shapeGeo[sk]=g; return g;
+}
+var texCache={}, redraws=[];
+function matFor(w){
+  var key=w.s+"|"+wishText(w)+"|"+w.n; if(texCache[key]) return texCache[key];
+  var cv=document.createElement("canvas"), draw=function(){ drawTag(cv,w.s,wishText(w),w.n); };
+  draw(); var t=new THREE.CanvasTexture(cv); t.encoding=THREE.sRGBEncoding; t.anisotropy=4;
+  redraws.push(function(){ draw(); t.needsUpdate=true; });
+  if(document.fonts&&document.fonts.load){ var txt=wishText(w)+w.n;
+    Promise.all([document.fonts.load('32px "Ma Shan Zheng"',txt+"祈福有求必应"),document.fonts.load('500 32px "Caveat"',txt||"a")]).then(function(){ draw(); t.needsUpdate=true; },function(){}); }
+  /* La nuit, l'étiquette ne reçoit plus de lumière : il faut qu'elle en
+     porte. La texture sert aussi d'émission — le papier rouge rougeoie, et
+     les caractères dorés, qui sont les pixels les plus clairs, s'allument
+     davantage. Rien n'est ajouté : c'est le vœu lui-même qui éclaire. */
+  var mat=new THREE.MeshStandardMaterial({map:t,roughness:.5,metalness:0,
+    emissive:new THREE.Color(0xffffff),emissiveMap:t,emissiveIntensity:0});
+  matsVoeu.push(mat);
+  return (texCache[key]=mat);
+}
+var tags={}, tagMeshes=[], clock=0;
+function makeTag(w,slot,animate){
+  var S=SHAPES[w.s], pivot=new THREE.Group(); pivot.position.set(slot.a.p[0],slot.a.p[1]-slot.a.r,slot.a.p[2]);
+  var th=new THREE.Mesh(threadGeo,goldMat); th.scale.y=slot.L+.03; pivot.add(th);
+  var knot=new THREE.Mesh(beadGeo,goldMat); knot.position.y=-slot.L+.02; pivot.add(knot);
+  var body=new THREE.Group(); body.position.y=-slot.L; body.rotation.y=Math.atan2(slot.a.p[0],slot.a.p[2])+(slot.ph-3.14)*.12; pivot.add(body);
+  var m=new THREE.Mesh(geoFor(w.s),[matFor(w),goldMat]); m.castShadow=true; m.receiveShadow=true; m.userData.wish=w; body.add(m);
+  var by=-(S.bot-S.top)*S.h, bd=new THREE.Mesh(beadGeo,goldMat); bd.position.y=by-.012; body.add(bd);
+  var ts=new THREE.Mesh(tasselGeo,silkMat); ts.position.y=by-.025; body.add(ts);
+  world.add(pivot); tagMeshes.push(m);
+  return {w:w,txt:wishText(w),slot:slot,pivot:pivot,body:body,mesh:m,born:animate?clock:-99,h:(S.bot-S.top)*S.h};
+}
+function removeTag(t){ world.remove(t.pivot); var i=tagMeshes.indexOf(t.mesh); if(i>=0) tagMeshes.splice(i,1); }
+window.__syncTags=function(){
+  var shown=wishes.slice(-slots.length), off=Math.max(0,wishes.length-slots.length), seen={}, focus=null;
+  shown.forEach(function(w,i){ var slot=slots[(off+i)%slots.length]; seen[w.id]=1; var t=tags[w.id];
+    var had=!!t; if(t&&(t.slot!==slot||t.w.s!==w.s||t.txt!==wishText(w)||t.w.n!==w.n)){ removeTag(t); t=null; }
+    if(!t){ tags[w.id]=makeTag(w,slot,!firstLoad&&!had); } else { t.w=w; t.mesh.userData.wish=w; }
+    if(pendingFocus===w.id) focus=tags[w.id]; });
+  Object.keys(tags).forEach(function(id){ if(!seen[id]){ removeTag(tags[id]); delete tags[id]; } });
+  if(remote!==null||wishes.length) firstLoad=false;
+  if(focus){ pendingFocus=null; focus.born=clock; focusTag(focus); }
+  else tryHash();
+};
+var hashDone=false;
+function tryHash(){ if(hashDone||!entered) return; var m=/^#w-([\w-]+)$/.exec(location.hash||""); if(!m){ hashDone=true; return; }
+  var t=tags[m[1]]; if(t){ hashDone=true; setTimeout(function(){ focusTag(t); },1200); } }
+window.__enter=function(){ tryHash(); };
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ redraws.forEach(function(f){f();}); buildShapes(); preview(); });
+
+/* ---- camera / orbit ---- */
+var homeY=(treeTop-1.6)/2+.2, cam={th:.6,ph:1.34,r:20,tg:new THREE.Vector3(0,homeY,0)}, goal={th:.6,ph:1.34,r:20,tg:new THREE.Vector3(0,homeY,0)};
+var homeR=14, idle=0, focused=false;
+function fitHome(){ var a=camera.aspect, tn=Math.tan(camera.fov*Math.PI/360), hh=(treeTop+2.9)/2+.3;
+  homeR=clamp(Math.max(hh/tn,((treeRad+1.5)/(tn*a))*.86),9,34); }
+window.__home=function(){ focused=false; goal.r=homeR; goal.tg.set(0,homeY,0); goal.ph=1.34; };
+function focusTag(t){ focused=true; var p=t.slot.pos, th=Math.atan2(p[0],p[2]);
+  while(th-goal.th>Math.PI) th-=6.2832; while(th-goal.th<-Math.PI) th+=6.2832;
+  goal.th=th; goal.ph=1.5; goal.r=2.3; goal.tg.set(p[0],p[1]-t.h*.5+world.position.y,p[2]); idle=0; openCard(t.w); }
+/* ------------------------------------------------------------------ secouer l'arbre
+   Secouer son téléphone fait tomber les feuilles et les cerises ; les vœux,
+   eux, restent accrochés. Puis tout repousse. C'est l'idée : le temps passe
+   sur l'arbre, pas sur ce qu'on lui a confié.
+
+   Huit mille feuilles et cerises sont dessinées en un seul appel, par
+   instances : on ne peut pas leur donner un objet chacune. On garde donc
+   leurs matrices de départ, et pendant les quatre secondes de l'animation
+   on recompose chaque matrice à la main — une rotation de trois sur trois
+   et une translation, soit une cinquantaine d'opérations par instance.
+   Quatre secondes de ce prix, et plus rien ensuite. */
+function Chute(im){
+  if(!im) return null;
+  var n=im.count, base=im.instanceMatrix.array.slice(), i;
+  /* Par instance : le retard avant de lâcher, la dérive latérale, et un axe
+     de culbute. Tirés une fois, pour que deux secousses ne donnent pas deux
+     chutes identiques il suffira de retirer le retard. */
+  var ret=new Float32Array(n), dvx=new Float32Array(n), dvz=new Float32Array(n), sp=new Float32Array(n);
+  var ax=new Float32Array(n*3);
+  for(i=0;i<n;i++){
+    ret[i]=R()*.55; dvx[i]=(R()-.5)*1.5; dvz[i]=(R()-.5)*1.5; sp[i]=2.2+R()*4.2;
+    var x=R()-.5, y=R()-.5, z=R()-.5, L=Math.hypot(x,y,z)||1;
+    ax[i*3]=x/L; ax[i*3+1]=y/L; ax[i*3+2]=z/L;
+  }
+  return {im:im,n:n,base:base,ret:ret,dvx:dvx,dvz:dvz,sp:sp,ax:ax};
+}
+var chutes=[], SECOUSSE={t:-99,duree:4.6};
+function chutePrete(){ if(chutes.length) return; var a=Chute(feuilles), b=Chute(cerises);
+  if(a) chutes.push(a); if(b) chutes.push(b); }
+/* `a` est le temps écoulé depuis la secousse. Avant 2,6 s les feuilles
+   tombent ; après, elles repoussent de zéro, chacune à son tour. */
+function chuteMaj(a){
+  var k, c, i, o;
+  for(k=0;k<chutes.length;k++){
+    c=chutes[k]; var arr=c.im.instanceMatrix.array;
+    for(i=0;i<c.n;i++){
+      o=i*16;
+      var t=a-c.ret[i];
+      if(t<=0){ /* pas encore lâchée : telle quelle */
+        for(var q=0;q<16;q++) arr[o+q]=c.base[o+q];
+        continue; }
+      if(t<2.6){
+        /* La chute : une parabole, une dérive, et une culbute autour d'un
+           axe tiré au départ.
+
+           Ce qui tombe au-dessus de l'île s'y pose, au lieu de la traverser
+           — on voyait passer les feuilles sous le sol, et se former un tapis
+           dans le vide. On calcule l'instant du contact, et on fige tout à
+           cet instant-là : la feuille garde l'inclinaison qu'elle avait en
+           touchant terre. Ce qui tombe à côté continue, et s'efface. */
+        var bx=c.base[o+12], bz=c.base[o+14];
+        var tSol=(bx*bx+bz*bz)<8.1?Math.sqrt(Math.max(0,(c.base[o+13]-.22)/1.225)):1e9;
+        var te=Math.min(t,tSol);
+        var dy=-1.225*te*te, dx=c.dvx[i]*te*.6, dz=c.dvz[i]*te*.6, an=te*c.sp[i];
+        var cs=Math.cos(an), sn=Math.sin(an), ic=1-cs;
+        var X=c.ax[i*3], Y=c.ax[i*3+1], Z=c.ax[i*3+2];
+        var r0=cs+X*X*ic,    r1=X*Y*ic-Z*sn, r2=X*Z*ic+Y*sn;
+        var r3=Y*X*ic+Z*sn,  r4=cs+Y*Y*ic,   r5=Y*Z*ic-X*sn;
+        var r6=Z*X*ic-Y*sn,  r7=Z*Y*ic+X*sn, r8=cs+Z*Z*ic;
+        /* La matrice d'instance est rangée par colonnes : trois colonnes de
+           base, puis la position. On tourne les trois premières, et on
+           décale la quatrième. */
+        for(var col=0;col<3;col++){
+          var b0=c.base[o+col*4], b1=c.base[o+col*4+1], b2=c.base[o+col*4+2];
+          arr[o+col*4]  =r0*b0+r1*b1+r2*b2;
+          arr[o+col*4+1]=r3*b0+r4*b1+r5*b2;
+          arr[o+col*4+2]=r6*b0+r7*b1+r8*b2;
+        }
+        /* Une fois passée sous l'île, la feuille s'efface : on la rend
+           minuscule plutôt que de la laisser traverser les montagnes. */
+        var y0=c.base[o+13]+dy;
+        if(y0<-4.2){ var f=Math.max(0,(y0+6.2)/2); for(var q2=0;q2<12;q2++) arr[o+q2]*=f; }
+        arr[o+12]=c.base[o+12]+dx; arr[o+13]=y0; arr[o+14]=c.base[o+14]+dz;
+      } else {
+        /* La repousse : chacune revient de zéro, en léger décalage, avec un
+           petit dépassement — c'est ce qui donne l'impression que ça pousse
+           et non que ça réapparaît. */
+        var u=(t-2.6-c.ret[i]*1.4)/1.25;
+        if(u<=0){ for(var q3=0;q3<16;q3++) arr[o+q3]=0; continue; }
+        if(u>=1){ for(var q4=0;q4<16;q4++) arr[o+q4]=c.base[o+q4]; continue; }
+        var e=1+2.70158*Math.pow(u-1,3)+1.70158*Math.pow(u-1,2);
+        for(var q5=0;q5<12;q5++) arr[o+q5]=c.base[o+q5]*e;
+        arr[o+12]=c.base[o+12]; arr[o+13]=c.base[o+13]; arr[o+14]=c.base[o+14]; arr[o+15]=1;
+      }
+    }
+    c.im.instanceMatrix.needsUpdate=true;
+  }
+}
+function secouer(){
+  if(!entered) return;
+  if(clock-SECOUSSE.t<SECOUSSE.duree) return;   /* une secousse à la fois */
+  chutePrete(); if(!chutes.length) return;
+  SECOUSSE.t=clock; sfx("tag");
+}
+
+/* ------------------------------------------------------------------ gyroscope
+   Incliner le téléphone déplace un peu le regard. Un peu seulement : c'est
+   une respiration, pas un pilotage — le doigt reste maître, et l'écart au
+   repos est borné pour qu'on ne perde jamais l'arbre.
+
+   Sur iOS, lire le gyroscope demande une autorisation, et cette
+   autorisation doit partir d'un geste. D'où le bouton : il n'apparaît que
+   là où les capteurs existent. */
+var GYRO={on:false,ref:null,th:0,ph:0,cth:0,cph:0,dispo:false};
+(function(){ try{ GYRO.dispo=("DeviceOrientationEvent" in window)&&petit(); }catch(e){} })();
+function gyroOrient(e){
+  if(e.gamma===null&&e.beta===null) return;
+  var g=(e.gamma||0)*Math.PI/180, b=(e.beta||0)*Math.PI/180;
+  if(!GYRO.ref) GYRO.ref={g:g,b:b};
+  /* L'écart à l'attitude de départ, borné à une quinzaine de degrés de
+     regard. Au-delà, on ne suit plus : sinon on perdrait l'arbre en posant
+     le téléphone sur une table. */
+  GYRO.th=clamp((g-GYRO.ref.g)*.55,-.26,.26);
+  GYRO.ph=clamp((b-GYRO.ref.b)*.45,-.20,.20);
+}
+var secTab=[], secDernier=-99;
+function gyroMotion(e){
+  var a=e.accelerationIncludingGravity; if(!a) return;
+  var m=Math.hypot(a.x||0,a.y||0,a.z||0), now=performance.now()/1000;
+  /* On ne regarde pas la force brute — la pesanteur y tient neuf mètres par
+     seconde carrée à elle seule — mais ce qui dépasse franchement. Trois
+     dépassements en une seconde, et c'est une secousse ; un seul, c'est un
+     téléphone qu'on repose. */
+  if(m>22){ secTab.push(now); }
+  while(secTab.length&&now-secTab[0]>1.1) secTab.shift();
+  if(secTab.length>=3&&now-secDernier>5){ secDernier=now; secTab.length=0; secouer(); }
+}
+function gyroPoser(v){
+  GYRO.on=v; GYRO.ref=null;
+  if(v){ addEventListener("deviceorientation",gyroOrient); addEventListener("devicemotion",gyroMotion); }
+  else { removeEventListener("deviceorientation",gyroOrient); removeEventListener("devicemotion",gyroMotion); GYRO.th=GYRO.ph=0; }
+  var b=$("gyro"); if(b) b.classList.toggle("on",v);
+  try{ localStorage.setItem("yw_gyro",v?"on":"off"); }catch(e){}
+}
+function gyroBasculer(){
+  if(GYRO.on){ gyroPoser(false); return; }
+  /* iOS : l'autorisation se demande depuis le geste, et une seule fois. */
+  var D=window.DeviceOrientationEvent, M=window.DeviceMotionEvent, att=[];
+  if(D&&typeof D.requestPermission==="function") att.push(D.requestPermission());
+  if(M&&typeof M.requestPermission==="function") att.push(M.requestPermission());
+  if(!att.length){ gyroPoser(true); toast(T("gyroOn")); return; }
+  Promise.all(att).then(function(r){
+    if(r.every(function(x){ return x==="granted"; })){ gyroPoser(true); toast(T("gyroOn")); }
+    else toast(T("gyroNon"));
+  },function(){ toast(T("gyroNon")); });
+}
+/* Le bouton du gyroscope n'apparaît que là où il peut servir : sur un
+   ordinateur, les événements existent mais ne se déclenchent jamais, et un
+   bouton qui ne fait rien est pire que pas de bouton. */
+if(GYRO.dispo){ $("gyro").hidden=false; $("gyro").onclick=gyroBasculer;
+  try{ if(localStorage.getItem("yw_gyro")==="on") gyroBasculer(); }catch(e){} }
+
+/* Une poignée pour les épreuves : se placer à une heure, viser un vœu,
+   lire l'état du ciel. Rien d'autre ne passe par là. */
+window.__essai={
+  heure:function(h){ CIEL.poser(h); sunMaj(); themeMaj(); },
+  ciel:function(){ return {h:CIEL.heure(),nuit:SUN.nuit,jour:SUN.jour,theme:theme,bas:SUN.ciel.bas.slice()}; },
+  voeux:function(){ return Object.keys(tags).length; },
+  viser:function(i){ var k=Object.keys(tags); if(k[i]!==undefined) focusTag(tags[k[i]]); return k.length; },
+  maison:function(){ window.__home(); },
+  relief:function(){ return !!terrain; },
+  secouer:function(){ SECOUSSE.t=-99; secouer(); },
+  secousse:function(){ return clock-SECOUSSE.t; },
+  gyro:function(g,b){ GYRO.dispo=true; if(!GYRO.on) gyroPoser(true); gyroOrient({gamma:g,beta:b}); return {th:GYRO.th,ph:GYRO.ph}; },
+  compte:function(){ return {feuilles:feuilles?feuilles.count:0,cerises:cerises?cerises.count:0,voeux:slots.length}; },
+  /* Ce que coûte une image de chute, en millisecondes de calcul pur. */
+  coutChute:function(){ chutePrete(); var n=24, t0, i, m=[];
+    for(i=0;i<n;i++){ t0=performance.now(); chuteMaj(.4+i*.08); m.push(performance.now()-t0); }
+    m.sort(function(a,b){return a-b;});
+    return {median:+m[n>>1].toFixed(2),pire:+m[n-1].toFixed(2)}; },
+  /* Ce qui s'allume, et ce qui s'éteint. */
+  lueur:function(){ return {voeu:matsVoeu.length?matsVoeu[0].emissiveIntensity:-1,
+    halos:halos.visible,or:goldMat.emissive.r,lune:lune.intensity,soleil:sun.intensity}; },
+  /* La hauteur moyenne des feuilles et des cerises, et la plus basse feuille
+     posée sur l'île — c'est elle qui dit si quelque chose traverse le sol. */
+  hauteurs:function(){
+    var moy=function(im){ if(!im) return 0; var a=im.instanceMatrix.array, s=0, i;
+      for(i=0;i<im.count;i++) s+=a[i*16+13]; return s/im.count; };
+    /* La règle posée dans le code est : ce qui part d'au-dessus de l'île s'y
+       pose. On la mesure donc sur la position de départ, et non sur la
+       position courante — une feuille partie du bord et qui dérive vers
+       l'intérieur passe sous l'île, elle ne la traverse pas. */
+    var pose=1e9, sous=0, b=chutes.length?chutes[0].base:null;
+    if(feuilles&&b){ var a=feuilles.instanceMatrix.array, i;
+      for(i=0;i<feuilles.count;i++){ var o=i*16;
+        if(b[o+12]*b[o+12]+b[o+14]*b[o+14]>=8.1) continue;   /* partie d'à côté */
+        if(a[o]===0&&a[o+5]===0) continue;                   /* pas encore repoussée */
+        var y=a[o+13]; if(y<pose) pose=y; if(y<.2) sous++; } }
+    return {feuilleY:moy(feuilles),ceriseY:moy(cerises),poseY:pose,sous:sous}; },
+  /* Le contraste du vœu sur son papier, mesuré sur la texture elle-même :
+     c'est elle qu'on lit, à l'écran comme sur la carte. On ne regarde que le
+     cadre réservé au texte, pour ne pas compter le liseré doré du bord. */
+  contraste:function(){
+    var cv=document.createElement("canvas");
+    drawTag(cv,"plaque","Douces fêtes de fin d'année","Antonin",2);
+    var S=SHAPES.plaque, W=cv.width, H=cv.height;
+    var X=function(u){ return Math.round((TM+u*(1-2*TM))*W); }, Y=function(v){ return Math.round((TM+v*(1-2*TM))*H); };
+    var x0=X(S.tx[0]), y0=Y(S.tx[1]), x1=X(S.tx[2]), y1=Y(S.tx[3]);
+    var g=cv.getContext("2d"), d=g.getImageData(x0,y0,x1-x0,y1-y0).data;
+    var lin=function(c){ c/=255; return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4); };
+    var lum=function(r,v,b){ return .2126*lin(r)+.7152*lin(v)+.0722*lin(b); };
+    var enc=0, nEnc=0, pap=1, n=0, i;
+    for(i=0;i<d.length;i+=4){
+      if(d[i+3]<200) continue; n++;
+      var L=lum(d[i],d[i+1],d[i+2]);
+      if(L>.42){ enc+=L; nEnc++; } else if(L<pap) pap=L;
+    }
+    if(!nEnc) return {ratio:0,part:0};
+    var e=enc/nEnc, a=Math.max(e,pap), b=Math.min(e,pap);
+    return {ratio:(a+.05)/(b+.05),part:Math.round(nEnc/n*100)}; }
+};
+var ptrs={}, nP=0, pinch=0, moved=0, downT=0, ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
+canvas.addEventListener("pointerdown",function(e){ try{canvas.setPointerCapture(e.pointerId);}catch(x){} ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; nP=Object.keys(ptrs).length;
+  if(nP===1){ moved=0; downT=performance.now(); } pinch=0; idle=0; });
+canvas.addEventListener("pointermove",function(e){ var p=ptrs[e.pointerId]; if(!p) return; var dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY; idle=0;
+  if(nP===1){ moved+=Math.abs(dx)+Math.abs(dy); goal.th-=dx*.0055; goal.ph=clamp(goal.ph-dy*.0045,.35,1.82); }
+  else if(nP>=2){ var k=Object.keys(ptrs), a=ptrs[k[0]], b=ptrs[k[1]], d=Math.hypot(a.x-b.x,a.y-b.y); if(pinch>0) goal.r=clamp(goal.r*pinch/d,1.5,36); pinch=d; moved=99; } });
+function up(e){ if(!ptrs[e.pointerId]) return; delete ptrs[e.pointerId]; nP=Object.keys(ptrs).length; pinch=0;
+  if(nP===0&&moved<8&&performance.now()-downT<500) pick(e.clientX,e.clientY); }
+canvas.addEventListener("pointerup",up); canvas.addEventListener("pointercancel",up);
+canvas.addEventListener("wheel",function(e){ e.preventDefault(); goal.r=clamp(goal.r*Math.exp(e.deltaY*.0012),1.5,36); idle=0; },{passive:false});
+function pick(x,y){ if(sheetOpen){ openSheet(false); return; }
+  ndc.set(x/window.innerWidth*2-1,-(y/window.innerHeight)*2+1); ray.setFromCamera(ndc,camera);
+  var hit=ray.intersectObjects(tagMeshes,false);
+  if(hit.length){ var w=hit[0].object.userData.wish; if(w&&tags[w.id]){ sfx("tag"); focusTag(tags[w.id]); } } else if(cardWish) closeCard(true); }
+
+/* ---- post : depth of field + grade ---- */
+var rt=null, post=null, postScene, postCam, postMat;
+try{
+  if(renderer.capabilities.isWebGL2||renderer.extensions.get("WEBGL_depth_texture")){
+    rt=new THREE.WebGLRenderTarget(4,4,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat});
+    rt.texture.encoding=THREE.sRGBEncoding; rt.depthTexture=new THREE.DepthTexture(4,4); rt.depthTexture.type=THREE.UnsignedIntType;
+    postMat=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,
+      uniforms:{tColor:{value:rt.texture},tDepth:{value:rt.depthTexture},uRes:{value:new THREE.Vector2(4,4)},uNear:{value:camera.near},uFar:{value:camera.far},
+        uFocus:{value:10},uAperture:{value:6},uUnit:{value:1},uTime:{value:0},uStep:{value:1.7}},
+      vertexShader:"varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.0,1.0); }",
+      fragmentShader:[
+      "precision highp float;",
+      "uniform sampler2D tColor; uniform sampler2D tDepth; uniform vec2 uRes; uniform float uNear,uFar,uFocus,uAperture,uUnit,uTime,uStep;",
+      "varying vec2 vUv;",
+      "float viewZ(vec2 p){ float d=texture2D(tDepth,p).x; float z=d*2.0-1.0; return 2.0*uNear*uFar/(uFar+uNear-z*(uFar-uNear)); }",
+      "float blurOf(float z){ return clamp(abs(z-uFocus)/z*uAperture,0.0,13.0); }",
+      "float hash(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }",
+      "void main(){",
+      "  float zc=viewZ(vUv); float bc=blurOf(zc);",
+      "  vec3 acc=texture2D(tColor,vUv).rgb; float tot=1.0; float rad=0.7;",
+      "  float ang=hash(vUv*uRes)*6.2832; vec2 px=uUnit/uRes;",
+      "  for(int i=0;i<44;i++){",
+      "    if(rad>=13.0) break;",
+      "    ang+=2.39996323; vec2 tc=vUv+vec2(cos(ang),sin(ang))*px*rad;",
+      "    float zs=viewZ(tc); float bs=blurOf(zs); if(zs>zc) bs=clamp(bs,0.0,bc*2.0);",
+      "    float m=smoothstep(rad-0.5,rad+0.5,bs);",
+      "    acc+=mix(acc/tot,texture2D(tColor,tc).rgb,m); tot+=1.0; rad+=uStep/rad;",
+      "  }",
+      "  vec3 col=acc/tot;",
+      "  vec2 q=vUv-0.5; float v=smoothstep(0.38,0.98,length(q*vec2(1.0,1.15)));",
+      "  col*=1.0-0.16*v; col=mix(col,col*vec3(1.03,1.0,0.955),0.6);",
+      "  col+=(hash(vUv*uRes+uTime)-0.5)*0.022;",
+      "  gl_FragColor=vec4(col,1.0);",
+      "}"].join("\n")});
+    postScene=new THREE.Scene(); postCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+    window.__post=true;
+    var quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),postMat); quad.frustumCulled=false; postScene.add(quad); post=true;
+  }
+}catch(e){ post=null; rt=null; }
+
+function resize(){ var w=window.innerWidth, h=window.innerHeight; renderer.setPixelRatio(PR); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+  if(rt){ var W=Math.floor(w*PR), H=Math.floor(h*PR); rt.setSize(W,H); postMat.uniforms.uRes.value.set(W,H); postMat.uniforms.uUnit.value=H/820; }
+  fitHome(); if(!focused) goal.r=homeR; }
+window.addEventListener("resize",resize); resize(); cam.r=homeR*1.5; goal.r=homeR;
+
+/* ---- loop ---- */
+var last=performance.now(), frames=0, slow=0, tuned=false, tmp=new THREE.Vector3();
+var reduce=false; try{ reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
+function frame(now){
+  requestAnimationFrame(frame);
+  var dt=Math.min(.05,(now-last)/1000); last=now; clock+=dt; var t=clock, i;
+  if(entered&&!tuned){ frames++; if(dt>.03) slow++; if(frames===110){ tuned=true; if(slow>45){ PR=Math.max(1,PR*.7); if(postMat) postMat.uniforms.uStep.value=2.6; resize(); } } }
+  /* L'heure d'abord : tout le décor en dépend, et le thème de l'interface
+     avec lui. */
+  sunMaj(); themeMaj(); lumMaj(); cielMaj(t);
+  idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0) goal.th+=dt*.045;
+  var k=1-Math.exp(-dt*(focused?2.6:3.4));
+  cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);
+  /* L'inclinaison du téléphone s'ajoute au regard, en douceur : appliquée
+     telle quelle, le moindre tremblement de main se verrait. */
+  GYRO.cth+=(GYRO.th-GYRO.cth)*(1-Math.exp(-dt*3.2));
+  GYRO.cph+=(GYRO.ph-GYRO.cph)*(1-Math.exp(-dt*3.2));
+  var vth=cam.th+GYRO.cth, vph=clamp(cam.ph+GYRO.cph,.3,1.86), sp=Math.sin(vph);
+  camera.position.set(cam.tg.x+cam.r*sp*Math.sin(vth), cam.tg.y+cam.r*Math.cos(vph), cam.tg.z+cam.r*sp*Math.cos(vth));
+  camera.lookAt(cam.tg);
+  if(clock-SECOUSSE.t<SECOUSSE.duree) chuteMaj(clock-SECOUSSE.t);
+  scene.fog.near=Math.max(cam.r-3.5,1.5); scene.fog.far=cam.r+24;
+  /* Le dôme du ciel suit la caméra : il est immense, mais il n'a pas à être
+     traversé quand on s'éloigne de l'arbre. */
+  skyDome.position.copy(camera.position);
+  world.position.y=Math.sin(t*.38)*.07; world.rotation.z=Math.sin(t*.21)*.006;
+  var gust=.5+.5*Math.sin(t*.23)*Math.sin(t*.11+1.3);
+  Object.keys(tags).forEach(function(id){ var g=tags[id], a=t-g.born, amp=.045+.07*gust, s=1;
+    if(a<1.1){ var x=clamp(a/1.1,0,1), c1=1.70158, c3=c1+1; s=1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2); }
+    if(a<5) amp+=.35*Math.exp(-a*.9);
+    g.pivot.scale.setScalar(Math.max(.001,s));
+    g.pivot.rotation.z=Math.sin(t*g.slot.w+g.slot.ph)*amp; g.pivot.rotation.x=Math.cos(t*g.slot.w*.83+g.slot.ph)*amp*.7;
+    g.body.rotation.y+=(Math.sin(t*.45+g.slot.ph)*.012)*dt*6; });
+  nuitMaj(t);
+  for(i=0;i<ribbons.length;i++){ var rb=ribbons[i]; rb.rotation.z=Math.sin(t*.9+rb.userData.ph)*(.05+.1*gust); rb.rotation.x=Math.cos(t*.7+rb.userData.ph)*(.04+.08*gust); }
+  for(i=0;i<DUST;i++){ var o=i*3; dustPos[o+1]+=dustSeed[i*2+1]*dt; dustPos[o]+=Math.sin(t*.4+dustSeed[i*2])*dt*.05; if(dustPos[o+1]>7.2) dustPos[o+1]=-2.6; }
+  dustGeo.attributes.position.needsUpdate=true;
+  for(i=0;i<falling.length;i++){ var f=falling[i], u=f.userData; u.y-=u.sp*dt; u.a+=dt*.12; if(u.y<-3.4){ u.y=5.4+R()*1.5; u.r=1+R()*4.4; }
+    f.position.set(Math.cos(u.a)*u.r+Math.sin(t*.8+u.ph)*.25,u.y,Math.sin(u.a)*u.r); f.rotation.set(t*.7+u.ph,t*.5+u.ph,Math.sin(t+u.ph)*.8); }
+  for(i=0;i<mists.length;i++){ var ms=mists[i]; ms.userData.a+=ms.userData.sp*dt; ms.position.x=Math.cos(ms.userData.a)*ms.userData.r; ms.position.z=Math.sin(ms.userData.a)*ms.userData.r; }
+  for(i=0;i<floaters.length;i++){ var fl=floaters[i]; fl.position.y=fl.userData.y+Math.sin(t*fl.userData.sp+fl.userData.ph)*.12; fl.rotation.y+=dt*.05; }
+  if(post){
+    var close=clamp((9-cam.r)/7,0,1), u2=postMat.uniforms;
+    u2.uFocus.value=Math.max(cam.r,1); u2.uAperture.value=5.5+close*9; u2.uTime.value=t%10;
+    renderer.setRenderTarget(rt); renderer.render(scene,camera); renderer.setRenderTarget(null); renderer.render(postScene,postCam);
+  } else renderer.render(scene,camera);
+}
+mergeWishes();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

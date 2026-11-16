@@ -1,0 +1,32 @@
+# ----------------------------------------------------------------------------
+# Le dossier de l'arbre à souhaits
+# ----------------------------------------------------------------------------
+# Comme l'atlas des variétés, ce dossier se redépose seul, sans toucher au
+# reste du site : ses règles vivent donc ici, et non dans le .htaccess de la
+# racine.
+
+<IfModule mod_headers.c>
+  # La page garde son nom d'une version à l'autre — elle ne porte pas
+  # d'empreinte, puisque ce dossier se corrige à la main. Il faut donc la
+  # revalider à chaque visite, sans quoi une correction mettrait des jours à
+  # paraître sur les appareils qui l'ont déjà ouverte.
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+  # La bibliothèque 3D, elle, ne bouge pas : elle porte son numéro de version
+  # dans son nom et peut rester un an en cache.
+  <FilesMatch "^three-r128\.min\.js$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ----------------------------------------------------------------------------
+# Compression
+# ----------------------------------------------------------------------------
+# La page porte le relevé du relief en base64 et deux images encodées : 440 Ko
+# de texte qui se réduisent de plus de moitié une fois compressés. La
+# bibliothèque 3D passe de 590 à 150 Ko. Sans cette règle, le visiteur
+# télécharge tout en entier — un soir de fête, sur un réseau de téléphone.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript
+</IfModule>

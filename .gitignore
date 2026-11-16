@@ -20,6 +20,10 @@ dist-*/
 # depuis arabica/.
 public/arabica/
 
+# Idem pour l'arbre à souhaits, recopié par outils/construire-wishes.mjs
+# depuis wishes/.
+public/wishes/
+
 # Tuiles d'altitude mises de côté par outils/relever-relief.mjs.
 .cache/
 /livraison/
