@@ -427,6 +427,70 @@ titre('La visite guidée tourne, et rend la main');
 }
 
 /* ------------------------------------------------------------------ *
+ * Souffler sur l'arbre
+ * ------------------------------------------------------------------ *
+ * Secouer le téléphone demandait un capteur de mouvement, une autorisation,
+ * et un geste que tout le monde ne fait pas spontanément. Souffler, si — et
+ * c'est le même geste que le vent.
+ *
+ * Un souffle se reconnaît à deux choses : il est fort, et il est grave. Ce
+ * qu'il faut vérifier n'est donc pas qu'il déclenche (c'est facile) mais que
+ * le reste ne déclenche pas : une voix, une pièce calme, un grondement
+ * lointain, un coup bref. Un arbre qui se dépouille à chaque bruit de rue
+ * serait pire qu'un arbre immobile.
+ */
+titre('Souffler fait voler les feuilles, et le reste non');
+{
+  const { ctx, p, bruit } = await ouvrir(11);
+  const e = await p.evaluate(() => window.__essai.souffle());
+  check('le micro est là, donc le bouton aussi', e.dispo && e.bouton);
+  check('et il est éteint tant qu’on ne l’a pas demandé', e.on, false);
+
+  /* On pousse un spectre à la place du micro : les graves, les aigus, et la
+     durée. Rien n'est enregistré nulle part — le détecteur ne lit qu'un
+     niveau. */
+  const essai = (bas, aigu, sec) => p.evaluate(([a, b2, c]) => window.__essai.souffleFaux(a, b2, c), [bas, aigu, sec]);
+  check('un souffle tenu : les feuilles s’envolent', await essai(-40, -62, 1.0));
+  check('un souffle trop bref : rien', await essai(-40, -62, 0.15), false);
+  check('une voix, forte mais pas si grave : rien', await essai(-44, -48, 1.0), false);
+  check('une pièce calme : rien', await essai(-78, -84, 1.0), false);
+  check('un grave sourd mais faible : rien', await essai(-60, -80, 1.0), false);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Rien ne se sélectionne
+ * ------------------------------------------------------------------ *
+ * Sur un téléphone, un appui un peu long sur un titre ou un bouton ouvrait
+ * une sélection bleue avec ses poignées, et la loupe du système par-dessus
+ * la scène. On vient tourner un arbre, pas copier un mot. Mais la sélection
+ * doit rester là où elle sert : les champs de saisie, le lien qu'on copie,
+ * et l'image de la carte, qu'un appui long doit pouvoir enregistrer.
+ */
+titre('Rien ne se sélectionne, sauf ce qui est fait pour');
+{
+  const { ctx, p, bruit } = await ouvrir(11);
+  const sel = await p.evaluate(() => {
+    const q = (s) => { const el = document.querySelector(s); const c = el && getComputedStyle(el);
+      return c ? (c.webkitUserSelect || c.userSelect) : 'absent'; };
+    return { conseil: q('#hint'), bouton: q('#add'), compte: q('#count'), titre: q('#cZh'),
+      lien: q('#link'), champ: q('#own'), image: q('#cimg') };
+  });
+  for (const [quoi, cle] of [['le conseil du bas', 'conseil'], ['les boutons', 'bouton'],
+    ['le compte des vœux', 'compte'], ['le vœu affiché', 'titre']]) {
+    check(`${quoi} ne se sélectionne pas (${sel[cle]})`, sel[cle], 'none');
+  }
+  check(`le lien se sélectionne, lui (${sel.lien})`, sel.lien, 'text');
+  check(`le champ du vœu aussi (${sel.champ})`, sel.champ, 'text');
+  /* Enregistrer la carte par un appui long est le seul moyen sur iOS quand
+     le téléchargement est refusé : cette image garde son menu. */
+  check(`et l’image de la carte reste enregistrable (${sel.image})`, sel.image !== 'none');
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
  * 8. Le gyroscope
  * ------------------------------------------------------------------ */
 titre('Le gyroscope déplace le regard, sans le perdre');

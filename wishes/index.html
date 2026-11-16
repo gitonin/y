@@ -13,7 +13,15 @@
 :root{--beige:#efebe2;--paper:#fbfaf7;--ink:#212121;--rust:#b95f2c;--green:#565a41;
   --ink-rgb:33,33,33;--beige-rgb:239,235,226}
 html{transition:none}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* Rien ne se sélectionne, sauf ce qui est fait pour. Sur un téléphone, un
+   appui un peu long sur un titre ou un bouton ouvrait une sélection bleue
+   avec ses poignées, et la loupe du système par-dessus la scène — on venait
+   tourner un arbre, pas copier un mot. On rend donc la sélection à ce qui
+   la mérite : les champs de saisie, le lien qu'on copie, et l'image de la
+   carte, qu'un appui long doit pouvoir enregistrer. */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+input,textarea,.selectable{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--beige);color:var(--ink);
   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
@@ -32,7 +40,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(var(--ink-rgb),.2);
   font-size:12px;letter-spacing:.08em;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .pill b{font-weight:500;opacity:.38}.pill b.on{opacity:1}
-.pill#gyro,.pill#cine{opacity:.55}.pill#gyro.on,.pill#cine.on{opacity:1}
+.pill#gyro,.pill#cine,.pill#souffle{opacity:.55}.pill#gyro.on,.pill#cine.on,.pill#souffle.on{opacity:1}
 .pill#cine svg{fill:currentColor;stroke:none}
 .pill[hidden]{display:none}
 /* L'invitation à ouvrir le gyroscope : elle ne paraît qu'une fois, sur un
@@ -169,6 +177,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   <div id="brandt"><button id="sign" aria-label="yunma.fr"><img class="lg" alt="yunma"></button></div>
   <div id="tools">
     <button class="pill" id="lang" aria-label="Langue"><b data-l="fr">FR</b><b data-l="en">EN</b><b data-l="zh">中</b></button>
+    <button class="pill" id="souffle" aria-label="Souffler" hidden><svg viewBox="0 0 24 24"><path d="M3 8.5h9.5a2.6 2.6 0 10-2.6-2.6"/><path d="M3 12.5h13a2.6 2.6 0 11-2.6 2.6"/><path d="M3 16.5h6.5"/></svg></button>
     <button class="pill" id="cine" aria-label="Visite"><svg viewBox="0 0 24 24"><path id="cineI" d="M8 5.5l10 6.5-10 6.5z"/></svg></button>
     <button class="pill" id="gyro" aria-label="Gyroscope" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="3.4" ry="8.4"/><path d="M3.6 12h16.8"/></svg></button>
     <button class="pill" id="snd" aria-label="Son"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndw" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg></button>
@@ -182,7 +191,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
     <button class="btn ghost round" id="share" aria-label="Partager"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg></button>
   </div>
   <div id="hint" data-i="hint"></div>
-  <div id="gyroAsk" hidden><span data-i="gyroAsk"></span><button id="gyroYes" data-i="gyroYes"></button><button id="gyroNo" aria-label="Non">×</button></div>
+  <div id="gyroAsk" hidden><span id="askTxt"></span><button id="gyroYes" data-i="gyroYes"></button><button id="gyroNo" aria-label="Non">×</button></div>
 </div>
 
 <div id="sheet" aria-hidden="true">
@@ -289,8 +298,9 @@ var PRESETS = [
 
 var I18N = {
  fr:{title:"L'arbre à souhaits",introText:"En Chine, on confie ses vœux à un arbre : une étiquette rouge, un fil d'or, quelques mots. Pour les fêtes, accrochez le vôtre à ce caféier du Yunnan — puis passez le lien à ceux que vous aimez.",
-  gyroAsk:"Incliner et secouer l'arbre ?",gyroYes:"Activer",cineOn:"Visite guidée",cineOff:"Reprendre la main",
-  gyroOn:"Gyroscope activé : inclinez le téléphone, et secouez-le.",gyroNon:"Le gyroscope n'a pas été autorisé.",
+  soufOn:"Soufflez sur votre téléphone : les feuilles s'envolent.",soufNon:"Le micro n'a pas été autorisé.",soufAsk:"Souffler pour faire voler les feuilles ?",
+  gyroAsk:"Incliner le téléphone pour bouger le regard ?",gyroYes:"Activer",cineOn:"Visite guidée",cineOff:"Reprendre la main",
+  gyroOn:"Gyroscope activé : inclinez le téléphone.",gyroNon:"Le gyroscope n'a pas été autorisé.",
   enter:"Entrer",by:"Une expérience signée",add:"Accrocher un vœu",hint:"Glisser pour tourner · pincer pour zoomer · toucher une étiquette",
   sheetTitle:"Votre vœu",s1:"1 · L'étiquette",st1:"Choisissez la forme de votre étiquette",st2:"Choisissez votre vœu",st3:"Signez, puis accrochez",stepOf:"Étape",next:"Continuer",g_own:"Mes propres mots",ownNote:"60 caractères au maximum : un mot court se lit mieux sur l'étiquette.",nameNote:"Votre prénom s'écrit sous le vœu. Vous pouvez laisser ce champ vide.",s2:"2 · Le vœu",g_zh:"Vœux chinois traditionnels",g_w:"Noël et nouvelle année",g_c:"Fêtes et café",s3:"… ou vos propres mots",s4:"Votre prénom (facultatif)",
   ownPh:"Écrivez votre petit mot (60 caractères)",namePh:"Prénom",hang:"Accrocher à l'arbre",shareWish:"Envoyer",back:"Retour",card:"Carte",cardTitle:"Votre carte numérique",
@@ -305,8 +315,9 @@ var I18N = {
   hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
-  gyroAsk:"Tilt and shake the tree?",gyroYes:"Turn on",cineOn:"Guided tour",cineOff:"Take back control",
-  gyroOn:"Gyroscope on: tilt the phone, and shake it.",gyroNon:"The gyroscope was not allowed.",
+  soufOn:"Blow on your phone: the leaves fly away.",soufNon:"The microphone was not allowed.",soufAsk:"Blow to make the leaves fly?",
+  gyroAsk:"Tilt the phone to move the view?",gyroYes:"Turn on",cineOn:"Guided tour",cineOff:"Take back control",
+  gyroOn:"Gyroscope on: tilt the phone.",gyroNon:"The gyroscope was not allowed.",
   enter:"Enter",by:"An experience by",add:"Hang a wish",hint:"Drag to orbit · pinch to zoom · tap a tag",
   sheetTitle:"Your wish",s1:"1 · The tag",st1:"Choose the shape of your tag",st2:"Choose your wish",st3:"Sign it, then hang it",stepOf:"Step",next:"Continue",g_own:"My own words",ownNote:"60 characters at most: a short note reads better on the tag.",nameNote:"Your first name is written under the wish. You can leave this empty.",s2:"2 · The wish",g_zh:"Traditional Chinese wishes",g_w:"Christmas and New Year",g_c:"Holidays and coffee",s3:"… or your own words",s4:"Your first name (optional)",
   ownPh:"Write your note (60 characters)",namePh:"First name",hang:"Hang on the tree",shareWish:"Send",back:"Back",card:"Card",cardTitle:"Your digital card",
@@ -321,8 +332,9 @@ var I18N = {
   hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
-  gyroAsk:"倾斜并摇动这棵树？",gyroYes:"开启",cineOn:"自动导览",cineOff:"交还控制",
-  gyroOn:"已开启陀螺仪：倾斜手机，也可以摇一摇。",gyroNon:"陀螺仪未获授权。",
+  soufOn:"对着手机吹一口气，叶子就会飞起来。",soufNon:"麦克风未获授权。",soufAsk:"吹一口气，让叶子飞起来？",
+  gyroAsk:"倾斜手机来移动视角？",gyroYes:"开启",cineOn:"自动导览",cineOff:"交还控制",
+  gyroOn:"已开启陀螺仪：倾斜手机即可。",gyroNon:"陀螺仪未获授权。",
   enter:"进入",by:"出品",add:"挂上心愿",hint:"拖动旋转 · 双指缩放 · 轻点红牌",
   sheetTitle:"你的心愿",s1:"1 · 选择红牌",st1:"选择红牌的形状",st2:"选一句祝福",st3:"署名，然后挂上",stepOf:"步骤",next:"继续",g_own:"自己写",ownNote:"最多60字：短短一句，在红牌上更好看。",nameNote:"名字会写在心愿下方，也可以不填。",s2:"2 · 选一句祝福",g_zh:"中国传统祝福",g_w:"圣诞与新年",g_c:"节日与咖啡",s3:"……或写下自己的话",s4:"你的名字（可不填）",
   ownPh:"写下你的心愿（60字以内）",namePh:"名字",hang:"挂到树上",shareWish:"分享",back:"返回",card:"贺卡",cardTitle:"你的数字贺卡",
@@ -1795,6 +1807,72 @@ function secouer(){
   SECOUSSE.t=clock; sfx("tag");
 }
 
+/* ------------------------------------------------------------------ souffler sur l'arbre
+   Secouer le téléphone demandait un capteur de mouvement, une autorisation,
+   et un geste que tout le monde ne fait pas spontanément. Souffler, si : on
+   souffle sur une bougie, sur une graine de pissenlit, sur une feuille posée
+   au creux de la main. Et c'est le même geste que le vent.
+
+   On écoute donc le micro, et l'on y cherche un souffle — pas un bruit.
+   Un souffle se reconnaît à deux choses : il est fort, et il est grave. La
+   parole, la musique et le bruit d'une rue ont de l'énergie partout ; un
+   souffle sur un micro en a surtout sous trois cents hertz, et presque rien
+   au-dessus de deux mille. On compare donc les deux bandes, et l'on exige
+   que l'écart tienne un quart de seconde : une porte qui claque ne le tient
+   pas, un souffle oui.
+
+   Rien n'est enregistré, rien ne sort de l'appareil : on ne lit qu'un
+   niveau, deux cents fois par seconde, et on l'oublie aussitôt. */
+var SOUF={on:false,flux:null,ana:null,bas:null,depuis:0,dernier:-99,niveau:0,dispo:false};
+(function(){ try{ SOUF.dispo=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia); }catch(e){} })();
+function souffleArreter(){
+  SOUF.on=false; SOUF.depuis=0;
+  if(SOUF.flux){ try{ SOUF.flux.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} SOUF.flux=null; }
+  SOUF.ana=null;
+  var b=$("souffle"); if(b) b.classList.remove("on");
+  try{ localStorage.setItem("yw_souffle","off"); }catch(e){}
+}
+function souffleOuvrir(){
+  if(SOUF.on){ souffleArreter(); return; }
+  if(!SOUF.dispo){ toast(T("soufNon")); return; }
+  if(!AC) startAudio();
+  /* On coupe les traitements du navigateur : la réduction de bruit et le
+     réglage automatique de gain sont faits pour la parole, et ils effacent
+     précisément ce qu'on cherche. */
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}})
+    .then(function(f){
+      if(!AC){ try{ f.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} toast(T("soufNon")); return; }
+      SOUF.flux=f;
+      var src=AC.createMediaStreamSource(f);
+      SOUF.ana=AC.createAnalyser(); SOUF.ana.fftSize=1024; SOUF.ana.smoothingTimeConstant=.55;
+      /* Le micro ne va nulle part : l'analyseur n'est relié à aucune sortie,
+         donc on ne s'entend pas, et rien n'est émis. */
+      src.connect(SOUF.ana);
+      SOUF.bas=new Float32Array(SOUF.ana.frequencyBinCount);
+      SOUF.on=true; SOUF.depuis=0;
+      $("souffle").classList.add("on");
+      try{ localStorage.setItem("yw_souffle","on"); }catch(e){}
+      toast(T("soufOn"));
+    },function(){ toast(T("soufNon")); });
+}
+/* La bande des graves, celle des aigus, et l'écart entre les deux. */
+function souffleMaj(dt){
+  if(!SOUF.on||!SOUF.ana||!AC) return;
+  SOUF.ana.getFloatFrequencyData(SOUF.bas);
+  var n=SOUF.bas.length, hz=AC.sampleRate/2/n, i;
+  var i1=Math.max(1,Math.round(70/hz)), i2=Math.round(300/hz), i3=Math.round(2000/hz), i4=Math.round(6000/hz);
+  var g=0, a=0, ng=0, na=0;
+  for(i=i1;i<=i2&&i<n;i++){ g+=SOUF.bas[i]; ng++; }
+  for(i=i3;i<=i4&&i<n;i++){ a+=SOUF.bas[i]; na++; }
+  if(!ng||!na) return;
+  g/=ng; a/=na;
+  SOUF.niveau=g;
+  /* Fort, et beaucoup plus grave qu'aigu. Les deux à la fois. */
+  var souffle=g>-52&&(g-a)>13;
+  if(souffle){ SOUF.depuis+=dt; } else { SOUF.depuis=0; }
+  if(SOUF.depuis>=.24&&clock-SOUF.dernier>6){ SOUF.dernier=clock; SOUF.depuis=0; secouer(); }
+}
+
 /* ------------------------------------------------------------------ gyroscope
    Incliner le téléphone déplace un peu le regard. Un peu seulement : c'est
    une respiration, pas un pilotage — le doigt reste maître, et l'écart au
@@ -1852,17 +1930,27 @@ function gyroBasculer(){
 if(GYRO.dispo){ $("gyro").hidden=false; $("gyro").onclick=gyroBasculer;
   try{ if(localStorage.getItem("yw_gyro")==="on") gyroBasculer(); }catch(e){} }
 
-/* L'invitation à ouvrir le gyroscope. Elle ne paraît qu'une fois : un
-   appareil qui en a un, un visiteur qui vient d'entrer, et le capteur
-   encore éteint. Refusée ou acceptée, on ne la repose plus. */
+/* L'invitation. Elle ne paraît qu'une fois, et elle porte sur le souffle :
+   c'est le geste principal, et le seul que tout le monde comprend sans
+   explication. L'inclinaison, plus discrète, garde sa pilule. Refusée ou
+   acceptée, on ne repose plus la question. */
+var inviteQuoi=null;
 function gyroInviter(){
-  if(!GYRO.dispo||GYRO.on) return;
-  try{ if(localStorage.getItem("yw_gyro_vu")==="1") return; }catch(e){}
-  setTimeout(function(){ if(!GYRO.on&&entered&&!sheetOpen) $("gyroAsk").hidden=false; },2600);
+  if(SOUF.dispo&&!SOUF.on) inviteQuoi="souffle";
+  else if(GYRO.dispo&&!GYRO.on) inviteQuoi="gyro";
+  else return;
+  try{ if(localStorage.getItem("yw_invite_vu")==="1") return; }catch(e){}
+  $("askTxt").textContent=T(inviteQuoi==="souffle"?"soufAsk":"gyroAsk");
+  setTimeout(function(){ if(entered&&!sheetOpen) $("gyroAsk").hidden=false; },2600);
 }
-function gyroRange(){ $("gyroAsk").hidden=true; try{ localStorage.setItem("yw_gyro_vu","1"); }catch(e){} }
-$("gyroYes").onclick=function(){ gyroRange(); gyroBasculer(); };
+function gyroRange(){ $("gyroAsk").hidden=true; try{ localStorage.setItem("yw_invite_vu","1"); }catch(e){} }
+$("gyroYes").onclick=function(){ gyroRange(); if(inviteQuoi==="souffle") souffleOuvrir(); else gyroBasculer(); };
 $("gyroNo").onclick=gyroRange;
+
+/* Le micro existe aussi sur un ordinateur : on souffle très bien dans celui
+   d'un portable. La pilule n'est donc pas réservée au téléphone. */
+if(SOUF.dispo){ $("souffle").hidden=false; $("souffle").onclick=souffleOuvrir;
+  try{ if(localStorage.getItem("yw_souffle")==="on") souffleOuvrir(); }catch(e){} }
 
 /* ------------------------------------------------------------------ la visite guidée
    Un bouton, et l'arbre se montre tout seul : il tourne, s'approche d'un
@@ -2003,6 +2091,21 @@ window.__essai={
       if(Math.abs(a[o]-b[o])<1e-4&&Math.abs(a[o+5]-b[o+5])<1e-4) n++; }
     return Math.round(n/feuilles.count*100); },
   visiteOn:function(){ return CINE.on; },
+  souffle:function(){ return {dispo:SOUF.dispo,on:SOUF.on,bouton:!$("souffle").hidden}; },
+  /* Pour l'épreuve : on pousse un spectre à la place du micro, et l'on
+     regarde si le souffle est reconnu — et si un simple bruit ne l'est pas. */
+  souffleFaux:function(bas,aigu,secondes){
+    var n=512, f=new Float32Array(n), i;
+    SOUF.on=true; SOUF.niveau=bas;
+    SOUF.ana={fftSize:1024,frequencyBinCount:n,getFloatFrequencyData:function(d){
+      var hz=(AC?AC.sampleRate:48000)/2/n;
+      for(i=0;i<n;i++) d[i]=(i*hz<700)?bas:aigu; }};
+    SOUF.bas=f; SOUF.depuis=0; SOUF.dernier=-99;
+    var pas=.05, t=0, lance=false, avant=SECOUSSE.t;
+    while(t<secondes){ souffleMaj(pas); t+=pas; if(SECOUSSE.t!==avant){ lance=true; break; } }
+    SOUF.on=false; SOUF.ana=null;
+    return lance;
+  },
   lien:function(w){ return lienVoeu(w); },
   decoder:function(c){ return decoderVoeu(c); },
   recu:function(){ return recu; },
@@ -2137,7 +2240,7 @@ function frame(now){
   /* L'heure d'abord : tout le décor en dépend, et le thème de l'interface
      avec lui. */
   sunMaj(); themeMaj(); lumMaj(); cielMaj(t);
-  cineMaj(dt);
+  souffleMaj(dt); cineMaj(dt);
   idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0&&!CINE.on) goal.th+=dt*.045;
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
   cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);

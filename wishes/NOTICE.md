@@ -83,7 +83,21 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   en monopode — un axe vertical unique, des rameaux horizontaux par paires
   opposées, de plus en plus courts vers le haut. C'est de là que vient sa
   silhouette en cône, qui tombe bien pour Noël.
-- **Secouer le téléphone** fait tomber les feuilles et les cerises. Les feuilles
+- **Souffler sur l'appareil** fait voler les feuilles. Secouer le téléphone
+  demandait un capteur de mouvement, une autorisation, et un geste que tout le
+  monde ne fait pas spontanément ; souffler, si — et c'est le même geste que le
+  vent. On écoute le micro et l'on y cherche un souffle, pas un bruit : un
+  souffle est fort *et* grave, il a de l'énergie sous trois cents hertz et
+  presque rien au-dessus de deux mille, et il tient un quart de seconde. Une
+  voix, une pièce calme, un grondement lointain et un coup bref ne déclenchent
+  rien — c'est vérifié. Rien n'est enregistré et rien ne sort de l'appareil :
+  on ne lit qu'un niveau, et on l'oublie aussitôt. Le micro existe aussi sur un
+  ordinateur : la pilule n'est pas réservée au téléphone.
+- **Rien ne se sélectionne**, sauf les champs de saisie, le lien qu'on copie et
+  l'image de la carte, qu'un appui long doit pouvoir enregistrer. Sur un
+  téléphone, un appui un peu long ouvrait sinon une sélection bleue avec ses
+  poignées, et la loupe du système par-dessus la scène.
+- **Secouer le téléphone** fait aussi tomber les feuilles et les cerises. Les feuilles
   voltigent, puis une bourrasque les emporte et les efface au loin ; les cerises
   sont lourdes et tombent presque droit ; les vœux restent accrochés. Puis tout
   repousse, chacun à son tour, étalé sur près de quatre secondes — l'arbre se
@@ -148,7 +162,16 @@ qui s'y accroche l'engage.
 **Le chinois n'est pas relu par un locuteur natif** : l'interface et les
 versions chinoises des vœux « Noël » et « café » sont à faire vérifier.
 
-**Le gyroscope et la secousse n'ont pas été essayés sur un vrai téléphone.**
-L'épreuve vérifie les nombres — les bornes de l'inclinaison, la chute, la
-repousse —, mais le seuil de la secousse (trois dépassements de 22 m/s² en une
-seconde) a été choisi, pas mesuré. À régler sur l'appareil.
+**Ni le gyroscope, ni la secousse, ni le souffle n'ont été essayés sur un vrai
+appareil.** L'épreuve vérifie les nombres — les bornes de l'inclinaison, la
+chute, la repousse, et le détecteur de souffle nourri de faux spectres —, mais
+les seuils ont été choisis, pas mesurés : trois dépassements de 22 m/s² en une
+seconde pour la secousse ; pour le souffle, des graves au-dessus de −52 dB,
+treize décibels de plus que les aigus, tenus un quart de seconde. À régler sur
+l'appareil.
+
+Un avertissement qui a coûté du temps : **une page publiée comme artefact
+claude.ai ne peut atteindre ni le micro, ni les capteurs de mouvement** — le
+cadre les refuse sans même poser la question. Un essai qui y échoue ne prouve
+donc rien sur ces trois gestes-là ; il faut déposer le dossier pour les
+juger.
