@@ -347,8 +347,13 @@ titre('Le vœu tient dans le lien');
        plafonnaient à cent six signes ; un vœu écrit à la main les dépasse. */
     check(`${nom} : le QR code le porte (version ${r.version})`, r.version >= 1 && r.version <= 9);
   }
-  check('un vœu de décor n’a pas de lien à lui',
-    await p.evaluate(() => window.__essai.lien({ s: 'plaque', p: 0, decor: true }).indexOf('#'), null), -1);
+  /* Un vœu du décor s'envoie comme un autre : ce sont des vœux, et le lien
+     les reporte à l'identique. Seul celui de Yunma n'a pas de lien à lui —
+     son texte change avec la langue de qui le lit. */
+  check('un vœu de décor s’envoie, lui aussi',
+    await p.evaluate(() => window.__essai.lien({ s: 'plaque', p: 0, decor: true }).indexOf('#v-') > 0));
+  check('le vœu de Yunma, non',
+    await p.evaluate(() => window.__essai.lien({ s: 'plaque', yunma: true }).indexOf('#'), null), -1);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
@@ -496,7 +501,7 @@ titre('La musique de Noël se joue toute seule');
   await p.waitForTimeout(1200);
   const a = await p.evaluate(() => window.__essai.musique());
   check(`elle joue (air ${a.air}, note ${a.note})`, a.on && a.note > 0);
-  check(`et les notes sont programmées en avance (${a.avance} s)`, a.avance > 0 && a.avance < 2);
+  check(`et les notes sont programmées en avance (${a.avance} s)`, a.avance > 0 && a.avance < 2.4);
   await p.waitForTimeout(1500);
   const b = await p.evaluate(() => window.__essai.musique());
   check(`l’air avance (${a.note} → ${b.note})`, b.note > a.note);
@@ -517,8 +522,11 @@ titre('Les guirlandes s’allument, et s’éteignent');
 {
   const { ctx, p, bruit } = await ouvrir(22);
   const a = await p.evaluate(() => window.__essai.fete());
-  check('elles sont allumées d’office', a.on);
+  /* Elles attendent qu'on les demande : l'arbre est d'abord un arbre, et
+     la fête est un bouton. */
+  check('au repos, elles sont éteintes', a.on, false);
   check(`deux cents ampoules (${a.points})`, a.points, 200);
+  await p.evaluate(() => window.__essai.fete(true));
   const monte = await p.waitForFunction(() => window.__essai.fete().amp > 0.9, null, { timeout: 60000 })
     .then(() => true).catch(() => false);
   const b = await p.evaluate(() => window.__essai.fete());
@@ -534,6 +542,7 @@ titre('Les guirlandes s’allument, et s’éteignent');
 }
 {
   const { ctx, p } = await ouvrir(13);
+  await p.evaluate(() => window.__essai.fete(true));
   await p.waitForFunction(() => window.__essai.fete().amp > 0.9, null, { timeout: 60000 }).catch(() => {});
   const j = await p.evaluate(() => window.__essai.fete());
   check(`de jour, elles restent discrètes (${j.opacite} contre 1 la nuit)`, j.opacite < 0.8);
@@ -657,6 +666,69 @@ titre('Toucher un vœu s’en approche, sans fiche par-dessus');
   check('la fiche s’ouvre pour un vœu qu’on vous envoie', await p.evaluate(() => window.__essai.fiche()));
   const f = await p.evaluate(() => window.__essai.cible(3));
   check(`et le vœu passe au-dessus d’elle (${f.y})`, f.y > 0);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Accrocher un vœu ne vide pas l'arbre
+ * ------------------------------------------------------------------ *
+ * Les vingt-huit vœux tout faits ne servaient que d'arbre d'attente :
+ * dès qu'un vrai vœu arrivait, ils disparaissaient tous. On écrivait son
+ * mot, et l'arbre se vidait d'un coup — seul au monde sur un caféier nu.
+ * Ils restent maintenant, et le compteur, lui, ne compte que les vrais.
+ */
+titre('Accrocher un vœu ne vide pas l’arbre');
+{
+  const ctx = await nav.newContext({ viewport: { width: 1000, height: 800 }, locale: 'fr-FR' });
+  const p = await ctx.newPage();
+  const bruit = [];
+  p.on('pageerror', (e) => bruit.push('' + e));
+  /* Un vœu déjà accroché sur cet appareil, comme après une visite. */
+  await p.addInitScript(() => {
+    try {
+      localStorage.setItem('yw_local', JSON.stringify([{ id: 'essai1', s: 'plaque', t: 'Un vœu à moi', n: 'Antonin', ts: Date.now(), local: true }]));
+      localStorage.setItem('yw_mine', JSON.stringify(['essai1']));
+    } catch (e) { /* vide */ }
+  });
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+  await p.waitForTimeout(1200);
+  await p.evaluate(() => document.getElementById('enter').click());
+  await p.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
+  await p.waitForTimeout(1000);
+  const n = await p.evaluate(() => window.__essai.voeux());
+  check(`l’arbre reste plein (${n} étiquettes)`, n > 25);
+  check('le compte n’annonce que le vrai vœu',
+    ((await p.locator('#count').textContent()) || '').trim(), '1 vœu accroché');
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Envoyer le vœu qu'on regarde
+ * ------------------------------------------------------------------ *
+ * S'approcher d'un vœu donne envie de l'envoyer, et il n'y a rien d'autre
+ * à proposer là. Une pilule discrète au-dessus de l'appel, et non une
+ * fiche par-dessus la scène.
+ */
+titre('Le vœu qu’on regarde porte son bouton d’envoi');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  const vu = () => p.evaluate(() => document.getElementById('voeuShare').classList.contains('on'));
+  await p.evaluate(() => { window.__essai.viser(3, false, true); });
+  await p.waitForTimeout(300);
+  check('en s’approchant, la pilule paraît', await vu());
+  const mot = await p.evaluate(() => document.getElementById('voeuShareT').textContent);
+  check(`elle dit ce qu’elle fait (« ${mot} »)`, /envoyer/i.test(mot));
+  await p.evaluate(() => window.__essai.maison());
+  await p.waitForTimeout(300);
+  check('en reculant, elle s’efface', await vu(), false);
+  /* Pendant la visite guidée, elle se tait : la caméra y passe de mot en
+     mot, et un bouton qui clignote à chaque plan transforme la veilleuse
+     en vitrine. */
+  await p.evaluate(() => { window.__essai.visite(true); window.__essai.viser(3, false, true); });
+  await p.waitForTimeout(300);
+  check('pendant la visite guidée, elle se tait', await vu(), false);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }

@@ -31,15 +31,22 @@ province entière derrière.
 
 Trois choses portent ce paysage :
 
-- **le terrain de l'atlas**, le même relevé du Yunnan, posé neuf cents
-  unités plus bas que l'île et montré sur un tiers de sa largeur : toute la
-  province étalée sur un horizon se chiffonne comme du papier ;
+- **le terrain de l'atlas**, le même relevé du Yunnan, posé très bas sous
+  l'île — ses crêtes passent une trentaine d'unités au-dessus d'elle — et
+  montré sur un tiers de sa largeur : toute la province étalée sur un
+  horizon se chiffonne comme du papier ;
 - **la brume linéaire**, dont le début et la fin suivent la distance de la
   caméra : l'île reste nette quand on s'en approche, et l'horizon reste
   lointain quand on s'en éloigne ;
 - **le flottement** : l'île monte et descend de sept centièmes d'unité. Vu
   de près, c'est un sixième de l'écran — d'où le rattrapage de la visée
   décrit plus bas, sans quoi le mot qu'on lit ne tiendrait pas en place.
+
+Sous l'île, il n'y a rien, et c'est voulu. Il y avait un disque d'ombre très
+bas, qui devait la faire flotter : une ombre posée sur rien se lit comme une
+tache. Et la poussière d'or ne descend plus sous le socle — une nuée de points
+dans le vide se lit comme un nuage de moucherons, d'autant que la profondeur
+de champ en fait des pastilles de couleur.
 
 ## Le cadrage
 
@@ -49,6 +56,14 @@ encadre donc une hauteur connue — du bout des racines au sommet de l'arbre
 —, on retire de l'écran utile la bande prise par l'appel, et l'on vise sous
 le milieu de ce qui reste. La distance se déduit du champ, en hauteur comme
 en largeur : sur un téléphone, c'est la largeur qui commande.
+
+**L'œil est à l'horizontale**, ou presque. Il surplombait l'île de treize
+degrés : on voyait l'arbre d'en haut, les montagnes s'écrasaient dans le bas
+de l'image et l'horizon disparaissait. À hauteur d'homme, les crêtes
+repassent derrière l'arbre, où elles doivent être — et le relief a été
+remonté de soixante-quinze unités pour qu'elles y passent vraiment. La visée
+est en outre portée un peu haut, ce qui fait descendre l'île dans l'image :
+le ciel au-dessus d'elle lui donne sa place.
 
 L'épreuve le vérifie sur trois écrans — large, carré, téléphone.
 
@@ -120,22 +135,29 @@ déborde, et il ne compte pas parmi les vœux du public.
 
 ## La visite guidée
 
-L'arbre se montre tout seul, en huit plans qui s'enchaînent dans un ordre fixe
-et se tirent au sort à l'intérieur — deux tours ne se ressemblent jamais tout à
-fait :
+Ce qu'on regarde, dans cet arbre, ce sont les mots. **Six plans sur neuf sont
+donc des vœux**, et l'on y dérive lentement au lieu de s'y arrêter : la
+caméra tourne autour du mot et respire un peu, le temps qu'on le lise.
+Immobile, le plan serait une photographie ; ici, c'est un mouvement
+d'appareil, et c'est la profondeur de champ qui fait le reste.
+
+On va **de proche en proche** : le vœu suivant est tiré parmi les plus proches
+voisins de celui qu'on quitte, et non au hasard dans tout l'arbre. On traverse
+ainsi la ramure au lieu de sauter d'un bord à l'autre. Le premier de la visite
+est celui de Yunma — c'est la maison qui accueille.
+
+Les trois autres plans rappellent où l'on est :
 
 - **la ronde large**, lente, à une hauteur et une distance tirées au sort ;
-- **l'approche d'un vœu** — le premier est celui de Yunma, les suivants au
-  hasard ;
-- **la plongée** : vu de haut, l'île devient un radeau et l'on voit la couronne
-  entière ;
+- **la plongée** ou **la contre-plongée**, en alternance : vu de haut, l'île
+  devient un radeau ; vu d'en bas, on remonte le tronc, les étiquettes passent
+  au-dessus et le ciel ferme l'image — c'est le plan qui donne sa taille à
+  l'arbre ;
 - **le vent** : on recule d'abord, car la bourrasque ne se voit pas le nez sur
-  une étiquette, puis les feuilles s'envolent — et le ciel s'en mêle ;
-- **la contre-plongée** : on remonte le tronc, les étiquettes passent au-dessus,
-  et le ciel ferme l'image. C'est le plan qui donne sa taille à l'arbre.
+  une étiquette, puis les feuilles s'envolent — et le ciel s'en mêle.
 
-Le diaphragme s'ouvre pendant la visite : le flou n'y est plus un confort, c'est
-ce qui dit où regarder. Le premier geste du visiteur reprend la main.
+Le diaphragme s'ouvre pendant la visite : le flou n'y est plus un confort,
+c'est ce qui dit où regarder. Le premier geste du visiteur reprend la main.
 
 ## Le ciel a des habitants
 
@@ -194,20 +216,35 @@ et un voile de couleur passe sur l'image finale — mais presque uniquement la
 nuit : le ciel de jour est un crème très clair, et la moindre teinte posée
 dessus repeint tout l'écran en rose.
 
-Elles sont allumées d'office. C'est un arbre de Noël.
+Ni elles ni la musique ne partent d'elles-mêmes : l'arbre est d'abord un
+arbre, et la fête est un bouton. Chacune se souvient du dernier choix, et
+revient allumée pour qui l'a demandée.
 
 ## Toucher un vœu
 
-Toucher une étiquette **s'en approche, et rien de plus**. Le mot est écrit
-dessus ; le redire dans un panneau par-dessus la scène n'ajoute rien et cache
-l'arbre. La fiche reste pour les deux vœux qui ont quelque chose à dire de plus
+Toucher une étiquette **s'en approche**, et fait paraître une pilule discrète
+au-dessus de l'appel : « Envoyer ce vœu ». S'approcher d'un mot donne envie de
+l'envoyer, et il n'y a rien d'autre à proposer là — le mot est écrit sur
+l'étiquette, le redire dans un panneau par-dessus la scène n'ajoute rien et
+cache l'arbre. La pilule se tait pendant la visite guidée, où la caméra passe
+de mot en mot.
+
+La fiche, elle, reste pour les deux vœux qui ont quelque chose à dire de plus
 — celui qu'on vient d'accrocher, et celui qu'on vous a envoyé —, et alors la
 visée remonte au-dessus d'elle, de la hauteur qu'elle occupe.
+
+**Tout vœu s'envoie**, le décor compris : ce sont des vœux comme les autres, et
+le lien les reporte à l'identique chez celui qui l'ouvre. Seul celui de Yunma
+n'a pas de lien à lui — son texte change avec la langue de qui le lit, et il
+n'y a rien à figer dedans ; sa pilule partage l'arbre.
 
 Trois réglages font que l'on arrive **sur le mot** :
 
 - **l'angle**. Celui qui touche une étiquette l'a vue : son angle est forcément
-  dégagé, et l'on se contente d'avancer — faire le tour de l'arbre pour revenir
+  dégagé, et l'on se contente d'avancer — à ceci près que le rayon du doigt ne
+  traverse que les étiquettes, de sorte qu'on peut en toucher une cachée
+  derrière une feuille ; on regarde donc ce qu'il y a devant elle, et si
+  quelque chose la couvre, on cherche un angle — faire le tour de l'arbre pour revenir
   sur le même mot désoriente, et rien ne le justifie. La visite guidée et un
   lien reçu, eux, n'ont pas d'angle choisi par quelqu'un : ils en cherchent un.
   Vingt et un angles sont essayés autour du vœu, cinq rayons chacun — le centre
@@ -263,6 +300,12 @@ l'arbre de l'autre. Un vœu envoyé arrive bien (voir ci-dessus), mais il ne res
 pas : il n'apparaît pas à ceux qui viendront ensuite. Tant que la constante
 `API` est vide, chaque vœu accroché reste dans le navigateur de celui qui l'a
 écrit, et le message « accroché sur cet appareil seulement » le dit.
+
+En attendant, **les trente vœux tout faits tiennent lieu de monde** : ils sont
+signés, ils sont là dès la première visite, et ils restent quand on accroche le
+sien. C'est une fiction assumée — un arbre vide donne envie de partir, et le
+jour où la base existera, les vrais vœux viendront simplement par-dessus. Le
+compteur, lui, ne ment pas : il ne compte que les vrais.
 
 Pour que l'arbre se remplisse vraiment, poser dans `API` l'adresse d'une petite
 API sur Infomaniak (PHP et MySQL font l'affaire) :
