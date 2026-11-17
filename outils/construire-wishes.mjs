@@ -93,7 +93,7 @@ function verifierContenu(page) {
     ['function secouer()', 'la secousse'],
     ['function menuOuvrir(', 'le menu'],
     ['var AIRS=', 'les airs de Noël'],
-    ['function feteBasculer()', 'les guirlandes'],
+    ['function volutePasser()', 'les volutes d’air'],
     ['function ouverture()', 'l’ouverture sur le vœu de Yunma'],
     ['emissiveMap:t', 'les étiquettes qui s’allument la nuit'],
     ['three-r128.min.js', 'la bibliothèque 3D, servie par le site'],

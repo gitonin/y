@@ -36,6 +36,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import QRCode from 'qrcode';
 
 const RACINE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DOSSIER = join(RACINE, 'public', 'wishes');
@@ -411,36 +412,37 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
 /* ------------------------------------------------------------------ *
  * La visite guidée
  * ------------------------------------------------------------------ *
- * Un bouton, et l'arbre se montre tout seul. Ce qui compte, et qui se
- * casse sans bruit : qu'elle tourne vraiment, qu'elle approche des vœux, et
- * que le premier geste du visiteur la lui reprenne — on ne lutte pas
- * contre quelqu'un qui veut tourner l'arbre lui-même.
+ * Elle n'a plus de bouton : l'arbre se montre tout seul, et le premier
+ * geste du visiteur la lui reprend. Elle revient d'elle-même au bout de
+ * dix secondes sans un geste — c'est une veilleuse, pas un film qu'on
+ * lance.
  */
-titre('La visite guidée tourne, et rend la main');
+titre('La visite guidée se lance seule, rend la main, et revient');
 {
   const { ctx, p, bruit } = await ouvrir(11);
-  check('au repos, elle est arrêtée', await p.evaluate(() => window.__essai.visiteOn()), false);
-  await p.evaluate(() => window.__essai.visite(true));
+  /* Elle démarre d'elle-même après l'ouverture sur le vœu de Yunma. */
+  const partie = await p.waitForFunction(() => window.__essai.visiteOn(), null, { timeout: 180000 })
+    .then(() => true).catch(() => false);
+  check('elle part d’elle-même', partie);
   const a = await p.evaluate(() => window.__essai.visiteEtat());
   /* Le rendu logiciel de l'épreuve tombe à une image par seconde, et
      l'horloge de la scène est plafonnée à cinquante millisecondes par
      image : deux secondes de mur ne font qu'un dixième de seconde de
-     scène. On attend donc que la vue ait tourné, pas qu'il se soit écoulé
+     scène. On attend donc que la vue ait bougé, pas qu'il se soit écoulé
      un temps. */
-  const tourne = await p.waitForFunction((t0) => window.__essai.visiteEtat().th > t0 + 0.12,
-    a.th, { timeout: 180000 }).then(() => true).catch(() => false);
-  const b = await p.evaluate(() => window.__essai.visiteEtat());
-  check(`elle fait tourner la vue (${a.th} → ${b.th})`, tourne);
-  /* Elle doit aussi s'approcher d'un vœu : c'est la raison d'être de la
-     visite, et c'est l'étape qu'un ordre mal tiré pourrait sauter. */
   await p.evaluate(() => window.__essai.avancer());
-  await p.waitForFunction(() => window.__essai.visiteEtat().vise, null, { timeout: 60000 });
+  await p.waitForFunction(() => window.__essai.visiteEtat().vise, null, { timeout: 120000 });
   const c = await p.evaluate(() => window.__essai.visiteEtat());
-  check(`elle s’approche d’un vœu (rayon ${c.r})`, c.r < 4);
+  check(`elle s’approche d’un vœu (rayon ${c.r})`, c.r < 6);
   /* Le premier geste sur la scène la stoppe. */
   await p.mouse.move(500, 400); await p.mouse.down(); await p.mouse.up();
   await p.waitForTimeout(300);
   check('le premier geste la stoppe', await p.evaluate(() => window.__essai.visiteOn()), false);
+  /* Et elle revient quand plus rien ne bouge. */
+  await p.evaluate(() => window.__essai.inactif(12));
+  const revenue = await p.waitForFunction(() => window.__essai.visiteOn(), null, { timeout: 120000 })
+    .then(() => true).catch(() => false);
+  check('et elle revient après quelques secondes d’immobilité', revenue);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
@@ -496,56 +498,21 @@ for (const [l, debut] of [['fr', 'Yunma vous souhaite'], ['en', 'Yunma wishes yo
 titre('La musique de Noël se joue toute seule');
 {
   const { ctx, p, bruit } = await ouvrir(13);
-  check('au repos, elle est muette', (await p.evaluate(() => window.__essai.musique())).on, false);
-  await p.evaluate(() => window.__essai.musique(true));
   await p.waitForTimeout(1200);
   const a = await p.evaluate(() => window.__essai.musique());
-  check(`elle joue (air ${a.air}, note ${a.note})`, a.on && a.note > 0);
+  /* Elle ne se choisit plus : on entre dans une veillée de Noël, et la
+     pilule du son suffit à la faire taire. */
+  check(`elle part d’elle-même (air ${a.air}, note ${a.note})`, a.on && a.note > 0);
+  check(`quatre airs se relaient (${a.noms.join(', ')})`, a.airs >= 4);
   check(`et les notes sont programmées en avance (${a.avance} s)`, a.avance > 0 && a.avance < 2.4);
   await p.waitForTimeout(1500);
   const b = await p.evaluate(() => window.__essai.musique());
   check(`l’air avance (${a.note} → ${b.note})`, b.note > a.note);
   await p.evaluate(() => window.__essai.musique(false));
   check('et elle s’arrête quand on le demande', (await p.evaluate(() => window.__essai.musique())).on, false);
+  check('le menu ne porte plus de bouton pour elle',
+    await p.evaluate(() => !document.getElementById('mNoel') && !document.getElementById('mFete') && !document.getElementById('mCine')));
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
-  await ctx.close();
-}
-
-/* ------------------------------------------------------------------ *
- * Les guirlandes
- * ------------------------------------------------------------------ *
- * Deux cents ampoules le long des rameaux, et un voile de couleur sur
- * l'image. Allumées d'office — c'est un arbre de Noël —, franches la nuit
- * et discrètes le jour.
- */
-titre('Les guirlandes s’allument, et s’éteignent');
-{
-  const { ctx, p, bruit } = await ouvrir(22);
-  const a = await p.evaluate(() => window.__essai.fete());
-  /* Elles attendent qu'on les demande : l'arbre est d'abord un arbre, et
-     la fête est un bouton. */
-  check('au repos, elles sont éteintes', a.on, false);
-  check(`deux cents ampoules (${a.points})`, a.points, 200);
-  await p.evaluate(() => window.__essai.fete(true));
-  const monte = await p.waitForFunction(() => window.__essai.fete().amp > 0.9, null, { timeout: 60000 })
-    .then(() => true).catch(() => false);
-  const b = await p.evaluate(() => window.__essai.fete());
-  check(`elles s’allument en fondu (${b.amp})`, monte);
-  check(`la nuit, elles sont franches (${b.opacite})`, b.opacite > 0.7);
-  check(`et le voile de couleur passe sur l’image (${b.voile})`, b.voile > 0.7);
-  await p.evaluate(() => window.__essai.fete(false));
-  const baisse = await p.waitForFunction(() => !window.__essai.fete().visible, null, { timeout: 60000 })
-    .then(() => true).catch(() => false);
-  check('on les éteint, et elles s’effacent', baisse);
-  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
-  await ctx.close();
-}
-{
-  const { ctx, p } = await ouvrir(13);
-  await p.evaluate(() => window.__essai.fete(true));
-  await p.waitForFunction(() => window.__essai.fete().amp > 0.9, null, { timeout: 60000 }).catch(() => {});
-  const j = await p.evaluate(() => window.__essai.fete());
-  check(`de jour, elles restent discrètes (${j.opacite} contre 1 la nuit)`, j.opacite < 0.8);
   await ctx.close();
 }
 
@@ -559,15 +526,15 @@ titre('Les guirlandes s’allument, et s’éteignent');
 titre('Le ciel a ses habitants, chacun à son heure');
 {
   const { ctx, p, bruit } = await ouvrir(13);
-  check('un vol passe quand on l’appelle', await p.evaluate(() => window.__essai.oiseaux()));
+  check('une volute passe quand on l’appelle', await p.evaluate(() => window.__essai.volutes()));
   const o = await p.evaluate(() => window.__essai.ciel2());
-  /* Assez haut pour passer derrière l'île, pas si haut qu'il sorte du
+  /* Assez haut pour passer derrière l'île, pas si haut qu'elle sorte du
      cadre : le ciel qu'on voit à l'écran n'est qu'une bande étroite
      au-dessus de l'horizontale de l'œil. */
-  check(`il passe au-dessus de l’île (${o.y} unités)`, o.y > 5.5 && o.y < 12);
-  /* Et surtout : dans le cadre. Lâchés à un angle tiré au sort et posés
-     trop haut, oiseaux comme étoiles filantes traversaient hors champ —
-     un vol que personne ne voit n'est pas un vol. */
+  check(`elle passe au-dessus de l’île (${o.y} unités)`, o.y > 3 && o.y < 10);
+  /* Et surtout : dans le cadre. Lâchées à un angle tiré au sort et posées
+     trop haut, volutes comme étoiles filantes traversaient hors champ —
+     un courant d'air que personne ne voit n'en est pas un. */
   const n = await p.evaluate(() => window.__essai.ois());
   check(`et dans le cadre, pas au-dessus (hauteur à l’écran ${n.ndc[1]})`, n.ndc[1] < 1);
   await p.evaluate(() => window.__essai.filante());
@@ -671,6 +638,103 @@ titre('Toucher un vœu s’en approche, sans fiche par-dessus');
 }
 
 /* ------------------------------------------------------------------ *
+ * Un vœu écrit à la main, envoyé pour de bon
+ * ------------------------------------------------------------------ *
+ * Tout le reste ne vaut rien si ce chemin-là est coupé. On l'emprunte donc
+ * en entier, comme un visiteur : écrire le vœu, l'accrocher, l'envoyer par
+ * mail et par SMS, télécharger sa carte, et ouvrir le lien reçu dans un
+ * autre navigateur pour vérifier que le mot est bien là, accroché et mis
+ * en avant.
+ *
+ * Le QR code de la carte est relu par un encodeur tiers — la bibliothèque
+ * « qrcode », qui n'a rien à voir avec le nôtre : si les deux matrices
+ * sont identiques, module pour module, c'est que n'importe quel lecteur y
+ * trouvera le lien.
+ */
+titre('Un vœu écrit à la main part vraiment, et arrive');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  const MOT = 'Que ta tasse soit pleine et ton hiver doux';
+  const QUI = 'Antonin';
+  /* On écrit le vœu comme un visiteur : une forme, des mots à soi, un
+     prénom, et on l'accroche. */
+  await p.click('#add');
+  await p.waitForTimeout(400);
+  await p.click('#shapes button:nth-child(3)');
+  await p.click('#stNext');
+  await p.waitForTimeout(200);
+  await p.click('#tabs button:nth-child(4)');
+  await p.fill('#own', MOT);
+  await p.click('#stNext');
+  await p.waitForTimeout(200);
+  await p.fill('#name', QUI);
+  await p.click('#hang');
+  const accroche = await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+    null, { timeout: 60000 }).then(() => true).catch(() => false);
+  check('le vœu s’accroche, et sa fiche s’ouvre', accroche);
+  check('le compte l’annonce', ((await p.locator('#count').textContent()) || '').trim(), '1 vœu accroché');
+  check('et l’arbre n’a pas perdu les autres', (await p.evaluate(() => window.__essai.voeux())) > 25);
+
+  /* Envoyer : le lien, le mail et le SMS. */
+  await p.click('#cShare');
+  await p.waitForFunction(() => document.getElementById('modal').classList.contains('open'), null, { timeout: 30000 });
+  const lien = await p.inputValue('#link');
+  check(`le lien porte le vœu (${lien.length} signes)`, lien.indexOf('#v-') > 0);
+  const mail = decodeURIComponent(await p.getAttribute('#byMail', 'href') || '');
+  const sms = decodeURIComponent(await p.getAttribute('#bySms', 'href') || '');
+  check('le mail s’ouvre sur un brouillon', mail.startsWith('mailto:?subject='));
+  check('il porte le vœu et le lien', mail.includes(MOT) && mail.includes(QUI) && mail.includes(lien));
+  check('le SMS aussi', sms.startsWith('sms:') && sms.includes(MOT) && sms.includes(lien));
+
+  /* La carte, et son QR code, relu par un tiers. */
+  await p.click('#mClose');
+  await p.click('#cCard');
+  const carte = await p.waitForFunction(() => document.getElementById('cmodal').classList.contains('open'),
+    null, { timeout: 60000 }).then(() => true).catch(() => false);
+  check('la carte se dessine', carte);
+  const img = await p.getAttribute('#cimg', 'src');
+  check(`l’image est là (${Math.round((img || '').length / 1024)} Ko)`, (img || '').startsWith('data:image/jpeg') && img.length > 40000);
+  const nous = await p.evaluate((u) => window.__qr(u), lien);
+  /* Même version et même niveau de correction que le nôtre, sinon la
+     bibliothèque en choisit une autre et les matrices ne se comparent
+     plus : notre codeur passe en L au-delà de la version 6, là où elle
+     serait restée plus bas. */
+  const version = (nous.length - 17) / 4;
+  const eux = QRCode.create(lien, { errorCorrectionLevel: version <= 6 ? 'M' : 'L', version });
+  const taille = eux.modules.size, dd = eux.modules.data;
+  let memes = nous.length === taille;
+  if (memes) {
+    for (let y = 0; y < taille && memes; y++) {
+      for (let x = 0; x < taille; x++) {
+        if (nous[y][x] !== (dd[y * taille + x] ? 1 : 0)) { memes = false; break; }
+      }
+    }
+  }
+  check(`le QR code est celui qu’un lecteur attend (version ${version}, ${nous.length} modules)`, memes);
+
+  /* Et le lien, ouvert ailleurs, mène au vœu : accroché, visé, et sa fiche
+     ouverte. */
+  const ctx2 = await nav.newContext({ viewport: { width: 1000, height: 800 }, locale: 'fr-FR' });
+  const p2 = await ctx2.newPage();
+  const bruit2 = [];
+  p2.on('pageerror', (e) => bruit2.push('' + e));
+  await p2.goto(lien.replace('https://yunma.fr/wishes', `http://127.0.0.1:${PORT}/`).replace('https://yunma.fr', `http://127.0.0.1:${PORT}`), { waitUntil: 'load' });
+  await p2.waitForTimeout(1200);
+  await p2.evaluate(() => document.getElementById('enter').click());
+  await p2.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
+  const vu = await p2.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+    null, { timeout: 60000 }).then(() => true).catch(() => false);
+  check('à l’arrivée, le vœu est là et sa carte s’ouvre', vu);
+  check('c’est le bon mot', ((await p2.locator('#cZh').textContent()) || '').trim(), MOT);
+  check('signé du bon prénom', ((await p2.locator('#cBy').textContent()) || '').includes(QUI));
+  check('et la caméra est allée dessus', (await p2.evaluate(() => window.__essai.visiteEtat())).vise);
+  check(`aucune erreur à l’arrivée (${bruit2.length})`, bruit2.length, 0);
+  await ctx2.close();
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
  * Accrocher un vœu ne vide pas l'arbre
  * ------------------------------------------------------------------ *
  * Les vingt-huit vœux tout faits ne servaient que d'arbre d'attente :
@@ -755,7 +819,9 @@ titre('Le menu porte les actions, le haut de l’écran respire');
 
   const m = await p.evaluate(() => window.__essai.menu(true));
   check('le menu s’ouvre', m.ouvert);
-  check(`il porte les actions (${m.entrees})`, m.entrees >= 2 && m.entrees <= 4);
+  /* Il ne reste que la langue et le vent : la visite guidée se lance
+     seule, la musique part seule, et les guirlandes n'existent plus. */
+  check(`il ne porte plus qu’une action (${m.entrees})`, m.entrees, 1);
   check('et il se referme', (await p.evaluate(() => window.__essai.menu(false))).ouvert, false);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();

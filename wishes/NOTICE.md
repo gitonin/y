@@ -44,9 +44,9 @@ Trois choses portent ce paysage :
 
 Sous l'île, il n'y a rien, et c'est voulu. Il y avait un disque d'ombre très
 bas, qui devait la faire flotter : une ombre posée sur rien se lit comme une
-tache. Et la poussière d'or ne descend plus sous le socle — une nuée de points
-dans le vide se lit comme un nuage de moucherons, d'autant que la profondeur
-de champ en fait des pastilles de couleur.
+tache. Et il y avait deux cent soixante grains de poussière d'or montant le
+long de l'arbre : la profondeur de champ en faisait des pastilles de couleur,
+et l'on ne voyait plus que cela. Les deux sont partis.
 
 ## Le cadrage
 
@@ -113,9 +113,6 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   remplit au lieu de se rhabiller d'un coup. Six mille instances sont
   recomposées à la main pendant les neuf secondes de l'animation : 1 ms par
   image, et plus rien ensuite.
-- **La poussière d'or** tourne autour de celui qui regarde plutôt que d'exister
-  partout : deux cent soixante grains dans un cylindre de vingt-deux unités,
-  recollés de l'autre côté dès qu'ils en sortent.
 
 ## L'ouverture
 
@@ -123,12 +120,12 @@ expériences du même site n'ont pas à avoir deux couchants différents.
 « Yunma vous souhaite de joyeuses fêtes », dans la langue du visiteur — est
 accroché à la place la mieux dégagée de l'arbre : la plus éloignée du tronc, à
 mi-hauteur, au bout du fil le plus long. La caméra s'y pose de tout près, avec
-la profondeur de champ qui va avec, puis recule au bout de sept secondes pour
-découvrir l'île.
+la profondeur de champ qui va avec ; sept secondes plus tard, la visite guidée
+prend la main et s'en va de proche en proche.
 
-Trois choses passent avant, et c'est voulu : un vœu reçu par un lien (c'est lui
-qu'on est venu lire), le premier geste du visiteur (il a pris la main, on ne la
-lui reprend pas), et la visite guidée.
+Deux choses passent avant, et c'est voulu : un vœu reçu par un lien — c'est lui
+qu'on est venu lire, et c'est de lui que la visite partira —, et le premier
+geste du visiteur : il a pris la main, on ne la lui reprend pas tout de suite.
 
 Ce vœu-là est toujours le premier de l'arbre, il garde sa place même si l'arbre
 déborde, et il ne compte pas parmi les vœux du public.
@@ -157,19 +154,34 @@ Les trois autres plans rappellent où l'on est :
   une étiquette, puis les feuilles s'envolent — et le ciel s'en mêle.
 
 Le diaphragme s'ouvre pendant la visite : le flou n'y est plus un confort,
-c'est ce qui dit où regarder. Le premier geste du visiteur reprend la main.
+c'est ce qui dit où regarder.
+
+**Elle n'a pas de bouton.** Elle se lance seule au bout de l'ouverture, le
+premier geste du visiteur la lui reprend, et elle revient d'elle-même après dix
+secondes sans un geste, rien d'ouvert par-dessus et aucun doigt sur l'écran.
+C'est une veilleuse, pas un film qu'on lance.
 
 ## Le ciel a des habitants
 
 Une veilleuse qui ne surprend jamais finit par ne plus rien montrer. Le ciel a
-donc deux habitants, chacun à son heure, et ils passent d'eux-mêmes toutes les
-quarante secondes environ — deux fois plus souvent pendant la visite guidée.
+donc deux habitants, et ils passent d'eux-mêmes toutes les vingt ou trente
+secondes — plus souvent pendant la visite guidée.
 
-- **Des oiseaux, le jour.** Sept, en V, deux triangles chacun : quatorze
-  triangles pour un vol. Ils traversent derrière l'île, à trente unités, et
-  entrent et sortent par un fondu — rien n'apparaît d'un coup dans un ciel vide.
-- **Des étoiles filantes, la nuit.** Un trait et non un point : c'est la traîne
-  qui se voit. Elle s'allume, file, et s'éteint en une seconde et demie.
+- **Des volutes d'air.** Trois rubans plats de soixante-quatre segments dont on
+  recalcule la courbe à chaque image : deux ondulations qui ne tombent pas
+  juste, l'une en hauteur, l'autre en profondeur, et une largeur qui s'éteint
+  aux deux bouts. Ils traversent derrière l'île et virevoltent un moment.
+  Un vol d'oiseaux passait ici : joli de près, mais à trente unités ce ne sont
+  plus que des triangles sombres, et l'on ne savait pas ce qu'on voyait. Un
+  courant d'air ne demande pas qu'on le reconnaisse.
+- **Des étoiles filantes, la nuit** — deux fois sur trois, l'autre fois une
+  volute : un trait et non un point, car c'est la traîne qui se voit. Elle
+  s'allume, file, et s'éteint en une seconde et demie.
+
+Les volutes sont **un trait d'encre le jour**, une lueur pâle la nuit. Dorées,
+elles ne se voyaient pas : il n'y a pas trente pour cent d'écart entre un or
+clair et le crème de ce ciel. L'encre, si — et c'est la matière du site, dont
+le logo est fait de traits.
 
 Les deux se placent **par rapport à la caméra** et non par rapport à l'île :
 lâchés à un angle tiré au sort, ils traversaient le plus souvent hors champ. Et
@@ -179,46 +191,34 @@ l'écran n'est qu'une bande de huit degrés au-dessus de l'horizontale, et posé
 
 ## La musique de Noël
 
-Rien n'est téléchargé : l'air est joué note à note par les mêmes oscillateurs
-que le reste de la page. Deux airs tombés dans le domaine public depuis
-longtemps — *Douce nuit* (1818) et *Vive le vent* (1857) —, notés en demi-tons
-au-dessus du do et en croches, et qui alternent avec un silence entre les deux.
+Elle **part d'elle-même** : on entre dans une veillée, et la pilule du son
+suffit à la faire taire. Rien n'est téléchargé ; les airs sont joués note à
+note par les mêmes oscillateurs que le reste de la page.
 
-La voix est une cloche : une fondamentale, trois partiels, une attaque sèche et
-une longue traîne, posée sur un coussin de tonique et de quinte très graves. Le
-gong de fond se tait pendant ce temps — deux sources graves à la fois font une
+**Quatre airs, tous du domaine public**, notés en demi-tons au-dessus du do et
+en croches : *Douce nuit* (1818), *Carol of the Bells* (Leontovitch, 1914, dont
+quatre notes font tout l'air), *We wish you a merry Christmas* (anglais
+traditionnel) et *Vive le vent* (1857). Ils se relaient dans l'ordre, à partir
+d'un air tiré au sort.
+
+**Entre deux airs, une pause.** Un coup de gong, puis deux bols qui tournent :
+on sort de la ritournelle, on respire, et l'air suivant n'arrive pas comme une
+piste qui s'enchaîne. Le bol a des partiels qui ne tombent pas sur
+l'harmonique, une attaque lente et deux voix désaccordées d'un souffle — c'est
+ce battement-là qu'on entend tourner dans un bol. Le gong de fond de la scène,
+lui, se tait pendant toute la musique : deux sources graves à la fois font une
 soupe.
 
-Les notes sont programmées **une seconde à l'avance** : la boucle d'images peut
-sauter, l'horloge du son non, et c'est elle qui tient la mesure. Si l'horloge
-prend de l'avance — le son coupé, un onglet laissé de côté —, on repart de
-l'instant présent, sans quoi toutes les notes du temps perdu sonneraient
-ensemble.
+La voix de la mélodie est une cloche : une fondamentale, trois partiels, une
+attaque sèche et une longue traîne, posée sur un coussin de tonique et de
+quinte très graves.
 
-Elle attend qu'on la demande : un son qui part tout seul chasse plus de monde
-qu'il n'en retient.
-
-## Les guirlandes
-
-Deux cents ampoules le long des rameaux, rouge, vert, or, blanc et rose, qui
-clignotent chacune à son rythme — et toutes ensemble sur la dernière note quand
-la musique joue. Chaque ampoule est dessinée deux fois : un cœur net, et un halo
-large et doux par-dessus. C'est le halo qui fait qu'une lumière se lit comme une
-lumière et non comme un grain de poussière.
-
-Elles sont posées un quart d'unité **sous** leur nœud de branche, là où pendent
-les étiquettes : au nœud même, l'ampoule est enfouie sous les feuilles qui y
-poussent.
-
-Pas de lampes dans la scène : trois lumières de plus et tous les matériaux se
-recompilent, pour un téléphone qui rame. Les ampoules brillent par elles-mêmes,
-et un voile de couleur passe sur l'image finale — mais presque uniquement la
-nuit : le ciel de jour est un crème très clair, et la moindre teinte posée
-dessus repeint tout l'écran en rose.
-
-Ni elles ni la musique ne partent d'elles-mêmes : l'arbre est d'abord un
-arbre, et la fête est un bouton. Chacune se souvient du dernier choix, et
-revient allumée pour qui l'a demandée.
+Les notes sont programmées **une seconde et demie à l'avance**, et par un
+battement de quart de seconde qui ne dépend pas de la boucle d'images : une
+scène lourde saute des images par poignées, et la mélodie hoquetait. Si
+l'horloge prend de l'avance — le son coupé, un onglet laissé de côté —, on
+repart de l'instant présent, sans quoi toutes les notes du temps perdu
+sonneraient ensemble.
 
 ## Toucher un vœu
 
@@ -264,11 +264,12 @@ Trois réglages font que l'on arrive **sur le mot** :
 ## Le menu
 
 Le haut de l'écran portait cinq pilules, et le logo s'écrasait entre elles. Il
-n'en reste que deux — le son, et le menu —, et les actions sont passées dans un
-panneau : la langue, la visite guidée, faire voler les feuilles, la musique de
-Noël et les guirlandes. Le partage est resté en bas, à côté de « Accrocher un
-vœu » : ce sont les deux gestes qui comptent, et ils ne se cachent pas dans un
-menu.
+n'en reste que deux — le son, et le menu —, et le menu lui-même s'est vidé à
+mesure que les choix disparaissaient : la visite guidée se lance seule, la
+musique part seule, les guirlandes n'existent plus. Il ne reste que la langue
+et « faire voler les feuilles ». Le partage est resté en bas, à côté de
+« Accrocher un vœu » : ce sont les deux gestes qui comptent, et ils ne se
+cachent pas dans un menu.
 
 ## Envoyer un vœu
 
@@ -286,9 +287,17 @@ version 9 — jusqu'à deux cent trente signes — en passant du niveau de
 correction M au niveau L au-delà de la version 6 : mieux vaut un code un peu
 moins robuste qui mène au bon mot qu'un code parfait qui mène à l'arbre nu. Les
 versions 7 à 9 en L sont les seules au-delà de 6 dont les blocs sont tous de
-même taille, et c'est ce que ce codeur sait faire. Les codes produits sont
-relus par un décodeur tiers dans la suite d'épreuves : c'est la seule preuve
-qu'ils mènent quelque part.
+même taille, et c'est ce que ce codeur sait faire.
+
+**Tout ce chemin est éprouvé d'un bout à l'autre**, et c'est la seule preuve
+qui vaille : l'épreuve écrit un vœu comme un visiteur — une forme, des mots à
+soi, un prénom —, l'accroche, ouvre l'envoi, vérifie que le brouillon de mail
+et celui de SMS portent le vœu, le prénom et le lien, télécharge la carte, puis
+compare le QR code produit à celui qu'une bibliothèque tierce fabrique pour le
+même lien : module pour module, format et masque compris. Si les deux matrices
+sont identiques, n'importe quel lecteur y trouvera le lien. Elle ouvre enfin ce
+lien dans un autre navigateur et vérifie que le mot est là, au bon nom, la
+caméra dessus et la carte ouverte.
 
 Un lien `…#w-<identifiant>` désigne un vœu de la base partagée. Il est reconnu,
 mais il ne mènera à quelque chose que le jour où cette base existera.

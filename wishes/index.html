@@ -213,10 +213,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 <div id="menu" hidden>
   <div class="mseg"><span data-i="mLang"></span><span class="segs">
     <button data-l="fr">FR</button><button data-l="en">EN</button><button data-l="zh">中</button></span></div>
-  <button class="mitem" id="mCine"><svg viewBox="0 0 24 24"><path id="mCineI" d="M8 5.5l10 6.5-10 6.5z" fill="currentColor" stroke="none"/></svg><span id="mCineT"></span></button>
   <button class="mitem" id="mVent"><svg viewBox="0 0 24 24"><path d="M3 8.5h9.5a2.6 2.6 0 10-2.6-2.6"/><path d="M3 12.5h13a2.6 2.6 0 11-2.6 2.6"/><path d="M3 16.5h6.5"/></svg><span data-i="mVent"></span></button>
-  <button class="mitem" id="mNoel"><svg viewBox="0 0 24 24"><path d="M9 17.5V5.2l10-1.7v12"/><circle cx="6.6" cy="17.6" r="2.4"/><circle cx="16.6" cy="15.8" r="2.4"/></svg><span id="mNoelT"></span></button>
-  <button class="mitem" id="mFete"><svg viewBox="0 0 24 24"><path d="M3 5.5c4 4 14 4 18 0"/><path d="M6.4 7.6l-1 2.6M11.2 9.1l-.5 2.8M16.6 8.4l.6 2.7M20.4 6.6l1.1 2.5M2.6 6.6L1.6 9.1"/><path d="M12 15.5v5M9.5 18h5"/></svg><span id="mFeteT"></span></button>
 </div>
 
 <div id="sheet" aria-hidden="true">
@@ -324,8 +321,7 @@ var PRESETS = [
 var I18N = {
  fr:{title:"L'arbre à souhaits",introText:"En Chine, on confie ses vœux à un arbre : une étiquette rouge, un fil d'or, quelques mots. Pour les fêtes, accrochez le vôtre à ce caféier du Yunnan — puis passez le lien à ceux que vous aimez.",
   voeuYunma:"Yunma vous souhaite de joyeuses fêtes",
-  mLang:"Langue",mVent:"Faire voler les feuilles",mNoelOn:"Musique de Noël",mNoelOff:"Arrêter la musique",mFeteOn:"Allumer les guirlandes",mFeteOff:"Éteindre les guirlandes",mShare:"Partager l'expérience",
-  cineOn:"Visite guidée",cineOff:"Reprendre la main",
+  mLang:"Langue",mVent:"Faire voler les feuilles",mShare:"Partager l'expérience",
   enter:"Entrer",by:"Une expérience signée",add:"Accrocher un vœu",hint:"Glisser pour tourner · pincer pour zoomer · toucher une étiquette",
   sheetTitle:"Votre vœu",s1:"1 · L'étiquette",st1:"Choisissez la forme de votre étiquette",st2:"Choisissez votre vœu",st3:"Signez, puis accrochez",stepOf:"Étape",next:"Continuer",g_own:"Mes propres mots",ownNote:"60 caractères au maximum : un mot court se lit mieux sur l'étiquette.",nameNote:"Votre prénom s'écrit sous le vœu. Vous pouvez laisser ce champ vide.",s2:"2 · Le vœu",g_zh:"Vœux chinois traditionnels",g_w:"Noël et nouvelle année",g_c:"Fêtes et café",s3:"… ou vos propres mots",s4:"Votre prénom (facultatif)",
   ownPh:"Écrivez votre petit mot (60 caractères)",namePh:"Prénom",hang:"Accrocher à l'arbre",shareWish:"Envoyer",back:"Retour",card:"Carte",cardTitle:"Votre carte numérique",
@@ -341,8 +337,7 @@ var I18N = {
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
   voeuYunma:"Yunma wishes you a joyful season",
-  mLang:"Language",mVent:"Make the leaves fly",mNoelOn:"Christmas music",mNoelOff:"Stop the music",mFeteOn:"Switch the lights on",mFeteOff:"Switch the lights off",mShare:"Share the experience",
-  cineOn:"Guided tour",cineOff:"Take back control",
+  mLang:"Language",mVent:"Make the leaves fly",mShare:"Share the experience",
   enter:"Enter",by:"An experience by",add:"Hang a wish",hint:"Drag to orbit · pinch to zoom · tap a tag",
   sheetTitle:"Your wish",s1:"1 · The tag",st1:"Choose the shape of your tag",st2:"Choose your wish",st3:"Sign it, then hang it",stepOf:"Step",next:"Continue",g_own:"My own words",ownNote:"60 characters at most: a short note reads better on the tag.",nameNote:"Your first name is written under the wish. You can leave this empty.",s2:"2 · The wish",g_zh:"Traditional Chinese wishes",g_w:"Christmas and New Year",g_c:"Holidays and coffee",s3:"… or your own words",s4:"Your first name (optional)",
   ownPh:"Write your note (60 characters)",namePh:"First name",hang:"Hang on the tree",shareWish:"Send",back:"Back",card:"Card",cardTitle:"Your digital card",
@@ -358,8 +353,7 @@ var I18N = {
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
   voeuYunma:"云马祝您节日快乐",
-  mLang:"语言",mVent:"让叶子飞起来",mNoelOn:"圣诞音乐",mNoelOff:"停止音乐",mFeteOn:"点亮彩灯",mFeteOff:"熄灭彩灯",mShare:"分享这棵树",
-  cineOn:"自动导览",cineOff:"交还控制",
+  mLang:"语言",mVent:"让叶子飞起来",mShare:"分享这棵树",
   enter:"进入",by:"出品",add:"挂上心愿",hint:"拖动旋转 · 双指缩放 · 轻点红牌",
   sheetTitle:"你的心愿",s1:"1 · 选择红牌",st1:"选择红牌的形状",st2:"选一句祝福",st3:"署名，然后挂上",stepOf:"步骤",next:"继续",g_own:"自己写",ownNote:"最多60字：短短一句，在红牌上更好看。",nameNote:"名字会写在心愿下方，也可以不填。",s2:"2 · 选一句祝福",g_zh:"中国传统祝福",g_w:"圣诞与新年",g_c:"节日与咖啡",s3:"……或写下自己的话",s4:"你的名字（可不填）",
   ownPh:"写下你的心愿（60字以内）",namePh:"名字",hang:"挂到树上",shareWish:"分享",back:"返回",card:"贺卡",cardTitle:"你的数字贺卡",
@@ -1097,9 +1091,11 @@ document.addEventListener("visibilitychange",function(){ if(!AC) return; try{ if
 $("enter").onclick=function(){
   entered=true; startAudio(); $("intro").classList.add("gone"); $("top").classList.remove("hide"); $("bottom").classList.remove("down");
   setTimeout(function(){ $("hint").style.opacity=0; },9000);
-  /* La musique ne peut partir qu'ici : un navigateur ne donne le son
-     qu'après un geste, et « Entrer » est ce geste. */
-  try{ if(localStorage.getItem("yw_noel")==="on") noelPartir(); }catch(e){}
+  /* La musique part d'elle-même, et ne se choisit plus : on entre dans une
+     veillée de Noël, et la pilule du son suffit à la faire taire. Elle ne
+     peut partir qu'ici : un navigateur ne donne le son qu'après un geste,
+     et « Entrer » est ce geste. */
+  noelPartir();
   if(window.__enter) window.__enter();
 };
 
@@ -1538,19 +1534,11 @@ var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0x
    rien du tout. La neige les remplace. */
 var falling=[];
 
-// golden dust + mist
+// brume
 var softTex=canvasTex(64,64,function(g,w){ var gr=g.createRadialGradient(w/2,w/2,0,w/2,w/2,w/2); gr.addColorStop(0,"rgba(255,255,255,1)"); gr.addColorStop(.4,"rgba(255,255,255,.45)"); gr.addColorStop(1,"rgba(255,255,255,0)"); g.fillStyle=gr; g.fillRect(0,0,w,w); });
-// golden dust + mist
-var softTex=canvasTex(64,64,function(g,w){ var gr=g.createRadialGradient(w/2,w/2,0,w/2,w/2,w/2); gr.addColorStop(0,"rgba(255,255,255,1)"); gr.addColorStop(.4,"rgba(255,255,255,.45)"); gr.addColorStop(1,"rgba(255,255,255,0)"); g.fillStyle=gr; g.fillRect(0,0,w,w); });
-var DUST=260, dustPos=new Float32Array(DUST*3), dustSeed=[];
-/* Elle monte le long de l'arbre, et ne descend pas plus bas que l'île :
-   sous elle, il n'y a que le vide, et une nuée de points qui flotte dans
-   ce vide se lit comme un nuage de moucherons — d'autant que la
-   profondeur de champ en fait des pastilles de couleur. */
-(function(){ for(var i=0;i<DUST;i++){ var a=R()*6.283, r=.6+R()*6.2; dustPos[i*3]=Math.cos(a)*r; dustPos[i*3+1]=-.1+R()*7.3; dustPos[i*3+2]=Math.sin(a)*r; dustSeed.push(R()*6.283,.05+R()*.12); } })();
-var dustGeo=new THREE.BufferGeometry(); dustGeo.setAttribute("position",new THREE.BufferAttribute(dustPos,3));
-var dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({map:softTex,color:C(0xe0b65a),size:.085,sizeAttenuation:true,transparent:true,opacity:.75,depthWrite:false}));
-dust.frustumCulled=false; scene.add(dust);
+/* La poussière d'or a été retirée. Deux cent soixante points dorés
+   montaient le long de l'arbre ; la profondeur de champ en faisait des
+   pastilles de couleur, et l'on ne voyait plus que cela. */
 var mists=[];
 (function(){ for(var i=0;i<11;i++){ var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:softTex,color:0xfffdf6,transparent:true,opacity:.3+R()*.2,depthWrite:false}));
   var a=R()*6.283, r=1+R()*3.2; sp.position.set(Math.cos(a)*r,-1.5-R()*.7,Math.sin(a)*r); var s=3.6+R()*3.4; sp.scale.set(s,s*.5,1);
@@ -1591,10 +1579,6 @@ function nuitMaj(t){
   for(var i=0;i<matsVoeu.length;i++) matsVoeu[i].emissiveIntensity=.62*n;
   silkMat.emissiveIntensity=.5*n;
   goldMat.emissive.copy(orJour).lerp(orNuit,n);
-  /* Blanche de jour, dorée la nuit : la même neige, et deux saisons de
-     lumière dans la même journée. */
-  dust.material.opacity=.75*j+.95*n;
-  dust.material.color.setRGB(.878+.08*n,.714+.04*n,.353-.06*n).convertSRGBToLinear();
   /* La brume blanche du jour deviendrait un drap gris la nuit : elle prend
      la couleur du bas du ciel, et s'efface de moitié. */
   var c=SUN.ciel, k;
@@ -1695,14 +1679,18 @@ if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ r
    bas de l'écran. On encadre donc une hauteur connue, du bout des racines
    au sommet de l'arbre, puis on vise plus bas que son milieu : la bande
    basse n'est pas de l'écran utile, et ce qu'on y pose est caché. */
-var CBAS=-3.7, CHAUT=treeTop+.55;
+/* Ce qu'on encadre, en bas, c'est le socle de l'île — et non le bout des
+   racines, qui pendent d'une unité de plus. Les laisser passer derrière le
+   bouton d'appel ne coûte rien, et cela permet de descendre l'arbre dans
+   l'image : il y a plus de ciel au-dessus, et plus de montagnes derrière. */
+var CBAS=-2.7, CHAUT=treeTop+.55;
 /* L'œil est à l'horizontale, ou presque. Il surplombait l'île de treize
    degrés : on voyait l'arbre d'en haut, les montagnes s'écrasaient dans le
    bas de l'image, et l'horizon disparaissait. À hauteur d'homme, les
    crêtes repassent derrière l'arbre, où elles doivent être.
    Et l'on vise un peu haut, ce qui fait descendre l'île dans l'image :
    le ciel au-dessus d'elle lui donne sa place. */
-var PH_HOME=1.50, DEC_HOME=.055;
+var PH_HOME=1.50, DEC_HOME=.105;
 var homeY=(CHAUT+CBAS)/2, homeR=14, idle=0, focused=false;
 var cam={th:.6,ph:PH_HOME,r:20,tg:new THREE.Vector3(0,homeY,0)}, goal={th:.6,ph:PH_HOME,r:20,tg:new THREE.Vector3(0,homeY,0)};
 function bandeBas(){ var e=document.getElementById("bottom");
@@ -1713,7 +1701,7 @@ function fitHome(){ var a=camera.aspect, tn=Math.tan(camera.fov*Math.PI/360);
   /* Un peu de marge : le calcul de plein cadre ne tient pas compte de
      l'inclinaison du regard ni du léger décalage vers le haut de la
      visée. */
-  homeR=clamp(Math.max(hh/tn,((treeRad+1.6)/(tn*a))*.92)*1.03,9,34);
+  homeR=clamp(Math.max(hh/tn,((treeRad+1.6)/(tn*a))*.92)*1.12,9,34);
   homeY=(CHAUT+CBAS)/2-hh*f+hh*DEC_HOME; }                    /* on vise sous le milieu */
 window.__home=function(){ focused=false; vise=null; goal.r=homeR; goal.tg.set(0,homeY,0); goal.ph=PH_HOME; barreVoeu(); };
 /* S'approcher d'un vœu. La fiche ne s'ouvre que lorsqu'elle a quelque chose
@@ -1790,10 +1778,11 @@ function focusTag(t,fiche,garder){ focused=true; derniereCible=Object.keys(tags)
 
 /* L'ouverture : on n'arrive pas sur l'arbre entier, on arrive sur un mot.
    La caméra se pose sur le vœu de Yunma, d'un peu plus loin pour qu'elle
-   ait le temps d'avancer, et recule au bout de sept secondes pour
-   découvrir l'île. Un vœu reçu par un lien passe avant : c'est lui qu'on
-   est venu lire. Et le premier geste du visiteur annule le recul — il a
-   pris la main, on ne la lui reprend pas. */
+   ait le temps d'avancer ; sept secondes plus tard, la visite guidée prend
+   la main et s'en va de proche en proche. Un vœu reçu par un lien passe
+   avant : c'est lui qu'on est venu lire, et c'est de lui que la visite
+   partira. Le premier geste du visiteur annule le relais — il a pris la
+   main, on ne la lui reprend pas tout de suite. */
 var ouvre=0, ouvreFait=false;
 function ouverture(){
   if(ouvreFait||!entered||recu||!tags.yunma) return;
@@ -1946,6 +1935,22 @@ var AIRS=[
     [9,4],[9,2],[12,3],[11,1],[9,2], [7,3],[9,1],[7,2],[4,6],
     [14,4],[14,2],[17,3],[14,1],[11,2], [12,6],[16,6],
     [12,2],[7,2],[4,2],[7,3],[5,1],[2,2], [0,6],[-99,6] ] },
+  { nom:"cloches", croche:.17, notes:[
+    /* « Carol of the Bells » — Leontovitch, 1914 : quatre notes qui
+       tournent, et c'est tout l'air. */
+    [11,2],[9,1],[11,1],[8,2], [11,2],[9,1],[11,1],[8,2],
+    [11,2],[9,1],[11,1],[8,2], [11,2],[9,1],[11,1],[8,2],
+    [16,2],[16,1],[14,1],[16,2], [11,2],[11,1],[9,1],[11,2],
+    [11,2],[9,1],[11,1],[8,2], [11,2],[9,1],[11,1],[8,2],
+    [4,2],[4,1],[2,1],[4,2], [9,2],[9,1],[8,1],[9,2],
+    [11,2],[9,1],[11,1],[8,2], [11,2],[9,1],[11,1],[8,2],
+    [9,6],[-99,4] ] },
+  { nom:"voeux", croche:.26, notes:[
+    /* « We wish you a merry Christmas » — anglais traditionnel, en fa. */
+    [12,2], [5,2],[5,1],[7,1],[5,1],[4,1], [2,2],[2,2],[2,2],
+    [2,2], [7,2],[7,1],[9,1],[7,1],[5,1], [4,2],[0,2],[0,2],
+    [0,2], [9,2],[9,1],[10,1],[9,1],[7,1], [5,2],[2,2],[0,2],
+    [0,2], [2,2],[7,2],[4,2], [5,6],[-99,5] ] },
   { nom:"vent", croche:.185, notes:[
     [4,2],[4,2],[4,4], [4,2],[4,2],[4,4], [4,2],[7,2],[0,3],[2,1],[4,8],
     [5,2],[5,2],[5,3],[5,1], [5,2],[4,2],[4,2],[4,1],[4,1],
@@ -1976,20 +1981,43 @@ function coussin(t,dur){ if(!AC||!bus) return;
     g.gain.setValueAtTime(.055-k*.018,t+dur-.8); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
     o.connect(g); g.connect(bus); o.start(t); o.stop(t+dur+.1); });
 }
+/* La pause entre deux airs. Un coup de gong, puis deux bols qui tournent :
+   on sort de la ritournelle, on respire, et l'air suivant n'arrive pas
+   comme une piste qui s'enchaîne. Le gong de fond, lui, se tait pendant
+   toute la musique — deux sources graves à la fois font une soupe. */
+function gongZen(t,v){ if(!AC||!bus) return;
+  var f=73.42;
+  [[1,.5,13],[2,.26,10],[2.76,.13,7],[3.42,.06,5],[4.3,.03,3.5]].forEach(function(pt){
+    [0,.45].forEach(function(b){
+      var o=AC.createOscillator(), g=AC.createGain(); o.type="sine"; o.frequency.value=f*pt[0]+b;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(pt[1]*v,t+.05);
+      g.gain.exponentialRampToValueAtTime(.0001,t+pt[2]);
+      o.connect(g); g.connect(bus); o.start(t); o.stop(t+pt[2]+.1); }); });
+}
+/* Un bol : des partiels qui ne tombent pas sur l'harmonique, une attaque
+   lente, et deux voix désaccordées d'un souffle — c'est ce battement-là
+   qu'on entend tourner dans un bol. */
+function bolZen(t,f,v){ if(!AC||!bus) return;
+  [[1,1,9],[2.74,.4,7],[5.42,.16,5],[8.1,.06,3.5]].forEach(function(pt){
+    [0,.6].forEach(function(b,k){
+      var o=AC.createOscillator(), g=AC.createGain(); o.type="sine"; o.frequency.value=f*pt[0]+b;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(pt[1]*v*(k?.7:1),t+.09);
+      g.gain.exponentialRampToValueAtTime(.0001,t+pt[2]);
+      o.connect(g); g.connect(bus); o.start(t); o.stop(t+pt[2]+.1); }); });
+}
+function pauseZen(t){ gongZen(t,.55); bolZen(t+2.6,174.6,.2); bolZen(t+5.6,261.6,.14); return 9.4; }
 function noelBasculer(){ NOEL.on?noelArreter():noelPartir(); }
 function noelPartir(){
   if(!AC) startAudio();
-  NOEL.on=true; NOEL.i=0; NOEL.quand=0; NOEL.air=FETE.on?1:Math.floor(R()*AIRS.length);
+  NOEL.on=true; NOEL.i=0; NOEL.quand=0; NOEL.air=Math.floor(R()*AIRS.length);
   /* La mesure ne peut pas dépendre de la boucle d'images. Une scène lourde
      saute des images par poignées, et la mélodie hoquetait ; un battement
      de quart de seconde, lui, continue de programmer les notes quoi qu'il
      arrive à l'affichage. Onglet caché, le son est suspendu de toute
      façon : rien ne s'accumule. */
   if(!NOEL.tic) NOEL.tic=setInterval(noelMaj,220);
-  try{ localStorage.setItem("yw_noel","on"); }catch(e){}
-  menuMaj();
 }
-function noelArreter(){ NOEL.on=false; if(NOEL.tic){ clearInterval(NOEL.tic); NOEL.tic=0; } try{ localStorage.setItem("yw_noel","off"); }catch(e){} menuMaj(); }
+function noelArreter(){ NOEL.on=false; if(NOEL.tic){ clearInterval(NOEL.tic); NOEL.tic=0; } }
 function noelMaj(){
   if(!NOEL.on||!AC||muted||AC.state!=="running") return;
   var t=AC.currentTime;
@@ -2005,7 +2033,7 @@ function noelMaj(){
       /* L'air est fini : un silence, puis l'autre air. On ne répète pas
          deux fois le même — une veilleuse qui boucle se remarque. */
       NOEL.i=0; NOEL.air=(NOEL.air+1)%AIRS.length;
-      NOEL.quand+=FETE.on?2.2:5.2; continue;
+      NOEL.quand+=pauseZen(NOEL.quand); continue;
     }
     var d=n[1]*air.croche;
     if(n[0]>-90){
@@ -2018,78 +2046,10 @@ function noelMaj(){
   }
 }
 
-/* ------------------------------------------------------------------ les guirlandes de fête
-   Des points de couleur le long des rameaux, qui s'allument et s'éteignent
-   chacun à son rythme — rouge, vert, or, blanc. C'est la version sobre de
-   la guirlande électrique : pas de lampes dans la scène (trois lumières de
-   plus, et tous les matériaux se recompilent, pour un téléphone qui
-   rame), mais des points qui brillent par eux-mêmes et un voile de couleur
-   passé sur l'image finale.
-
-   De nuit, c'est un sapin de Noël ; de jour, cela se voit à peine, et
-   c'est très bien ainsi : on ne met pas de guirlande en plein soleil. */
-var FETE={on:false,amp:0};
-var guir=(function(){
-  var n=Math.min(200,nodes.length), pos=new Float32Array(n*3), col=new Float32Array(n*3), ph=new Float32Array(n*2), i;
-  var pas=Math.max(1,Math.floor(nodes.length/n));
-  var COUL=[[1,.26,.2],[.32,.85,.4],[1,.82,.35],[1,1,.95],[1,.45,.75]];
-  for(i=0;i<n;i++){ var a=nodes[(i*pas)%nodes.length];
-    /* Un peu plus bas que le nœud, et un peu plus loin du tronc : au nœud
-       même, l'ampoule est enfouie sous les feuilles qui y poussent. C'est
-       là que pendent les étiquettes, et c'est là qu'il y a de l'air. */
-    var rr=Math.hypot(a.p[0],a.p[2])||1;
-    pos[i*3]=a.p[0]*(1+.12/rr); pos[i*3+1]=a.p[1]-.26; pos[i*3+2]=a.p[2]*(1+.12/rr);
-    var c=COUL[i%COUL.length]; col[i*3]=c[0]; col[i*3+1]=c[1]; col[i*3+2]=c[2];
-    ph[i*2]=R()*6.283; ph[i*2+1]=.7+R()*1.9; }
-  var g=new THREE.BufferGeometry();
-  g.setAttribute("position",new THREE.BufferAttribute(pos,3));
-  g.setAttribute("color",new THREE.BufferAttribute(col.slice(),3));
-  var tex=canvasTex(32,32,function(x,w,h){ var r=x.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2);
-    r.addColorStop(0,"rgba(255,255,255,1)"); r.addColorStop(.35,"rgba(255,255,255,.75)"); r.addColorStop(1,"rgba(255,255,255,0)");
-    x.fillStyle=r; x.fillRect(0,0,w,h); });
-  /* Deux passes pour une ampoule : un cœur net, et un halo large et doux
-     par-dessus. C'est le halo qui fait qu'une lumière se lit comme une
-     lumière et non comme un grain de poussière. Les deux partagent la même
-     géométrie — une seule liste de couleurs à tenir à jour. */
-  var faire=function(taille,op){ var m=new THREE.Points(g,new THREE.PointsMaterial({size:taille,map:tex,
-      transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true,
-      opacity:op,fog:false,sizeAttenuation:true}));
-    m.visible=false; world.add(m); return m; };
-  return {pts:faire(.22,0),halo:faire(.78,0),base:col,ph:ph,n:n};
-})();
-function feteBasculer(){ FETE.on=!FETE.on;
-  guir.pts.visible=guir.halo.visible=true;
-  try{ localStorage.setItem("yw_fete",FETE.on?"on":"off"); }catch(e){}
-  menuMaj();
-}
-function feteMaj(t,dt){
-  var cible=FETE.on?1:0;
-  FETE.amp+=(cible-FETE.amp)*Math.min(1,dt*2.2);
-  if(FETE.amp<.004){ if(guir.pts.visible){ guir.pts.visible=guir.halo.visible=false; } }
-  else {
-    guir.pts.visible=guir.halo.visible=true;
-    /* Plus franc la nuit, discret le jour : on ne met pas de guirlande en
-       plein soleil. */
-    guir.pts.material.opacity=FETE.amp*(.7+.3*SUN.nuit);
-    guir.pts.material.size=.2+.08*SUN.nuit;
-    guir.halo.material.opacity=FETE.amp*(.12+.26*SUN.nuit);
-    guir.halo.material.size=.7+.4*SUN.nuit;
-    var c=guir.pts.geometry.attributes.color, a=c.array, b=guir.base, i;
-    /* Chacun clignote à son rythme ; sur la musique, tous respirent
-       ensemble à la dernière note jouée. */
-    var pouls=NOEL.on&&AC?Math.max(0,1-(AC.currentTime-NOEL.battement)*1.7):0;
-    for(i=0;i<guir.n;i++){
-      var k=.34+.66*(.5+.5*Math.sin(t*guir.ph[i*2+1]+guir.ph[i*2]));
-      k=k*k*(1+.9*pouls);
-      a[i*3]=b[i*3]*k; a[i*3+1]=b[i*3+1]*k; a[i*3+2]=b[i*3+2]*k; }
-    c.needsUpdate=true;
-  }
-  /* Le voile de couleur est presque entièrement affaire de nuit : le ciel
-     de jour est un crème très clair, et la moindre teinte posée dessus
-     repeint tout l'écran en rose. De jour on n'en garde qu'un soupçon. */
-  if(postMat) postMat.uniforms.uFete.value=FETE.amp*(.1+.9*SUN.nuit);
-}
-
+/* Les guirlandes de fête ont été retirées. Deux cents ampoules le long des
+   rameaux, un voile de couleur sur l'image : joli la nuit, bavard le jour,
+   et une option de plus dans un menu qui doit rester court. L'arbre est un
+   arbre ; ce qui brille la nuit, ce sont les vœux. */
 /* ------------------------------------------------------------------ les surprises
    Une veilleuse qui ne surprend jamais finit par ne plus rien montrer. Le
    ciel a donc deux habitants, chacun à son heure : des oiseaux le jour,
@@ -2100,59 +2060,85 @@ function feteMaj(t,dt){
    Ils vont et viennent d'eux-mêmes, mais rarement ; la visite guidée, elle,
    les appelle. */
 
-/* Un vol en V : sept oiseaux, deux triangles chacun, et des ailes qui
-   battent par une simple rotation. Quatorze triangles pour un vol — on
-   peut se le permettre à chaque passage. */
-var OIS=(function(){
+/* Des volutes d'air. Un vol d'oiseaux passait ici : joli de près, mais à
+   trente unités ce ne sont plus que des triangles sombres, et l'on ne
+   savait pas ce qu'on voyait. Un courant d'air ne demande pas qu'on le
+   reconnaisse — il passe, il ondule, il s'en va.
+
+   Trois rubans, chacun un ruban plat de soixante-quatre segments dont on
+   recalcule la courbe à chaque image : deux ondulations qui ne tombent pas
+   juste, l'une en hauteur, l'autre en profondeur, et une largeur qui
+   s'éteint aux deux bouts. Ils traversent le fond de l'image, derrière
+   l'île, et reviennent de loin en loin.
+
+   Ils ne sont pas additifs : sur un ciel crème à peine moins blanc qu'eux,
+   l'addition ne se voit pas. Ils sont dorés le jour — un souffle de
+   lumière —, bleu pâle la nuit. */
+var RUB=(function(){
+  var N=64;
+  var tex=canvasTex(256,16,function(g,w,h){
+    var gr=g.createLinearGradient(0,0,w,0);
+    gr.addColorStop(0,"rgba(255,255,255,0)"); gr.addColorStop(.18,"rgba(255,255,255,.55)");
+    gr.addColorStop(.5,"rgba(255,255,255,1)"); gr.addColorStop(.82,"rgba(255,255,255,.55)");
+    gr.addColorStop(1,"rgba(255,255,255,0)");
+    g.fillStyle=gr; g.fillRect(0,0,w,h);
+    /* Un creux au milieu dans la hauteur : le ruban se lit comme deux
+       filets jumeaux plutôt que comme une barre. */
+    var v=g.createLinearGradient(0,0,0,h);
+    v.addColorStop(0,"rgba(255,255,255,0)"); v.addColorStop(.3,"rgba(255,255,255,1)");
+    v.addColorStop(.5,"rgba(255,255,255,.45)"); v.addColorStop(.7,"rgba(255,255,255,1)");
+    v.addColorStop(1,"rgba(255,255,255,0)");
+    g.globalCompositeOperation="destination-in"; g.fillStyle=v; g.fillRect(0,0,w,h);
+  });
   var grp=new THREE.Group(); grp.visible=false; scene.add(grp);
-  var mat=new THREE.MeshBasicMaterial({color:C(0x3c4248),side:THREE.DoubleSide,fog:false,transparent:true,opacity:.85});
-  var aile=new THREE.BufferGeometry();
-  aile.setAttribute("position",new THREE.BufferAttribute(new Float32Array([0,0,0, 1,.12,-.35, 1,-.02,.3]),3));
-  aile.computeVertexNormals();
-  var ois=[], i;
-  for(i=0;i<7;i++){
-    var o=new THREE.Group();
-    var g=new THREE.Mesh(aile,mat), d=new THREE.Mesh(aile,mat);
-    d.scale.z=-1; o.add(g); o.add(d);
-    /* Le V : un meneur, puis les autres en arrière et sur les côtés. */
-    var r=Math.ceil(i/2), cote=(i%2)?1:-1;
-    o.userData={dx:-r*1.5,dz:cote*r*1.25,ph:R()*6.283,sp:5.4+R()*1.6,ech:.85+R()*.3};
-    o.scale.setScalar(o.userData.ech);
-    grp.add(o); ois.push(o);
+  var mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,fog:false,
+    side:THREE.DoubleSide,opacity:0});
+  var rub=[], i, k;
+  for(k=0;k<3;k++){
+    var g2=new THREE.PlaneGeometry(1,1,N,1);
+    var m=new THREE.Mesh(g2,mat);
+    m.frustumCulled=false;
+    m.userData={ph:R()*6.283,L:18+R()*12,A:.9+R()*1.1,B:1.4+R()*1.4,W:.22+R()*.16,
+      v1:1.1+R()*.9,v2:.7+R()*.6,dy:(k-1)*1.9+(R()-.5)*.8,sp:.5+R()*.5};
+    grp.add(m); rub.push(m);
   }
-  return {grp:grp,ois:ois,t:-99,duree:11,a:0,b:0,h:0};
+  return {grp:grp,rub:rub,mat:mat,N:N,t:-99,duree:13,a:0,b:0,h:0};
 })();
-function oiseauxPasser(){
-  if(clock-OIS.t<OIS.duree) return;
-  /* Ils passent derrière l'île, en travers de ce qu'on regarde. Lâchés à
-     un angle tiré au sort, ils traversaient le plus souvent hors champ —
-     un vol que personne ne voit n'est pas un vol. On part donc de l'azimut
-     opposé à la caméra, qui est le fond de l'image, et l'on balaie d'un
-     bord à l'autre. */
-  var sens=R()<.5?-1:1, base=cam.th+Math.PI+(R()-.5)*.5;
-  OIS.t=clock; OIS.a=base-sens*1.15; OIS.b=base+sens*1.15; OIS.h=6.5+R()*4;
-  OIS.grp.visible=true;
+function volutePasser(){
+  if(clock-RUB.t<RUB.duree) return;
+  /* Comme les oiseaux avant elles : derrière l'île, en travers de ce qu'on
+     regarde, et non à un azimut tiré au sort qui tombe hors champ. */
+  var sens=R()<.5?-1:1, base=cam.th+Math.PI+(R()-.5)*.4;
+  RUB.t=clock; RUB.a=base-sens*.8; RUB.b=base+sens*.8; RUB.h=4+R()*5;
+  RUB.grp.visible=true;
 }
-function oiseauxMaj(t){
-  if(!OIS.grp.visible) return;
-  var u=(t-OIS.t)/OIS.duree;
-  if(u>1||u<0){ OIS.grp.visible=false; return; }
-  /* On traverse en arc de cercle autour de l'île, assez loin pour passer
-     derrière elle et devant les montagnes. */
-  /* Même convention d'azimut que la caméra — x en sinus, z en cosinus —,
-     sans quoi « derrière l'île » tombe à angle droit du regard. */
-  var D=30, a=OIS.a+(OIS.b-OIS.a)*u;
-  var x=Math.sin(a)*D, z=Math.cos(a)*D, y=OIS.h+Math.sin(u*3.1)*1.6;
-  OIS.grp.position.set(x,y,z);
-  OIS.grp.rotation.y=a+(OIS.b<OIS.a?Math.PI:0);
-  /* Ils arrivent et s'en vont par un fondu : rien n'apparaît d'un coup
-     dans un ciel vide. */
-  var f=Math.min(1,Math.min(u,1-u)*6);
-  for(var i=0;i<OIS.ois.length;i++){ var o=OIS.ois[i], d=o.userData;
-    o.position.set(d.dx,Math.sin(t*1.1+d.ph)*.25,d.dz);
-    o.scale.setScalar(d.ech*f);
-    var bat=Math.sin(t*d.sp+d.ph);
-    o.children[0].rotation.x=bat*.85; o.children[1].rotation.x=-bat*.85; }
+function voluteMaj(t){
+  if(!RUB.grp.visible) return;
+  var u=(t-RUB.t)/RUB.duree;
+  if(u>1||u<0){ RUB.grp.visible=false; RUB.mat.opacity=0; return; }
+  var D=30, a=RUB.a+(RUB.b-RUB.a)*u;
+  RUB.grp.position.set(Math.sin(a)*D,RUB.h,Math.cos(a)*D);
+  RUB.grp.rotation.y=a+(RUB.b<RUB.a?Math.PI:0)+Math.PI/2;
+  /* Un trait d'encre le jour, une lueur pâle la nuit. Doré sur le crème du
+     ciel, le ruban ne se voyait pas : il n'y a pas trente pour cent
+     d'écart entre un or clair et ce fond-là. L'encre, si — et c'est la
+     matière du site, dont le logo est fait de traits. */
+  var n=SUN.nuit;
+  RUB.mat.color.setRGB(.14+.64*n,.15+.71*n,.14+.86*n).convertSRGBToLinear();
+  RUB.mat.opacity=Math.min(1,Math.min(u,1-u)*5)*(.3+.3*n);
+  for(var k=0;k<RUB.rub.length;k++){
+    var m=RUB.rub[k], d=m.userData, pos=m.geometry.attributes.position, A=pos.array;
+    for(var i=0;i<=RUB.N;i++){
+      var q=i/RUB.N, x=(q-.5)*d.L;
+      var y=d.dy+d.A*Math.sin(q*9.4+d.ph+t*d.v1*d.sp);
+      var z=d.B*Math.sin(q*5.1+d.ph*1.7+t*d.v2*d.sp);
+      var w=Math.sin(Math.PI*q)*d.W*(.75+.45*Math.sin(q*7.3+t*1.4+d.ph));
+      var o=i*3, o2=(i+RUB.N+1)*3;
+      A[o]=x; A[o+1]=y+w; A[o+2]=z;
+      A[o2]=x; A[o2+1]=y-w; A[o2+2]=z;
+    }
+    pos.needsUpdate=true;
+  }
 }
 
 /* Une étoile filante : un trait qui s'allume, file, et s'éteint. Un trait
@@ -2208,12 +2194,14 @@ function filanteMaj(t){
 }
 /* Le ciel vit de lui-même, mais sans insister : un passage toutes les
    quarante secondes environ, et jamais les deux à la fois. */
-var cielProchain=24+R()*30;
+var cielProchain=16+R()*18;
 function surprisesMaj(t,dt){
-  oiseauxMaj(t); filanteMaj(t);
+  voluteMaj(t); filanteMaj(t);
   if(t<cielProchain) return;
-  cielProchain=t+(CINE.on?14+R()*12:34+R()*30);
-  if(SUN.nuit>.5) filantePasser(); else oiseauxPasser();
+  cielProchain=t+(CINE.on?16+R()*12:26+R()*20);
+  /* La nuit appartient d'abord aux étoiles filantes, mais pas tout à fait :
+     une volute de temps en temps rappelle qu'il y a de l'air là-haut. */
+  if(SUN.nuit>.5&&R()<.65) filantePasser(); else volutePasser();
 }
 
 /* ------------------------------------------------------------------ la visite guidée
@@ -2225,7 +2213,6 @@ function surprisesMaj(t,dt){
    Le premier geste du visiteur reprend la main : on ne lutte jamais contre
    quelqu'un qui veut tourner l'arbre lui-même. */
 var CINE={on:false,prochain:0,etape:0,ronde:true,vit:.115,deriv:0,zoom:0};
-function cineBasculer(){ CINE.on?cineStop():cineStart(); }
 function cineStart(){
   if(CINE.on||!entered) return;
   /* L'étape part de moins un : la première qu'on exécute est donc la ronde
@@ -2233,13 +2220,11 @@ function cineStart(){
      à une étiquette dès la première image et ne tournait jamais. */
   CINE.on=true; CINE.etape=-1; CINE.prochain=0; CINE.ronde=true; CINE.vit=.115;
   ouvre=0; barreVoeu();
-  if($("mCine")) menuMaj();
   closeCard(true); window.__home();
 }
 function cineStop(muet){
   if(!CINE.on) return;
   CINE.on=false; barreVoeu();
-  if($("mCine")) menuMaj();
   if(!muet) closeCard(true);
 }
 /* Les plans. Chacun pose la caméra, dit à quelle vitesse l'arbre tourne, et
@@ -2265,7 +2250,7 @@ function cineContre(){ closeCard(true); window.__home(); CINE.ronde=true;
    filante la nuit. */
 function cineVent(){ closeCard(true); window.__home(); CINE.ronde=true;
   goal.ph=PH_HOME-.12; goal.r=homeR*1.1; CINE.vit=.07;
-  secouer(); if(SUN.nuit>.5) filantePasser(); else oiseauxPasser();
+  secouer(); if(SUN.nuit>.5) filantePasser(); else volutePasser();
   return SECOUSSE.duree+.8; }
 /* Un vœu. Le premier de la visite est celui de Yunma — c'est la maison qui
    accueille —, puis on va de proche en proche : le suivant est tiré parmi
@@ -2275,7 +2260,10 @@ function cineVent(){ closeCard(true); window.__home(); CINE.ronde=true;
 function cineVoeu(){
   var ids=Object.keys(tags); if(!ids.length) return 0;
   var t=null;
-  if(CINE.etape<2&&tags.yunma) t=tags.yunma;
+  /* Rien en vue encore : on commence par le vœu de Yunma. Sinon on part de
+     celui qu'on regarde — un vœu reçu par un lien, ou celui où le visiteur
+     a laissé la caméra. */
+  if(!vise&&tags.yunma) t=tags.yunma;
   else if(vise){
     var p=vise.slot.pos, pres=[];
     ids.forEach(function(id){ var g=tags[id]; if(g===vise) return;
@@ -2317,13 +2305,6 @@ function cineMaj(dt){
    le logo et noyaient les deux gestes qui comptent. */
 var menuOuvert=false;
 function menuMaj(){
-  $("mCineT").textContent=T(CINE.on?"cineOff":"cineOn");
-  $("mCineI").setAttribute("d",CINE.on?"M8.5 6h2.6v12H8.5zM12.9 6h2.6v12h-2.6z":"M8 5.5l10 6.5-10 6.5z");
-  $("mCine").classList.toggle("on",CINE.on);
-  $("mNoelT").textContent=T(NOEL.on?"mNoelOff":"mNoelOn");
-  $("mNoel").classList.toggle("on",NOEL.on);
-  $("mFeteT").textContent=T(FETE.on?"mFeteOff":"mFeteOn");
-  $("mFete").classList.toggle("on",FETE.on);
   Array.prototype.forEach.call(document.querySelectorAll("#menu .segs button"),function(b){
     b.classList.toggle("on",b.getAttribute("data-l")===lang); });
 }
@@ -2342,14 +2323,7 @@ addEventListener("pointerdown",function(e){
 },true);
 Array.prototype.forEach.call(document.querySelectorAll("#menu .segs button"),function(b){
   b.onclick=function(){ setLang(b.getAttribute("data-l")); menuMaj(); }; });
-$("mCine").onclick=function(){ cineBasculer(); menuMaj(); };
 $("mVent").onclick=function(){ menuOuvrir(false); secouer(); };
-$("mNoel").onclick=function(){ if(!AC) startAudio(); noelBasculer(); };
-$("mFete").onclick=function(){ feteBasculer(); };
-/* Ni les guirlandes ni la musique ne partent d'elles-mêmes : l'arbre est
-   d'abord un arbre, et la fête est un bouton. Chacune se souvient du
-   dernier choix, et revient allumée pour qui l'a demandée. */
-try{ FETE.on=localStorage.getItem("yw_fete")==="on"; }catch(e){ FETE.on=false; }
 menuMaj();
 
 /* Le gyroscope et le souffle ont tous deux été retirés. Incliner le
@@ -2366,28 +2340,29 @@ window.__essai={
   ciel:function(){ return {h:CIEL.heure(),nuit:SUN.nuit,jour:SUN.jour,theme:theme,bas:SUN.ciel.bas.slice()}; },
   voeux:function(){ return Object.keys(tags).length; },
   fentes:function(){ return slots.length; },
-  /* La fête : les guirlandes, et le voile de couleur sur l'image. */
-  fete:function(v){ if(v!==undefined&&v!==FETE.on) feteBasculer();
-    return {on:FETE.on,amp:+FETE.amp.toFixed(2),points:guir.n,visible:guir.pts.visible,
-      opacite:+guir.pts.material.opacity.toFixed(2),voile:postMat?+postMat.uniforms.uFete.value.toFixed(2):-1}; },
   /* La musique : l'air en cours, et la note programmée la plus lointaine. */
   musique:function(v){ if(v!==undefined&&v!==NOEL.on) noelBasculer();
-    return {on:NOEL.on,air:NOEL.air,note:NOEL.i,avance:AC?+(NOEL.quand-AC.currentTime).toFixed(2):-1}; },
+    return {on:NOEL.on,air:NOEL.air,note:NOEL.i,airs:AIRS.length,
+      noms:AIRS.map(function(a){return a.nom;}),
+      avance:AC?+(NOEL.quand-AC.currentTime).toFixed(2):-1}; },
+  /* Pour l'épreuve : vieillir l'inactivité d'un coup. La visite guidée
+     revient au bout de dix secondes sans geste, et dix secondes d'horloge
+     de scène font deux minutes de mur sous un rendu logiciel. */
+  inactif:function(v){ idle=v===undefined?12:v; return idle; },
   /* Les habitants du ciel. */
-  ciel2:function(){ return {oiseaux:OIS.grp.visible,filante:FIL.m.visible,
-    opacite:+FIL.m.material.opacity.toFixed(2),
-    y:+OIS.grp.position.y.toFixed(1),prochain:+(cielProchain-clock).toFixed(1)}; },
+  ciel2:function(){ return {volutes:RUB.grp.visible,filante:FIL.m.visible,
+    opacite:+FIL.m.material.opacity.toFixed(2),voile:+RUB.mat.opacity.toFixed(2),
+    y:+RUB.grp.position.y.toFixed(1),prochain:+(cielProchain-clock).toFixed(1)}; },
   /* Le vœu de Yunma, et l'ouverture qui se pose dessus. */
   yunma:function(){ return {texte:wishText(YUNMA), premier:wishes[0].id==="yunma",
     place:Object.keys(tags).indexOf("yunma"), accroche:!!tags.yunma}; },
   accueil:function(){ return {fait:ouvreFait, recul:ouvre>0, vise:focused}; },
-  oiseaux:function(){ oiseauxPasser(); return OIS.grp.visible; },
-  ois:function(){ var v=OIS.grp.position.clone().project(camera);
-    return {vis:OIS.grp.visible,u:+((clock-OIS.t)/OIS.duree).toFixed(2),
-      pos:[+OIS.grp.position.x.toFixed(1),+OIS.grp.position.y.toFixed(1),+OIS.grp.position.z.toFixed(1)],
+  volutes:function(){ volutePasser(); return RUB.grp.visible; },
+  ois:function(){ var v=RUB.grp.position.clone().project(camera);
+    return {vis:RUB.grp.visible,u:+((clock-RUB.t)/RUB.duree).toFixed(2),
+      op:+RUB.mat.opacity.toFixed(2),
       ndc:[+v.x.toFixed(2),+v.y.toFixed(2),+v.z.toFixed(3)],
-      ech:+OIS.ois[0].scale.x.toFixed(2), far:camera.far,
-      d:+OIS.grp.position.distanceTo(camera.position).toFixed(1)}; },
+      d:+RUB.grp.position.distanceTo(camera.position).toFixed(1)}; },
   filante:function(){ filantePasser(); return FIL.m.visible; },
   fil:function(){ var v=FIL.m.position.clone().project(camera);
     return {vis:FIL.m.visible,u:+((clock-FIL.t)/FIL.duree).toFixed(2),op:+FIL.m.material.opacity.toFixed(2),
@@ -2587,11 +2562,11 @@ try{
     rt.texture.encoding=THREE.sRGBEncoding; rt.depthTexture=new THREE.DepthTexture(4,4); rt.depthTexture.type=THREE.UnsignedIntType;
     postMat=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,
       uniforms:{tColor:{value:rt.texture},tDepth:{value:rt.depthTexture},uRes:{value:new THREE.Vector2(4,4)},uNear:{value:camera.near},uFar:{value:camera.far},
-        uFocus:{value:10},uAperture:{value:6},uUnit:{value:1},uTime:{value:0},uStep:{value:1.7},uFete:{value:0}},
+        uFocus:{value:10},uAperture:{value:6},uUnit:{value:1},uTime:{value:0},uStep:{value:1.7}},
       vertexShader:"varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.0,1.0); }",
       fragmentShader:[
       "precision highp float;",
-      "uniform sampler2D tColor; uniform sampler2D tDepth; uniform vec2 uRes; uniform float uNear,uFar,uFocus,uAperture,uUnit,uTime,uStep,uFete;",
+      "uniform sampler2D tColor; uniform sampler2D tDepth; uniform vec2 uRes; uniform float uNear,uFar,uFocus,uAperture,uUnit,uTime,uStep;",
       "varying vec2 vUv;",
       "float viewZ(vec2 p){ float d=texture2D(tDepth,p).x; float z=d*2.0-1.0; return 2.0*uNear*uFar/(uFar+uNear-z*(uFar-uNear)); }",
       "float blurOf(float z){ return clamp(abs(z-uFocus)/z*uAperture,0.0,13.0); }",
@@ -2608,14 +2583,6 @@ try{
       "    acc+=mix(acc/tot,texture2D(tColor,tc).rgb,m); tot+=1.0; rad+=uStep/rad;",
       "  }",
       "  vec3 col=acc/tot;",
-      /* Le voile de fête : une couleur qui tourne lentement, et une onde
-         qui la traverse. Les périodes divisent dix secondes, comme uTime,
-         sans quoi la couleur sauterait à chaque tour d'horloge. */
-      "  if(uFete>0.001){",
-      "    vec3 teinte=vec3(0.5+0.5*sin(uTime*1.2566),0.5+0.5*sin(uTime*1.2566+2.1),0.5+0.5*sin(uTime*1.2566+4.2));",
-      "    float w=0.5+0.5*sin(uTime*2.5133+vUv.x*5.0+vUv.y*2.0);",
-      "    col=mix(col,col*(0.45+1.15*teinte),uFete*(0.22+0.17*w));",
-      "  }",
       "  vec2 q=vUv-0.5; float v=smoothstep(0.38,0.98,length(q*vec2(1.0,1.15)));",
       "  col*=1.0-0.16*v; col=mix(col,col*vec3(1.03,1.0,0.955),0.6);",
       "  col+=(hash(vUv*uRes+uTime)-0.5)*0.022;",
@@ -2642,8 +2609,12 @@ function frame(now){
   /* L'heure d'abord : tout le décor en dépend, et le thème de l'interface
      avec lui. */
   sunMaj(); themeMaj(); lumMaj(); cielMaj(t);
-  cineMaj(dt); noelMaj(); feteMaj(t,dt); surprisesMaj(t,dt);
-  if(ouvre&&t-ouvre>7){ ouvre=0; window.__home(); }
+  cineMaj(dt); noelMaj(); surprisesMaj(t,dt);
+  if(ouvre&&t-ouvre>7){ ouvre=0; cineStart(); }
+  /* Et si plus rien ne bouge, la visite revient d'elle-même : c'est une
+     veilleuse, pas un film qu'on lance. Dix secondes d'immobilité, rien
+     d'ouvert par-dessus, et aucun doigt sur l'écran. */
+  if(!CINE.on&&entered&&!reduce&&idle>10&&!sheetOpen&&!cardWish&&nP===0&&!menuOuvert) cineStart();
   idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0&&!CINE.on) goal.th+=dt*.045;
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
   cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);
@@ -2673,8 +2644,6 @@ function frame(now){
     g.body.rotation.y+=(Math.sin(t*.45+g.slot.ph)*.012)*dt*6; });
   nuitMaj(t);
   for(i=0;i<ribbons.length;i++){ var rb=ribbons[i]; rb.rotation.z=Math.sin(t*.9+rb.userData.ph)*(.05+.1*gust); rb.rotation.x=Math.cos(t*.7+rb.userData.ph)*(.04+.08*gust); }
-  for(i=0;i<DUST;i++){ var o=i*3; dustPos[o+1]+=dustSeed[i*2+1]*dt; dustPos[o]+=Math.sin(t*.4+dustSeed[i*2])*dt*.05; if(dustPos[o+1]>7.2) dustPos[o+1]=-.1; }
-  dustGeo.attributes.position.needsUpdate=true;
   for(i=0;i<falling.length;i++){ var f=falling[i], u=f.userData; u.y-=u.sp*dt; u.a+=dt*.12; if(u.y<-3.4){ u.y=5.4+R()*1.5; u.r=1+R()*4.4; }
     f.position.set(Math.cos(u.a)*u.r+Math.sin(t*.8+u.ph)*.25,u.y,Math.sin(u.a)*u.r); f.rotation.set(t*.7+u.ph,t*.5+u.ph,Math.sin(t+u.ph)*.8); }
   for(i=0;i<floaters.length;i++){ var fl=floaters[i]; fl.position.y=fl.userData.y+Math.sin(t*fl.userData.sp+fl.userData.ph)*.12; fl.rotation.y+=dt*.05; }
