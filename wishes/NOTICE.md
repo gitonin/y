@@ -105,14 +105,17 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   l'image de la carte, qu'un appui long doit pouvoir enregistrer. Sur un
   téléphone, un appui un peu long ouvrait sinon une sélection bleue avec ses
   poignées, et la loupe du système par-dessus la scène.
-- **Le vent** — l'entrée « Faire voler les feuilles » du menu, et le plan du
-  vent dans la visite guidée — fait tomber les feuilles et les cerises. Les feuilles
-  voltigent, puis une bourrasque les emporte et les efface au loin ; les cerises
-  sont lourdes et tombent presque droit ; les vœux restent accrochés. Puis tout
-  repousse, chacun à son tour, étalé sur près de quatre secondes — l'arbre se
-  remplit au lieu de se rhabiller d'un coup. Six mille instances sont
-  recomposées à la main pendant les neuf secondes de l'animation : 1 ms par
-  image, et plus rien ensuite.
+- **Le vent** — le plan du vent de la visite guidée — fait tomber les feuilles
+  et les cerises. Les feuilles voltigent, puis une bourrasque les emporte et les
+  efface au loin ; les cerises sont lourdes et tombent presque droit ; les vœux
+  restent accrochés. **L'arbre reste nu un moment** : la repousse ne commence
+  qu'après cinq secondes et demie, s'étale sur dix, et chaque feuille met deux
+  secondes à revenir. Elle partait quatre secondes après la bourrasque et
+  s'étalait sur cinq : on n'avait pas le temps de voir l'arbre dépouillé que les
+  feuilles étaient déjà revenues. Six mille instances sont recomposées à la main
+  pendant les seize secondes de l'animation : 1 ms par image, et plus rien
+  ensuite. La visite, elle, repart vers un vœu au bout de neuf secondes,
+  pendant que l'arbre se remplit derrière.
 
 ## L'ouverture
 
@@ -170,7 +173,11 @@ secondes — plus souvent pendant la visite guidée.
 - **Des volutes d'air.** Trois rubans plats de soixante-quatre segments dont on
   recalcule la courbe à chaque image : deux ondulations qui ne tombent pas
   juste, l'une en hauteur, l'autre en profondeur, et une largeur qui s'éteint
-  aux deux bouts. Ils traversent derrière l'île et virevoltent un moment.
+  aux deux bouts. Ils sont **presque à plat** — quelques dixièmes d'unité
+  d'ondulation sur vingt-six de long : ce n'est pas une arabesque, c'est un
+  souffle. Ils traversent derrière l'île, montent d'un rien en passant comme
+  l'air chaud, paraissent vite et s'en vont longuement : un souffle de vent ne
+  s'éteint pas comme il s'allume.
   Un vol d'oiseaux passait ici : joli de près, mais à trente unités ce ne sont
   plus que des triangles sombres, et l'on ne savait pas ce qu'on voyait. Un
   courant d'air ne demande pas qu'on le reconnaisse.
@@ -261,15 +268,24 @@ Trois réglages font que l'on arrive **sur le mot** :
   descendrait avec elle d'un sixième de l'écran. La visée suit donc l'île, et le
   mot ne bouge plus.
 
-## Le menu
+## Le haut de l'écran
 
-Le haut de l'écran portait cinq pilules, et le logo s'écrasait entre elles. Il
-n'en reste que deux — le son, et le menu —, et le menu lui-même s'est vidé à
-mesure que les choix disparaissaient : la visite guidée se lance seule, la
-musique part seule, les guirlandes n'existent plus. Il ne reste que la langue
-et « faire voler les feuilles ». Le partage est resté en bas, à côté de
-« Accrocher un vœu » : ce sont les deux gestes qui comptent, et ils ne se
-cachent pas dans un menu.
+Il portait cinq pilules, et le logo s'écrasait entre elles ; puis deux, dont un
+menu. Le menu s'est vidé à mesure que les choix disparaissaient — la visite
+guidée se lance seule, la musique part seule, les guirlandes n'existent plus —,
+et un panneau pour une seule ligne est un panneau de trop. Il ne reste que **le
+son et la langue**, trois lettres directement accessibles.
+
+Le partage et « Accrocher un vœu » sont restés en bas : ce sont les deux gestes
+qui comptent, et ils ne se cachent pas.
+
+Le **conseil du bas** — « glisser pour tourner, pincer pour zoomer, toucher une
+étiquette » — ne s'efface plus au bout de neuf secondes. Il disparaissait juste
+au moment où l'on commençait à vouloir toucher quelque chose, et plus rien ne
+disait comment.
+
+Le **compteur des vœux** a été retiré : « un vœu accroché » sous un arbre qui
+en porte trente n'annonçait rien, ni ce qu'on voit, ni ce qu'on peut faire.
 
 ## Envoyer un vœu
 
@@ -278,7 +294,9 @@ sans base de données : `…/wishes#v-<vœu encodé>`. Celui qui l'ouvre le voit
 accroché à l'arbre, à son nom, carte ouverte — la caméra y va toute seule.
 
 Le lien part par mail, par SMS, ou se copie, depuis le bouton **Envoyer** de la
-carte d'un vœu. Et c'est lui que porte le **QR code** de la carte à
+carte d'un vœu, ou depuis la pilule « Envoyer ce vœu » quand on en regarde un de
+près. Le partage de l'arbre lui-même, lui, s'annonce simplement :
+« Partagez l'expérience ». Et c'est lui que porte le **QR code** de la carte à
 télécharger : il menait à l'arbre nu, il mène maintenant au bon mot.
 
 Le codeur de QR code a dû grandir pour cela. Il s'arrêtait à la version 6, soit

@@ -44,29 +44,19 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 /* Le menu. Six boutons alignés dans la barre écrasaient le logo — un
    dessin à hauteur fixe dans une boîte qui rétrécit finit déformé. Il n'en
    reste que deux : couper le son, qu'on cherche vite, et ouvrir le reste. */
-#menu{position:fixed;top:58px;right:16px;z-index:14;min-width:216px;max-width:calc(100vw - 32px);
-  background:rgba(var(--beige-rgb),.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-radius:8px;box-shadow:0 18px 50px -22px rgba(var(--ink-rgb),.5),inset 0 0 0 1px rgba(var(--ink-rgb),.14);
-  padding:6px;display:flex;flex-direction:column;gap:2px}
-#menu[hidden]{display:none}
-.mitem{display:flex;align-items:center;gap:11px;width:100%;padding:11px 12px;border-radius:5px;
-  font-size:13px;text-align:left;color:var(--ink);background:none}
-.mitem:hover{background:rgba(var(--ink-rgb),.07)}
-.mitem[hidden]{display:none}
-.mitem svg{width:18px;height:18px;flex:0 0 18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.mitem.on{color:var(--rust)}
-.mseg{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px 10px;
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
-.mseg .segs{display:flex;gap:2px}
-.mseg button{padding:5px 8px;border-radius:4px;font-size:12px;letter-spacing:.04em;color:var(--ink);opacity:.42}
-.mseg button.on{opacity:1;background:rgba(var(--ink-rgb),.1)}
+/* La langue, en haut à droite, à côté du son. Il y avait là un menu, qui
+   n'a plus rien à porter : la visite guidée se lance seule, la musique part
+   seule, les guirlandes n'existent plus, et le vent souffle dans la visite.
+   Un panneau pour une seule ligne était un panneau de trop. */
+#langs{padding:0 3px;gap:0}
+#langs button{padding:0 7px;height:32px;font-size:12px;letter-spacing:.08em;color:var(--ink);opacity:.38}
+#langs button.on{opacity:1}
 .pill svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
 /* bottom */
 #bottom{position:fixed;left:0;right:0;bottom:0;padding:0 16px 14px;display:flex;flex-direction:column;align-items:center;
   gap:10px;z-index:5;pointer-events:none;transition:opacity .5s,transform .5s}
 #bottom>*{pointer-events:auto}
-#count{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);pointer-events:none;font-weight:500}
 #cta{display:flex;gap:8px;align-items:center}
 .btn{height:50px;padding:0 26px;border-radius:4px;background:var(--rust);color:var(--beige);font-size:12.5px;font-weight:500;letter-spacing:.14em;
   text-transform:uppercase;transition:background .2s}
@@ -196,24 +186,17 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   <div id="brandt"><button id="sign" aria-label="yunma.fr"><img class="lg" alt="yunma"></button></div>
   <div id="tools">
     <button class="pill" id="snd" aria-label="Son"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="sndw" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg></button>
-    <button class="pill" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="pill" id="langs"><button data-l="fr">FR</button><button data-l="en">EN</button><button data-l="zh">中</button></div>
   </div>
 </div>
 
 <div id="bottom" class="down">
-  <div id="count"></div>
   <button id="voeuShare"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg><span id="voeuShareT"></span></button>
   <div id="cta">
     <button class="btn" id="add" data-i="add"></button>
     <button class="btn ghost round" id="share" aria-label="Partager"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg></button>
   </div>
   <div id="hint" data-i="hint"></div>
-</div>
-
-<div id="menu" hidden>
-  <div class="mseg"><span data-i="mLang"></span><span class="segs">
-    <button data-l="fr">FR</button><button data-l="en">EN</button><button data-l="zh">中</button></span></div>
-  <button class="mitem" id="mVent"><svg viewBox="0 0 24 24"><path d="M3 8.5h9.5a2.6 2.6 0 10-2.6-2.6"/><path d="M3 12.5h13a2.6 2.6 0 11-2.6 2.6"/><path d="M3 16.5h6.5"/></svg><span data-i="mVent"></span></button>
 </div>
 
 <div id="sheet" aria-hidden="true">
@@ -321,50 +304,50 @@ var PRESETS = [
 var I18N = {
  fr:{title:"L'arbre à souhaits",introText:"En Chine, on confie ses vœux à un arbre : une étiquette rouge, un fil d'or, quelques mots. Pour les fêtes, accrochez le vôtre à ce caféier du Yunnan — puis passez le lien à ceux que vous aimez.",
   voeuYunma:"Yunma vous souhaite de joyeuses fêtes",
-  mLang:"Langue",mVent:"Faire voler les feuilles",mShare:"Partager l'expérience",
+  mShare:"Partager l'expérience",
   enter:"Entrer",by:"Une expérience signée",add:"Accrocher un vœu",hint:"Glisser pour tourner · pincer pour zoomer · toucher une étiquette",
   sheetTitle:"Votre vœu",s1:"1 · L'étiquette",st1:"Choisissez la forme de votre étiquette",st2:"Choisissez votre vœu",st3:"Signez, puis accrochez",stepOf:"Étape",next:"Continuer",g_own:"Mes propres mots",ownNote:"60 caractères au maximum : un mot court se lit mieux sur l'étiquette.",nameNote:"Votre prénom s'écrit sous le vœu. Vous pouvez laisser ce champ vide.",s2:"2 · Le vœu",g_zh:"Vœux chinois traditionnels",g_w:"Noël et nouvelle année",g_c:"Fêtes et café",s3:"… ou vos propres mots",s4:"Votre prénom (facultatif)",
   ownPh:"Écrivez votre petit mot (60 caractères)",namePh:"Prénom",hang:"Accrocher à l'arbre",shareWish:"Envoyer",back:"Retour",card:"Carte",cardTitle:"Votre carte numérique",
   cardHint:"Téléchargez la carte, ou faites un appui long sur l'image pour l'enregistrer.",jpg:"Image JPEG",pdf:"PDF",cardScan:"Scannez pour retrouver ce vœu sur l'arbre",leaveTitle:"Quitter l'expérience ?",leaveText:"Le site yunma.fr va s'ouvrir dans une nouvelle page. L'arbre reste ouvert ici.",leaveGo:"Aller sur yunma.fr",leaveStay:"Rester ici",saved:"Carte enregistrée.",cardFail:"Téléchargement indisponible ici : appui long sur l'image.",
-  shareTitle:"Faire passer l'arbre",shareText:"Envoyez ce lien : la personne découvrira l'arbre, les vœux déjà accrochés, et pourra ajouter le sien.",
+  shareTitle:"Partagez l'expérience",shareText:"Envoyez ce lien : la personne découvrira l'arbre, les vœux déjà accrochés, et pourra ajouter le sien.",
   shareWishTitle:"Envoyer ce vœu",shareWishText:"Ce lien porte le vœu lui-même : en l'ouvrant, votre ami le verra accroché à l'arbre, à son nom.",
   byMail:"Par mail",bySms:"Par SMS",mailSubject:"Un vœu pour toi, sur l'arbre Yunma",
   shareBody:function(t,n,u){ return (n?n+" t'a accroché un vœu":"Un vœu t'a été accroché")+" sur l'arbre à souhaits de Yunma :\n\n« "+t+" »\n\nOuvre ce lien pour le voir sur l'arbre :\n"+u+"\n"; },
   shareBodyNu:function(u){ return "Viens accrocher un vœu à l'arbre à souhaits de Yunma :\n"+u+"\n"; },
   recu:"Un vœu pour vous",
-  copy:"Copier le lien",copied:"Lien copié",close:"Fermer",count:function(n){return n+(n>1?" vœux accrochés":" vœu accroché");},
+  copy:"Copier le lien",copied:"Lien copié",close:"Fermer",
   hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
   voeuYunma:"Yunma wishes you a joyful season",
-  mLang:"Language",mVent:"Make the leaves fly",mShare:"Share the experience",
+  mShare:"Share the experience",
   enter:"Enter",by:"An experience by",add:"Hang a wish",hint:"Drag to orbit · pinch to zoom · tap a tag",
   sheetTitle:"Your wish",s1:"1 · The tag",st1:"Choose the shape of your tag",st2:"Choose your wish",st3:"Sign it, then hang it",stepOf:"Step",next:"Continue",g_own:"My own words",ownNote:"60 characters at most: a short note reads better on the tag.",nameNote:"Your first name is written under the wish. You can leave this empty.",s2:"2 · The wish",g_zh:"Traditional Chinese wishes",g_w:"Christmas and New Year",g_c:"Holidays and coffee",s3:"… or your own words",s4:"Your first name (optional)",
   ownPh:"Write your note (60 characters)",namePh:"First name",hang:"Hang on the tree",shareWish:"Send",back:"Back",card:"Card",cardTitle:"Your digital card",
   cardHint:"Download the card, or long-press the image to save it.",jpg:"JPEG image",pdf:"PDF",cardScan:"Scan to find this wish on the tree",leaveTitle:"Leave the experience?",leaveText:"The yunma.fr website will open in a new page. The tree stays open here.",leaveGo:"Go to yunma.fr",leaveStay:"Stay here",saved:"Card saved.",cardFail:"Download unavailable here: long-press the image.",
-  shareTitle:"Pass the tree on",shareText:"Send this link: they will discover the tree, the wishes already hanging, and can add their own.",
+  shareTitle:"Share the experience",shareText:"Send this link: they will discover the tree, the wishes already hanging, and can add their own.",
   shareWishTitle:"Send this wish",shareWishText:"This link carries the wish itself: opening it, your friend will see it hanging on the tree, in their name.",
   byMail:"By email",bySms:"By text",mailSubject:"A wish for you, on the Yunma tree",
   shareBody:function(t,n,u){ return (n?n+" hung a wish for you":"A wish was hung for you")+" on Yunma's wishing tree:\n\n“"+t+"”\n\nOpen this link to see it on the tree:\n"+u+"\n"; },
   shareBodyNu:function(u){ return "Come and hang a wish on Yunma's wishing tree:\n"+u+"\n"; },
   recu:"A wish for you",
-  copy:"Copy link",copied:"Link copied",close:"Close",count:function(n){return n+(n>1?" wishes hanging":" wish hanging");},
+  copy:"Copy link",copied:"Link copied",close:"Close",
   hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
   voeuYunma:"云马祝您节日快乐",
-  mLang:"语言",mVent:"让叶子飞起来",mShare:"分享这棵树",
+  mShare:"分享这棵树",
   enter:"进入",by:"出品",add:"挂上心愿",hint:"拖动旋转 · 双指缩放 · 轻点红牌",
   sheetTitle:"你的心愿",s1:"1 · 选择红牌",st1:"选择红牌的形状",st2:"选一句祝福",st3:"署名，然后挂上",stepOf:"步骤",next:"继续",g_own:"自己写",ownNote:"最多60字：短短一句，在红牌上更好看。",nameNote:"名字会写在心愿下方，也可以不填。",s2:"2 · 选一句祝福",g_zh:"中国传统祝福",g_w:"圣诞与新年",g_c:"节日与咖啡",s3:"……或写下自己的话",s4:"你的名字（可不填）",
   ownPh:"写下你的心愿（60字以内）",namePh:"名字",hang:"挂到树上",shareWish:"分享",back:"返回",card:"贺卡",cardTitle:"你的数字贺卡",
   cardHint:"下载贺卡，或长按图片保存。",jpg:"JPEG 图片",pdf:"PDF",cardScan:"扫码，在树上找到这个心愿",leaveTitle:"要离开吗？",leaveText:"yunma.fr 网站将在新页面打开，许愿树仍留在这里。",leaveGo:"前往 yunma.fr",leaveStay:"留在这里",saved:"贺卡已保存。",cardFail:"此处无法下载：请长按图片保存。",
-  shareTitle:"把这棵树传下去",shareText:"发送此链接：对方可以看到这棵树和已挂上的心愿，并添上自己的。",
+  shareTitle:"分享这段体验",shareText:"发送此链接：对方可以看到这棵树和已挂上的心愿，并添上自己的。",
   shareWishTitle:"把这个心愿发出去",shareWishText:"这个链接带着心愿本身：朋友打开它，就能在树上看到这枚红牌。",
   byMail:"用邮件",bySms:"用短信",mailSubject:"送给你的一个心愿，在云马许愿树上",
   shareBody:function(t,n,u){ return (n?n+"在云马许愿树上为你挂了一个心愿：":"有人在云马许愿树上为你挂了一个心愿：")+"\n\n「"+t+"」\n\n打开链接，在树上看看：\n"+u+"\n"; },
   shareBodyNu:function(u){ return "来云马许愿树挂一个心愿吧：\n"+u+"\n"; },
   recu:"送给你的心愿",
-  copy:"复制链接",copied:"链接已复制",close:"关闭",count:function(n){return "已挂 "+n+" 个心愿";},
+  copy:"复制链接",copied:"链接已复制",close:"关闭",
   hung:"你的心愿已挂上。",localOnly:"心愿仅保存在本设备：此访客暂不能写入共享内容。",
   need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
 };
@@ -608,11 +591,13 @@ function applyLang(){
   $("own").placeholder=T("ownPh"); $("name").placeholder=T("namePh");
   $("share").setAttribute("aria-label",T("mShare"));
   document.title=T("title")+" — Yunma";
-  buildPresets(); setStepSafe(); updateCount(); if(cardWish) fillCard(cardWish);
+  buildPresets(); setStepSafe(); if(cardWish) fillCard(cardWish);
 }
 function setStepSafe(){ try{ setStep(step); }catch(e){} }
 function setLang(l){ lang=l; try{localStorage.setItem("yw_lang",l);}catch(e){} applyLang(); preview(); if(window.__syncTags) window.__syncTags(); }
-function updateCount(){ var n=wishes.filter(function(w){return !w.decor&&!w.recu;}).length; $("count").textContent=n?T("count")(n):""; }
+/* Le compteur des vœux a été retiré. « Un vœu accroché » sous un arbre qui
+   en porte trente n'annonçait rien : ni ce qu'on voit, ni ce qu'on peut
+   faire. Le compte est une donnée de gestion, pas un décor. */
 var toastT=0; function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(function(){t.classList.remove("on");},3800); }
 
 function buildShapes(){
@@ -783,7 +768,7 @@ function mergeWishes(){
   /* Le vœu reçu passe en dernier : il prend donc la dernière place libre,
      et c'est celle vers laquelle la caméra ira. */
   if(recu&&!list.some(function(w){ return w.id===recu.id; })) list.push(recu);
-  wishes=[YUNMA].concat(list.filter(function(w){ return w.id!=="yunma"; })); updateCount(); if(window.__syncTags) window.__syncTags();
+  wishes=[YUNMA].concat(list.filter(function(w){ return w.id!=="yunma"; })); if(window.__syncTags) window.__syncTags();
 }
 function saveLocal(){ try{ localStorage.setItem("yw_local",JSON.stringify(localW)); }catch(e){} }
 function rememberMine(id){ try{ var m=JSON.parse(localStorage.getItem("yw_mine")||"[]"); m.push(id); localStorage.setItem("yw_mine",JSON.stringify(m.slice(-50))); }catch(e){} }
@@ -1090,7 +1075,9 @@ document.addEventListener("visibilitychange",function(){ if(!AC) return; try{ if
 
 $("enter").onclick=function(){
   entered=true; startAudio(); $("intro").classList.add("gone"); $("top").classList.remove("hide"); $("bottom").classList.remove("down");
-  setTimeout(function(){ $("hint").style.opacity=0; },9000);
+  /* Le conseil du bas ne s'efface plus au bout de neuf secondes. Il
+     disparaissait juste au moment où l'on commençait à vouloir toucher
+     quelque chose, et plus rien ne disait comment. */
   /* La musique part d'elle-même, et ne se choisit plus : on entre dans une
      veillée de Noël, et la pilule du son suffit à la faire taire. Elle ne
      peut partir qu'ici : un navigateur ne donne le son qu'après un geste,
@@ -1821,7 +1808,7 @@ function Chute(im,vol){
   }
   return {im:im,n:n,base:base,ret:ret,ph:ph,sp:sp,rep:rep,ax:ax,ec:ec,fo:fo,dis:dis,vol:vol};
 }
-var chutes=[], SECOUSSE={t:-99,duree:9.2,vx:1,vz:0};
+var chutes=[], SECOUSSE={t:-99,duree:16.2,vx:1,vz:0};
 function chutePrete(){ if(chutes.length) return; var a=Chute(feuilles,1), b=Chute(cerises,0);
   if(a) chutes.push(a); if(b) chutes.push(b); }
 
@@ -1831,13 +1818,18 @@ function chutePrete(){ if(chutes.length) return; var a=Chute(feuilles,1), b=Chut
    la VOLTIGE — elle descend lentement en se balançant, comme une feuille,
    et non comme une pierre ; la BOURRASQUE — à partir d'une seconde, le vent
    se lève, la rase au sol puis l'emporte, et elle s'efface en s'éloignant ;
-   la REPOUSSE — chacune revient à son tour, étalée sur près de quatre
-   secondes, dans un ordre tiré au sort. On ne voit donc pas l'arbre se
-   rhabiller d'un coup, mais se remplir.
+   la REPOUSSE — chacune revient à son tour, étalée sur dix secondes, dans
+   un ordre tiré au sort. On ne voit donc pas l'arbre se rhabiller d'un
+   coup, mais se remplir — et l'on a le temps, avant, de le voir nu.
 
    Les cerises, elles, sont lourdes : elles tombent plus droit, volent moins
    loin, et ne voltigent pas. C'est le paramètre `vol`. */
-var CHUTE_FIN=3.9, REPOUSSE=4.9;
+/* L'arbre reste nu un moment. La repousse commençait quatre secondes après
+   la bourrasque et s'étalait sur cinq : on n'avait pas le temps de voir
+   l'arbre dépouillé que les feuilles étaient déjà revenues. Elle part
+   maintenant plus tard, s'étale sur dix, et chaque feuille met deux
+   secondes au lieu d'une et demie. */
+var CHUTE_FIN=5.4, REPOUSSE=10.4, POUSSE=2;
 function chuteMaj(a){
   var k, c, i, o;
   var vx=SECOUSSE.vx, vz=SECOUSSE.vz;
@@ -1893,7 +1885,7 @@ function chuteMaj(a){
         /* La repousse : chacune à son tour, dans un ordre tiré au sort, et
            avec un petit dépassement — c'est ce qui donne l'impression que
            ça pousse, et non que ça réapparaît. */
-        var u=(t-CHUTE_FIN-c.rep[i]*(REPOUSSE-1.3))/1.3;
+        var u=(t-CHUTE_FIN-c.rep[i]*(REPOUSSE-POUSSE))/POUSSE;
         if(u<=0){ for(q=0;q<16;q++) arr[o+q]=0; continue; }
         if(u>=1){ for(q=0;q<16;q++) arr[o+q]=c.base[o+q]; continue; }
         var e=1+2.70158*Math.pow(u-1,3)+1.70158*Math.pow(u-1,2);
@@ -2098,8 +2090,8 @@ var RUB=(function(){
     var g2=new THREE.PlaneGeometry(1,1,N,1);
     var m=new THREE.Mesh(g2,mat);
     m.frustumCulled=false;
-    m.userData={ph:R()*6.283,L:18+R()*12,A:.9+R()*1.1,B:1.4+R()*1.4,W:.22+R()*.16,
-      v1:1.1+R()*.9,v2:.7+R()*.6,dy:(k-1)*1.9+(R()-.5)*.8,sp:.5+R()*.5};
+    m.userData={ph:R()*6.283,L:26+R()*14,A:.22+R()*.3,B:.5+R()*.7,W:.2+R()*.14,
+      v1:.8+R()*.7,v2:.55+R()*.5,dy:(k-1)*1.25+(R()-.5)*.5,sp:.45+R()*.4};
     grp.add(m); rub.push(m);
   }
   return {grp:grp,rub:rub,mat:mat,N:N,t:-99,duree:13,a:0,b:0,h:0};
@@ -2117,7 +2109,8 @@ function voluteMaj(t){
   var u=(t-RUB.t)/RUB.duree;
   if(u>1||u<0){ RUB.grp.visible=false; RUB.mat.opacity=0; return; }
   var D=30, a=RUB.a+(RUB.b-RUB.a)*u;
-  RUB.grp.position.set(Math.sin(a)*D,RUB.h,Math.cos(a)*D);
+  /* Et il monte d'un rien en passant, comme l'air chaud. */
+  RUB.grp.position.set(Math.sin(a)*D,RUB.h+u*1.6,Math.cos(a)*D);
   RUB.grp.rotation.y=a+(RUB.b<RUB.a?Math.PI:0)+Math.PI/2;
   /* Un trait d'encre le jour, une lueur pâle la nuit. Doré sur le crème du
      ciel, le ruban ne se voyait pas : il n'y a pas trente pour cent
@@ -2125,13 +2118,17 @@ function voluteMaj(t){
      matière du site, dont le logo est fait de traits. */
   var n=SUN.nuit;
   RUB.mat.color.setRGB(.14+.64*n,.15+.71*n,.14+.86*n).convertSRGBToLinear();
-  RUB.mat.opacity=Math.min(1,Math.min(u,1-u)*5)*(.3+.3*n);
+  /* Il paraît vite et s'en va longuement : un souffle de vent ne s'éteint
+     pas comme il s'allume. */
+  RUB.mat.opacity=Math.min(1,u*6)*Math.min(1,(1-u)*2.2)*(.3+.3*n);
   for(var k=0;k<RUB.rub.length;k++){
     var m=RUB.rub[k], d=m.userData, pos=m.geometry.attributes.position, A=pos.array;
     for(var i=0;i<=RUB.N;i++){
       var q=i/RUB.N, x=(q-.5)*d.L;
-      var y=d.dy+d.A*Math.sin(q*9.4+d.ph+t*d.v1*d.sp);
-      var z=d.B*Math.sin(q*5.1+d.ph*1.7+t*d.v2*d.sp);
+      /* Presque à plat : le ruban ondule de quelques dixièmes d'unité sur
+         vingt-six de long. Ce n'est pas une arabesque, c'est un souffle. */
+      var y=d.dy+d.A*Math.sin(q*6.2+d.ph+t*d.v1*d.sp);
+      var z=d.B*Math.sin(q*3.4+d.ph*1.7+t*d.v2*d.sp);
       var w=Math.sin(Math.PI*q)*d.W*(.75+.45*Math.sin(q*7.3+t*1.4+d.ph));
       var o=i*3, o2=(i+RUB.N+1)*3;
       A[o]=x; A[o+1]=y+w; A[o+2]=z;
@@ -2251,7 +2248,10 @@ function cineContre(){ closeCard(true); window.__home(); CINE.ronde=true;
 function cineVent(){ closeCard(true); window.__home(); CINE.ronde=true;
   goal.ph=PH_HOME-.12; goal.r=homeR*1.1; CINE.vit=.07;
   secouer(); if(SUN.nuit>.5) filantePasser(); else volutePasser();
-  return SECOUSSE.duree+.8; }
+  /* On ne reste pas seize secondes sur le même plan : le vent souffle, les
+     feuilles s'en vont, et la visite repart vers un vœu pendant que
+     l'arbre se remplit derrière. */
+  return 9.4; }
 /* Un vœu. Le premier de la visite est celui de Yunma — c'est la maison qui
    accueille —, puis on va de proche en proche : le suivant est tiré parmi
    les plus proches voisins de celui qu'on quitte, et non au hasard dans
@@ -2298,33 +2298,10 @@ function cineMaj(dt){
   CINE.prochain=clock+d;
 }
 
-/* ------------------------------------------------------------------ le menu
-   Tout ce qui n'est pas « accrocher un vœu » ou « partager l'arbre » vit
-   ici : la langue, la visite guidée, le vent qui emporte les feuilles, la
-   musique de Noël et les guirlandes. Six pilules dans la barre écrasaient
-   le logo et noyaient les deux gestes qui comptent. */
-var menuOuvert=false;
-function menuMaj(){
-  Array.prototype.forEach.call(document.querySelectorAll("#menu .segs button"),function(b){
-    b.classList.toggle("on",b.getAttribute("data-l")===lang); });
-}
-function menuOuvrir(v){
-  menuOuvert=v===undefined?!menuOuvert:v;
-  if(menuOuvert) menuMaj();
-  $("menu").hidden=!menuOuvert;
-}
-$("menuBtn").onclick=function(e){ e.stopPropagation(); if(!AC) startAudio(); menuOuvrir(); };
-/* Un geste ailleurs referme le menu : on ne laisse pas un panneau ouvert
-   par-dessus la scène. */
-addEventListener("pointerdown",function(e){
-  if(!menuOuvert) return;
-  if(e.target.closest&&(e.target.closest("#menu")||e.target.closest("#menuBtn"))) return;
-  menuOuvrir(false);
-},true);
-Array.prototype.forEach.call(document.querySelectorAll("#menu .segs button"),function(b){
-  b.onclick=function(){ setLang(b.getAttribute("data-l")); menuMaj(); }; });
-$("mVent").onclick=function(){ menuOuvrir(false); secouer(); };
-menuMaj();
+/* ------------------------------------------------------------------ la langue
+   Trois lettres en haut à droite, et c'est tout ce qui reste à choisir. */
+Array.prototype.forEach.call(document.querySelectorAll("#langs button"),function(b){
+  b.onclick=function(){ if(!AC) startAudio(); setLang(b.getAttribute("data-l")); }; });
 
 /* Le gyroscope et le souffle ont tous deux été retirés. Incliner le
    téléphone déplaçait un peu le regard : joli sur le papier, invisible à
@@ -2375,8 +2352,8 @@ window.__essai={
     return {haut:Math.round(h.y*1000)/1000, bas:Math.round(b.y*1000)/1000,
       barre:Math.round((bandeBas()/window.innerHeight*2-1)*1000)/1000}; },
   viser:function(i,fiche,garder){ var k=Object.keys(tags); if(k[i]!==undefined) focusTag(tags[k[i]],!!fiche,!!garder); return k.length; },
-  menu:function(v){ menuOuvrir(v); return {ouvert:menuOuvert,
-    entrees:Array.prototype.filter.call(document.querySelectorAll("#menu .mitem"),function(b){return !b.hidden;}).length}; },
+  langues:function(){ return Array.prototype.map.call(document.querySelectorAll("#langs button"),
+    function(b){ return b.getAttribute("data-l")+(b.classList.contains("on")?"*":""); }).join(","); },
   maison:function(){ window.__home(); },
   /* Arriver tout de suite où la caméra se rend : l'amorti demande des
      dizaines d'images, et l'épreuve n'en dessine qu'une poignée. */
@@ -2614,7 +2591,7 @@ function frame(now){
   /* Et si plus rien ne bouge, la visite revient d'elle-même : c'est une
      veilleuse, pas un film qu'on lance. Dix secondes d'immobilité, rien
      d'ouvert par-dessus, et aucun doigt sur l'écran. */
-  if(!CINE.on&&entered&&!reduce&&idle>10&&!sheetOpen&&!cardWish&&nP===0&&!menuOuvert) cineStart();
+  if(!CINE.on&&entered&&!reduce&&idle>10&&!sheetOpen&&!cardWish&&nP===0) cineStart();
   idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0&&!CINE.on) goal.th+=dt*.045;
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
   cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);

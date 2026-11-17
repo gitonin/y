@@ -26,7 +26,7 @@
  *      repousse ;
  *   9. la visite guidée tourne toute seule, et le premier geste la stoppe ;
  *  10. toucher un vœu s'en approche, sans ouvrir de fiche par-dessus ;
- *  11. le menu porte les actions, et le haut de l'écran n'a que deux pilules ;
+ *  11. le haut de l'écran ne porte que le son et la langue ;
  *  12. on entre par le vœu de Yunma, dans la langue du visiteur ;
  *  13. la musique de Noël se joue en avance sur elle-même ;
  *  14. les guirlandes s'allument, et le ciel a ses habitants.
@@ -293,13 +293,20 @@ titre('Secouer emporte les feuilles au vent, et pas les vœux');
     ec.moy > 1.5 && ec.max > 6);
   check(`les vœux sont restés accrochés (${voeux})`, await p.evaluate(() => window.__essai.voeux()), voeux);
 
-  /* La repousse est étalée : si tout revenait d'un coup, l'arbre se
-     rhabillerait d'un bloc au lieu de se remplir. */
-  await p.waitForFunction(() => window.__essai.secousse() >= 7.0, null, { timeout: 180000 });
+  /* L'arbre reste nu un moment : la repousse ne commence qu'après cinq
+     secondes et demie. Sans ce temps-là, on n'avait pas le temps de le
+     voir dépouillé. */
+  await p.waitForFunction(() => window.__essai.secousse() >= 5.0, null, { timeout: 180000 });
+  const nu = await p.evaluate(() => window.__essai.repousse());
+  check(`à cinq secondes, l’arbre est encore nu (${nu} %)`, nu < 5);
+
+  /* Puis elle s'étale : si tout revenait d'un coup, l'arbre se rhabillerait
+     d'un bloc au lieu de se remplir. */
+  await p.waitForFunction(() => window.__essai.secousse() >= 10.6, null, { timeout: 240000 });
   const mi = await p.evaluate(() => window.__essai.repousse());
   check(`à mi-repousse, une partie seulement est revenue (${mi} %)`, mi > 5 && mi < 95);
 
-  await p.waitForFunction(() => window.__essai.secousse() >= 9.0, null, { timeout: 180000 });
+  await p.waitForFunction(() => window.__essai.secousse() >= 16.0, null, { timeout: 300000 });
   await p.waitForTimeout(400);
   const apres = await p.evaluate(() => window.__essai.hauteurs());
   check(`tout a repoussé (${apres.feuilleY.toFixed(2)})`, Math.abs(apres.feuilleY - avant.feuilleY) < 0.02);
@@ -389,9 +396,6 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
     (await p.locator('#cZh').textContent())?.trim(), envoi.t);
   check('signé du bon prénom',
     ((await p.locator('#cBy').textContent()) || '').includes(envoi.n));
-  /* Un vœu reçu n'est pas un vœu accroché : il ne gonfle pas le compte. */
-  check('il ne compte pas comme un vœu de l’arbre',
-    ((await p.locator('#count').textContent()) || '').trim(), '');
   /* La carte, et son QR code. La photographie du fond n'est plus encodée
      dans la page : elle part quand on ouvre la carte. Les polices, elles,
      sont prêtes depuis longtemps — et déclenchaient le dessin avant son
@@ -510,8 +514,9 @@ titre('La musique de Noël se joue toute seule');
   check(`l’air avance (${a.note} → ${b.note})`, b.note > a.note);
   await p.evaluate(() => window.__essai.musique(false));
   check('et elle s’arrête quand on le demande', (await p.evaluate(() => window.__essai.musique())).on, false);
-  check('le menu ne porte plus de bouton pour elle',
-    await p.evaluate(() => !document.getElementById('mNoel') && !document.getElementById('mFete') && !document.getElementById('mCine')));
+  check('et rien nulle part ne propose de la choisir',
+    await p.evaluate(() => !document.getElementById('mNoel') && !document.getElementById('mFete')
+      && !document.getElementById('mCine') && !document.getElementById('menu')));
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
@@ -575,11 +580,11 @@ titre('Rien ne se sélectionne, sauf ce qui est fait pour');
   const sel = await p.evaluate(() => {
     const q = (s) => { const el = document.querySelector(s); const c = el && getComputedStyle(el);
       return c ? (c.webkitUserSelect || c.userSelect) : 'absent'; };
-    return { conseil: q('#hint'), bouton: q('#add'), compte: q('#count'), titre: q('#cZh'),
+    return { conseil: q('#hint'), bouton: q('#add'), langue: q('#langs button'), titre: q('#cZh'),
       lien: q('#link'), champ: q('#own'), image: q('#cimg') };
   });
   for (const [quoi, cle] of [['le conseil du bas', 'conseil'], ['les boutons', 'bouton'],
-    ['le compte des vœux', 'compte'], ['le vœu affiché', 'titre']]) {
+    ['le choix de la langue', 'langue'], ['le vœu affiché', 'titre']]) {
     check(`${quoi} ne se sélectionne pas (${sel[cle]})`, sel[cle], 'none');
   }
   check(`le lien se sélectionne, lui (${sel.lien})`, sel.lien, 'text');
@@ -672,7 +677,6 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
   const accroche = await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
     null, { timeout: 60000 }).then(() => true).catch(() => false);
   check('le vœu s’accroche, et sa fiche s’ouvre', accroche);
-  check('le compte l’annonce', ((await p.locator('#count').textContent()) || '').trim(), '1 vœu accroché');
   check('et l’arbre n’a pas perdu les autres', (await p.evaluate(() => window.__essai.voeux())) > 25);
 
   /* Envoyer : le lien, le mail et le SMS. */
@@ -762,8 +766,8 @@ titre('Accrocher un vœu ne vide pas l’arbre');
   await p.waitForTimeout(1000);
   const n = await p.evaluate(() => window.__essai.voeux());
   check(`l’arbre reste plein (${n} étiquettes)`, n > 25);
-  check('le compte n’annonce que le vrai vœu',
-    ((await p.locator('#count').textContent()) || '').trim(), '1 vœu accroché');
+  check('et plus aucun compteur ne l’annonce',
+    await p.evaluate(() => !document.getElementById('count')));
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
@@ -798,17 +802,19 @@ titre('Le vœu qu’on regarde porte son bouton d’envoi');
 }
 
 /* ------------------------------------------------------------------ *
- * Le menu
+ * Le haut de l'écran
  * ------------------------------------------------------------------ *
- * Le haut de l'écran portait cinq pilules, et le logo s'écrasait entre
- * elles. Les actions sont donc passées dans un menu : il ne reste que le
- * son et le menu lui-même, et le logo retrouve sa place.
+ * Il portait cinq pilules, et le logo s'écrasait entre elles ; puis deux,
+ * dont un menu. Le menu n'a plus rien à porter — la visite guidée se lance
+ * seule, la musique part seule, les guirlandes n'existent plus —, et il ne
+ * reste que le son et la langue, directement accessible.
  */
-titre('Le menu porte les actions, le haut de l’écran respire');
+titre('Le haut de l’écran ne porte que le son et la langue');
 {
   const { ctx, p, bruit } = await ouvrir(13, { width: 390, height: 844 });
-  const haut = await p.evaluate(() => document.querySelectorAll('#tools .pill').length);
+  const haut = await p.evaluate(() => document.querySelectorAll('#tools > *').length);
   check(`deux pilules en haut (${haut})`, haut, 2);
+  check('plus de menu', await p.evaluate(() => !document.getElementById('menu') && !document.getElementById('menuBtn')));
   const logo = await p.evaluate(() => { const i = document.querySelector('#sign img');
     return { l: Math.round(i.getBoundingClientRect().width), h: Math.round(i.getBoundingClientRect().height),
       nl: i.naturalWidth, nh: i.naturalHeight }; });
@@ -817,12 +823,34 @@ titre('Le menu porte les actions, le haut de l’écran respire');
   const ecart = Math.abs((logo.l / logo.h) / (logo.nl / logo.nh) - 1);
   check(`le logo garde ses proportions (${(ecart * 100).toFixed(1)} % d’écart)`, ecart < 0.02);
 
-  const m = await p.evaluate(() => window.__essai.menu(true));
-  check('le menu s’ouvre', m.ouvert);
-  /* Il ne reste que la langue et le vent : la visite guidée se lance
-     seule, la musique part seule, et les guirlandes n'existent plus. */
-  check(`il ne porte plus qu’une action (${m.entrees})`, m.entrees, 1);
-  check('et il se referme', (await p.evaluate(() => window.__essai.menu(false))).ouvert, false);
+  /* Les trois langues sont là, et celle du visiteur est marquée. */
+  check(`les trois langues sont accessibles (${await p.evaluate(() => window.__essai.langues())})`,
+    await p.evaluate(() => window.__essai.langues()), 'fr*,en,zh');
+  await p.click('#langs button[data-l="en"]');
+  await p.waitForTimeout(300);
+  check('on en change d’un geste', await p.evaluate(() => window.__essai.langues()), 'fr,en*,zh');
+  check('et l’appel suit', ((await p.locator('#add').textContent()) || '').trim(), 'Hang a wish');
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le conseil du bas
+ * ------------------------------------------------------------------ *
+ * Il s'effaçait au bout de neuf secondes, juste au moment où l'on
+ * commençait à vouloir toucher quelque chose — et plus rien ne disait
+ * comment. Il reste maintenant pendant toute l'expérience.
+ */
+titre('Le conseil du bas reste');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  const lire = () => p.evaluate(() => { const h = document.getElementById('hint');
+    return { texte: h.textContent.trim(), op: +getComputedStyle(h).opacity }; });
+  const a = await lire();
+  check(`il dit comment faire (« ${a.texte} »)`, a.texte.length > 20 && a.op > 0.9);
+  await p.waitForTimeout(11000);
+  const b = await lire();
+  check(`et il est toujours là onze secondes plus tard (${b.op})`, b.op > 0.9);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }

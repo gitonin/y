@@ -91,7 +91,7 @@ function verifierContenu(page) {
     ['const RELIEF=', 'le relevé du relief'],
     ['var CIEL=', 'le cycle du jour et de la nuit'],
     ['function secouer()', 'la secousse'],
-    ['function menuOuvrir(', 'le menu'],
+    ['id="langs"', 'le choix de la langue'],
     ['var AIRS=', 'les airs de Noël'],
     ['function volutePasser()', 'les volutes d’air'],
     ['function ouverture()', 'l’ouverture sur le vœu de Yunma'],
