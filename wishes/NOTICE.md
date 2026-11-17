@@ -86,34 +86,115 @@ expériences du même site n'ont pas à avoir deux couchants différents.
   en monopode — un axe vertical unique, des rameaux horizontaux par paires
   opposées, de plus en plus courts vers le haut. C'est de là que vient sa
   silhouette en cône, qui tombe bien pour Noël.
-- **Souffler sur l'appareil** fait voler les feuilles. Secouer le téléphone
-  demandait un capteur de mouvement, une autorisation, et un geste que tout le
-  monde ne fait pas spontanément ; souffler, si — et c'est le même geste que le
-  vent. On écoute le micro et l'on y cherche un souffle, pas un bruit : un
-  souffle est fort *et* grave, il a de l'énergie sous trois cents hertz et
-  presque rien au-dessus de deux mille, et il tient un quart de seconde. Une
-  voix, une pièce calme, un grondement lointain et un coup bref ne déclenchent
-  rien — c'est vérifié. Rien n'est enregistré et rien ne sort de l'appareil :
-  on ne lit qu'un niveau, et on l'oublie aussitôt. Le micro existe aussi sur un
-  ordinateur : l'entrée du menu n'est pas réservée au téléphone.
 - **Rien ne se sélectionne**, sauf les champs de saisie, le lien qu'on copie et
   l'image de la carte, qu'un appui long doit pouvoir enregistrer. Sur un
   téléphone, un appui un peu long ouvrait sinon une sélection bleue avec ses
   poignées, et la loupe du système par-dessus la scène.
-- **Le vent** — l'entrée « Faire voler les feuilles » du menu, ou un souffle
-  dans le micro — fait tomber les feuilles et les cerises. Les feuilles
+- **Le vent** — l'entrée « Faire voler les feuilles » du menu, et le plan du
+  vent dans la visite guidée — fait tomber les feuilles et les cerises. Les feuilles
   voltigent, puis une bourrasque les emporte et les efface au loin ; les cerises
   sont lourdes et tombent presque droit ; les vœux restent accrochés. Puis tout
   repousse, chacun à son tour, étalé sur près de quatre secondes — l'arbre se
   remplit au lieu de se rhabiller d'un coup. Six mille instances sont
   recomposées à la main pendant les neuf secondes de l'animation : 1 ms par
   image, et plus rien ensuite.
-- **La visite guidée** : l'arbre tourne, s'approche d'un vœu tiré au sort, le
-  laisse lire, repart, en choisit un autre, lâche ses feuilles au vent, les
-  laisse repousser, et recommence. Le premier geste du visiteur reprend la main.
 - **La poussière d'or** tourne autour de celui qui regarde plutôt que d'exister
   partout : deux cent soixante grains dans un cylindre de vingt-deux unités,
   recollés de l'autre côté dès qu'ils en sortent.
+
+## L'ouverture
+
+**On n'entre pas par un plan large, on entre par un mot.** Le vœu de Yunma —
+« Yunma vous souhaite de joyeuses fêtes », dans la langue du visiteur — est
+accroché à la place la mieux dégagée de l'arbre : la plus éloignée du tronc, à
+mi-hauteur, au bout du fil le plus long. La caméra s'y pose de tout près, avec
+la profondeur de champ qui va avec, puis recule au bout de sept secondes pour
+découvrir l'île.
+
+Trois choses passent avant, et c'est voulu : un vœu reçu par un lien (c'est lui
+qu'on est venu lire), le premier geste du visiteur (il a pris la main, on ne la
+lui reprend pas), et la visite guidée.
+
+Ce vœu-là est toujours le premier de l'arbre, il garde sa place même si l'arbre
+déborde, et il ne compte pas parmi les vœux du public.
+
+## La visite guidée
+
+L'arbre se montre tout seul, en huit plans qui s'enchaînent dans un ordre fixe
+et se tirent au sort à l'intérieur — deux tours ne se ressemblent jamais tout à
+fait :
+
+- **la ronde large**, lente, à une hauteur et une distance tirées au sort ;
+- **l'approche d'un vœu** — le premier est celui de Yunma, les suivants au
+  hasard ;
+- **la plongée** : vu de haut, l'île devient un radeau et l'on voit la couronne
+  entière ;
+- **le vent** : on recule d'abord, car la bourrasque ne se voit pas le nez sur
+  une étiquette, puis les feuilles s'envolent — et le ciel s'en mêle ;
+- **la contre-plongée** : on remonte le tronc, les étiquettes passent au-dessus,
+  et le ciel ferme l'image. C'est le plan qui donne sa taille à l'arbre.
+
+Le diaphragme s'ouvre pendant la visite : le flou n'y est plus un confort, c'est
+ce qui dit où regarder. Le premier geste du visiteur reprend la main.
+
+## Le ciel a des habitants
+
+Une veilleuse qui ne surprend jamais finit par ne plus rien montrer. Le ciel a
+donc deux habitants, chacun à son heure, et ils passent d'eux-mêmes toutes les
+quarante secondes environ — deux fois plus souvent pendant la visite guidée.
+
+- **Des oiseaux, le jour.** Sept, en V, deux triangles chacun : quatorze
+  triangles pour un vol. Ils traversent derrière l'île, à trente unités, et
+  entrent et sortent par un fondu — rien n'apparaît d'un coup dans un ciel vide.
+- **Des étoiles filantes, la nuit.** Un trait et non un point : c'est la traîne
+  qui se voit. Elle s'allume, file, et s'éteint en une seconde et demie.
+
+Les deux se placent **par rapport à la caméra** et non par rapport à l'île :
+lâchés à un angle tiré au sort, ils traversaient le plus souvent hors champ. Et
+la hauteur de l'étoile filante se mesure depuis l'œil — le ciel qu'on voit à
+l'écran n'est qu'une bande de huit degrés au-dessus de l'horizontale, et posée
+à trente unités de haut, elle filait au-dessus du cadre.
+
+## La musique de Noël
+
+Rien n'est téléchargé : l'air est joué note à note par les mêmes oscillateurs
+que le reste de la page. Deux airs tombés dans le domaine public depuis
+longtemps — *Douce nuit* (1818) et *Vive le vent* (1857) —, notés en demi-tons
+au-dessus du do et en croches, et qui alternent avec un silence entre les deux.
+
+La voix est une cloche : une fondamentale, trois partiels, une attaque sèche et
+une longue traîne, posée sur un coussin de tonique et de quinte très graves. Le
+gong de fond se tait pendant ce temps — deux sources graves à la fois font une
+soupe.
+
+Les notes sont programmées **une seconde à l'avance** : la boucle d'images peut
+sauter, l'horloge du son non, et c'est elle qui tient la mesure. Si l'horloge
+prend de l'avance — le son coupé, un onglet laissé de côté —, on repart de
+l'instant présent, sans quoi toutes les notes du temps perdu sonneraient
+ensemble.
+
+Elle attend qu'on la demande : un son qui part tout seul chasse plus de monde
+qu'il n'en retient.
+
+## Les guirlandes
+
+Deux cents ampoules le long des rameaux, rouge, vert, or, blanc et rose, qui
+clignotent chacune à son rythme — et toutes ensemble sur la dernière note quand
+la musique joue. Chaque ampoule est dessinée deux fois : un cœur net, et un halo
+large et doux par-dessus. C'est le halo qui fait qu'une lumière se lit comme une
+lumière et non comme un grain de poussière.
+
+Elles sont posées un quart d'unité **sous** leur nœud de branche, là où pendent
+les étiquettes : au nœud même, l'ampoule est enfouie sous les feuilles qui y
+poussent.
+
+Pas de lampes dans la scène : trois lumières de plus et tous les matériaux se
+recompilent, pour un téléphone qui rame. Les ampoules brillent par elles-mêmes,
+et un voile de couleur passe sur l'image finale — mais presque uniquement la
+nuit : le ciel de jour est un crème très clair, et la moindre teinte posée
+dessus repeint tout l'écran en rose.
+
+Elles sont allumées d'office. C'est un arbre de Noël.
 
 ## Toucher un vœu
 
@@ -147,10 +228,10 @@ Trois réglages font que l'on arrive **sur le mot** :
 
 Le haut de l'écran portait cinq pilules, et le logo s'écrasait entre elles. Il
 n'en reste que deux — le son, et le menu —, et les actions sont passées dans un
-panneau : la langue, la visite guidée, faire voler les feuilles, et souffler
-pour les faire voler là où le micro existe. Le partage est resté en bas, à côté
-de « Accrocher un vœu » : ce sont les deux gestes qui comptent, et ils ne se
-cachent pas dans un menu.
+panneau : la langue, la visite guidée, faire voler les feuilles, la musique de
+Noël et les guirlandes. Le partage est resté en bas, à côté de « Accrocher un
+vœu » : ce sont les deux gestes qui comptent, et ils ne se cachent pas dans un
+menu.
 
 ## Envoyer un vœu
 
@@ -196,17 +277,17 @@ qui s'y accroche l'engage.
 **Le chinois n'est pas relu par un locuteur natif** : l'interface et les
 versions chinoises des vœux « Noël » et « café » sont à faire vérifier.
 
-**Le souffle n'a pas été essayé sur un vrai appareil.** L'épreuve vérifie les
-nombres — la chute, la repousse, et le détecteur nourri de faux spectres —, mais
-les seuils ont été choisis, pas mesurés : des graves au-dessus de −52 dB, treize
-décibels de plus que les aigus, tenus un quart de seconde. À régler sur
-l'appareil.
+**La musique n'a pas été écoutée.** L'épreuve vérifie que les notes sont
+programmées, qu'elles le sont en avance et que l'air avance ; elle ne peut pas
+dire si cela sonne juste. Les deux airs sont notés à la main, et le premier
+écouteur sera le premier juge. De même, l'équilibre entre la cloche, le coussin
+grave et le gong de fond est posé au jugé.
 
-Un avertissement qui a coûté du temps : **une page publiée comme artefact
-claude.ai ne peut atteindre ni le micro, ni les capteurs de mouvement** — le
-cadre les refuse sans même poser la question. Un essai qui y échoue ne prouve
-donc rien sur le souffle ; il faut déposer le dossier pour le juger.
-
-Le gyroscope a été essayé, puis retiré : agiter le téléphone ne faisait rien de
-sûr, l'autorisation s'ajoutait à celle du micro, et le geste n'était évident
-pour personne. Souffler fait le même travail, et c'est le geste du vent.
+**Le gyroscope et le souffle ont été retirés.** Incliner le téléphone déplaçait
+un peu le regard : joli sur le papier, invisible à l'usage. Souffler dans le
+micro faisait voler les feuilles : joli aussi, mais cela demandait une
+autorisation que personne n'accorde à un arbre — et une page publiée comme
+artefact claude.ai ne peut atteindre ni le micro ni les capteurs de mouvement,
+de sorte qu'on ne pouvait ni l'essayer ni le régler sans déposer le dossier. Le
+menu porte « faire voler les feuilles », qui marche partout et sans rien
+demander.

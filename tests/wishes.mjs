@@ -26,7 +26,10 @@
  *      repousse ;
  *   9. la visite guidée tourne toute seule, et le premier geste la stoppe ;
  *  10. toucher un vœu s'en approche, sans ouvrir de fiche par-dessus ;
- *  11. le menu porte les actions, et le haut de l'écran n'a que deux pilules.
+ *  11. le menu porte les actions, et le haut de l'écran n'a que deux pilules ;
+ *  12. on entre par le vœu de Yunma, dans la langue du visiteur ;
+ *  13. la musique de Noël se joue en avance sur elle-même ;
+ *  14. les guirlandes s'allument, et le ciel a ses habitants.
  */
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
@@ -71,7 +74,7 @@ check('le relevé du relief et les images sont compressés à la volée', htacce
    affichage double. */
 check('aucune image n’est encodée dans la page', !/data:image\/(png|jpe?g);base64/.test(page));
 const kob = Math.round(Buffer.byteLength(page) / 1024);
-check(`la page tient en moins de 220 Ko (${kob})`, kob < 220);
+check(`la page tient en moins de 240 Ko (${kob})`, kob < 240);
 
 /* ------------------------------------------------------------------ *
  * 2. Plus rien de l'environnement d'origine
@@ -172,6 +175,10 @@ titre('L’arbre n’a qu’un tronc, et son île tient à l’écran');
 for (const [nom, vue] of [['large', { width: 1440, height: 820 }],
   ['carré', { width: 900, height: 900 }], ['téléphone', { width: 390, height: 844 }]]) {
   const { ctx, p, bruit } = await ouvrir(13, vue);
+  /* On arrive sur le vœu de Yunma : le cadrage d'accueil est celui vers
+     lequel la caméra recule ensuite, et c'est lui qu'on mesure. */
+  await p.evaluate(() => { window.__essai.maison(); window.__essai.poser(); });
+  await p.waitForTimeout(400);
   const c = await p.evaluate(() => window.__essai.cadrage());
   check(`sur ${nom}, la cime est dans l’écran (${c.haut})`, c.haut < 0.98);
   check(`sur ${nom}, l’île passe au-dessus de l’appel (${c.bas} > ${c.barre})`, c.bas > c.barre);
@@ -434,34 +441,145 @@ titre('La visite guidée tourne, et rend la main');
 }
 
 /* ------------------------------------------------------------------ *
- * Souffler sur l'arbre
+ * L'ouverture
  * ------------------------------------------------------------------ *
- * Secouer le téléphone demandait un capteur de mouvement, une autorisation,
- * et un geste que tout le monde ne fait pas spontanément. Souffler, si — et
- * c'est le même geste que le vent.
- *
- * Un souffle se reconnaît à deux choses : il est fort, et il est grave. Ce
- * qu'il faut vérifier n'est donc pas qu'il déclenche (c'est facile) mais que
- * le reste ne déclenche pas : une voix, une pièce calme, un grondement
- * lointain, un coup bref. Un arbre qui se dépouille à chaque bruit de rue
- * serait pire qu'un arbre immobile.
+ * On n'entre plus par un plan large : on entre par un mot. Le vœu de Yunma
+ * est accroché à la place la mieux dégagée de l'arbre, la caméra s'y pose,
+ * et recule au bout de sept secondes pour découvrir l'île — sauf si le
+ * visiteur a déjà pris la main, ou si un lien reçu réclame la place.
  */
-titre('Souffler fait voler les feuilles, et le reste non');
-{
-  const { ctx, p, bruit } = await ouvrir(11);
-  const e = await p.evaluate(() => window.__essai.souffle());
-  check('le micro est là, donc le bouton aussi', e.dispo && e.bouton);
-  check('et il est éteint tant qu’on ne l’a pas demandé', e.on, false);
+titre('On entre par le vœu de Yunma');
+for (const [l, debut] of [['fr', 'Yunma vous souhaite'], ['en', 'Yunma wishes you'], ['zh', '云马祝您']]) {
+  const ctx = await nav.newContext({ viewport: { width: 1000, height: 800 }, locale: l === 'zh' ? 'zh-CN' : l });
+  const p = await ctx.newPage();
+  const bruit = [];
+  p.on('pageerror', (e) => bruit.push('' + e));
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+  await p.waitForTimeout(1200);
+  await p.evaluate(() => document.getElementById('enter').click());
+  await p.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
+  await p.waitForTimeout(1000);
+  const y = await p.evaluate(() => window.__essai.yunma());
+  check(`en ${l}, le vœu est dans la langue du visiteur (« ${y.texte} »)`, y.texte.startsWith(debut));
+  check(`en ${l}, il est le premier de l’arbre et il y est accroché`, y.premier && y.accroche);
+  const a = await p.evaluate(() => window.__essai.accueil());
+  check(`en ${l}, la caméra s’est posée dessus`, a.fait && a.vise);
+  check(`en ${l}, et le recul est armé`, a.recul);
+  await p.evaluate(() => window.__essai.poser());
+  await p.waitForTimeout(500);
+  const v = await p.evaluate(() => window.__essai.cible(window.__essai.yunma().place));
+  check(`en ${l}, le mot est dans l’écran (${v.x} / ${v.y}, rayon ${v.r})`,
+    Math.abs(v.x) < 0.5 && Math.abs(v.y) < 0.9 && v.r < 6);
+  /* Le premier geste annule le recul : on ne reprend pas la main à
+     quelqu'un qui vient de la prendre. */
+  await p.mouse.move(500, 400); await p.mouse.down(); await p.mouse.up();
+  await p.waitForTimeout(200);
+  check(`en ${l}, le premier geste annule le recul`, (await p.evaluate(() => window.__essai.accueil())).recul, false);
+  check(`en ${l}, aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
 
-  /* On pousse un spectre à la place du micro : les graves, les aigus, et la
-     durée. Rien n'est enregistré nulle part — le détecteur ne lit qu'un
-     niveau. */
-  const essai = (bas, aigu, sec) => p.evaluate(([a, b2, c]) => window.__essai.souffleFaux(a, b2, c), [bas, aigu, sec]);
-  check('un souffle tenu : les feuilles s’envolent', await essai(-40, -62, 1.0));
-  check('un souffle trop bref : rien', await essai(-40, -62, 0.15), false);
-  check('une voix, forte mais pas si grave : rien', await essai(-44, -48, 1.0), false);
-  check('une pièce calme : rien', await essai(-78, -84, 1.0), false);
-  check('un grave sourd mais faible : rien', await essai(-60, -80, 1.0), false);
+/* ------------------------------------------------------------------ *
+ * La musique de Noël
+ * ------------------------------------------------------------------ *
+ * Rien n'est téléchargé : l'air est joué note à note par les oscillateurs
+ * de la page. Ce qui se casse sans bruit, ici, c'est l'horloge : si les
+ * notes ne sont plus programmées en avance, la mélodie hoquette à chaque
+ * image sautée. On vérifie donc qu'il y a toujours de l'avance, et que
+ * l'air avance.
+ */
+titre('La musique de Noël se joue toute seule');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  check('au repos, elle est muette', (await p.evaluate(() => window.__essai.musique())).on, false);
+  await p.evaluate(() => window.__essai.musique(true));
+  await p.waitForTimeout(1200);
+  const a = await p.evaluate(() => window.__essai.musique());
+  check(`elle joue (air ${a.air}, note ${a.note})`, a.on && a.note > 0);
+  check(`et les notes sont programmées en avance (${a.avance} s)`, a.avance > 0 && a.avance < 2);
+  await p.waitForTimeout(1500);
+  const b = await p.evaluate(() => window.__essai.musique());
+  check(`l’air avance (${a.note} → ${b.note})`, b.note > a.note);
+  await p.evaluate(() => window.__essai.musique(false));
+  check('et elle s’arrête quand on le demande', (await p.evaluate(() => window.__essai.musique())).on, false);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Les guirlandes
+ * ------------------------------------------------------------------ *
+ * Deux cents ampoules le long des rameaux, et un voile de couleur sur
+ * l'image. Allumées d'office — c'est un arbre de Noël —, franches la nuit
+ * et discrètes le jour.
+ */
+titre('Les guirlandes s’allument, et s’éteignent');
+{
+  const { ctx, p, bruit } = await ouvrir(22);
+  const a = await p.evaluate(() => window.__essai.fete());
+  check('elles sont allumées d’office', a.on);
+  check(`deux cents ampoules (${a.points})`, a.points, 200);
+  const monte = await p.waitForFunction(() => window.__essai.fete().amp > 0.9, null, { timeout: 60000 })
+    .then(() => true).catch(() => false);
+  const b = await p.evaluate(() => window.__essai.fete());
+  check(`elles s’allument en fondu (${b.amp})`, monte);
+  check(`la nuit, elles sont franches (${b.opacite})`, b.opacite > 0.7);
+  check(`et le voile de couleur passe sur l’image (${b.voile})`, b.voile > 0.7);
+  await p.evaluate(() => window.__essai.fete(false));
+  const baisse = await p.waitForFunction(() => !window.__essai.fete().visible, null, { timeout: 60000 })
+    .then(() => true).catch(() => false);
+  check('on les éteint, et elles s’effacent', baisse);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+{
+  const { ctx, p } = await ouvrir(13);
+  await p.waitForFunction(() => window.__essai.fete().amp > 0.9, null, { timeout: 60000 }).catch(() => {});
+  const j = await p.evaluate(() => window.__essai.fete());
+  check(`de jour, elles restent discrètes (${j.opacite} contre 1 la nuit)`, j.opacite < 0.8);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le ciel a des habitants
+ * ------------------------------------------------------------------ *
+ * Des oiseaux le jour, des étoiles filantes la nuit. Chacun à son heure :
+ * une étoile filante en plein midi serait une erreur, et c'est le genre
+ * d'erreur qu'on ne voit jamais soi-même, puisqu'elle dure une seconde.
+ */
+titre('Le ciel a ses habitants, chacun à son heure');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  check('un vol passe quand on l’appelle', await p.evaluate(() => window.__essai.oiseaux()));
+  const o = await p.evaluate(() => window.__essai.ciel2());
+  /* Assez haut pour passer derrière l'île, pas si haut qu'il sorte du
+     cadre : le ciel qu'on voit à l'écran n'est qu'une bande étroite
+     au-dessus de l'horizontale de l'œil. */
+  check(`il passe au-dessus de l’île (${o.y} unités)`, o.y > 5.5 && o.y < 12);
+  /* Et surtout : dans le cadre. Lâchés à un angle tiré au sort et posés
+     trop haut, oiseaux comme étoiles filantes traversaient hors champ —
+     un vol que personne ne voit n'est pas un vol. */
+  const n = await p.evaluate(() => window.__essai.ois());
+  check(`et dans le cadre, pas au-dessus (hauteur à l’écran ${n.ndc[1]})`, n.ndc[1] < 1);
+  await p.evaluate(() => window.__essai.filante());
+  await p.waitForTimeout(400);
+  const f = await p.evaluate(() => window.__essai.ciel2());
+  check(`une étoile filante en plein jour ne se voit pas (${f.opacite})`, f.opacite, 0);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+{
+  const { ctx, p, bruit } = await ouvrir(22);
+  await p.evaluate(() => window.__essai.filante());
+  /* Elle s'allume en filant : au début de sa course elle est presque
+     transparente, et le rendu logiciel ne donne qu'une image par seconde.
+     On attend donc son plein éclat plutôt qu'un délai. */
+  const brille = await p.waitForFunction(() => window.__essai.ciel2().opacite > 0.5, null, { timeout: 60000 })
+    .then(() => true).catch(() => false);
+  const f = await p.evaluate(() => window.__essai.ciel2());
+  check(`la nuit, elle brille (${f.opacite})`, brille);
+  const n = await p.evaluate(() => window.__essai.fil());
+  check(`et elle file dans le cadre (${n.ndc[0]} / ${n.ndc[1]})`, n.ndc[1] < 1 && Math.abs(n.ndc[0]) < 1.4);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
