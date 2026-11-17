@@ -652,10 +652,13 @@ var ficheH=0;
 function barreVoeu(){
   var b=$("voeuShare"); if(!b) return;
   /* Pas pendant la visite guidée : la caméra y passe de mot en mot, et un
-     bouton qui clignote à chaque plan transforme la veilleuse en vitrine. */
-  var montrer=!!(vise&&focused&&!cardWish&&!sheetOpen&&entered&&!CINE.on);
+     bouton qui clignote à chaque plan transforme la veilleuse en vitrine.
+     Pas non plus sur le vœu de Yunma, qui n'a pas de lien à lui : la
+     pilule n'aurait alors proposé que de partager l'arbre, ce que l'icône
+     à côté de l'appel fait déjà. */
+  var montrer=!!(vise&&focused&&!vise.w.yunma&&!cardWish&&!sheetOpen&&entered&&!CINE.on);
   b.classList.toggle("on",montrer);
-  if(montrer) $("voeuShareT").textContent=T(vise.w.yunma?"shareTitle":"shareWishTitle");
+  if(montrer) $("voeuShareT").textContent=T("shareWishTitle");
 }
 function openCard(w){ cardWish=w; fillCard(w); $("card").classList.add("open"); $("bottom").classList.add("down"); barreVoeu();
   ficheH=$("card").getBoundingClientRect().height+18; }

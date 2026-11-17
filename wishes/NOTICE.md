@@ -243,7 +243,8 @@ visée remonte au-dessus d'elle, de la hauteur qu'elle occupe.
 **Tout vœu s'envoie**, le décor compris : ce sont des vœux comme les autres, et
 le lien les reporte à l'identique chez celui qui l'ouvre. Seul celui de Yunma
 n'a pas de lien à lui — son texte change avec la langue de qui le lit, et il
-n'y a rien à figer dedans ; sa pilule partage l'arbre.
+n'y a rien à figer dedans. Sa pilule ne paraît donc pas : elle n'aurait proposé
+que de partager l'arbre, ce que l'icône à côté de l'appel fait déjà.
 
 Trois réglages font que l'on arrive **sur le mot** :
 

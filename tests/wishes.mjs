@@ -791,6 +791,12 @@ titre('Le vœu qu’on regarde porte son bouton d’envoi');
   await p.evaluate(() => window.__essai.maison());
   await p.waitForTimeout(300);
   check('en reculant, elle s’efface', await vu(), false);
+  /* Et elle se tait sur le vœu de Yunma, qui n'a pas de lien à lui : elle
+     n'aurait proposé que de partager l'arbre, ce que l'icône à côté de
+     l'appel fait déjà. */
+  await p.evaluate(() => { window.__essai.viser(window.__essai.yunma().place, false, true); });
+  await p.waitForTimeout(300);
+  check('sur le vœu de Yunma, elle se tait', await vu(), false);
   /* Pendant la visite guidée, elle se tait : la caméra y passe de mot en
      mot, et un bouton qui clignote à chaque plan transforme la veilleuse
      en vitrine. */
