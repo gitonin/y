@@ -227,6 +227,22 @@ l'horloge prend de l'avance — le son coupé, un onglet laissé de côté —, 
 repart de l'instant présent, sans quoi toutes les notes du temps perdu
 sonneraient ensemble.
 
+## Accrocher le sien
+
+Un vœu qu'on vient d'accrocher s'annonçait par un cartouche qui surgissait
+par-dessus la scène, le mot déjà écrit dessus et trois boutons dessous. On
+voyait le panneau, pas l'étiquette.
+
+Maintenant, **soixante-dix grains d'or** partent du vœu et retombent — une
+direction prise au hasard sur la sphère, une vitesse qui l'est un peu moins
+(plus vers le haut, sans quoi la gerbe tombe comme un sac), un frein et une
+pesanteur —, et la caméra s'en approche en même temps. On voit où le vœu s'est
+posé, et on le lit sur l'arbre, là où il est.
+
+La fiche vient **ensuite**, deux secondes et demie plus tard, quand on a vu :
+« Votre vœu », puis le mot, puis Envoyer, Carte et Retour. Le titre annonce le
+mot, il ne le suit pas — un titre se lit avant.
+
 ## Toucher un vœu
 
 Toucher une étiquette **s'en approche**, et fait paraître une pilule discrète

@@ -678,9 +678,26 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
   await p.waitForTimeout(200);
   await p.fill('#name', QUI);
   await p.click('#hang');
+  /* D'abord l'or : soixante-dix grains partent du vœu, et la caméra y va.
+     Le cartouche noir qui surgissait par-dessus la scène montrait le
+     panneau, pas l'étiquette. */
+  const or = await p.waitForFunction(() => window.__essai.etincelles().vues, null, { timeout: 30000 })
+    .then(() => true).catch(() => false);
+  const et = await p.evaluate(() => window.__essai.etincelles());
+  check(`l’or éclate autour du vœu (${et.grains} grains)`, or);
+  check('et aucune fiche ne surgit avec elle', et.ficheAlors, false);
+  check('la caméra s’en approche', (await p.evaluate(() => window.__essai.visiteEtat())).vise);
+  /* La fiche vient ensuite, quand on a vu. */
   const accroche = await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
     null, { timeout: 60000 }).then(() => true).catch(() => false);
-  check('le vœu s’accroche, et sa fiche s’ouvre', accroche);
+  check('puis la fiche s’ouvre', accroche);
+  const delai = await p.evaluate(() => window.__essai.etincelles().apres);
+  check(`elle attend qu’on ait vu (${delai} ms après la gerbe)`, delai > 2000);
+  check('elle annonce le vœu avant de le dire',
+    ((await p.locator('#cBy').textContent()) || '').trim(), 'Votre vœu');
+  check('et « votre vœu » est bien au-dessus du mot',
+    await p.evaluate(() => { const c = document.getElementById('card');
+      return c.firstElementChild.id === 'cBy'; }));
   check('et l’arbre n’a pas perdu les autres', (await p.evaluate(() => window.__essai.voeux())) > 25);
 
   /* Envoyer : le lien, le mail et le SMS. */

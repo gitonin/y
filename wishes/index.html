@@ -166,7 +166,10 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #card .zh.lat{font-family:"Caveat","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:28px;color:var(--ink)}
 #card .py{font-size:12px;color:rgba(var(--ink-rgb),.5);margin-top:2px;letter-spacing:.04em}
 #card .tr{font-size:15px;margin-top:8px;line-height:1.4}
-#card .by{font-size:12px;color:var(--green);margin-top:8px;letter-spacing:.04em}
+/* « Votre vœu » annonce le mot, il ne le suit pas : c'est un titre, et un
+   titre se lit avant. Vide, il ne prend pas de place. */
+#card .by{font-size:11px;color:var(--green);letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+#card .by:not(:empty){margin-bottom:7px}
 #card .row{display:flex;gap:8px;margin-top:14px}
 #card .row .btn{height:44px;font-size:11.5px;padding:0 6px;flex:1}
 #cimg{display:block;max-height:50vh;max-width:100%;margin:4px auto 12px;border-radius:3px;box-shadow:0 12px 30px -14px rgba(60,40,20,.55);-webkit-touch-callout:default;user-select:auto;-webkit-user-select:auto}
@@ -229,7 +232,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 </div>
 
 <div id="card">
-  <div class="zh zhf" id="cZh"></div><div class="py" id="cPy"></div><div class="tr" id="cTr"></div><div class="by" id="cBy"></div>
+  <div class="by" id="cBy"></div><div class="zh zhf" id="cZh"></div><div class="py" id="cPy"></div><div class="tr" id="cTr"></div>
   <div class="row"><button class="btn" id="cShare" data-i="shareWish"></button><button class="btn ghost" id="cCard" data-i="card"></button><button class="btn ghost" id="cBack" data-i="back"></button></div>
 </div>
 
@@ -674,11 +677,12 @@ function barreVoeu(){
   var surRecu=!!(vise&&recu&&vise.w.id===recu.id&&focused&&!sheetOpen&&entered&&!CINE.on);
   $("recuDe").classList.toggle("on",surRecu);
   if(surRecu) $("recuDe").textContent=T("recuDe")(vise.w.n||"");
-  var montrer=!!(vise&&focused&&!vise.w.yunma&&!surRecu&&!cardWish&&!sheetOpen&&entered&&!CINE.on);
+  var montrer=!!(vise&&focused&&!vise.w.yunma&&!surRecu&&!cardWish&&!sheetOpen&&entered&&!CINE.on&&!fichePrevue);
   b.classList.toggle("on",montrer);
   if(montrer) $("voeuShareT").textContent=T("shareWishTitle");
 }
-function openCard(w){ cardWish=w; fillCard(w); $("card").classList.add("open"); $("bottom").classList.add("down"); barreVoeu();
+function openCard(w){ if(ETIN.quand&&ETIN.apres<0) ETIN.apres=Math.round(performance.now()-ETIN.quand);
+  cardWish=w; fillCard(w); $("card").classList.add("open"); $("bottom").classList.add("down"); barreVoeu();
   ficheH=$("card").getBoundingClientRect().height+18; }
 function closeCard(keepCam){ if(!cardWish) return; cardWish=null; $("card").classList.remove("open");
   if(!sheetOpen) $("bottom").classList.remove("down"); if(!keepCam&&window.__home) window.__home(); barreVoeu(); }
@@ -1700,7 +1704,15 @@ window.__syncTags=function(){
     if(pendingFocus===w.id) focus=tags[w.id]; });
   Object.keys(tags).forEach(function(id){ if(!seen[id]){ removeTag(tags[id]); delete tags[id]; } });
   if(remote!==null||wishes.length) firstLoad=false;
-  if(focus){ pendingFocus=null; focus.born=clock; focusTag(focus,true); }
+  if(focus){ pendingFocus=null; focus.born=clock;
+    /* On s'approche et l'or éclate ; la fiche attend qu'on ait vu. */
+    focusTag(focus,false); etincelles(focus);
+    fichePrevue=focus; barreVoeu();
+    setTimeout(function(){
+      if(fichePrevue!==focus) return;
+      fichePrevue=null;
+      if(focused&&vise===focus&&!sheetOpen) openCard(focus.w); else barreVoeu();
+    },2700); }
   else { tryHash(); ouverture(); }
 };
 var hashDone=false;
@@ -1835,7 +1847,7 @@ function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(
    avant : c'est lui qu'on est venu lire, et c'est de lui que la visite
    partira. Le premier geste du visiteur annule le relais — il a pris la
    main, on ne la lui reprend pas tout de suite. */
-var ouvre=0, ouvreFait=false;
+var ouvre=0, ouvreFait=false, fichePrevue=null;
 function ouverture(){
   if(ouvreFait||!entered||recu||!tags.yunma) return;
   ouvreFait=true;
@@ -2107,6 +2119,57 @@ function noelMaj(){
    rameaux, un voile de couleur sur l'image : joli la nuit, bavard le jour,
    et une option de plus dans un menu qui doit rester court. L'arbre est un
    arbre ; ce qui brille la nuit, ce sont les vœux. */
+/* ------------------------------------------------------------------ les étincelles
+   Un vœu qu'on vient d'accrocher s'annonçait par un cartouche noir qui
+   surgissait par-dessus la scène, avec le mot déjà écrit dessus et trois
+   boutons. On voyait le panneau, pas l'étiquette.
+
+   Soixante-dix grains d'or qui partent du vœu et retombent : on voit où il
+   s'est posé, la caméra y va, et le mot se lit sur l'arbre — là où il est.
+   La fiche vient ensuite, quand on a vu. */
+var ETIN=(function(){
+  var N=70, pos=new Float32Array(N*3), vit=new Float32Array(N*3);
+  var geo=new THREE.BufferGeometry(); geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  var m=new THREE.Points(geo,new THREE.PointsMaterial({map:softTex,color:C(0xffe6a4),size:.1,
+    sizeAttenuation:true,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));
+  m.visible=false; m.frustumCulled=false; world.add(m);
+  return {pts:m,pos:pos,vit:vit,n:N,t:-99,duree:1.9};
+})();
+function etincelles(t){
+  if(!t||!t.slot) return;
+  var p=t.slot.pos, y=p[1]-t.h*.5, i;
+  for(i=0;i<ETIN.n;i++){
+    /* Une direction prise au hasard sur la sphère, et une vitesse qui ne
+       l'est pas tout à fait : un peu plus vers le haut, sans quoi la
+       gerbe tombe comme un sac. */
+    var a=R()*6.283, b=Math.acos(2*R()-1), v=.7+R()*1.6, o=i*3;
+    ETIN.pos[o]=p[0]; ETIN.pos[o+1]=y; ETIN.pos[o+2]=p[2];
+    ETIN.vit[o]=Math.sin(b)*Math.cos(a)*v;
+    ETIN.vit[o+1]=Math.cos(b)*v*.75+.45;
+    ETIN.vit[o+2]=Math.sin(b)*Math.sin(a)*v;
+  }
+  /* Pour l'épreuve : l'instant de la gerbe, et l'état de la fiche à cet
+     instant-là. Mesuré dans la page, car entre deux allers-retours d'une
+     épreuve les deux secondes et demie sont passées. */
+  ETIN.quand=performance.now(); ETIN.ficheAlors=!!cardWish; ETIN.apres=-1;
+  ETIN.t=clock; ETIN.pts.visible=true;
+  ETIN.pts.geometry.attributes.position.needsUpdate=true;
+}
+function etincellesMaj(t,dt){
+  if(!ETIN.pts.visible) return;
+  var u=(t-ETIN.t)/ETIN.duree;
+  if(u>1||u<0){ ETIN.pts.visible=false; ETIN.pts.material.opacity=0; return; }
+  var i, f=1-u, frein=Math.pow(.05,dt);
+  for(i=0;i<ETIN.n;i++){ var o=i*3;
+    ETIN.pos[o]+=ETIN.vit[o]*dt; ETIN.pos[o+1]+=ETIN.vit[o+1]*dt; ETIN.pos[o+2]+=ETIN.vit[o+2]*dt;
+    ETIN.vit[o]*=frein; ETIN.vit[o+2]*=frein;
+    ETIN.vit[o+1]=ETIN.vit[o+1]*frein-1.7*dt; }
+  ETIN.pts.geometry.attributes.position.needsUpdate=true;
+  /* Elles s'allument d'un coup et s'éteignent en s'éparpillant. */
+  ETIN.pts.material.opacity=Math.min(1,u*9)*f*f*(.95+.05*SUN.nuit);
+  ETIN.pts.material.size=.07+.08*f;
+}
+
 /* ------------------------------------------------------------------ les surprises
    Une veilleuse qui ne surprend jamais finit par ne plus rien montrer. Le
    ciel a donc deux habitants, chacun à son heure : des oiseaux le jour,
@@ -2390,7 +2453,15 @@ window.__essai={
   /* Pour l'épreuve : vieillir l'inactivité d'un coup. La visite guidée
      revient au bout de dix secondes sans geste, et dix secondes d'horloge
      de scène font deux minutes de mur sous un rendu logiciel. */
+  /* La gerbe d'or d'un vœu qu'on vient d'accrocher. */
+  etincelles:function(){ return {vues:ETIN.pts.visible,u:+((clock-ETIN.t)/ETIN.duree).toFixed(2),
+    op:+ETIN.pts.material.opacity.toFixed(2),grains:ETIN.n,
+    ficheAlors:ETIN.ficheAlors,apres:ETIN.apres}; },
   /* Le logo : ce qu'il y a derrière lui, et jusqu'où il s'éclaircit. */
+  /* La gerbe d'or d'un vœu qu'on vient d'accrocher. */
+  etincelles:function(){ return {vues:ETIN.pts.visible,u:+((clock-ETIN.t)/ETIN.duree).toFixed(2),
+    op:+ETIN.pts.material.opacity.toFixed(2),grains:ETIN.n,
+    ficheAlors:ETIN.ficheAlors,apres:ETIN.apres}; },
   /* Le logo : ce qu'il y a derrière lui, et jusqu'où il s'éclaircit. */
   /* Sonde brute : la couleur lue à un point de l'écran, en pixels CSS. */
   pixel:function(cx,cy){ var cv=renderer.domElement, b=new Uint8Array(4*4*4);
@@ -2662,7 +2733,7 @@ function frame(now){
   /* L'heure d'abord : tout le décor en dépend, et le thème de l'interface
      avec lui. */
   sunMaj(); themeMaj(); lumMaj(); cielMaj(t);
-  cineMaj(dt); noelMaj(); surprisesMaj(t,dt);
+  cineMaj(dt); noelMaj(); surprisesMaj(t,dt); etincellesMaj(t,dt);
   if(ouvre&&t-ouvre>7){ ouvre=0; cineStart(); }
   /* Et si plus rien ne bouge, la visite revient d'elle-même : c'est une
      veilleuse, pas un film qu'on lance. Dix secondes d'immobilité, rien
