@@ -389,18 +389,22 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
   await p.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
   /* La caméra y va au bout d'une seconde et deux dixièmes, puis met le
      temps qu'il faut à s'y rendre : on attend la carte, pas une horloge. */
-  const vu = await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+  const vu = await p.waitForFunction(() => document.getElementById('recuDe').classList.contains('on'),
     null, { timeout: 60000 }).then(() => true).catch(() => false);
-  check('la carte du vœu s’ouvre toute seule', vu);
-  check('et c’est le bon mot',
-    (await p.locator('#cZh').textContent())?.trim(), envoi.t);
-  check('signé du bon prénom',
-    ((await p.locator('#cBy').textContent()) || '').includes(envoi.n));
+  /* Plus de cartouche par-dessus la scène : une ligne, et les deux boutons
+     de toujours en dessous. Le mot, lui, est écrit sur l'étiquette, que la
+     caméra va lire de tout près. */
+  check('une ligne dit qui l’envoie', vu);
+  check('et elle le nomme',
+    ((await p.locator('#recuDe').textContent()) || '').includes(envoi.n));
+  check('aucune fiche ne s’ouvre par-dessus',
+    await p.evaluate(() => window.__essai.fiche()), false);
+  const pres = await p.evaluate(() => window.__essai.visiteEtat());
+  check(`et la caméra s’en approche de tout près (rayon ${pres.r})`, pres.r < 3.8);
   /* La carte, et son QR code. La photographie du fond n'est plus encodée
      dans la page : elle part quand on ouvre la carte. Les polices, elles,
      sont prêtes depuis longtemps — et déclenchaient le dessin avant son
      arrivée, d'où une carte sur beige vide. */
-  await p.click('#cBack'); await p.waitForTimeout(400);
   await p.evaluate(() => { window.__essai.viser(0, true); });
   await p.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
   await p.click('#cCard');
@@ -726,12 +730,14 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
   await p2.waitForTimeout(1200);
   await p2.evaluate(() => document.getElementById('enter').click());
   await p2.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
-  const vu = await p2.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+  const vu = await p2.waitForFunction(() => document.getElementById('recuDe').classList.contains('on'),
     null, { timeout: 60000 }).then(() => true).catch(() => false);
-  check('à l’arrivée, le vœu est là et sa carte s’ouvre', vu);
-  check('c’est le bon mot', ((await p2.locator('#cZh').textContent()) || '').trim(), MOT);
-  check('signé du bon prénom', ((await p2.locator('#cBy').textContent()) || '').includes(QUI));
-  check('et la caméra est allée dessus', (await p2.evaluate(() => window.__essai.visiteEtat())).vise);
+  check('à l’arrivée, le vœu est là et une ligne dit qui l’envoie', vu);
+  check('elle nomme l’expéditeur', ((await p2.locator('#recuDe').textContent()) || '').includes(QUI));
+  const arr = await p2.evaluate(() => window.__essai.visiteEtat());
+  check(`et la caméra est allée dessus, de tout près (rayon ${arr.r})`, arr.vise && arr.r < 3.8);
+  check('c’est le bon mot sur l’étiquette',
+    await p2.evaluate((m) => window.__essai.recu() && window.__essai.recu().t === m, MOT));
   check(`aucune erreur à l’arrivée (${bruit2.length})`, bruit2.length, 0);
   await ctx2.close();
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
@@ -804,6 +810,47 @@ titre('Le vœu qu’on regarde porte son bouton d’envoi');
   await p.waitForTimeout(300);
   check('pendant la visite guidée, elle se tait', await vu(), false);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
+ * Le logo se lit sur ce qu'il y a derrière lui
+ * ------------------------------------------------------------------ *
+ * C'est un dessin noir sur fond transparent. Le thème l'inversait avec la
+ * nuit ; mais il disparaît aussi en plein jour dès qu'on s'approche de
+ * l'arbre, où ce sont des feuilles sombres qui passent derrière lui. On
+ * mesure donc, deux fois par seconde, huit pixels sur huit à l'endroit même
+ * du logo, dans l'image qu'on vient de dessiner.
+ */
+titre('Le logo s’éclaircit sur un fond sombre');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  await p.evaluate(() => { window.__essai.maison(); window.__essai.poser(); });
+  await p.waitForTimeout(1500);
+  const loin = await p.evaluate(() => window.__essai.logo());
+  check(`de loin, le ciel est clair derrière lui (${loin.lum})`, loin.lum > 0.7);
+  check(`il reste noir (inversion ${loin.inv})`, loin.inv < 0.1);
+  /* Dans la ramure, en plein jour : le fond devient sombre, le logo doit
+     s'éclaircir. On maintient la vue, car la visite guidée reprend la main
+     dès qu'on ne touche plus à rien. */
+  const clair = await p.waitForFunction(() => {
+    window.__essai.vue({ tx: 0, ty: 3.2, tz: 0, r: 1.5, ph: 1.5, th: 0.3 });
+    window.__essai.inactif(0);
+    return window.__essai.logo().inv > 0.8;
+  }, null, { timeout: 120000, polling: 500 }).then(() => true).catch(() => false);
+  const pres = await p.evaluate(() => window.__essai.logo());
+  check(`dans la ramure, le fond s’assombrit (${pres.lum})`, pres.lum < 0.3);
+  check(`et le logo passe au blanc (inversion ${pres.inv})`, clair);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+/* De nuit, c'est le thème qui le fait, et il ne redescend jamais sous lui. */
+{
+  const { ctx, p } = await ouvrir(22);
+  await p.waitForFunction(() => window.__essai.ciel().theme > 0.98, null, { timeout: 30000 }).catch(() => {});
+  await p.waitForTimeout(600);
+  const nuit = await p.evaluate(() => window.__essai.logo());
+  check(`la nuit, il est blanc quoi qu’il arrive (${nuit.css})`, +nuit.css > 0.95);
   await ctx.close();
 }
 

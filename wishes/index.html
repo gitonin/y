@@ -78,6 +78,15 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 img.lg{filter:invert(var(--logo-inv,0))}
 #introLogo{height:116px;width:auto;margin-bottom:26px}
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+/* Un vœu reçu d'un ami s'annonce d'une ligne, et rien de plus : « Camille
+   vous envoie ce message ». Le mot est écrit sur l'étiquette, que la caméra
+   va lire de tout près ; un panneau qui le répète, avec ses boutons, ne
+   servait qu'à cacher l'arbre. Dessous, les deux boutons de toujours. */
+#recuDe{display:none;align-items:center;height:34px;padding:0 15px;border-radius:999px;
+  background:rgba(var(--beige-rgb),.9);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.3);
+  font-size:11px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;text-align:center;
+  -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);max-width:calc(100vw - 32px)}
+#recuDe.on{display:inline-flex}
 /* Le vœu qu'on regarde de près porte son propre bouton : s'en approcher
    donne envie de l'envoyer, et il n'y a rien d'autre à proposer là. Une
    pilule discrète au-dessus de l'appel, et non une fiche par-dessus la
@@ -191,6 +200,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 </div>
 
 <div id="bottom" class="down">
+  <div id="recuDe"></div>
   <button id="voeuShare"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 13v6h14v-6"/></svg><span id="voeuShareT"></span></button>
   <div id="cta">
     <button class="btn" id="add" data-i="add"></button>
@@ -315,6 +325,7 @@ var I18N = {
   shareBody:function(t,n,u){ return (n?n+" t'a accroché un vœu":"Un vœu t'a été accroché")+" sur l'arbre à souhaits de Yunma :\n\n« "+t+" »\n\nOuvre ce lien pour le voir sur l'arbre :\n"+u+"\n"; },
   shareBodyNu:function(u){ return "Viens accrocher un vœu à l'arbre à souhaits de Yunma :\n"+u+"\n"; },
   recu:"Un vœu pour vous",
+  recuDe:function(n){ return n?n+" vous envoie ce message":"On vous envoie ce message"; },
   copy:"Copier le lien",copied:"Lien copié",close:"Fermer",
   hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
@@ -331,6 +342,7 @@ var I18N = {
   shareBody:function(t,n,u){ return (n?n+" hung a wish for you":"A wish was hung for you")+" on Yunma's wishing tree:\n\n“"+t+"”\n\nOpen this link to see it on the tree:\n"+u+"\n"; },
   shareBodyNu:function(u){ return "Come and hang a wish on Yunma's wishing tree:\n"+u+"\n"; },
   recu:"A wish for you",
+  recuDe:function(n){ return n?n+" sends you this wish":"Someone sends you this wish"; },
   copy:"Copy link",copied:"Link copied",close:"Close",
   hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
@@ -347,6 +359,7 @@ var I18N = {
   shareBody:function(t,n,u){ return (n?n+"在云马许愿树上为你挂了一个心愿：":"有人在云马许愿树上为你挂了一个心愿：")+"\n\n「"+t+"」\n\n打开链接，在树上看看：\n"+u+"\n"; },
   shareBodyNu:function(u){ return "来云马许愿树挂一个心愿吧：\n"+u+"\n"; },
   recu:"送给你的心愿",
+  recuDe:function(n){ return n?n+" 给你送来这个心愿":"有人给你送来这个心愿"; },
   copy:"复制链接",copied:"链接已复制",close:"关闭",
   hung:"你的心愿已挂上。",localOnly:"心愿仅保存在本设备：此访客暂不能写入共享内容。",
   need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
@@ -656,7 +669,12 @@ function barreVoeu(){
      Pas non plus sur le vœu de Yunma, qui n'a pas de lien à lui : la
      pilule n'aurait alors proposé que de partager l'arbre, ce que l'icône
      à côté de l'appel fait déjà. */
-  var montrer=!!(vise&&focused&&!vise.w.yunma&&!cardWish&&!sheetOpen&&entered&&!CINE.on);
+  /* Un vœu reçu annonce qui l'envoie, et c'est tout ce qu'il y a à dire
+     là : la ligne prend la place de la pilule. */
+  var surRecu=!!(vise&&recu&&vise.w.id===recu.id&&focused&&!sheetOpen&&entered&&!CINE.on);
+  $("recuDe").classList.toggle("on",surRecu);
+  if(surRecu) $("recuDe").textContent=T("recuDe")(vise.w.n||"");
+  var montrer=!!(vise&&focused&&!vise.w.yunma&&!surRecu&&!cardWish&&!sheetOpen&&entered&&!CINE.on);
   b.classList.toggle("on",montrer);
   if(montrer) $("voeuShareT").textContent=T("shareWishTitle");
 }
@@ -1186,7 +1204,46 @@ function themeMaj(){
      chercher un à un. */
   CSSV.setProperty("--ink-rgb",CIEL.mel(JOUR.ink,NUIT.ink,theme).map(Math.round).join(","));
   CSSV.setProperty("--beige-rgb",CIEL.mel(JOUR.beige,NUIT.beige,theme).map(Math.round).join(","));
-  CSSV.setProperty("--logo-inv",theme.toFixed(3));
+  logoMaj();
+}
+/* ---- le logo suit ce qu'il y a derrière lui ----
+   Le logo est un dessin noir sur fond transparent. Sur le bleu de minuit il
+   disparaissait : le thème l'inversait donc avec la nuit. Mais il disparaît
+   aussi en plein jour dès qu'on s'approche de l'arbre, où ce sont des
+   feuilles sombres qui passent derrière lui — et le thème, lui, est resté
+   au jour.
+
+   On lit donc huit pixels sur huit à l'endroit même du logo, dans l'image
+   qu'on vient de dessiner, deux fois par seconde : c'est peu cher, et c'est
+   la seule mesure qui dise vraiment ce qu'il y a derrière. Clair ou sombre,
+   l'inversion suit par un fondu — avec une zone morte entre les deux
+   seuils, sans quoi il clignoterait sur un fond qui hésite. */
+var LOGO={v:0,cible:0,t:-9e9,buf:new Uint8Array(4*8*8),pose:-1};
+function logoMaj(){
+  var v=Math.max(theme,LOGO.v);
+  if(Math.abs(v-LOGO.pose)<=.004) return;
+  LOGO.pose=v; CSSV.setProperty("--logo-inv",v.toFixed(3));
+}
+function logoFond(dt){
+  LOGO.v+=(LOGO.cible-LOGO.v)*Math.min(1,Math.max(.016,dt)*2.6);
+  logoMaj();
+  /* Deux fois par seconde de vraie seconde, et non d'horloge de scène :
+     celle-ci est plafonnée par image, et sur une machine lente la mesure
+     ne se prenait plus qu'une fois toutes les dix secondes. */
+  var mnt=performance.now(); if(mnt-LOGO.t<450) return;
+  LOGO.t=mnt;
+  var el=document.querySelector("#sign img"); if(!el||!el.width) return;
+  var r=el.getBoundingClientRect(), cv=renderer.domElement;
+  var x=Math.round((r.left+r.width*.5)*PR)-4, y=cv.height-Math.round((r.top+r.height*.5)*PR)-4;
+  x=Math.round(clamp(x,0,cv.width-8)); y=Math.round(clamp(y,0,cv.height-8));
+  try{
+    if(rt) renderer.readRenderTargetPixels(rt,x,y,8,8,LOGO.buf);
+    else { var gl=renderer.getContext(); gl.readPixels(x,y,8,8,gl.RGBA,gl.UNSIGNED_BYTE,LOGO.buf); }
+  }catch(e){ return; }
+  var i, lum=0;
+  for(i=0;i<64;i++) lum+=LOGO.buf[i*4]*.299+LOGO.buf[i*4+1]*.587+LOGO.buf[i*4+2]*.114;
+  lum/=64*255; LOGO.lum=+lum.toFixed(3);
+  if(LOGO.cible>.5){ if(lum>.54) LOGO.cible=0; } else if(lum<.44) LOGO.cible=1;
 }
 themeMaj();
 
@@ -1658,7 +1715,7 @@ function tryHash(){ if(hashDone||!entered) return;
   if(!id){ hashDone=true; return; }
   var t=tags[id]; if(!t) return;
   hashDone=true;
-  setTimeout(function(){ focusTag(t,true); if(recu) toast(T("recu")); },1200);
+  setTimeout(function(){ focusTag(t,!recu,false,!!recu); barreVoeu(); },1200);
 }
 window.__enter=function(){ tryHash(); ouverture(); };
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ redraws.forEach(function(f){f();}); buildShapes(); preview(); });
@@ -1750,7 +1807,7 @@ function angleDegage(cible,th0,r,demi){
    qu'on vous a envoyé. Toucher un vœu de l'arbre ne fait que s'en
    approcher : le mot est écrit dessus, le redire par-dessus la scène
    n'ajoute rien et cache l'arbre. */
-function focusTag(t,fiche,garder){ focused=true; derniereCible=Object.keys(tags).indexOf(t.w.id);
+function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(tags).indexOf(t.w.id);
   var p=t.slot.pos; vise=t; viseY=p[1]-t.h*.5;
   cibleV.set(p[0],viseY+world.position.y,p[2]);
   /* Assez près pour lire le mot, assez loin pour voir encore la branche
@@ -1758,7 +1815,12 @@ function focusTag(t,fiche,garder){ focused=true; derniereCible=Object.keys(tags)
      a un champ étroit, et ce qui cadre bien sur un ordinateur y met le nez
      dans les feuilles. On impose donc une largeur et une hauteur de champ,
      et c'est la plus exigeante des deux qui donne la distance. */
-  var tn=Math.tan(camera.fov*Math.PI/360), r=clamp(Math.max(.60/(tn*camera.aspect),.95/tn),2.3,5.4);
+  var tn=Math.tan(camera.fov*Math.PI/360);
+  /* « pres » : le vœu qu'un ami vous envoie. On s'en approche bien plus que
+     des autres — c'est le seul mot qu'on soit venu lire, et il doit
+     remplir l'écran assez pour qu'on n'ait rien à faire pour le lire. */
+  var r=pres?clamp(Math.max(.40/(tn*camera.aspect),.62/tn),1.7,3.7)
+            :clamp(Math.max(.60/(tn*camera.aspect),.95/tn),2.3,5.4);
   var a=garder?{th:cam.th,ph:clamp(cam.ph,1.28,1.78)}
               :angleDegage(cibleV,Math.atan2(p[0],p[2]),r,Math.max(.14,t.h*.42));
   var th=a.th;
@@ -2328,6 +2390,17 @@ window.__essai={
   /* Pour l'épreuve : vieillir l'inactivité d'un coup. La visite guidée
      revient au bout de dix secondes sans geste, et dix secondes d'horloge
      de scène font deux minutes de mur sous un rendu logiciel. */
+  /* Le logo : ce qu'il y a derrière lui, et jusqu'où il s'éclaircit. */
+  /* Le logo : ce qu'il y a derrière lui, et jusqu'où il s'éclaircit. */
+  /* Sonde brute : la couleur lue à un point de l'écran, en pixels CSS. */
+  pixel:function(cx,cy){ var cv=renderer.domElement, b=new Uint8Array(4*4*4);
+    var x=Math.round(cx*PR), y=cv.height-Math.round(cy*PR);
+    try{ if(rt) renderer.readRenderTargetPixels(rt,x,y,4,4,b);
+      else { var gl=renderer.getContext(); gl.readPixels(x,y,4,4,gl.RGBA,gl.UNSIGNED_BYTE,b); } }
+    catch(e){ return ""+e; }
+    return [b[0],b[1],b[2],x,y]; },
+  logo:function(){ return {inv:+LOGO.v.toFixed(2),cible:LOGO.cible,lum:LOGO.lum,
+    css:getComputedStyle(document.documentElement).getPropertyValue("--logo-inv").trim()}; },
   inactif:function(v){ idle=v===undefined?12:v; return idle; },
   /* Les habitants du ciel. */
   ciel2:function(){ return {volutes:RUB.grp.visible,filante:FIL.m.visible,
@@ -2610,7 +2683,11 @@ function frame(now){
   /* L'île monte et descend ; un vœu qu'on regarde de près monterait et
      descendrait avec elle, d'un sixième de l'écran. La visée suit donc le
      flottement, et le mot ne bouge plus. */
-  if(vise&&focused){ var dec=cardWish?Math.tan(camera.fov*Math.PI/360)*goal.r*Math.min(ficheH/window.innerHeight,.45):0;
+  if(vise&&focused){ var tnv=Math.tan(camera.fov*Math.PI/360);
+    /* Le vœu reçu est vu de si près que sa signature venait buter sur la
+       ligne qui l'annonce : on le remonte d'un dixième d'écran. */
+    var dec=cardWish?tnv*goal.r*Math.min(ficheH/window.innerHeight,.45)
+           :(recu&&vise.w.id===recu.id?tnv*goal.r*.15:0);
     /* La distance d'arrivée, et non celle où l'on se trouve : pendant
        l'approche, on vient de vingt unités, et le décalage emporterait la
        visée bien au-dessus de l'arbre. */
@@ -2635,6 +2712,8 @@ function frame(now){
     u2.uFocus.value=Math.max(cam.r,1); u2.uAperture.value=5.5+close*9+(CINE.on?4:0); u2.uTime.value=t%10;
     renderer.setRenderTarget(rt); renderer.render(scene,camera); renderer.setRenderTarget(null); renderer.render(postScene,postCam);
   } else renderer.render(scene,camera);
+  /* Après le rendu, et pas avant : c'est l'image finale qu'on mesure. */
+  logoFond(dt);
 }
 mergeWishes();
 requestAnimationFrame(frame);

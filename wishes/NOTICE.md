@@ -269,6 +269,21 @@ Trois réglages font que l'on arrive **sur le mot** :
   descendrait avec elle d'un sixième de l'écran. La visée suit donc l'île, et le
   mot ne bouge plus.
 
+## Le logo
+
+C'est un dessin noir sur fond transparent. Sur le bleu de minuit il
+disparaissait : le thème l'inversait donc avec la nuit. Mais il disparaît aussi
+**en plein jour dès qu'on s'approche de l'arbre**, où ce sont des feuilles
+sombres qui passent derrière lui — et le thème, lui, est resté au jour.
+
+On lit donc huit pixels sur huit à l'endroit même du logo, dans l'image qu'on
+vient de dessiner, **deux fois par seconde** — de vraies secondes, et non
+d'horloge de scène, qui est plafonnée par image et ne donnait plus qu'une mesure
+toutes les dix secondes sur une machine lente. Clair ou sombre, l'inversion suit
+par un fondu, avec une zone morte entre les deux seuils, sans quoi le logo
+clignoterait sur un fond qui hésite. Et il ne redescend jamais sous ce que le
+thème demande : la nuit, il reste blanc.
+
 ## Le haut de l'écran
 
 Il portait cinq pilules, et le logo s'écrasait entre elles ; puis deux, dont un
@@ -292,7 +307,14 @@ en porte trente n'annonçait rien, ni ce qu'on voit, ni ce qu'on peut faire.
 
 **Le vœu tient dans le lien.** C'est ce qui permet de l'envoyer aujourd'hui,
 sans base de données : `…/wishes#v-<vœu encodé>`. Celui qui l'ouvre le voit
-accroché à l'arbre, à son nom, carte ouverte — la caméra y va toute seule.
+accroché à l'arbre, à son nom — la caméra y va toute seule, et **de bien plus
+près que pour les autres** : c'est le seul mot qu'il soit venu lire, et il doit
+remplir l'écran assez pour qu'on n'ait rien à faire pour le lire.
+
+Il ne reçoit pas de cartouche. Une ligne suffit — « Camille vous envoie ce
+message » —, et dessous les deux boutons de toujours. Le mot est écrit sur
+l'étiquette, que la caméra montre ; un panneau qui le répète, avec ses propres
+boutons, ne servait qu'à cacher l'arbre.
 
 Le lien part par mail, par SMS, ou se copie, depuis le bouton **Envoyer** de la
 carte d'un vœu, ou depuis la pilule « Envoyer ce vœu » quand on en regarde un de
