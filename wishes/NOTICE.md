@@ -233,15 +233,30 @@ Un vœu qu'on vient d'accrocher s'annonçait par un cartouche qui surgissait
 par-dessus la scène, le mot déjà écrit dessus et trois boutons dessous. On
 voyait le panneau, pas l'étiquette.
 
-Maintenant, **soixante-dix grains d'or** partent du vœu et retombent — une
-direction prise au hasard sur la sphère, une vitesse qui l'est un peu moins
-(plus vers le haut, sans quoi la gerbe tombe comme un sac), un frein et une
-pesanteur —, et la caméra s'en approche en même temps. On voit où le vœu s'est
-posé, et on le lit sur l'arbre, là où il est.
+Maintenant, c'est une affaire de temps :
 
-La fiche vient **ensuite**, deux secondes et demie plus tard, quand on a vu :
-« Votre vœu », puis le mot, puis Envoyer, Carte et Retour. Le titre annonce le
-mot, il ne le suit pas — un titre se lit avant.
+- **la caméra part la première**, seule, vers la place où le vœu va paraître ;
+- **une seconde plus tard, l'étiquette pousse et l'or éclate** : quatre-vingts
+  grains partent du vœu et retombent — une direction prise au hasard sur la
+  sphère, une vitesse qui l'est un peu moins (plus vers le haut, sans quoi la
+  gerbe tombe comme un sac), un frein, une pesanteur, et chacun scintille à son
+  rythme, car un grain d'or qui ne clignote pas n'est qu'un point jaune. Les
+  deux partaient d'abord ensemble : le mot avait fini de pousser et l'or de
+  retomber avant que la vue n'arrive, et l'on ne voyait rien ;
+- **la fiche vient en dernier**, deux secondes et demie après la gerbe, quand
+  on a vu : « Votre vœu », puis le mot, puis Envoyer, Carte et Retour. Le titre
+  annonce le mot, il ne le suit pas — un titre se lit avant.
+
+L'étiquette et sa gerbe suivent **la même horloge**, celle de la scène, et non
+l'une la scène et l'autre la montre : sur une machine qui rame, elles
+resteraient sinon à une seconde l'une de l'autre.
+
+Et **rien ne s'affiche en noir par-dessus l'arbre**. « Vœu accroché sur cet
+appareil seulement » était un aveu technique posé au moment précis où l'on
+vient d'y mettre son mot : la seule chose qu'on y gagnait, c'était de gâcher ce
+moment-là. Le vœu est enregistré, la gerbe le dit, et cette notice dit le
+reste. Les seuls messages qui restent répondent à un geste explicite — un lien
+copié, une carte enregistrée, un champ vide.
 
 ## Toucher un vœu
 
@@ -365,7 +380,8 @@ mais il ne mènera à quelque chose que le jour où cette base existera.
 l'arbre de l'autre. Un vœu envoyé arrive bien (voir ci-dessus), mais il ne reste
 pas : il n'apparaît pas à ceux qui viendront ensuite. Tant que la constante
 `API` est vide, chaque vœu accroché reste dans le navigateur de celui qui l'a
-écrit, et le message « accroché sur cet appareil seulement » le dit.
+écrit. Rien ne le dit plus à l'écran — c'était un cartouche noir posé sur
+l'arbre au pire moment ; c'est écrit ici, et cela suffit.
 
 En attendant, **les trente vœux tout faits tiennent lieu de monde** : ils sont
 signés, ils sont là dès la première visite, et ils restent quand on accroche le

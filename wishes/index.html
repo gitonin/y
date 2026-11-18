@@ -330,7 +330,6 @@ var I18N = {
   recu:"Un vœu pour vous",
   recuDe:function(n){ return n?n+" vous envoie ce message":"On vous envoie ce message"; },
   copy:"Copier le lien",copied:"Lien copié",close:"Fermer",
-  hung:"Votre vœu est accroché.",localOnly:"Vœu accroché sur cet appareil seulement : l'écriture partagée n'est pas ouverte à ce visiteur.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
   voeuYunma:"Yunma wishes you a joyful season",
@@ -347,7 +346,6 @@ var I18N = {
   recu:"A wish for you",
   recuDe:function(n){ return n?n+" sends you this wish":"Someone sends you this wish"; },
   copy:"Copy link",copied:"Link copied",close:"Close",
-  hung:"Your wish is hanging.",localOnly:"Wish hung on this device only: shared writing is not open to this visitor.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
   voeuYunma:"云马祝您节日快乐",
@@ -364,7 +362,6 @@ var I18N = {
   recu:"送给你的心愿",
   recuDe:function(n){ return n?n+" 给你送来这个心愿":"有人给你送来这个心愿"; },
   copy:"复制链接",copied:"链接已复制",close:"关闭",
-  hung:"你的心愿已挂上。",localOnly:"心愿仅保存在本设备：此访客暂不能写入共享内容。",
   need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
 };
 var lang = "fr";
@@ -803,14 +800,19 @@ $("hang").onclick=function(){
   var id="w"+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);
   var w=cleanWish(id,{s:d.s,p:d.p,t:d.t,n:d.n,ts:Date.now()}); w.mine=true; w.local=true;
   localW.push(w); rememberMine(id); pendingFocus=id; openSheet(false); mergeWishes(); sfx("hang");
-  var fail=function(){ saveLocal(); toast(T("localOnly")); };
+  /* Rien ne s'affiche ici. « Vœu accroché sur cet appareil seulement »
+     était un aveu technique posé en noir par-dessus l'arbre, au moment
+     précis où l'on vient d'y mettre son mot : la seule chose qu'on y
+     gagnait, c'était de gâcher ce moment-là. Le vœu est enregistré, la
+     gerbe d'or le dit, et la notice dit le reste. */
+  var fail=function(){ saveLocal(); };
   if(!API){ fail(); return; }
   $("hang").disabled=true;
   fetch(API,{method:"POST",headers:{"content-type":"application/json"},
     body:JSON.stringify({s:w.s,p:w.p,t:w.t,n:w.n,id:id})})
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(){
-      w.local=false; localW=localW.filter(function(x){return x.id!==id;}); saveLocal(); toast(T("hung"));
+      w.local=false; localW=localW.filter(function(x){return x.id!==id;}); saveLocal();
       if(cardWish&&cardWish.id===id) fillCard(w); charger();
     },fail).then(function(){ $("hang").disabled=false; });
 };
@@ -1704,15 +1706,16 @@ window.__syncTags=function(){
     if(pendingFocus===w.id) focus=tags[w.id]; });
   Object.keys(tags).forEach(function(id){ if(!seen[id]){ removeTag(tags[id]); delete tags[id]; } });
   if(remote!==null||wishes.length) firstLoad=false;
-  if(focus){ pendingFocus=null; focus.born=clock;
-    /* On s'approche et l'or éclate ; la fiche attend qu'on ait vu. */
-    focusTag(focus,false); etincelles(focus);
-    fichePrevue=focus; barreVoeu();
-    setTimeout(function(){
-      if(fichePrevue!==focus) return;
-      fichePrevue=null;
-      if(focused&&vise===focus&&!sheetOpen) openCard(focus.w); else barreVoeu();
-    },2700); }
+  if(focus){ pendingFocus=null;
+    /* La caméra part d'abord, seule ; l'étiquette et sa gerbe d'or ne
+       paraissent qu'une seconde plus tard, quand on est arrivé. Toutes
+       deux à la fois, on ne voyait rien : le mot avait fini de pousser et
+       l'or de retomber avant que la vue n'arrive. Une étiquette dont
+       l'instant de naissance est devant nous reste invisible — son
+       animation d'apparition la tient à l'échelle zéro. */
+    focus.born=clock+1.05;
+    focusTag(focus,false);
+    fichePrevue=focus; etinAttend=focus; barreVoeu(); }
   else { tryHash(); ouverture(); }
 };
 var hashDone=false;
@@ -1847,13 +1850,13 @@ function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(
    avant : c'est lui qu'on est venu lire, et c'est de lui que la visite
    partira. Le premier geste du visiteur annule le relais — il a pris la
    main, on ne la lui reprend pas tout de suite. */
-var ouvre=0, ouvreFait=false, fichePrevue=null;
+var ouvre=0, ouvreFait=false, ouvreArme=false, fichePrevue=null, etinAttend=null;
 function ouverture(){
   if(ouvreFait||!entered||recu||!tags.yunma) return;
   ouvreFait=true;
   focusTag(tags.yunma,false);
   cam.th=goal.th; cam.ph=goal.ph; cam.r=goal.r+3.2; cam.tg.copy(goal.tg);
-  ouvre=clock;
+  ouvre=clock; ouvreArme=true;
 }
 /* ------------------------------------------------------------------ secouer l'arbre
    Secouer son téléphone fait tomber les feuilles et les cerises ; les vœux,
@@ -2128,12 +2131,14 @@ function noelMaj(){
    s'est posé, la caméra y va, et le mot se lit sur l'arbre — là où il est.
    La fiche vient ensuite, quand on a vu. */
 var ETIN=(function(){
-  var N=70, pos=new Float32Array(N*3), vit=new Float32Array(N*3);
-  var geo=new THREE.BufferGeometry(); geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
-  var m=new THREE.Points(geo,new THREE.PointsMaterial({map:softTex,color:C(0xffe6a4),size:.1,
+  var N=80, pos=new Float32Array(N*3), vit=new Float32Array(N*3), col=new Float32Array(N*3), ph=new Float32Array(N*2);
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  geo.setAttribute("color",new THREE.BufferAttribute(col,3));
+  var m=new THREE.Points(geo,new THREE.PointsMaterial({map:softTex,size:.1,vertexColors:true,
     sizeAttenuation:true,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));
   m.visible=false; m.frustumCulled=false; world.add(m);
-  return {pts:m,pos:pos,vit:vit,n:N,t:-99,duree:1.9};
+  return {pts:m,pos:pos,vit:vit,col:col,ph:ph,n:N,t:-99,duree:2.3};
 })();
 function etincelles(t){
   if(!t||!t.slot) return;
@@ -2147,6 +2152,9 @@ function etincelles(t){
     ETIN.vit[o]=Math.sin(b)*Math.cos(a)*v;
     ETIN.vit[o+1]=Math.cos(b)*v*.75+.45;
     ETIN.vit[o+2]=Math.sin(b)*Math.sin(a)*v;
+    /* Chacun scintille à son rythme : un grain d'or qui ne clignote pas
+       n'est qu'un point jaune. */
+    ETIN.ph[i*2]=R()*6.283; ETIN.ph[i*2+1]=9+R()*14;
   }
   /* Pour l'épreuve : l'instant de la gerbe, et l'état de la fiche à cet
      instant-là. Mesuré dans la page, car entre deux allers-retours d'une
@@ -2165,6 +2173,12 @@ function etincellesMaj(t,dt){
     ETIN.vit[o]*=frein; ETIN.vit[o+2]*=frein;
     ETIN.vit[o+1]=ETIN.vit[o+1]*frein-1.7*dt; }
   ETIN.pts.geometry.attributes.position.needsUpdate=true;
+  /* La couleur porte le scintillement — un or chaud qui va jusqu'au blanc
+     et redescend —, l'opacité porte la gerbe entière. */
+  var c=ETIN.pts.geometry.attributes.color;
+  for(i=0;i<ETIN.n;i++){ var o2=i*3, k=.45+.55*(.5+.5*Math.sin(t*ETIN.ph[i*2+1]+ETIN.ph[i*2]));
+    ETIN.col[o2]=k; ETIN.col[o2+1]=k*.9; ETIN.col[o2+2]=k*.64; }
+  c.needsUpdate=true;
   /* Elles s'allument d'un coup et s'éteignent en s'éparpillant. */
   ETIN.pts.material.opacity=Math.min(1,u*9)*f*f*(.95+.05*SUN.nuit);
   ETIN.pts.material.size=.07+.08*f;
@@ -2480,7 +2494,9 @@ window.__essai={
   /* Le vœu de Yunma, et l'ouverture qui se pose dessus. */
   yunma:function(){ return {texte:wishText(YUNMA), premier:wishes[0].id==="yunma",
     place:Object.keys(tags).indexOf("yunma"), accroche:!!tags.yunma}; },
-  accueil:function(){ return {fait:ouvreFait, recul:ouvre>0, vise:focused}; },
+  /* « arme » dit que le relais vers la visite a bien été posé à
+     l'ouverture ; « recul » dit s'il tient encore, ce qui vieillit vite. */
+  accueil:function(){ return {fait:ouvreFait, arme:ouvreArme, recul:ouvre>0, vise:focused}; },
   volutes:function(){ volutePasser(); return RUB.grp.visible; },
   ois:function(){ var v=RUB.grp.position.clone().project(camera);
     return {vis:RUB.grp.visible,u:+((clock-RUB.t)/RUB.duree).toFixed(2),
@@ -2770,6 +2786,17 @@ function frame(now){
     g.pivot.scale.setScalar(Math.max(.001,s));
     g.pivot.rotation.z=Math.sin(t*g.slot.w+g.slot.ph)*amp; g.pivot.rotation.x=Math.cos(t*g.slot.w*.83+g.slot.ph)*amp*.7;
     g.body.rotation.y+=(Math.sin(t*.45+g.slot.ph)*.012)*dt*6; });
+  /* La gerbe part à l'instant même où l'étiquette paraît, et non une
+     seconde après la montre : les deux suivent la même horloge, celle de
+     la scène, et restent ensemble même si la machine rame. */
+  if(etinAttend&&clock>=etinAttend.born){
+    var ta=etinAttend; etinAttend=null; etincelles(ta);
+    setTimeout(function(){
+      if(fichePrevue!==ta) return;
+      fichePrevue=null;
+      if(focused&&vise===ta&&!sheetOpen) openCard(ta.w); else barreVoeu();
+    },2600);
+  }
   nuitMaj(t);
   for(i=0;i<ribbons.length;i++){ var rb=ribbons[i]; rb.rotation.z=Math.sin(t*.9+rb.userData.ph)*(.05+.1*gust); rb.rotation.x=Math.cos(t*.7+rb.userData.ph)*(.04+.08*gust); }
   for(i=0;i<falling.length;i++){ var f=falling[i], u=f.userData; u.y-=u.sp*dt; u.a+=dt*.12; if(u.y<-3.4){ u.y=5.4+R()*1.5; u.r=1+R()*4.4; }

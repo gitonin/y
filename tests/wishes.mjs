@@ -479,7 +479,7 @@ for (const [l, debut] of [['fr', 'Yunma vous souhaite'], ['en', 'Yunma wishes yo
   check(`en ${l}, il est le premier de l’arbre et il y est accroché`, y.premier && y.accroche);
   const a = await p.evaluate(() => window.__essai.accueil());
   check(`en ${l}, la caméra s’est posée dessus`, a.fait && a.vise);
-  check(`en ${l}, et le recul est armé`, a.recul);
+  check(`en ${l}, et le relais vers la visite est posé`, a.arme);
   await p.evaluate(() => window.__essai.poser());
   await p.waitForTimeout(500);
   const v = await p.evaluate(() => window.__essai.cible(window.__essai.yunma().place));
