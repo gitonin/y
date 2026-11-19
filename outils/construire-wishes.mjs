@@ -10,7 +10,8 @@
  *   public/wishes/
  *     index.html          toute l'expérience : styles, données, scène et son
  *     three-r128.min.js   la bibliothèque 3D, servie par le site
- *     .htaccess           cache court sur la page, long sur la bibliothèque
+ *     abonner.php         le relais du journal de la récolte
+ *     .htaccess           cache court sur la page, et le journal tenu secret
  *
  * Il n'y a rien à compiler : cette construction recopie, et vérifie. Ce
  * qu'elle vérifie est ce qui se défait tout seul avec le temps — la charte,
@@ -70,6 +71,7 @@ async function verifierCharte(page) {
 const TOLERE = [
   /^https:\/\/fonts\.googleapis\.com\//, /^https:\/\/fonts\.gstatic\.com\//,
   /^https:\/\/yunma\.fr(\/|$)/,   /* le lien de sortie vers le site : une destination, pas une dépendance */
+  /^https:\/\/www\.instagram\.com\/yunma\.coffee$/,  /* le compte, une destination aussi : un lien, non un bouton qui pisterait */
 ];
 function verifierAutonomie(page) {
   const dehors = [];
@@ -98,6 +100,10 @@ function verifierContenu(page) {
     ['emissiveMap:t', 'les étiquettes qui s’allument la nuit'],
     ['three-r128.min.js', 'la bibliothèque 3D, servie par le site'],
     ['assets/logo-yunma-transparent.png', 'le logo, sorti du base64'],
+    ['id="reco"', 'le journal de la récolte'],
+    ['function recoEnvoyer()', 'l’envoi de l’adresse'],
+    ['instagram.com/yunma.coffee', 'le compte Instagram'],
+    ['?v="+encoderVoeu', 'le vœu dans la question du lien'],
   ];
   for (const [quoi, nom] of attendu) if (!page.includes(quoi)) manques.push(nom);
   /* Rien ne doit plus pointer vers l'environnement où l'expérience est née. */
@@ -120,6 +126,11 @@ verifierContenu(page);
 await writeFile(path.join(CIBLE, 'index.html'), page);
 await copyFile(path.join(SOURCE, 'three.min.js'), path.join(CIBLE, 'three-r128.min.js'));
 await copyFile(path.join(SOURCE, '.htaccess'), path.join(CIBLE, '.htaccess'));
+/* Le relais : il garde du côté du serveur ce qui ne peut pas vivre dans une
+   page publique. Le dossier cesse d'être tout à fait statique — il demande
+   PHP, que l'hébergement d'Infomaniak exécute —, et la page continue de
+   s'ouvrir sans lui : elle le dit, simplement, si l'inscription échoue. */
+await copyFile(path.join(SOURCE, 'abonner.php'), path.join(CIBLE, 'abonner.php'));
 await mkdir(path.join(CIBLE, 'assets'), { recursive: true });
 for (const f of ['logo-yunma-transparent.png', 'carte-photo-1050x1480.jpg']) {
   await copyFile(path.join(SOURCE, 'assets', f), path.join(CIBLE, 'assets', f));

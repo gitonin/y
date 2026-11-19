@@ -172,6 +172,21 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #card .by:not(:empty){margin-bottom:7px}
 #card .row{display:flex;gap:8px;margin-top:14px}
 #card .row .btn{height:44px;font-size:11.5px;padding:0 6px;flex:1}
+/* Le journal de la récolte, sous un filet, au bas de la fiche. Un champ
+   ouvert qui attend au milieu d'un sapin, c'est un péage : il ne paraît que
+   si l'on a touché « par mail ». Et la ligne ne reparaît plus une fois
+   qu'on a répondu — demander deux fois, c'est harceler. */
+#card .reco{margin-top:14px;padding-top:12px;border-top:1px solid rgba(var(--ink-rgb),.14);
+  display:none;flex-direction:column;gap:9px;position:relative}
+#card .reco.on{display:flex}
+#card .reco .rtx{margin:0;font-size:12.5px;line-height:1.45;color:rgba(var(--ink-rgb),.8)}
+#card .reco .rrow{display:none;gap:8px}
+#card .reco .rrow.on{display:flex}
+#card .reco .rrow .btn{height:38px;font-size:10.5px;padding:0 10px;flex:1;letter-spacing:.1em}
+#card .reco .field{flex:1;min-width:0;height:38px;padding:0 12px;font-size:16px}
+#card .reco .rnote{margin:0;font-size:10.5px;line-height:1.45;color:rgba(var(--ink-rgb),.52)}
+#card .reco .rnote:empty{display:none}
+#card .reco .pot{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
 #cimg{display:block;max-height:50vh;max-width:100%;margin:4px auto 12px;border-radius:3px;box-shadow:0 12px 30px -14px rgba(60,40,20,.55);-webkit-touch-callout:default;user-select:auto;-webkit-user-select:auto}
 #cmodal .row .btn,#lmodal .row .btn{padding:0 6px;font-size:11.5px;letter-spacing:.1em}
 
@@ -234,6 +249,19 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 <div id="card">
   <div class="by" id="cBy"></div><div class="zh zhf" id="cZh"></div><div class="py" id="cPy"></div><div class="tr" id="cTr"></div>
   <div class="row"><button class="btn" id="cShare" data-i="shareWish"></button><button class="btn ghost" id="cCard" data-i="card"></button><button class="btn ghost" id="cBack" data-i="back"></button></div>
+  <div class="reco" id="reco">
+    <p class="rtx" id="rTxt"></p>
+    <div class="rrow" id="rChoix">
+      <button class="btn ghost" id="rMail" data-i="aboMail"></button>
+      <a class="btn ghost" id="rInsta" href="https://www.instagram.com/yunma.coffee" target="_blank" rel="noopener" data-i="aboInsta"></a>
+    </div>
+    <div class="rrow" id="rForm">
+      <input class="field" id="rAdr" type="email" inputmode="email" autocomplete="email" maxlength="80" spellcheck="false">
+      <button class="btn" id="rGo" data-i="aboGo"></button>
+    </div>
+    <p class="rnote selectable" id="rNote"></p>
+    <input class="pot" id="rPot" tabindex="-1" autocomplete="off" aria-hidden="true">
+  </div>
 </div>
 
 <div id="modal" class="modal"><div class="box">
@@ -330,6 +358,11 @@ var I18N = {
   recu:"Un vœu pour vous",
   recuDe:function(n){ return n?n+" vous envoie ce message":"On vous envoie ce message"; },
   copy:"Copier le lien",copied:"Lien copié",close:"Fermer",
+  aboTxt:"Janvier 2027, Yunma repart au Yunnan chercher les nouveaux cafés. Suivez-nous",
+  aboMail:"Par mail",aboInsta:"Sur Instagram",aboGo:"Recevoir",aboPh:"votre adresse",
+  aboNote:"Votre adresse ne sert qu'à ce journal, et un mot à hello@yunma.fr la retire.",
+  aboOk:"C'est noté. Rendez-vous en janvier.",aboInstaOk:"Merci. À bientôt sur Instagram.",
+  aboBad:"Cette adresse n'a pas l'air juste.",aboFail:"L'inscription n'a pas pu se faire. Réessayez dans un moment.",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
   voeuYunma:"Yunma wishes you a joyful season",
@@ -346,6 +379,11 @@ var I18N = {
   recu:"A wish for you",
   recuDe:function(n){ return n?n+" sends you this wish":"Someone sends you this wish"; },
   copy:"Copy link",copied:"Link copied",close:"Close",
+  aboTxt:"January 2027, Yunma heads back to Yunnan for the new coffees. Follow along",
+  aboMail:"By email",aboInsta:"On Instagram",aboGo:"Sign up",aboPh:"your address",
+  aboNote:"Your address is used for this journal only, and a word to hello@yunma.fr removes it.",
+  aboOk:"Noted. See you in January.",aboInstaOk:"Thank you. See you on Instagram.",
+  aboBad:"That address does not look right.",aboFail:"The sign-up did not go through. Please try again in a moment.",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
   voeuYunma:"云马祝您节日快乐",
@@ -362,6 +400,11 @@ var I18N = {
   recu:"送给你的心愿",
   recuDe:function(n){ return n?n+" 给你送来这个心愿":"有人给你送来这个心愿"; },
   copy:"复制链接",copied:"链接已复制",close:"关闭",
+  aboTxt:"2027 年 1 月，云马将重返云南寻找新一季的咖啡。欢迎关注",
+  aboMail:"邮件订阅",aboInsta:"Instagram",aboGo:"订阅",aboPh:"您的邮箱",
+  aboNote:"您的邮箱仅用于这份记录，写信至 hello@yunma.fr 即可退出。",
+  aboOk:"已记下，一月见。",aboInstaOk:"谢谢，Instagram 上见。",
+  aboBad:"这个邮箱地址似乎不对。",aboFail:"订阅未能完成，请稍后再试。",
   need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
 };
 var lang = "fr";
@@ -601,7 +644,7 @@ function applyLang(){
   document.documentElement.lang=lang;
   Array.prototype.forEach.call(document.querySelectorAll("[data-i]"),function(el){ el.textContent=T(el.getAttribute("data-i")); });
   Array.prototype.forEach.call(document.querySelectorAll("[data-l]"),function(el){ el.classList.toggle("on",el.getAttribute("data-l")===lang); });
-  $("own").placeholder=T("ownPh"); $("name").placeholder=T("namePh");
+  $("own").placeholder=T("ownPh"); $("name").placeholder=T("namePh"); recoTextes();
   $("share").setAttribute("aria-label",T("mShare"));
   document.title=T("title")+" — Yunma";
   buildPresets(); setStepSafe(); if(cardWish) fillCard(cardWish);
@@ -653,6 +696,7 @@ function fillCard(w){
      le lien ne menait à rien. Maintenant qu'il porte le vœu, il n'y a plus
      que le décor à masquer — un vœu de décor n'est à personne. */
   $("cShare").style.display=w.decor?"none":"";
+  recoTextes();
 }
 /* La fiche occupe le bas de l'écran : le vœu doit remonter au-dessus
    d'elle, sinon elle le cache. On retient sa hauteur à l'ouverture, et la
@@ -679,11 +723,83 @@ function barreVoeu(){
   if(montrer) $("voeuShareT").textContent=T("shareWishTitle");
 }
 function openCard(w){ if(ETIN.quand&&ETIN.apres<0) ETIN.apres=Math.round(performance.now()-ETIN.quand);
-  cardWish=w; fillCard(w); $("card").classList.add("open"); $("bottom").classList.add("down"); barreVoeu();
+  cardWish=w; fillCard(w); recoRaz(); $("card").classList.add("open"); $("bottom").classList.add("down"); barreVoeu();
   ficheH=$("card").getBoundingClientRect().height+18; }
 function closeCard(keepCam){ if(!cardWish) return; cardWish=null; $("card").classList.remove("open");
   if(!sheetOpen) $("bottom").classList.remove("down"); if(!keepCam&&window.__home) window.__home(); barreVoeu(); }
-function shareBase(){ return /^https?:/.test(SHARE_URL)?SHARE_URL:String(location.href).split("#")[0]; }
+
+/* ------------------------------------------------------------------ le journal de la récolte
+   Quelqu'un qui vient d'écrire un vœu et de le voir s'accrocher a donné
+   quelque chose. C'est le seul moment de la visite où l'on peut demander en
+   retour — une fois, en une ligne, et sans jamais barrer la vue.
+
+   Deux portes, et le visiteur choisit : son adresse, ou le compte
+   Instagram. La seconde ne coûte rien à personne et ne demande aucune
+   donnée ; la première passe par un relais sur le serveur, car la clé d'un
+   service d'envoi n'a rien à faire dans une page publique — tout ce qui est
+   ici est lisible par tout le monde.
+
+   La ligne vit dans la fiche, et nulle part ailleurs : la fiche ne s'ouvre
+   que lorsqu'on vient d'accrocher son vœu, ou qu'on touche celui qu'un ami
+   nous a envoyé. Une fois qu'on a répondu, elle ne reparaît plus. */
+var ABO="abonner.php", ABO_V="recolte-2027-1";
+var aboEtat=""; try{ aboEtat=localStorage.getItem("yw_abo")||""; }catch(e){}
+var aboT0=Date.now(), aboEnCours=false;
+/* L'adresse du relais, et pourquoi elle n'est pas écrite telle quelle :
+   « abonner.php » se résout par rapport à la page, et la page peut être
+   servie sous « /wishes » sans barre finale — auquel cas le navigateur
+   chercherait « /abonner.php », à côté du dossier. On reconstruit donc le
+   chemin du dossier, qu'il finisse par une barre, par « index.html » ou par
+   rien du tout. Ainsi le dossier reste déplaçable où l'on veut. */
+function aboURL(){
+  var d=location.pathname||"/";
+  if(!/\/$/.test(d)&&!/\.[a-z0-9]+$/i.test(d)) d+="/";
+  return d.replace(/[^/]*$/,"")+ABO;
+}
+function recoTextes(){
+  if(!$("reco")) return;
+  $("rTxt").textContent=T("aboTxt");
+  /* Le champ n'a pas d'étiquette visible — la ligne au-dessus dit déjà tout —
+     mais il lui en faut une pour qui lit l'écran à l'oreille. */
+  $("rAdr").placeholder=T("aboPh"); $("rAdr").setAttribute("aria-label",T("aboPh"));
+  /* Tant qu'on n'a rien demandé, pas un mot sur l'adresse : parler de ce
+     qu'on en fera avant même de l'avoir demandée, c'est déjà la demander. */
+  $("rNote").textContent=aboEtat==="insta"?T("aboInstaOk"):aboEtat==="mail"?T("aboOk")
+    :$("rForm").classList.contains("on")?T("aboNote"):"";
+}
+/* À chaque ouverture de fiche, la ligne repart pliée : le champ ne reste
+   pas ouvert d'un vœu à l'autre avec une adresse à moitié écrite. */
+function recoRaz(){
+  if(!$("reco")) return;
+  var montrer=!aboEtat;
+  $("reco").classList.toggle("on",montrer);
+  $("rChoix").classList.toggle("on",montrer);
+  $("rForm").classList.remove("on");
+  $("rGo").disabled=false; $("rAdr").value=""; $("rPot").value="";
+  recoTextes();
+}
+function recoFini(cle){
+  $("rChoix").classList.remove("on"); $("rForm").classList.remove("on");
+  $("rNote").textContent=T(cle);
+}
+function recoEnvoyer(){
+  var a=$("rAdr").value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(a)){ $("rNote").textContent=T("aboBad"); return; }
+  if(aboEnCours) return;
+  aboEnCours=true; $("rGo").disabled=true;
+  var fini=function(ok){ aboEnCours=false; $("rGo").disabled=false;
+    if(ok){ aboEtat="mail"; try{ localStorage.setItem("yw_abo","mail"); }catch(e){} recoFini("aboOk"); }
+    else $("rNote").textContent=T("aboFail"); };
+  /* Le relais est à côté de la page : aucune question d'origine, et le
+     dossier reste déplaçable tel quel. S'il n'est pas là — un hébergement
+     sans PHP, un aperçu local —, on le dit, on ne fait pas semblant. */
+  try{
+    fetch(aboURL(),{method:"POST",headers:{"content-type":"application/json"},
+      body:JSON.stringify({m:a,l:lang,v:ABO_V,d:Date.now()-aboT0,p:$("rPot").value})})
+      .then(function(r){ fini(!!r&&r.ok); },function(){ fini(false); });
+  }catch(e){ fini(false); }
+}
+function shareBase(){ return /^https?:/.test(SHARE_URL)?SHARE_URL:String(location.href).split(/[?#]/)[0]; }
 
 /* ------------------------------------------------------------------ le vœu tient dans le lien
    Envoyer un vœu à quelqu'un supposait que ce quelqu'un puisse le lire. Or
@@ -723,7 +839,14 @@ function decoderVoeu(code){
    et le lien les reporte à l'identique chez celui qui l'ouvre. Seul celui
    de Yunma n'a pas de lien à lui — son texte change avec la langue de qui
    le lit, et il n'y a rien à figer dedans. */
-function lienVoeu(w){ return w&&!w.yunma ? shareBase()+"#v-"+encoderVoeu(w) : shareBase(); }
+/* Le vœu voyage dans la question du lien — « ?v=… » —, et non plus après
+   le dièse. La différence ne se voit pas à l'œil, mais elle décide de tout
+   ce qui vient : ce qui suit un dièse n'arrive jamais au serveur, et aucun
+   réseau social ne peut donc savoir de quel vœu il s'agit quand on colle le
+   lien chez lui. Avec une question ordinaire, le serveur pourra un jour
+   fabriquer la vignette du vœu. Les liens en « #v-… » déjà partis
+   continuent de marcher : on les lit toujours. */
+function lienVoeu(w){ return w&&!w.yunma ? shareBase()+"?v="+encoderVoeu(w) : shareBase(); }
 
 function openShare(w){
   var url=lienVoeu(w), perso=!!(w&&!w.yunma);
@@ -748,6 +871,14 @@ $("name").oninput=preview;
 $("share").onclick=function(){ openShare(null); };
 $("voeuShare").onclick=function(){ if(vise){ cineStop(); openShare(vise.w); } };
 $("cShare").onclick=function(){ openShare(cardWish); };
+$("rMail").onclick=function(){ $("rChoix").classList.remove("on"); $("rForm").classList.add("on");
+  $("rNote").textContent=T("aboNote"); $("rAdr").focus(); };
+/* Le compte Instagram s'ouvre dans une autre page — l'arbre reste ouvert
+   derrière. On ne sait pas si la personne s'est abonnée, et ce n'est pas
+   grave : on a demandé une fois, on ne redemande pas. */
+$("rInsta").onclick=function(){ aboEtat="insta"; try{ localStorage.setItem("yw_abo","insta"); }catch(e){} recoFini("aboInstaOk"); };
+$("rGo").onclick=recoEnvoyer;
+$("rAdr").onkeydown=function(e){ if(e.key==="Enter"){ e.preventDefault(); recoEnvoyer(); } };
 $("cBack").onclick=function(){ closeCard(false); };
 $("mClose").onclick=function(){ $("modal").classList.remove("open"); };
 $("modal").onclick=function(e){ if(e.target===$("modal")) $("modal").classList.remove("open"); };
@@ -761,7 +892,10 @@ $("copy").onclick=function(){ var inp=$("link"), done=function(){ toast(T("copie
    le vœu du visiteur, c'est celui qu'on lui a envoyé. */
 var recu=null;
 function lireRecu(){
-  var m=/^#v-([A-Za-z0-9_-]+)$/.exec(location.hash||""); if(!m) return false;
+  /* Deux écritures à lire : « ?v=… », celle qu'on envoie aujourd'hui, et
+     « #v-… », celle des liens partis avant le changement. */
+  var m=/[?&]v=([A-Za-z0-9_-]+)/.exec(location.search||"")||/^#v-([A-Za-z0-9_-]+)$/.exec(location.hash||"");
+  if(!m) return false;
   var v=decoderVoeu(m[1]); if(!v) return false;
   if(recu&&recu.id===v.id) return false;
   recu=v; recu.recu=true; return true;
@@ -999,7 +1133,7 @@ function buildCard(w){
      tout l'intérêt de la carte. S'il ne tient pas — un vœu écrit à la main
      dans une langue à trois octets par signe —, on retombe sur l'arbre,
      mais le lien imprimé dessous, lui, reste complet. */
-  var url=w.decor?CARD_URL:CARD_URL+"#v-"+encoderVoeu(w), qm=qrMatrix(url)||qrMatrix(CARD_URL), qs=150, qx=cx+pad, qy=fy+26;
+  var url=w.decor?CARD_URL:CARD_URL+"?v="+encoderVoeu(w), qm=qrMatrix(url)||qrMatrix(CARD_URL), qs=150, qx=cx+pad, qy=fy+26;
   if(qm){ var n=qm.length, cell=qs/n; g.fillStyle="#212121"; for(var r=0;r<n;r++) for(var c=0;c<n;c++) if(qm[r][c]) g.fillRect(qx+c*cell,qy+r*cell,cell+.4,cell+.4); }
   var lgh=150, lgw=logoImg.naturalWidth?lgh*logoImg.naturalWidth/logoImg.naturalHeight:0, lgx=cx+cw-pad-lgw;
   if(lgw) g.drawImage(logoImg,lgx,qy,lgw,lgh);
@@ -1719,10 +1853,11 @@ window.__syncTags=function(){
   else { tryHash(); ouverture(); }
 };
 var hashDone=false;
-/* Deux sortes de liens mènent à un vœu précis. « #v-… » porte le vœu
-   lui-même : il marche partout, et c'est celui qu'on envoie aujourd'hui.
-   « #w-<identifiant> » désigne un vœu de la base partagée : il ne marchera
-   que le jour où elle existera, et on le garde pour ce jour-là. */
+/* Deux sortes de liens mènent à un vœu précis. « ?v=… » porte le vœu
+   lui-même — et « #v-… » le portait hier : tous deux sont lus plus haut, et
+   le vœu est déjà accroché quand on arrive ici. « #w-<identifiant> »
+   désigne un vœu de la base partagée : il ne marchera que le jour où elle
+   existera, et on le garde pour ce jour-là. */
 function tryHash(){ if(hashDone||!entered) return;
   var h=location.hash||"", id=null;
   if(recu) id=recu.id;
@@ -2605,6 +2740,15 @@ window.__essai={
     return Math.round(n/feuilles.count*100); },
   visiteOn:function(){ return CINE.on; },
   lien:function(w){ return lienVoeu(w); },
+  /* L'état de la ligne du journal : ce qu'on voit, et ce qui a été répondu. */
+  abo:function(){ var r=$("reco");
+    return {vue:!!r&&r.classList.contains("on"),choix:$("rChoix").classList.contains("on"),
+      champ:$("rForm").classList.contains("on"),note:$("rNote").textContent,
+      texte:$("rTxt").textContent,etat:aboEtat,insta:$("rInsta").getAttribute("href")}; },
+  aboMail:function(a){ $("rMail").click(); $("rAdr").value=a; recoEnvoyer(); },
+  aboURL:function(){ return aboURL(); },
+  aboInsta:function(){ $("rInsta").onclick(); },
+  aboOubli:function(){ aboEtat=""; try{ localStorage.removeItem("yw_abo"); }catch(e){} },
   decoder:function(c){ return decoderVoeu(c); },
   recu:function(){ return recu; },
   /* Le fond de la carte : la photographie, ou le beige vide si elle est

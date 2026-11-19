@@ -16,7 +16,8 @@ rouge. Adresse : `https://yunma.fr/wishes`.
 | `assets/logo-yunma-transparent.png` | Le logo, à l'accueil et sur la carte. |
 | `assets/carte-photo-1050x1480.jpg` | Le fond de la carte à télécharger. Chargé seulement quand quelqu'un ouvre sa carte. |
 | `seeds.json` | Vingt-huit vœux de départ, à verser dans la base le jour où elle existera. La page ne les lit pas : tant qu'il n'y a pas de base, elle fabrique son décor à partir des vœux tout faits. Ce fichier n'est pas déposé. |
-| `.htaccess` | Cache court sur la page, long sur la bibliothèque, compression. |
+| `abonner.php` | Le relais du journal de la récolte : il reçoit les adresses et les écrit dans `abonnes.jsonl`, à côté de lui. Le seul morceau de l'expérience qui tourne sur le serveur. |
+| `.htaccess` | Cache court sur la page, long sur la bibliothèque, compression, et le journal des adresses tenu hors de portée du dehors. |
 
 Comme l'atlas des variétés, ce dossier **se redépose seul** : aucun menu du site
 n'y mène, il ne figure pas au plan du site, et l'on y entre par un lien qu'on
@@ -337,7 +338,7 @@ en porte trente n'annonçait rien, ni ce qu'on voit, ni ce qu'on peut faire.
 ## Envoyer un vœu
 
 **Le vœu tient dans le lien.** C'est ce qui permet de l'envoyer aujourd'hui,
-sans base de données : `…/wishes#v-<vœu encodé>`. Celui qui l'ouvre le voit
+sans base de données : `…/wishes?v=<vœu encodé>`. Celui qui l'ouvre le voit
 accroché à l'arbre, à son nom — la caméra y va toute seule, et **de bien plus
 près que pour les autres** : c'est le seul mot qu'il soit venu lire, et il doit
 remplir l'écran assez pour qu'on n'ait rien à faire pour le lire.
@@ -371,8 +372,69 @@ sont identiques, n'importe quel lecteur y trouvera le lien. Elle ouvre enfin ce
 lien dans un autre navigateur et vérifie que le mot est là, au bon nom, la
 caméra dessus et la carte ouverte.
 
+**Pourquoi une question et non un dièse.** Le vœu voyageait d'abord après le
+dièse, `…#v-<vœu>`. La différence ne se voit pas à l'œil, mais elle décide de
+tout ce qui viendra : *ce qui suit un dièse n'arrive jamais au serveur*. Aucun
+réseau social ne peut donc savoir de quel vœu il s'agit quand on lui colle le
+lien, et la vignette qu'il affiche ne peut être que celle de l'arbre nu. Avec
+une question ordinaire, le serveur pourra un jour fabriquer la vignette du vœu
+lui-même. Le changement a été fait avant toute mise en ligne, tant qu'aucun
+lien n'était parti ; les liens en `#v-…` restent lus, et l'épreuve le vérifie.
+
 Un lien `…#w-<identifiant>` désigne un vœu de la base partagée. Il est reconnu,
 mais il ne mènera à quelque chose que le jour où cette base existera.
+
+## Le journal de la récolte
+
+Au bas de la fiche, sous un filet, une ligne : *« Janvier 2027, Yunma repart au
+Yunnan chercher les nouveaux cafés. Suivez-nous »*, et deux portes — **par
+mail**, ou **sur Instagram**.
+
+**Le moment.** Quelqu'un qui vient d'écrire un vœu et de le voir s'accrocher a
+donné quelque chose : c'est le seul instant de la visite où l'on peut demander
+en retour. La ligne vit donc dans la fiche, et nulle part ailleurs — et la
+fiche ne s'ouvre que là, ou lorsqu'on touche le vœu qu'un ami nous a envoyé.
+Elle part pliée : aucun champ n'attend ouvert, et rien n'est dit de l'adresse
+avant qu'on ait touché « par mail ». Parler de ce qu'on en fera avant de
+l'avoir demandée, c'est déjà la demander. Une fois qu'on a répondu — par l'une
+ou l'autre porte —, elle ne reparaît plus (`yw_abo` dans la mémoire du
+navigateur). Demander deux fois, c'est harceler.
+
+**Pourquoi un fichier PHP.** Tout ce qui est dans la page est public : le jeton
+de vitrine de la boutique peut y vivre, il est fait pour cela, mais la clé d'un
+service d'envoi, jamais. `abonner.php` garde de son côté ce qui ne peut pas
+vivre dans une page. Le dossier cesse donc d'être tout à fait statique — il
+demande PHP, que l'hébergement d'Infomaniak exécute —, et la page continue de
+s'ouvrir sans lui : si l'inscription échoue, **elle le dit**, elle ne fait pas
+semblant d'avoir enregistré.
+
+Ce que le relais fait, dans l'ordre : il refuse ce qui ne vient pas de sa
+propre origine ; il laisse tomber en silence un envoi dont le champ invisible
+est rempli, ou qui arrive moins d'une seconde et demie après l'ouverture de la
+page — ni captcha ni devinette ; il vérifie la forme de l'adresse, puis que son
+domaine peut recevoir du courrier (après avoir demandé à la machine si elle
+sait seulement interroger le DNS : sans ce sondage, un serveur sans résolveur
+refuserait toutes les adresses du monde) ; il refuse la sixième inscription
+venue de la même machine dans l'heure ; et il écrit une ligne dans
+`abonnes.jsonl`, sous verrou exclusif.
+
+Ce qu'on garde, et rien de plus : l'adresse, la langue de lecture, l'instant,
+et **la version exacte du texte qui a été montré** — c'est elle qui prouve à
+quoi la personne a consenti. L'adresse de la machine n'est gardée que hachée,
+et seulement pour écarter un robot qui reviendrait cent fois. Le fichier est
+posé dans le dossier public faute de pouvoir écrire ailleurs chez l'hébergeur :
+le `.htaccess` refuse de le servir, et c'est cette règle qui tient la liste à
+l'abri. **Ne pas la perdre en redéposant le dossier.**
+
+**Instagram** est un simple lien, `https://www.instagram.com/yunma.coffee`,
+ouvert dans une autre page — pas un bouton de réseau qui pisterait, et rien
+n'est chargé de chez eux. On ne saura jamais si la personne s'est abonnée, et
+ce n'est pas grave : on a demandé une fois.
+
+L'épreuve porte sur le vrai relais, lancé pour de bon à côté du serveur
+d'épreuve : l'adresse écrite dans la page se retrouve dans le journal, et le
+piège, la hâte, la répétition, l'envoi venu d'ailleurs et la sixième tentative
+sont tous refusés comme ils doivent l'être.
 
 ## Ce qui reste à faire
 
@@ -386,8 +448,7 @@ l'arbre au pire moment ; c'est écrit ici, et cela suffit.
 En attendant, **les trente vœux tout faits tiennent lieu de monde** : ils sont
 signés, ils sont là dès la première visite, et ils restent quand on accroche le
 sien. C'est une fiction assumée — un arbre vide donne envie de partir, et le
-jour où la base existera, les vrais vœux viendront simplement par-dessus. Le
-compteur, lui, ne ment pas : il ne compte que les vrais.
+jour où la base existera, les vrais vœux viendront simplement par-dessus.
 
 Pour que l'arbre se remplisse vraiment, poser dans `API` l'adresse d'une petite
 API sur Infomaniak (PHP et MySQL font l'affaire) :
@@ -413,6 +474,29 @@ un peu le regard : joli sur le papier, invisible à l'usage. Souffler dans le
 micro faisait voler les feuilles : joli aussi, mais cela demandait une
 autorisation que personne n'accorde à un arbre — et une page publiée comme
 artefact claude.ai ne peut atteindre ni le micro ni les capteurs de mouvement,
-de sorte qu'on ne pouvait ni l'essayer ni le régler sans déposer le dossier. Le
-menu porte « faire voler les feuilles », qui marche partout et sans rien
-demander.
+de sorte qu'on ne pouvait ni l'essayer ni le régler sans déposer le dossier.
+Secouer le téléphone, qui ne demande rien à personne, en tient lieu.
+
+**La liste n'a pas encore de service d'envoi.** Le relais écrit dans un
+fichier, et c'est tout ce qu'il fait : pas de courrier de confirmation, pas de
+lien de désinscription, et l'envoi de janvier 2027 serait à faire à la main. Ce
+qui manque tient en un appel, à la fin d'`abonner.php`, vers une liste à double
+confirmation — Brevo, française et européenne, ou la boutique Shopify elle-même
+si l'on veut une seule base clients. Attention de ce côté-là : le courrier de
+double confirmation de Shopify part de façon fiable depuis la vitrine, et non
+depuis l'API d'administration ; à éprouver sur une boutique d'essai avant de
+s'y engager. Et les mentions légales du site ont reçu le paragraphe qu'il
+fallait, mais il devra être relu le jour où un sous-traitant entrera dans le
+tableau.
+
+**L'image à partager n'existe pas encore.** Aucun réseau ne laisse une page web
+lui préparer une publication avec une image : Instagram et TikTok n'ont même
+pas de lien de partage, et Facebook, X ou Threads ne prennent qu'une adresse et
+un texte, l'image étant celle que la page déclare. Il n'y a donc que deux
+mécanismes à construire — la feuille de partage du téléphone, qui reçoit un
+fichier et ouvre Instagram, et les balises de la page pour les liens collés.
+Le lien est déjà prêt pour le second (voir « Pourquoi une question et non un
+dièse ») ; reste à dessiner l'image : un format 1080 × 1920 pour la story, le
+vœu lisible à bout de bras, et en bas le logo, « Cafés de spécialité du
+Yunnan » et l'adresse du site — car une story partagée par un ami ne porte
+aucun lien cliquable.
