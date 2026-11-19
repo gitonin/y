@@ -842,6 +842,47 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
  * éprouve donc le relais pour de bon — c'est lui qui tiendra la liste — puis
  * la ligne elle-même, dans la page, jusqu'à l'écriture dans le journal.
  */
+/* ------------------------------------------------------------------ *
+ * La visite guidée ne referme rien
+ * ------------------------------------------------------------------ *
+ * Sept secondes après l'arrivée, la visite prend le relais de l'ouverture.
+ * Elle le prenait sans rien regarder : celui qui touche « accrocher un vœu »
+ * dès son arrivée écrivait donc son mot pendant que la caméra s'en allait, et
+ * sa fiche lui était refermée au nez. Une veilleuse attend que la pièce soit
+ * vide.
+ */
+titre('La visite attend que rien ne soit ouvert');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  await p.click('#add');
+  await p.waitForTimeout(400);
+  await p.evaluate(() => window.__essai.relais(8));
+  await p.waitForTimeout(1200);
+  check('le panneau d’écriture ouvert, elle ne part pas',
+    await p.evaluate(() => window.__essai.visiteOn()), false);
+  check('et le panneau est toujours là',
+    await p.evaluate(() => document.getElementById('sheet').classList.contains('open')));
+  await p.click('#sheetX');
+  await p.waitForTimeout(300);
+  await p.evaluate(() => { window.__essai.viser(2, true); });
+  await p.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
+  await p.evaluate(() => window.__essai.relais(8));
+  await p.waitForTimeout(1200);
+  check('une fiche ouverte, elle ne part pas non plus',
+    await p.evaluate(() => window.__essai.visiteOn()), false);
+  check('et la fiche reste ouverte',
+    await p.evaluate(() => window.__essai.fiche()));
+  /* Mais dès que l'écran est rendu à l'arbre, elle prend bien le relais. */
+  await p.click('#cBack');
+  await p.waitForTimeout(300);
+  await p.evaluate(() => window.__essai.relais(8));
+  const partie = await p.waitForFunction(() => window.__essai.visiteOn(), null, { timeout: 20000 })
+    .then(() => true).catch(() => false);
+  check('l’écran rendu à l’arbre, elle part', partie);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
 titre('Le journal de la récolte');
 if (!PHP) console.log('  (php n’est pas sur cette machine : le relais n’a pas été éprouvé)');
 else {

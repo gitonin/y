@@ -2690,6 +2690,9 @@ window.__essai={
   visiteEtat:function(){ return {on:CINE.on,etape:CINE.etape,ronde:CINE.ronde,
     r:+goal.r.toFixed(2),th:+goal.th.toFixed(2),vise:focused}; },
   avancer:function(){ CINE.prochain=0; },
+  /* Pour l'épreuve : armer le relais d'ouverture comme s'il avait assez
+     attendu, sans passer sept secondes de scène à le regarder vieillir. */
+  relais:function(s){ ouvre=clock-(s===undefined?8:s); return ouvre; },
   secousse:function(){ return clock-SECOUSSE.t; },
   compte:function(){ return {feuilles:feuilles?feuilles.count:0,cerises:cerises?cerises.count:0,voeux:slots.length}; },
   /* La charpente : un caféier n'a qu'un axe. S'il en repousse quatre, la
@@ -2894,7 +2897,13 @@ function frame(now){
      avec lui. */
   sunMaj(); themeMaj(); lumMaj(); cielMaj(t);
   cineMaj(dt); noelMaj(); surprisesMaj(t,dt); etincellesMaj(t,dt);
-  if(ouvre&&t-ouvre>7){ ouvre=0; cineStart(); }
+  /* Le relais d'ouverture attend, lui aussi, que rien ne soit ouvert
+     par-dessus l'arbre. Il ne regardait rien : sept secondes après l'arrivée,
+     la visite partait quoi qu'il arrive. Quelqu'un qui touche « accrocher un
+     vœu » dès son arrivée écrit donc son mot pendant que la caméra s'en va,
+     et la fiche qui vient couronner son geste lui est refermée au nez par une
+     veilleuse. Ce n'est pas quelqu'un qui s'est absenté : on repousse. */
+  if(ouvre&&t-ouvre>7){ if(sheetOpen||cardWish||nP){ ouvre=t; } else { ouvre=0; cineStart(); } }
   /* Et si plus rien ne bouge, la visite revient d'elle-même : c'est une
      veilleuse, pas un film qu'on lance. Dix secondes d'immobilité, rien
      d'ouvert par-dessus, et aucun doigt sur l'écran. */
