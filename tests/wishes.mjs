@@ -534,7 +534,6 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
   const ca = await p.evaluate(() => window.__essai.carte());
   check(`la carte est au format d’une carte (${ca.l} × ${ca.h})`, ca.l === 1050 && ca.h === 1480);
   check(`elle montre la scène et non un fond uni (écart ${ca.ecart})`, ca.ecart > 60);
-  check('et son QR code porte le vœu, non l’arbre nu', ca.qr);
   check(`trois zones cliquables pour le PDF (${ca.liens})`, ca.liens, 3);
 
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
@@ -950,6 +949,9 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
   check(`l’image est là (${Math.round((img || '').length / 1024)} Ko)`, (img || '').startsWith('data:image/jpeg') && img.length > 40000);
   const ca2 = await p.evaluate(() => window.__essai.carte());
   check(`et c’est bien la scène qu’elle montre (écart ${ca2.ecart})`, ca2.ecart > 60);
+  /* Le QR code porte le vœu lui-même. Un vœu de décor, lui, n'est à
+     personne : le sien retombe sur l'arbre, et c'est voulu. */
+  check('son QR code porte le vœu, non l’arbre nu', ca2.qr);
   const nous = await p.evaluate((u) => window.__qr(u), lien);
   /* Même version et même niveau de correction que le nôtre, sinon la
      bibliothèque en choisit une autre et les matrices ne se comparent
