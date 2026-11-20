@@ -562,6 +562,86 @@ titre('La musique de Noël se joue toute seule');
  * une étoile filante en plein midi serait une erreur, et c'est le genre
  * d'erreur qu'on ne voit jamais soi-même, puisqu'elle dure une seconde.
  */
+/* ------------------------------------------------------------------ *
+ * Le son, et les absences
+ * ------------------------------------------------------------------ *
+ * Quitter la page suspend l'horloge du son — c'est voulu : un arbre qui
+ * chante dans un onglet qu'on a quitté est mal élevé. Le retour, lui, ne
+ * l'était pas : « reprendre » était demandé une fois, sans vérifier que
+ * cela avait pris. Or cela ne prend pas toujours — une page revenue
+ * d'arrière-plan n'a pas toujours le droit de redémarrer son audio sans un
+ * geste, et le navigateur ne dit rien, il laisse l'horloge arrêtée. On
+ * revenait alors sur un arbre muet, que le bouton du son ne rallumait pas
+ * puisqu'il ne fait que baisser un volume.
+ *
+ * On éprouve donc les deux retours : celui qu'on accorde, et celui qu'on
+ * refuse en silence.
+ */
+titre('Le son revient quand on revient');
+{
+  const ctx = await nav.newContext({ viewport: { width: 900, height: 760 }, locale: 'fr-FR' });
+  const p = await ctx.newPage();
+  const bruit = [];
+  p.on('pageerror', (e) => bruit.push('' + e));
+  p.on('console', (m) => { if (m.type() === 'error') bruit.push(m.text()); });
+  /* De quoi refuser la reprise, comme le fait un téléphone au retour
+     d'arrière-plan : la page croit demander, et rien ne repart. */
+  await p.addInitScript(() => {
+    const P = window.AudioContext.prototype, vrai = P.resume;
+    P.resume = function () { return window.__refuse ? Promise.resolve() : vrai.apply(this, arguments); };
+  });
+  /* On simule le départ et le retour : une page d'épreuve n'est jamais
+     vraiment cachée, le navigateur sans écran les tient toutes pour
+     visibles. */
+  const visibilite = (cache) => p.evaluate((h) => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => h });
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => (h ? 'hidden' : 'visible') });
+    document.dispatchEvent(new Event('visibilitychange'));
+  }, cache);
+  const etat = () => p.evaluate(() => window.__essai.audio());
+
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+  await p.waitForTimeout(1400);
+  await p.evaluate(() => document.getElementById('enter').click());
+  await p.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
+  await p.waitForTimeout(2200);
+  check('à l’arrivée, le son tourne', (await etat()).etat, 'running');
+
+  await visibilite(true);
+  await p.waitForTimeout(800);
+  check('on quitte la page, l’horloge s’arrête', (await etat()).etat, 'suspended');
+
+  await visibilite(false);
+  const revenu = await p.waitForFunction(() => window.__essai.audio().etat === 'running', null, { timeout: 20000 })
+    .then(() => true).catch(() => false);
+  check('on revient, elle repart', revenu);
+  const a = await etat();
+  await p.waitForTimeout(2500);
+  const b = await etat();
+  check(`et la mélodie continue d’avancer (${a.horloge} → ${b.horloge})`, b.horloge > a.horloge);
+  check('les notes restent programmées en avance', b.avance > 0);
+
+  /* Le retour qu'on refuse en silence. */
+  await p.evaluate(() => { window.__refuse = true; });
+  await visibilite(true);
+  await p.waitForTimeout(800);
+  await visibilite(false);
+  await p.waitForTimeout(900);
+  check('une reprise refusée laisse bien l’horloge arrêtée', (await etat()).etat, 'suspended');
+  const arme = await p.waitForFunction(() => window.__essai.audio().arme, null, { timeout: 20000 })
+    .then(() => true).catch(() => false);
+  check('mais le secours s’arme', arme);
+  /* Et le premier geste du visiteur la rallume — un seul suffit. */
+  await p.evaluate(() => { window.__refuse = false; });
+  await p.evaluate(() => document.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
+  const rallume = await p.waitForFunction(() => window.__essai.audio().etat === 'running', null, { timeout: 20000 })
+    .then(() => true).catch(() => false);
+  check('et le premier geste la rallume', rallume);
+  check('le secours se désarme derrière lui', (await etat()).arme, false);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
 titre('Le ciel a ses habitants, chacun à son heure');
 {
   const { ctx, p, bruit } = await ouvrir(13);

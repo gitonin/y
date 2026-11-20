@@ -227,6 +227,26 @@ l'horloge prend de l'avance — le son coupé, un onglet laissé de côté —, 
 repart de l'instant présent, sans quoi toutes les notes du temps perdu
 sonneraient ensemble.
 
+**Quitter la page suspend l'horloge du son**, et c'est voulu : un arbre qui
+chante dans un onglet qu'on a quitté est mal élevé. Le retour, lui, ne l'était
+pas. « Reprendre » était demandé une fois, sans vérifier que cela avait pris —
+or cela ne prend pas toujours : une page revenue d'arrière-plan n'a pas
+toujours le droit de redémarrer son audio sans un geste, et le navigateur ne
+dit rien, il laisse l'horloge arrêtée. On revenait d'Instagram sur un arbre
+muet, et le bouton du son n'y changeait rien, puisqu'il ne fait que baisser un
+volume.
+
+Maintenant : on essaie au retour, on vérifie trois dixièmes de seconde plus
+tard, et si l'horloge est toujours arrêtée on attend le premier geste du
+visiteur pour réessayer — un seul suffit, et le secours se désarme derrière
+lui. Le changement de visibilité, le retour depuis la mémoire du navigateur et
+la reprise du focus mènent tous les trois au même endroit. La mélodie, elle,
+n'a rien perdu : une horloge suspendue ne vieillit pas, et les notes déjà
+programmées sont toujours devant nous.
+
+L'épreuve joue les deux retours, celui qu'on accorde et celui qu'on refuse en
+silence.
+
 ## Accrocher le sien
 
 Un vœu qu'on vient d'accrocher s'annonçait par un cartouche qui surgissait

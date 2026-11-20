@@ -1227,7 +1227,51 @@ function setMuted(m){ muted=m; $("sndw").style.display=m?"none":""; $("snd").sty
   if(AC&&master){ var t=AC.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(m?0:.75,t+1.2); } }
 $("snd").onclick=function(){ if(!AC) startAudio(); setMuted(!muted); };
 $("add").addEventListener("click",function(){ cineStop(); });
-document.addEventListener("visibilitychange",function(){ if(!AC) return; try{ if(document.hidden) AC.suspend(); else AC.resume(); }catch(e){} });
+/* ------------------------------------------------------------------ le son et les absences
+   Quitter la page — passer dans Instagram pour y poser sa story, changer
+   d'onglet, verrouiller son téléphone — suspend l'horloge du son. C'est
+   voulu : un arbre qui chante dans un onglet qu'on a quitté est un arbre
+   mal élevé.
+
+   Ce qui ne l'était pas, c'est le retour. « Reprendre » était demandé une
+   fois, et personne ne vérifiait que cela avait pris. Or cela ne prend pas
+   toujours : sur iPhone, une page revenue d'arrière-plan n'a pas toujours
+   le droit de redémarrer son audio sans un geste, et le navigateur ne dit
+   rien — il laisse l'horloge arrêtée. On revenait alors sur un arbre muet,
+   et plus rien n'y faisait, pas même toucher le bouton du son, qui ne fait
+   que baisser un volume.
+
+   Donc : on essaie au retour, on vérifie trois dixièmes de seconde plus
+   tard, et si l'horloge est toujours arrêtée on attend le premier geste du
+   visiteur pour réessayer. La mélodie, elle, n'a rien perdu : une horloge
+   suspendue ne vieillit pas, et les notes déjà programmées sont toujours
+   devant nous. */
+var repriseArmee=false;
+function audioReprendre(){
+  if(!AC) return;
+  try{ var pr=AC.resume(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){}
+  setTimeout(function(){ if(AC&&AC.state!=="running") audioArmerGeste(); },320);
+}
+function audioArmerGeste(){
+  if(repriseArmee||!AC) return;
+  repriseArmee=true;
+  var essai=function(){
+    repriseArmee=false;
+    document.removeEventListener("pointerdown",essai,true);
+    document.removeEventListener("touchend",essai,true);
+    if(AC){ try{ var pr=AC.resume(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){} }
+  };
+  document.addEventListener("pointerdown",essai,true);
+  document.addEventListener("touchend",essai,true);
+}
+document.addEventListener("visibilitychange",function(){
+  if(!AC) return;
+  if(document.hidden){ try{ AC.suspend(); }catch(e){} } else audioReprendre();
+});
+/* Une page rendue depuis la mémoire du navigateur ne passe pas toujours par
+   le changement de visibilité ; celle qui reprend le focus non plus. */
+addEventListener("pageshow",audioReprendre);
+addEventListener("focus",audioReprendre);
 
 $("enter").onclick=function(){
   entered=true; startAudio(); $("intro").classList.add("gone"); $("top").classList.remove("hide"); $("bottom").classList.remove("down");
@@ -2590,6 +2634,12 @@ window.__essai={
   voeux:function(){ return Object.keys(tags).length; },
   fentes:function(){ return slots.length; },
   /* La musique : l'air en cours, et la note programmée la plus lointaine. */
+  /* L'état du son, et ce qu'il devient quand on quitte la page. */
+  audio:function(){ return {etat:AC?AC.state:"",muet:muted,
+    gain:master?+master.gain.value.toFixed(2):-1,
+    horloge:AC?+AC.currentTime.toFixed(2):-1,
+    note:NOEL.i,air:NOEL.air,arme:repriseArmee,
+    avance:AC?+(NOEL.quand-AC.currentTime).toFixed(2):-1}; },
   musique:function(v){ if(v!==undefined&&v!==NOEL.on) noelBasculer();
     return {on:NOEL.on,air:NOEL.air,note:NOEL.i,airs:AIRS.length,
       noms:AIRS.map(function(a){return a.nom;}),
