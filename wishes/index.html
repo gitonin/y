@@ -2799,7 +2799,7 @@ window.__essai={
      à savoir écrire. */
   story:function(){ var f=STORY.fichier;
     return {on:STORY.on,phase:STORY.phase,u:+(STORY.u||0).toFixed(2),mime:STORY.mime,
-      vues:STORY.vues,w:STORY.w,h:STORY.h,
+      vues:STORY.vues,w:STORY.w,h:STORY.h,lum:STORY.lum,ecart:STORY.ecart,
       fichier:f?{nom:f.name,type:f.type,ko:Math.round(f.size/1024)}:null,
       bouton:$("sShare").textContent,mode:$("sShare").getAttribute("data-mode"),
       note:$("sNote").textContent,ouverte:$("story").classList.contains("open"),
@@ -2964,10 +2964,15 @@ window.addEventListener("resize",resize); resize(); cam.r=homeR*1.5; goal.r=home
    prêt, et c'est en touchant « Partager » qu'on ouvre la feuille. C'est de
    toute façon ce qu'on voudrait : voir avant d'envoyer. */
 var STORY={on:false,phase:"",u:0,t0:0,duree:7.2,w:720,h:1280,cv:null,g:null,
-  rec:null,bouts:[],mime:"",tag:null,webm:false,or:false,avant:null,fichier:null,vues:0};
+  rec:null,bouts:[],mime:"",tag:null,webm:false,or:false,avant:null,fichier:null,
+  vues:0,demarre:false,lum:-1,ecart:-1};
 function storyCv(W,H){
   if(!STORY.cv){ STORY.cv=$("sCv"); STORY.g=STORY.cv.getContext("2d"); }
   if(STORY.cv.width!==W||STORY.cv.height!==H){ STORY.cv.width=W; STORY.cv.height=H; }
+  /* Une toile qu'on vient de dimensionner est transparente, et une vidéo
+     n'a pas de transparence : elle serait noire. On la remplit du crème du
+     ciel, pour qu'aucune image, jamais, ne parte au noir. */
+  STORY.g.fillStyle="#efebe2"; STORY.g.fillRect(0,0,W,H);
   return STORY.cv;
 }
 /* Ce que cette machine sait encoder, et qu'Instagram saura lire. */
@@ -3010,19 +3015,7 @@ function storyLancer(w){
      l'île, qui n'a rien à faire dans une story. Un mouvement court et lent
      vaut mieux qu'un grand vol qui montre les coulisses. */
   STORY.de={th:goal.th-.40,ph:Math.min(goal.ph+.09,1.74),r:Math.min(goal.r*1.85,6.4)};
-  STORY.bouts=[]; STORY.mime=storyMime(); STORY.rec=null;
-  if(STORY.mime){
-    try{
-      var flux=STORY.cv.captureStream(30);
-      STORY.rec=new MediaRecorder(flux,{mimeType:STORY.mime,videoBitsPerSecond:3500000});
-      STORY.rec.ondataavailable=function(e){ if(e.data&&e.data.size) STORY.bouts.push(e.data); };
-      STORY.rec.onstop=function(){
-        var ext=/mp4/.test(STORY.mime)?"mp4":"webm";
-        storyMonter(new Blob(STORY.bouts,{type:STORY.mime.split(";")[0]}),ext);
-      };
-      STORY.rec.start();
-    }catch(e){ STORY.rec=null; }
-  }
+  STORY.bouts=[]; STORY.mime=storyMime(); STORY.rec=null; STORY.demarre=false;
   STORY.phase="film"; STORY.t0=performance.now(); STORY.on=true;
   return true;
 }
@@ -3057,9 +3050,11 @@ function storyPose(u){
 function storyDecor(g,W,H,u){
   var k=H/1280, HV='"Helvetica Neue",Helvetica,Arial,sans-serif', cjk=lang==="zh";
   var sb=H-180*k, i;
-  /* Le bandeau est là dès la première image : c'est elle que les réseaux
-     prennent pour vignette, et une vignette sans marque ne sert à rien. */
-  var aBande=1, aTitre=clamp(.25+u*6,0,1);
+  /* Le bandeau et le titre sont là dès la première image, à pleine force :
+     c'est elle que les réseaux prennent pour vignette, et un titre en
+     fondu y paraîtrait à moitié effacé. Ce qui monte en fondu, c'est ce
+     qu'on découvre — le vœu, puis l'adresse. */
+  var aBande=1, aTitre=1;
   var aMot=clamp((u-.60)/.12,0,1), aUrl=clamp((u-.76)/.12,0,1);
   /* Un voile crème monte du bas : il porte le bandeau, et il tient le texte
      lisible quelle que soit la branche qui passe derrière. */
@@ -3116,6 +3111,40 @@ function storyDessiner(u){
   var g=STORY.g, W=STORY.w, H=STORY.h;
   g.drawImage(renderer.domElement,0,0,W,H);
   storyDecor(g,W,H,u); STORY.vues++;
+  /* La première image, mesurée une fois : sa clarté moyenne, et l'écart
+     entre son point le plus sombre et le plus clair. La clarté seule ne
+     suffit pas — elle écarte le noir, mais pas un rectangle de crème uni,
+     qui est l'autre façon de s'ouvrir sur rien. Une vraie image de l'arbre
+     a du feuillage sombre et du ciel clair : son écart est grand. */
+  if(!STORY.demarre){
+    try{ var som=0, n=0, mn=255, mx=0, q, y, d;
+      for(y=2;y<=8;y+=2){
+        d=g.getImageData(0,Math.round(H*y/10),W,1).data;
+        for(q=0;q<d.length;q+=4){ var v=(d[q]+d[q+1]+d[q+2])/3;
+          som+=v; n++; if(v<mn) mn=v; if(v>mx) mx=v; }
+      }
+      STORY.lum=Math.round(som/n); STORY.ecart=Math.round(mx-mn);
+    }catch(e){ STORY.lum=-1; STORY.ecart=-1; }
+  }
+}
+/* L'enregistreur naît ici, et pas plus tôt : sur une toile qui porte déjà
+   sa première image. Créé avant, son flux retenait l'image d'avant — une
+   toile vide, c'est-à-dire du noir, et, une fois la toile remplie de crème
+   pour éviter ce noir, un rectangle crème. Dans les deux cas le film
+   s'ouvrait sur rien, et c'est cette première image que les réseaux
+   prennent pour vignette. */
+function storyFilmer(){
+  if(!STORY.mime) return;
+  try{
+    var flux=STORY.cv.captureStream(30);
+    STORY.rec=new MediaRecorder(flux,{mimeType:STORY.mime,videoBitsPerSecond:3500000});
+    STORY.rec.ondataavailable=function(e){ if(e.data&&e.data.size) STORY.bouts.push(e.data); };
+    STORY.rec.onstop=function(){
+      var ext=/mp4/.test(STORY.mime)?"mp4":"webm";
+      storyMonter(new Blob(STORY.bouts,{type:STORY.mime.split(";")[0]}),ext);
+    };
+    STORY.rec.start();
+  }catch(e){ STORY.rec=null; }
 }
 /* Le film est fini : on rend la scène à l'écran, et l'on fabrique le
    fichier. Sans encodeur, c'est une image fixe — plus grande, puisqu'elle
@@ -3201,6 +3230,13 @@ function frame(now){
   /* Le tournage écrit la trajectoire lui-même, et sur la montre : un film
      dure sept secondes pour celui qui le regarde, quelle que soit la
      vitesse de la machine. */
+  /* Le film ne commence qu'à sa première image composée. Entre le moment
+     où l'on appuie et celle-là, il se passe le temps qu'il faut à la scène
+     pour être rendue à un format qu'elle n'avait pas — un battement de cil
+     sur un téléphone, une seconde entière sur une machine sans carte
+     graphique. Compter à partir de l'appui ferait commencer le film en
+     cours de route. */
+  if(STORY.on&&!STORY.demarre) STORY.t0=now;
   if(STORY.on) STORY.u=STORY.phase==="film"?Math.min(1,(now-STORY.t0)/1000/STORY.duree):1;
   if(STORY.on&&(STORY.phase==="film"||STORY.phase==="photo")) storyPose(STORY.u);
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
@@ -3263,6 +3299,11 @@ function frame(now){
      n'y a pas d'encodeur, l'attente du fichier quand il y en a un. */
   if(STORY.on){
     storyDessiner(STORY.phase==="photo"?1:STORY.u);
+    /* L'enregistreur ne part qu'ici, la première image une fois composée :
+       parti plus tôt, il filmait une toile encore vide, et le film
+       s'ouvrait sur du noir — or c'est cette première image que les
+       réseaux prennent pour vignette. On ne sait pas ce qu'on regarde. */
+    if(!STORY.demarre){ STORY.demarre=true; storyFilmer(); }
     if(STORY.phase==="film"&&STORY.u>=1){
       if(STORY.rec){ STORY.phase="attente"; try{ STORY.rec.stop(); }catch(e){ storyMonter(null,"mp4"); } }
       else { STORY.phase="photo"; STORY.w=1080; STORY.h=1920; storyCv(1080,1920); storyTaille(1080,1920); }

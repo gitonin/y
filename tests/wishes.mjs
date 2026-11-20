@@ -973,6 +973,15 @@ titre('La story se fabrique dans la page');
   check(`c’est un film MP4 (${f.ko} Ko)`, f.type === 'video/mp4' && f.ko > 0);
   check('il porte un nom qu’on retrouvera', f.nom, 'voeu-yunma.mp4');
   const apres = await p.evaluate(() => window.__essai.story());
+  /* Le film s'ouvrait sur du noir : l'enregistreur partait avant que la
+     première image ne soit composée, et filmait une toile encore vide. Or
+     c'est cette première image que les réseaux prennent pour vignette — on
+     ne savait pas ce qu'on regardait. */
+  check(`le film ne s’ouvre pas sur du noir (clarté ${apres.lum})`, apres.lum > 40);
+  /* Ni sur un rectangle uni : l'enregistreur créé trop tôt retenait l'image
+     d'avant — une toile vide. Une vraie image de l'arbre a du feuillage
+     sombre et du ciel clair. */
+  check(`ni sur un fond uni (écart ${apres.ecart})`, apres.ecart > 60);
   check('un bouton propose d’en faire quelque chose', apres.actions && !!apres.bouton);
   /* Là où la feuille de partage du système ne prend pas de fichier, on
      enregistre et l'on dit quoi en faire. On ne fait pas semblant. */

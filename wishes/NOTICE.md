@@ -457,6 +457,22 @@ un ami ne porte aucun lien cliquable.
    image montrerait le dessous de l'île. Et rien d'important ne descend dans
    les deux cent cinquante derniers pixels : Instagram y pose son interface.
 
+**Le film ne s'ouvre pas sur du noir.** L'enregistreur naissait avec la
+toile, avant que la première image n'y soit peinte : son flux retenait donc
+l'image d'avant — une toile vide, c'est-à-dire du noir, puis, une fois la
+toile remplie de crème pour éviter ce noir, un rectangle crème. Dans les deux
+cas le film s'ouvrait sur rien, et l'on ne savait pas ce qu'on regardait — or
+c'est cette première image que les réseaux prennent pour vignette. Il naît
+maintenant à la première image composée, sur une toile qui porte déjà la
+scène ; le bandeau et le titre y sont à pleine force, et seuls le vœu et
+l'adresse montent en fondu. L'horloge du film part elle aussi de cette
+première image, et non du moment où l'on appuie : sur une machine lente, le
+temps de passer au format d'une story aurait mangé l'ouverture.
+
+L'épreuve mesure cette première image : sa clarté, qui écarte le noir, et
+l'écart entre son point le plus sombre et le plus clair, qui écarte le fond
+uni.
+
 **Comment c'est fait.** Le rendu passe au format d'une story — même machinerie
 que le redimensionnement de la fenêtre, cible du flou comprise —, la boucle
 d'image écrit la trajectoire sur la montre et non sur l'horloge de la scène
