@@ -313,7 +313,13 @@ titre('Les textes tiennent la nuit');
       for (let i = pile.length - 1; i >= 0; i--) { const c = pile[i], a = c[3];
         out = [0, 1, 2].map((k) => c[k] * a + out[k] * (1 - a)); }
       return out; };
-    const ratio = (a, b) => { const l1 = lum(a), l2 = lum(b);
+    /* Le texte aussi peut être translucide — « rgba(encre, .6) » se lit
+       partout dans cette page. On le compose donc sur son fond avant de
+       mesurer : sans cela, un texte à deux dixièmes d'opacité passerait
+       pour parfaitement lisible, et l'épreuve se mentirait à elle-même. */
+    const ratio = (c, b) => { const a = c[3] === undefined ? 1 : c[3];
+      const f = [0, 1, 2].map((k) => c[k] * a + b[k] * (1 - a));
+      const l1 = lum(f), l2 = lum(b);
       return +(((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05))).toFixed(2); };
     const sel = ['#own', '#name', '#link', '#hint', '#recuDe', '#voeuShareT', '#toast', '#stTitle',
       '#stepN', '#cBy', '#cZh', '#cPy', '#cTr', '#rTxt', '#shareTtl', '#shareTxt', '#sNote', '#sShare',
@@ -321,13 +327,13 @@ titre('Les textes tiennent la nuit');
       '#rInsta', '#cJpg', '#cClose', '#leaveStay', '#leaveGo', '#stBack', '#stNext', '#hang', '#sheetX'];
     let pire = { nom: '', r: 99 };
     for (const q of sel) { const el = document.querySelector(q); if (!el) continue;
-      const c = rgba(getComputedStyle(el).color), r = ratio([c[0], c[1], c[2]], fond(el));
+      const r = ratio(rgba(getComputedStyle(el).color), fond(el));
       if (r < pire.r) pire = { nom: q, r }; }
-    const ph = rgba(getComputedStyle(document.getElementById('own'), '::placeholder').color);
-    const rph = ratio([ph[0], ph[1], ph[2]], fond(document.getElementById('own')));
-    const ch = rgba(getComputedStyle(document.getElementById('own')).color);
-    return { pire, placeholder: rph, champ: ratio([ch[0], ch[1], ch[2]], fond(document.getElementById('own'))),
-      note: ratio(rgba(getComputedStyle(document.getElementById('sNote')).color).slice(0, 3), fond(document.getElementById('sNote'))) };
+    const champ = document.getElementById('own'), note = document.getElementById('sNote');
+    return { pire,
+      placeholder: ratio(rgba(getComputedStyle(champ, '::placeholder').color), fond(champ)),
+      champ: ratio(rgba(getComputedStyle(champ).color), fond(champ)),
+      note: ratio(rgba(getComputedStyle(note).color), fond(note)) };
   });
   check(`tous les textes tiennent 4,5 contre 1 (le plus faible : ${mesure.pire.nom} à ${mesure.pire.r})`,
     mesure.pire.r >= 4.5);
