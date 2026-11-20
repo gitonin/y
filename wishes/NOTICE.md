@@ -335,10 +335,22 @@ story, dont le fond est sombre en tout temps, prenait ses textes au thème :
 ils s'effaçaient le soir. Le texte de remplacement des champs, laissé au
 navigateur, tombait lui à 3,5.
 
-L'épreuve mesure maintenant, pour de bon, le rapport de contraste de trente-six
-textes sur le fond réellement composé derrière eux — fonds translucides
-empilés compris —, le champ au focus et son texte de remplacement en plus. Le
-plus faible doit tenir 4,5 contre 1.
+Le jour, lui, était pire que la nuit, et personne ne l'avait vu parce que
+personne ne l'avait mesuré. Les textes seconds — le conseil du bas, les
+transcriptions en pinyin, les notes sous les champs — étaient posés entre 45 et
+65 % d'encre. Sur le crème du jour, cela tombe entre 2,6 et 4,6 contre 1, là où
+les mêmes opacités tiennent 6 à 9 sur le bleu de nuit : de l'encre sombre sur
+un fond clair perd beaucoup plus vite que l'inverse. Une transcription qu'on ne
+peut pas lire ne sert personne ; ils sont remontés à 68-70 %, et restent
+seconds par leur taille et leur interlettrage.
+
+L'épreuve mesure maintenant, pour de bon, le rapport de contraste d'une
+quarantaine de textes sur le fond réellement composé derrière eux — fonds
+translucides empilés compris, et **texte translucide compris** : la première
+version de cette mesure ne composait que le fond, de sorte qu'un texte à deux
+dixièmes d'opacité lui paraissait parfaitement lisible. Elle certifiait ce
+qu'elle était censée attraper. Tout est mesuré deux fois, à treize heures et à
+vingt-deux heures, et le plus faible doit tenir 4,5 contre 1.
 
 ## Le logo
 

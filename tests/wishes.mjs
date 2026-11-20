@@ -330,7 +330,7 @@ for (const [heure, moment] of [[13, 'de jour'], [22, 'de nuit']]) {
       '#stepN', '#cBy', '#cZh', '#cPy', '#cTr', '#rTxt', '#rNote', '#shareTtl', '#shareTxt', '#sNote',
       '#sShare', '#sClose', '#copy', '#mClose', '#cCard', '#cBack', '#cShare', '#add', '#byStory',
       '#byMail', '#rInsta', '#cJpg', '#cClose', '#leaveStay', '#leaveGo', '#stBack', '#stNext',
-      '#hang', '#sheetX', '#ownNote', '#nameNote'];
+      '#hang', '#sheetX', '#ownNote', '#nameNote', '#presets .p', '#presets .t', '#tabs button'];
     let pire = { nom: '', r: 99 };
     for (const q of sel) { const el = document.querySelector(q); if (!el) continue;
       const r = ratio(rgba(getComputedStyle(el).color), fond(el));
