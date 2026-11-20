@@ -263,6 +263,82 @@ titre('La nuit allume les vœux');
  * mots de briller la nuit. On mesure sur la texture elle-même — c'est elle
  * qu'on lit, à l'écran comme sur la carte.
  */
+/* ------------------------------------------------------------------ *
+ * Les textes tiennent la nuit
+ * ------------------------------------------------------------------ *
+ * Tout le décor et toute l'interface basculent à la tombée du jour :
+ * l'encre devient claire, le crème devient bleu de minuit. Ce qui se défait
+ * là-dedans, ce sont les couleurs posées une fois pour toutes. Le champ où
+ * l'on écrit son vœu s'éclaircissait au focus — en blanc sur blanc la nuit,
+ * sur le seul endroit où le visiteur a quelque chose à écrire. Et la
+ * fenêtre de la story, dont le fond est sombre en tout temps, prenait ses
+ * textes au thème : ils disparaissaient le soir.
+ *
+ * On mesure donc, pour de bon, le rapport de contraste de chaque texte sur
+ * le fond qui est réellement derrière lui.
+ */
+titre('Les textes tiennent la nuit');
+{
+  const { ctx, p, bruit } = await ouvrir(22);
+  check(`il fait bien nuit (${(await p.evaluate(() => window.__essai.ciel())).nuit})`,
+    (await p.evaluate(() => window.__essai.ciel())).nuit > 0.9);
+  /* On ouvre tout ce qui peut s'ouvrir, d'un coup. */
+  await p.evaluate(() => {
+    document.getElementById('sheet').classList.add('open');
+    document.getElementById('card').classList.add('open');
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('story').classList.add('open');
+    document.getElementById('cmodal').classList.add('open');
+    document.getElementById('lmodal').classList.add('open');
+    document.getElementById('sNote').textContent = 'Prête.';
+    document.getElementById('sShare').textContent = 'Partager';
+    document.getElementById('recuDe').classList.add('on');
+    document.getElementById('recuDe').textContent = 'Léa vous envoie ce message';
+    document.getElementById('toast').classList.add('on');
+    document.getElementById('toast').textContent = 'Lien copié';
+  });
+  await p.focus('#own');
+  await p.waitForTimeout(500);
+  const mesure = await p.evaluate(() => {
+    const lum = (c) => { const f = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+      return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2]; };
+    const rgba = (s) => { const m = s.match(/[\d.]+/g); if (!m) return null;
+      return [+m[0], +m[1], +m[2], m[3] === undefined ? 1 : +m[3]]; };
+    /* Le fond réel : on empile les fonds des parents jusqu'au premier
+       opaque, et on les compose. */
+    const fond = (el) => { let n = el; const pile = [];
+      while (n && n !== document.documentElement) { const c = rgba(getComputedStyle(n).backgroundColor);
+        if (c && c[3] > 0) { pile.push(c); if (c[3] >= 0.99) break; } n = n.parentElement; }
+      let out = [20, 20, 20];
+      for (let i = pile.length - 1; i >= 0; i--) { const c = pile[i], a = c[3];
+        out = [0, 1, 2].map((k) => c[k] * a + out[k] * (1 - a)); }
+      return out; };
+    const ratio = (a, b) => { const l1 = lum(a), l2 = lum(b);
+      return +(((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05))).toFixed(2); };
+    const sel = ['#own', '#name', '#link', '#hint', '#recuDe', '#voeuShareT', '#toast', '#stTitle',
+      '#stepN', '#cBy', '#cZh', '#cPy', '#cTr', '#rTxt', '#shareTtl', '#shareTxt', '#sNote', '#sShare',
+      '#sClose', '#copy', '#mClose', '#cCard', '#cBack', '#cShare', '#add', '#byStory', '#byMail',
+      '#rInsta', '#cJpg', '#cClose', '#leaveStay', '#leaveGo', '#stBack', '#stNext', '#hang', '#sheetX'];
+    let pire = { nom: '', r: 99 };
+    for (const q of sel) { const el = document.querySelector(q); if (!el) continue;
+      const c = rgba(getComputedStyle(el).color), r = ratio([c[0], c[1], c[2]], fond(el));
+      if (r < pire.r) pire = { nom: q, r }; }
+    const ph = rgba(getComputedStyle(document.getElementById('own'), '::placeholder').color);
+    const rph = ratio([ph[0], ph[1], ph[2]], fond(document.getElementById('own')));
+    const ch = rgba(getComputedStyle(document.getElementById('own')).color);
+    return { pire, placeholder: rph, champ: ratio([ch[0], ch[1], ch[2]], fond(document.getElementById('own'))),
+      note: ratio(rgba(getComputedStyle(document.getElementById('sNote')).color).slice(0, 3), fond(document.getElementById('sNote'))) };
+  });
+  check(`tous les textes tiennent 4,5 contre 1 (le plus faible : ${mesure.pire.nom} à ${mesure.pire.r})`,
+    mesure.pire.r >= 4.5);
+  /* Les deux qui avaient lâché, nommément. */
+  check(`le vœu qu’on écrit se lit dans son champ (${mesure.champ})`, mesure.champ >= 4.5);
+  check(`et son texte de remplacement aussi (${mesure.placeholder})`, mesure.placeholder >= 4.5);
+  check(`la fenêtre de la story garde ses textes clairs (${mesure.note})`, mesure.note >= 4.5);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
 titre('Le vœu se lit sur son étiquette');
 {
   const { ctx, p } = await ouvrir(13);

@@ -320,6 +320,26 @@ Trois réglages font que l'on arrive **sur le mot** :
   descendrait avec elle d'un sixième de l'écran. La visée suit donc l'île, et le
   mot ne bouge plus.
 
+## Les textes tiennent la nuit
+
+Tout bascule à la tombée du jour : l'encre devient claire, le crème devient
+bleu de minuit, et l'interface suit sans qu'on s'en occupe — tant qu'elle est
+écrite en variables. Ce qui se défait, ce sont les couleurs posées une fois
+pour toutes.
+
+Deux l'étaient. Le champ où l'on écrit son vœu s'éclaircissait au focus, d'un
+blanc fixe : la nuit, l'encre étant claire elle aussi, on écrivait **en blanc
+sur blanc** — un rapport de contraste de 1,05 contre 1, sur le seul endroit de
+l'expérience où le visiteur a quelque chose à écrire. Et la fenêtre de la
+story, dont le fond est sombre en tout temps, prenait ses textes au thème :
+ils s'effaçaient le soir. Le texte de remplacement des champs, laissé au
+navigateur, tombait lui à 3,5.
+
+L'épreuve mesure maintenant, pour de bon, le rapport de contraste de trente-six
+textes sur le fond réellement composé derrière eux — fonds translucides
+empilés compris —, le champ au focus et son texte de remplacement en plus. Le
+plus faible doit tenir 4,5 contre 1.
+
 ## Le logo
 
 C'est un dessin noir sur fond transparent. Sur le bleu de minuit il
@@ -432,11 +452,22 @@ film elle-même, à la demande, et le remet au système.
 **Ce qu'on voit** : sept secondes au format vertical. La caméra part de six
 unités, vient se poser sur le mot, l'or éclate au moment où elle arrive, et
 elle continue d'avancer imperceptiblement jusqu'à la fin — c'est ce dernier
-rien qui fait qu'une image est vivante et non figée. Par-dessus : le titre en
-haut, le vœu écrit en toutes lettres et signé dans la bande calme du bas, puis
-le logo, « Cafés de spécialité du Yunnan » et **l'adresse du site**. Cette
-dernière est le seul élément qui ramène quelqu'un : une story repartagée par
-un ami ne porte aucun lien cliquable.
+rien qui fait qu'une image est vivante et non figée.
+
+Par-dessus, **tout ce qui signe se tient ensemble**, dans la bande calme du
+bas : le vœu écrit en toutes lettres, le prénom, un filet, puis le nom de
+l'expérience, le logo, « Cafés de spécialité du Yunnan » et **l'adresse du
+site**. Cette dernière est le seul élément qui ramène quelqu'un — une story
+repartagée par un ami ne porte aucun lien cliquable. Le nom était d'abord posé
+en haut, sur le feuillage : il s'y lisait mal le jour et pas du tout la nuit.
+Un nom de marque n'a rien à faire seul au milieu d'une image ; il va avec le
+logo.
+
+**Les couleurs suivent l'heure**, comme le reste de l'interface : voile crème
+et encre noire le jour, voile de nuit et encre claire le soir. Une bande de
+papier clair collée au bas d'une scène nocturne n'aurait trompé personne. Le
+logo, qui est un dessin noir, est repeint à la teinte de l'encre dans une
+toile de côté — une fois par teinte, et non trente fois par seconde.
 
 **Trois choses commandent toute la fabrication.**
 

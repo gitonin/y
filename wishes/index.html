@@ -151,7 +151,14 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #presets .t{font-size:12px;color:rgba(var(--ink-rgb),.78);display:block;line-height:1.3}
 .field{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:4px;border:0;outline:0;color:var(--ink);
   background:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.3);resize:none}
-.field:focus{box-shadow:inset 0 0 0 2px var(--rust);background:#f8f6f0}
+/* Le fond du champ suit le thème. Il était posé en clair une fois pour
+   toutes : la nuit, l'encre devenant claire elle aussi, on écrivait son vœu
+   en blanc sur blanc — invisible, et sur le seul endroit où le visiteur a
+   quelque chose à écrire. C'est le liseré orange qui dit le focus. */
+.field:focus{box-shadow:inset 0 0 0 2px var(--rust);background:var(--paper)}
+/* Le texte de remplacement laissé au navigateur tombait à trois et demi
+   pour un sur le fond de nuit : on le pose nous-mêmes. */
+.field::placeholder{color:rgba(var(--ink-rgb),.55);opacity:1}
 #sheet footer{display:flex;gap:14px;align-items:center;padding:10px 18px 16px;border-top:1px solid rgba(var(--ink-rgb),.08)}
 #prev{height:58px;width:auto;max-width:54px;filter:drop-shadow(0 4px 6px rgba(90,20,10,.35))}
 #sheet footer .btn{flex:1;padding:0 10px}#sheet footer .btn.ghost{flex:0 0 auto;padding:0 16px}
@@ -210,11 +217,14 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #sCv{display:block;height:100%;width:auto;max-width:100%}
 #sVid,#sImg{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #sVid.on,#sImg.on{display:block}
-#story #sNote{margin:0;font-size:12.5px;line-height:1.5;color:rgba(var(--beige-rgb),.78);text-align:center;min-height:19px}
+/* Le fond de cette fenêtre est sombre en tout temps : ses textes ne suivent
+   donc pas le thème, sinon ils disparaissent la nuit, quand l'encre et le
+   crème s'échangent. */
+#story #sNote{margin:0;font-size:12.5px;line-height:1.5;color:rgba(240,238,232,.8);text-align:center;min-height:19px}
 #story .row{display:none;gap:8px;width:100%}
 #story .row.on{display:flex}
 #story .row .btn{flex:1;height:46px;font-size:12px}
-#story .btn.ghost{background:transparent;color:var(--beige);box-shadow:inset 0 0 0 1px rgba(var(--beige-rgb),.45)}
+#story .btn.ghost{background:transparent;color:#f0eee8;box-shadow:inset 0 0 0 1px rgba(240,238,232,.45)}
 #toast{position:fixed;left:50%;top:88px;transform:translate(-50%,-20px);z-index:40;background:var(--ink);color:var(--beige);
   font-size:13px;line-height:1.4;padding:10px 16px;border-radius:4px;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none;
   max-width:86vw;text-align:center}
@@ -3046,65 +3056,85 @@ function storyPose(u){
 }
 /* Ce qu'on écrit par-dessus l'image. Tout est mesuré depuis le bas sûr :
    Instagram pose son interface sur les deux cent cinquante derniers pixels
-   d'une story de 1920 — rien d'important n'a le droit d'y descendre. */
+   d'une story de 1920 — rien d'important n'a le droit d'y descendre.
+
+   Le nom de l'expérience était en haut, posé sur le feuillage : il s'y
+   lisait mal le jour, et pas du tout la nuit. Il descend donc auprès du
+   logo, dans la bande calme, où tout ce qui signe se tient ensemble — le
+   vœu, un filet, puis le nom, la marque, le métier et l'adresse.
+
+   Les couleurs suivent l'heure, comme le reste de l'interface : un voile
+   crème et de l'encre noire le jour, un voile de nuit et de l'encre claire
+   le soir. Une bande de papier clair collée au bas d'une scène nocturne
+   n'aurait trompé personne. */
+function storyTeinte(k,a){
+  var c=CIEL.mel(JOUR[k],NUIT[k],theme).map(Math.round);
+  return a===undefined?"rgb("+c.join(",")+")":"rgba("+c.join(",")+","+a+")";
+}
+/* Le logo est un dessin noir sur fond transparent : la nuit, il faut le
+   repeindre. On le recolore une fois par teinte, dans une toile de côté, et
+   l'on garde le résultat — sinon c'est trente fois par seconde. */
+var logoTeint={cle:"",cv:null};
+function storyLogo(h,couleur){
+  if(!logoImg.complete||!logoImg.naturalWidth) return null;
+  var w=Math.round(h*logoImg.naturalWidth/logoImg.naturalHeight), cle=h+"|"+couleur;
+  if(logoTeint.cle===cle) return logoTeint.cv;
+  var cv=document.createElement("canvas"); cv.width=w; cv.height=h;
+  var g=cv.getContext("2d");
+  g.drawImage(logoImg,0,0,w,h);
+  g.globalCompositeOperation="source-in"; g.fillStyle=couleur; g.fillRect(0,0,w,h);
+  logoTeint.cle=cle; logoTeint.cv=cv; return cv;
+}
 function storyDecor(g,W,H,u){
   var k=H/1280, HV='"Helvetica Neue",Helvetica,Arial,sans-serif', cjk=lang==="zh";
   var sb=H-180*k, i;
-  /* Le bandeau et le titre sont là dès la première image, à pleine force :
-     c'est elle que les réseaux prennent pour vignette, et un titre en
-     fondu y paraîtrait à moitié effacé. Ce qui monte en fondu, c'est ce
-     qu'on découvre — le vœu, puis l'adresse. */
-  var aBande=1, aTitre=1;
   var aMot=clamp((u-.60)/.12,0,1), aUrl=clamp((u-.76)/.12,0,1);
-  /* Un voile crème monte du bas : il porte le bandeau, et il tient le texte
+  var encre=storyTeinte("ink");
+  /* Un voile monte du bas : il porte tout ce qui signe, et tient le texte
      lisible quelle que soit la branche qui passe derrière. */
-  var gr=g.createLinearGradient(0,H*.56,0,H);
-  gr.addColorStop(0,"rgba(239,235,226,0)"); gr.addColorStop(.45,"rgba(239,235,226,.42)");
-  gr.addColorStop(1,"rgba(239,235,226,.93)");
-  g.save(); g.globalAlpha=Math.max(aBande,aMot)*.98; g.fillStyle=gr; g.fillRect(0,H*.56,W,H*.44); g.restore();
-  var gh=g.createLinearGradient(0,0,0,H*.22);
-  gh.addColorStop(0,"rgba(239,235,226,.55)"); gh.addColorStop(1,"rgba(239,235,226,0)");
-  g.save(); g.globalAlpha=aTitre; g.fillStyle=gh; g.fillRect(0,0,W,H*.22); g.restore();
+  var gr=g.createLinearGradient(0,H*.50,0,H);
+  gr.addColorStop(0,storyTeinte("beige",0));
+  gr.addColorStop(.40,storyTeinte("beige",.42));
+  gr.addColorStop(1,storyTeinte("beige",.95));
+  g.fillStyle=gr; g.fillRect(0,H*.50,W,H*.50);
   g.textAlign="center"; g.textBaseline="alphabetic";
-  /* Le titre, tout en haut, sous la zone que l'interface d'Instagram
-     recouvre. */
-  g.save(); g.globalAlpha=aTitre; g.fillStyle="rgba(33,33,33,.92)";
-  g.shadowColor="rgba(239,235,226,.9)"; g.shadowBlur=Math.round(14*k);
-  g.font=(cjk?"":"500 ")+Math.round(22*k)+"px "+(cjk?ZH_FONT:HV);
-  try{ g.letterSpacing=Math.round(5*k)+"px"; }catch(e){}
-  g.fillText(cjk?T("storyTop"):T("storyTop").toUpperCase(),W/2,195*k);
-  try{ g.letterSpacing="0px"; }catch(e){}
-  g.restore();
   /* Le vœu, écrit en toutes lettres : sur l'étiquette il se lit de près,
      dans un fil qui défile il faut qu'il se lise d'un coup d'œil. */
   var w=STORY.tag&&STORY.tag.w, txt=w?wishText(w):"";
   if(txt&&aMot>0){
-    g.save(); g.globalAlpha=aMot; g.fillStyle="#212121";
+    g.save(); g.globalAlpha=aMot; g.fillStyle=encre;
     var mcjk=isCJK(txt);
     g.font=mcjk?Math.round(38*k)+"px "+ZH_FONT:'500 '+Math.round(42*k)+'px "Caveat",'+HV;
     /* Deux lignes au plus : le mot est déjà sur l'étiquette, celui-ci n'est
        là que pour se lire d'un coup d'œil dans un fil qui défile. */
-    var lignes=wrapText(g,txt,W-180*k).slice(0,2), bas=sb-(w.n?278:252)*k;
+    var lignes=wrapText(g,txt,W-180*k).slice(0,2), bas=sb-(w.n?348:322)*k;
     var y=bas-(lignes.length-1)*Math.round((mcjk?48:46)*k);
     for(i=0;i<lignes.length;i++){ g.fillText(lignes[i],W/2,y); y+=Math.round((mcjk?48:46)*k); }
-    if(w.n){ g.fillStyle="#565a41"; g.font="500 "+Math.round(15*k)+"px "+HV;
+    if(w.n){ g.fillStyle=storyTeinte("green"); g.font="500 "+Math.round(15*k)+"px "+HV;
       try{ g.letterSpacing=Math.round(3*k)+"px"; }catch(e){}
-      g.fillText("— "+w.n,W/2,sb-234*k); try{ g.letterSpacing="0px"; }catch(e){} }
+      g.fillText("— "+w.n,W/2,sb-304*k); try{ g.letterSpacing="0px"; }catch(e){} }
     g.restore();
   }
-  /* Le bandeau : le logo, la signature, l'adresse. Il paraît tôt, pour
-     qu'une image arrêtée n'importe quand porte déjà la marque. */
-  g.save(); g.globalAlpha=aBande;
-  if(logoImg.complete&&logoImg.naturalWidth){
-    var lh=Math.round(96*k), lw=lh*logoImg.naturalWidth/logoImg.naturalHeight;
-    g.drawImage(logoImg,(W-lw)/2,sb-196*k,lw,lh);
-  }
-  g.fillStyle="rgba(33,33,33,.8)"; g.font=(cjk?"":"500 ")+Math.round(16*k)+"px "+(cjk?ZH_FONT:HV);
+  /* Le filet sépare ce qu'on envoie de qui l'envoie. */
+  g.save(); g.globalAlpha=.5; g.strokeStyle=encre; g.lineWidth=Math.max(1,Math.round(1.5*k));
+  g.beginPath(); g.moveTo(W/2-62*k,sb-262*k); g.lineTo(W/2+62*k,sb-262*k); g.stroke(); g.restore();
+  /* Le bloc qui signe : le nom de l'expérience, la marque, le métier,
+     l'adresse. Il paraît dès la première image — c'est elle que les réseaux
+     prennent pour vignette, et une vignette sans marque ne sert à rien. */
+  g.fillStyle=storyTeinte("ink",.86);
+  g.font=(cjk?"":"500 ")+Math.round(20*k)+"px "+(cjk?ZH_FONT:HV);
+  try{ g.letterSpacing=Math.round(4.5*k)+"px"; }catch(e){}
+  g.fillText(cjk?T("storyTop"):T("storyTop").toUpperCase(),W/2,sb-222*k);
+  try{ g.letterSpacing="0px"; }catch(e){}
+  var lg=storyLogo(Math.round(92*k),encre);
+  if(lg) g.drawImage(lg,(W-lg.width)/2,sb-192*k);
+  g.fillStyle=storyTeinte("ink",.76);
+  g.font=(cjk?"":"500 ")+Math.round(15*k)+"px "+(cjk?ZH_FONT:HV);
   try{ g.letterSpacing=Math.round(3.5*k)+"px"; }catch(e){}
   g.fillText(cjk?T("storyBas"):T("storyBas").toUpperCase(),W/2,sb-62*k);
   try{ g.letterSpacing="0px"; }catch(e){}
-  g.restore();
-  g.save(); g.globalAlpha=aUrl; g.fillStyle="#b95f2c"; g.font="500 "+Math.round(21*k)+"px "+HV;
+  g.save(); g.globalAlpha=aUrl; g.fillStyle=storyTeinte("rust");
+  g.font="500 "+Math.round(21*k)+"px "+HV;
   g.fillText(CARD_URL_TEXT,W/2,sb-20*k); g.restore();
 }
 function storyDessiner(u){
