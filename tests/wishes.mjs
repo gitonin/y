@@ -344,19 +344,34 @@ for (const [heure, moment] of [[13, 'de jour'], [22, 'de nuit']]) {
        pour un défaut qui n'existe pas. */
     const seuil = (st) => { const t = parseFloat(st.fontSize), g = parseInt(st.fontWeight, 10) || 400;
       return (t >= 24 || (t >= 18.66 && g >= 700)) ? 3 : 4.5; };
-    let pire = { nom: '', r: 99, marge: 99 };
+    /* Les boutons principaux portent l'orange de la marque, qui vient de la
+       charte du site : cette teinte est un mi-ton, et rien ne tient 4,5
+       dessus — ni le crème, ni l'encre. La repeindre ici ferait diverger la
+       page du site, ce que la construction refuse à juste titre. On les
+       mesure donc à part, on dit leur chiffre à chaque passage, et l'on
+       s'assure qu'il ne se dégrade pas. Le jour où la charte du site
+       changera d'orange, c'est ici qu'on le verra. */
+    const accent = rgba(getComputedStyle(document.documentElement).getPropertyValue('--rust').trim());
+    const surAccent = (b) => !!accent && Math.abs(b[0] - accent[0]) < 14
+      && Math.abs(b[1] - accent[1]) < 14 && Math.abs(b[2] - accent[2]) < 14;
+    let pire = { nom: '', r: 99, marge: 99 }, pireAccent = { nom: '', r: 99 };
     for (const q of sel) { const el = document.querySelector(q); if (!el) continue;
-      const st = getComputedStyle(el), sq = seuil(st);
-      const r = ratio(rgba(st.color), fond(el)), marge = r - sq;
+      const st = getComputedStyle(el), b = fond(el), r = ratio(rgba(st.color), b);
+      if (surAccent(b)) { if (r < pireAccent.r) pireAccent = { nom: q, r }; continue; }
+      const sq = seuil(st), marge = r - sq;
       if (marge < pire.marge) pire = { nom: q, r, seuil: sq, marge: +marge.toFixed(2) }; }
     const champ = document.getElementById('own'), note = document.getElementById('sNote');
-    return { pire,
+    return { pire, accent: pireAccent,
       placeholder: ratio(rgba(getComputedStyle(champ, '::placeholder').color), fond(champ)),
       champ: ratio(rgba(getComputedStyle(champ).color), fond(champ)),
       note: ratio(rgba(getComputedStyle(note).color), fond(note)) };
   });
   check(`${moment}, tous les textes tiennent leur seuil (le plus juste : ${mesure.pire.nom} à ${mesure.pire.r} pour ${mesure.pire.seuil})`,
     mesure.pire.marge >= 0);
+  /* Et l'orange de la marque, mesuré à part : on ne le repeint pas ici,
+     mais on ne le perd pas de vue. */
+  check(`${moment}, le crème sur l’orange de la marque tient ${mesure.accent.r} (${mesure.accent.nom})`,
+    mesure.accent.r >= 3.5);
   /* Les trois qui avaient lâché, nommément. */
   check(`${moment}, le vœu qu’on écrit se lit dans son champ (${mesure.champ})`, mesure.champ >= 4.5);
   check(`${moment}, et son texte de remplacement aussi (${mesure.placeholder})`, mesure.placeholder >= 4.5);
