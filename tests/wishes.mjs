@@ -448,8 +448,18 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
 titre('La visite guidée se lance seule, rend la main, et revient');
 {
   const { ctx, p, bruit } = await ouvrir(11);
-  /* Elle démarre d'elle-même après l'ouverture sur le vœu de Yunma. */
-  const partie = await p.waitForFunction(() => window.__essai.visiteOn(), null, { timeout: 180000 })
+  /* Elle démarre d'elle-même après l'ouverture sur le vœu de Yunma. Le
+     relais est posé à l'arrivée, et il part sept secondes plus tard — sept
+     secondes de l'horloge de la scène, qui est plafonnée à cinquante
+     millisecondes par image : sous un rendu logiciel à une image par
+     seconde, cela fait près de trois minutes de mur, et l'attente devenait
+     un pari sur la charge de la machine. On vérifie donc les deux moitiés :
+     que le relais est bien posé tout seul, puis qu'arrivé à terme il lance
+     la visite tout seul. Rien ici n'appelle la visite. */
+  check('le relais est posé à l’arrivée',
+    await p.evaluate(() => window.__essai.accueil().arme));
+  await p.evaluate(() => window.__essai.relais(6.9));
+  const partie = await p.waitForFunction(() => window.__essai.visiteOn(), null, { timeout: 90000 })
     .then(() => true).catch(() => false);
   check('elle part d’elle-même', partie);
   const a = await p.evaluate(() => window.__essai.visiteEtat());
