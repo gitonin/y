@@ -125,12 +125,14 @@ await writeFile(path.join(CIBLE, 'index.html'), page);
 await copyFile(path.join(SOURCE, 'three.min.js'), path.join(CIBLE, 'three-r128.min.js'));
 await copyFile(path.join(SOURCE, '.htaccess'), path.join(CIBLE, '.htaccess'));
 await mkdir(path.join(CIBLE, 'assets'), { recursive: true });
-for (const f of ['logo-yunma-transparent.png', 'carte-photo-1050x1480.jpg']) {
+/* La photographie de fond de la carte a disparu avec l'ancien dessin : la
+   carte montre maintenant l'arbre lui-même, rendu à l'instant. */
+for (const f of ['logo-yunma-transparent.png']) {
   await copyFile(path.join(SOURCE, 'assets', f), path.join(CIBLE, 'assets', f));
 }
 
 const ko = async (f) => Math.round((await stat(path.join(CIBLE, f))).size / 1024);
 const zko = Math.round(gzipSync(Buffer.from(page)).length / 1024);
 console.log(`  arbre à souhaits ${await ko('index.html')} Ko (${zko} Ko compressés) `
-  + `+ 3D ${await ko('three-r128.min.js')} Ko + images ${await ko('assets/logo-yunma-transparent.png')
-  + await ko('assets/carte-photo-1050x1480.jpg')} Ko, /wishes/, charte vérifiée`);
+  + `+ 3D ${await ko('three-r128.min.js')} Ko + logo ${await ko('assets/logo-yunma-transparent.png')
+  } Ko, /wishes/, charte vérifiée`);

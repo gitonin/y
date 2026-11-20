@@ -14,7 +14,6 @@ rouge. Adresse : `https://yunma.fr/wishes`.
 | `index.html` | Toute l'expérience : styles, textes, données, scène et son. |
 | `three.min.js` | three.js r128, servi par le site. Déposé sous le nom `three-r128.min.js`, qui porte sa version : c'est ce qui permet de le garder un an en cache. |
 | `assets/logo-yunma-transparent.png` | Le logo, à l'accueil et sur la carte. |
-| `assets/carte-photo-1050x1480.jpg` | Le fond de la carte à télécharger. Chargé seulement quand quelqu'un ouvre sa carte. |
 | `seeds.json` | Vingt-huit vœux de départ, à verser dans la base le jour où elle existera. La page ne les lit pas : tant qu'il n'y a pas de base, elle fabrique son décor à partir des vœux tout faits. Ce fichier n'est pas déposé. |
 | `.htaccess` | Cache court sur la page, long sur la bibliothèque, compression. |
 
@@ -467,13 +466,40 @@ elle continue d'avancer imperceptiblement jusqu'à la fin — c'est ce dernier
 rien qui fait qu'une image est vivante et non figée.
 
 Par-dessus, **tout ce qui signe se tient ensemble**, dans la bande calme du
-bas : le vœu écrit en toutes lettres, le prénom, un filet, puis le nom de
-l'expérience, le logo, « Cafés de spécialité du Yunnan » et **l'adresse du
-site**. Cette dernière est le seul élément qui ramène quelqu'un — une story
-repartagée par un ami ne porte aucun lien cliquable. Le nom était d'abord posé
-en haut, sur le feuillage : il s'y lisait mal le jour et pas du tout la nuit.
-Un nom de marque n'a rien à faire seul au milieu d'une image ; il va avec le
-logo.
+bas : le vœu écrit en toutes lettres, le prénom, le logo, « Cafés de spécialité
+du Yunnan » et **l'adresse du site**. Cette dernière est le seul élément qui
+ramène quelqu'un — une story repartagée par un ami ne porte aucun lien
+cliquable.
+
+Le nom de l'expérience était d'abord posé en haut, sur le feuillage, puis
+descendu auprès du logo derrière un filet : il est maintenant retiré, et le
+filet avec lui. Une image qui dit « Yunma, cafés de spécialité du Yunnan,
+yunma.fr/wishes » n'a pas besoin de se nommer deux fois, et un trait de plus
+n'était qu'un trait de plus.
+
+**La carte à télécharger est ce même dessin, arrêté, plus un QR code.** Elle
+montrait auparavant une photographie de fond et une reconstitution de
+l'étiquette dessinée à la main sur un cartouche blanc : deux dessins pour une
+seule chose, et celui de la carte ne montrait pas l'arbre. Elle montre
+maintenant le vrai mot dans le vrai arbre, à l'heure qu'il est — d'où la
+disparition de la photographie du dossier, deux cent mille octets de moins à
+déposer.
+
+Trois choses la distinguent du film, toutes dues à sa forme, plus large. Elle
+vise **l'étiquette elle-même** et non le point où elle est accrochée : elle se
+balance au bout de son fil, et ce balancement, qui ne se voit pas sur un format
+vertical, la sortait du cadre d'une carte. Elle **recule d'un cinquième**, pour
+que le mot ne touche pas les bords. Et elle **décale l'objectif** au lieu de
+viser plus bas : monter le sujet dans le cadre en baissant la visée descend
+aussi la caméra, puisqu'elle orbite autour de ce qu'elle vise — il fallait
+viser si bas qu'elle venait frôler les rochers de l'île, et un caillou flou
+mangeait le tiers de l'image. On rend donc une image plus haute et l'on en
+garde le bas.
+
+Le QR code est posé sur sa propre plaque claire, en tout temps : un lecteur a
+besoin de modules sombres sur un fond clair, et la nuit le voile est sombre.
+C'est le seul endroit du dessin qui ne suit pas l'heure, et c'est pour qu'il
+fonctionne.
 
 **Les couleurs suivent l'heure**, comme le reste de l'interface : voile crème
 et encre noire le jour, voile de nuit et encre claire le soir. Une bande de

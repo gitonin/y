@@ -508,17 +508,19 @@ titre('Celui qui ouvre le lien tombe sur le vœu');
     await p.evaluate(() => window.__essai.fiche()), false);
   const pres = await p.evaluate(() => window.__essai.visiteEtat());
   check(`et la caméra s’en approche de tout près (rayon ${pres.r})`, pres.r < 3.8);
-  /* La carte, et son QR code. La photographie du fond n'est plus encodée
-     dans la page : elle part quand on ouvre la carte. Les polices, elles,
-     sont prêtes depuis longtemps — et déclenchaient le dessin avant son
-     arrivée, d'où une carte sur beige vide. */
+  /* La carte montre l'arbre lui-même, rendu à l'instant : plus de
+     photographie de fond, plus de reconstitution de l'étiquette dessinée à
+     la main. C'est le dessin de la story, arrêté, plus un QR code. */
   await p.evaluate(() => { window.__essai.viser(0, true); });
   await p.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
   await p.click('#cCard');
   await p.waitForFunction(() => document.getElementById('cmodal').classList.contains('open'), null, { timeout: 60000 });
-  await p.waitForTimeout(600);
-  const fond = await p.evaluate(() => window.__essai.carteFond());
-  check(`la carte porte bien sa photographie (écart de couleur ${fond})`, fond > 25);
+  await p.waitForTimeout(400);
+  const ca = await p.evaluate(() => window.__essai.carte());
+  check(`la carte est au format d’une carte (${ca.l} × ${ca.h})`, ca.l === 1050 && ca.h === 1480);
+  check(`elle montre la scène et non un fond uni (écart ${ca.ecart})`, ca.ecart > 60);
+  check('et son QR code porte le vœu, non l’arbre nu', ca.qr);
+  check(`trois zones cliquables pour le PDF (${ca.liens})`, ca.liens, 3);
 
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
@@ -931,6 +933,8 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
   check('la carte se dessine', carte);
   const img = await p.getAttribute('#cimg', 'src');
   check(`l’image est là (${Math.round((img || '').length / 1024)} Ko)`, (img || '').startsWith('data:image/jpeg') && img.length > 40000);
+  const ca2 = await p.evaluate(() => window.__essai.carte());
+  check(`et c’est bien la scène qu’elle montre (écart ${ca2.ecart})`, ca2.ecart > 60);
   const nous = await p.evaluate((u) => window.__qr(u), lien);
   /* Même version et même niveau de correction que le nôtre, sinon la
      bibliothèque en choisit une autre et les matrices ne se comparent

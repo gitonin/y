@@ -353,7 +353,6 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
    sa carte, ce que presque personne ne fait avant d'avoir accroché un vœu.
    La page passe ainsi de 466 à 200 kilo-octets. */
 window.YW_LOGO="assets/logo-yunma-transparent.png";
-window.YW_PHOTO="assets/carte-photo-1050x1480.jpg";
 </script>
 <script src="three.min.js"></script>
 <script>
@@ -1085,12 +1084,13 @@ function pdfFromJpeg(jpg,w,h,pw,ph,links){
   add(enc(x+"trailer\n<</Size "+n+"/Root 1 0 R>>\nstartxref\n"+xo+"\n%%EOF\n"));
   var out=new Uint8Array(len), o=0; parts.forEach(function(a){ out.set(a,o); o+=a.length; }); return out;
 }
-var logoImg=new Image(), photoImg=new Image(); logoImg.src=window.YW_LOGO||"";
+var logoImg=new Image(); logoImg.src=window.YW_LOGO||"";
 /* La photographie ne sert qu'à la carte : on ne va la chercher qu'au moment
    où quelqu'un l'ouvre. Elle est en cache bien avant qu'il n'appuie sur
    « enregistrer ». */
-var photoDemandee=false;
-function photoCharger(){ if(photoDemandee) return; photoDemandee=true; photoImg.src=window.YW_PHOTO||""; }
+/* La photographie de fond de la carte a disparu avec l'ancien dessin : la
+   carte montre maintenant l'arbre lui-même, rendu à l'instant. Deux cent
+   mille octets de moins à déposer, et une image de moins à attendre. */
 Array.prototype.forEach.call(document.querySelectorAll("img.lg"),function(im){ im.src=window.YW_LOGO||""; });
 /* Enregistrer la carte. L'expérience passait par un service de
    téléchargement qui n'existe que chez Claude ; sur yunma.fr il n'y en a
@@ -1110,72 +1110,38 @@ function wrapText(g,text,maxW){ var sp=/\s/.test(text), toks=sp?text.split(/\s+/
   if(cur) out.push(cur); return out; }
 function rrect(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.lineTo(x+w-r,y); g.quadraticCurveTo(x+w,y,x+w,y+r); g.lineTo(x+w,y+h-r); g.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
   g.lineTo(x+r,y+h); g.quadraticCurveTo(x,y+h,x,y+h-r); g.lineTo(x,y+r); g.quadraticCurveTo(x,y,x+r,y); g.closePath(); }
-function buildCard(w){
-  var W=1050,H=1480,cv=document.createElement("canvas"); cv.width=W; cv.height=H; var g=cv.getContext("2d"), i, HV='"Helvetica Neue",Helvetica,Arial,sans-serif';
-  g.fillStyle="#ebe7de"; g.fillRect(0,0,W,H);
-  if(photoImg.complete&&photoImg.naturalWidth){ var pr=Math.max(W/photoImg.naturalWidth,H/photoImg.naturalHeight), pw=photoImg.naturalWidth*pr, phh=photoImg.naturalHeight*pr; g.drawImage(photoImg,(W-pw)/2,(H-phh)/2,pw,phh); }
-  // white cartouche
-  var cx=56, cy=56, cw=W-112, ch=830, pad=54;
-  g.save(); g.shadowColor="rgba(70,45,20,.28)"; g.shadowBlur=50; g.shadowOffsetY=18; g.fillStyle="#ffffff"; rrect(g,cx,cy,cw,ch,10); g.fill(); g.restore();
-  // header
-  g.textAlign="left"; g.textBaseline="middle"; g.fillStyle="#8f512c"; g.font="54px "+ZH_FONT; g.fillText("许愿树",cx+pad,cy+74);
-  var hw=g.measureText("许愿树").width; g.fillStyle="#575a44"; g.font="500 19px "+HV; try{ g.letterSpacing="4px"; }catch(e){}
-  g.fillText(lang==="zh"?"云南咖啡树上的一个心愿":T("title").toUpperCase(),cx+pad+hw+22,cy+78); try{ g.letterSpacing="0px"; }catch(e){}
-  g.strokeStyle="#8f512c"; g.lineWidth=2; g.beginPath(); g.moveTo(cx+pad,cy+124); g.lineTo(cx+cw-pad,cy+124); g.stroke();
-  // the tag, hanging from the golden line
-  var S=SHAPES[w.s]||SHAPES.plaque, tc=document.createElement("canvas"); drawTag(tc,w.s,wishText(w),w.n,3);
-  var th=Math.min(420,310*S.h/S.w), tw=th*S.w/S.h, tcx=cx+pad+170, tx=tcx-tw/2, ty=cy+178+(420-th)/2, eye=ty+th*(TM+S.top*(1-2*TM))+16*tw/256;
-  g.strokeStyle="#c9a04a"; g.lineWidth=3; g.beginPath(); g.moveTo(tcx,cy+124); g.lineTo(tcx,eye); g.stroke();
-  var MX=function(a){return tx+(TM+a*(1-2*TM))*tw;}, MY=function(b){return ty+(TM+b*(1-2*TM))*th;};
-  var PA={moveTo:function(a,b){g.moveTo(MX(a),MY(b));},lineTo:function(a,b){g.lineTo(MX(a),MY(b));},quadraticCurveTo:function(a,b,c,d){g.quadraticCurveTo(MX(a),MY(b),MX(c),MY(d));},
-    bezierCurveTo:function(a,b,c,d,e,f){g.bezierCurveTo(MX(a),MY(b),MX(c),MY(d),MX(e),MY(f));}};
-  g.save(); g.beginPath(); S.path(PA); g.closePath(); g.shadowColor="rgba(90,30,10,.36)"; g.shadowBlur=30; g.shadowOffsetY=16; g.fillStyle="#b3241c"; g.fill(); g.restore();
-  g.save(); g.beginPath(); S.path(PA); g.closePath(); g.clip(); g.drawImage(tc,tx,ty,tw,th); g.restore();
-  // the words, to the right of the tag
-  var pre=w.p>=0&&PRESETS[w.p]&&PRESETS[w.p].k==="zh"?PRESETS[w.p]:null, txt=wishText(w), lx=cx+pad+380, lw=cx+cw-pad-lx, blocks=[], lines;
-  if(pre){ blocks.push(["#8f512c","96px "+ZH_FONT,pre.zh,108]); blocks.push(["rgba(33,33,33,.5)","25px "+HV,pre.py,50]);
-    if(lang!=="zh"){ g.font="300 34px "+HV; wrapText(g,pre[lang],lw).forEach(function(l){ blocks.push(["#212121","300 34px "+HV,l,44]); }); }
-  } else { var cj=isCJK(txt), f=cj?"66px "+ZH_FONT:"58px "+LAT_FONT; g.font=f; lines=wrapText(g,txt,lw).slice(0,5);
-    lines.forEach(function(l){ blocks.push([cj?"#8f512c":"#212121",f,l,cj?80:64]); }); }
-  if(w.n) blocks.push(["#575a44","italic 28px "+HV,"— "+w.n,58]);
-  if(!w.decor&&w.ts>1e12){ var ds=""; try{ ds=new Date(w.ts).toLocaleDateString(lang==="zh"?"zh-CN":lang,{year:"numeric",month:"long",day:"numeric"}); }catch(e){} if(ds) blocks.push(["rgba(33,33,33,.45)","21px "+HV,ds,w.n?34:54]); }
-  var tot=0; blocks.forEach(function(b){ tot+=b[3]; }); var y=cy+124+(506-tot)/2;
-  blocks.forEach(function(b){ g.fillStyle=b[0]; g.font=b[1]; g.fillText(b[2],lx,y+b[3]/2,lw); y+=b[3]; });
-  // footer : QR, link, logo
-  var fy=cy+630; g.strokeStyle="rgba(33,33,33,.14)"; g.lineWidth=1; g.beginPath(); g.moveTo(cx+pad,fy); g.lineTo(cx+cw-pad,fy); g.stroke();
-  /* Le QR code porte le vœu, et non plus l'adresse nue de l'arbre : c'est
-     tout l'intérêt de la carte. S'il ne tient pas — un vœu écrit à la main
-     dans une langue à trois octets par signe —, on retombe sur l'arbre,
-     mais le lien imprimé dessous, lui, reste complet. */
-  var url=w.decor?CARD_URL:CARD_URL+"?v="+encoderVoeu(w), qm=qrMatrix(url)||qrMatrix(CARD_URL), qs=150, qx=cx+pad, qy=fy+26;
-  if(qm){ var n=qm.length, cell=qs/n; g.fillStyle="#212121"; for(var r=0;r<n;r++) for(var c=0;c<n;c++) if(qm[r][c]) g.fillRect(qx+c*cell,qy+r*cell,cell+.4,cell+.4); }
-  var lgh=150, lgw=logoImg.naturalWidth?lgh*logoImg.naturalWidth/logoImg.naturalHeight:0, lgx=cx+cw-pad-lgw;
-  if(lgw) g.drawImage(logoImg,lgx,qy,lgw,lgh);
-  var sx=qx+qs+34, sw=lgx-sx-30; g.fillStyle="rgba(33,33,33,.72)"; g.font="300 25px "+HV; lines=wrapText(g,T("cardScan"),sw);
-  for(i=0;i<lines.length&&i<2;i++) g.fillText(lines[i],sx,qy+24+i*34);
-  g.fillStyle="#212121"; g.font="500 38px "+HV; g.fillText(CARD_URL_TEXT,sx,qy+qs-24); var uw=g.measureText(CARD_URL_TEXT).width;
-  cv.links=[{x:sx,y:qy+qs-50,w:uw,h:52,url:CARD_URL},{x:qx,y:qy,w:qs,h:qs,url:url}];
-  if(lgw) cv.links.push({x:lgx,y:qy,w:lgw,h:lgh,url:SITE_URL});
-  return cv;
-}
-var cardCv=null;
-function openCardModal(w){ if(!w) return;
-  photoCharger();
-  /* La carte attend trois choses : ses deux polices, et la photographie du
-     fond. Celle-ci n'est plus encodée dans la page — elle part quand on
-     ouvre la carte, et pas avant —, donc elle arrive la dernière. Sans
-     cette attente, les polices prêtes déclenchaient le dessin tout de
-     suite, et la carte sortait sur un beige vide.
+/* La carte à télécharger, c'est la story arrêtée, plus un QR code. Elle
+   montrait auparavant une photographie de fond et une reconstitution de
+   l'étiquette dessinée à la main sur un cartouche blanc : deux dessins pour
+   une seule chose, et celui de la carte ne montrait pas l'arbre. Elle montre
+   maintenant le vrai mot dans le vrai arbre, à l'heure qu'il est.
 
-     Au bout de deux secondes et demie on n'attend plus : une carte sans sa
-     photographie vaut mieux qu'une fenêtre qui ne s'ouvre pas. */
-  var go=function(){ if(go.done) return;
-    if(!photoImg.complete&&!go.tard) return;
-    go.done=true; cardCv=buildCard(w); window.__cardCv=cardCv; $("cimg").src=cardCv.toDataURL("image/jpeg",.9);
-    $("cmodal").classList.add("open"); };
-  if(!photoImg.complete) photoImg.addEventListener("load",go,{once:true});
-  setTimeout(function(){ go.tard=true; go(); },2500);
-  try{ Promise.all([document.fonts.load('80px "Ma Shan Zheng"',"许愿树"+wishText(w)),document.fonts.load('500 60px "Caveat"',wishText(w)||"a")]).then(go,go); }catch(e){ go(); }
+   D'où un détour : il faut une image de la scène, donc un tour de boucle. La
+   carte est préparée comme un film d'une seule image — on passe au format,
+   on rend, on compose, on rend la scène à l'écran. */
+var cardCv=null;
+function openCardModal(w){ if(!w||STORY.on) return;
+  var t=tags[w.id]; if(!t) return;
+  STORY.tag=t; STORY.or=false; STORY.u=1; STORY.vues=0; STORY.demarre=true; STORY.fige=true;
+  STORY.avant={th:cam.th,ph:cam.ph,r:cam.r,tg:cam.tg.clone(),
+    gth:goal.th,gph:goal.ph,gr:goal.r,gtg:goal.tg.clone(),vise:vise,focused:focused};
+  cineStop(true); ouvre=0;
+  STORY.w=1050; STORY.h=1480; storyCv(STORY.w,STORY.h); storyTaille(STORY.w,STORY.h,.36);
+  focusTag(t,false);
+  STORY.vers={th:goal.th,ph:goal.ph,r:goal.r,tg:goal.tg.clone()};
+  STORY.de={th:goal.th,ph:goal.ph,r:goal.r};
+  STORY.phase="carte"; STORY.on=true;
+}
+/* L'image est là : on la recopie dans une toile à elle — celle de la story
+   servira à autre chose —, et la fenêtre s'ouvre. */
+function carteFinir(){
+  var cv=document.createElement("canvas"); cv.width=STORY.w; cv.height=STORY.h;
+  cv.getContext("2d").drawImage(STORY.cv,0,0);
+  cv.links=STORY.liens||[];
+  cardCv=cv; window.__cardCv=cv;
+  storyFinir(); STORY.fige=false;
+  try{ $("cimg").src=cv.toDataURL("image/jpeg",.92); $("cmodal").classList.add("open"); }
+  catch(e){ toast(T("cardFail")); }
 }
 function saveCard(kind){ if(!cardCv) return;
   cardCv.toBlob(function(blob){ if(!blob){ toast(T("cardFail")); return; }
@@ -2836,13 +2802,15 @@ window.__essai={
   /* Le fond de la carte : la photographie, ou le beige vide si elle est
      arrivée trop tard. On mesure l'écart des couleurs dans le bas de la
      carte — une photographie varie, un aplat non. */
-  carteFond:function(){
-    var cv=window.__cardCv; if(!cv) return -1;
-    var g=cv.getContext("2d"), d=g.getImageData(60,1050,930,360).data, i, n=0;
-    var mr=0,mv=0,mb=0; for(i=0;i<d.length;i+=16){ mr+=d[i];mv+=d[i+1];mb+=d[i+2];n++; }
-    mr/=n;mv/=n;mb/=n; var e=0;
-    for(i=0;i<d.length;i+=16) e+=Math.abs(d[i]-mr)+Math.abs(d[i+1]-mv)+Math.abs(d[i+2]-mb);
-    return Math.round(e/n);
+  /* La carte : sa taille, ses liens cliquables, et de quoi dire qu'elle
+     montre bien une scène et non un fond uni. */
+  carte:function(){
+    var cv=window.__cardCv; if(!cv) return null;
+    var g=cv.getContext("2d"), d=g.getImageData(0,Math.round(cv.height*.3),cv.width,1).data;
+    var mn=255,mx=0,som=0,n=0,i,v;
+    for(i=0;i<d.length;i+=4){ v=(d[i]+d[i+1]+d[i+2])/3; som+=v; n++; if(v<mn)mn=v; if(v>mx)mx=v; }
+    return {l:cv.width,h:cv.height,lum:Math.round(som/n),ecart:Math.round(mx-mn),
+      liens:(cv.links||[]).length,qr:(cv.links||[]).some(function(x){ return /\?v=/.test(x.url); })};
   },
   /* Ce que coûte une image de chute, en millisecondes de calcul pur. */
   coutChute:function(){ chutePrete(); var n=24, t0, i, m=[];
@@ -3008,9 +2976,18 @@ function storyMime(){
 }
 /* Le rendu passe au format d'une story. On touche à la même machinerie que
    le redimensionnement de la fenêtre, cible du flou comprise. */
-function storyTaille(W,H){
+/* Monter le sujet dans le cadre en visant plus bas descend aussi la caméra,
+   puisqu'elle orbite autour de ce qu'elle vise : sur la carte, plus large,
+   il fallait viser si bas qu'elle venait frôler les rochers de l'île, et un
+   caillou flou mangeait le tiers de l'image. On décale donc l'objectif et
+   non la caméra — on rend une image plus haute et l'on en garde le bas, ce
+   qui remonte le sujet sans bouger d'un pouce. */
+function storyTaille(W,H,decal){
   renderer.setPixelRatio(1); renderer.setSize(W,H,false);
-  camera.aspect=W/H; camera.updateProjectionMatrix();
+  camera.aspect=W/H;
+  if(decal) camera.setViewOffset(W,Math.round(H*(1+decal)),0,Math.round(H*decal),W,H);
+  else camera.clearViewOffset();
+  camera.updateProjectionMatrix();
   if(rt){ rt.setSize(W,H); postMat.uniforms.uRes.value.set(W,H); postMat.uniforms.uUnit.value=H/820; }
 }
 function storyLancer(w){
@@ -3044,6 +3021,20 @@ function storyLancer(w){
    s'annule aux deux bouts, pour n'emporter ni le départ ni l'arrivée. */
 function storyPose(u){
   var D=STORY.de, A=STORY.vers;
+  /* La carte est une image arrêtée : elle se tient au cadrage d'arrivée,
+     sans la dérive qui fait vivre la fin du film. Deux différences avec le
+     film, toutes deux dues à sa forme, plus étroite : on vise l'étiquette
+     elle-même et non le point où elle est accrochée — elle se balance au
+     bout de son fil, et ce balancement, qui ne se voit pas sur un format
+     vertical, la sortait du cadre d'une carte ; et l'on recule d'un
+     cinquième, pour qu'elle ne touche pas les bords. */
+  if(STORY.fige){
+    if(!STORY.v3) STORY.v3=new THREE.Vector3();
+    var v=STORY.v3; STORY.tag.mesh.getWorldPosition(v);
+    goal.th=cam.th=A.th; goal.ph=cam.ph=A.ph; goal.r=cam.r=A.r*1.22;
+    goal.tg.copy(v); cam.tg.copy(v);
+    return;
+  }
   var x=clamp((u-.13)/.47,0,1), e=x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
   var f=clamp((u-.60)/.40,0,1);
   var th=D.th+(A.th-D.th)*e+Math.sin(u*3.1416)*.10+f*.07;
@@ -3063,14 +3054,14 @@ function storyPose(u){
   goal.tg.y-=dy; cam.tg.y-=dy;
   if(!STORY.or&&u>=.58){ STORY.or=true; etincelles(STORY.tag); }
 }
-/* Ce qu'on écrit par-dessus l'image. Tout est mesuré depuis le bas sûr :
-   Instagram pose son interface sur les deux cent cinquante derniers pixels
-   d'une story de 1920 — rien d'important n'a le droit d'y descendre.
+/* Ce qu'on écrit par-dessus l'image, et qui sert aussi bien au film qu'à la
+   carte à télécharger : c'est le même objet, vu une fois en mouvement et une
+   fois arrêté, et il n'y a aucune raison qu'il ait deux dessins. La carte y
+   ajoute son QR code, et c'est tout ce qui l'en distingue.
 
-   Le nom de l'expérience était en haut, posé sur le feuillage : il s'y
-   lisait mal le jour, et pas du tout la nuit. Il descend donc auprès du
-   logo, dans la bande calme, où tout ce qui signe se tient ensemble — le
-   vœu, un filet, puis le nom, la marque, le métier et l'adresse.
+   Tout est mesuré depuis le bas sûr. Pour une story, il laisse les deux cent
+   cinquante derniers pixels à l'interface d'Instagram ; pour une carte, qui
+   n'est recouverte par rien, il laisse la place du QR code.
 
    Les couleurs suivent l'heure, comme le reste de l'interface : un voile
    crème et de l'encre noire le jour, un voile de nuit et de l'encre claire
@@ -3094,9 +3085,10 @@ function storyLogo(h,couleur){
   g.globalCompositeOperation="source-in"; g.fillStyle=couleur; g.fillRect(0,0,w,h);
   logoTeint.cle=cle; logoTeint.cv=cv; return cv;
 }
-function storyDecor(g,W,H,u){
+function storyDecor(g,W,H,u,opt){
+  opt=opt||{};
   var k=H/1280, HV='"Helvetica Neue",Helvetica,Arial,sans-serif', cjk=lang==="zh";
-  var sb=H-180*k, i;
+  var sb=H-(opt.bas===undefined?180:opt.bas)*k, i;
   var aMot=clamp((u-.60)/.12,0,1), aUrl=clamp((u-.76)/.12,0,1);
   var encre=storyTeinte("ink");
   /* Un voile monte du bas : il porte tout ce qui signe, et tient le texte
@@ -3116,28 +3108,20 @@ function storyDecor(g,W,H,u){
     g.font=mcjk?Math.round(38*k)+"px "+ZH_FONT:'500 '+Math.round(42*k)+'px "Caveat",'+HV;
     /* Deux lignes au plus : le mot est déjà sur l'étiquette, celui-ci n'est
        là que pour se lire d'un coup d'œil dans un fil qui défile. */
-    var lignes=wrapText(g,txt,W-180*k).slice(0,2), bas=sb-(w.n?348:322)*k;
+    var lignes=wrapText(g,txt,W-180*k).slice(0,2), bas=sb-(w.n?266:240)*k;
     var y=bas-(lignes.length-1)*Math.round((mcjk?48:46)*k);
     for(i=0;i<lignes.length;i++){ g.fillText(lignes[i],W/2,y); y+=Math.round((mcjk?48:46)*k); }
     if(w.n){ g.fillStyle=storyTeinte("green"); g.font="500 "+Math.round(15*k)+"px "+HV;
       try{ g.letterSpacing=Math.round(3*k)+"px"; }catch(e){}
-      g.fillText("— "+w.n,W/2,sb-304*k); try{ g.letterSpacing="0px"; }catch(e){} }
+      g.fillText("— "+w.n,W/2,sb-222*k); try{ g.letterSpacing="0px"; }catch(e){} }
     g.restore();
   }
-  /* Le filet sépare ce qu'on envoie de qui l'envoie. */
-  g.save(); g.globalAlpha=.5; g.strokeStyle=encre; g.lineWidth=Math.max(1,Math.round(1.5*k));
-  g.beginPath(); g.moveTo(W/2-62*k,sb-262*k); g.lineTo(W/2+62*k,sb-262*k); g.stroke(); g.restore();
-  /* Le bloc qui signe : le nom de l'expérience, la marque, le métier,
-     l'adresse. Il paraît dès la première image — c'est elle que les réseaux
-     prennent pour vignette, et une vignette sans marque ne sert à rien. */
-  g.fillStyle=storyTeinte("ink",.86);
-  g.font=(cjk?"":"500 ")+Math.round(20*k)+"px "+(cjk?ZH_FONT:HV);
-  try{ g.letterSpacing=Math.round(4.5*k)+"px"; }catch(e){}
-  g.fillText(cjk?T("storyTop"):T("storyTop").toUpperCase(),W/2,sb-222*k);
-  try{ g.letterSpacing="0px"; }catch(e){}
+  /* Le bloc qui signe : la marque, le métier, l'adresse. Il paraît dès la
+     première image — c'est elle que les réseaux prennent pour vignette, et
+     une vignette sans marque ne sert à rien. */
   var lg=storyLogo(Math.round(92*k),encre);
   if(lg) g.drawImage(lg,(W-lg.width)/2,sb-192*k);
-  g.fillStyle=storyTeinte("ink",.76);
+  g.fillStyle=storyTeinte("ink",.78);
   g.font=(cjk?"":"500 ")+Math.round(15*k)+"px "+(cjk?ZH_FONT:HV);
   try{ g.letterSpacing=Math.round(3.5*k)+"px"; }catch(e){}
   g.fillText(cjk?T("storyBas"):T("storyBas").toUpperCase(),W/2,sb-62*k);
@@ -3145,11 +3129,32 @@ function storyDecor(g,W,H,u){
   g.save(); g.globalAlpha=aUrl; g.fillStyle=storyTeinte("rust");
   g.font="500 "+Math.round(21*k)+"px "+HV;
   g.fillText(CARD_URL_TEXT,W/2,sb-20*k); g.restore();
+  STORY.liens=null;
+  if(!opt.qr) return;
+  /* Le QR code porte le vœu, et non l'adresse nue de l'arbre : c'est tout
+     l'intérêt de la carte. S'il ne tient pas — un vœu écrit à la main dans
+     une langue à trois octets par signe —, on retombe sur l'arbre, mais
+     l'adresse imprimée au-dessus, elle, reste complète.
+
+     Il est posé sur sa propre plaque claire, en tout temps : un lecteur de
+     QR code a besoin de modules sombres sur un fond clair, et la nuit le
+     voile est sombre. C'est le seul endroit du dessin qui ne suit pas
+     l'heure, et c'est pour qu'il fonctionne. */
+  var url=w&&!w.decor?CARD_URL+"?v="+encoderVoeu(w):CARD_URL;
+  var qm=qrMatrix(url)||qrMatrix(CARD_URL); if(!qm) return;
+  var qs=Math.round(188*k), m=Math.round(16*k), qx=Math.round((W-qs)/2), qy=Math.round(sb+28*k);
+  g.fillStyle="#fbfaf7"; rrect(g,qx-m,qy-m,qs+2*m,qs+2*m,Math.round(8*k)); g.fill();
+  var n=qm.length, cell=qs/n; g.fillStyle="#212121";
+  for(var r=0;r<n;r++) for(var c=0;c<n;c++) if(qm[r][c]) g.fillRect(qx+c*cell,qy+r*cell,cell+.4,cell+.4);
+  /* Ce que le PDF rendra cliquable. */
+  var uw=Math.round(200*k);
+  STORY.liens=[{x:(W-uw)/2,y:sb-44*k,w:uw,h:34*k,url:CARD_URL},{x:qx,y:qy,w:qs,h:qs,url:url}];
+  if(lg) STORY.liens.push({x:(W-lg.width)/2,y:sb-192*k,w:lg.width,h:92*k,url:SITE_URL});
 }
-function storyDessiner(u){
+function storyDessiner(u,opt){
   var g=STORY.g, W=STORY.w, H=STORY.h;
   g.drawImage(renderer.domElement,0,0,W,H);
-  storyDecor(g,W,H,u); STORY.vues++;
+  storyDecor(g,W,H,u,opt); STORY.vues++;
   /* La première image, mesurée une fois : sa clarté moyenne, et l'écart
      entre son point le plus sombre et le plus clair. La clarté seule ne
      suffit pas — elle écarte le noir, mais pas un rectangle de crème uni,
@@ -3190,7 +3195,7 @@ function storyFilmer(){
    ne coûte qu'une seule vue. */
 function storyFinir(){
   STORY.on=false; STORY.phase="";
-  renderer.setPixelRatio(PR); resize();
+  renderer.setPixelRatio(PR); camera.clearViewOffset(); resize();
   var a=STORY.avant;
   if(a){ cam.th=a.th; cam.ph=a.ph; cam.r=a.r; cam.tg.copy(a.tg);
     goal.th=a.gth; goal.ph=a.gph; goal.r=a.gr; goal.tg.copy(a.gtg);
@@ -3277,7 +3282,7 @@ function frame(now){
      cours de route. */
   if(STORY.on&&!STORY.demarre) STORY.t0=now;
   if(STORY.on) STORY.u=STORY.phase==="film"?Math.min(1,(now-STORY.t0)/1000/STORY.duree):1;
-  if(STORY.on&&(STORY.phase==="film"||STORY.phase==="photo")) storyPose(STORY.u);
+  if(STORY.on&&STORY.phase) storyPose(STORY.u);
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
   cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);
   var vth=cam.th, vph=clamp(cam.ph,.3,1.86), sp=Math.sin(vph);
@@ -3336,7 +3341,12 @@ function frame(now){
      recopie dans sa toile, on écrit par-dessus, et c'est cette toile-là que
      l'enregistreur filme. Puis on passe à la suite — l'image fixe quand il
      n'y a pas d'encodeur, l'attente du fichier quand il y en a un. */
-  if(STORY.on){
+  if(STORY.on&&STORY.phase==="carte"){
+    /* Deux tours : au premier la scène vient d'être redimensionnée et le
+       rendu de l'image précédente traîne encore dans la toile. */
+    storyDessiner(1,{bas:260,qr:true});
+    if(STORY.vues>=2) carteFinir();
+  } else if(STORY.on){
     storyDessiner(STORY.phase==="photo"?1:STORY.u);
     /* L'enregistreur ne part qu'ici, la première image une fois composée :
        parti plus tôt, il filmait une toile encore vide, et le film
