@@ -16,8 +16,7 @@ rouge. Adresse : `https://yunma.fr/wishes`.
 | `assets/logo-yunma-transparent.png` | Le logo, à l'accueil et sur la carte. |
 | `assets/carte-photo-1050x1480.jpg` | Le fond de la carte à télécharger. Chargé seulement quand quelqu'un ouvre sa carte. |
 | `seeds.json` | Vingt-huit vœux de départ, à verser dans la base le jour où elle existera. La page ne les lit pas : tant qu'il n'y a pas de base, elle fabrique son décor à partir des vœux tout faits. Ce fichier n'est pas déposé. |
-| `abonner.php` | Le relais du journal de la récolte : il reçoit les adresses et les écrit dans `abonnes.jsonl`, à côté de lui. Le seul morceau de l'expérience qui tourne sur le serveur. |
-| `.htaccess` | Cache court sur la page, long sur la bibliothèque, compression, et le journal des adresses tenu hors de portée du dehors. |
+| `.htaccess` | Cache court sur la page, long sur la bibliothèque, compression. |
 
 Comme l'atlas des variétés, ce dossier **se redépose seul** : aucun menu du site
 n'y mène, il ne figure pas au plan du site, et l'on y entre par un lien qu'on
@@ -384,57 +383,80 @@ lien n'était parti ; les liens en `#v-…` restent lus, et l'épreuve le vérif
 Un lien `…#w-<identifiant>` désigne un vœu de la base partagée. Il est reconnu,
 mais il ne mènera à quelque chose que le jour où cette base existera.
 
-## Le journal de la récolte
+## Suivre Yunma
 
-Au bas de la fiche, sous un filet, une ligne : *« Janvier 2027, Yunma repart au
-Yunnan chercher les nouveaux cafés. Suivez-nous »*, et deux portes — **par
-mail**, ou **sur Instagram**.
+Au bas de la fiche, sous un filet, une ligne : *« Janvier 2027, Yunma repart
+au Yunnan chercher les nouveaux cafés. Suivez-nous »*, et une porte —
+**suivre sur Instagram**.
 
 **Le moment.** Quelqu'un qui vient d'écrire un vœu et de le voir s'accrocher a
 donné quelque chose : c'est le seul instant de la visite où l'on peut demander
 en retour. La ligne vit donc dans la fiche, et nulle part ailleurs — et la
 fiche ne s'ouvre que là, ou lorsqu'on touche le vœu qu'un ami nous a envoyé.
-Elle part pliée : aucun champ n'attend ouvert, et rien n'est dit de l'adresse
-avant qu'on ait touché « par mail ». Parler de ce qu'on en fera avant de
-l'avoir demandée, c'est déjà la demander. Une fois qu'on a répondu — par l'une
-ou l'autre porte —, elle ne reparaît plus (`yw_abo` dans la mémoire du
+Une fois qu'on a répondu, elle ne reparaît plus (`yw_abo` dans la mémoire du
 navigateur). Demander deux fois, c'est harceler.
 
-**Pourquoi un fichier PHP.** Tout ce qui est dans la page est public : le jeton
-de vitrine de la boutique peut y vivre, il est fait pour cela, mais la clé d'un
-service d'envoi, jamais. `abonner.php` garde de son côté ce qui ne peut pas
-vivre dans une page. Le dossier cesse donc d'être tout à fait statique — il
-demande PHP, que l'hébergement d'Infomaniak exécute —, et la page continue de
-s'ouvrir sans lui : si l'inscription échoue, **elle le dit**, elle ne fait pas
-semblant d'avoir enregistré.
+**On ne garde rien.** Pas d'adresse, pas de champ, pas de relais sur le
+serveur, rien à écrire nulle part — le dossier reste entièrement statique. Le
+compte est un lien ordinaire, `https://www.instagram.com/yunma.coffee`, ouvert
+dans une autre page : pas un bouton de réseau qui pisterait, et rien n'est
+chargé de chez eux. On ne saura jamais si la personne s'est abonnée, et ce
+n'est pas grave : on a demandé une fois.
 
-Ce que le relais fait, dans l'ordre : il refuse ce qui ne vient pas de sa
-propre origine ; il laisse tomber en silence un envoi dont le champ invisible
-est rempli, ou qui arrive moins d'une seconde et demie après l'ouverture de la
-page — ni captcha ni devinette ; il vérifie la forme de l'adresse, puis que son
-domaine peut recevoir du courrier (après avoir demandé à la machine si elle
-sait seulement interroger le DNS : sans ce sondage, un serveur sans résolveur
-refuserait toutes les adresses du monde) ; il refuse la sixième inscription
-venue de la même machine dans l'heure ; et il écrit une ligne dans
-`abonnes.jsonl`, sous verrou exclusif.
+## La story
 
-Ce qu'on garde, et rien de plus : l'adresse, la langue de lecture, l'instant,
-et **la version exacte du texte qui a été montré** — c'est elle qui prouve à
-quoi la personne a consenti. L'adresse de la machine n'est gardée que hachée,
-et seulement pour écarter un robot qui reviendrait cent fois. Le fichier est
-posé dans le dossier public faute de pouvoir écrire ailleurs chez l'hébergeur :
-le `.htaccess` refuse de le servir, et c'est cette règle qui tient la liste à
-l'abri. **Ne pas la perdre en redéposant le dossier.**
+Sur Instagram, **un lien ne se clique pas**. Ce qui s'y partage est une image
+ou un film ; le lien du vœu, lui, n'y sert à rien. La page fabrique donc le
+film elle-même, à la demande, et le remet au système.
 
-**Instagram** est un simple lien, `https://www.instagram.com/yunma.coffee`,
-ouvert dans une autre page — pas un bouton de réseau qui pisterait, et rien
-n'est chargé de chez eux. On ne saura jamais si la personne s'est abonnée, et
-ce n'est pas grave : on a demandé une fois.
+**Ce qu'on voit** : sept secondes au format vertical. La caméra part de six
+unités, vient se poser sur le mot, l'or éclate au moment où elle arrive, et
+elle continue d'avancer imperceptiblement jusqu'à la fin — c'est ce dernier
+rien qui fait qu'une image est vivante et non figée. Par-dessus : le titre en
+haut, le vœu écrit en toutes lettres et signé dans la bande calme du bas, puis
+le logo, « Cafés de spécialité du Yunnan » et **l'adresse du site**. Cette
+dernière est le seul élément qui ramène quelqu'un : une story repartagée par
+un ami ne porte aucun lien cliquable.
 
-L'épreuve porte sur le vrai relais, lancé pour de bon à côté du serveur
-d'épreuve : l'adresse écrite dans la page se retrouve dans le journal, et le
-piège, la hâte, la répétition, l'envoi venu d'ailleurs et la sixième tentative
-sont tous refusés comme ils doivent l'être.
+**Trois choses commandent toute la fabrication.**
+
+1. **Instagram ne prend pas le WebM.** Un navigateur qui ne sait encoder que
+   cela ne nous sert à rien : on fabrique alors une image fixe, en
+   1080 × 1920, qui passe partout. Le film, lui, est en MP4/H.264, en
+   720 × 1280 — assez pour une story, assez léger pour partir d'un téléphone.
+2. **La feuille de partage ne s'ouvre que sur un geste**, et sept secondes de
+   tournage ont depuis longtemps épuisé celui du départ. On montre donc le
+   film quand il est prêt, et c'est en touchant « Partager » qu'on ouvre la
+   feuille. C'est de toute façon ce qu'on voudrait : voir avant d'envoyer.
+   Là où la feuille ne prend pas de fichier — un ordinateur, un navigateur
+   ancien —, le bouton devient « Enregistrer » et dit quoi faire ensuite.
+3. **Un cadre vertical n'est pas un écran.** Le sujet n'y va pas au milieu,
+   sinon il tombe dans le texte qui monte du bas : la visée descend d'un
+   quart de demi-hauteur, mesuré sur la distance d'arrivée — mesuré sur la
+   distance du large, il viserait vingt mètres sous l'arbre et la première
+   image montrerait le dessous de l'île. Et rien d'important ne descend dans
+   les deux cent cinquante derniers pixels : Instagram y pose son interface.
+
+**Comment c'est fait.** Le rendu passe au format d'une story — même machinerie
+que le redimensionnement de la fenêtre, cible du flou comprise —, la boucle
+d'image écrit la trajectoire sur la montre et non sur l'horloge de la scène
+(un film dure sept secondes pour celui qui le regarde, quelle que soit la
+vitesse de la machine), chaque image est recopiée dans une toile où l'on écrit
+par-dessus, et c'est cette toile que l'enregistreur filme. Le bandeau est là
+dès la première image : c'est elle que les réseaux prennent pour vignette.
+Pendant le tournage, la veilleuse ne part pas et l'île ne décale plus la
+visée. À la fin, la scène est rendue à l'écran telle qu'elle était.
+
+L'aperçu empile le film sur la toile, qui garde sa dernière image : un
+navigateur qui sait encoder sans savoir décoder — cela existe — montrerait
+sinon un rectangle noir à la place de ce qu'on vient de fabriquer.
+
+**Ce que l'épreuve vérifie** : que le fichier est fabriqué, qu'il est bien un
+MP4 nommé `voeu-yunma.mp4`, que sans encodeur c'est une image de 1080 × 1920,
+que le format du rendu est pris puis rendu, et que l'arbre nu ne propose pas
+de story — il n'a pas de mot à filmer. Le film produit a été ouvert hors du
+navigateur : H.264, 720 × 1280, durée juste. **Ce qu'elle ne peut pas
+vérifier, c'est qu'Instagram l'accepte** : cela se voit sur un téléphone.
 
 ## Ce qui reste à faire
 
@@ -477,26 +499,17 @@ artefact claude.ai ne peut atteindre ni le micro ni les capteurs de mouvement,
 de sorte qu'on ne pouvait ni l'essayer ni le régler sans déposer le dossier.
 Secouer le téléphone, qui ne demande rien à personne, en tient lieu.
 
-**La liste n'a pas encore de service d'envoi.** Le relais écrit dans un
-fichier, et c'est tout ce qu'il fait : pas de courrier de confirmation, pas de
-lien de désinscription, et l'envoi de janvier 2027 serait à faire à la main. Ce
-qui manque tient en un appel, à la fin d'`abonner.php`, vers une liste à double
-confirmation — Brevo, française et européenne, ou la boutique Shopify elle-même
-si l'on veut une seule base clients. Attention de ce côté-là : le courrier de
-double confirmation de Shopify part de façon fiable depuis la vitrine, et non
-depuis l'API d'administration ; à éprouver sur une boutique d'essai avant de
-s'y engager. Et les mentions légales du site ont reçu le paragraphe qu'il
-fallait, mais il devra être relu le jour où un sous-traitant entrera dans le
-tableau.
+**La story n'a jamais été publiée.** Elle est fabriquée, mesurée, ouverte hors
+du navigateur — mais ni Instagram ni la feuille de partage d'un téléphone
+n'existent ici. Trois choses se verront au premier essai sur un appareil :
+qu'Instagram prend bien le fichier, que le film n'est pas saccadé sur un
+téléphone modeste (la trajectoire dure sept secondes quelle que soit la
+machine, mais une machine lente y met moins d'images), et que la feuille de
+partage propose bien Stories, Reels et la publication.
 
-**L'image à partager n'existe pas encore.** Aucun réseau ne laisse une page web
-lui préparer une publication avec une image : Instagram et TikTok n'ont même
-pas de lien de partage, et Facebook, X ou Threads ne prennent qu'une adresse et
-un texte, l'image étant celle que la page déclare. Il n'y a donc que deux
-mécanismes à construire — la feuille de partage du téléphone, qui reçoit un
-fichier et ouvre Instagram, et les balises de la page pour les liens collés.
-Le lien est déjà prêt pour le second (voir « Pourquoi une question et non un
-dièse ») ; reste à dessiner l'image : un format 1080 × 1920 pour la story, le
-vœu lisible à bout de bras, et en bas le logo, « Cafés de spécialité du
-Yunnan » et l'adresse du site — car une story partagée par un ami ne porte
-aucun lien cliquable.
+**Les liens collés n'ont pas encore de vignette.** Facebook, X ou Threads vont
+chercher dans la page l'image qu'ils affichent, et la page n'en déclare
+aucune. Le lien est prêt pour cela depuis qu'il porte le vœu dans sa question
+(voir « Pourquoi une question et non un dièse ») : il reste à poser une belle
+vignette unique pour `/wishes`, puis, si les chiffres montrent que les liens
+voyagent par copier-coller, une vignette par vœu fabriquée par le serveur.

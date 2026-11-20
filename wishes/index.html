@@ -183,10 +183,8 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #card .reco .rrow{display:none;gap:8px}
 #card .reco .rrow.on{display:flex}
 #card .reco .rrow .btn{height:38px;font-size:10.5px;padding:0 10px;flex:1;letter-spacing:.1em}
-#card .reco .field{flex:1;min-width:0;height:38px;padding:0 12px;font-size:16px}
 #card .reco .rnote{margin:0;font-size:10.5px;line-height:1.45;color:rgba(var(--ink-rgb),.52)}
 #card .reco .rnote:empty{display:none}
-#card .reco .pot{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
 #cimg{display:block;max-height:50vh;max-width:100%;margin:4px auto 12px;border-radius:3px;box-shadow:0 12px 30px -14px rgba(60,40,20,.55);-webkit-touch-callout:default;user-select:auto;-webkit-user-select:auto}
 #cmodal .row .btn,#lmodal .row .btn{padding:0 6px;font-size:11.5px;letter-spacing:.1em}
 
@@ -197,6 +195,26 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .modal h2{margin:0 0 8px;font-size:18px;font-weight:500}
 .modal p{margin:0 0 14px;font-size:13px;line-height:1.55;color:var(--ink)}
 .modal .row{display:flex;gap:8px;margin-top:12px}.modal .row .btn{flex:1;height:46px;font-size:12px}
+/* La story : on regarde le film se faire, puis on le partage. Le fond est
+   sombre et presque opaque — derrière, la scène est rendue au format d'une
+   story, donc étirée sur l'écran : il n'y a rien à y voir. */
+#story{position:fixed;inset:0;z-index:35;background:rgba(18,16,14,.96);display:none;
+  align-items:center;justify-content:center;padding:18px}
+#story.open{display:flex}
+#story .sbox{display:flex;flex-direction:column;align-items:center;gap:13px;width:100%;max-width:400px}
+/* Le film se pose par-dessus la toile, qui garde sa dernière image. Un
+   navigateur qui sait encoder sans savoir décoder — cela existe — montrerait
+   sinon un rectangle noir à la place de ce qu'on vient de fabriquer. */
+#story .cadre{position:relative;display:inline-flex;height:min(58vh,560px);max-width:100%;
+  border-radius:6px;overflow:hidden;background:#141210;box-shadow:0 18px 50px -20px rgba(0,0,0,.8)}
+#sCv{display:block;height:100%;width:auto;max-width:100%}
+#sVid,#sImg{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#sVid.on,#sImg.on{display:block}
+#story #sNote{margin:0;font-size:12.5px;line-height:1.5;color:rgba(var(--beige-rgb),.78);text-align:center;min-height:19px}
+#story .row{display:none;gap:8px;width:100%}
+#story .row.on{display:flex}
+#story .row .btn{flex:1;height:46px;font-size:12px}
+#story .btn.ghost{background:transparent;color:var(--beige);box-shadow:inset 0 0 0 1px rgba(var(--beige-rgb),.45)}
 #toast{position:fixed;left:50%;top:88px;transform:translate(-50%,-20px);z-index:40;background:var(--ink);color:var(--beige);
   font-size:13px;line-height:1.4;padding:10px 16px;border-radius:4px;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none;
   max-width:86vw;text-align:center}
@@ -252,24 +270,34 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
   <div class="reco" id="reco">
     <p class="rtx" id="rTxt"></p>
     <div class="rrow" id="rChoix">
-      <button class="btn ghost" id="rMail" data-i="aboMail"></button>
       <a class="btn ghost" id="rInsta" href="https://www.instagram.com/yunma.coffee" target="_blank" rel="noopener" data-i="aboInsta"></a>
     </div>
-    <div class="rrow" id="rForm">
-      <input class="field" id="rAdr" type="email" inputmode="email" autocomplete="email" maxlength="80" spellcheck="false">
-      <button class="btn" id="rGo" data-i="aboGo"></button>
-    </div>
-    <p class="rnote selectable" id="rNote"></p>
-    <input class="pot" id="rPot" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p class="rnote" id="rNote"></p>
   </div>
 </div>
 
 <div id="modal" class="modal"><div class="box">
   <h2 id="shareTtl"></h2><p id="shareTxt"></p>
   <input class="field" id="link" readonly>
-  <div class="row"><a class="btn" id="byMail" href="#" data-i="byMail"></a><a class="btn" id="bySms" href="#" data-i="bySms"></a></div>
+  <div class="row" id="rowStory"><button class="btn" id="byStory" data-i="story"></button></div>
+  <div class="row"><a class="btn ghost" id="byMail" href="#" data-i="byMail"></a><a class="btn ghost" id="bySms" href="#" data-i="bySms"></a></div>
   <div class="row"><button class="btn ghost" id="copy" data-i="copy"></button><button class="btn ghost" id="mClose" data-i="close"></button></div>
 </div></div>
+
+<div id="story">
+  <div class="sbox">
+    <div class="cadre">
+      <canvas id="sCv"></canvas>
+      <video id="sVid" playsinline muted loop></video>
+      <img id="sImg" alt="">
+    </div>
+    <p id="sNote"></p>
+    <div class="row" id="sActions">
+      <button class="btn" id="sShare"></button>
+      <button class="btn ghost" id="sClose" data-i="close"></button>
+    </div>
+  </div>
+</div>
 
 <div id="cmodal" class="modal"><div class="box">
   <h2 data-i="cardTitle"></h2>
@@ -359,10 +387,13 @@ var I18N = {
   recuDe:function(n){ return n?n+" vous envoie ce message":"On vous envoie ce message"; },
   copy:"Copier le lien",copied:"Lien copié",close:"Fermer",
   aboTxt:"Janvier 2027, Yunma repart au Yunnan chercher les nouveaux cafés. Suivez-nous",
-  aboMail:"Par mail",aboInsta:"Sur Instagram",aboGo:"Recevoir",aboPh:"votre adresse",
-  aboNote:"Votre adresse ne sert qu'à ce journal, et un mot à hello@yunma.fr la retire.",
-  aboOk:"C'est noté. Rendez-vous en janvier.",aboInstaOk:"Merci. À bientôt sur Instagram.",
-  aboBad:"Cette adresse n'a pas l'air juste.",aboFail:"L'inscription n'a pas pu se faire. Réessayez dans un moment.",
+  aboInsta:"Suivre sur Instagram",aboInstaOk:"Merci. À bientôt sur Instagram.",
+  story:"Story Instagram",storyFab:"On fabrique votre story…",
+  storyPret:"Prête. En story, en publication ou en reel.",
+  storyPartager:"Partager",storyGarder:"Enregistrer",
+  storyAide:"Enregistrée dans vos images. Ouvrez Instagram et choisissez-la.",
+  storyRate:"La story n'a pas pu être fabriquée sur cet appareil.",
+  storyTop:"L'arbre à souhaits",storyBas:"Cafés de spécialité du Yunnan",
   need:"Choisissez un vœu ou écrivez le vôtre.",anon:"Anonyme",from:"Accroché par ",mine:"Votre vœu",nogl:"Votre navigateur ne peut pas afficher la scène 3D (WebGL indisponible)."},
  en:{title:"The Wishing Tree",introText:"In China, wishes are entrusted to a tree: a red tag, a golden thread, a few words. This winter, hang yours on this Yunnan coffee tree — then pass the link to the people you love.",
   voeuYunma:"Yunma wishes you a joyful season",
@@ -380,10 +411,13 @@ var I18N = {
   recuDe:function(n){ return n?n+" sends you this wish":"Someone sends you this wish"; },
   copy:"Copy link",copied:"Link copied",close:"Close",
   aboTxt:"January 2027, Yunma heads back to Yunnan for the new coffees. Follow along",
-  aboMail:"By email",aboInsta:"On Instagram",aboGo:"Sign up",aboPh:"your address",
-  aboNote:"Your address is used for this journal only, and a word to hello@yunma.fr removes it.",
-  aboOk:"Noted. See you in January.",aboInstaOk:"Thank you. See you on Instagram.",
-  aboBad:"That address does not look right.",aboFail:"The sign-up did not go through. Please try again in a moment.",
+  aboInsta:"Follow on Instagram",aboInstaOk:"Thank you. See you on Instagram.",
+  story:"Instagram story",storyFab:"Making your story…",
+  storyPret:"Ready. As a story, a post or a reel.",
+  storyPartager:"Share",storyGarder:"Save",
+  storyAide:"Saved to your pictures. Open Instagram and pick it.",
+  storyRate:"The story could not be made on this device.",
+  storyTop:"The wishing tree",storyBas:"Yunnan specialty coffee",
   need:"Pick a wish or write your own.",anon:"Anonymous",from:"Hung by ",mine:"Your wish",nogl:"Your browser cannot display the 3D scene (WebGL unavailable)."},
  zh:{title:"咖啡许愿树",introText:"在中国，人们把心愿托付给一棵树：一枚红牌、一根金线、几句心里话。这个节日，把你的心愿挂在这棵云南咖啡树上，再把链接传给你在乎的人。",
   voeuYunma:"云马祝您节日快乐",
@@ -401,10 +435,13 @@ var I18N = {
   recuDe:function(n){ return n?n+" 给你送来这个心愿":"有人给你送来这个心愿"; },
   copy:"复制链接",copied:"链接已复制",close:"关闭",
   aboTxt:"2027 年 1 月，云马将重返云南寻找新一季的咖啡。欢迎关注",
-  aboMail:"邮件订阅",aboInsta:"Instagram",aboGo:"订阅",aboPh:"您的邮箱",
-  aboNote:"您的邮箱仅用于这份记录，写信至 hello@yunma.fr 即可退出。",
-  aboOk:"已记下，一月见。",aboInstaOk:"谢谢，Instagram 上见。",
-  aboBad:"这个邮箱地址似乎不对。",aboFail:"订阅未能完成，请稍后再试。",
+  aboInsta:"关注 Instagram",aboInstaOk:"谢谢，Instagram 上见。",
+  story:"Instagram 快拍",storyFab:"正在生成…",
+  storyPret:"好了。可发快拍、贴文或 Reels。",
+  storyPartager:"分享",storyGarder:"保存",
+  storyAide:"已保存到相册。打开 Instagram 选择它。",
+  storyRate:"这台设备无法生成快拍。",
+  storyTop:"咖啡许愿树",storyBas:"云南精品咖啡",
   need:"请选择一句祝福，或写下自己的话。",anon:"匿名",from:"挂牌人：",mine:"你的心愿",nogl:"你的浏览器无法显示 3D 场景（WebGL 不可用）。"}
 };
 var lang = "fr";
@@ -728,76 +765,32 @@ function openCard(w){ if(ETIN.quand&&ETIN.apres<0) ETIN.apres=Math.round(perform
 function closeCard(keepCam){ if(!cardWish) return; cardWish=null; $("card").classList.remove("open");
   if(!sheetOpen) $("bottom").classList.remove("down"); if(!keepCam&&window.__home) window.__home(); barreVoeu(); }
 
-/* ------------------------------------------------------------------ le journal de la récolte
+/* ------------------------------------------------------------------ suivre Yunma
    Quelqu'un qui vient d'écrire un vœu et de le voir s'accrocher a donné
    quelque chose. C'est le seul moment de la visite où l'on peut demander en
    retour — une fois, en une ligne, et sans jamais barrer la vue.
 
-   Deux portes, et le visiteur choisit : son adresse, ou le compte
-   Instagram. La seconde ne coûte rien à personne et ne demande aucune
-   donnée ; la première passe par un relais sur le serveur, car la clé d'un
-   service d'envoi n'a rien à faire dans une page publique — tout ce qui est
-   ici est lisible par tout le monde.
+   On ne demande rien qu'on doive garder : pas d'adresse, pas de champ, pas
+   de relais sur le serveur, rien à écrire nulle part. Un lien vers le
+   compte, ouvert dans une autre page, et c'est tout. On ne saura jamais si
+   la personne s'est abonnée, et ce n'est pas grave : on a demandé une fois.
 
    La ligne vit dans la fiche, et nulle part ailleurs : la fiche ne s'ouvre
    que lorsqu'on vient d'accrocher son vœu, ou qu'on touche celui qu'un ami
    nous a envoyé. Une fois qu'on a répondu, elle ne reparaît plus. */
-var ABO="abonner.php", ABO_V="recolte-2027-1";
 var aboEtat=""; try{ aboEtat=localStorage.getItem("yw_abo")||""; }catch(e){}
-var aboT0=Date.now(), aboEnCours=false;
-/* L'adresse du relais, et pourquoi elle n'est pas écrite telle quelle :
-   « abonner.php » se résout par rapport à la page, et la page peut être
-   servie sous « /wishes » sans barre finale — auquel cas le navigateur
-   chercherait « /abonner.php », à côté du dossier. On reconstruit donc le
-   chemin du dossier, qu'il finisse par une barre, par « index.html » ou par
-   rien du tout. Ainsi le dossier reste déplaçable où l'on veut. */
-function aboURL(){
-  var d=location.pathname||"/";
-  if(!/\/$/.test(d)&&!/\.[a-z0-9]+$/i.test(d)) d+="/";
-  return d.replace(/[^/]*$/,"")+ABO;
-}
 function recoTextes(){
   if(!$("reco")) return;
   $("rTxt").textContent=T("aboTxt");
-  /* Le champ n'a pas d'étiquette visible — la ligne au-dessus dit déjà tout —
-     mais il lui en faut une pour qui lit l'écran à l'oreille. */
-  $("rAdr").placeholder=T("aboPh"); $("rAdr").setAttribute("aria-label",T("aboPh"));
-  /* Tant qu'on n'a rien demandé, pas un mot sur l'adresse : parler de ce
-     qu'on en fera avant même de l'avoir demandée, c'est déjà la demander. */
-  $("rNote").textContent=aboEtat==="insta"?T("aboInstaOk"):aboEtat==="mail"?T("aboOk")
-    :$("rForm").classList.contains("on")?T("aboNote"):"";
+  $("rNote").textContent=aboEtat?T("aboInstaOk"):"";
 }
-/* À chaque ouverture de fiche, la ligne repart pliée : le champ ne reste
-   pas ouvert d'un vœu à l'autre avec une adresse à moitié écrite. */
+/* À chaque ouverture de fiche, la ligne repart de zéro. */
 function recoRaz(){
   if(!$("reco")) return;
   var montrer=!aboEtat;
   $("reco").classList.toggle("on",montrer);
   $("rChoix").classList.toggle("on",montrer);
-  $("rForm").classList.remove("on");
-  $("rGo").disabled=false; $("rAdr").value=""; $("rPot").value="";
   recoTextes();
-}
-function recoFini(cle){
-  $("rChoix").classList.remove("on"); $("rForm").classList.remove("on");
-  $("rNote").textContent=T(cle);
-}
-function recoEnvoyer(){
-  var a=$("rAdr").value.trim();
-  if(!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(a)){ $("rNote").textContent=T("aboBad"); return; }
-  if(aboEnCours) return;
-  aboEnCours=true; $("rGo").disabled=true;
-  var fini=function(ok){ aboEnCours=false; $("rGo").disabled=false;
-    if(ok){ aboEtat="mail"; try{ localStorage.setItem("yw_abo","mail"); }catch(e){} recoFini("aboOk"); }
-    else $("rNote").textContent=T("aboFail"); };
-  /* Le relais est à côté de la page : aucune question d'origine, et le
-     dossier reste déplaçable tel quel. S'il n'est pas là — un hébergement
-     sans PHP, un aperçu local —, on le dit, on ne fait pas semblant. */
-  try{
-    fetch(aboURL(),{method:"POST",headers:{"content-type":"application/json"},
-      body:JSON.stringify({m:a,l:lang,v:ABO_V,d:Date.now()-aboT0,p:$("rPot").value})})
-      .then(function(r){ fini(!!r&&r.ok); },function(){ fini(false); });
-  }catch(e){ fini(false); }
 }
 function shareBase(){ return /^https?:/.test(SHARE_URL)?SHARE_URL:String(location.href).split(/[?#]/)[0]; }
 
@@ -848,8 +841,13 @@ function decoderVoeu(code){
    continuent de marcher : on les lit toujours. */
 function lienVoeu(w){ return w&&!w.yunma ? shareBase()+"?v="+encoderVoeu(w) : shareBase(); }
 
+var shareWish=null;
 function openShare(w){
   var url=lienVoeu(w), perso=!!(w&&!w.yunma);
+  /* La story montre un mot dans l'arbre : il faut donc qu'il y soit. Le
+     partage de l'arbre nu, lui, n'a rien à filmer. */
+  shareWish=perso?w:null;
+  $("rowStory").style.display=(perso&&tags[w.id])?"":"none";
   $("link").value=url;
   $("shareTxt").textContent=T(perso?"shareWishText":"shareText");
   $("shareTtl").textContent=T(perso?"shareWishTitle":"shareTitle");
@@ -871,14 +869,11 @@ $("name").oninput=preview;
 $("share").onclick=function(){ openShare(null); };
 $("voeuShare").onclick=function(){ if(vise){ cineStop(); openShare(vise.w); } };
 $("cShare").onclick=function(){ openShare(cardWish); };
-$("rMail").onclick=function(){ $("rChoix").classList.remove("on"); $("rForm").classList.add("on");
-  $("rNote").textContent=T("aboNote"); $("rAdr").focus(); };
 /* Le compte Instagram s'ouvre dans une autre page — l'arbre reste ouvert
    derrière. On ne sait pas si la personne s'est abonnée, et ce n'est pas
    grave : on a demandé une fois, on ne redemande pas. */
-$("rInsta").onclick=function(){ aboEtat="insta"; try{ localStorage.setItem("yw_abo","insta"); }catch(e){} recoFini("aboInstaOk"); };
-$("rGo").onclick=recoEnvoyer;
-$("rAdr").onkeydown=function(e){ if(e.key==="Enter"){ e.preventDefault(); recoEnvoyer(); } };
+$("rInsta").onclick=function(){ aboEtat="insta"; try{ localStorage.setItem("yw_abo","insta"); }catch(e){}
+  $("rChoix").classList.remove("on"); $("rNote").textContent=T("aboInstaOk"); };
 $("cBack").onclick=function(){ closeCard(false); };
 $("mClose").onclick=function(){ $("modal").classList.remove("open"); };
 $("modal").onclick=function(e){ if(e.target===$("modal")) $("modal").classList.remove("open"); };
@@ -2743,14 +2738,29 @@ window.__essai={
     return Math.round(n/feuilles.count*100); },
   visiteOn:function(){ return CINE.on; },
   lien:function(w){ return lienVoeu(w); },
-  /* L'état de la ligne du journal : ce qu'on voit, et ce qui a été répondu. */
+  /* L'état de la ligne « suivre » : ce qu'on voit, et ce qui a été répondu. */
   abo:function(){ var r=$("reco");
     return {vue:!!r&&r.classList.contains("on"),choix:$("rChoix").classList.contains("on"),
-      champ:$("rForm").classList.contains("on"),note:$("rNote").textContent,
-      texte:$("rTxt").textContent,etat:aboEtat,insta:$("rInsta").getAttribute("href")}; },
-  aboMail:function(a){ $("rMail").click(); $("rAdr").value=a; recoEnvoyer(); },
-  aboURL:function(){ return aboURL(); },
+      note:$("rNote").textContent,texte:$("rTxt").textContent,etat:aboEtat,
+      insta:$("rInsta").getAttribute("href")}; },
   aboInsta:function(){ $("rInsta").onclick(); },
+  /* La story : son état, et deux leviers pour l'éprouver — un film plus
+     court, et le WebM ouvert, qu'un navigateur sans encodeur H.264 est seul
+     à savoir écrire. */
+  story:function(){ var f=STORY.fichier;
+    return {on:STORY.on,phase:STORY.phase,u:+(STORY.u||0).toFixed(2),mime:STORY.mime,
+      vues:STORY.vues,w:STORY.w,h:STORY.h,
+      fichier:f?{nom:f.name,type:f.type,ko:Math.round(f.size/1024)}:null,
+      bouton:$("sShare").textContent,mode:$("sShare").getAttribute("data-mode"),
+      note:$("sNote").textContent,ouverte:$("story").classList.contains("open"),
+      actions:$("sActions").classList.contains("on"),offre:$("rowStory").style.display,
+      toile:[renderer.domElement.width,renderer.domElement.height]}; },
+  storyWebm:function(v){ STORY.webm=v!==false; return storyMime(); },
+  /* Pour éprouver l'image fixe là où le navigateur sait filmer. */
+  storySansFilm:function(v){ STORY.sansFilm=v!==false; return storyMime(); },
+  storyFichier:function(){ return STORY.fichier; },
+  storyDuree:function(d){ STORY.duree=d; return STORY.duree; },
+  storyImage:function(){ try{ return STORY.cv?STORY.cv.toDataURL("image/jpeg",.85):""; }catch(e){ return ""; } },
   aboOubli:function(){ aboEtat=""; try{ localStorage.removeItem("yw_abo"); }catch(e){} },
   decoder:function(c){ return decoderVoeu(c); },
   recu:function(){ return recu; },
@@ -2886,6 +2896,235 @@ function resize(){ var w=window.innerWidth, h=window.innerHeight; renderer.setPi
   fitHome(); if(!focused){ goal.r=homeR; goal.tg.setY(homeY); } }
 window.addEventListener("resize",resize); resize(); cam.r=homeR*1.5; goal.r=homeR; cam.tg.setY(homeY); goal.tg.setY(homeY);
 
+/* ------------------------------------------------------------------ la story
+   Un vœu accroché dans un arbre ne se partage pas par un lien : sur
+   Instagram, un lien ne se clique pas. Ce qui s'y partage, c'est une image
+   ou un film. On fabrique donc le film, ici, dans la page : sept secondes
+   au format vertical, la caméra qui vient se poser sur le mot, l'or qui
+   éclate, et en bas le logo, la signature et l'adresse du site — car une
+   story repartagée par un ami ne porte aucun lien cliquable, et l'adresse
+   écrite dans l'image est la seule chose qui ramène quelqu'un.
+
+   Deux contraintes commandent tout le reste. La première : Instagram ne
+   prend pas le WebM. Un navigateur qui ne sait encoder que cela ne nous
+   servirait à rien, et l'on fabrique alors une image fixe — qui, elle,
+   passe partout. La seconde : la feuille de partage du système ne s'ouvre
+   que sur un geste du visiteur, et sept secondes de tournage ont depuis
+   longtemps épuisé celui du départ. On montre donc le film quand il est
+   prêt, et c'est en touchant « Partager » qu'on ouvre la feuille. C'est de
+   toute façon ce qu'on voudrait : voir avant d'envoyer. */
+var STORY={on:false,phase:"",u:0,t0:0,duree:7.2,w:720,h:1280,cv:null,g:null,
+  rec:null,bouts:[],mime:"",tag:null,webm:false,or:false,avant:null,fichier:null,vues:0};
+function storyCv(W,H){
+  if(!STORY.cv){ STORY.cv=$("sCv"); STORY.g=STORY.cv.getContext("2d"); }
+  if(STORY.cv.width!==W||STORY.cv.height!==H){ STORY.cv.width=W; STORY.cv.height=H; }
+  return STORY.cv;
+}
+/* Ce que cette machine sait encoder, et qu'Instagram saura lire. */
+function storyMime(){
+  if(typeof MediaRecorder==="undefined"||!MediaRecorder.isTypeSupported) return "";
+  var l=["video/mp4;codecs=avc1.42E01E","video/mp4;codecs=avc1","video/mp4"];
+  /* Le WebM n'est ouvert que pour l'épreuve : un navigateur sans encodeur
+     H.264 doit pouvoir filmer pour qu'on vérifie le tournage. Il ne part
+     jamais vers Instagram, qui le refuserait. */
+  if(STORY.sansFilm) return "";
+  if(STORY.webm) l=l.concat(["video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm"]);
+  for(var i=0;i<l.length;i++){ try{ if(MediaRecorder.isTypeSupported(l[i])) return l[i]; }catch(e){} }
+  return "";
+}
+/* Le rendu passe au format d'une story. On touche à la même machinerie que
+   le redimensionnement de la fenêtre, cible du flou comprise. */
+function storyTaille(W,H){
+  renderer.setPixelRatio(1); renderer.setSize(W,H,false);
+  camera.aspect=W/H; camera.updateProjectionMatrix();
+  if(rt){ rt.setSize(W,H); postMat.uniforms.uRes.value.set(W,H); postMat.uniforms.uUnit.value=H/820; }
+}
+function storyLancer(w){
+  if(STORY.on) return false;
+  var t=w&&tags[w.id]; if(!t) return false;
+  $("modal").classList.remove("open");
+  $("story").classList.add("open"); $("bottom").classList.add("down");
+  $("sVid").classList.remove("on"); $("sImg").classList.remove("on");
+  $("sActions").classList.remove("on"); $("sNote").textContent=T("storyFab");
+  STORY.fichier=null; STORY.tag=t; STORY.or=false; STORY.u=0; STORY.vues=0;
+  STORY.avant={th:cam.th,ph:cam.ph,r:cam.r,tg:cam.tg.clone(),
+    gth:goal.th,gph:goal.ph,gr:goal.r,gtg:goal.tg.clone(),vise:vise,focused:focused};
+  cineStop(true); ouvre=0;
+  STORY.w=720; STORY.h=1280; storyCv(STORY.w,STORY.h); storyTaille(STORY.w,STORY.h);
+  /* Le cadrage d'arrivée est celui qu'on connaît — mais calculé pour un
+     écran vertical, d'où la mise au format avant l'appel. Le départ est le
+     même point, vu de trois fois plus loin et d'un peu plus haut. */
+  focusTag(t,false);
+  STORY.vers={th:goal.th,ph:goal.ph,r:goal.r,tg:goal.tg.clone()};
+  /* Le large, mais pas trop : au-delà de six unités on voit le dessous de
+     l'île, qui n'a rien à faire dans une story. Un mouvement court et lent
+     vaut mieux qu'un grand vol qui montre les coulisses. */
+  STORY.de={th:goal.th-.40,ph:Math.min(goal.ph+.09,1.74),r:Math.min(goal.r*1.85,6.4)};
+  STORY.bouts=[]; STORY.mime=storyMime(); STORY.rec=null;
+  if(STORY.mime){
+    try{
+      var flux=STORY.cv.captureStream(30);
+      STORY.rec=new MediaRecorder(flux,{mimeType:STORY.mime,videoBitsPerSecond:3500000});
+      STORY.rec.ondataavailable=function(e){ if(e.data&&e.data.size) STORY.bouts.push(e.data); };
+      STORY.rec.onstop=function(){
+        var ext=/mp4/.test(STORY.mime)?"mp4":"webm";
+        storyMonter(new Blob(STORY.bouts,{type:STORY.mime.split(";")[0]}),ext);
+      };
+      STORY.rec.start();
+    }catch(e){ STORY.rec=null; }
+  }
+  STORY.phase="film"; STORY.t0=performance.now(); STORY.on=true;
+  return true;
+}
+/* La trajectoire. Un seul mouvement : on vient de loin, on se pose, et l'on
+   continue d'avancer imperceptiblement — c'est ce dernier rien qui fait
+   qu'une image est vivante et non figée. Le léger balancement latéral
+   s'annule aux deux bouts, pour n'emporter ni le départ ni l'arrivée. */
+function storyPose(u){
+  var D=STORY.de, A=STORY.vers;
+  var x=clamp((u-.13)/.47,0,1), e=x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  var f=clamp((u-.60)/.40,0,1);
+  var th=D.th+(A.th-D.th)*e+Math.sin(u*3.1416)*.10+f*.07;
+  var ph=D.ph+(A.ph-D.ph)*e-f*.02;
+  var r=D.r+(A.r-D.r)*e-f*.22;
+  goal.th=cam.th=th; goal.ph=cam.ph=ph; goal.r=cam.r=r;
+  goal.tg.copy(A.tg); cam.tg.copy(A.tg);
+  /* Un cadre vertical n'est pas un écran : le sujet n'y va pas au milieu,
+     sinon il tombe dans le texte qui monte du bas. On vise donc un peu plus
+     bas que le mot, ce qui le fait remonter aux deux cinquièmes de la
+     hauteur — et laisse le tiers inférieur au nom, au logo et à l'adresse. */
+  /* Le décalage se mesure sur la distance d'arrivée, et non sur celle où
+     l'on se trouve : calculé sur la distance du large, il viserait vingt
+     mètres sous l'arbre, et la première image du film montrerait le
+     dessous de l'île. */
+  var dy=Math.tan(camera.fov*Math.PI/360)*A.r*.23;
+  goal.tg.y-=dy; cam.tg.y-=dy;
+  if(!STORY.or&&u>=.58){ STORY.or=true; etincelles(STORY.tag); }
+}
+/* Ce qu'on écrit par-dessus l'image. Tout est mesuré depuis le bas sûr :
+   Instagram pose son interface sur les deux cent cinquante derniers pixels
+   d'une story de 1920 — rien d'important n'a le droit d'y descendre. */
+function storyDecor(g,W,H,u){
+  var k=H/1280, HV='"Helvetica Neue",Helvetica,Arial,sans-serif', cjk=lang==="zh";
+  var sb=H-180*k, i;
+  /* Le bandeau est là dès la première image : c'est elle que les réseaux
+     prennent pour vignette, et une vignette sans marque ne sert à rien. */
+  var aBande=1, aTitre=clamp(.25+u*6,0,1);
+  var aMot=clamp((u-.60)/.12,0,1), aUrl=clamp((u-.76)/.12,0,1);
+  /* Un voile crème monte du bas : il porte le bandeau, et il tient le texte
+     lisible quelle que soit la branche qui passe derrière. */
+  var gr=g.createLinearGradient(0,H*.56,0,H);
+  gr.addColorStop(0,"rgba(239,235,226,0)"); gr.addColorStop(.45,"rgba(239,235,226,.42)");
+  gr.addColorStop(1,"rgba(239,235,226,.93)");
+  g.save(); g.globalAlpha=Math.max(aBande,aMot)*.98; g.fillStyle=gr; g.fillRect(0,H*.56,W,H*.44); g.restore();
+  var gh=g.createLinearGradient(0,0,0,H*.22);
+  gh.addColorStop(0,"rgba(239,235,226,.55)"); gh.addColorStop(1,"rgba(239,235,226,0)");
+  g.save(); g.globalAlpha=aTitre; g.fillStyle=gh; g.fillRect(0,0,W,H*.22); g.restore();
+  g.textAlign="center"; g.textBaseline="alphabetic";
+  /* Le titre, tout en haut, sous la zone que l'interface d'Instagram
+     recouvre. */
+  g.save(); g.globalAlpha=aTitre; g.fillStyle="rgba(33,33,33,.92)";
+  g.shadowColor="rgba(239,235,226,.9)"; g.shadowBlur=Math.round(14*k);
+  g.font=(cjk?"":"500 ")+Math.round(22*k)+"px "+(cjk?ZH_FONT:HV);
+  try{ g.letterSpacing=Math.round(5*k)+"px"; }catch(e){}
+  g.fillText(cjk?T("storyTop"):T("storyTop").toUpperCase(),W/2,195*k);
+  try{ g.letterSpacing="0px"; }catch(e){}
+  g.restore();
+  /* Le vœu, écrit en toutes lettres : sur l'étiquette il se lit de près,
+     dans un fil qui défile il faut qu'il se lise d'un coup d'œil. */
+  var w=STORY.tag&&STORY.tag.w, txt=w?wishText(w):"";
+  if(txt&&aMot>0){
+    g.save(); g.globalAlpha=aMot; g.fillStyle="#212121";
+    var mcjk=isCJK(txt);
+    g.font=mcjk?Math.round(38*k)+"px "+ZH_FONT:'500 '+Math.round(42*k)+'px "Caveat",'+HV;
+    /* Deux lignes au plus : le mot est déjà sur l'étiquette, celui-ci n'est
+       là que pour se lire d'un coup d'œil dans un fil qui défile. */
+    var lignes=wrapText(g,txt,W-180*k).slice(0,2), bas=sb-(w.n?278:252)*k;
+    var y=bas-(lignes.length-1)*Math.round((mcjk?48:46)*k);
+    for(i=0;i<lignes.length;i++){ g.fillText(lignes[i],W/2,y); y+=Math.round((mcjk?48:46)*k); }
+    if(w.n){ g.fillStyle="#565a41"; g.font="500 "+Math.round(15*k)+"px "+HV;
+      try{ g.letterSpacing=Math.round(3*k)+"px"; }catch(e){}
+      g.fillText("— "+w.n,W/2,sb-234*k); try{ g.letterSpacing="0px"; }catch(e){} }
+    g.restore();
+  }
+  /* Le bandeau : le logo, la signature, l'adresse. Il paraît tôt, pour
+     qu'une image arrêtée n'importe quand porte déjà la marque. */
+  g.save(); g.globalAlpha=aBande;
+  if(logoImg.complete&&logoImg.naturalWidth){
+    var lh=Math.round(96*k), lw=lh*logoImg.naturalWidth/logoImg.naturalHeight;
+    g.drawImage(logoImg,(W-lw)/2,sb-196*k,lw,lh);
+  }
+  g.fillStyle="rgba(33,33,33,.8)"; g.font=(cjk?"":"500 ")+Math.round(16*k)+"px "+(cjk?ZH_FONT:HV);
+  try{ g.letterSpacing=Math.round(3.5*k)+"px"; }catch(e){}
+  g.fillText(cjk?T("storyBas"):T("storyBas").toUpperCase(),W/2,sb-62*k);
+  try{ g.letterSpacing="0px"; }catch(e){}
+  g.restore();
+  g.save(); g.globalAlpha=aUrl; g.fillStyle="#b95f2c"; g.font="500 "+Math.round(21*k)+"px "+HV;
+  g.fillText(CARD_URL_TEXT,W/2,sb-20*k); g.restore();
+}
+function storyDessiner(u){
+  var g=STORY.g, W=STORY.w, H=STORY.h;
+  g.drawImage(renderer.domElement,0,0,W,H);
+  storyDecor(g,W,H,u); STORY.vues++;
+}
+/* Le film est fini : on rend la scène à l'écran, et l'on fabrique le
+   fichier. Sans encodeur, c'est une image fixe — plus grande, puisqu'elle
+   ne coûte qu'une seule vue. */
+function storyFinir(){
+  STORY.on=false; STORY.phase="";
+  renderer.setPixelRatio(PR); resize();
+  var a=STORY.avant;
+  if(a){ cam.th=a.th; cam.ph=a.ph; cam.r=a.r; cam.tg.copy(a.tg);
+    goal.th=a.gth; goal.ph=a.gph; goal.r=a.gr; goal.tg.copy(a.gtg);
+    vise=a.vise; focused=a.focused; }
+  idle=0; barreVoeu();
+}
+function storyMonter(blob,ext){
+  storyFinir();
+  if(!blob||!blob.size){ $("sNote").textContent=T("storyRate"); $("sActions").classList.add("on");
+    $("sShare").style.display="none"; return; }
+  var type=blob.type||(ext==="mp4"?"video/mp4":"image/jpeg");
+  try{ STORY.fichier=new File([blob],"voeu-yunma."+ext,{type:type}); }
+  catch(e){ STORY.fichier=blob; STORY.fichier.name="voeu-yunma."+ext; }
+  var u=URL.createObjectURL(blob);
+
+  if(ext==="jpg"){ $("sImg").src=u; $("sImg").classList.add("on"); }
+  else { var v=$("sVid");
+    /* La vignette du lecteur, c'est la dernière image du film et non la
+       première : on veut voir le mot, pas le plan large dont il part. */
+    try{ v.poster=STORY.cv.toDataURL("image/jpeg",.8); }catch(e){}
+    v.src=u; v.classList.add("on"); try{ v.play(); }catch(e){} }
+  $("sNote").textContent=T("storyPret");
+  var peut=false;
+  try{ peut=!!(navigator.canShare&&navigator.canShare({files:[STORY.fichier]})); }catch(e){}
+  $("sShare").style.display=""; $("sShare").textContent=T(peut?"storyPartager":"storyGarder");
+  $("sShare").setAttribute("data-mode",peut?"partager":"garder");
+  $("sActions").classList.add("on");
+}
+function storyFermer(){
+  if(STORY.on){ if(STORY.rec&&STORY.rec.state==="recording"){ try{ STORY.rec.stop(); }catch(e){} } storyFinir(); }
+  var v=$("sVid"); try{ v.pause(); }catch(e){}
+  $("story").classList.remove("open"); $("bottom").classList.remove("down");
+  if(v.src) URL.revokeObjectURL(v.src);
+  if($("sImg").src) URL.revokeObjectURL($("sImg").src);
+  v.removeAttribute("src"); $("sImg").removeAttribute("src"); STORY.fichier=null;
+}
+$("byStory").onclick=function(){ if(!storyLancer(shareWish)) toast(T("storyRate")); };
+$("sClose").onclick=storyFermer;
+/* Le geste du visiteur, enfin : c'est lui qui ouvre la feuille de partage.
+   Là où elle n'existe pas, on enregistre le fichier et l'on dit quoi en
+   faire — personne ne devine qu'il faut aller le rechercher dans ses
+   images. */
+$("sShare").onclick=function(){
+  var f=STORY.fichier; if(!f) return;
+  if($("sShare").getAttribute("data-mode")==="partager"){
+    try{ navigator.share({files:[f],text:T("storyBas")+" · "+CARD_URL_TEXT}).catch(function(){}); }catch(e){}
+  } else {
+    toast(telecharger(f,f.name)?T("saved"):T("cardFail"));
+    $("sNote").textContent=T("storyAide");
+  }
+};
+
 /* ---- loop ---- */
 var last=performance.now(), frames=0, slow=0, tuned=false, tmp=new THREE.Vector3();
 var reduce=false; try{ reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
@@ -2903,12 +3142,17 @@ function frame(now){
      vœu » dès son arrivée écrit donc son mot pendant que la caméra s'en va,
      et la fiche qui vient couronner son geste lui est refermée au nez par une
      veilleuse. Ce n'est pas quelqu'un qui s'est absenté : on repousse. */
-  if(ouvre&&t-ouvre>7){ if(sheetOpen||cardWish||nP){ ouvre=t; } else { ouvre=0; cineStart(); } }
+  if(ouvre&&t-ouvre>7){ if(sheetOpen||cardWish||nP||STORY.on){ ouvre=t; } else { ouvre=0; cineStart(); } }
   /* Et si plus rien ne bouge, la visite revient d'elle-même : c'est une
      veilleuse, pas un film qu'on lance. Dix secondes d'immobilité, rien
      d'ouvert par-dessus, et aucun doigt sur l'écran. */
-  if(!CINE.on&&entered&&!reduce&&idle>10&&!sheetOpen&&!cardWish&&nP===0) cineStart();
+  if(!CINE.on&&entered&&!reduce&&idle>10&&!sheetOpen&&!cardWish&&!STORY.on&&nP===0) cineStart();
   idle+=dt; if(!reduce&&idle>3.5&&!focused&&!sheetOpen&&nP===0&&!CINE.on) goal.th+=dt*.045;
+  /* Le tournage écrit la trajectoire lui-même, et sur la montre : un film
+     dure sept secondes pour celui qui le regarde, quelle que soit la
+     vitesse de la machine. */
+  if(STORY.on) STORY.u=STORY.phase==="film"?Math.min(1,(now-STORY.t0)/1000/STORY.duree):1;
+  if(STORY.on&&(STORY.phase==="film"||STORY.phase==="photo")) storyPose(STORY.u);
   var k=1-Math.exp(-dt*(focused?2.6:3.4));
   cam.th+=(goal.th-cam.th)*k; cam.ph+=(goal.ph-cam.ph)*k; cam.r+=(goal.r-cam.r)*k; cam.tg.lerp(goal.tg,k);
   var vth=cam.th, vph=clamp(cam.ph,.3,1.86), sp=Math.sin(vph);
@@ -2923,7 +3167,7 @@ function frame(now){
   /* L'île monte et descend ; un vœu qu'on regarde de près monterait et
      descendrait avec elle, d'un sixième de l'écran. La visée suit donc le
      flottement, et le mot ne bouge plus. */
-  if(vise&&focused){ var tnv=Math.tan(camera.fov*Math.PI/360);
+  if(vise&&focused&&!STORY.on){ var tnv=Math.tan(camera.fov*Math.PI/360);
     /* Le vœu reçu est vu de si près que sa signature venait buter sur la
        ligne qui l'annonce : on le remonte d'un dixième d'écran. */
     var dec=cardWish?tnv*goal.r*Math.min(ficheH/window.innerHeight,.45)
@@ -2963,6 +3207,21 @@ function frame(now){
     u2.uFocus.value=Math.max(cam.r,1); u2.uAperture.value=5.5+close*9+(CINE.on?4:0); u2.uTime.value=t%10;
     renderer.setRenderTarget(rt); renderer.render(scene,camera); renderer.setRenderTarget(null); renderer.render(postScene,postCam);
   } else renderer.render(scene,camera);
+  /* La story se compose ici, sur l'image qui vient d'être rendue : on la
+     recopie dans sa toile, on écrit par-dessus, et c'est cette toile-là que
+     l'enregistreur filme. Puis on passe à la suite — l'image fixe quand il
+     n'y a pas d'encodeur, l'attente du fichier quand il y en a un. */
+  if(STORY.on){
+    storyDessiner(STORY.phase==="photo"?1:STORY.u);
+    if(STORY.phase==="film"&&STORY.u>=1){
+      if(STORY.rec){ STORY.phase="attente"; try{ STORY.rec.stop(); }catch(e){ storyMonter(null,"mp4"); } }
+      else { STORY.phase="photo"; STORY.w=1080; STORY.h=1920; storyCv(1080,1920); storyTaille(1080,1920); }
+    } else if(STORY.phase==="photo"){
+      STORY.phase="attente";
+      try{ STORY.cv.toBlob(function(b){ storyMonter(b,"jpg"); },"image/jpeg",.92); }
+      catch(e){ storyMonter(null,"jpg"); }
+    }
+  }
   /* Après le rendu, et pas avant : c'est l'image finale qu'on mesure. */
   logoFond(dt);
 }

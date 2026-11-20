@@ -10,8 +10,7 @@
  *   public/wishes/
  *     index.html          toute l'expérience : styles, données, scène et son
  *     three-r128.min.js   la bibliothèque 3D, servie par le site
- *     abonner.php         le relais du journal de la récolte
- *     .htaccess           cache court sur la page, et le journal tenu secret
+ *     .htaccess           cache court sur la page, long sur la bibliothèque
  *
  * Il n'y a rien à compiler : cette construction recopie, et vérifie. Ce
  * qu'elle vérifie est ce qui se défait tout seul avec le temps — la charte,
@@ -100,8 +99,7 @@ function verifierContenu(page) {
     ['emissiveMap:t', 'les étiquettes qui s’allument la nuit'],
     ['three-r128.min.js', 'la bibliothèque 3D, servie par le site'],
     ['assets/logo-yunma-transparent.png', 'le logo, sorti du base64'],
-    ['id="reco"', 'le journal de la récolte'],
-    ['function recoEnvoyer()', 'l’envoi de l’adresse'],
+    ['id="reco"', 'la ligne « suivre Yunma »'],
     ['instagram.com/yunma.coffee', 'le compte Instagram'],
     ['?v="+encoderVoeu', 'le vœu dans la question du lien'],
   ];
@@ -126,11 +124,6 @@ verifierContenu(page);
 await writeFile(path.join(CIBLE, 'index.html'), page);
 await copyFile(path.join(SOURCE, 'three.min.js'), path.join(CIBLE, 'three-r128.min.js'));
 await copyFile(path.join(SOURCE, '.htaccess'), path.join(CIBLE, '.htaccess'));
-/* Le relais : il garde du côté du serveur ce qui ne peut pas vivre dans une
-   page publique. Le dossier cesse d'être tout à fait statique — il demande
-   PHP, que l'hébergement d'Infomaniak exécute —, et la page continue de
-   s'ouvrir sans lui : elle le dit, simplement, si l'inscription échoue. */
-await copyFile(path.join(SOURCE, 'abonner.php'), path.join(CIBLE, 'abonner.php'));
 await mkdir(path.join(CIBLE, 'assets'), { recursive: true });
 for (const f of ['logo-yunma-transparent.png', 'carte-photo-1050x1480.jpg']) {
   await copyFile(path.join(SOURCE, 'assets', f), path.join(CIBLE, 'assets', f));

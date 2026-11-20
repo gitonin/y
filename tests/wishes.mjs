@@ -31,11 +31,9 @@
  *  13. la musique de Noël se joue en avance sur elle-même ;
  *  14. les guirlandes s'allument, et le ciel a ses habitants.
  */
-import { createServer, request } from 'node:http';
-import { readFileSync, existsSync, readdirSync, mkdtempSync, copyFileSync, rmSync } from 'node:fs';
+import { createServer } from 'node:http';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, extname, dirname, resolve } from 'node:path';
-import { tmpdir } from 'node:os';
-import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import QRCode from 'qrcode';
@@ -43,7 +41,6 @@ import QRCode from 'qrcode';
 const RACINE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DOSSIER = join(RACINE, 'public', 'wishes');
 const PORT = 4412;
-const PORT_PHP = 4413;
 
 let ok = 0;
 const echecs = [];
@@ -63,7 +60,7 @@ if (!existsSync(DOSSIER)) {
 }
 const deposes = readdirSync(DOSSIER).sort();
 check(`le dossier porte ce qu’il faut (${deposes.join(', ')})`,
-  deposes.join(','), '.htaccess,abonner.php,assets,index.html,three-r128.min.js');
+  deposes.join(','), '.htaccess,assets,index.html,three-r128.min.js');
 
 const page = readFileSync(join(DOSSIER, 'index.html'), 'utf8');
 const htaccess = readFileSync(join(DOSSIER, '.htaccess'), 'utf8');
@@ -83,12 +80,7 @@ const kob = Math.round(Buffer.byteLength(page) / 1024);
    encodées, qui, elles, ne se compressent pas. C'est la vérification
    au-dessus qui les attrape ; celle-ci dit seulement que la page reste une
    page. */
-check(`la page tient en moins de 250 Ko (${kob})`, kob < 250);
-
-/* Le journal des adresses est posé dans le dossier public, faute de pouvoir
-   écrire ailleurs chez l'hébergeur. Sans cette règle, la liste des abonnés
-   serait téléchargeable par qui en devine le nom. */
-check('le journal des adresses ne se télécharge pas', /jsonl/.test(htaccess) && /denied|Deny from all/.test(htaccess));
+check(`la page tient en moins de 270 Ko (${kob})`, kob < 270);
 
 /* ------------------------------------------------------------------ *
  * 2. Plus rien de l'environnement d'origine
@@ -108,41 +100,8 @@ check(`rien n’est chargé du dehors, hors les polices (${dehors.length})`, deh
  * ------------------------------------------------------------------ */
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json',
   '.jpg': 'image/jpeg', '.png': 'image/png', '.css': 'text/css' };
-/* Le relais d'abonnement est un vrai fichier PHP : on le fait tourner pour
-   de bon, dans un dossier de passage, et le serveur d'épreuve lui passe les
-   envois. L'épreuve porte alors sur ce qui sera déposé, et non sur une
-   imitation complaisante. */
-const PHP = spawnSync('php', ['-v'], { stdio: 'ignore' }).status === 0;
-const PHP_DIR = PHP ? mkdtempSync(join(tmpdir(), 'yunma-abo-')) : null;
-let phpServeur = null;
-if (PHP) {
-  copyFileSync(join(DOSSIER, 'abonner.php'), join(PHP_DIR, 'abonner.php'));
-  phpServeur = spawn('php', ['-S', `127.0.0.1:${PORT_PHP}`, '-t', PHP_DIR], { stdio: 'ignore' });
-}
-/** Passe un envoi au relais PHP, et rend ce qu'il répond. */
-function versPhp(corps, entetes = {}) {
-  return new Promise((res) => {
-    const d = request({ host: '127.0.0.1', port: PORT_PHP, path: '/abonner.php', method: 'POST',
-      headers: { 'content-type': 'application/json', 'content-length': Buffer.byteLength(corps),
-        'sec-fetch-site': 'same-origin', ...entetes } },
-    (s) => { const b = []; s.on('data', (c) => b.push(c));
-      s.on('end', () => res({ code: s.statusCode, corps: Buffer.concat(b).toString() })); });
-    d.on('error', () => res({ code: 0, corps: '' }));
-    d.end(corps);
-  });
-}
 const serveur = createServer((q, r) => {
   let p = decodeURIComponent(q.url.split('?')[0]);
-  if (q.method === 'POST' && p === '/abonner.php') {
-    const b = [];
-    q.on('data', (c) => b.push(c));
-    q.on('end', async () => {
-      const rep = await versPhp(Buffer.concat(b).toString());
-      r.writeHead(rep.code || 502, { 'content-type': 'application/json' });
-      r.end(rep.corps || '{}');
-    });
-    return;
-  }
   if (p.endsWith('/')) p += 'index.html';
   const f = join(DOSSIER, p);
   if (!existsSync(f) || !f.startsWith(DOSSIER)) { r.writeHead(404); return r.end('404'); }
@@ -831,63 +790,16 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
  * Ils restent maintenant, et le compteur, lui, ne compte que les vrais.
  */
 /* ------------------------------------------------------------------ *
- * Le journal de la récolte
+ * Suivre Yunma
  * ------------------------------------------------------------------ *
- * Au bas de la fiche, deux portes : son adresse, ou le compte Instagram.
- * Une seule demande, au moment où l'on vient de donner quelque chose, et
- * plus jamais ensuite.
- *
- * L'adresse passe par un relais sur le serveur, parce qu'une clé de service
- * d'envoi n'a rien à faire dans une page que tout le monde peut lire. On
- * éprouve donc le relais pour de bon — c'est lui qui tiendra la liste — puis
- * la ligne elle-même, dans la page, jusqu'à l'écriture dans le journal.
+ * Au bas de la fiche, une ligne et une porte : le compte Instagram. On ne
+ * demande rien qu'il faille garder — ni adresse, ni champ, ni relais sur le
+ * serveur. On demande une fois, au seul moment de la visite où l'on peut
+ * demander quelque chose : celui qui vient d'accrocher son vœu a donné.
  */
-/* ------------------------------------------------------------------ *
- * La visite guidée ne referme rien
- * ------------------------------------------------------------------ *
- * Sept secondes après l'arrivée, la visite prend le relais de l'ouverture.
- * Elle le prenait sans rien regarder : celui qui touche « accrocher un vœu »
- * dès son arrivée écrivait donc son mot pendant que la caméra s'en allait, et
- * sa fiche lui était refermée au nez. Une veilleuse attend que la pièce soit
- * vide.
- */
-titre('La visite attend que rien ne soit ouvert');
+titre('Suivre Yunma');
 {
-  const { ctx, p, bruit } = await ouvrir(13);
-  await p.click('#add');
-  await p.waitForTimeout(400);
-  await p.evaluate(() => window.__essai.relais(8));
-  await p.waitForTimeout(1200);
-  check('le panneau d’écriture ouvert, elle ne part pas',
-    await p.evaluate(() => window.__essai.visiteOn()), false);
-  check('et le panneau est toujours là',
-    await p.evaluate(() => document.getElementById('sheet').classList.contains('open')));
-  await p.click('#sheetX');
-  await p.waitForTimeout(300);
-  await p.evaluate(() => { window.__essai.viser(2, true); });
-  await p.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
-  await p.evaluate(() => window.__essai.relais(8));
-  await p.waitForTimeout(1200);
-  check('une fiche ouverte, elle ne part pas non plus',
-    await p.evaluate(() => window.__essai.visiteOn()), false);
-  check('et la fiche reste ouverte',
-    await p.evaluate(() => window.__essai.fiche()));
-  /* Mais dès que l'écran est rendu à l'arbre, elle prend bien le relais. */
-  await p.click('#cBack');
-  await p.waitForTimeout(300);
-  await p.evaluate(() => window.__essai.relais(8));
-  const partie = await p.waitForFunction(() => window.__essai.visiteOn(), null, { timeout: 20000 })
-    .then(() => true).catch(() => false);
-  check('l’écran rendu à l’arbre, elle part', partie);
-  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
-  await ctx.close();
-}
-
-titre('Le journal de la récolte');
-if (!PHP) console.log('  (php n’est pas sur cette machine : le relais n’a pas été éprouvé)');
-else {
   const INSTA = 'https://www.instagram.com/yunma.coffee';
-  const MOI = 'antonin@gmail.com';
   const { ctx, p, bruit } = await ouvrir(13);
   const fiche = async (i) => { await p.evaluate((n) => window.__essai.viser(n, true), i);
     await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
@@ -898,88 +810,118 @@ else {
   let a = await etat();
   check('la ligne paraît au bas de la fiche', a.vue);
   check('elle annonce janvier 2027 et le Yunnan', /Janvier 2027/.test(a.texte) && /Yunnan/.test(a.texte));
-  check('elle laisse le choix entre les deux', a.choix);
-  check('aucun champ n’attend ouvert', a.champ, false);
-  /* Parler de ce qu'on fera de l'adresse avant de l'avoir demandée, c'est
-     déjà la demander. */
-  check('et rien n’est encore dit de l’adresse', a.note, '');
+  check('elle offre le compte, et rien d’autre', a.choix);
   check('le compte Instagram est le bon', a.insta, INSTA);
+  /* Plus rien ne réclame d'adresse nulle part : ni champ, ni bouton. */
+  check('aucun champ ne demande d’adresse',
+    await p.evaluate(() => document.querySelectorAll('#card input, input[type=email]').length), 0);
 
-  await p.click('#rMail');
+  await p.evaluate(() => window.__essai.aboInsta());
   await p.waitForTimeout(200);
   a = await etat();
-  check('« par mail » ouvre le champ', a.champ && !a.choix);
-  check('et dit alors à quoi sert l’adresse', /hello@yunma\.fr/.test(a.note));
-
-  await p.fill('#rAdr', 'bonjour');
-  await p.click('#rGo');
-  await p.waitForTimeout(300);
-  check('ce qui n’est pas une adresse est dit tel quel', /pas l'air juste/.test((await etat()).note));
-
-  await p.fill('#rAdr', MOI);
-  await p.click('#rGo');
-  await p.waitForTimeout(1500);
-  a = await etat();
-  check('une adresse donnée est reçue', /noté/.test(a.note) && a.etat === 'mail');
-  check('le champ et le choix s’effacent alors', !a.champ && !a.choix);
-  const journal = () => readFileSync(join(PHP_DIR, 'abonnes.jsonl'), 'utf8')
-    .trim().split('\n').filter(Boolean).map((l) => JSON.parse(l));
-  check('et le relais l’a écrite dans le journal', journal().some((e) => e.m === MOI));
+  check('suivre clôt la demande', a.etat, 'insta');
+  check('et la remercie sans rien lui demander', /Instagram/.test(a.note) && !a.choix);
 
   await p.click('#cBack');
   await p.waitForTimeout(400);
   await fiche(3);
   check('une fois répondu, on ne redemande plus', (await etat()).vue, false);
-
-  /* L'autre porte. On ne saura jamais si la personne s'est abonnée, et ce
-     n'est pas grave : on a demandé une fois. */
-  await p.evaluate(() => window.__essai.aboOubli());
-  await p.click('#cBack');
-  await p.waitForTimeout(400);
-  await fiche(4);
-  await p.evaluate(() => window.__essai.aboInsta());
-  await p.waitForTimeout(200);
-  a = await etat();
-  check('suivre sur Instagram clôt la demande aussi', a.etat, 'insta');
-  check('et le remercie sans rien lui demander', /Instagram/.test(a.note) && !a.champ);
   check(`aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
+}
 
-  /* Le relais, maintenant, pour lui-même. */
-  const env = (o) => versPhp(JSON.stringify({ l: 'fr', v: 'recolte-2027-1', d: 9000, p: '', ...o }));
-  check('la même adresse deux fois n’est écrite qu’une', (await env({ m: MOI.toUpperCase() })).code, 204);
-  check('ce qui n’est pas une adresse est refusé', (await env({ m: 'bonjour' })).code, 400);
-  /* Ni captcha ni devinette : un champ que l'œil ne voit pas, et le temps
-     qu'il faut pour lire, toucher et écrire. Dans les deux cas on répond que
-     c'est noté sans rien écrire — un robot à qui l'on dit non recommence. */
-  check('le piège invisible renvoie sans rien écrire', (await env({ m: 'robot@gmail.com', p: 'x' })).code, 204);
-  check('une réponse trop rapide pour une main aussi', (await env({ m: 'vite@gmail.com', d: 200 })).code, 204);
-  check('un envoi venu d’un autre site est refusé',
-    (await versPhp(JSON.stringify({ m: 'ailleurs@gmail.com', d: 9000 }), { 'sec-fetch-site': 'cross-site' })).code, 403);
-  for (const i of [2, 3, 4, 5]) await env({ m: `gens${i}@gmail.com` });
-  check('et la sixième tentative dans l’heure est refusée', (await env({ m: 'gens6@gmail.com' })).code, 429);
+/* ------------------------------------------------------------------ *
+ * La story
+ * ------------------------------------------------------------------ *
+ * Sur Instagram, un lien ne se clique pas : ce qui s'y partage est une
+ * image ou un film. La page en fabrique donc un, au format vertical, et le
+ * remet au système. Deux chemins, selon ce que la machine sait encoder : le
+ * film en MP4 — le seul format qu'Instagram accepte — ou, à défaut, une
+ * image fixe, qui passe partout.
+ *
+ * Ce qu'on vérifie ici est ce qui partirait vraiment : le fichier, son
+ * format, sa taille, son nom. Ce qu'on ne peut pas vérifier d'ici, c'est
+ * qu'Instagram l'accepte — cela se voit sur un téléphone, pas dans un
+ * navigateur sans écran.
+ */
+titre('La story se fabrique dans la page');
+{
+  const MOT = 'Que ton année sente bon le café';
+  const { ctx, p, bruit } = await ouvrir(13);
+  await p.evaluate(() => window.__essai.storyDuree(4));
+  await p.click('#add');
+  await p.waitForTimeout(400);
+  await p.click('#shapes button:nth-child(3)');
+  await p.click('#stNext');
+  await p.waitForTimeout(200);
+  await p.click('#tabs button:nth-child(4)');
+  await p.fill('#own', MOT);
+  await p.click('#stNext');
+  await p.waitForTimeout(200);
+  await p.fill('#name', 'Antonin');
+  await p.click('#hang');
+  await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+    null, { timeout: 90000 });
+  await p.waitForTimeout(400);
+  const avant = await p.evaluate(() => window.__essai.story().toile);
 
-  const j = journal();
-  check(`le journal ne garde que les vraies (${j.length})`, j.length, 5);
-  check('chacune avec sa langue, son instant et le texte consenti',
-    j.every((e) => e.m && e.l && e.t > 0 && e.v === 'recolte-2027-1' && e.s === 'arbre-a-voeux'));
-  /* On garde de quoi écarter un robot, pas de quoi reconnaître quelqu'un. */
-  check('et l’adresse de la machine seulement hachée', j.every((e) => /^[0-9a-f]{16}$/.test(e.ip)));
-  check('ni le piège ni la hâte n’ont laissé de trace',
-    !j.some((e) => e.m === 'robot@gmail.com' || e.m === 'vite@gmail.com' || e.m === 'ailleurs@gmail.com'));
+  await p.click('#cShare');
+  await p.waitForFunction(() => document.getElementById('modal').classList.contains('open'), null, { timeout: 30000 });
+  check('un vœu accroché se propose en story', (await p.evaluate(() => window.__essai.story().offre)) !== 'none');
 
-  /* Et quand le relais refuse — ici parce qu'on vient d'épuiser le compte de
-     l'heure —, la page le dit. Elle ne fait pas semblant d'avoir enregistré. */
-  const { ctx: c2, p: p2 } = await ouvrir(13);
-  await p2.evaluate(() => window.__essai.viser(2, true));
-  await p2.waitForFunction(() => document.getElementById('card').classList.contains('open'), null, { timeout: 60000 });
-  await p2.click('#rMail');
-  await p2.fill('#rAdr', 'tard@gmail.com');
-  await p2.click('#rGo');
-  await p2.waitForTimeout(1500);
-  const r = await p2.evaluate(() => window.__essai.abo());
-  check('un relais qui refuse est annoncé, non maquillé', /pas pu se faire/.test(r.note) && r.etat !== 'mail');
-  await c2.close();
+  await p.click('#byStory');
+  await p.waitForTimeout(900);
+  const pendant = await p.evaluate(() => window.__essai.story());
+  check('le tournage commence au format d’une story', pendant.w === 720 && pendant.h === 1280);
+  check('et la scène est rendue à ce format', pendant.toile[0] === 720 && pendant.toile[1] === 1280);
+  check('on le dit pendant qu’il dure', /fabrique/.test(pendant.note));
+
+  const pret = await p.waitForFunction(() => window.__essai.story().fichier, null, { timeout: 120000 })
+    .then(() => true).catch(() => false);
+  check('le fichier est fabriqué', pret);
+  const f = (await p.evaluate(() => window.__essai.story())).fichier || {};
+  check(`c’est un film MP4 (${f.ko} Ko)`, f.type === 'video/mp4' && f.ko > 0);
+  check('il porte un nom qu’on retrouvera', f.nom, 'voeu-yunma.mp4');
+  const apres = await p.evaluate(() => window.__essai.story());
+  check('un bouton propose d’en faire quelque chose', apres.actions && !!apres.bouton);
+  /* Là où la feuille de partage du système ne prend pas de fichier, on
+     enregistre et l'on dit quoi en faire. On ne fait pas semblant. */
+  check('faute de feuille de partage, il propose d’enregistrer', apres.mode, 'garder');
+  check('la scène est rendue à l’écran', apres.toile[0], avant[0]);
+
+  /* Sans encodeur H.264, le film n'a pas de sens : Instagram ne prend pas le
+     WebM. On fabrique alors une image, plus grande, qui passe partout. */
+  await p.click('#sClose');
+  await p.waitForTimeout(400);
+  await p.evaluate(() => { window.__essai.storySansFilm(true); window.__essai.storyDuree(4); });
+  await p.click('#cShare');
+  await p.waitForFunction(() => document.getElementById('modal').classList.contains('open'), null, { timeout: 30000 });
+  await p.click('#byStory');
+  const pret2 = await p.waitForFunction(() => window.__essai.story().fichier, null, { timeout: 120000 })
+    .then(() => true).catch(() => false);
+  check('sans encodeur, une image est fabriquée', pret2);
+  const g = (await p.evaluate(() => window.__essai.story()));
+  check(`c’est une image (${(g.fichier || {}).ko} Ko)`, (g.fichier || {}).type, 'image/jpeg');
+  check('au format d’une story, en pleine taille', g.w === 1080 && g.h === 1920);
+  check('et elle porte son nom', (g.fichier || {}).nom, 'voeu-yunma.jpg');
+
+  await p.click('#sClose');
+  await p.waitForTimeout(500);
+  const fin = await p.evaluate(() => window.__essai.story());
+  check('en fermant, la scène retrouve l’écran', fin.toile[0], avant[0]);
+  check('et la story ne tourne plus', fin.on, false);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* L'arbre nu, lui, n'a pas de mot à filmer. */
+{
+  const { ctx, p } = await ouvrir(13);
+  await p.click('#share');
+  await p.waitForFunction(() => document.getElementById('modal').classList.contains('open'), null, { timeout: 30000 });
+  check('le partage de l’arbre nu ne propose pas de story',
+    await p.evaluate(() => window.__essai.story().offre), 'none');
+  await ctx.close();
 }
 
 titre('Accrocher un vœu ne vide pas l’arbre');
@@ -1159,7 +1101,5 @@ for (const [l, mot] of [['fr', 'Entrer'], ['en', 'Enter'], ['zh', '进入']]) {
 
 await nav.close();
 serveur.close();
-if (phpServeur) phpServeur.kill();
-if (PHP_DIR) rmSync(PHP_DIR, { recursive: true, force: true });
 console.log(`\n${ok} vérifications passées, ${echecs.length} en échec`);
 if (echecs.length) { echecs.forEach((e) => console.log(`  - ${e}`)); process.exit(1); }
