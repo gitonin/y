@@ -301,6 +301,11 @@ for (const [heure, moment] of [[13, 'de jour'], [22, 'de nuit']]) {
     document.getElementById('cPy').textContent = 'wànshì rúyì';
     document.getElementById('cTr').textContent = 'Que tout aille bien';
     document.getElementById('rNote').textContent = 'Merci.';
+    /* Et les deux états choisis, qui portaient eux aussi un fond clair posé
+       en dur : la forme de l'étiquette, et le vœu tout fait. */
+    const f = document.querySelector('#shapes button'), v = document.querySelector('#presets button');
+    if (f) f.classList.add('on');
+    if (v) v.classList.add('on');
   });
   await p.focus('#own');
   await p.waitForTimeout(500);
@@ -331,18 +336,27 @@ for (const [heure, moment] of [[13, 'de jour'], [22, 'de nuit']]) {
       '#sShare', '#sClose', '#copy', '#mClose', '#cCard', '#cBack', '#cShare', '#add', '#byStory',
       '#byMail', '#rInsta', '#cJpg', '#cClose', '#leaveStay', '#leaveGo', '#stBack', '#stNext',
       '#hang', '#sheetX', '#ownNote', '#nameNote', '#presets .p', '#presets .t', '#tabs button'];
-    let pire = { nom: '', r: 99 };
+    /* Le seuil dépend de la taille, comme le dit la règle : un texte de
+       vingt-quatre pixels, ou de dix-neuf en gras, se lit à trois contre un
+       là où un texte courant en demande quatre et demi. Le grand vœu
+       chinois de la fiche fait trente-quatre pixels : lui appliquer le seuil
+       des petits textes reviendrait à repeindre la couleur de la marque
+       pour un défaut qui n'existe pas. */
+    const seuil = (st) => { const t = parseFloat(st.fontSize), g = parseInt(st.fontWeight, 10) || 400;
+      return (t >= 24 || (t >= 18.66 && g >= 700)) ? 3 : 4.5; };
+    let pire = { nom: '', r: 99, marge: 99 };
     for (const q of sel) { const el = document.querySelector(q); if (!el) continue;
-      const r = ratio(rgba(getComputedStyle(el).color), fond(el));
-      if (r < pire.r) pire = { nom: q, r }; }
+      const st = getComputedStyle(el), sq = seuil(st);
+      const r = ratio(rgba(st.color), fond(el)), marge = r - sq;
+      if (marge < pire.marge) pire = { nom: q, r, seuil: sq, marge: +marge.toFixed(2) }; }
     const champ = document.getElementById('own'), note = document.getElementById('sNote');
     return { pire,
       placeholder: ratio(rgba(getComputedStyle(champ, '::placeholder').color), fond(champ)),
       champ: ratio(rgba(getComputedStyle(champ).color), fond(champ)),
       note: ratio(rgba(getComputedStyle(note).color), fond(note)) };
   });
-  check(`${moment}, tous les textes tiennent 4,5 contre 1 (le plus faible : ${mesure.pire.nom} à ${mesure.pire.r})`,
-    mesure.pire.r >= 4.5);
+  check(`${moment}, tous les textes tiennent leur seuil (le plus juste : ${mesure.pire.nom} à ${mesure.pire.r} pour ${mesure.pire.seuil})`,
+    mesure.pire.marge >= 0);
   /* Les trois qui avaient lâché, nommément. */
   check(`${moment}, le vœu qu’on écrit se lit dans son champ (${mesure.champ})`, mesure.champ >= 4.5);
   check(`${moment}, et son texte de remplacement aussi (${mesure.placeholder})`, mesure.placeholder >= 4.5);
