@@ -277,11 +277,11 @@ titre('La nuit allume les vœux');
  * On mesure donc, pour de bon, le rapport de contraste de chaque texte sur
  * le fond qui est réellement derrière lui.
  */
-titre('Les textes tiennent la nuit');
-{
-  const { ctx, p, bruit } = await ouvrir(22);
-  check(`il fait bien nuit (${(await p.evaluate(() => window.__essai.ciel())).nuit})`,
-    (await p.evaluate(() => window.__essai.ciel())).nuit > 0.9);
+titre('Les textes tiennent, de jour comme de nuit');
+for (const [heure, moment] of [[13, 'de jour'], [22, 'de nuit']]) {
+  const { ctx, p, bruit } = await ouvrir(heure);
+  const nuit = (await p.evaluate(() => window.__essai.ciel())).nuit;
+  check(`${moment}, le ciel est bien celui-là (nuit ${nuit})`, heure === 13 ? nuit < 0.1 : nuit > 0.9);
   /* On ouvre tout ce qui peut s'ouvrir, d'un coup. */
   await p.evaluate(() => {
     document.getElementById('sheet').classList.add('open');
@@ -296,6 +296,11 @@ titre('Les textes tiennent la nuit');
     document.getElementById('recuDe').textContent = 'Léa vous envoie ce message';
     document.getElementById('toast').classList.add('on');
     document.getElementById('toast').textContent = 'Lien copié';
+    /* Les deux lignes de la fiche chinoise ne sont écrites que pour un vœu
+       tout fait : on les remplit, sinon elles ne se mesurent pas. */
+    document.getElementById('cPy').textContent = 'wànshì rúyì';
+    document.getElementById('cTr').textContent = 'Que tout aille bien';
+    document.getElementById('rNote').textContent = 'Merci.';
   });
   await p.focus('#own');
   await p.waitForTimeout(500);
@@ -322,9 +327,10 @@ titre('Les textes tiennent la nuit');
       const l1 = lum(f), l2 = lum(b);
       return +(((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05))).toFixed(2); };
     const sel = ['#own', '#name', '#link', '#hint', '#recuDe', '#voeuShareT', '#toast', '#stTitle',
-      '#stepN', '#cBy', '#cZh', '#cPy', '#cTr', '#rTxt', '#shareTtl', '#shareTxt', '#sNote', '#sShare',
-      '#sClose', '#copy', '#mClose', '#cCard', '#cBack', '#cShare', '#add', '#byStory', '#byMail',
-      '#rInsta', '#cJpg', '#cClose', '#leaveStay', '#leaveGo', '#stBack', '#stNext', '#hang', '#sheetX'];
+      '#stepN', '#cBy', '#cZh', '#cPy', '#cTr', '#rTxt', '#rNote', '#shareTtl', '#shareTxt', '#sNote',
+      '#sShare', '#sClose', '#copy', '#mClose', '#cCard', '#cBack', '#cShare', '#add', '#byStory',
+      '#byMail', '#rInsta', '#cJpg', '#cClose', '#leaveStay', '#leaveGo', '#stBack', '#stNext',
+      '#hang', '#sheetX', '#ownNote', '#nameNote'];
     let pire = { nom: '', r: 99 };
     for (const q of sel) { const el = document.querySelector(q); if (!el) continue;
       const r = ratio(rgba(getComputedStyle(el).color), fond(el));
@@ -335,13 +341,13 @@ titre('Les textes tiennent la nuit');
       champ: ratio(rgba(getComputedStyle(champ).color), fond(champ)),
       note: ratio(rgba(getComputedStyle(note).color), fond(note)) };
   });
-  check(`tous les textes tiennent 4,5 contre 1 (le plus faible : ${mesure.pire.nom} à ${mesure.pire.r})`,
+  check(`${moment}, tous les textes tiennent 4,5 contre 1 (le plus faible : ${mesure.pire.nom} à ${mesure.pire.r})`,
     mesure.pire.r >= 4.5);
-  /* Les deux qui avaient lâché, nommément. */
-  check(`le vœu qu’on écrit se lit dans son champ (${mesure.champ})`, mesure.champ >= 4.5);
-  check(`et son texte de remplacement aussi (${mesure.placeholder})`, mesure.placeholder >= 4.5);
-  check(`la fenêtre de la story garde ses textes clairs (${mesure.note})`, mesure.note >= 4.5);
-  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  /* Les trois qui avaient lâché, nommément. */
+  check(`${moment}, le vœu qu’on écrit se lit dans son champ (${mesure.champ})`, mesure.champ >= 4.5);
+  check(`${moment}, et son texte de remplacement aussi (${mesure.placeholder})`, mesure.placeholder >= 4.5);
+  check(`${moment}, la fenêtre de la story garde ses textes clairs (${mesure.note})`, mesure.note >= 4.5);
+  check(`${moment}, aucune erreur (${bruit.length})`, bruit.length, 0);
   await ctx.close();
 }
 
