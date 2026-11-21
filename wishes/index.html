@@ -1719,7 +1719,18 @@ function tubes(list){
   g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3)); g.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
   g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2)); g.setIndex(idx); return g;
 }
+/* On ramasse au passage, pendant que l'arbre se fabrique, de quoi savoir
+   plus tard ce qui se met devant un mot : chaque bout de branche, chaque
+   feuille, chaque cerise, réduit à une gélule — deux bouts et un rayon.
+   Les vrais maillages, eux, sont hors de prix à croiser : les six mille
+   feuilles sont une seule grappe d'instances, et three.js les essaie une
+   par une, triangle par triangle. */
+var GELS=[];
+function gel(ax,ay,az,bx,by,bz,r){ GELS.push(ax,ay,az,bx,by,bz,r); }
 var treeMesh=new THREE.Mesh(tubes(branches.concat(extras)),barkMat); treeMesh.name="branches"; treeMesh.castShadow=true; treeMesh.receiveShadow=true; world.add(treeMesh);
+(function(){ branches.concat(extras).forEach(function(b){ for(var j=0;j+1<b.pts.length;j++){
+  var u=b.pts[j], v=b.pts[j+1];
+  gel(u[0],u[1],u[2],v[0],v[1],v[2],Math.max(b.radii[j],b.radii[j+1])); } }); })();
 
 // floating island
 (function(){
@@ -1778,6 +1789,11 @@ var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0x
     var up=[(R()-.5)*.6,1,(R()-.5)*.6], n=vnorm(vsub(up,vscale(a,vdot(up,a)))), y=vscale(a,-1), x=vcross(y,n), sc=.78+R()*.55;
     vx.set(x[0],x[1],x[2]); vy.set(y[0],y[1],y[2]); vz.set(n[0],n[1],n[2]); m4.makeBasis(vx,vy,vz); m4.scale(vs.set(sc,sc,sc));
     m4.setPosition(nd.p[0]+a[0]*nd.r,nd.p[1]+a[1]*nd.r,nd.p[2]+a[2]*nd.r); im.setMatrixAt(k,m4);
+    /* La feuille pend le long de « a » sur quarante-quatre centièmes : sa
+       gélule va de son attache à sa pointe. Le rayon est un peu plus étroit
+       que le quadrilatère, qui est à moitié transparent. */
+    gel(nd.p[0]+a[0]*nd.r,nd.p[1]+a[1]*nd.r,nd.p[2]+a[2]*nd.r,
+        nd.p[0]+a[0]*(nd.r+.44*sc),nd.p[1]+a[1]*(nd.r+.44*sc),nd.p[2]+a[2]*(nd.r+.44*sc),.072*sc);
     var ci=R()<.9?Math.floor(R()*6):6+Math.floor(R()*3); col.set(LEAF_COLS[ci]).convertSRGBToLinear(); col.multiplyScalar(.85+R()*.35); im.setColorAt(k,col); k++; }); });
   im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true;
   im.castShadow=true; im.receiveShadow=true; im.frustumCulled=false;
@@ -1791,10 +1807,105 @@ var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0x
     for(var i=0;i<n;i++){ var th=R()*6.283, off=nd.r+.03, al=(R()-.5)*.11, cs=Math.cos(th)*off, sn=Math.sin(th)*off, pl=R()<.82?pal:[RED,MID,GRN][Math.floor(R()*3)];
       list.push([nd.p[0]+u[0]*cs+v[0]*sn+nd.d[0]*al, nd.p[1]+u[1]*cs+v[1]*sn+nd.d[1]*al, nd.p[2]+u[2]*cs+v[2]*sn+nd.d[2]*al, pl[Math.floor(R()*pl.length)]]); } });
   var im=new THREE.InstancedMesh(new THREE.SphereGeometry(.036,8,6),new THREE.MeshStandardMaterial({roughness:.26,metalness:0}),list.length), d=new THREE.Object3D(), col=new THREE.Color();
-  list.forEach(function(c,i){ var sc=.8+R()*.4; d.position.set(c[0],c[1],c[2]); d.rotation.set(R()*3,R()*3,R()*3); d.scale.set(sc,sc*1.16,sc); d.updateMatrix(); im.setMatrixAt(i,d.matrix);
+  list.forEach(function(c,i){ var sc=.8+R()*.4; gel(c[0],c[1],c[2],c[0],c[1],c[2],.042*sc); d.position.set(c[0],c[1],c[2]); d.rotation.set(R()*3,R()*3,R()*3); d.scale.set(sc,sc*1.16,sc); d.updateMatrix(); im.setMatrixAt(i,d.matrix);
     col.set(c[3]).convertSRGBToLinear(); col.multiplyScalar(.9+R()*.25); im.setColorAt(i,col); });
   im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true; im.receiveShadow=true; im.frustumCulled=false; im.name="cerises"; world.add(im); cerises=im;
 })();
+/* ------------------------------------------------------------------ *
+ * Ce qui se met entre un œil et un mot
+ * ------------------------------------------------------------------ *
+ * Un vœu pend sous sa branche, au milieu des feuilles : vu du mauvais
+ * endroit, il est à moitié caché, et un mot à moitié caché ne se lit pas.
+ * On sait maintenant le mesurer pour de bon : dix mille gélules, un rayon
+ * tiré de l'œil vers le mot, et la distance entre deux segments.
+ *
+ * Le relevé exact — croiser les vrais maillages — coûtait trente
+ * millisecondes pour cinq rayons, le budget entier d'une image : on
+ * rendait la main avant d'avoir essayé les bons angles, et l'on gardait le
+ * moins mauvais. Celui-ci coûte quelques dixièmes de milliseconde, et l'on
+ * peut enfin essayer tous les angles — et, surtout, demander au vœu de
+ * s'avancer vers son lecteur jusqu'à ce que plus rien ne le couvre.
+ */
+var GELF=new Float32Array(GELS); GELS=null;
+/* La distance au carré entre deux segments. Six nombres par segment, pas
+   un objet alloué : c'est appelé des centaines de milliers de fois par
+   visée, et chaque allocation y coûterait une image. */
+function segSeg2(p1x,p1y,p1z,q1x,q1y,q1z,p2x,p2y,p2z,q2x,q2y,q2z){
+  var d1x=q1x-p1x,d1y=q1y-p1y,d1z=q1z-p1z,d2x=q2x-p2x,d2y=q2y-p2y,d2z=q2z-p2z;
+  var rx=p1x-p2x,ry=p1y-p2y,rz=p1z-p2z;
+  var a=d1x*d1x+d1y*d1y+d1z*d1z, e=d2x*d2x+d2y*d2y+d2z*d2z, f=d2x*rx+d2y*ry+d2z*rz, s, t, c, b, den;
+  if(a<1e-12){ s=0; t=e<1e-12?0:f/e; t=t<0?0:t>1?1:t; }
+  else { c=d1x*rx+d1y*ry+d1z*rz;
+    if(e<1e-12){ t=0; s=-c/a; s=s<0?0:s>1?1:s; }
+    else { b=d1x*d2x+d1y*d2y+d1z*d2z; den=a*e-b*b;
+      s=den!==0?(b*f-c*e)/den:0; s=s<0?0:s>1?1:s;
+      t=(b*s+f)/e;
+      if(t<0){ t=0; s=-c/a; s=s<0?0:s>1?1:s; }
+      else if(t>1){ t=1; s=(b-c)/a; s=s<0?0:s>1?1:s; } } }
+  var cx=p1x+d1x*s-p2x-d2x*t, cy=p1y+d1y*s-p2y-d2y*t, cz=p1z+d1z*s-p2z-d2z*t;
+  return cx*cx+cy*cy+cz*cz;
+}
+/* Les gélules du moment : les étiquettes et les rubans bougent, on les
+   refait à chaque visée. Deux gélules par étiquette plutôt qu'une : une
+   seule, assez large pour couvrir le rectangle, déborderait aux quatre
+   coins et déclarerait caché un mot qui ne l'est pas. Un mot caché par sa
+   voisine est le cas le plus vexant — on voit bien qu'il y a quelque
+   chose, et on ne peut pas le lire. */
+var GELV=[], vGel=new THREE.Vector3(), invMonde=new THREE.Matrix4();
+function gelsVivants(sauf){
+  GELV.length=0; world.updateWorldMatrix(false,true); invMonde.copy(world.matrixWorld).invert();
+  var i, j;
+  for(i=0;i<tagMeshes.length;i++){
+    var tm=tagMeshes[i]; if(tm===sauf||!tm.userData.wish) continue;
+    var S=SHAPES[tm.userData.wish.s], hh=(S.bot-S.top)*S.h, q=S.w*.25, ax, ay, az;
+    for(j=-1;j<=1;j+=2){
+      vGel.set(j*q,S.top*S.h,0).applyMatrix4(tm.matrixWorld).applyMatrix4(invMonde);
+      ax=vGel.x; ay=vGel.y; az=vGel.z;
+      vGel.set(j*q,S.top*S.h-hh,0).applyMatrix4(tm.matrixWorld).applyMatrix4(invMonde);
+      GELV.push(ax,ay,az,vGel.x,vGel.y,vGel.z,q);
+    }
+  }
+  for(i=0;i<ribbons.length;i++){ var rb=ribbons[i];
+    GELV.push(rb.position.x,rb.position.y,rb.position.z,
+              rb.position.x,rb.position.y-rb.scale.y,rb.position.z,.032); }
+}
+/* Les seules gélules qui pourraient se mettre devant ce mot-ci. Les écarter
+   une fois, au lieu de les essayer à chaque angle : c'est ce tri qui rend
+   le reste gratuit. */
+var PROCHES=[];
+function gelsProches(cx,cy,cz,portee){
+  PROCHES.length=0;
+  var i, n=GELF.length;
+  for(i=0;i<n;i+=7){
+    var mx=(GELF[i]+GELF[i+3])*.5-cx, my=(GELF[i+1]+GELF[i+4])*.5-cy, mz=(GELF[i+2]+GELF[i+5])*.5-cz;
+    var dx=GELF[i+3]-GELF[i], dy=GELF[i+4]-GELF[i+1], dz=GELF[i+5]-GELF[i+2];
+    var lim=portee+GELF[i+6]+Math.sqrt(dx*dx+dy*dy+dz*dz)*.5;
+    if(mx*mx+my*my+mz*mz<lim*lim) PROCHES.push(i);
+  }
+}
+/* Ce rayon-là est-il arrêté ? */
+function gelBloque(ox,oy,oz,px,py,pz){
+  var k, i, r;
+  for(k=0;k<PROCHES.length;k++){ i=PROCHES[k]; r=GELF[i+6];
+    if(segSeg2(ox,oy,oz,px,py,pz,GELF[i],GELF[i+1],GELF[i+2],GELF[i+3],GELF[i+4],GELF[i+5])<r*r) return true; }
+  for(k=0;k<GELV.length;k+=7){ r=GELV[k+6];
+    if(segSeg2(ox,oy,oz,px,py,pz,GELV[k],GELV[k+1],GELV[k+2],GELV[k+3],GELV[k+4],GELV[k+5])<r*r) return true; }
+  return false;
+}
+/* Cinq rayons vers un mot : son centre, ses deux bords, son haut, son bas.
+   Une feuille qui couvre la moitié d'une étiquette ne croise pas forcément
+   son milieu, et un seul rayon la déclarerait dégagée. On s'arrête à deux
+   centimètres de l'étiquette pour ne pas compter ce qui la frôle. */
+function motCouvert(ox,oy,oz,cx,cy,cz,th,dmx,dmy){
+  var dx=Math.cos(th)*dmx, dz=-Math.sin(th)*dmx, n=0, q;
+  for(q=0;q<5;q++){
+    var ex=q===1?-1:q===2?1:0, ey=q===3?-1:q===4?1:0;
+    var px=cx+dx*ex, py=cy+dmy*ey, pz=cz+dz*ex;
+    var vx=px-ox, vy=py-oy, vz=pz-oz, d=Math.sqrt(vx*vx+vy*vy+vz*vz)||1, k=(d-.02)/d;
+    if(gelBloque(ox,oy,oz,ox+vx*k,oy+vy*k,oz+vz*k)) n++;
+  }
+  return n;
+}
 /* Les douze feuilles qui dérivaient dans le vide ont été retirées : au-
    dessus d'une île qui flotte, elles disaient le vent ; sur une montagne
    enneigée, des feuilles vertes qui tournent dans l'air d'hiver ne disent
@@ -1902,12 +2013,17 @@ function makeTag(w,slot,animate){
   var S=SHAPES[w.s], pivot=new THREE.Group(); pivot.position.set(slot.a.p[0],slot.a.p[1]-slot.a.r,slot.a.p[2]);
   var th=new THREE.Mesh(threadGeo,goldMat); th.scale.y=slot.L+.03; pivot.add(th);
   var knot=new THREE.Mesh(beadGeo,goldMat); knot.position.y=-slot.L+.02; pivot.add(knot);
+  /* Le fil et son nœud sont gardés sous la main : quand le vœu s'avance
+     vers son lecteur, c'est la ficelle qui le tient, et elle doit se tendre
+     vers lui — sinon l'étiquette quitte son fil, et l'on ne voit plus qu'un
+     décalque posé devant l'arbre. */
   var body=new THREE.Group(); body.position.y=-slot.L; body.rotation.y=Math.atan2(slot.a.p[0],slot.a.p[2])+(slot.ph-3.14)*.12; pivot.add(body);
   var m=new THREE.Mesh(geoFor(w.s),[matFor(w),goldMat]); m.name="etiquette"; m.castShadow=true; m.receiveShadow=true; m.userData.wish=w; body.add(m);
   var by=-(S.bot-S.top)*S.h, bd=new THREE.Mesh(beadGeo,goldMat); bd.position.y=by-.012; body.add(bd);
   var ts=new THREE.Mesh(tasselGeo,silkMat); ts.position.y=by-.025; body.add(ts);
   world.add(pivot); tagMeshes.push(m);
-  return {w:w,txt:wishText(w),slot:slot,pivot:pivot,body:body,mesh:m,born:animate?clock:-99,h:(S.bot-S.top)*S.h};
+  return {w:w,txt:wishText(w),slot:slot,pivot:pivot,body:body,mesh:m,fil:th,noeud:knot,
+    born:animate?clock:-99,h:(S.bot-S.top)*S.h};
 }
 function removeTag(t){ world.remove(t.pivot); var i=tagMeshes.indexOf(t.mesh); if(i>=0) tagMeshes.splice(i,1); }
 /* Où va quel vœu. Les places se suivaient dans l'ordre où l'arbre les avait
@@ -2017,58 +2133,47 @@ window.__home=function(){ focused=false; vise=null; goal.r=homeR; goal.tg.set(0,
    fait que s'en approcher — le mot est écrit dessus, le redire dans un
    panneau par-dessus n'ajoute rien et cache la scène. */
 var derniereCible=0, vise=null, viseY=0;
-/* Une étiquette pend sous sa branche, au milieu des feuilles : vue de
-   l'endroit où elle a poussé, elle est souvent à moitié cachée. On essaie
-   donc quelques angles autour d'elle et l'on garde le plus dégagé — un
-   rayon tiré de l'œil au mot compte ce qu'il traverse. À égalité, l'angle
-   de face l'emporte : on ne fait pas le tour de l'arbre pour rien. */
-var rayVue=new THREE.Raycaster(), oeilV=new THREE.Vector3(), dirV=new THREE.Vector3(), cibleV=new THREE.Vector3(), cibleO=new THREE.Vector3();
-var DTH=[0,.3,-.3,.62,-.62,.95,-.95], DPH=[1.62,1.45,1.78];
-var vTag=new THREE.Vector3();
-function angleDegage(cible,th0,r,demi,sauf){
-  var obst=[]; if(feuilles&&feuilles.visible) obst.push(feuilles); if(cerises&&cerises.visible) obst.push(cerises);
-  /* Les autres étiquettes comptent autant que les feuilles : un mot caché
-     par sa voisine est aussi illisible qu'un mot caché par une branche, et
-     c'est même le cas le plus vexant — on voit bien qu'il y a quelque
-     chose, et on ne peut pas le lire.
-
-     Mais seulement les voisines. Les trente autres ne peuvent rien cacher
-     d'ici, et les faire tester par chacun des cinq rayons de chacun des
-     vingt et un angles épuisait le budget de trente millisecondes avant
-     qu'on ait essayé les bons angles : on cherchait mieux, on trouvait
-     pire. */
-  for(var qo=0;qo<tagMeshes.length;qo++){
-    var tm=tagMeshes[qo]; if(tm===sauf) continue;
-    tm.getWorldPosition(vTag);
-    if(vTag.distanceToSquared(cible)<2.25) obst.push(tm);
+/* Où se placer, et de combien le mot sort de son feuillage. Les deux
+   ensemble, parce qu'ils se compensent : un pas vers le lecteur vaut
+   souvent mieux qu'un quart de tour autour de l'arbre — on préfère voir le
+   vœu s'avancer que voir le décor tourner. On essaie donc les combinaisons
+   du moins cher au plus cher, et l'on s'arrête à la première qui ne
+   traverse plus rien. */
+var derniereCible=0, vise=null, viseY=0;
+var cibleV=new THREE.Vector3();
+var DTH=[0,.3,-.3,.62,-.62,.95,-.95], DPH=[1.62,1.45,1.78], DSO=[0,.2,.42,.66];
+var VBAS=new THREE.Vector3(0,-1,0), vFil=new THREE.Vector3();
+var ESSAIS=(function(){ var L=[], i, j, k;
+  for(i=0;i<DSO.length;i++) for(j=0;j<DTH.length;j++) for(k=0;k<DPH.length;k++)
+    L.push([i,j,k,DSO[i]*1.4+Math.abs(DTH[j])+Math.abs(DPH[k]-1.62)*.6]);
+  L.sort(function(a,b){ return a[3]-b[3]; }); return L; })();
+/* De combien le vœu remonte quand il s'avance : le fil garde sa longueur,
+   comme une ficelle qu'on tire. En deçà de quatre dixièmes de sa longueur
+   il faudrait qu'elle s'étire, et l'on préfère cela à un mot resté caché. */
+function sortieY(L,av){ return -Math.sqrt(Math.max(L*L-av*av,L*L*.16)); }
+function vueDegagee(t,th0,r,garder){
+  var S=SHAPES[t.w.s], ap=t.slot.a.p, L=t.slot.L, ar=t.slot.a.r, h=t.h;
+  var dmx=S.w*.32, dmy=h*.36, best=null, t0=performance.now(), i, e;
+  gelsVivants(t.mesh);
+  gelsProches(t.slot.pos[0],t.slot.pos[1]-h*.5,t.slot.pos[2],r+1.2);
+  for(i=0;i<ESSAIS.length;i++){
+    e=ESSAIS[i];
+    /* Quand quelqu'un touche une étiquette, il l'a vue : son angle est
+       forcément dégagé, et tourner autour de l'arbre pour revenir sur le
+       même mot désoriente. On ne lui cherche alors qu'un pas en avant. */
+    if(garder&&(e[1]||e[2])) continue;
+    var so=DSO[e[0]], th=garder?th0:th0+DTH[e[1]], ph=garder?clamp(cam.ph,1.28,1.78):DPH[e[2]];
+    var av=.17+so, sth=Math.sin(th), cth=Math.cos(th), by=sortieY(L,av);
+    var cx=ap[0]+sth*av, cy=ap[1]-ar+by-h*.5, cz=ap[2]+cth*av, sp=Math.sin(ph);
+    var n=motCouvert(cx+r*sp*sth,cy+r*Math.cos(ph),cz+r*sp*cth,cx,cy,cz,th,dmx,dmy);
+    if(!best||n<best.n) best={th:th,ph:ph,so:so,n:n};
+    if(!n) break;
+    /* Un vœu enfoui fait essayer les quatre-vingt-quatre combinaisons. Cela
+       reste sous la milliseconde, mais le garde-fou demeure : passé
+       vingt-cinq millisecondes on garde le moins mauvais. */
+    if(performance.now()-t0>25) break;
   }
-  var best={th:th0,ph:1.62,n:0}; if(!obst.length) return best;
-  best=null; var t0=performance.now();
-  for(var i=0;i<DTH.length;i++) for(var j=0;j<DPH.length;j++){
-    var th=th0+DTH[i], ph=DPH[j], sp=Math.sin(ph);
-    oeilV.set(cible.x+r*sp*Math.sin(th), cible.y+r*Math.cos(ph), cible.z+r*sp*Math.cos(th));
-    /* Cinq rayons, pas un : le centre du mot, ses deux bords, son haut et
-       son bas. Une feuille qui couvre la moitié d'une étiquette ne croise
-       pas son milieu, et un seul rayon la déclarerait dégagée. */
-    var n=0, dx=Math.cos(th)*demi, dz=-Math.sin(th)*demi, q;
-    for(q=0;q<5;q++){
-      var ox=q===1?-1:q===2?1:0, oy=q===3?-1:q===4?1:0;
-      cibleO.set(cible.x+dx*ox,cible.y+demi*oy,cible.z+dz*ox);
-      dirV.subVectors(cibleO,oeilV); var d=dirV.length(); dirV.multiplyScalar(1/d);
-      rayVue.set(oeilV,dirV); rayVue.near=0; rayVue.far=d-.14;
-      n+=rayVue.intersectObjects(obst,false).length; }
-    var score=n*4+Math.abs(DTH[i])+Math.abs(ph-1.62)*.6;
-    if(!best||score<best.score) best={th:th,ph:ph,n:n,score:score};
-    /* Les angles sont essayés du plus proche de la face au plus écarté :
-       le premier qui ne traverse rien est le bon, et l'on s'arrête là —
-       sans quoi l'on paierait quarante millisecondes à chaque touche. */
-    if(n===0) return best;
-    /* Un vœu enfoui fait essayer les vingt et un angles, et vingt et un
-       angles coûtent, sur un téléphone, le quart d'une seconde. Passé
-       trente millisecondes on garde le moins mauvais : mieux vaut un angle
-       imparfait tout de suite qu'un temps mort au doigt. */
-    if(performance.now()-t0>30) return best;
-  }
+  best.ms=Math.round((performance.now()-t0)*100)/100;
   return best;
 }
 /* S'approcher d'un vœu.
@@ -2084,8 +2189,7 @@ function angleDegage(cible,th0,r,demi,sauf){
    approcher : le mot est écrit dessus, le redire par-dessus la scène
    n'ajoute rien et cache l'arbre. */
 function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(tags).indexOf(t.w.id);
-  var p=t.slot.pos; vise=t; viseY=p[1]-t.h*.5;
-  cibleV.set(p[0],viseY+world.position.y,p[2]);
+  var p=t.slot.pos, ap=t.slot.a.p; vise=t;
   /* Assez près pour lire le mot, assez loin pour voir encore la branche
      qui le porte. La distance dépend de la forme de l'écran : un téléphone
      a un champ étroit, et ce qui cadre bien sur un ordinateur y met le nez
@@ -2097,8 +2201,15 @@ function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(
      remplir l'écran assez pour qu'on n'ait rien à faire pour le lire. */
   var r=pres?clamp(Math.max(.40/(tn*camera.aspect),.62/tn),1.7,3.7)
             :clamp(Math.max(.60/(tn*camera.aspect),.95/tn),2.3,5.4);
-  var a=garder?{th:cam.th,ph:clamp(cam.ph,1.28,1.78)}
-              :angleDegage(cibleV,Math.atan2(p[0],p[2]),r,Math.max(.14,t.h*.42),t.mesh);
+  var a=vueDegagee(t,garder?cam.th:Math.atan2(p[0],p[2]),r,!!garder);
+  /* Le vœu s'avance vers son lecteur de ce qu'il faut pour que plus rien ne
+     le couvre, et la caméra vise l'endroit où il sera — non celui où il
+     pend. Sans quoi elle le poursuivrait pendant qu'il sort, et le mot
+     dériverait dans le cadre pendant qu'on le lit. */
+  t.sortie=a.so; t.dirS=[Math.sin(a.th),Math.cos(a.th)];
+  var av=.17+a.so, by=sortieY(t.slot.L,av);
+  viseY=ap[1]-t.slot.a.r+by-t.h*.5;
+  cibleV.set(ap[0]+t.dirS[0]*av,viseY+world.position.y,ap[2]+t.dirS[1]*av);
   var th=a.th;
   while(th-goal.th>Math.PI) th-=6.2832; while(th-goal.th<-Math.PI) th+=6.2832;
   goal.th=th; goal.ph=a.ph; goal.r=r; goal.tg.copy(cibleV); idle=0;
@@ -2869,8 +2980,8 @@ window.__essai={
   /* Ce que coûte le choix d'un angle dégagé, et ce qu'il reste devant. */
   angle:function(i){ var k=Object.keys(tags), t=tags[k[i||0]]; if(!t) return null;
     var p=t.slot.pos; cibleV.set(p[0],p[1]-t.h*.5+world.position.y,p[2]);
-    var t0=performance.now(), a=angleDegage(cibleV,Math.atan2(p[0],p[2]),2.5,Math.max(.14,t.h*.42));
-    return {ms:Math.round((performance.now()-t0)*10)/10,obstacles:a.n,
+    var a=vueDegagee(t,Math.atan2(p[0],p[2]),2.5,false);
+    return {ms:a.ms,obstacles:a.n,sortie:a.so,
       ecart:Math.round((a.th-Math.atan2(p[0],p[2]))*100)/100,ph:a.ph}; },
   /* Les nombres de la visée, quand l'image ne dit pas ce qui cloche. */
   visee:function(){ var v=new THREE.Vector3(); if(vise) vise.mesh.getWorldPosition(v);
@@ -3534,11 +3645,22 @@ function frame(now){
     var cible=(vise===g&&focused&&!CINE.ronde)?1:0;
     g.avance=(g.avance||0)+(cible-(g.avance||0))*Math.min(1,dt*3.5);
     var ap=g.slot.a.p;
+    g.pivot.position.set(ap[0],ap[1]-g.slot.a.r,ap[2]);
     if(g.avance>.002){
-      var ddx=camera.position.x-ap[0], ddz=camera.position.z-ap[2];
-      var dn=Math.hypot(ddx,ddz)||1, av=.17*g.avance;
-      g.pivot.position.set(ap[0]+ddx/dn*av,ap[1]-g.slot.a.r,ap[2]+ddz/dn*av);
-    } else g.pivot.position.set(ap[0],ap[1]-g.slot.a.r,ap[2]);
+      /* La direction est celle qu'a retenue l'approche, et non celle de la
+         caméra à cet instant : pendant qu'elle vole, les deux diffèrent, et
+         le vœu partirait d'un côté pour revenir de l'autre. */
+      var ds=g.dirS||[0,1], av=(.17+(g.sortie||0))*g.avance, by=sortieY(g.slot.L,av);
+      var bx=ds[0]*av, bz=ds[1]*av, lg=Math.sqrt(bx*bx+by*by+bz*bz)||1;
+      g.body.position.set(bx,by,bz);
+      g.fil.quaternion.setFromUnitVectors(VBAS,vFil.set(bx/lg,by/lg,bz/lg));
+      g.fil.scale.y=lg+.03;
+      g.noeud.position.set(bx*(1-.02/lg),by*(1-.02/lg),bz*(1-.02/lg));
+      g.sorti=true;
+    } else if(g.sorti){
+      g.body.position.set(0,-g.slot.L,0); g.fil.quaternion.identity();
+      g.fil.scale.y=g.slot.L+.03; g.noeud.position.set(0,-g.slot.L+.02,0); g.sorti=false;
+    }
     g.body.rotation.y+=(Math.sin(t*.45+g.slot.ph)*.012)*dt*6; });
   /* La gerbe part à l'instant même où l'étiquette paraît, et non une
      seconde après la montre : les deux suivent la même horloge, celle de
