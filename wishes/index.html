@@ -2810,16 +2810,23 @@ window.__essai={
     world.traverse(function(o){ if(o.isMesh&&o.visible&&!dedans(o)) obst.push(o); });
     var S=SHAPES[t.w.s], tx=S.tx, nx=7, ny=7;
     var ray=new THREE.Raycaster(), oe=quelPoint||camera.position;
-    var pt=new THREE.Vector3(), dv=new THREE.Vector3(), pris=0, tot=0, quoi={}, a, b;
+    var pt=new THREE.Vector3(), dv=new THREE.Vector3(), pris=0, tot=0, quoi={}, ou=[], a, b;
     for(a=0;a<nx;a++) for(b=0;b<ny;b++){
       var u=tx[0]+(tx[2]-tx[0])*(a/(nx-1)), v=tx[1]+(tx[3]-tx[1])*(b/(ny-1));
       pt.set((u-.5)*S.w,S.top*S.h-v*S.h,0).applyMatrix4(t.mesh.matrixWorld);
       dv.subVectors(pt,oe); var d=dv.length(); dv.multiplyScalar(1/d);
       ray.set(oe,dv); ray.near=0; ray.far=d-.02;
       var h=ray.intersectObjects(obst,false);
-      tot++; if(h.length){ pris++; var nm=h[0].object.name||"?"; quoi[nm]=(quoi[nm]|0)+1; }
+      tot++; if(h.length){ pris++; var nm=h[0].object.name||"?"; quoi[nm]=(quoi[nm]|0)+1;
+        /* Où se tient l'obstacle sur le trajet : tout près de l'étiquette
+           (part proche de un) ou devant le nez du lecteur ? Les deux ne se
+           soignent pas du même geste — l'un se règle en sortant le mot de
+           son feuillage, l'autre en écartant ce qui est sur le chemin. */
+        ou.push(+(h[0].distance/d).toFixed(2)); }
     }
+    ou.sort(function(x,y){ return x-y; });
     return {part:+(pris/tot).toFixed(2),quoi:quoi,
+      ou:ou.length?[ou[0],ou[ou.length>>1],ou[ou.length-1]]:[],
       ecran:(function(){ var v=new THREE.Vector3(); t.mesh.getWorldPosition(v); v.project(camera);
         return [+v.x.toFixed(2),+v.y.toFixed(2)]; })()};
   },
