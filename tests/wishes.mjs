@@ -746,12 +746,19 @@ titre('Le son revient quand on revient');
      l'instant de la note suivante reste à trois cents, et la boucle n'a
      plus rien à programmer — jamais. L'arbre se taisait pour de bon, et
      l'état du son disait « en marche ». */
-  await p.evaluate(() => window.__essai.musiqueQuand(300));
-  const loin = await etat();
-  await p.waitForTimeout(2000);
-  const revenu2 = await etat();
-  check(`une note posée à trois cents secondes ne fige pas la mélodie (${loin.avance} → ${revenu2.avance})`,
-    revenu2.avance < 14 && revenu2.note !== loin.note);
+  const pose = await p.evaluate(() => window.__essai.musiqueQuand(300));
+  await p.waitForTimeout(1200);
+  const recale = await etat();
+  /* Réancrée veut dire : ramenée dans la fenêtre où la boucle a de quoi
+     travailler. Quatorze secondes, parce que la plus longue pause zen en
+     fait onze et que c'est la seule attente légitime de cette longueur. */
+  check(`une note posée à trois cents secondes est réancrée (rendez-vous ${pose.toFixed(1)}, avance ${recale.avance})`,
+    recale.avance < 14);
+  /* Et la mélodie reprend sa marche. On attend large : derrière une pause
+     zen, la note suivante peut n'arriver que onze secondes plus tard. */
+  const reparti = await p.waitForFunction((n) => window.__essai.audio().note !== n,
+    recale.note, { timeout: 45000 }).then(() => true).catch(() => false);
+  check(`et la mélodie reprend sa marche (note ${recale.note})`, reparti);
 
   /* Et la chaîne entière reconstruite : c'est le dernier recours, quand
      une horloge arrêtée ne veut plus repartir. */
