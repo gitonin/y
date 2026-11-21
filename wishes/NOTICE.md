@@ -312,6 +312,37 @@ et l'on compte ceux qui traversent une feuille, une cerise ou une voisine. Le
 centre n'est jamais traversé : le mot lui-même se lit toujours. Au pire, une
 feuille frôle le bord de l'étiquette, et cela ne gêne personne.
 
+## Deux pièges du tactile
+
+Les deux se sont vus sur un téléphone et pas sur un ordinateur, et tous deux
+prenaient au visiteur la fiche qu'on lui avait promise après son vœu.
+
+**Le relais d'ouverture ne faisait que se repousser.** Sept secondes après
+l'arrivée, la visite guidée prend la main ; tant qu'un panneau est ouvert, le
+relais se repousse — mais il se repoussait *à l'instant où il allait partir*.
+Refermer le panneau lui laissait donc entre zéro et sept secondes à courir,
+selon le moment où l'on avait fermé : souvent en plein milieu des trois
+secondes et demie qui mènent à la fiche. La caméra s'en allait, et la fiche ne
+s'ouvrait jamais. Quelqu'un qui vient d'écrire son vœu n'est pas quelqu'un qui
+s'est absenté : le relais est maintenant éteint pour de bon dès qu'un mot est
+accroché, et c'est à l'inactivité, et à elle seule, de rallumer la veilleuse.
+
+**Les fantômes du tactile.** Un doigt posé sur un bouton produit l'événement
+tactile, puis — trois cents millisecondes plus tard, et parce que le web a
+vingt ans d'histoire — une paire d'événements souris au même endroit. Si le
+bouton a disparu entre-temps, et c'est exactement ce que fait « Accrocher à
+l'arbre », cette paire tombe sur la scène qui était dessous : l'arbre croit
+qu'on a touché à côté et recule. On ignore donc les touches de souris qui
+suivent un toucher de moins de neuf dixièmes de seconde, et l'on n'écoute pas
+la scène pendant la demi-seconde qui suit la fermeture d'un panneau.
+
+**Et la fiche s'ouvre quoi qu'il arrive.** Elle ne s'ouvrait que si la caméra
+était encore sur le mot au bout des deux secondes six ; si quelque chose
+l'avait emportée, on renonçait en silence. C'est le seul moment de la visite
+où la fiche est due : on ramène maintenant la caméra plutôt que de renoncer.
+
+L'épreuve joue le geste entier sur un écran tactile, fantôme compris.
+
 ## Toucher un vœu
 
 Toucher une étiquette **s'en approche**, et fait paraître une pilule discrète

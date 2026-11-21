@@ -1021,6 +1021,79 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
  * serveur. On demande une fois, au seul moment de la visite où l'on peut
  * demander quelque chose : celui qui vient d'accrocher son vœu a donné.
  */
+/* ------------------------------------------------------------------ *
+ * Accrocher son vœu, sur un téléphone
+ * ------------------------------------------------------------------ *
+ * Celui qui vient d'écrire son mot doit voir la caméra s'en approcher, puis
+ * sa fiche s'ouvrir pour l'envoyer. Deux choses le lui prenaient, et aucune
+ * ne se voyait sur un ordinateur.
+ *
+ * Le relais d'ouverture, d'abord : il ne faisait que se repousser tant
+ * qu'un panneau était ouvert, et il se repoussait à l'instant où il allait
+ * partir. Refermer le panneau lui laissait donc entre zéro et sept secondes
+ * à courir — souvent en plein milieu des trois secondes et demie qui mènent
+ * à la fiche.
+ *
+ * Les fantômes du tactile ensuite : un doigt posé sur « Accrocher à
+ * l'arbre » produit l'événement tactile, puis, trois cents millisecondes
+ * plus tard, une paire d'événements souris au même endroit. Le bouton ayant
+ * disparu entre-temps, elle tombe sur la scène, qui croit qu'on a touché à
+ * côté et recule.
+ *
+ * On éprouve donc le geste complet sur un écran tactile, fantôme compris.
+ */
+titre('Accrocher son vœu, sur un téléphone');
+{
+  const ctx = await nav.newContext({ viewport: { width: 390, height: 844 }, locale: 'fr-FR',
+    hasTouch: true, isMobile: true });
+  const p = await ctx.newPage();
+  const bruit = [];
+  p.on('pageerror', (e) => bruit.push('' + e));
+  p.on('console', (m) => { if (m.type() === 'error') bruit.push(m.text()); });
+  await p.goto(`http://127.0.0.1:${PORT}/?heure=13`, { waitUntil: 'load' });
+  await p.waitForTimeout(1400);
+  await p.evaluate(() => document.getElementById('enter').click());
+  await p.waitForFunction(() => window.__essai && window.__essai.voeux() > 0, null, { timeout: 60000 });
+  await p.waitForTimeout(1600);
+  await p.tap('#add');
+  await p.waitForTimeout(500);
+  await p.tap('#shapes button:nth-child(3)');
+  await p.tap('#stNext');
+  await p.waitForTimeout(400);
+  await p.tap('#tabs button:nth-child(4)');
+  await p.fill('#own', 'Que ton année sente bon le café');
+  await p.tap('#stNext');
+  await p.waitForTimeout(400);
+  await p.fill('#name', 'Antonin');
+  /* Le fantôme est armé depuis la page, pour qu'il parte bien trois cents
+     millisecondes après le doigt et non après un aller-retour du harnais. */
+  const boite = await p.evaluate(() => { const b = document.getElementById('hang').getBoundingClientRect();
+    return { x: Math.round(b.x + b.width / 2), y: Math.round(b.y + b.height / 2) }; });
+  await p.evaluate(({ x, y }) => {
+    window.__fantome = 0;
+    document.addEventListener('touchend', function h() {
+      document.removeEventListener('touchend', h, true);
+      setTimeout(() => { const c = document.getElementById('c'); window.__fantome = 1;
+        for (const t of ['pointerdown', 'pointerup']) c.dispatchEvent(new PointerEvent(t,
+          { bubbles: true, clientX: x, clientY: y, pointerType: 'mouse', pointerId: 99, isPrimary: true }));
+      }, 300);
+    }, true);
+  }, boite);
+  await p.tap('#hang');
+  await p.waitForFunction(() => window.__fantome === 1, null, { timeout: 30000 }).catch(() => {});
+  await p.waitForTimeout(400);
+  const apres = await p.evaluate(() => window.__essai.visiteEtat());
+  check(`le fantôme n’emporte pas la caméra (rayon ${apres.r})`, apres.vise && apres.r < 6);
+  check('et la visite ne prend pas la main', apres.on, false);
+  const fiche = await p.waitForFunction(() => document.getElementById('card').classList.contains('open'),
+    null, { timeout: 90000 }).then(() => true).catch(() => false);
+  check('la fiche s’ouvre pour qu’on puisse l’envoyer', fiche);
+  const fin = await p.evaluate(() => window.__essai.visiteEtat());
+  check(`et la caméra est restée sur le mot (rayon ${fin.r})`, fin.vise && fin.r < 6);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
 titre('Suivre Yunma');
 {
   const INSTA = 'https://www.instagram.com/yunma.coffee';

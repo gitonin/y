@@ -743,7 +743,8 @@ function setStep(n){ step=n;
 function draftWish(){ var own=tab==="own"?$("own").value.trim().slice(0,60):"";
   return {s:selShape, p:tab==="own"?-1:selPreset, t:own, n:$("name").value.trim().slice(0,20)}; }
 function preview(){ var d=draftWish(); drawTag($("prev"),d.s,wishText(d),d.n); drawTag($("prevBig"),d.s,wishText(d),d.n,2); }
-function openSheet(o){ sheetOpen=o; $("sheet").classList.toggle("open",o); $("sheet").setAttribute("aria-hidden",o?"false":"true");
+function openSheet(o){ sheetOpen=o; gardeTap=performance.now()+500;
+  $("sheet").classList.toggle("open",o); $("sheet").setAttribute("aria-hidden",o?"false":"true");
   $("bottom").classList.toggle("down",o||!!cardWish||!entered); if(o){ closeCard(true); setStep(1); } barreVoeu(); }
 function fillCard(w){
   var pre=w.p>=0&&PRESETS[w.p]&&PRESETS[w.p].k==="zh"?PRESETS[w.p]:null, zh=$("cZh"), txt=wishText(w);
@@ -1897,6 +1898,15 @@ window.__syncTags=function(){
        animation d'apparition la tient à l'échelle zéro. */
     focus.born=clock+1.05;
     focusTag(focus,false);
+    /* Le relais d'ouverture est éteint pour de bon. Il ne faisait que se
+       repousser tant qu'un panneau était ouvert, et il se repoussait au
+       moment où il allait partir : refermer le panneau lui laissait donc
+       entre zéro et sept secondes à courir — souvent en plein milieu des
+       trois secondes et demie qui mènent à la fiche. La visite emportait
+       la caméra, et la fiche promise ne s'ouvrait jamais. Quelqu'un qui
+       vient d'écrire son vœu n'est pas quelqu'un qui s'est absenté : c'est
+       à l'inactivité, et à elle seule, de rallumer la veilleuse. */
+    ouvre=0;
     fichePrevue=focus; etinAttend=focus; barreVoeu(); }
   else { tryHash(); ouverture(); }
 };
@@ -2931,16 +2941,37 @@ window.__essai={
 canvas.addEventListener("pointerdown",function(){ cineStop(); },true);
 canvas.addEventListener("wheel",function(){ cineStop(); },{passive:true,capture:true});
 var ptrs={}, nP=0, pinch=0, moved=0, downT=0, ray=new THREE.Raycaster(), ndc=new THREE.Vector2();
+/* Les fantômes du tactile. Sur un téléphone, un doigt posé sur un bouton
+   produit l'événement tactile, puis — trois cents millisecondes plus tard,
+   et parce que le web a vingt ans d'histoire — une paire d'événements
+   souris au même endroit. Si le bouton a disparu entre-temps, et c'est
+   exactement ce que fait « Accrocher à l'arbre », cette paire tombe sur la
+   scène qui était dessous : l'arbre croit qu'on a touché à côté, recule, et
+   la fiche qu'on avait promise ne s'ouvre jamais. Sur un ordinateur, rien
+   de tout cela n'arrive — c'est pourquoi l'épreuve ne le voyait pas.
+
+   On note donc l'instant du dernier toucher, et l'on ignore les touches de
+   souris qui le suivent de près. */
+var derniereTouche=0, gardeTap=0;
+document.addEventListener("touchstart",function(){ derniereTouche=performance.now(); },{passive:true,capture:true});
 canvas.addEventListener("pointerdown",function(e){ try{canvas.setPointerCapture(e.pointerId);}catch(x){} ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; nP=Object.keys(ptrs).length;
   if(nP===1){ moved=0; downT=performance.now(); } pinch=0; idle=0; ouvre=0; });
 canvas.addEventListener("pointermove",function(e){ var p=ptrs[e.pointerId]; if(!p) return; var dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY; idle=0;
   if(nP===1){ moved+=Math.abs(dx)+Math.abs(dy); goal.th-=dx*.0055; goal.ph=clamp(goal.ph-dy*.0045,.35,1.82); }
   else if(nP>=2){ var k=Object.keys(ptrs), a=ptrs[k[0]], b=ptrs[k[1]], d=Math.hypot(a.x-b.x,a.y-b.y); if(pinch>0) goal.r=clamp(goal.r*pinch/d,1.5,36); pinch=d; moved=99; } });
 function up(e){ if(!ptrs[e.pointerId]) return; delete ptrs[e.pointerId]; nP=Object.keys(ptrs).length; pinch=0;
-  if(nP===0&&moved<8&&performance.now()-downT<500) pick(e.clientX,e.clientY); }
+  if(nP===0&&moved<8&&performance.now()-downT<500) pick(e.clientX,e.clientY,e.pointerType); }
 canvas.addEventListener("pointerup",up); canvas.addEventListener("pointercancel",up);
 canvas.addEventListener("wheel",function(e){ e.preventDefault(); goal.r=clamp(goal.r*Math.exp(e.deltaY*.0012),1.5,36); idle=0; },{passive:false});
-function pick(x,y){ if(sheetOpen){ openSheet(false); return; }
+function pick(x,y,type){
+  var m=performance.now();
+  /* Un clic de souris juste après un toucher est un fantôme : on le laisse
+     passer. Et pendant la demi-seconde qui suit la fermeture d'un panneau,
+     on n'écoute pas la scène du tout — c'est le moment où le fantôme
+     tombe, et rien d'utile ne se touche à cet instant-là. */
+  if(type==="mouse"&&m-derniereTouche<900) return;
+  if(m<gardeTap) return;
+  if(sheetOpen){ openSheet(false); return; }
   ndc.set(x/window.innerWidth*2-1,-(y/window.innerHeight)*2+1); ray.setFromCamera(ndc,camera);
   var hit=ray.intersectObjects(tagMeshes,false);
   if(hit.length){ var w=hit[0].object.userData.wish; if(w&&tags[w.id]){ sfx("tag");
@@ -3402,7 +3433,13 @@ function frame(now){
     setTimeout(function(){
       if(fichePrevue!==ta) return;
       fichePrevue=null;
-      if(focused&&vise===ta&&!sheetOpen) openCard(ta.w); else barreVoeu();
+      if(sheetOpen){ barreVoeu(); return; }
+      /* On a promis sa fiche à celui qui vient d'écrire : il doit pouvoir
+         envoyer son mot. Si quelque chose a emporté la caméra entre-temps,
+         on la ramène plutôt que de renoncer — c'est le seul moment de la
+         visite où la fiche est due. */
+      if(!focused||vise!==ta){ cineStop(true); focusTag(ta,false); }
+      openCard(ta.w);
     },2600);
   }
   nuitMaj(t);
