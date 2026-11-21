@@ -1719,7 +1719,7 @@ function tubes(list){
   g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3)); g.setAttribute("normal",new THREE.Float32BufferAttribute(nor,3));
   g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2)); g.setIndex(idx); return g;
 }
-var treeMesh=new THREE.Mesh(tubes(branches.concat(extras)),barkMat); treeMesh.castShadow=true; treeMesh.receiveShadow=true; world.add(treeMesh);
+var treeMesh=new THREE.Mesh(tubes(branches.concat(extras)),barkMat); treeMesh.name="branches"; treeMesh.castShadow=true; treeMesh.receiveShadow=true; world.add(treeMesh);
 
 // floating island
 (function(){
@@ -1737,16 +1737,16 @@ var treeMesh=new THREE.Mesh(tubes(branches.concat(extras)),barkMat); treeMesh.ca
   }
   g.setAttribute("color",new THREE.Float32BufferAttribute(col,3)); g.computeVertexNormals();
   var m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:0,bumpMap:barkTex,bumpScale:.03}));
-  m.castShadow=true; m.receiveShadow=true; world.add(m);
+  m.name="ile"; m.castShadow=true; m.receiveShadow=true; world.add(m);
   // roots dangling under the island
   var under=[], k,j; for(k=0;k<14;k++){ var a2=R()*6.283, r2=.3+R()*1.6, y0=-2.6+r2*.95, L=.5+R()*1.3, pts=[], rr2=[];
     for(j=0;j<=5;j++){ pts.push([Math.cos(a2)*r2+(R()-.5)*.08, y0-L*j/5, Math.sin(a2)*r2+(R()-.5)*.08]); rr2.push(.022*(1-j/6)); }
     under.push({pts:pts,radii:rr2,depth:4}); }
-  var um=new THREE.Mesh(tubes(under),barkMat); world.add(um);
+  var um=new THREE.Mesh(tubes(under),barkMat); um.name="racines"; world.add(um);
   // stones
   var rockMat=new THREE.MeshStandardMaterial({color:C(0x8b8378),roughness:1,flatShading:true});
   for(k=0;k<7;k++){ var s=new THREE.Mesh(new THREE.IcosahedronGeometry(.12+R()*.2,1),rockMat), a3=R()*6.283, r3=1.3+R()*1.3;
-    s.position.set(Math.cos(a3)*r3,.14,Math.sin(a3)*r3); s.scale.set(1,.55+R()*.3,1); s.rotation.y=R()*6; s.castShadow=true; s.receiveShadow=true; world.add(s); }
+    s.position.set(Math.cos(a3)*r3,.14,Math.sin(a3)*r3); s.scale.set(1,.55+R()*.3,1); s.rotation.y=R()*6; s.name="pierre"; s.castShadow=true; s.receiveShadow=true; world.add(s); }
 })();
 var floaters=[];
 (function(){ var rockMat=new THREE.MeshStandardMaterial({color:C(0x7d7267),roughness:1,flatShading:true});
@@ -1782,7 +1782,7 @@ var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0x
   im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true;
   im.castShadow=true; im.receiveShadow=true; im.frustumCulled=false;
   im.customDepthMaterial=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,map:leafTex,alphaTest:.5});
-  world.add(im); feuilles=im;
+  im.name="feuilles"; world.add(im); feuilles=im;
 })();
 // coffee cherries : clusters hugging the branch at the leaf nodes, from green to deep red
 (function(){
@@ -1793,7 +1793,7 @@ var LEAF_COLS=[0x2f4f2b,0x365a2f,0x3f6a32,0x4a7836,0x2a4428,0x587f3a,0x86a046,0x
   var im=new THREE.InstancedMesh(new THREE.SphereGeometry(.036,8,6),new THREE.MeshStandardMaterial({roughness:.26,metalness:0}),list.length), d=new THREE.Object3D(), col=new THREE.Color();
   list.forEach(function(c,i){ var sc=.8+R()*.4; d.position.set(c[0],c[1],c[2]); d.rotation.set(R()*3,R()*3,R()*3); d.scale.set(sc,sc*1.16,sc); d.updateMatrix(); im.setMatrixAt(i,d.matrix);
     col.set(c[3]).convertSRGBToLinear(); col.multiplyScalar(.9+R()*.25); im.setColorAt(i,col); });
-  im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true; im.receiveShadow=true; im.frustumCulled=false; world.add(im); cerises=im;
+  im.instanceMatrix.needsUpdate=true; if(im.instanceColor) im.instanceColor.needsUpdate=true; im.receiveShadow=true; im.frustumCulled=false; im.name="cerises"; world.add(im); cerises=im;
 })();
 /* Les douze feuilles qui dérivaient dans le vide ont été retirées : au-
    dessus d'une île qui flotte, elles disaient le vent ; sur une montagne
@@ -1821,7 +1821,7 @@ var ribbons=[];
   var mat=new THREE.MeshStandardMaterial({map:tex,side:THREE.DoubleSide,roughness:.45,metalness:0});
   var geo=new THREE.PlaneGeometry(.055,1,1,6); geo.translate(0,-.5,0);
   ribbonSpots.forEach(function(a){ var m=new THREE.Mesh(geo,mat), L=Math.min(.7+R()*1.1,Math.max(.25,a.p[1]-a.r-.35)); m.position.set(a.p[0],a.p[1]-a.r,a.p[2]); m.scale.set(1,L,1);
-    m.rotation.y=R()*6.283; m.userData={ph:R()*6.283,ry:m.rotation.y}; m.castShadow=true; world.add(m); ribbons.push(m); });
+    m.rotation.y=R()*6.283; m.userData={ph:R()*6.283,ry:m.rotation.y}; m.name="ruban"; m.castShadow=true; world.add(m); ribbons.push(m); });
 })();
 
 /* ---- tags ---- */
@@ -1903,7 +1903,7 @@ function makeTag(w,slot,animate){
   var th=new THREE.Mesh(threadGeo,goldMat); th.scale.y=slot.L+.03; pivot.add(th);
   var knot=new THREE.Mesh(beadGeo,goldMat); knot.position.y=-slot.L+.02; pivot.add(knot);
   var body=new THREE.Group(); body.position.y=-slot.L; body.rotation.y=Math.atan2(slot.a.p[0],slot.a.p[2])+(slot.ph-3.14)*.12; pivot.add(body);
-  var m=new THREE.Mesh(geoFor(w.s),[matFor(w),goldMat]); m.castShadow=true; m.receiveShadow=true; m.userData.wish=w; body.add(m);
+  var m=new THREE.Mesh(geoFor(w.s),[matFor(w),goldMat]); m.name="etiquette"; m.castShadow=true; m.receiveShadow=true; m.userData.wish=w; body.add(m);
   var by=-(S.bot-S.top)*S.h, bd=new THREE.Mesh(beadGeo,goldMat); bd.position.y=by-.012; body.add(bd);
   var ts=new THREE.Mesh(tasselGeo,silkMat); ts.position.y=by-.025; body.add(ts);
   world.add(pivot); tagMeshes.push(m);
@@ -2796,6 +2796,32 @@ window.__essai={
       n+=h; if(q===0) centre=h;
     }
     return {n:n,centre:centre};
+  },
+  /* Le même relevé, mais sérieux : une grille de quarante-neuf points sur
+     la zone écrite de l'étiquette — pas son contour —, un rayon de l'œil
+     vers chacun, et tout ce que la scène porte devant. Les branches et les
+     rubans y sont, eux que le choix d'angle ne regardait pas. Rend la part
+     couverte, de zéro à un, et le nom de ce qui couvre. */
+  couvert:function(ind,quelPoint){
+    var t=ind===undefined||ind===null?vise:tags[Object.keys(tags)[ind]];
+    if(!t) return null;
+    var dedans=function(o){ var q=o; while(q){ if(q===t.pivot) return true; q=q.parent; } return false; };
+    var obst=[];
+    world.traverse(function(o){ if(o.isMesh&&o.visible&&!dedans(o)) obst.push(o); });
+    var S=SHAPES[t.w.s], tx=S.tx, nx=7, ny=7;
+    var ray=new THREE.Raycaster(), oe=quelPoint||camera.position;
+    var pt=new THREE.Vector3(), dv=new THREE.Vector3(), pris=0, tot=0, quoi={}, a, b;
+    for(a=0;a<nx;a++) for(b=0;b<ny;b++){
+      var u=tx[0]+(tx[2]-tx[0])*(a/(nx-1)), v=tx[1]+(tx[3]-tx[1])*(b/(ny-1));
+      pt.set((u-.5)*S.w,S.top*S.h-v*S.h,0).applyMatrix4(t.mesh.matrixWorld);
+      dv.subVectors(pt,oe); var d=dv.length(); dv.multiplyScalar(1/d);
+      ray.set(oe,dv); ray.near=0; ray.far=d-.02;
+      var h=ray.intersectObjects(obst,false);
+      tot++; if(h.length){ pris++; var nm=h[0].object.name||"?"; quoi[nm]=(quoi[nm]|0)+1; }
+    }
+    return {part:+(pris/tot).toFixed(2),quoi:quoi,
+      ecran:(function(){ var v=new THREE.Vector3(); t.mesh.getWorldPosition(v); v.project(camera);
+        return [+v.x.toFixed(2),+v.y.toFixed(2)]; })()};
   },
   /* La place qu'a reçue le vœu qu'on regarde, et son dégagement. */
   place:function(){ if(!vise) return null;

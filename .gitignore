@@ -28,3 +28,6 @@ public/wishes/
 .cache/
 /livraison/
 /.avant/
+
+# Sondes jetables de l'épreuve : elles vivent le temps d'un diagnostic.
+tests/.*.mjs
