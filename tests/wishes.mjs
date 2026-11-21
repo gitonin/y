@@ -75,12 +75,13 @@ check('le relevé du relief et les images sont compressés à la volée', htacce
    affichage double. */
 check('aucune image n’est encodée dans la page', !/data:image\/(png|jpe?g);base64/.test(page));
 const kob = Math.round(Buffer.byteLength(page) / 1024);
-/* Le garde-fou n'est pas la taille elle-même — deux cent quarante kilo-octets
-   de texte se compressent à moins de cent — mais le retour des images
-   encodées, qui, elles, ne se compressent pas. C'est la vérification
-   au-dessus qui les attrape ; celle-ci dit seulement que la page reste une
-   page. */
-check(`la page tient en moins de 270 Ko (${kob})`, kob < 270);
+/* Le garde-fou n'est pas la taille elle-même — deux cent soixante-dix
+   kilo-octets de texte se compressent à moins de cent-dix — mais le retour
+   des images encodées, qui, elles, ne se compressent pas. C'est la
+   vérification au-dessus qui les attrape ; celle-ci dit seulement que la
+   page reste une page. Le plafond suit donc le texte, qui grossit à chaque
+   soin apporté : trois cents kilo-octets, soit cent-vingt sur le réseau. */
+check(`la page tient en moins de 300 Ko (${kob})`, kob < 300);
 
 /* ------------------------------------------------------------------ *
  * 2. Plus rien de l'environnement d'origine
@@ -739,6 +740,29 @@ titre('Le son revient quand on revient');
   check(`et la mélodie continue d’avancer (${a.horloge} → ${b.horloge})`, b.horloge > a.horloge);
   check('les notes restent programmées en avance', b.avance > 0);
 
+  /* L'horloge du son remplacée. Une horloge de son ne recule jamais… sauf
+     quand le navigateur en reconstruit une, ce qui arrive au retour
+     d'arrière-plan sur certains téléphones : la nouvelle repart de zéro,
+     l'instant de la note suivante reste à trois cents, et la boucle n'a
+     plus rien à programmer — jamais. L'arbre se taisait pour de bon, et
+     l'état du son disait « en marche ». */
+  await p.evaluate(() => window.__essai.musiqueQuand(300));
+  const loin = await etat();
+  await p.waitForTimeout(2000);
+  const revenu2 = await etat();
+  check(`une note posée à trois cents secondes ne fige pas la mélodie (${loin.avance} → ${revenu2.avance})`,
+    revenu2.avance < 14 && revenu2.note !== loin.note);
+
+  /* Et la chaîne entière reconstruite : c'est le dernier recours, quand
+     une horloge arrêtée ne veut plus repartir. */
+  const gen = await p.evaluate(() => window.__essai.audioRefaire());
+  await p.waitForTimeout(1500);
+  const neuf = await etat();
+  check(`la chaîne se refait au besoin (génération ${gen})`, gen > 0 && neuf.etat === 'running');
+  await p.waitForTimeout(2000);
+  const neuf2 = await etat();
+  check(`et la mélodie repart dessus (${neuf.horloge} → ${neuf2.horloge})`, neuf2.horloge > neuf.horloge);
+
   /* Le retour qu'on refuse en silence. */
   await p.evaluate(() => { window.__refuse = true; });
   await visibilite(true);
@@ -746,13 +770,16 @@ titre('Le son revient quand on revient');
   await visibilite(false);
   await p.waitForTimeout(900);
   check('une reprise refusée laisse bien l’horloge arrêtée', (await etat()).etat, 'suspended');
-  const arme = await p.waitForFunction(() => window.__essai.audio().arme, null, { timeout: 20000 })
+  /* L'insistance dure huit battements de trois dixièmes ; sur une machine
+     sans carte graphique, où une image prend une seconde, ces battements
+     s'étirent d'autant. On attend donc large. */
+  const arme = await p.waitForFunction(() => window.__essai.audio().arme, null, { timeout: 60000 })
     .then(() => true).catch(() => false);
   check('mais le secours s’arme', arme);
   /* Et le premier geste du visiteur la rallume — un seul suffit. */
   await p.evaluate(() => { window.__refuse = false; });
   await p.evaluate(() => document.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
-  const rallume = await p.waitForFunction(() => window.__essai.audio().etat === 'running', null, { timeout: 20000 })
+  const rallume = await p.waitForFunction(() => window.__essai.audio().etat === 'running', null, { timeout: 30000 })
     .then(() => true).catch(() => false);
   check('et le premier geste la rallume', rallume);
   check('le secours se désarme derrière lui', (await etat()).arme, false);

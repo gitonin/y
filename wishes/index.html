@@ -1174,6 +1174,10 @@ $("cmodal").onclick=function(e){ if(e.target===$("cmodal")) $("cmodal").classLis
 
 /* ------------------------------------------------------------------ audio (synthesised, no files) */
 var AC=null, master=null, muted=false, bus=null, sfxBus=null, SCALE=[], mIdx=7;
+/* Chaque chaîne audio porte son numéro : quand on en reconstruit une, les
+   minuteries de l'ancienne s'arrêtent d'elles-mêmes au lieu d'aller greffer
+   leurs oscillateurs sur une chaîne morte. */
+var AUDIOGEN=0;
 (function(){ var r=[1,1.2,4/3,1.5,1.8]; for(var i=0;i<14;i++) SCALE.push(123.47*r[i%5]*Math.pow(2,Math.floor(i/5))); })();
 function startAudio(){
   try{
@@ -1187,14 +1191,15 @@ function startAudio(){
     sfxBus=AC.createGain(); sfxBus.gain.value=.8; sfxBus.connect(master); var sfxSend=AC.createGain(); sfxSend.gain.value=1.1; sfxBus.connect(sfxSend); sfxSend.connect(conv);
     var lp=AC.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=1500; lp.connect(bus);
     // a very low gong : soft mallet, slow beating partials, long tail
-    var gong=function(){ if(!AC||AC.state!=="running"||NOEL.on) return; var t=AC.currentTime+.05, FS=[98,110,123.47,146.83,164.81,196,220,246.94], f=FS[Math.floor(Math.random()*FS.length)], v=(.7+Math.random()*.25)*(f>170?.75:1), dk=f>170?.6:.8;
+    var maGen=AUDIOGEN;
+    var gong=function(){ if(maGen!==AUDIOGEN||!AC||AC.state!=="running"||NOEL.on) return; var t=AC.currentTime+.05, FS=[98,110,123.47,146.83,164.81,196,220,246.94], f=FS[Math.floor(Math.random()*FS.length)], v=(.7+Math.random()*.25)*(f>170?.75:1), dk=f>170?.6:.8;
       [[1,.5,17],[2,.26,13],[2.76,.13,9],[3.42,.06,6],[4.3,.03,4]].forEach(function(p){ [0,.45].forEach(function(b){
         var o=AC.createOscillator(), g=AC.createGain(); o.type="sine"; o.frequency.value=f*p[0]+b;
         g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(p[1]*v,t+.05); g.gain.exponentialRampToValueAtTime(.0001,t+p[2]*dk);
         o.connect(g); g.connect(lp); o.start(t); o.stop(t+p[2]*dk+.1); }); });
       var th=AC.createOscillator(), tg=AC.createGain(); th.type="sine"; th.frequency.setValueAtTime(f*2.2,t); th.frequency.exponentialRampToValueAtTime(f,t+.3);
       tg.gain.setValueAtTime(0,t); tg.gain.linearRampToValueAtTime(.35*v,t+.01); tg.gain.exponentialRampToValueAtTime(.0001,t+.5); th.connect(tg); tg.connect(lp); th.start(t); th.stop(t+.6); };
-    setTimeout(gong,1200); (function loop(){ setTimeout(function(){ gong(); loop(); },7000+Math.random()*6000); })();
+    setTimeout(gong,1200); (function loop(){ setTimeout(function(){ if(maGen!==AUDIOGEN) return; gong(); loop(); },7000+Math.random()*6000); })();
     master.gain.linearRampToValueAtTime(.75,AC.currentTime+2.5);
     if(AC.state==="suspended") AC.resume();
   }catch(e){ AC=null; }
@@ -1242,12 +1247,41 @@ $("add").addEventListener("click",function(){ cineStop(); });
    visiteur pour réessayer. La mélodie, elle, n'a rien perdu : une horloge
    suspendue ne vieillit pas, et les notes déjà programmées sont toujours
    devant nous. */
-var repriseArmee=false;
-function audioReprendre(){
+var repriseArmee=false, repriseTic=0, repriseN=0;
+function audioPousser(){
   if(!AC) return;
   try{ var pr=AC.resume(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){}
-  setTimeout(function(){ if(AC&&AC.state!=="running") audioArmerGeste(); },320);
 }
+/* On n'essaie plus une fois : on insiste. Le navigateur ne rend pas
+   toujours la main au même instant que la page — la session audio d'un
+   téléphone se rouvre un peu après le retour à l'écran —, et un seul essai
+   tombait souvent juste avant. Huit, répartis sur deux secondes et demie,
+   couvrent ce décalage sans que personne ne s'en aperçoive. */
+function audioReprendre(){
+  if(!AC) return;
+  audioPousser();
+  /* Une relance déjà en cours n'est pas remise à zéro : le retour sur une
+     page déclenche souvent trois événements coup sur coup — visibilité,
+     focus, page rendue — et les recommencer l'un après l'autre faisait une
+     insistance sans fin, qui ne laissait jamais la place au secours par le
+     geste. */
+  if(repriseTic) return;
+  repriseN=0;
+  repriseTic=setInterval(function(){
+    repriseN++;
+    if(!AC||AC.state==="running"||repriseN>8){
+      clearInterval(repriseTic); repriseTic=0;
+      if(AC&&AC.state!=="running") audioArmerGeste();
+      return;
+    }
+    audioPousser();
+  },300);
+}
+/* Et si rien n'y fait, on attend le premier geste du visiteur : sur
+   iPhone, une page revenue d'arrière-plan n'a pas toujours le droit de
+   redémarrer son audio sans lui. Ce geste-là essaie une dernière fois, et
+   reconstruit toute la chaîne s'il le faut — une horloge de son qui reste
+   arrêtée ne se répare pas, elle se remplace. */
 function audioArmerGeste(){
   if(repriseArmee||!AC) return;
   repriseArmee=true;
@@ -1255,10 +1289,21 @@ function audioArmerGeste(){
     repriseArmee=false;
     document.removeEventListener("pointerdown",essai,true);
     document.removeEventListener("touchend",essai,true);
-    if(AC){ try{ var pr=AC.resume(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){} }
+    audioPousser();
+    setTimeout(function(){ if(AC&&AC.state!=="running") audioRefaire(); },250);
   };
   document.addEventListener("pointerdown",essai,true);
   document.addEventListener("touchend",essai,true);
+}
+function audioRefaire(){
+  var etaitMuet=muted;
+  try{ if(AC) AC.close(); }catch(e){}
+  AC=null; master=null; bus=null; sfxBus=null; AUDIOGEN++;
+  startAudio();
+  if(AC){ muted=etaitMuet; if(etaitMuet&&master) master.gain.value=0;
+    /* La mélodie repart de la nouvelle horloge ; le planificateur s'en
+       charge au prochain battement. */
+    NOEL.quand=0; }
 }
 document.addEventListener("visibilitychange",function(){
   if(!AC) return;
@@ -2312,8 +2357,17 @@ function noelMaj(){
   /* Si l'horloge a pris de l'avance sur nous — le son coupé, un onglet
      laissé de côté —, on repart d'ici : sans cela, la boucle programmerait
      d'un coup toutes les notes du temps perdu, et elles sonneraient
-     ensemble. */
-  if(!NOEL.quand||NOEL.quand<t) NOEL.quand=t+.3;
+     ensemble.
+
+     Et s'il reste à l'inverse une avance impossible, on repart aussi. Une
+     horloge de son ne recule jamais… sauf quand le navigateur en reconstruit
+     une, ce qui arrive au retour d'arrière-plan sur certains téléphones : la
+     nouvelle repart de zéro, l'instant de la note suivante reste à trois
+     cents, et la boucle n'a plus rien à programmer — jamais. L'arbre se
+     taisait pour de bon, et l'état du son disait « en marche ». La pause zen
+     la plus longue met onze secondes : au-delà de quatorze, c'est que
+     l'horloge a changé. */
+  if(!NOEL.quand||NOEL.quand<t||NOEL.quand>t+14) NOEL.quand=t+.3;
   /* On programme tout ce qui tombe dans la seconde et demie qui vient. */
   while(NOEL.quand<t+1.4){
     var air=AIRS[NOEL.air], n=air.notes[NOEL.i];
@@ -2680,8 +2734,13 @@ window.__essai={
   audio:function(){ return {etat:AC?AC.state:"",muet:muted,
     gain:master?+master.gain.value.toFixed(2):-1,
     horloge:AC?+AC.currentTime.toFixed(2):-1,
-    note:NOEL.i,air:NOEL.air,arme:repriseArmee,
+    note:NOEL.i,air:NOEL.air,arme:repriseArmee,gen:AUDIOGEN,
     avance:AC?+(NOEL.quand-AC.currentTime).toFixed(2):-1}; },
+  /* Pour l'épreuve : poser l'instant de la note suivante où l'on veut —
+     notamment loin dans l'avenir, comme le fait une horloge de son
+     reconstruite — et reconstruire toute la chaîne à la demande. */
+  musiqueQuand:function(v){ if(AC) NOEL.quand=AC.currentTime+v; return NOEL.quand; },
+  audioRefaire:function(){ audioRefaire(); return AUDIOGEN; },
   musique:function(v){ if(v!==undefined&&v!==NOEL.on) noelBasculer();
     return {on:NOEL.on,air:NOEL.air,note:NOEL.i,airs:AIRS.length,
       noms:AIRS.map(function(a){return a.nom;}),
