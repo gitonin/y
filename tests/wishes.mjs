@@ -927,6 +927,17 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
     await p.evaluate(() => { const c = document.getElementById('card');
       return c.firstElementChild.id === 'cBy'; }));
   check('et l’arbre n’a pas perdu les autres', (await p.evaluate(() => window.__essai.voeux())) > 25);
+  /* Le mot qu'on vient d'écrire doit se lire. Il prenait la place suivante
+     dans l'ordre où l'arbre les avait fabriquées — la trente et unième,
+     derrière les trente vœux de décor : souvent au milieu des branches,
+     parfois derrière une autre étiquette. On compte donc les rayons qui,
+     du point où l'on se tient jusqu'au mot, traversent une feuille, une
+     cerise ou une voisine. */
+  const clair = await p.evaluate(() => window.__essai.degage());
+  check('rien ne passe devant le mot qu’on vient d’accrocher', clair.centre, 0);
+  check(`et rien ne le barre (${clair.n} rayon sur 5 frôlé)`, clair.n <= 1);
+  const pl = await p.evaluate(() => window.__essai.place());
+  check(`et il a reçu une place dégagée (${pl && pl.degagement})`, !!pl && pl.degagement > 2);
 
   /* Envoyer : le lien, le mail et le SMS. */
   await p.click('#cShare');

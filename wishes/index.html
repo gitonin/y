@@ -549,6 +549,13 @@ var extras=[];
 })();
 
 // tag slots : deterministic, spaced, identical for every visitor
+/* Ce qui fait qu'une place est bien dégagée : elle est loin du tronc, au
+   bout d'un fil assez long pour que l'étiquette pende dans l'air et non
+   dans les feuilles, et à mi-hauteur — ni dans la cime, ni dans les
+   branches basses où tout se croise. */
+function degagement(sl){
+  return Math.hypot(sl.pos[0],sl.pos[2])+sl.L*1.4-Math.abs(sl.pos[1]-treeTop*0.44)*0.85;
+}
 var slots=[], ribbonSpots=[];
 (function(){
   var c=anchorsAll.slice(), i,j;
@@ -568,13 +575,9 @@ var slots=[], ribbonSpots=[];
   });
   for(i=0;ribbonSpots.length<22&&i<c.length;i+=9) ribbonSpots.push(c[i]);
   /* La première place revient au vœu de Yunma, qui ouvre l'expérience : on
-     prend donc la mieux dégagée — loin du tronc, à mi-hauteur, au bout
-     d'un fil assez long pour que l'étiquette pende dans l'air et non dans
-     les feuilles. */
+     prend donc la mieux dégagée. */
   var mieux=-1e9, im=0;
-  for(i=0;i<slots.length;i++){ var sl=slots[i];
-    var sc=Math.hypot(sl.pos[0],sl.pos[2])+sl.L*1.4-Math.abs(sl.pos[1]-treeTop*0.44)*0.85;
-    if(sc>mieux){ mieux=sc; im=i; } }
+  for(i=0;i<slots.length;i++){ if(degagement(slots[i])>mieux){ mieux=degagement(slots[i]); im=i; } }
   if(im){ var tmp0=slots[0]; slots[0]=slots[im]; slots[im]=tmp0; }
 })();
 
@@ -1854,11 +1857,32 @@ function makeTag(w,slot,animate){
   return {w:w,txt:wishText(w),slot:slot,pivot:pivot,body:body,mesh:m,born:animate?clock:-99,h:(S.bot-S.top)*S.h};
 }
 function removeTag(t){ world.remove(t.pivot); var i=tagMeshes.indexOf(t.mesh); if(i>=0) tagMeshes.splice(i,1); }
+/* Où va quel vœu. Les places se suivaient dans l'ordre où l'arbre les avait
+   fabriquées : le vœu qu'on venait d'écrire prenait donc la trente et
+   unième venue, derrière les trente vœux de décor — souvent au milieu des
+   branches, parfois derrière une autre étiquette, et on ne pouvait plus le
+   lire. Or c'est le seul qui compte pour celui qui l'écrit.
+
+   Le vœu de Yunma et le décor ne bougent pas d'un pouce : ils gardent les
+   places qu'ils ont toujours eues, sans quoi l'arbre se remanierait sous
+   les yeux du visiteur à chaque mot ajouté. Ce sont les vrais vœux qui
+   prennent désormais les mieux dégagées de celles qui restent, dans
+   l'ordre. */
+var ORDRE=null;
+function placeDe(i,d){
+  if(i<=d) return i;
+  if(!ORDRE){
+    ORDRE=[]; for(var k=0;k<slots.length;k++) if(k>d) ORDRE.push(k);
+    ORDRE.sort(function(a,b){ return degagement(slots[b])-degagement(slots[a]); });
+  }
+  return ORDRE.length?ORDRE[(i-d-1)%ORDRE.length]:i%slots.length;
+}
 window.__syncTags=function(){
   /* Le vœu de Yunma garde la première place quoi qu'il arrive : si l'arbre
      déborde, ce sont les autres qu'on écarte, pas lui. */
-  var shown=[YUNMA].concat(wishes.filter(function(w){ return !w.yunma; }).slice(-(slots.length-1))), off=0, seen={}, focus=null;
-  shown.forEach(function(w,i){ var slot=slots[(off+i)%slots.length]; seen[w.id]=1; var t=tags[w.id];
+  var shown=[YUNMA].concat(wishes.filter(function(w){ return !w.yunma; }).slice(-(slots.length-1))), seen={}, focus=null;
+  var nDecor=DECOR.length;
+  shown.forEach(function(w,i){ var slot=slots[placeDe(i,nDecor)]; seen[w.id]=1; var t=tags[w.id];
     var had=!!t; if(t&&(t.slot!==slot||t.w.s!==w.s||t.txt!==wishText(w)||t.w.n!==w.n)){ removeTag(t); t=null; }
     if(!t){ tags[w.id]=makeTag(w,slot,!firstLoad&&!had); } else { t.w=w; t.mesh.userData.wish=w; }
     if(pendingFocus===w.id) focus=tags[w.id]; });
@@ -1938,8 +1962,24 @@ var derniereCible=0, vise=null, viseY=0;
    de face l'emporte : on ne fait pas le tour de l'arbre pour rien. */
 var rayVue=new THREE.Raycaster(), oeilV=new THREE.Vector3(), dirV=new THREE.Vector3(), cibleV=new THREE.Vector3(), cibleO=new THREE.Vector3();
 var DTH=[0,.3,-.3,.62,-.62,.95,-.95], DPH=[1.62,1.45,1.78];
-function angleDegage(cible,th0,r,demi){
+var vTag=new THREE.Vector3();
+function angleDegage(cible,th0,r,demi,sauf){
   var obst=[]; if(feuilles&&feuilles.visible) obst.push(feuilles); if(cerises&&cerises.visible) obst.push(cerises);
+  /* Les autres étiquettes comptent autant que les feuilles : un mot caché
+     par sa voisine est aussi illisible qu'un mot caché par une branche, et
+     c'est même le cas le plus vexant — on voit bien qu'il y a quelque
+     chose, et on ne peut pas le lire.
+
+     Mais seulement les voisines. Les trente autres ne peuvent rien cacher
+     d'ici, et les faire tester par chacun des cinq rayons de chacun des
+     vingt et un angles épuisait le budget de trente millisecondes avant
+     qu'on ait essayé les bons angles : on cherchait mieux, on trouvait
+     pire. */
+  for(var qo=0;qo<tagMeshes.length;qo++){
+    var tm=tagMeshes[qo]; if(tm===sauf) continue;
+    tm.getWorldPosition(vTag);
+    if(vTag.distanceToSquared(cible)<2.25) obst.push(tm);
+  }
   var best={th:th0,ph:1.62,n:0}; if(!obst.length) return best;
   best=null; var t0=performance.now();
   for(var i=0;i<DTH.length;i++) for(var j=0;j<DPH.length;j++){
@@ -1996,7 +2036,7 @@ function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(
   var r=pres?clamp(Math.max(.40/(tn*camera.aspect),.62/tn),1.7,3.7)
             :clamp(Math.max(.60/(tn*camera.aspect),.95/tn),2.3,5.4);
   var a=garder?{th:cam.th,ph:clamp(cam.ph,1.28,1.78)}
-              :angleDegage(cibleV,Math.atan2(p[0],p[2]),r,Math.max(.14,t.h*.42));
+              :angleDegage(cibleV,Math.atan2(p[0],p[2]),r,Math.max(.14,t.h*.42),t.mesh);
   var th=a.th;
   while(th-goal.th>Math.PI) th-=6.2832; while(th-goal.th<-Math.PI) th+=6.2832;
   goal.th=th; goal.ph=a.ph; goal.r=r; goal.tg.copy(cibleV); idle=0;
@@ -2656,6 +2696,34 @@ window.__essai={
   ciel2:function(){ return {volutes:RUB.grp.visible,filante:FIL.m.visible,
     opacite:+FIL.m.material.opacity.toFixed(2),voile:+RUB.mat.opacity.toFixed(2),
     y:+RUB.grp.position.y.toFixed(1),prochain:+(cielProchain-clock).toFixed(1)}; },
+  /* Ce qui se met entre le lecteur et le mot qu'il regarde. Cinq rayons :
+     le centre du mot, ses deux bords, son haut et son bas. On rend les deux
+     chiffres séparément, parce qu'ils ne disent pas la même chose : une
+     feuille qui frôle le bord d'une étiquette ne gêne personne, une feuille
+     en travers du mot le rend illisible. */
+  degage:function(){
+    if(!vise) return -1;
+    var obst=[], i; if(feuilles&&feuilles.visible) obst.push(feuilles);
+    if(cerises&&cerises.visible) obst.push(cerises);
+    for(i=0;i<tagMeshes.length;i++) if(tagMeshes[i]!==vise.mesh) obst.push(tagMeshes[i]);
+    var c=new THREE.Vector3(); vise.mesh.getWorldPosition(c);
+    var demi=Math.max(.14,vise.h*.42), th=cam.th;
+    var dx=Math.cos(th)*demi, dz=-Math.sin(th)*demi, n=0, q;
+    var o=camera.position, cv=new THREE.Vector3(), dv=new THREE.Vector3(), ray=new THREE.Raycaster();
+    var centre=0;
+    for(q=0;q<5;q++){
+      var ox=q===1?-1:q===2?1:0, oy=q===3?-1:q===4?1:0;
+      cv.set(c.x+dx*ox,c.y+demi*oy,c.z+dz*ox);
+      dv.subVectors(cv,o); var d=dv.length(); dv.multiplyScalar(1/d);
+      ray.set(o,dv); ray.near=0; ray.far=d-.14;
+      var h=ray.intersectObjects(obst,false).length;
+      n+=h; if(q===0) centre=h;
+    }
+    return {n:n,centre:centre};
+  },
+  /* La place qu'a reçue le vœu qu'on regarde, et son dégagement. */
+  place:function(){ if(!vise) return null;
+    return {rang:slots.indexOf(vise.slot),degagement:+degagement(vise.slot).toFixed(2)}; },
   /* Le vœu de Yunma, et l'ouverture qui se pose dessus. */
   yunma:function(){ return {texte:wishText(YUNMA), premier:wishes[0].id==="yunma",
     place:Object.keys(tags).indexOf("yunma"), accroche:!!tags.yunma}; },
@@ -3312,6 +3380,19 @@ function frame(now){
     if(a<5) amp+=.35*Math.exp(-a*.9);
     g.pivot.scale.setScalar(Math.max(.001,s));
     g.pivot.rotation.z=Math.sin(t*g.slot.w+g.slot.ph)*amp; g.pivot.rotation.x=Math.cos(t*g.slot.w*.83+g.slot.ph)*amp*.7;
+    /* Le mot qu'on est en train de lire s'avance vers le lecteur. Un sixième
+       d'unité suffit : l'étiquette se détache des cerises et des feuilles
+       qui lui frôlaient le bord, et l'on croit à une branche qui ploie vers
+       soi plutôt qu'à un décalque posé par-dessus l'arbre. Elle y revient
+       seule dès qu'on regarde ailleurs. */
+    var cible=(vise===g&&focused&&!CINE.ronde)?1:0;
+    g.avance=(g.avance||0)+(cible-(g.avance||0))*Math.min(1,dt*3.5);
+    var ap=g.slot.a.p;
+    if(g.avance>.002){
+      var ddx=camera.position.x-ap[0], ddz=camera.position.z-ap[2];
+      var dn=Math.hypot(ddx,ddz)||1, av=.17*g.avance;
+      g.pivot.position.set(ap[0]+ddx/dn*av,ap[1]-g.slot.a.r,ap[2]+ddz/dn*av);
+    } else g.pivot.position.set(ap[0],ap[1]-g.slot.a.r,ap[2]);
     g.body.rotation.y+=(Math.sin(t*.45+g.slot.ph)*.012)*dt*6; });
   /* La gerbe part à l'instant même où l'étiquette paraît, et non une
      seconde après la montre : les deux suivent la même horloge, celle de

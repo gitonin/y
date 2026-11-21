@@ -277,6 +277,41 @@ moment-là. Le vœu est enregistré, la gerbe le dit, et cette notice dit le
 reste. Les seuls messages qui restent répondent à un geste explicite — un lien
 copié, une carte enregistrée, un champ vide.
 
+## Le mot qu'on vient d'écrire se lit
+
+Les places dans l'arbre se suivaient dans l'ordre où il les avait fabriquées.
+Le vœu qu'on venait d'écrire prenait donc la trente et unième venue, derrière
+les trente vœux de décor : souvent au milieu des branches, parfois derrière une
+autre étiquette, et on ne pouvait plus le lire. Or c'est le seul qui compte
+pour celui qui l'écrit.
+
+Trois choses y pourvoient maintenant, et aucune ne triche sur la profondeur —
+une étiquette dessinée par-dessus l'arbre serait un décalque, pas un objet.
+
+1. **La place.** Le vœu de Yunma et le décor ne bougent pas d'un pouce : ils
+   gardent les leurs, sans quoi l'arbre se remanierait sous les yeux du
+   visiteur à chaque mot ajouté. Ce sont les vrais vœux qui prennent désormais
+   les mieux dégagées de celles qui restent — loin du tronc, au bout d'un long
+   fil, à mi-hauteur —, dans l'ordre.
+2. **L'angle.** Le choix de l'angle de vue tenait compte des feuilles et des
+   cerises, pas des autres étiquettes. Un mot caché par sa voisine est pourtant
+   aussi illisible qu'un mot caché par une branche, et c'est même le cas le
+   plus vexant : on voit bien qu'il y a quelque chose, et on ne peut pas le
+   lire. Seules les voisines sont testées — les trente autres ne peuvent rien
+   cacher d'ici, et les faire essayer par chacun des cinq rayons de chacun des
+   vingt et un angles épuisait le budget de trente millisecondes avant qu'on
+   ait tenté les bons angles : on cherchait mieux, on trouvait pire.
+3. **L'avancée.** Le mot qu'on est en train de lire s'avance d'un sixième
+   d'unité vers le lecteur. L'étiquette se détache des cerises et des feuilles
+   qui lui frôlaient le bord, et l'on croit à une branche qui ploie vers soi.
+   Elle y revient seule dès qu'on regarde ailleurs.
+
+**Ce qui est mesuré**, et dit tel quel : cinq rayons partent du point où se
+tient le lecteur vers le mot — son centre, ses deux bords, son haut, son bas —
+et l'on compte ceux qui traversent une feuille, une cerise ou une voisine. Le
+centre n'est jamais traversé : le mot lui-même se lit toujours. Au pire, une
+feuille frôle le bord de l'étiquette, et cela ne gêne personne.
+
 ## Toucher un vœu
 
 Toucher une étiquette **s'en approche**, et fait paraître une pilule discrète
