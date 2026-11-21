@@ -1872,16 +1872,22 @@ function gelsVivants(sauf){
 /* Les seules gélules qui pourraient se mettre devant ce mot-ci. Les écarter
    une fois, au lieu de les essayer à chaque angle : c'est ce tri qui rend
    le reste gratuit. */
-var PROCHES=[];
+var PROCHES=[], TRI=[];
 function gelsProches(cx,cy,cz,portee){
-  PROCHES.length=0;
+  PROCHES.length=0; TRI.length=0;
   var i, n=GELF.length;
   for(i=0;i<n;i+=7){
     var mx=(GELF[i]+GELF[i+3])*.5-cx, my=(GELF[i+1]+GELF[i+4])*.5-cy, mz=(GELF[i+2]+GELF[i+5])*.5-cz;
     var dx=GELF[i+3]-GELF[i], dy=GELF[i+4]-GELF[i+1], dz=GELF[i+5]-GELF[i+2];
-    var lim=portee+GELF[i+6]+Math.sqrt(dx*dx+dy*dy+dz*dz)*.5;
-    if(mx*mx+my*my+mz*mz<lim*lim) PROCHES.push(i);
+    var d2=mx*mx+my*my+mz*mz, lim=portee+GELF[i+6]+Math.sqrt(dx*dx+dy*dy+dz*dz)*.5;
+    if(d2<lim*lim) TRI.push([d2,i]);
   }
+  /* De la plus proche du mot à la plus lointaine. Un rayon s'arrête à sa
+     première rencontre : en commençant par ce qui serre l'étiquette, on
+     trouve l'obstacle en quelques essais au lieu de deux mille, et le
+     garde-fou des vingt-cinq millisecondes ne sert plus. */
+  TRI.sort(function(a,b){ return a[0]-b[0]; });
+  for(i=0;i<TRI.length;i++) PROCHES.push(TRI[i][1]);
 }
 /* Ce rayon-là est-il arrêté ? */
 function gelBloque(ox,oy,oz,px,py,pz){
@@ -1892,14 +1898,16 @@ function gelBloque(ox,oy,oz,px,py,pz){
     if(segSeg2(ox,oy,oz,px,py,pz,GELV[k],GELV[k+1],GELV[k+2],GELV[k+3],GELV[k+4],GELV[k+5])<r*r) return true; }
   return false;
 }
-/* Cinq rayons vers un mot : son centre, ses deux bords, son haut, son bas.
-   Une feuille qui couvre la moitié d'une étiquette ne croise pas forcément
-   son milieu, et un seul rayon la déclarerait dégagée. On s'arrête à deux
+/* Neuf rayons vers un mot : son centre, ses quatre bords et ses quatre
+   coins. Cinq ne suffisaient pas — une étiquette voisine qui couvrait un
+   coin passait inaperçue, et le mot était déclaré dégagé alors qu'un
+   sixième de son texte se lisait derrière elle. On s'arrête à deux
    centimètres de l'étiquette pour ne pas compter ce qui la frôle. */
+var MX=[0,-1,1,0,0,-.78,.78,-.78,.78], MY=[0,0,0,-1,1,-.78,-.78,.78,.78];
 function motCouvert(ox,oy,oz,cx,cy,cz,th,dmx,dmy){
   var dx=Math.cos(th)*dmx, dz=-Math.sin(th)*dmx, n=0, q;
-  for(q=0;q<5;q++){
-    var ex=q===1?-1:q===2?1:0, ey=q===3?-1:q===4?1:0;
+  for(q=0;q<9;q++){
+    var ex=MX[q], ey=MY[q];
     var px=cx+dx*ex, py=cy+dmy*ey, pz=cz+dz*ex;
     var vx=px-ox, vy=py-oy, vz=pz-oz, d=Math.sqrt(vx*vx+vy*vy+vz*vz)||1, k=(d-.02)/d;
     if(gelBloque(ox,oy,oz,ox+vx*k,oy+vy*k,oz+vz*k)) n++;
