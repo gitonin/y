@@ -2745,7 +2745,11 @@ function cineStart(){
 }
 function cineStop(muet){
   if(!CINE.on) return;
-  CINE.on=false; barreVoeu();
+  /* La ronde s'arrête avec la visite. Ce drapeau restait levé après coup,
+     et comme c'est lui qui empêche le vœu de s'avancer vers son lecteur
+     pendant les plans larges, le pas en avant ne se faisait plus jamais
+     dès qu'un plan large avait eu lieu — c'est-à-dire presque toujours. */
+  CINE.on=false; CINE.ronde=false; barreVoeu();
   if(!muet) closeCard(true);
 }
 /* Les plans. Chacun pose la caméra, dit à quelle vitesse l'arbre tourne, et
@@ -3656,7 +3660,7 @@ function frame(now){
        qui lui frôlaient le bord, et l'on croit à une branche qui ploie vers
        soi plutôt qu'à un décalque posé par-dessus l'arbre. Elle y revient
        seule dès qu'on regarde ailleurs. */
-    var cible=(vise===g&&focused&&!CINE.ronde)?1:0;
+    var cible=(vise===g&&focused&&!(CINE.on&&CINE.ronde))?1:0;
     g.avance=(g.avance||0)+(cible-(g.avance||0))*Math.min(1,dt*3.5);
     var ap=g.slot.a.p;
     g.pivot.position.set(ap[0],ap[1]-g.slot.a.r,ap[2]);
