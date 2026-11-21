@@ -909,6 +909,67 @@ titre('Toucher un vœu s’en approche, sans fiche par-dessus');
 }
 
 /* ------------------------------------------------------------------ *
+ * Le mot qu'on regarde est devant tout le reste
+ * ------------------------------------------------------------------ *
+ * C'est la seule chose qui compte dans cet arbre : le mot doit se lire.
+ * Or un vœu pend sous sa branche, au milieu des feuilles, et la moitié
+ * des vœux du décor étaient couverts de soixante-cinq à quatre-vingt-dix
+ * pour cent — par les feuilles, les cerises, les branches, les rubans, et
+ * parfois par une autre étiquette, ce qui est le plus vexant : on voit
+ * qu'il y a un mot, et on ne peut pas le lire.
+ *
+ * Le relevé ne croit pas l'approche sur parole. L'approche, elle, raisonne
+ * sur des gélules — des segments et des rayons — parce qu'il lui faut sa
+ * réponse en moins d'une image. Le relevé, lui, a tout son temps : il tire
+ * quarante-neuf rayons sur la zone écrite de l'étiquette et croise les
+ * vrais maillages de la scène, tous. Si les deux se mettent à diverger, ce
+ * contrôle le dira.
+ */
+titre('Le vœu qu’on regarde est devant tout le reste');
+{
+  const { ctx, p, bruit } = await ouvrir(13);
+  /* La visite guidée reprend la main dès qu'on la laisse tranquille, et
+     une visée qu'elle a reprise ne mesure plus rien. On la réaffirme donc
+     jusqu'à ce que le pas en avant soit complet, et l'on relève dans le
+     même aller-retour : entre deux, elle a le temps de tout annuler. */
+  const poserSur = async (i) => {
+    for (let k = 0; k < 12; k++) {
+      await p.evaluate((j) => {
+        const e = window.__essai, s = e.sortie();
+        if (!s || e.visiteOn() || s.avance < 0.99) { e.visite(false); e.viser(j, false, false); e.poser(); }
+      }, i);
+      await p.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+      const o = await p.evaluate(() => {
+        const e = window.__essai, s = e.sortie();
+        return s && s.avance > 0.99 ? { s, c: e.couvert() } : null;
+      });
+      if (o) return o;
+    }
+    return null;
+  };
+  const n = await p.evaluate(() => window.__essai.voeux());
+  const releves = [];
+  for (let i = 0; i < n; i += 4) releves.push([i, await poserSur(i)]);
+  check(`on arrive à se poser sur chacun (${releves.length} vœux)`, releves.every(([, o]) => !!o));
+  const sales = releves.filter(([, o]) => o && o.c.part > 0.04);
+  check(`et aucun n’est couvert (${sales.map(([i, o]) => `${i}:${o.c.part}`).join(' ') || 'tous dégagés'})`,
+    sales.length, 0);
+  /* Le pas en avant est la moitié du remède : sans lui, il faudrait faire
+     le tour de l'arbre, et l'on perdrait le lecteur. */
+  const pas = releves.filter(([, o]) => o && o.s.pas > 0).length;
+  check(`certains ont eu besoin d’un pas en avant (${pas}/${releves.length})`, pas > 0);
+  /* Et cela doit rester gratuit : la recherche a lieu au doigt. */
+  const couts = await p.evaluate(() => {
+    const n2 = window.__essai.voeux(), o = [];
+    for (let i = 0; i < n2; i++) o.push(window.__essai.angle(i).ms);
+    return o;
+  });
+  check(`chercher la vue dégagée coûte au plus ${Math.max(...couts)} ms`, Math.max(...couts) < 20);
+  check(`aucune erreur (${bruit.length})`, bruit.length, 0);
+  await ctx.close();
+}
+
+/* ------------------------------------------------------------------ *
  * Un vœu écrit à la main, envoyé pour de bon
  * ------------------------------------------------------------------ *
  * Tout le reste ne vaut rien si ce chemin-là est coupé. On l'emprunte donc
@@ -970,6 +1031,11 @@ titre('Un vœu écrit à la main part vraiment, et arrive');
   const clair = await p.evaluate(() => window.__essai.degage());
   check('rien ne passe devant le mot qu’on vient d’accrocher', clair.centre, 0);
   check(`et rien ne le barre (${clair.n} rayon sur 5 frôlé)`, clair.n <= 1);
+  /* Le relevé sérieux, celui qui croise toute la scène sur quarante-neuf
+     points : c'est son propre mot, c'est celui qui compte le plus. */
+  const net = await p.evaluate(() => window.__essai.couvert());
+  check(`et sa zone écrite est entièrement dégagée (${net.part} couverte${
+    Object.keys(net.quoi).length ? ' par ' + JSON.stringify(net.quoi) : ''})`, net.part <= 0.02);
   const pl = await p.evaluate(() => window.__essai.place());
   check(`et il a reçu une place dégagée (${pl && pl.degagement})`, !!pl && pl.degagement > 2);
 
@@ -1224,6 +1290,10 @@ titre('La story se fabrique dans la page');
   await p.click('#byStory');
   await p.waitForTimeout(900);
   const pendant = await p.evaluate(() => window.__essai.story());
+  /* Ce qu'on filme doit se lire : c'est le seul endroit où le mot partira
+     sans son lecteur, et où personne ne pourra tourner autour. */
+  const filme = await p.evaluate(() => window.__essai.couvert());
+  check(`le mot filmé est dégagé (${filme ? filme.part : 'pas de vœu'})`, !!filme && filme.part <= 0.02);
   check('le tournage commence au format d’une story', pendant.w === 720 && pendant.h === 1280);
   check('et la scène est rendue à ce format', pendant.toile[0] === 720 && pendant.toile[1] === 1280);
   check('on le dit pendant qu’il dure', /fabrique/.test(pendant.note));
