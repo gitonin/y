@@ -312,10 +312,22 @@ et l'on compte ceux qui traversent une feuille, une cerise ou une voisine. Le
 centre n'est jamais traversé : le mot lui-même se lit toujours. Au pire, une
 feuille frôle le bord de l'étiquette, et cela ne gêne personne.
 
-## Deux pièges du tactile
+## Trois pièges du tactile
 
-Les deux se sont vus sur un téléphone et pas sur un ordinateur, et tous deux
-prenaient au visiteur la fiche qu'on lui avait promise après son vœu.
+Les trois se sont vus sur un téléphone et pas sur un ordinateur. Les deux
+premiers prenaient au visiteur la fiche qu'on lui avait promise après son vœu ;
+le troisième l'empêchait d'écrire son prénom.
+
+**Le clavier ne pousse rien : il se pose par-dessus la page.** Un panneau collé
+au bas de l'écran passe donc dessous dès qu'on touche un champ, avec ses
+boutons — on écrivait son prénom, et « Retour » comme « Accrocher à l'arbre »
+ne répondaient plus, non parce qu'ils étaient cassés, mais parce qu'ils
+n'étaient plus là où l'on tapait. Le navigateur sait ce qui reste de l'écran
+une fois le clavier posé : la différence avec la fenêtre entière est la hauteur
+du clavier, et c'est elle qu'on donne au panneau pour qu'il se tienne
+au-dessus. Là où cette mesure n'existe pas, ou là où le clavier pousse
+vraiment la page — beaucoup d'Android —, la différence est nulle et rien ne
+change.
 
 **Le relais d'ouverture ne faisait que se repousser.** Sept secondes après
 l'arrivée, la visite guidée prend la main ; tant qu'un panneau est ouvert, le

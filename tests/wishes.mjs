@@ -1065,6 +1065,27 @@ titre('Accrocher son vœu, sur un téléphone');
   await p.tap('#stNext');
   await p.waitForTimeout(400);
   await p.fill('#name', 'Antonin');
+  /* Le clavier. On ne peut pas en ouvrir un vrai dans un navigateur sans
+     écran, mais on peut poser la mesure qu'il produit — la hauteur qu'il
+     mange en bas — et vérifier ce qui en dépend : que les boutons du
+     panneau restent au-dessus de lui, et qu'un doigt posé dessus les
+     atteigne. Sans cela ils passaient dessous, et « Retour » comme
+     « Accrocher à l'arbre » ne répondaient plus. */
+  const sousClavier = (h) => p.evaluate((px) => {
+    document.documentElement.style.setProperty('--clavier', px + 'px');
+    const b = document.getElementById('stBack').getBoundingClientRect();
+    const sous = document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2);
+    const f = document.getElementById('sheet').getBoundingClientRect();
+    return { bas: Math.round(b.bottom), visible: Math.round(innerHeight - px),
+      touche: !!sous && (sous.id === 'stBack' || sous.closest('#stBack') !== null),
+      haut: Math.round(f.top) };
+  }, h);
+  const k = await sousClavier(320);
+  check(`clavier ouvert, les boutons restent au-dessus (bas ${k.bas} ≤ ${k.visible})`, k.bas <= k.visible);
+  check('et le doigt les atteint', k.touche);
+  check(`le panneau tient dans ce qui reste (haut ${k.haut})`, k.haut >= 0);
+  const k0 = await sousClavier(0);
+  check('clavier refermé, le panneau redescend', k0.bas > k.bas && k0.touche);
   /* Le fantôme est armé depuis la page, pour qu'il parte bien trois cents
      millisecondes après le doigt et non après un aller-retour du harnais. */
   const boite = await p.evaluate(() => { const b = document.getElementById('hang').getBoundingClientRect();

@@ -117,10 +117,17 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 #intro .by img{display:block;height:78px;width:auto;margin:10px auto 0}
 
 /* sheet */
-#sheet{position:fixed;left:0;right:0;bottom:0;z-index:12;background:rgba(var(--beige-rgb),.96);backdrop-filter:blur(14px);
+/* Le panneau se pose au-dessus du clavier, et non dessous. Sur un
+   téléphone, le clavier ne pousse rien : il se dépose par-dessus la page.
+   Un panneau collé au bas de l'écran passait donc dessous dès qu'on
+   touchait un champ, avec ses boutons — on écrivait son prénom, et
+   « Retour » comme « Accrocher à l'arbre » ne répondaient plus, parce
+   qu'ils n'étaient tout simplement plus là où l'on tapait. La hauteur du
+   clavier est mesurée plus bas et posée dans « --clavier ». */
+#sheet{position:fixed;left:0;right:0;bottom:var(--clavier,0px);z-index:12;background:rgba(var(--beige-rgb),.96);backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);border-radius:8px 8px 0 0;box-shadow:0 -20px 60px -24px rgba(var(--ink-rgb),.35);
-  max-height:78vh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1);
-  max-width:560px;margin:0 auto}
+  max-height:calc(78vh - var(--clavier,0px));display:flex;flex-direction:column;transform:translateY(105%);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);max-width:560px;margin:0 auto}
 #sheet.open{transform:none}
 #sheet header{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 18px 10px}
 #sheet header h2{margin:0;font-size:18px;font-weight:500;line-height:1.25}
@@ -3030,6 +3037,22 @@ try{
 function resize(){ var w=window.innerWidth, h=window.innerHeight; renderer.setPixelRatio(PR); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
   if(rt){ var W=Math.floor(w*PR), H=Math.floor(h*PR); rt.setSize(W,H); postMat.uniforms.uRes.value.set(W,H); postMat.uniforms.uUnit.value=H/820; }
   fitHome(); if(!focused){ goal.r=homeR; goal.tg.setY(homeY); } }
+/* ---- la fenêtre visible, et le clavier qui la mange ----
+   Ce que le navigateur appelle la fenêtre visible est ce qui reste de
+   l'écran une fois le clavier posé dessus. La différence avec la fenêtre
+   tout court est la hauteur du clavier : c'est elle qu'on donne au panneau
+   d'écriture pour qu'il se tienne au-dessus. Là où cette mesure n'existe
+   pas — un vieux navigateur —, la valeur reste à zéro et rien ne change ;
+   là où le clavier pousse vraiment la page, comme sur beaucoup
+   d'Android, la différence est nulle et rien ne change non plus. */
+var vueVis=window.visualViewport;
+function clavierMaj(){
+  if(!vueVis) return;
+  var bas=Math.max(0,Math.round(window.innerHeight-vueVis.height-vueVis.offsetTop));
+  if(bas<60) bas=0;
+  CSSV.setProperty("--clavier",bas+"px");
+}
+if(vueVis){ vueVis.addEventListener("resize",clavierMaj); vueVis.addEventListener("scroll",clavierMaj); clavierMaj(); }
 window.addEventListener("resize",resize); resize(); cam.r=homeR*1.5; goal.r=homeR; cam.tg.setY(homeY); goal.tg.setY(homeY);
 
 /* ------------------------------------------------------------------ la story
