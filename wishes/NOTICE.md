@@ -292,40 +292,73 @@ moment-là. Le vœu est enregistré, la gerbe le dit, et cette notice dit le
 reste. Les seuls messages qui restent répondent à un geste explicite — un lien
 copié, une carte enregistrée, un champ vide.
 
-## Le mot qu'on vient d'écrire se lit
+## Tout mot qu'on regarde est devant le reste
 
 Les places dans l'arbre se suivaient dans l'ordre où il les avait fabriquées.
 Le vœu qu'on venait d'écrire prenait donc la trente et unième venue, derrière
 les trente vœux de décor : souvent au milieu des branches, parfois derrière une
-autre étiquette, et on ne pouvait plus le lire. Or c'est le seul qui compte
-pour celui qui l'écrit.
+autre étiquette, et on ne pouvait plus le lire. On lui a donné une bonne place,
+puis un angle choisi, puis un sixième d'unité d'avancée — et l'on a cru que
+c'était réglé.
 
-Trois choses y pourvoient maintenant, et aucune ne triche sur la profondeur —
-une étiquette dessinée par-dessus l'arbre serait un décalque, pas un objet.
+Ce ne l'était pas. **La moitié des vœux du décor étaient couverts de
+soixante-cinq à quatre-vingt-dix pour cent**, l'un d'eux entièrement par sa
+voisine. Or le décor, c'est ce qu'on regarde pendant toute la visite. Trois
+raisons, trouvées en mesurant :
 
-1. **La place.** Le vœu de Yunma et le décor ne bougent pas d'un pouce : ils
-   gardent les leurs, sans quoi l'arbre se remanierait sous les yeux du
-   visiteur à chaque mot ajouté. Ce sont les vrais vœux qui prennent désormais
-   les mieux dégagées de celles qui restent — loin du tronc, au bout d'un long
-   fil, à mi-hauteur —, dans l'ordre.
-2. **L'angle.** Le choix de l'angle de vue tenait compte des feuilles et des
-   cerises, pas des autres étiquettes. Un mot caché par sa voisine est pourtant
-   aussi illisible qu'un mot caché par une branche, et c'est même le cas le
-   plus vexant : on voit bien qu'il y a quelque chose, et on ne peut pas le
-   lire. Seules les voisines sont testées — les trente autres ne peuvent rien
-   cacher d'ici, et les faire essayer par chacun des cinq rayons de chacun des
-   vingt et un angles épuisait le budget de trente millisecondes avant qu'on
-   ait tenté les bons angles : on cherchait mieux, on trouvait pire.
-3. **L'avancée.** Le mot qu'on est en train de lire s'avance d'un sixième
-   d'unité vers le lecteur. L'étiquette se détache des cerises et des feuilles
-   qui lui frôlaient le bord, et l'on croit à une branche qui ploie vers soi.
-   Elle y revient seule dès qu'on regarde ailleurs.
+- Le choix d'angle ne regardait **que** les feuilles, les cerises et les
+  étiquettes à moins d'une unité et demie. Ni les branches, ni les rubans, ni
+  l'île. Ce qu'il ne regardait pas, il ne pouvait pas l'éviter.
+- Il abandonnait au bout de trente millisecondes, parce que croiser les vrais
+  maillages coûte trop cher : les six mille feuilles sont une seule grappe
+  d'instances, que three.js essaie une par une, triangle par triangle. On
+  cherchait mieux, on gardait pire.
+- Et l'avancée ne se faisait **jamais**. La ronde de la visite guidée
+  s'arrêtait sans abaisser son drapeau, et c'est ce drapeau qui interdit au vœu
+  de s'avancer pendant les plans larges. Dès qu'un plan large avait eu lieu —
+  c'est-à-dire presque toujours — le sixième d'unité restait lettre morte.
 
-**Ce qui est mesuré**, et dit tel quel : cinq rayons partent du point où se
-tient le lecteur vers le mot — son centre, ses deux bords, son haut, son bas —
-et l'on compte ceux qui traversent une feuille, une cerise ou une voisine. Le
-centre n'est jamais traversé : le mot lui-même se lit toujours. Au pire, une
-feuille frôle le bord de l'étiquette, et cela ne gêne personne.
+### Des gélules, et un pas en avant
+
+**Savoir ce qu'il y a devant.** Chaque feuille, chaque cerise, chaque bout de
+branche, chaque étiquette et chaque ruban devient une gélule : un segment et un
+rayon. Un rayon contre une gélule, c'est une distance entre deux segments —
+trente opérations, sans un objet alloué. Les dix mille gélules sont triées de
+la plus proche du mot à la plus lointaine, et l'on écarte en un passage celles
+qui ne longent pas le trajet. Ce qui coûtait trente millisecondes pour cinq
+rayons en coûte quelques dixièmes pour vingt-cinq, et l'on peut enfin essayer
+les quatre-vingt-quatre combinaisons au lieu d'abandonner à la première
+passable.
+
+**Vingt-cinq rayons**, une grille sur toute la zone écrite. Neuf laissaient
+passer un ruban qui barre un coin : assez fin pour tomber entre les points,
+assez large pour cacher trois lettres.
+
+**Le mot vient au lecteur.** C'est le vrai remède. Le vœu qu'on regarde
+s'avance vers celui qui le lit jusqu'à ce que plus rien ne le couvre — jusqu'à
+huit dixièmes d'unité. Sa ficelle se tend vers lui et il remonte d'autant,
+comme un fil qu'on tire ; les feuilles où il se nichait passent derrière lui.
+Il revient seul à sa place dès qu'on regarde ailleurs. Rien n'est dessiné
+par-dessus l'arbre : une étiquette posée en décalque se verrait tout de suite.
+
+L'angle et le pas sont choisis **ensemble**, du moins cher au plus cher : un
+pas vers le lecteur vaut mieux qu'un quart de tour autour de l'arbre. On
+préfère voir le vœu s'avancer que voir le décor tourner. Et quand quelqu'un
+touche une étiquette, il l'a vue : son angle est forcément bon, et l'on ne lui
+cherche qu'un pas en avant — tourner pour revenir sur le même mot désoriente.
+
+### Ce qui est mesuré
+
+Quarante-neuf rayons sur la zone écrite de l'étiquette, croisés contre les
+vrais maillages de la scène, tous. L'épreuve ne croit pas l'approche sur
+parole : l'approche raisonne sur des gélules parce qu'il lui faut sa réponse en
+moins d'une image, le relevé a tout son temps. Si les deux se mettent à
+diverger, c'est le relevé qui a raison.
+
+**Trente et un vœux sur trente et un, entièrement dégagés.** Et de même le mot
+qu'on vient d'écrire, celui qu'un ami vous envoie, l'image de la carte à
+télécharger, et chaque image du film — seul endroit où le mot part sans son
+lecteur, et où personne ne pourra tourner autour.
 
 ## Trois pièges du tactile
 
