@@ -235,13 +235,28 @@ dit rien, il laisse l'horloge arrêtée. On revenait d'Instagram sur un arbre
 muet, et le bouton du son n'y changeait rien, puisqu'il ne fait que baisser un
 volume.
 
-Maintenant : on essaie au retour, on vérifie trois dixièmes de seconde plus
-tard, et si l'horloge est toujours arrêtée on attend le premier geste du
-visiteur pour réessayer — un seul suffit, et le secours se désarme derrière
-lui. Le changement de visibilité, le retour depuis la mémoire du navigateur et
-la reprise du focus mènent tous les trois au même endroit. La mélodie, elle,
-n'a rien perdu : une horloge suspendue ne vieillit pas, et les notes déjà
-programmées sont toujours devant nous.
+Maintenant : on essaie au retour, puis on insiste **huit fois, trois dixièmes
+de seconde d'écart** — deux secondes et demie en tout —, parce qu'une page qui
+revient d'arrière-plan refuse souvent la première demande et accepte la
+troisième. Si l'horloge résiste encore, on attend le premier geste du visiteur,
+et ce geste-là ne se contente plus de redemander : il **refait la chaîne
+entière**, horloge comprise. Les minuteries de l'ancienne meurent avec elle —
+chaque chaîne porte son numéro de génération, et un gong programmé sur la
+précédente se tait tout seul en voyant qu'il n'est plus de son temps. Le
+changement de visibilité, le retour depuis la mémoire du navigateur et la
+reprise du focus mènent tous les trois au même endroit.
+
+Et un piège plus retors, qui a coûté une deuxième visite : **certains
+téléphones ne suspendent pas l'horloge du son, ils la remplacent**. La
+nouvelle repart de zéro ; l'instant de la note suivante, lui, reste là où on
+l'avait posé — trois cents secondes plus loin. On ne repartait donc que d'une
+horloge en avance, jamais d'une horloge en retard sur ce qu'on attendait
+d'elle : la boucle regardait un rendez-vous qui n'arriverait plus avant cinq
+minutes, ne trouvait rien à programmer, et l'arbre se taisait pour de bon —
+tout en jurant que le son était « en marche ». La note suivante est maintenant
+réancrée **dès qu'elle est derrière nous ou à plus de quatorze secondes devant**
+(la plus longue pause zen en fait onze, et c'est la seule attente légitime de
+cette longueur).
 
 L'épreuve joue les deux retours, celui qu'on accorde et celui qu'on refuse en
 silence.
