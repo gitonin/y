@@ -2208,6 +2208,7 @@ function focusTag(t,fiche,garder,pres){ focused=true; derniereCible=Object.keys(
      dériverait dans le cadre pendant qu'on le lit. */
   t.sortie=a.so; t.dirS=[Math.sin(a.th),Math.cos(a.th)];
   var av=.17+a.so, by=sortieY(t.slot.L,av);
+  t.prevu=[ap[0]+Math.sin(a.th)*av,ap[1]-t.slot.a.r+by-t.h*.5,ap[2]+Math.cos(a.th)*av];
   viseY=ap[1]-t.slot.a.r+by-t.h*.5;
   cibleV.set(ap[0]+t.dirS[0]*av,viseY+world.position.y,ap[2]+t.dirS[1]*av);
   var th=a.th;
@@ -2944,6 +2945,16 @@ window.__essai={
       ecran:(function(){ var v=new THREE.Vector3(); t.mesh.getWorldPosition(v); v.project(camera);
         return [+v.x.toFixed(2),+v.y.toFixed(2)]; })()};
   },
+  /* Le pas en avant : ce que l'approche a promis, et où le vœu se tient
+     vraiment. Les deux doivent coïncider — sinon la caméra cadre un
+     endroit où il n'y a rien. */
+  sortie:function(){ if(!vise) return null;
+    var v=new THREE.Vector3(); vise.mesh.getWorldPosition(v);
+    v.y-=vise.h*.5; world.worldToLocal(v);
+    return {pas:vise.sortie,avance:+(vise.avance||0).toFixed(2),
+      prevu:(vise.prevu||[]).map(function(x){return +x.toFixed(3);}),
+      reel:[+v.x.toFixed(3),+v.y.toFixed(3),+v.z.toFixed(3)],
+      corps:[+vise.body.position.x.toFixed(3),+vise.body.position.y.toFixed(3),+vise.body.position.z.toFixed(3)]}; },
   /* La place qu'a reçue le vœu qu'on regarde, et son dégagement. */
   place:function(){ if(!vise) return null;
     return {rang:slots.indexOf(vise.slot),degagement:+degagement(vise.slot).toFixed(2)}; },
