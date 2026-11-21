@@ -2914,7 +2914,10 @@ window.__essai={
      rubans y sont, eux que le choix d'angle ne regardait pas. Rend la part
      couverte, de zéro à un, et le nom de ce qui couvre. */
   couvert:function(ind,quelPoint){
-    var t=ind===undefined||ind===null?vise:tags[Object.keys(tags)[ind]];
+    /* Pendant la story, le mot cadré est celui qu'elle a figé, et non
+       forcément le dernier visé. */
+    var t=ind===undefined||ind===null?(STORY.on&&STORY.tag?STORY.tag:vise)
+                                     :tags[Object.keys(tags)[ind]];
     if(!t) return null;
     var dedans=function(o){ var q=o; while(q){ if(q===t.pivot) return true; q=q.parent; } return false; };
     var obst=[];
